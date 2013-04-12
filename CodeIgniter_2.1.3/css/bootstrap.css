@@ -3181,8 +3181,8 @@ input[type="submit"].btn.btn-mini {
 }
 .nav-tabs > li > a,
 .nav-pills > li > a {
-  padding-right: 61px;
-  padding-left: 61px;
+  padding-right: 30px; /* 61px default */
+  padding-left: 30px; /* 61px default */
   margin-right: 1px;
   line-height: 14px;
   background: rgb(246,230,180); /* Old browsers */
@@ -6322,6 +6322,11 @@ button.close {
     overflow: visible !important;
   }
 }
+
+
+
+
+
 
 .tamano-inicio_sesion{
     width: 600px;
