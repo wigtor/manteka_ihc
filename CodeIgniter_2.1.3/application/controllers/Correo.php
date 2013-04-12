@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class correoController extends CI_Controller {
+class Correo extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -29,5 +29,5 @@ class correoController extends CI_Controller {
 	}
 }
 
-/* End of file correoController.php */
-/* Location: ./application/controllers/correoController.php */
+/* End of file Correo.php */
+/* Location: ./application/controllers/Correo.php */

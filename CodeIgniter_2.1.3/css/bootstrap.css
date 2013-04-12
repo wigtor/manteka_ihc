@@ -6327,20 +6327,20 @@ button.close {
     width: 600px;
     height: 530px;
     
-  }
+}
 
-  .click_lista{
+.click_lista{
     border-right-style: solid;
     border-right-width: 1px;
     padding-right: 22px;
-  }
+}
 
-  .boton-usuario {
+.boton-usuario {
      border-right-width: 1px;
      padding-right: 22px;
-  }
+}
 
-  .banner {
+.banner {
     background: -moz-linear-gradient(top,  rgba(30,87,153,1) 0%, rgba(125,185,232,0) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
     background: -webkit-linear-gradient(top,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
@@ -6351,24 +6351,37 @@ button.close {
     width: 100%;
 	height:160px;
  
-  }
+}
 
-  .logo-usach {
+.logo-usach {
     top: 0px;
-    background-image: url(../img/logo_usach.png);
+    background-image: url(/manteka/img/logo_usach.png);
     background-size: 115px 142px;
     background-repeat: no-repeat;
     height:150px;
     width: 150px;
 	float:left;
-  }
+}
   
-    .logo-manteka {
+.logo-manteka {
     top: 0px;
-    background-image: url(../img/logo_manteka.png);
+    background-image: url(/manteka/img/logo_manteka.png);
     background-size: 115px 142px;
     background-repeat: no-repeat;
     height:150px;
     width: 150px;
 	float:right;
-  }
+}
+
+
+.click_lista{
+    border-right-style: solid;
+    border-right-width: 1px;
+    padding-right: 22px;
+}
+
+
+.login {
+    margin-top: 50px;
+    margin-left: 750px;
+}
