@@ -27,6 +27,8 @@
 		<div class="banner">
 			<div class="logo-usach">
 			</div>
+			<div class="logo-manteka">
+			</div>
 		</div>
 		<div>
 			<ul class="nav nav-tabs">
