@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Correo extends CI_Controller {
+class Informes extends CI_Controller {
 	
 	/**
 	 * Index Page for this controller.
@@ -25,8 +25,8 @@ class Correo extends CI_Controller {
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', '', true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
 		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', '', true);
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos', '', true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_informes', '', true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_informes', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
