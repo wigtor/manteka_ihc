@@ -4,11 +4,19 @@
 		<ul class="nav">
 			<li>
 				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-					Usuario
+					<?php echo 'Alguien' ?>
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					asdasdasd
+					<li>
+						Editar perfil
+					</li>
+					<li>
+						Cambiar correo electrónico
+					</li>
+					<li>
+						Cambiar contraseña
+					</li>
 				</ul>
 			</li>
 		  <li><a href="#"><div class="click_lista">Cerrar Sesion</div></a></li>
