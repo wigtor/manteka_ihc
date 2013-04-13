@@ -1,7 +1,7 @@
 <!-- Barra superior que contiene el nombre del usuario, el menu, cerrar sesión y botón de ayuda -->
 <div class="navbar barra_usuario">
 	<!-- <div class="navbar-inner hacerTransparente"> -->
-		<ul class="nav pull-right">
+		<ul class="nav pull-right botones_barra_usuario">
 			<li>
 				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
 					<?php echo 'Paz Bustos' ?>

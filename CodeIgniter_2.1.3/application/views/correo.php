@@ -7,7 +7,7 @@
 
 		
 		<?php //NO SE DONDE PONER ESTA WEA PARA QUE SE VEA BIEN
-			//echo $barra_usuario		//Esta variable es pasada como parámetro a esta vista
+			echo $barra_usuario		//Esta variable es pasada como parámetro a esta vista
 		?>
 		
 		<?php

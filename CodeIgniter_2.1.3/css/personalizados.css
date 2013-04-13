@@ -26,11 +26,9 @@
 
 .navbar.barra_usuario {
 	margin-bottom: 0px;
-	/*position: absolute;*/
-	margin-right:0px;
-	margin-left:auto;
-	margin-right:0px;
-	
+}
+.nav.botones_barra_usuario {
+	margin-right:10px;
 }
 
 .navbar.barra_superior {
@@ -74,7 +72,7 @@
   background: linear-gradient(to bottom,  rgba(241,231,103,1) 0%,rgba(254,182,69,1) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1e767', endColorstr='#feb645',GradientType=0 ); /* IE6-9 */
 
-  border: 1px solid #FF8000; /* Borde del botón presionado del menu */
+  border: 0px solid #FF8000; /* Borde del botón presionado del menu */
   border-bottom-color: transparent;
   cursor: default;
 }
@@ -93,7 +91,7 @@
   background: -ms-linear-gradient(top,  rgba(246,230,180,1) 0%,rgba(237,144,23,1) 100%); /* IE10+ */
   background: linear-gradient(to bottom,  rgba(246,230,180,1) 0%,rgba(237,144,23,1) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6e6b4', endColorstr='#ed9017',GradientType=0 ); /* IE6-9 */
-	border: 1px solid #ddd; /* Borde de los botones del menu */
+  border: 0px solid #ddd; /* Borde de los botones del menu */
 }
 
 
