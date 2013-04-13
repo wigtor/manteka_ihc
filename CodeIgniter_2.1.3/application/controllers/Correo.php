@@ -24,6 +24,8 @@ class Correo extends CI_Controller {
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', '', true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
 		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', '', true);
+		$datos_plantilla["cuerpo_central"] = $this->load->view('templates/cuerpo_central', '', true);
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barra_lateral', '', true);
 		$this->load->view('correo', $datos_plantilla);
 		
 	}
