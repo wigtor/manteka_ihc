@@ -5,24 +5,28 @@
 ?>
 <body>
 
-		<?php
-			echo $barra_usuario		//Esta variable es pasada como parámetro a esta vista
+		
+		<?php //NO SE DONDE PONER ESTA WEA PARA QUE SE VEA BIEN
+			//echo $barra_usuario		//Esta variable es pasada como parámetro a esta vista
 		?>
 		
 		<?php
-			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
+			echo $banner_portada;	//Esta variable es pasada como parámetro a esta vista
 		?>
 		
+		
+		<div>
 		<?php
-			echo $menu_superior		//Esta variable es pasada como parámetro a esta vista
+			echo $menu_superior;		//Esta variable es pasada como parámetro a esta vista
 		?>
+		</div>
 		
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2">
 					<!--Sidebar content-->
 					<?php
-						echo $barra_lateral		//Esta variable es pasada como parámetro a esta vista
+						echo $barra_lateral;		//Esta variable es pasada como parámetro a esta vista
 					?>
 				
 				
@@ -30,7 +34,7 @@
 				<div class="span10">
 					<!--Body content-->
 					<?php
-						echo $cuerpo_central		//Esta variable es pasada como parámetro a esta vista
+						echo $cuerpo_central;		//Esta variable es pasada como parámetro a esta vista
 					?>
 					
 				</div>

@@ -1,10 +1,10 @@
 <!-- Barra superior que contiene el nombre del usuario, el menu, cerrar sesión y botón de ayuda -->
-<div class="navbar">
-	<div class="navbar-inner">
-		<ul class="nav">
+<div class="navbar barra_usuario">
+	<!-- <div class="navbar-inner hacerTransparente"> -->
+		<ul class="nav pull-right">
 			<li>
 				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-					<?php echo 'Alguien' ?>
+					<?php echo 'Paz Bustos' ?>
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
@@ -19,8 +19,19 @@
 					</li>
 				</ul>
 			</li>
-		  <li><a href="#"><div class="click_lista">Cerrar Sesion</div></a></li>
-		  <li><a href="#"><div class="click_lista">Ayuda</div></a></li>
+			<li>
+				<button class="btn" href="#">
+					Cerrar sesión
+					
+				</button>
+				
+			</li>
+			<li>
+				<button class="btn" href="#">
+					Ayuda
+					
+				</button>
+			</li>
 		</ul>
-	  </div>
+	<!--</div> -->
 </div >

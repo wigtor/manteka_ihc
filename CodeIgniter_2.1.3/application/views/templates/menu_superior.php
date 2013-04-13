@@ -1,7 +1,7 @@
 <!-- Menu que contiene todos los "casos de uso" (lo más macro) -->
 
 <div>
-	<ul class="nav nav-tabs">
+	<ul class="nav nav-tabs barra_superior">
 		
 		<li class="active">
 			<a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/mail-message.png" alt="Correo" height="50" width="50">Correo</a>
