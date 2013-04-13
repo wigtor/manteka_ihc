@@ -4,14 +4,14 @@
 	<ul class="nav nav-tabs barra_superior">
 		
 		<li class="active">
-			<a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/mail-message.png" alt="Correo" height="50" width="50">Correo</a>
+			<a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/mail-message.png" alt="Correo" height="50px" width="50px">Correo</a>
 		</li>
-		<li><a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/system-users.png" alt="Correo" height="50" width="50">Profesor</a></li>
-		<li><a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/seccion.png" alt="Correo" height="50" width="50">Sección</a></li>
-		<li><a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/university.png" alt="Correo" height="50" width="50">Modulo</a></li>
-		<li><a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/sala.png"  alt="Correo" height="50" width="50">Sala</a></li>
-		<li><a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/system-users.png" alt="Correo" height="50" width="50">Alumno</a></li>
-		<li><a href="#"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/inform.png" alt="Correo" height="50" width="50">Informe</a></li>
+		<li><a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/system-users.png" alt="Correo" height="50px" width="50px">Profesor</a></li>
+		<li><a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/seccion.png" alt="Correo" height="50px" width="50px">Sección</a></li>
+		<li><a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/university.png" alt="Correo" height="50px" width="50px">Modulo</a></li>
+		<li><a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/sala.png"  alt="Correo" height="50px" width="50px">Sala</a></li>
+		<li><a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/system-users.png" alt="Correo" height="50px" width="50px">Alumno</a></li>
+		<li><a href="#"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/inform.png" alt="Correo" height="50px" width="50px">Informe</a></li>
 		
 	</ul>
 </div>
