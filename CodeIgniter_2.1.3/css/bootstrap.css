@@ -3196,7 +3196,8 @@ input[type="submit"].btn.btn-mini {
 
 }
 .nav-tabs {
-  border-bottom: 40px solid rgba(254,182,69,1);
+  /*border-bottom: 40px solid rgba(254,182,69,1); */ /* Hace que aparezca la barra naranja abajo */
+  border-bottom: 1px solid #ddd;
 }
 .nav-tabs > li {
   margin-bottom: -1px;

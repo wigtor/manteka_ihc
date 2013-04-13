@@ -21,6 +21,8 @@
 		?>
 		</div>
 		
+		
+		<!-- Ahora debe ir el código de la barra lateral y la carga de la vista más interna -->
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2">
@@ -28,22 +30,21 @@
 					<?php
 						echo $barra_lateral;		//Esta variable es pasada como parámetro a esta vista
 					?>
-				
-				
 				</div>
 				<div class="span10">
-					<!--Body content-->
-					<?php
-						echo $cuerpo_central;		//Esta variable es pasada como parámetro a esta vista
-					?>
+					<!-- Barra de navegación con botones undo-redo -->
+					
+						<?php
+							echo $barra_navegacion;
+						?>
+						<!--Body content-->
+						<?php
+							echo $cuerpo_central;		//Esta variable es pasada como parámetro a esta vista
+						?>
 					
 				</div>
 			</div>
 		</div>
-		
-		<!-- Ahora debe ir el código de la barra lateral y la carga de la vista más interna -->
-		
-		
 </body>
 </html>
 
