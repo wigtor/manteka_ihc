@@ -6,4 +6,5 @@
 		<li><a href="#">Agregar plantillas</a></li>
 		<li><a href="#">Editar plantillas</a></li>
 		<li><a href="#">Borrar plantillas</a></li>
+		<li><a href="#">Contactos</a></li>
     </ul>
