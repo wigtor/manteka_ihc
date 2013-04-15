@@ -1,16 +1,16 @@
 <!-- Menu que contiene todos los "casos de uso" (lo más macro) -->
 
-<div>
-	<ul class="nav nav-tabs">
+
+	<ul class="nav nav-tabs barra_superior">
+		
 		<li class="active">
-			<a href="#"><img src="/manteka/img/icons/mail-message.png" alt="Correo" height="50" width="50">Correo</a>
+			<a href="<?php echo site_url("Correo/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/mail-message.png" alt="Correo" height="50px" width="50px">Correos</a>
 		</li>
-		<li><a href="#"><img src="/manteka/img/icons/system-users.png" alt="Correo" height="50" width="50">Profesor</a></li>
-		<li><a href="#"><img src="/manteka/img/icons/seccion.png"  alt="Correo" height="50" width="50">Seccion</a></li>
-		<li><a href="#"><img src="/manteka/img/icons/university.png" alt="Correo" height="50" width="50">Modulo</a></li>
-		<li><a href="#"><img src="/manteka/img/icons/sala.png"  alt="Correo" height="50" width="50">Sala</a></li>
-		<li><a href="#"><img src="/manteka/img/icons/system-users.png" alt="Correo" height="50" width="50">Alumno</a></li>
-		<li><a href="#"><img src="/manteka/img/icons/inform.png" alt="Correo" height="50" width="50">Informe</a></li>
+		<li><a href="<?php echo site_url("Profesores/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/system-users.png" alt="Correo" height="50px" width="50px">Profesores</a></li>
+		<li><a href="<?php echo site_url("Secciones/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/seccion.png" alt="Correo" height="50px" width="50px">Secciones</a></li>
+		<li><a href="<?php echo site_url("Planificacion/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/university.png" alt="Correo" height="50px" width="50px">Planificación</a></li>
+		<li><a href="<?php echo site_url("Salas/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/sala.png"  alt="Correo" height="50px" width="50px">Salas</a></li>
+		<li><a href="<?php echo site_url("Alumnos/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/system-users.png" alt="Correo" height="50px" width="50px">Alumnos</a></li>
+		<li><a href="<?php echo site_url("Informes/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/inform.png" alt="Correo" height="50px" width="50px">Informes</a></li>
 		
 	</ul>
-</div>
