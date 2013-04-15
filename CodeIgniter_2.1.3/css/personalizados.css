@@ -190,3 +190,14 @@ footer {
 #wrap {
 	height: 570px;
 }
+
+@font-face {
+	font-family: 'iconos';
+	src: url('fonts/iconos.eot');
+	src: url('fonts/iconos.eot?#iefix') format('embedded-opentype'),
+	url('fonts/iconos.svg#iconos') format('svg'),
+	url('fonts/iconos.woff') format('woff'),
+	url('fonts/iconos.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}

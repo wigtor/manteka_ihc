@@ -29,7 +29,6 @@
 			<li>
 				<button class="btn btn_sin_padding" href="#">
 					Ayuda
-					
 				</button>
 			</li>
 		</ul>
