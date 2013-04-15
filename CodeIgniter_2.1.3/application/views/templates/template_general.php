@@ -19,7 +19,7 @@
 			echo $menu_superior;		//Esta variable es pasada como parámetro a esta vista
 		?>
 		
-		<div class="barra_superior_gradiente"></div>
+		<!-- <div class="barra_superior_gradiente"></div> -->
 		
 		<!-- Ahora debe ir el código de la barra lateral y la carga de la vista más interna -->
 		<div class="container-fluid">
