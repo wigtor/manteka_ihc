@@ -3,11 +3,11 @@
 	<!-- <div class="navbar-inner hacerTransparente"> -->
 		<ul class="nav pull-right botones_barra_usuario">
 			<li>
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+				<button class="btn btn_sin_padding btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
 					<?php echo 'Paz Bustos' ?>
 					<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu">
+				<ul class="dropdown-menu btn_sin_padding">
 					<li>
 						Editar perfil
 					</li>
@@ -20,14 +20,14 @@
 				</ul>
 			</li>
 			<li>
-				<button class="btn" href="#">
+				<button class="btn btn_sin_padding" href="#">
 					Cerrar sesión
 					
 				</button>
 				
 			</li>
 			<li>
-				<button class="btn" href="#">
+				<button class="btn btn_sin_padding" href="#">
 					Ayuda
 					
 				</button>

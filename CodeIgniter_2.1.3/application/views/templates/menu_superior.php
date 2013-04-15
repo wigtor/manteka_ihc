@@ -1,6 +1,6 @@
 <!-- Menu que contiene todos los "casos de uso" (lo más macro) -->
 
-<div>
+
 	<ul class="nav nav-tabs barra_superior">
 		
 		<li class="active">
@@ -14,4 +14,3 @@
 		<li><a href="<?php echo site_url("Informes/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/inform.png" alt="Correo" height="50px" width="50px">Informes</a></li>
 		
 	</ul>
-</div>

@@ -5,8 +5,8 @@
 		<div class="span2">
 			<img src="/<?php echo config_item('dir_alias') ?>/img/logo_usach.png" alt="logo usach" style="width: auto; height: 140px;">
 		</div>
-		<div class="span2 offset8">
-			<img src="/<?php echo config_item('dir_alias') ?>/img/logo_manteka.png" alt="logo manteka" style="width: auto; height: 140px;">
+		<div class="span3 offset7">
+			<img src="/<?php echo config_item('dir_alias') ?>/img/logo_manteka.png" alt="logo manteka" style="width: 259px; height: 100px;">
 		</div>
     </div>
 	
