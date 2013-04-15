@@ -123,8 +123,8 @@
 
 .barra_superior > li > a,
 .barra_superior > li > a {
-  padding-right: 20px; /* 61px default */
-  padding-left: 20px; /* 61px default */
+  padding-right: 15px; /* 61px default */
+  padding-left: 15px; /* 61px default */
   margin-right: 1px;
   line-height: 14px;
   background: rgb(246,230,180); /* Old browsers */

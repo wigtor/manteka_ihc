@@ -3,10 +3,10 @@
 <?php
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
-<body>
+	<body>
 
-		
-		<?php //NO SE DONDE PONER ESTA WEA PARA QUE SE VEA BIEN
+	<div id="wrap">
+		<?php //NO SE DONDE PONER ESTO PARA QUE SE VEA BIEN
 			echo $barra_usuario		//Esta variable es pasada como parámetro a esta vista
 		?>
 		
@@ -15,14 +15,11 @@
 		?>
 		
 		
-		<div>
 		<?php
 			echo $menu_superior;		//Esta variable es pasada como parámetro a esta vista
 		?>
-		</div>
-		<div class="barra_superior_gradiente">
-			
-		</div>
+		
+		<div class="barra_superior_gradiente"></div>
 		
 		<!-- Ahora debe ir el código de la barra lateral y la carga de la vista más interna -->
 		<div class="container-fluid">
@@ -47,6 +44,12 @@
 				</div>
 			</div>
 		</div>
-</body>
+	</div>
+	<div id="footer">
+		<?php
+			echo $footer;
+		?>
+	</div>
+	</body>
 </html>
 
