@@ -180,6 +180,7 @@
 footer {
 	font-size: 10px;
 	text-align: center;
+	color: gray;
 }
 
 .icon_footer {
@@ -211,4 +212,12 @@ font-family: 'MyWebFont';
 	font-size: 30px ! important;
 	line-height: 10px ! important;
 	vertical-align: middle;
+}
+
+.btn_with_icon_solo_footer{
+	font-family: MyWebFont,Serif ! important;
+	font-size: 20px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+	color: gray;
 }
