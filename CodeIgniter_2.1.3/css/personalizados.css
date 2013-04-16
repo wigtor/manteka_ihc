@@ -1,11 +1,5 @@
 /* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
 
-.btn_with_icon:first-letter {
-	font-family: 'MyWebFont' !important;
-	font-size: 30px !important;
-	line-height: 10px;
-}
-
 .click_lista{
     border-right-style: solid;
     border-right-width: 1px;
@@ -199,11 +193,15 @@ footer {
 
 @font-face{
 font-family: 'MyWebFont';
-	src: url('WebFont.eot');
-	src: url('WebFont.eot?#iefix') format('embedded-opentype'),
-	url('WebFont.woff') format('woff'),
-	url('WebFont.ttf') format('truetype'),
-	url('WebFont.svg#webfont') format('svg');
+	src: url('/manteka/css/WebFont.eot');
+	src: url('/manteka/css/WebFont.eot?#iefix') format('embedded-opentype'),
+	url('/manteka/css/WebFont.woff') format('woff'),
+	url('/manteka/css/WebFont.ttf') format('truetype'),
+	url('/manteka/css/WebFont.svg#webfont') format('svg');
 }
 
-
+.btn_with_icon:first-letter {
+	font-family: 'MyWebFont', serif ! important;
+	font-size: 30px ! important;
+	line-height: 10px ! important;
+}
