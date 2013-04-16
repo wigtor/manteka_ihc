@@ -201,7 +201,14 @@ font-family: 'MyWebFont';
 }
 
 .btn_with_icon:first-letter {
-	font-family: 'MyWebFont', serif ! important;
+	font-family: MyWebFont,Serif ! important;
 	font-size: 30px ! important;
 	line-height: 10px ! important;
+	vertical-align: middle;
+}
+.btn_with_icon_solo{
+	font-family: MyWebFont,Serif ! important;
+	font-size: 30px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
 }
