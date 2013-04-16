@@ -1,7 +1,10 @@
 <!-- Menu que contiene todos los "casos de uso" (lo más macro) -->
+    <div class="navbar">
+		<div class="navbar-inner">
+			
 
 
-	<ul class="nav nav-tabs barra_superior">
+	<ul class="nav">
 		<?php 
 			if ($menuSuperiorAbierto == "Correos") {
 				echo '<li class="active">';
@@ -10,7 +13,7 @@
 				echo '<li>';
 			}
 		?>
-			<a href="<?php echo site_url("Correo/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/mail.png" alt="Correo">Correos</a>
+			<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">MCorreos</a>
 		</li>
 		<?php 
 			if ($menuSuperiorAbierto == "Docentes") {
@@ -68,3 +71,5 @@
 		<a href="<?php echo site_url("Informes/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/book.png" alt="Correo" height="50px" width="50px">Informes</a></li>
 		
 	</ul>
+	</div>
+    </div>
