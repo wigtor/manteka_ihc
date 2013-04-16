@@ -29,7 +29,7 @@
 				echo '<li>';
 			}
 		?>
-		<a href="<?php echo site_url("Secciones/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/seccion.png" alt="Correo">Secciones</a></li>
+		<a href="<?php echo site_url("Secciones/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/users.png" alt="Correo">Secciones</a></li>
 		<?php 
 			if ($menuSuperiorAbierto == "Planificacion") {
 				echo '<li class="active">';
@@ -38,7 +38,7 @@
 				echo '<li>';
 			}
 		?>
-		<a href="<?php echo site_url("Planificacion/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/university.png" alt="Correo">Planificación</a></li>
+		<a href="<?php echo site_url("Planificacion/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/calendar2.png" alt="Correo">Planificación</a></li>
 		<?php 
 			if ($menuSuperiorAbierto == "Salas") {
 				echo '<li class="active">';
@@ -47,7 +47,7 @@
 				echo '<li>';
 			}
 		?>
-		<a href="<?php echo site_url("Salas/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/sala.png"  alt="Correo">Salas</a></li>
+		<a href="<?php echo site_url("Salas/index") ?>"><img class="icon_menu_superior" src="/<?php echo config_item('dir_alias') ?>/img/icons/library.png"  alt="Correo">Salas</a></li>
 		<?php 
 			if ($menuSuperiorAbierto == "Alumnos") {
 				echo '<li class="active">';
