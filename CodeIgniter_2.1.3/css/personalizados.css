@@ -1,5 +1,11 @@
 /* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
 
+.btn_with_icon:first-letter {
+	font-family: 'MyWebFont' !important;
+	font-size: 30px !important;
+	line-height: 10px;
+}
+
 .click_lista{
     border-right-style: solid;
     border-right-width: 1px;
@@ -169,8 +175,8 @@
 }
 
 .icon_menu_superior {
-	width:50px;
-	height:50px;
+	width:32px;
+	height:32px;
 }
 
 .btn.btn_sin_padding {
@@ -190,3 +196,14 @@ footer {
 #wrap {
 	height: 570px;
 }
+
+@font-face{
+font-family: 'MyWebFont';
+	src: url('WebFont.eot');
+	src: url('WebFont.eot?#iefix') format('embedded-opentype'),
+	url('WebFont.woff') format('woff'),
+	url('WebFont.ttf') format('truetype'),
+	url('WebFont.svg#webfont') format('svg');
+}
+
+

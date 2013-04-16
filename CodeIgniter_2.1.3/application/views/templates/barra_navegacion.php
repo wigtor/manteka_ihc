@@ -1,9 +1,9 @@
 <!-- Barra con los botones undo y redo -->
 <div class="barra_navegacion pull-top">
 	<div class="span6">
-		<img class="btn btn_sin_padding" src="/manteka/img/icons/edit-undo.png" alt="undo" height="28px" width="28px">
+		<a class="btn_with_icon">&#60;</a>
 	</div>
 	<div class="span6">
-		<img class="btn btn_sin_padding" src="/manteka/img/icons/edit-redo.png" alt="redo" height="28px" width="28px">
+		<a class="btn_with_icon">&#61;</a>
 	</div>
 </div>
