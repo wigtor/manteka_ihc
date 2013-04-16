@@ -21,6 +21,7 @@ class Planificacion extends CI_Controller {
 	{
 		$this->load->helper('url');
 		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = "Planificacion";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', '', true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
