@@ -1,5 +1,11 @@
 /* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
 
+.btn_with_icon:first-letter {
+	font-family: 'MyWebFont' !important;
+	font-size: 30px !important;
+	line-height: 10px;
+}
+
 .click_lista{
     border-right-style: solid;
     border-right-width: 1px;
@@ -191,13 +197,13 @@ footer {
 	height: 570px;
 }
 
-@font-face {
-	font-family: 'iconos';
-	src: url('fonts/iconos.eot');
-	src: url('fonts/iconos.eot?#iefix') format('embedded-opentype'),
-	url('fonts/iconos.svg#iconos') format('svg'),
-	url('fonts/iconos.woff') format('woff'),
-	url('fonts/iconos.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+@font-face{
+font-family: 'MyWebFont';
+	src: url('WebFont.eot');
+	src: url('WebFont.eot?#iefix') format('embedded-opentype'),
+	url('WebFont.woff') format('woff'),
+	url('WebFont.ttf') format('truetype'),
+	url('WebFont.svg#webfont') format('svg');
 }
+
+
