@@ -1,5 +1,11 @@
 /* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
 
+.btn_with_icon:first-letter {
+	font-family: 'MyWebFont' !important;
+	font-size: 30px !important;
+	line-height: 10px;
+}
+
 .click_lista{
     border-right-style: solid;
     border-right-width: 1px;
@@ -200,8 +206,4 @@ font-family: 'MyWebFont';
 	url('WebFont.svg#webfont') format('svg');
 }
 
-.btn_with_icon:first-letter {
-	font-family: 'MyWebFont';
-	
-}
 
