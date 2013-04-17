@@ -2,7 +2,7 @@
 
 <div class="banner row-fluid">
 		<div class="pull-left">
-			<img src="/<?php echo config_item('dir_alias') ?>/img/logo_usach.png" alt="logo usach" style="width: auto; height: 140px;">
+			<img src="/<?php echo config_item('dir_alias') ?>/img/logo_usach.png" alt="logo usach" style="width: auto; height: 110px;">
 		</div>
 		<div class="pull-right">
 			<img src="/<?php echo config_item('dir_alias') ?>/img/logo_manteka.png" alt="logo manteka" style="width: 259px; height: 100px;">
