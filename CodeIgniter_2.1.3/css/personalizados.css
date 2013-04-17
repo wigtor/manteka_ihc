@@ -213,6 +213,7 @@ font-family: 'MyWebFont';
 	font-size: 30px ! important;
 	line-height: 10px ! important;
 	vertical-align: middle;
+	display:inline-block;
 }
 
 .btn_with_icon_solo_footer{
