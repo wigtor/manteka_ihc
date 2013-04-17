@@ -4361,6 +4361,9 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar-inner {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
   min-height: 40px;
   padding-right: 20px;
   padding-left: 20px;
