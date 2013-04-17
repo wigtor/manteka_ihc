@@ -39,7 +39,11 @@
 	text-align: center;
 }
 
-
+.navbar-inner{
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 .navbar.barra_usuario {
 	margin-bottom: 0px;
