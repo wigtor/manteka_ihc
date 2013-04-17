@@ -50,11 +50,9 @@
 			</div>
 		</div>
 	</div>
-	<div id="footer">
-		<?php
-			echo $footer;
-		?>
-	</div>
+	<?php
+		echo $footer;
+	?>
 	</body>
 </html>
 
