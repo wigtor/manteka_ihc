@@ -189,7 +189,8 @@ footer {
 }
 
 #wrap {
-	height: 570px;
+	min-height:575px;
+	height: 95%;
 }
 
 @font-face{
