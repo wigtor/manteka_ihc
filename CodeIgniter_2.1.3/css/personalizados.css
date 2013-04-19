@@ -228,3 +228,11 @@ font-family: 'MyWebFont';
 	vertical-align: middle;
 	color: gray;
 }
+
+.letra_progress_bar {
+		color: rgb(235,235,235);
+}
+
+.progress_bar {
+	background-color: rgb(0, 165, 215);
+}

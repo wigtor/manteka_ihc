@@ -1,9 +1,9 @@
 <!-- Barra con los botones undo y redo -->
 <div class="span7">
-	<div class="progress">
-		<div class="bar" style="width: 20%;"><p>Destinatarios</p></div>
-		<div class="bar" style="width: 20%;"><p>Plantillas</p></div>
-		<div class="bar" style="width: 20%;"><p>Editar mensaje</p></div>
+	<div class="progress progress-striped active">
+		<div class="bar progress_bar" style="width: 20%;"><p class="letra_progress_bar">Paso 1</div>
+		<div class="bar progress_bar " style="width: 20%;"><p class="letra_progress_bar">Paso 2</p></div>
+		<div class="bar progress_bar" style="width: 20%;"><p class="letra_progress_bar">Paso 3</p></div>
 	</div>
 </div>
 <div class="span5">
