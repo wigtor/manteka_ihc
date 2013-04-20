@@ -32,7 +32,7 @@
 				</div>
 				<div class="span10">
 					<!-- Barra de navegación con botones undo-redo -->
-					
+					<div style="min-height: 310px">
 						<?php
 							echo $barra_navegacion;
 						?>
@@ -40,16 +40,19 @@
 						<?php
 							echo $cuerpo_central;		//Esta variable es pasada como parámetro a esta vista
 						?>
-					
+					</div>
+					<div class="row-fluid">
+						<?php
+							echo $barra_progreso_atras_siguiente;		//Esta variable es pasada como parámetro a esta vista
+						?>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div id="footer">
-		<?php
-			echo $footer;
-		?>
-	</div>
+	<?php
+		echo $footer;
+	?>
 	</body>
 </html>
 
