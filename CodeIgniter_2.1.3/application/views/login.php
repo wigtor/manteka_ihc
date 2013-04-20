@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <?php
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
 <body>
-		
+		<?php echo form_open('php/login/'); ?>
 		<?php
 			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
 		?>
@@ -18,15 +18,16 @@
 			<div class="span4">
 					<form class="form-horizontal">
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">Rut</label>
+							<label class="control-label" for="inputRut">Rut</label>
 							<div class="controls">
-							  <input type="text" id="inputEmail" placeholder="Ingrese rut, ejemplo: 175657436">
+							  <input type="text" name="inputRut" id="inputRut" placeholder="Ingrese rut, ejemplo: 175657436" value="<?= set_value('inputPassword'); ?>">
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
-								<input type="password" id="inputPassword" placeholder="Ingrese su contraseña">
+								<input type="password" name="inputPassword" id="inputPassword" placeholder="Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
+								<div class="LoginUsuariosError"><?= form_error('passwordlogin');?></div>
 							</div>
 						</div>
 						<div class="control-group">

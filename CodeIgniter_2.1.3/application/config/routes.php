@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "Correo"; //Cambiar por el login despues
+$route['default_controller'] = "Login";
 $route['404_override'] = '';
 
 
