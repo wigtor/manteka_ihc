@@ -20,10 +20,16 @@ class Correo extends CI_Controller {
 	public function index()
 	{
 		$this->load->helper('url');
+		$this->load->library('session');
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Correos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', '', true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
 		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
 		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
