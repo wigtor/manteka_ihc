@@ -4,8 +4,6 @@ class Php extends CI_Controller {
 
    function login($idioma=null)
    {
-		$this->load->library('session');
-		$this->load->helper('url');
 		//$this->config->set_item('language', 'spanish');      //   Setear dinámicamente el idioma que deseamos que ejecute nuestra aplicación
       if(!isset($_POST['inputRut'])){   //   Si no recibimos ningún valor proveniente del formulario, significa que el usuario recién ingresa.   
          $this->load->view('login');      //   Por lo tanto le presentamos la pantalla del formulario de ingreso.

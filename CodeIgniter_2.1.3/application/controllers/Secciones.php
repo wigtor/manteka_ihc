@@ -19,8 +19,6 @@ class Secciones extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->helper('url');
-		$this->load->library('session');
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
