@@ -4,7 +4,7 @@
     	<div class="accordion-group">
 		    <div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-				Profesor
+				Profesores
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
@@ -20,7 +20,7 @@
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
 				Ayudantes
 		    </div>
-		    <div id="collapseTwo" class="accordion-body collapse in">
+		    <div id="collapseTwo" class="accordion-body collapse">
 		    	<div class="accordion-inner">
 		        	<li><a href="#">Agregar ayudantes</a></li>
 					<li><a href="#">Editar  ayudantes</a></li>
@@ -32,9 +32,9 @@
 	  <div class="accordion-group">
 		    <div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-				Coordinador 
+				Coordinadores
 		    </div>
-		    <div id="collapseThree" class="accordion-body collapse in">
+		    <div id="collapseThree" class="accordion-body collapse">
 		    	<div class="accordion-inner">
 		        	<li><a href="#">Ver Coordinadores</a></li>
 					<li><a href="#">Agregar coordinador</a></li>
