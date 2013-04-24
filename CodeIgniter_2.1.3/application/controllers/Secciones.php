@@ -17,6 +17,12 @@ class Secciones extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function index() //Esto hace que el index sea la vista que se desee
+	{
+		$this->verSecciones();
+	}
+
 	public function verSecciones()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -48,10 +54,21 @@ class Secciones extends CI_Controller {
 		
 	}
 	
-	public function index() //Esto hace que el index sea la vista que se desee
-	{
-		$this->verSecciones();
-	}
+
+	public function crearSecciones()
+    {
+    	//
+    }
+    
+    public function modificarSecciones()
+    {
+    	//
+    }
+
+    public function eliminarSecciones()
+    {
+    	//
+    }
 }
 
 /* End of file Correo.php */

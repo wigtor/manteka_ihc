@@ -17,6 +17,11 @@ class Salas extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+	public function index() //Esto hace que el index sea la vista que se desee
+	{
+		$this->verSalas();
+	}
+
 	public function verSalas()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -47,11 +52,23 @@ class Salas extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
+
+	public function crearSalas()
+    {
+    	//
+    }
+    
+    public function modificarSalas()
+    {
+    	//
+    }
+
+    public function eliminarSalas()
+    {
+    	//
+    }
 	
-	public function index() //Esto hace que el index sea la vista que se desee
-	{
-		$this->verSalas();
-	}
+	
 }
 
 /* End of file Correo.php */

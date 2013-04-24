@@ -38,6 +38,25 @@ class Alumnos extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
+
+	public function crearAlumnos()
+    {
+    	//
+    }
+    
+    public function modificarAlumnos()
+    {
+    	//
+    }
+
+    public function eliminarAlumnos()
+    {
+    	//
+    }
+    public function verAlumnos()
+    {
+    	//
+    }
 }
 
 /* End of file Correo.php */
