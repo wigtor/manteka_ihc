@@ -25,10 +25,10 @@ class Secciones extends CI_Controller {
 
 	public function verSecciones()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
+		}*/
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Secciones";
@@ -48,7 +48,7 @@ class Secciones extends CI_Controller {
 		
 		
 		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_secciones', '', true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_secciones_ver', '', true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_secciones', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
