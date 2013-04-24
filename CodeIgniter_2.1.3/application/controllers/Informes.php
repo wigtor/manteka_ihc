@@ -17,7 +17,7 @@ class Informes extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
+	public function generarInformes()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
@@ -37,6 +37,11 @@ class Informes extends CI_Controller {
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_informes', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
+	}
+	
+	public function index() //Esto hace que el index sea la vista que se desee
+	{
+		$this->generarInformes();
 	}
 }
 
