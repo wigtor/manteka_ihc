@@ -8,9 +8,9 @@
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
 		        	<li class="active"><a href="#">Ver alumnos</a></li>
-					<li><a href="#">Agregar alumnos</a></li>
-					<li><a href="#">Editar alumnos</a></li>
-					<li><a href="#">Borrar alumnos</a></li>
+					<li><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Agregar alumnos</a></li>
+					<li><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
+					<li><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
 		     	</div>
 		    </div>
 	  	</div>

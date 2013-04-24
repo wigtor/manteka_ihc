@@ -7,10 +7,10 @@
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li class="active"><a href="#">Ver salas</a></li>
-					<li><a href="#">Agregar salas</a></li>
-					<li><a href="#">Editar salas</a></li>
-					<li><a href="#">Borrar salas</a></li>
+		        	<li class="active"><a href="<?php site_url("Salas/verSalas")?>">Ver salas</a></li>
+					<li><a href="<?php echo site_url("Salas/agregarSalas")?>">Agregar salas</a></li>
+					<li><a href="<?php echo site_url("Salas/editarSalas")?>">Editar salas</a></li>
+					<li><a href="<?php echo site_url("Salas/borrarSalas")?>">Borrar salas</a></li>
 		     	</div>
 		    </div>
 	  	</div>

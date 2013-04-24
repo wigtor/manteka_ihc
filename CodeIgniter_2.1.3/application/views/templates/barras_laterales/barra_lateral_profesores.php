@@ -8,10 +8,10 @@
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Ver profesores</a></li>
-	        		<li><a href="#">Agregar profesores</a></li>
-					<li><a href="#">Editar  profesores</a></li>
-					<li><a href="#">Borrar profesores</a></li>
+		        	<li><a href="<?php echo site_url("Profesores/verProfesores")?>">Ver profesores</a></li>
+	        		<li><a href="<?php echo site_url("Profesores/agregarProfesores")?>">Agregar profesores</a></li>
+					<li><a href="<?php echo site_url("Profesores/editarProfesores")?>">Editar  profesores</a></li>
+					<li><a href="<?php echo site_url("Profesores/borrarProfesores")?>">Borrar profesores</a></li>
 		     	</div>
 		    </div>
 	  	</div>
@@ -22,10 +22,10 @@
 		    </div>
 		    <div id="collapseTwo" class="accordion-body collapse">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Agregar ayudantes</a></li>
-					<li><a href="#">Editar  ayudantes</a></li>
-					<li><a href="#">Borrar ayudantes</a></li>
-					<li><a href="#">Editar ayudantes</a></li>
+		        	<li><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
+					<li><a href="<?php echo site_url("Ayudantes/agregarAyudantes")?>">Agregar ayudantes</a></li>
+					<li><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Borrar ayudantes</a></li>
+					<li><a href="<?php echo site_url("Ayudantes/borrarAyudantes")?>">Borrar ayudantes</a></li>
 		     	</div>
 		    </div>
 	  </div>
@@ -36,9 +36,9 @@
 		    </div>
 		    <div id="collapseThree" class="accordion-body collapse">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Ver Coordinadores</a></li>
-					<li><a href="#">Agregar coordinador</a></li>
-					<li><a href="#">Borrar coordinador</a></li>
+		        	<li><a href="<?php echo site_url("Coordinadores/verCoordinadores")?>">Ver Coordinadores</a></li>
+					<li><a href="<?php echo site_url("Coordinadores/agregarCoordinadores")?>">Agregar coordinador</a></li>
+					<li><a href="<?php echo site_url("Coordinadores/borrarCoordinadores")?>">Borrar coordinador</a></li>
 		     	</div>
 		    </div>
 	  </div>

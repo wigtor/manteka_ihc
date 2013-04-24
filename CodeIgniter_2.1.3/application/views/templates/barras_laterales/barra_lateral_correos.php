@@ -7,8 +7,9 @@
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Correos enviados</a></li>
-	        		<li><a href="#">Enviar correo</a></li>
+		        	<li><a href="<?php echo site_url("Correo/correosEnviados")?>">Correos enviados</a></li>
+	        		<li><a href="<?php echo site_url("Correo/enviarCorreo")?>">Enviar correo</a></li>
+					<li><a href="<?php echo site_url("Correo/verBorradores")?>">Ver borradores</a></li>
 		     	</div>
 		    </div>
 	  	</div>
@@ -19,9 +20,9 @@
 		    </div>
 		    <div id="collapseTwo" class="accordion-body collapse">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Agregar plantillas</a></li>
-					<li><a href="#">Editar plantillas</a></li>
-					<li><a href="#">Borrar plantillas</a></li>
+		        	<li><a href="<?php echo site_url("Plantillas/agregarPlantillas")?>">Agregar plantillas</a></li>
+					<li><a href="<?php echo site_url("Plantillas/editarPlantillas")?>">Editar plantillas</a></li>
+					<li><a href="<?php echo site_url("Plantillas/borrarPlantillas")?>">Borrar plantillas</a></li>
 		     	</div>
 		    </div>
 	  </div>
@@ -32,10 +33,10 @@
 		    </div>
 		    <div id="collapseThree" class="accordion-body collapse">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Ver grupos</a></li>
-					<li><a href="#">Agregar grupos</a></li>
-					<li><a href="#">Editar grupos</a></li>
-					<li><a href="#">Borrar grupos</a></li>
+		        	<li><a href="<?php echo site_url("GruposContactos/verGrupos")?>">Ver grupos</a></li>
+					<li><a href="<?php echo site_url("GruposContactos/agregarGrupos")?>">Agregar grupos</a></li>
+					<li><a href="<?php echo site_url("GruposContactos/editarGrupos")?>">Editar grupos</a></li>
+					<li><a href="<?php echo site_url("GruposContactos/borrarGrupos")?>">Borrar grupos</a></li>
 		     	</div>
 		    </div>
 	  </div>
