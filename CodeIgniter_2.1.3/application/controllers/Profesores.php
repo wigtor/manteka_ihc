@@ -25,8 +25,8 @@ class Profesores extends CI_Controller {
 
 	public function verProfesores()
 	{
-		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		/*if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}*/
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
