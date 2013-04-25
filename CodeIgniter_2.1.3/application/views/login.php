@@ -3,6 +3,7 @@
 <?php
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
+
 <body>
 		
 		<?php
