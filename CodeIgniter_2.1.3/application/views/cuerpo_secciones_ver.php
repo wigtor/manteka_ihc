@@ -1,10 +1,6 @@
 <?php
-//crear un arreglo que tenga el nombre (listado_secciones) y ponerle datos random para mostrar en las tablitas.
-    $arreglito1 = array("ingenieria",12558996-8,"araucano","maternox","gonzalo","miMail@usach.cl");//hago un arreglo con esos  valores
-    $arreglito2 = array("Arquitectura",1111111-8,"muñoz","varas","lokohanks","miMail@usach.cl");//hago un arreglo con esos  valores
-    $secciones = array("A-1","B-2","C-4","D-89","M888");
-    //var_dump($arreglito[1]);muestro el valor con calve 1 , quedando 12.
-   // echo "{$arreglito[1]}";tambien se puede hacer asi, //muestro el valor con calve 1 , quedando 12.
+    $arreglito1 = array("ingenieria",12558996-8,"araucano","maternox","gonzalo","miMail@usach.cl");
+    $arreglito2 = array("Arquitectura",1111111-8,"muñoz","varas","lokohanks","miMail@usach.cl");
 ?>
 <fieldset>
     <legend>Secciones</legend>
