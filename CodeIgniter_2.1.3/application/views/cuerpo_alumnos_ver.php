@@ -21,7 +21,7 @@
 				</ul>
 			</div>
 		</div>
-	    <select multiple="multiple" style="width:342px; height:170px">
+	    <select size=10 style="width:342px">
 		<option>Me encantaria </option>
 		<option>saber</option>
 		<option>como hacer</option>
