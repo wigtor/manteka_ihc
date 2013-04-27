@@ -4,7 +4,7 @@
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
 <body>
-		<?php echo form_open('php/login/'); ?>
+		
 		<?php
 			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
 		?>
@@ -16,7 +16,7 @@
 				Basta de enviar correos uno por uno! :)
 			</div>
 			<div class="span4">
-					<form class="form-horizontal">
+				<?php echo form_open('php/login/'); ?>
 						<div class="control-group">
 							<label class="control-label" for="inputRut">Rut</label>
 							<div class="controls">
@@ -38,7 +38,7 @@
 								<button type="submit" class="btn">Iniciar Sesión</button>
 							</div>
 						</div>
-					</form>
+					
 			</div>
 		</div>
 		

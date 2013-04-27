@@ -7,8 +7,8 @@
 		    </div>
 		    <div id="collapseTwo" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li class="active"><a href="#">Ver planificación</a></li>
-					<li><a href="#">Editar planificación</a></li>
+		        	<li class="active"><a href="<?php site_url("Planificacion/verPlanificacion")?>">Ver planificación</a></li>
+					<li><a href="<?php echo site_url("Planificacion/editarPlanificacion")?>">Editar planificación</a></li>
 		     	</div>
 		    </div>
 	  </div>
@@ -19,10 +19,10 @@
 		    </div>
 		    <div id="collapseThree" class="accordion-body collapse">
 		    	<div class="accordion-inner">
-					<li><a href="#">Ver módulos</a></li>
-		        	<li><a href="#">Agregar módulos</a></li>
-					<li><a href="#">Editar módulos</a></li>
-					<li><a href="#">Quitar módulos</a></li>
+					<li><a href="<?php echo site_url("Modulos/verModulos")?>">Ver módulos</a></li>
+		        	<li><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
+					<li><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
+					<li><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>
 		     	</div>
 		    </div>
 	  </div>

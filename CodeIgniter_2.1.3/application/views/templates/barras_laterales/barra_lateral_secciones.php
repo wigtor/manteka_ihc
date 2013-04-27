@@ -7,10 +7,10 @@
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li><a href="#">Ver secciones</a></li>
-	        		<li><a href="#">Agregar secciones</a></li>
-					<li><a href="#">Editar secciones</a></li>
-					<li><a href="#">Borrar secciones</a></li>
+		        	<li><a href="<?php echo site_url("Secciones/verSecciones")?>">Ver secciones</a></li>
+	        		<li><a href="<?php echo site_url("Secciones/agregarSecciones")?>">Agregar secciones</a></li>
+					<li><a href="<?php echo site_url("Secciones/editarSecciones")?>">Editar secciones</a></li>
+					<li><a href="<?php echo site_url("Secciones/borrarSecciones")?>">Borrar secciones</a></li>
 		     	</div>
 		    </div>
 	  	</div>
