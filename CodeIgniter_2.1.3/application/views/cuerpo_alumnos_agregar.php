@@ -111,6 +111,14 @@
 							</div>
 
 						</div>
+						<div class="row">
+							<div class="span2 offset6" style="margin-left:55%">
+								<button class ="btn" type="submit" >Agregar</button>
+							</div>
+							<div class="span2" style="margin-left:3%">
+								<button class ="btn" type="reset" >Cancelar</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

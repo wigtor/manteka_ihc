@@ -49,6 +49,16 @@
 							</div>
 							
 						</div>
+						<div class= "row-fluid" >
+							<div class= "span9">
+								<div class = "span3 offset5">
+									<button class ="btn" type="submit" >Eliminar</button>
+								</div>
+								<div class = "span3 ">
+									<button  class ="btn" type="reset" >Cancelar</button>
+								</div>
+							</div>	
+						</div>
 					</div>	
 				</div>
 
