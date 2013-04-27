@@ -81,21 +81,33 @@
 
 					<div class="span6" >
 						<div class="row">
-							<div class="span6">
+							<div class="span5">
 								<div class="control-group">
 		  							<label class="control-label" for="inputInfo">6-.*Asignar Carrera</label>
 		  						</div>
 							</div>
 							<div  class="span6">
-								dskjbasj
+								<div class="controls">
+		    						<input type="text" id="inputInfo" placeholder="Filtro de Carrera">
+		  						</div>
+		  						<div>
+		  							<textarea rows="3" readonly="readonly"></textarea>
+		  						</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="span6">
-								te resulto
+							<div class="span5">
+								<div class="control-group">
+		  							<label class="control-label" for="inputInfo">7-.*Asignar sección</label>
+		  						</div>
 							</div>
 							<div  class="span6">
-								dskjbasj
+								<div class="controls">
+		    						<input type="text" id="inputInfo" placeholder="Filtro de Sección">
+		  						</div>
+		  						<div>
+		  							<textarea rows="3" readonly="readonly"></textarea>
+		  						</div>
 							</div>
 
 						</div>
