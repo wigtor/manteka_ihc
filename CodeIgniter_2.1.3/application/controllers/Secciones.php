@@ -43,12 +43,24 @@ class Secciones extends CI_Controller {
 		
 		
 		//Lógica del controlador
+
+
+    $alumnos1 = '<tr><td>ingenieria</td><td>12558996-8</td><td>araucano</td><td>maternox</td><td>gonzalo</td><td>miMail@usach.cl</td></tr>';
+    $alumnos2 = '<tr><td>ingenieria</td><td>12558996-8</td><td>araucano</td><td>maternox</td><td>gonzalo</td><td>miMail@usach.cl</td></tr><tr><td>Arquitectura</td><td>1111111-8</td><td>muñoz</td><td>varas</td><td>lokohanks</td><td>miMail@usach.cl</td></tr>';
+    $alumnos3 = '<tr><td>Arquitectura</td><td>1111111-8</td><td>muñoz</td><td>varas</td><td>lokohanks</td><td>miMail@usach.cl</td></tr>';
+    $seccion1 = [1,'nombreseccio1',"profesor1" ,'v1', '9_3','56567',$alumnos1];
+    $seccion2 = [2,'nombreseccio2',"profesor2", 'v2', '_30','6567',$alumnos2];
+    $seccion3 = [3,'nombreseccio3',"profesor3", 'v3', '9:0','567',$alumnos3];
+    //  id   nombre_seccion   nombre_profesor   modulo   horario   sala   alumnos
+    
+
+
+		$datos_cuerpo['listado_secciones']=[$seccion1, $seccion2, $seccion3];
 		
 		
 		
 		
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_secciones_ver', '', true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_secciones_ver', $datos_cuerpo, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_secciones', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
