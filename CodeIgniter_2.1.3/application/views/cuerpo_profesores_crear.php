@@ -42,7 +42,7 @@
 				
 			</div>
 		</div>
-		<div class="span3 offset7">
+		<div class="span3 offset9">
 			<button class="btn" type="button">Agregar</button>
 			<button class="btn" type="button">Cancelar</button>
 		</div>
