@@ -6,5 +6,11 @@ class model_usuario extends CI_Model{
       $query = $this->db->get('usuario'); //Acá va el nombre de la tabla
       return $query->row();    //   Devolvemos al controlador la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias)
    }
+   
+   function cambiarContrasegna($rut,$password_nva){
+      $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
+      $query = $this->db->update('usuario', array('PASSWORD_PRIMARIA'=>$password_nva)); //Acá va el nombre de la tabla
+      return TRUE;
+   }
 }
 ?>
