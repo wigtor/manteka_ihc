@@ -58,44 +58,31 @@ class Login extends CI_Controller {
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
-	
-		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-		$this->form_validation->set_rules('contrasegna_actual', 'Contraseña actual', 'required');
-		$this->form_validation->set_rules('nva_contrasegna_rep', 'Contraseña nueva', 'required|min_length[5]|max_length[100]');
-		$this->form_validation->set_rules('nva_contrasegna', 'Contraseña nueva', 'required|min_length[5]|max_length[100]');
+		
+		$this->form_validation->set_rules('contrasegna_actual', 'Contraseña actual', "required|xss_clean|callback_check_user_and_password[$rut]");
+		$this->form_validation->set_rules('nva_contrasegna_rep', 'Confirmación de contraseña', 'required|min_length[5]|max_length[100]|matches[nva_contrasegna]|xss_clean');
+		$this->form_validation->set_rules('nva_contrasegna', 'Contraseña nueva', 'required|min_length[5]|max_length[100]|xss_clean');
+		$this->form_validation->set_error_delimiters('<div class="error alert alert-error">', '</div>');
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->cambiarContrasegna(); //Vuelvo a llamar el cambio de contraseña si hubo un error
 		}
 		else
 		{
-			$this->load->model('model_usuario');
-			$logueo = $this->model_usuario->ValidarUsuario($rut ,$_POST['contrasegna_actual']);
-			$hayErrores = FALSE;
-			//Compruebo si son iguales las contraseñas
-			if ($_POST['nva_contrasegna'] != $_POST['nva_contrasegna_rep']) {	
-				//SETEAR ERRORES
-				$this->form_validation->set_message('nva_contrasegna_rep', 'Las contraseñas no coinciden');
-				$hayErrores = TRUE;
-			}
-			
-			if ($logueo) {
-				if ($hayErrores) {
-					$this->cambiarContrasegna(); //Vuelvo a llamar el cambio de contraseña si hubo un error
-				}
-				else {
-					$resultado = $this->model_usuario->cambiarContrasegna($rut ,md5($_POST['nva_contrasegna']));
-					redirect('/Correo/', 'index'); //Voy a la pantalla principal si se cambió correctamente la contraseña
-				}
-			}
-			else {
-				//SETEAR ERRORES
-				$this->form_validation->set_message('contrasegna_actual', 'La contraseña actual es incorrecta');
-				$hayErrores = TRUE;
-				$this->cambiarContrasegna(); //Vuelvo a llamar el cambio de contraseña si hubo un error
-			}
-			
-			
+			$resultado = $this->model_usuario->cambiarContrasegna($rut ,md5($_POST['nva_contrasegna']));
+			redirect('/Correo/', 'index'); //Voy a la pantalla principal si se cambió correctamente la contraseña
+		}
+	}
+	
+	public function check_user_and_password($current_password, $user) {
+		$this->load->model('model_usuario');
+		$logueo = $this->model_usuario->ValidarUsuario($user ,$current_password);
+		if ($logueo) {
+			return TRUE;
+		}
+		else {
+			$this->form_validation->set_message('check_user_and_password', 'La %s es incorrecta');
+			return FALSE;
 		}
 	}
 }
