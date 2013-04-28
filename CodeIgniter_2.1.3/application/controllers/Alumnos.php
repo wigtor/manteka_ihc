@@ -67,8 +67,14 @@ class Alumnos extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
+		//** FORMATO DE  RECEPCION EN LA VISTA => id  nombre  rut  apellido_paterno   apellido_materno  correo  carrera  seccion **//
+		$listado_alumnos = [[0,"nombre1","17312767-7", "paterno1","materno1", "quedaditos@usach.cl", "informatica", "A-01"] ,
+							[1,"nombre2","11111111-9", "paterno2","materno2", "quedadines@easypc.cl", "mecanica", "B-01"],
+							[2,"nombre3","12345678-7", "paterno3","materno3", "quedadits@paginillas.cl", "arquitectura", "C-01"],
+							[3,"nombre4","77777777-7", "paterno4","materno4", "quedados@gmail.cl", "medicina", "D-01"]];
+		$datos_cuerpo['listado_alumnos'] = $listado_alumnos;
 		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_ver', '', true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_ver', $datos_cuerpo, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
     }

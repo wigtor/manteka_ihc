@@ -1,6 +1,7 @@
 
 <fieldset>
 	<legend>Agregar profesor</legend>
+	<form>
 		<div class="span12">
 			<h4>Complete los siguientes datos para ingresar un profesor:</h4><br/>
 			<div class="span9">
@@ -46,4 +47,5 @@
 			<button class="btn" type="button">Agregar</button>
 			<button class="btn" type="button">Cancelar</button>
 		</div>
+	</form>
 </fieldset>
