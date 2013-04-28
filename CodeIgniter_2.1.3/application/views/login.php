@@ -9,7 +9,7 @@
 			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
 		?>
 		<div class="row-fluid">
-			<div class="span7">
+			<div class="span7 offset1">
 				<h2>Bienvenido a ManteKA</h2>
 				ManteKA es un sistema que le permite mantener una comunicación precisa y fluida con los participantes de la asignatura de Comunicación Efectiva perteneciente al módulo básico de ingeniería. <br>
 				A través de ManteKA es posible envíar correos electrónicos masivos mediante los filtros que se proporcionan. <br>
