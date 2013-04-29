@@ -24,7 +24,7 @@
 		    	<div class="accordion-inner">
 		        	<li><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
 					<li><a href="<?php echo site_url("Ayudantes/agregarAyudantes")?>">Agregar ayudantes</a></li>
-					<li><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Borrar ayudantes</a></li>
+					<li><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Editar ayudantes</a></li>
 					<li><a href="<?php echo site_url("Ayudantes/borrarAyudantes")?>">Borrar ayudantes</a></li>
 		     	</div>
 		    </div>

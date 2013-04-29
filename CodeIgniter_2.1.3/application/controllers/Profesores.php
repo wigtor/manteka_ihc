@@ -44,6 +44,9 @@ class Profesores extends CI_Controller {
 	{
 		$this->verProfesores();
 	}
+
+	
+
 }
 
 /* End of file Correo.php */
