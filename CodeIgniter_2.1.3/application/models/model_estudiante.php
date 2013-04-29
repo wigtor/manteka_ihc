@@ -1,14 +1,14 @@
 <?php
  
-class Estudiante extends CI_Model {
-    int  rut_estudiante = '';
-    var nombre1_estudiante = '';
-    var nombre2_estudiante  = '';
-    var apellido_paterno='';
-    var apellido_materno='';
-    var correo_estudiante='';
-    var cod_seccion='';
-    var cod_carrera='';
+class Model_estudiante extends CI_Model {
+    public $rut_estudiante = 0;
+    var $nombre1_estudiante = '';
+    var $nombre2_estudiante  = '';
+    var $apellido_paterno='';
+    var $apellido_materno='';
+    var $correo_estudiante='';
+    var $cod_seccion='';
+    var $cod_carrera='';
  
 // Modelo para insertar y eliminar un estudiante. No se si est� completamente correcto la verdad, no lo he podido probar
  
@@ -37,9 +37,51 @@ class Estudiante extends CI_Model {
 
     public function VerEstudiante($rut_estudiante)
     {
-        $db->query("SELECT * FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' ");
+        //$db->query("SELECT * FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' ");
+		
+		$sql="SELECT * FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$row=mysql_fetch_array($datos);
+		$estudiante[0] = $row['RUT_ESTUDIANTE'];
+		$estudiante[1] = $row['NOMBRE1_ESTUDIANTE'];
+		$estudiante[2] = $row['NOMBRE2_ESTUDIANTE'];
+		$estudiante[3] = $row['APELLIDO_PATERNO'];
+		$estudiante[4] = $row['APELLIDO_MATERNO'];
+		$estudiante[5] = $row['CORREO_ESTUDIANTE'];
+		$estudiante[6] = $row['COD_SECCION'];
+		$estudiante[7] = $row['COD_CARRERA'];
+		return $estudiante;
+		
     }
 
+	public function VerTodosLosEstudiantes()
+	{
+		
+		//db->query("SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO");
+		$sql="SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO"; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista;
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			//$est = new Estudiante();
+			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
+			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
+			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
+			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
+			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
+			$lista[$contador][6] = $row['COD_SECCION'];
+			$lista[$contador][7] = $row['COD_CARRERA'];
+			
+			$contador = $contador + 1;
+		}
+		
+		return $lista;
+		//$ssql = "SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO";
+		//return mysql_query($ssql);
+		
+		}
+	
     public function EditarEstudiante($rut_estudiante)
     {
         $this->rut_estudiante = $_POST['rut_estudiante'];
