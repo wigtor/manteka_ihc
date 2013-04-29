@@ -42,7 +42,7 @@ class Otros extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_not_found', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = ""; //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}

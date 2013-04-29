@@ -15,7 +15,8 @@
 				A través de ManteKA es posible envíar correos electrónicos masivos mediante los filtros que se proporcionan. <br>
 				Basta de enviar correos uno por uno! :)
 			</div>
-			<div class="span4">
+			<fieldset class="span3">
+				<legend>Inicio de sesión</legend>
 				<?php echo form_open('php/login/'); ?>
 						<div class="control-group">
 							<label class="control-label" for="inputRut">Rut</label>
@@ -39,7 +40,7 @@
 							</div>
 						</div>
 					
-			</div>
+			</fieldset>
 		</div>
 		
 </body>

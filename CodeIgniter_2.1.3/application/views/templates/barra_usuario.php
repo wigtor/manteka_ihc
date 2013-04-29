@@ -11,7 +11,7 @@
 					<?php  ?>
 					<!-- <span class="caret"></span>
 				</button> -->
-				<li class="dropdown active btn_with_icon pull-right" style ="padding-left: 2px; padding-bottom: 0px;">
+				<li class="dropdown active pull-right" style ="padding-left: 2px; padding-bottom: 0px;">
 				    <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="font-size: 12px; padding-bottom: 5px; padding-top: 6px; padding-left: 8px; padding-right: 5px;">
 				        <?php echo $rut_usuario ?>
 				        <b class="caret"></b>
