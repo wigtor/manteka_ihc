@@ -3,21 +3,53 @@
 	<div class="row-fluid">
 		<div class="span6">
 			1.-Listado Alumnos
+			<script type="text/javascript">
+				function ordenarFiltro(largo){
+					var filtroLista = document.getElementById("filtroLista").value;
+					var arreglo = new Array();
+					var alumno;
+					var ocultar;
+					var cont;
+					
+					<?php
+					$contadorE = 0;
+					while($contadorE<count($rs_estudiantes)){
+						echo 'arreglo['.$contadorE.']=new Array();';
+						echo 'arreglo['.$contadorE.'][1] = "'.$rs_estudiantes[$contadorE][1].'";';
+						$contadorE = $contadorE + 1;
+					}
+					?>
+					
+					
+					for(cont=0;cont < arreglo.length;cont++){
+						alumno = document.getElementById(cont);
+						ocultar=document.getElementById(cont);
+						if(0 > arreglo[cont][1].indexOf(filtroLista)){
+							ocultar.style.display='none';
+						}
+						else
+						{
+							ocultar.style.display='';
+						}
+				}
+			}
+			
+			</script>
 			<div class="span12"></div>
-			<form style="margin-left: 3%;">
+			
 				<fieldset>
 					<div class="span10">
-					<input type="text" placeholder="Flitro búsqueda">
+					<input id="filtroLista"  onchange="ordenarFiltro(<?php echo count($rs_estudiantes)?>)" type="text" placeholder="Filtro búsqueda">
 						<div class="btn-group" style="float: right;">
 						  <a class="btn ">Filtrar por:</a>
 						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						  <ul class="dropdown-menu">
-						    <li><a>Acuerdate de preguntar por los filtros</a></li>
+						    <li><a >Primer nombre</a></li>
 						  </ul>
 						</div>
 					</div>
 				</fieldset>
-			</form>
+			
 			<div class="row-fluid" style="margin-left: 3%;">
 				<table class="table table-hover">
 					<thead>
@@ -30,19 +62,26 @@
 					
 						<?php
 						$contador=0;
+						
+						echo '<form id="formDetalle" type="post">';
 						while ($contador<count($rs_estudiantes)){
 							
-							echo '<form  type="post" action="VerPorBoton/'. $rs_estudiantes[$contador][0].'">';
 							echo '<tr>';
-							echo	'<td  style="text-align:center;">'. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'<p></p><input type="submit" value="detalle" align="right"></input></td>';
-							//echo '<input type="hidden" name="seleccion1" id="tipo" value="'. $rs_articulos[$contador][0].'">';
-							//echo '<input type="submit" name="cualquierNombre"">Agregar alumno</input>';
+							echo	'<td  id="'.$contador.'"onclick="hacerSubmitDetalleAlumno('. $rs_estudiantes[$contador][0].')" style="text-align:center;">'. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 							echo '</tr>';
-							echo '</form>';
-							
+														
 							$contador = $contador + 1;
 						}
+						echo '</form>';
 						?>
+						<script type="text/javascript">
+							function hacerSubmitDetalleAlumno(rut_estudiante){
+								var detalle = document.getElementById("formDetalle");
+								detalle.action = "<?php echo site_url("Alumnos/VerPorBoton/") ?>/"+rut_estudiante;
+								detalle.submit();
+								
+							}
+						</script>
 					</tbody>
 				</table>
 			</div>
