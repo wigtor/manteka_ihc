@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-	echo $head						//Esta variable es pasada como parámetro a esta vista
+	echo $head						//Esta variable es pasada como parÃ¡metro a esta vista
 ?>
 <body>
 		
 		<?php
-			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
+			echo $banner_portada	//Esta variable es pasada como parÃ¡metro a esta vista
 		?>
 		<div class="row-fluid">
 			<div class="span7 offset1">
 				<h2>Bienvenido a ManteKA</h2>
-				ManteKA es un sistema que le permite mantener una comunicación precisa y fluida con los participantes de la asignatura de Comunicación Efectiva perteneciente al módulo básico de ingeniería. <br>
-				A través de ManteKA es posible envíar correos electrónicos masivos mediante los filtros que se proporcionan. <br>
+				ManteKA es un sistema que le permite mantener una comunicaciÃ³n precisa y fluida con los participantes de la asignatura de ComunicaciÃ³n Efectiva perteneciente al mÃ³dulo bÃ¡sico de ingenierÃ­a. <br>
+				A travÃ©s de ManteKA es posible enviar correos electrÃ³nicos masivos mediante los filtros que se proporcionan. <br>
 				Basta de enviar correos uno por uno! :)
 			</div>
 			<fieldset class="span3">
-				<legend>Inicio de sesión</legend>
+				<legend>Inicio de sesiÃ³n</legend>
 				<?php echo form_open('php/login/'); ?>
 						<div class="control-group">
 							<label class="control-label" for="inputRut">Rut</label>
@@ -25,9 +25,9 @@
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">Contraseña</label>
+							<label class="control-label" for="inputPassword">ContraseÃ±a</label>
 							<div class="controls">
-								<input type="password" name="inputPassword" id="inputPassword" placeholder="Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
+								<input type="password" name="inputPassword" id="inputPassword" placeholder="Ingrese su contraseÃ±a" value="<?= set_value('inputPassword'); ?>">
 								<div class="LoginUsuariosError"><?= form_error('passwordlogin');?></div>
 							</div>
 						</div>
@@ -36,7 +36,7 @@
 								<label class="checkbox">
 									<input type="checkbox"> Recordarme
 								</label>
-								<button type="submit" class="btn">Iniciar Sesión</button>
+								<button type="submit" class="btn">Iniciar SesiÃ³n</button>
 							</div>
 						</div>
 					

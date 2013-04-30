@@ -34,9 +34,14 @@ class Login extends CI_Controller {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
 		
+		$texto_mensaje = "Ha ocurrido un error al cambiar la contraseña";
+		
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
+		if (isset($texto_mensaje)) {
+			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $texto_mensaje, true);
+		}
 		$datos_plantilla["menuSuperiorAbierto"] = ""; //Ningún botón está presionado
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);

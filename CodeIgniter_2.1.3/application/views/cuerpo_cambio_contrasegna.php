@@ -1,6 +1,6 @@
 
 <fieldset>
-	<legend>Cambiar contraseña</legend>
+	<legend>Cambiar contraseÃ±a</legend>
 	
 	
 	<?php echo form_open('Login/cambiarContrasegnaPost'); ?>
@@ -10,27 +10,30 @@
 		
 		
 		<div class="row-fluid">
-			<label>Contraseña actual*</label>
+			<label>*ContraseÃ±a actual*</label>
 			<input type="password" name="contrasegna_actual" value="<?php echo set_value('contrasegna_actual'); ?>">
 			<?php echo form_error('contrasegna_actual', '<div class="error alert alert-error span8 pull-right">', '</div>'); ?>
 		</div>
 		
 		<div class="row-fluid">
-			<label>Nueva contraseña*</label>
+			<label>*Nueva contraseÃ±a</label>
 			<input type="password" name="nva_contrasegna" value="<?php echo set_value('nva_contrasegna'); ?>">
 			<?php echo form_error('nva_contrasegna', '<div class="error alert alert-error span8 pull-right">', '</div>'); ?>
 		</div>
 		
 		
 		<div class="row-fluid">
-			<label>Confirme su nueva contraseña*</label>
+			<label>*Confirme su nueva contraseÃ±a</label>
 			<input type="password" name="nva_contrasegna_rep" value="<?php echo set_value('nva_contrasegna_rep'); ?>">
 			<?php echo form_error('nva_contrasegna_rep', '<div class="error alert alert-error span8 pull-right">', '</div>'); ?>
 		</div>
 		
 		<div>
-			<button type="submit" class="btn">Cambiar contraseña</button>
+			<button type="submit" class="btn">*Cambiar contraseÃ±a</button>
 		</div>
+		
+		
+		
 	</div>
 	
 </fieldset>

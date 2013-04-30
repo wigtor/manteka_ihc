@@ -1,4 +1,4 @@
-<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario según el botón de la barra superior en que se encuentre -->
+<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario segÃºn el botÃ³n de la barra superior en que se encuentre -->
 
     <div class="accordion" id="accordion2">
     	<div class="accordion-group">
