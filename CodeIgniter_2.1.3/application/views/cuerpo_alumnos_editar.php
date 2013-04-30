@@ -8,15 +8,14 @@
 				<div class="row-fluid">
 					<div class="span6">
 						<div style="margin-bottom:2%">
-							1.-*Seleccionar Alumno:
+							1.-Seleccionar Alumno:
 						</div>
 						<div class="row-fluid">
 							<div class="span6">
 								<div class="controls">
-		    						<input type="text" id="inputInfo" placeholder="Filtro de Alumno">
+		    						<input type="text" id="inputInfo" placeholder="Filtro">
 		  						</div>
 							</div>
-
 							<div class="span6">
 								<div class="btn-group" >
 						  			<a class="btn ">Filtrar por:</a>
@@ -27,13 +26,13 @@
 						 			 </ul>
 								</div>
 							</div>
-
 						</div>
-						<div class= "row-fluid">
-							<div class="span6">
-								<textarea rows="3" readonly="readonly"></textarea>
+						<div class="flow_fluid">
+							<div class="span9">
+								<textarea rows="8" readonly="readonly" style="width:100%; height:100%"></textarea>
+								
 							</div>
-						</div>
+						</div>	
 
 					</div>
 					<div class="span6">

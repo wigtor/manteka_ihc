@@ -4,7 +4,7 @@
 			<div>
 			<legend>Borrar Alumno</legend>
 			</div>
-			<div>
+			
 				<div class= "row-fluid">
 					
 					<div class= "span6">
@@ -62,7 +62,7 @@
 					</div>	
 				</div>
 
-			</div>
+			
 	
 
 			
