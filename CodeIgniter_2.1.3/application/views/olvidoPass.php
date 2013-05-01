@@ -19,18 +19,26 @@
 		      	</p><br>
 
 		      	<?php echo form_open('Login/recuperaPassPost/'); ?>
-		      		<div class="control-group">
+			      	<?php
+			      	$hay_error_email = '';
+					if (form_error('email') != '') {
+						$hay_error_email = 'error';
+					}
+					?>
+		      		<div class="control-group <?php echo $hay_error_email ?>">
 			        	<label class="control-label" for="email-input">
-			          		Dirección de correo electrónico:
+			          		Email:
 			        	</label>
 			        	<div class="controls">
-			        		<input type="email" name="email" id="email-input" placeholder="Ejemplo: alguien@usach.cl" autofocus/>
-			        		<div>
-			        			<input type="submit" class="btn btn-primary" value="Enviar"></input>
-			        		</div>
+			        		<input type="email" name="email" id="email-input" placeholder="Ejemplo: alguien@usach.cl" value="<?php echo set_value('email'); ?>" autofocus/>
+			        		<?php echo form_error('email', '<span class="help-inline">', '</span>'); ?>
 			        	</div>
+
 		        	</div>
-		      	
+		      		<div>
+	        			<input type="submit" class="btn btn-primary" value="Enviar"></input>
+	        			<a class="pull-right" href="<?php echo site_url("Login/index")?>">Volver al inicio de sesión</a>
+	        		</div>
 	      	</fieldset>
     	</div>
 		
