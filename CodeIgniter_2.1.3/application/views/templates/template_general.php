@@ -37,7 +37,13 @@
 					<!-- Barra de navegación con botones undo-redo -->
 					<div style="min-height: 310px">
 						<?php
-							echo $barra_navegacion;
+							if (!isset($mostrarBarra_navegacion)) {
+								echo $barra_navegacion;
+							}
+							else if ($mostrarBarra_navegacion == TRUE){
+								echo $barra_navegacion;
+							}
+							//Si no está entonces no se hace ningún echo
 						?>
 						<!--Body content-->
 						<?php

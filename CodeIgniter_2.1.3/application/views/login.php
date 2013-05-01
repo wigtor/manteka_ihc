@@ -12,7 +12,7 @@
 			<div class="span7 offset1">
 				<h2>Bienvenido a ManteKA</h2>
 				ManteKA es un sistema que le permite mantener una comunicación precisa y fluida con los participantes de la asignatura de Comunicación Efectiva perteneciente al módulo básico de ingeniería. <br>
-				A través de ManteKA es posible enviar correos electrónicos masivos mediante los filtros que se proporcionan. <br>
+				A través de ManteKA es posible enviar correos electrónicos masivos a las personas que usted requiere <br>
 				Basta de enviar correos uno por uno! :)
 			</div>
 			<fieldset class="span3">
@@ -36,10 +36,19 @@
 								<label class="checkbox">
 									<input type="checkbox"> Recordarme
 								</label>
-								<button type="submit" class="btn">Iniciar Sesión</button>
+								<button type="submit" class="btn btn-primary">
+									Entrar
+								</button>
+								<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 							</div>
 						</div>
-					
+						<div class="control-group">
+							O puede entrar con su cuenta Gmail<br>
+
+							<button type="button" class="btn">
+								Entrar con Gmail
+							</button>
+						</div>
 			</fieldset>
 		</div>
 		

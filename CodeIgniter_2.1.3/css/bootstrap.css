@@ -1032,8 +1032,11 @@ fieldset {
   /*padding: 0;*/
   margin: 0;
   /*border: 0;*/
-  border-color: #e5e5e5; /*Lo agregu�*/
-  border-style: solid; /*Lo agregu�*/
+  border-color: #e5e5e5; /*Lo agregué*/
+  border-style: solid; /*Lo agregué*/
+  -webkit-border-radius: 5px; /*Lo agregué*/
+  -moz-border-radius: 5px; /*Lo agregué*/
+  border-radius: 5px; /*Lo agregué*/
 }
 
 legend {
