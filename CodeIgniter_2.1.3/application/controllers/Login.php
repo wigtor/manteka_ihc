@@ -89,8 +89,7 @@ class Login extends CI_Controller {
 			$new_pass = $this->randomPassword();
 			/* Seteo la nueva contraseña en el modelo y le doy un tiempo de validez */
 			$this->load->model('model_usuario');
-			$this->load->helper('date');
-			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, now());
+			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, date('Y-m-d'));
 			if ($existeEmail) {
 				$mensaje = "Su nueva contraseña es: ";
 				$mensaje += $new_pass;
