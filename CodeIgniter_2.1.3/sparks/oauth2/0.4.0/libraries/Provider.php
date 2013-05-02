@@ -194,6 +194,13 @@ abstract class OAuth2_Provider
 		{
 			throw new OAuth2_Exception($return);
 		}
+
+		try{
+			return OAuth2_Token::factory('access', $return);
+		}
+		catch(Exception $e){
+			throw new OAuth2_Exception($return);
+		}
 		
 		return OAuth2_Token::factory('access', $return);
 	}

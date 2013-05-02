@@ -88,13 +88,16 @@ class Php extends CI_Controller {
 
             // Here you should use this information to A) look for a user B) help a new user sign up with existing data.
             // If you store it all in a cookie and redirect to a registration page this is crazy-simple.
-            echo "<pre>Tokens: ";
-            var_dump($token);
+            //echo "<pre>Tokens: ";
+            //var_dump($token);
 
-            echo "\n\nUser Info: ";
-            var_dump($user);
+            //echo "\n\nUser Info: ";
+            //var_dump($user);
+            $mail = $user['email'];
+            echo "Mi correo es: ". $mail;
         } catch (OAuth2_Exception $e) {
-            show_error('That didnt work: ' . $e);
+            echo "Error";
+            //show_error('That didnt work: ' . $e);
         }
     }
 

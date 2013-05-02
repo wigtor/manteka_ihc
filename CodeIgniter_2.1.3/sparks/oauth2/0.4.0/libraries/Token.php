@@ -26,6 +26,13 @@ abstract class OAuth2_Token {
 		include_once 'Token/'.$name.'.php';
 
 		$class = 'OAuth2_Token_'.$name;
+		try{
+			return new $class($options);
+		}
+		catch(Exception $e){
+			throw new Exception("Error Processing Request", 1);
+			
+		}
 
 		return new $class($options);
 	}
