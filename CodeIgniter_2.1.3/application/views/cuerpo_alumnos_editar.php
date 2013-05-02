@@ -1,5 +1,5 @@
 <div class="row_fluid">
-	<div>
+	<div class="span10">
 		<fieldset>
 			<div>
 			<legend>Editar Alumno</legend>
@@ -104,11 +104,15 @@
 							</div>
 						</div>
 						<div class="row-fluid">
-							<div class="span2 offset5">
-								<button class ="btn" type="submit" >Guardar</button>
+							<div class="span10">
+								<div class="row-fluid">
+								<div class="span3 offset6">
+									<button class ="btn" type="submit" >Guardar</button>
+								</div>
+								<div class="span3">
+									<button class ="btn" type="reset" >Cancelar</button>
+								</div>
 							</div>
-							<div class="span2">
-								<button class ="btn" type="reset" >Cancelar</button>
 							</div>
 						</div>
 						

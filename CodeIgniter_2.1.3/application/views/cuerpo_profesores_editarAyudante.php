@@ -1,4 +1,5 @@
 <div class="row_fluid">
+<div class="span10">
 	<div>
 		<fieldset>
 			<div>
@@ -8,37 +9,57 @@
 				<div class="row-fluid">
 					<div class="span6">
 						<div style="margin-bottom:2%">
-							1.-*Seleccionar Ayudante a modificar:
+							Seleccionar Ayudante:
 						</div>
 						<div class="row-fluid">
-							<div class="span6">
-								<div class="controls">
-		    						<input type="text" id="inputInfo" placeholder="Filtro de Alumno">
-		  						</div>
+							<div class="span5">
+								Tipo de Busqueda
 							</div>
-
 							<div class="span6">
-								<div class="btn-group" >
-						  			<a class="btn ">Filtrar por:</a>
-						  			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-						  			<ul class="dropdown-menu">
-						    		<li><a>Carrera</a></li>
-						    		<li><a>Seccion</a></li>
-						 			 </ul>
-								</div>
-							</div>
-
-						</div>
-						<div class= "row-fluid">
-							<div class="span6">
-								<textarea rows="3" readonly="readonly"></textarea>
+								<select>
+									  <option>Nombre</option>
+									  <option>RUT</option>
+									  <option>Profesor</option>
+								</select>
 							</div>
 						</div>
+						<div class="flow_fluid">
+							<div class="span5">
+								1. Seleccionar Ayudante
+							</div>
+							<div class="span6">
+								<input type="text" id="inputInfo" placeholder="Filtro">
+							</div>
+							
+						</div>
+						<div class="flow_fluid">
+							<div class="span5">
+							</div>
+							<div class="span6">
+								<!--<textarea rows="8" readonly="readonly" style="width:100%; height:100%"></textarea>-->
+								<!--<pre style="heidth:200px">
+									
+								</pre>-->
+								<select multiple="multiple" style="width:100%; height:150px"  >
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+								<option>9</option>
+								<option>10</option>
+							</select>
+								
+							</div>
+						</div>	
 
 					</div>
 					<div class="span6">
 						<div style="margin-bottom:2%">
-							Complete los datos del formulario para modificar el alumno
+							Complete los datos del formulario para modificar a un ayudante
 						</div>
 						<div class="row-fluid">
 							<div class="span4">
@@ -105,11 +126,13 @@
 							</div>
 						</div>
 						<div class="row-fluid">
-							<div class="span2 offset5">
-								<button class ="btn" type="submit" >Guardar</button>
-							</div>
-							<div class="span2">
-								<button class ="btn" type="reset" >Cancelar</button>
+							<div class="span10">
+								<div class="span3 offset6">
+									<button class ="btn" type="submit" >Guardar</button>
+								</div>
+								<div class="span3">
+									<button class ="btn" type="reset" >Cancelar</button>
+								</div>
 							</div>
 						</div>
 						
@@ -119,4 +142,5 @@
 			</div>
 		</fieldset>
 	</div>
+</div>
 </div>
