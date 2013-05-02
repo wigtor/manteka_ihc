@@ -51,13 +51,14 @@ class Login extends CI_Controller {
 	*/
 	private function enviarCorreo($destino, $subject, $mensaje) {
 		try {
-			$this->email->from('manteka@manteka.cl', 'ManteKA');
+			$this->email->from('no-reply@manteka.cl', 'ManteKA');
 			$this->email->to($destino);
 			$this->email->subject($subject);
 			$this->email->message($mensaje);
 
 
 			$this->email->send();
+			//echo $this->email->print_debugger();
 			return TRUE;
 		}
 		catch (Exception $e) {
@@ -92,11 +93,11 @@ class Login extends CI_Controller {
 			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, date('Y-m-d'));
 			if ($existeEmail) {
 				$mensaje = "Su nueva contraseña es: ";
-				$mensaje += $new_pass;
-				$mensaje += "\nEsta contraseña es válida sólo por el día de hoy, luego no podrá utilizarla";
-				$mensaje += "\nA penas inicie sesión nuevamente cambie su contraseña";
-				$mensaje += "\n\nEl equipo de ManteKA";
-				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje)) {
+				$mensaje = $mensaje.$new_pass;
+				$mensaje = $mensaje."\nEsta contraseña es válida sólo por el día de hoy, luego no podrá utilizarla";
+				$mensaje = $mensaje."\nA penas inicie sesión nuevamente cambie su contraseña";
+				$mensaje = $mensaje."\n\nEl equipo de ManteKA";
+				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje) == FALSE) {
 					$datos_plantilla["titulo_msj"] = "No se pudo enviar el correo";
 					$datos_plantilla["cuerpo_msj"] = "Existe un problema con el servicio que envía correos electrónicos, comuniquese con el administrador";
 					$datos_plantilla["tipo_msj"] = "alert-error";
