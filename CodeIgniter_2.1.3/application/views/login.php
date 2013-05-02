@@ -35,11 +35,11 @@
 							<div class="controls">
 								<label class="checkbox">
 									<input type="checkbox"> Recordarme
+									<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 								</label>
 								<button type="submit" class="btn btn-primary">
 									Entrar
-								</button>
-								<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
+								</button>					
 							</div>
 						</div>
 				<?php echo form_close(""); ?>
