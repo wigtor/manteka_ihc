@@ -62,7 +62,7 @@ function ordenarFiltro(){
 }
 </script>
 
-<!-->
+
 <fieldset>
 	<legend>Ver Alumnos</legend>
 	<div class="row-fluid">
@@ -123,7 +123,7 @@ function ordenarFiltro(){
 		</div>
 		<div class="span6" style="margin-left: 2%;">		
 		2.-Detalle Alumnos:
-	    <pre> <!--style="margin-top: 16%; margin-left: 0%;"-->
+	    <pre> <style="margin-top: 16%; margin-left: 0%;">
 
 			Rut:              <b id="rutDetalle"></b>
 			Nombre uno:       <b id="nombreunoDetalle"></b>
@@ -132,7 +132,7 @@ function ordenarFiltro(){
 			Apellido materno: <b id="apellidomaternoDetalle"></b>
 			Carrera:          <b id="carreraDetalle" ></b>
 			Sección:          <b id="seccionDetalle"></b>
-			Correo:           <b id="correoDetalle">usach</b>
+			Correo:           <b id="correoDetalle"></b>
 		
 
 		

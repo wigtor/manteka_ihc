@@ -29,7 +29,8 @@ class Model_estudiante extends CI_Model {
 
     public function EliminarEstudiante($rut_estudiante)
     {
-        $db->query("DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' ");
+		$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
     }
     
 //operaciones para ver y editar datos de un estudiante
