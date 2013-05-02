@@ -1,15 +1,19 @@
 <script type="text/javascript">
-	function hacerSubmitDetalleAlumno(rut_estudiante){
-		var detalle = document.getElementById("formDetalle");
-		detalle.action = "<?php echo site_url("Alumnos/VerPorBoton/") ?>/"+rut_estudiante;
-		detalle.submit();
-		
+	
+	if("<?php echo $mensaje_confirmacion_borrar;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion_borrar;?>"!="-1"){
+				alert("Alumno eliminado correctamente");
+				}
+				else{
+					alert("Error al eliminar");
+				}
 	}
 </script>
 
 <script type="text/javascript">
 	function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera){
-		
+			
+			document.getElementById("rutEliminar").value = rut;
 			document.getElementById("rutDetalle").innerHTML = rut;
 			document.getElementById("nombreunoDetalle").innerHTML = nombre1;
 			document.getElementById("nombredosDetalle").innerHTML = nombre2;
@@ -22,7 +26,25 @@
 	}
 </script>
 
-						
+<script type="text/javascript">
+	function eliminarAlumno(){
+		
+		var rut = document.getElementById("rutEliminar").value;
+		
+		if(rut!=""){
+					var borrar = document.getElementById("formBorrar");
+					borrar.action = "<?php echo site_url("Alumnos/EliminarAlumno/") ?>/"+rut;
+					borrar.submit();
+					
+					
+		}
+		else{
+				alert("Seleecione un estudiante");
+		}
+		
+	}
+</script>
+
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
@@ -63,16 +85,22 @@ function ordenarFiltro(){
 </script>
 
 
-<fieldset>
-	<legend>Ver Alumnos</legend>
-	<div class="row-fluid">
+<div class= "row-fluid">
+	<div class= "span10">
+		<fieldset>
+			<div>
+			<legend>Borrar Alumno</legend>
+			</div>
+			
+				<div class= "row-fluid">
+					
 		<div class="span6">
 			1.-Listado Alumnos
 			<div class="span12"></div>
 			
 				<fieldset>
 					<div class="span10">
-					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro bÃºsqueda">
 						<!--div class="btn-group" style="float: right;">
 						  <a class="btn ">Filtrar por:</a>
 						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -94,7 +122,7 @@ function ordenarFiltro(){
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th style="text-align:left;">Nombre Completo</th>
+							<th style="text-align:center;">Nombre Completo</th>
 							
 						</tr>
 					</thead>
@@ -108,7 +136,7 @@ function ordenarFiltro(){
 							
 							echo '<tr>';
 							echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-										  style="text-align:left;">
+										  style="text-align:center;">
 										  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 							echo '</tr>';
 														
@@ -121,18 +149,50 @@ function ordenarFiltro(){
 				</table>
 			</div>
 		</div>
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-		2.-Detalle Alumnos:
-	    <pre style="margin-top: 2%; padding: 2%">
-Rut:              <b id="rutDetalle"></b>
-Nombre uno:       <b id="nombreunoDetalle"></b>
-Nombre dos:       <b id="nombredosDetalle" ></b>
-Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-Apellido materno: <b id="apellidomaternoDetalle"></b>
-Carrera:          <b id="carreraDetalle" ></b>
-Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
 
-		</div>
+
+					<div class="span6">
+						<div style="margin-bottom:2%">
+							2.-Detalle del Alumno:
+						</div>
+						<form id="formBorrar" type="post">
+							<div class="row-fluid">
+								<pre> <style="margin-top: 50%; margin-left: 0%;">
+								
+									<input type="hidden" id="rutEliminar" value="">
+									Rut:              <b id="rutDetalle"></b>
+									Nombre uno:       <b id="nombreunoDetalle"></b>
+									Nombre dos:       <b id="nombredosDetalle" ></b>
+									Apellido paterno: <b id="apellidopaternoDetalle" ></b>
+									Apellido materno: <b id="apellidomaternoDetalle"></b>
+									Carrera:          <b id="carreraDetalle" ></b>
+									SecciÃ³n:          <b id="seccionDetalle"></b>
+									Correo:           <b id="correoDetalle"></b>
+								
+
+								
+								</pre>
+								
+							</div>
+							<div class= "row-fluid" >
+								<div class= "span9">
+									<div class = "span3 offset5">
+										<button class ="btn"  onclick="eliminarAlumno()" >Eliminar</button>
+									</div>
+									<div class = "span3 ">
+										<button  class ="btn" type="reset" >Cancelar</button>
+									</div>
+								</div>	
+							</div>
+						</form>
+					</div>	
+				</div>
+
+			
+	
+
+			
+		</fieldset>
 	</div>
-</fieldset>
+	</div>
+</div>
