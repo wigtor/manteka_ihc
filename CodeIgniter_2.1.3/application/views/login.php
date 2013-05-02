@@ -3,6 +3,7 @@
 <?php
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
+<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
 <body>
 		
 		<?php
@@ -24,7 +25,7 @@
 							<div class="controls">
 							  <input style="width:200px" type="text" name="inputRut" id="inputRut" placeholder=" Ingrese rut, ejemplo: 1756574" value="<?= set_value('inputRut'); ?>">
 							  <STRONG>-</STRONG>
-							  <input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut" placeholder="K" value="<?= set_value('inputGuionRut'); ?>">
+							  <input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut" onblur="calculaDigitoVerificador()" placeholder="K" value="<?= set_value('inputGuionRut'); ?>">
 							</div>
 						</div>
 						<div class="control-group">
