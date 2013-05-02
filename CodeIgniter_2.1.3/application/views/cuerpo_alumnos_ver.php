@@ -62,7 +62,7 @@ function ordenarFiltro(){
 }
 </script>
 
-
+<!-->
 <fieldset>
 	<legend>Ver Alumnos</legend>
 	<div class="row-fluid">
