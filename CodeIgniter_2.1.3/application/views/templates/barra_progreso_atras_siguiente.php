@@ -12,9 +12,9 @@
 		<div class="span5">
 			<div class="row-fluid">
 				<ul class="pager pull-right" style="margin:0">
-					<li><a href="#"><div class="btn_with_icon_solo">&#60;</div> &nbsp; Atrás</a></li>
+					<li><a href="#"><div class="btn_with_icon_solo">&#60;</div> &nbsp; AtrÃ¡s</a></li>
 					<li><a href="#"><div class="btn_with_icon_solo">&#61;</div> &nbsp; Siguiente</a></li>
-					<li><a href="#"><div class="btn_with_icon_solo">Â</div> &nbsp; Cancelar</a></li>
+					<li><a href="#"><div class="btn_with_icon_solo">Ã‚</div> &nbsp; Cancelar</a></li>
 				</ul>
 			</div>
 		</div>';
