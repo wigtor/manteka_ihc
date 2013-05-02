@@ -28,7 +28,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th style="text-align:center;">Nombre Completo</th>
+							<th style="text-align:left;">Nombre Completo</th>
 						</tr>
 
 					</thead>
@@ -55,20 +55,17 @@
 				</table>
 			</div>
 		</div>
-		<div class="span6" style="margin-left: %; padding: 56 %">		
+		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle Profesor:
-	    <pre style="margin-top: 2%; padding: 10 %">	
-Rut:              <!--<b id="rutDetalle"></b>-->
-Nombre uno:       <!--<b id="nombreunoDetalle"></b>-->
-Apellido paterno: <!--<b id="apellidopaternoDetalle" ></b>-->
-Correo:           <!--<b id="mailDetalle" ></b>-->
-Fono:			  <!--<b id="fonoDetalle" ></b> -->
-Modulo:			  <!--<b id="moduloDetalle" ></b> -->
-Seccion:          <!--<b id="seccionDetalle"></b>-->
-Tipo:             <!--<b id="tipoDetalle">usach</b>-->
-		
-
-		</pre>
+	    <pre style="margin-top: 2%; padding: 2%">
+ Rut:              <!--<b id="rutDetalle"></b>-->
+ Nombre uno:       <!--<b id="nombreunoDetalle"></b>-->
+ Apellido paterno: <!--<b id="apellidopaternoDetalle" ></b>-->
+ Correo:           <!--<b id="mailDetalle" ></b>-->
+ Fono:			  <!--<b id="fonoDetalle" ></b> -->
+ Modulo:			  <!--<b id="moduloDetalle" ></b> -->
+ Seccion:          <!--<b id="seccionDetalle"></b>-->
+ Tipo:             <!--<b id="tipoDetalle">usach</b>--></pre>
 
 		</div>
 	</div>

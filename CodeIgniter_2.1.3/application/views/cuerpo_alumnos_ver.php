@@ -94,7 +94,7 @@ function ordenarFiltro(){
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th style="text-align:center;">Nombre Completo</th>
+							<th style="text-align:left;">Nombre Completo</th>
 							
 						</tr>
 					</thead>
@@ -108,7 +108,7 @@ function ordenarFiltro(){
 							
 							echo '<tr>';
 							echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-										  style="text-align:center;">
+										  style="text-align:left;">
 										  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 							echo '</tr>';
 														
@@ -121,22 +121,17 @@ function ordenarFiltro(){
 				</table>
 			</div>
 		</div>
-		<div class="span6" style="margin-left: 2%;">		
+		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle Alumnos:
-	    <pre> <style="margin-top: 16%; margin-left: 0%;">
-
-			Rut:              <b id="rutDetalle"></b>
-			Nombre uno:       <b id="nombreunoDetalle"></b>
-			Nombre dos:       <b id="nombredosDetalle" ></b>
-			Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-			Apellido materno: <b id="apellidomaternoDetalle"></b>
-			Carrera:          <b id="carreraDetalle" ></b>
-			Sección:          <b id="seccionDetalle"></b>
-			Correo:           <b id="correoDetalle"></b>
-		
-
-		
-		</pre>
+	    <pre style="margin-top: 2%; padding: 2%">
+Rut:              <b id="rutDetalle"></b>
+Nombre uno:       <b id="nombreunoDetalle"></b>
+Nombre dos:       <b id="nombredosDetalle" ></b>
+Apellido paterno: <b id="apellidopaternoDetalle" ></b>
+Apellido materno: <b id="apellidomaternoDetalle"></b>
+Carrera:          <b id="carreraDetalle" ></b>
+Sección:          <b id="seccionDetalle"></b>
+Correo:           <b id="correoDetalle"></b></pre>
 
 		</div>
 	</div>
