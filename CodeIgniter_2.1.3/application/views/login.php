@@ -11,9 +11,10 @@
 		<div class="row-fluid">
 			<div class="span7 offset1">
 				<h2>Bienvenido a ManteKA</h2>
-				ManteKA es un sistema que le permite mantener una comunicación precisa y fluida con los participantes de la asignatura de Comunicación Efectiva perteneciente al módulo básico de ingeniería. <br>
-				A través de ManteKA es posible enviar correos electrónicos masivos a las personas que usted requiere <br>
-				Basta de enviar correos uno por uno! :)
+						<p align="justify">
+							ManteKA es un sistema que le permite mantener una comunicación precisa y fluida con los participantes de la asignatura de Comunicación Efectiva perteneciente al módulo básico de ingeniería. 							A través de ManteKA es posible enviar correos electrónicos masivos a las personas que usted requiere 
+							Basta de enviar correos uno por uno!.
+						</p>
 			</div>
 			<fieldset class="span3">
 				<legend>Inicio de sesión</legend>
@@ -29,15 +30,15 @@
 						<div class="control-group">
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
-								<input style="width:250px type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
+								<input style="width:242px" type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
 								<div class="LoginUsuariosError"><?= form_error('passwordlogin');?></div>
 							</div>
 						</div>
 						<div class="control-group">
 							<div class="controls">
 								<label class="checkbox">
-									<input type="checkbox"> Recordarme
-									<a href="<?php echo site_url("Login/olvidoPass")?>"> &nbsp ¿Olvidó su contraseña?</a>
+									<input type="checkbox"> Recordarme&nbsp
+									<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 								</label>
 								<button type="submit" class="btn btn-primary">
 									Entrar
