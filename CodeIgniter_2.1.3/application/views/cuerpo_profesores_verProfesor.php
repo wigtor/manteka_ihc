@@ -7,7 +7,7 @@
 			
 				<fieldset>
 					<div class="span10">
-					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro bÃºsqueda">
 						<!--div class="btn-group" style="float: right;">
 						  <a class="btn ">Filtrar por:</a>
 						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
