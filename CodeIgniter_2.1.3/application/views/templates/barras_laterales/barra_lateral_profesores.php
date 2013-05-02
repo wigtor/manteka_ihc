@@ -1,4 +1,4 @@
-<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario según el botón de la barra superior en que se encuentre -->
+<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario segÃºn el botÃ³n de la barra superior en que se encuentre -->
 
     <div class="accordion" id="accordion2">
     	<div class="accordion-group">
@@ -24,7 +24,7 @@
 		    	<div class="accordion-inner">
 		        	<li><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
 					<li><a href="<?php echo site_url("Ayudantes/agregarAyudantes")?>">Agregar ayudantes</a></li>
-					<li><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Borrar ayudantes</a></li>
+					<li><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Editar ayudantes</a></li>
 					<li><a href="<?php echo site_url("Ayudantes/borrarAyudantes")?>">Borrar ayudantes</a></li>
 		     	</div>
 		    </div>
