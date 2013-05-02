@@ -21,13 +21,15 @@
 						<div class="control-group">
 							<label class="control-label" for="inputRut">Rut</label>
 							<div class="controls">
-							  <input type="text" name="inputRut" id="inputRut" placeholder="Ingrese rut, ejemplo: 175657436" value="<?= set_value('inputPassword'); ?>">
+							  <input style="width:200px" type="text" name="inputRut" id="inputRut" placeholder=" Ingrese rut, ejemplo: 1756574" value="<?= set_value('inputRut'); ?>">
+							  <STRONG>-</STRONG>
+							  <input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut" placeholder="K" value="<?= set_value('inputGuionRut'); ?>">
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
-								<input type="password" name="inputPassword" id="inputPassword" placeholder="Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
+								<input style="width:250px type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
 								<div class="LoginUsuariosError"><?= form_error('passwordlogin');?></div>
 							</div>
 						</div>
@@ -35,20 +37,22 @@
 							<div class="controls">
 								<label class="checkbox">
 									<input type="checkbox"> Recordarme
-									<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
+									<a href="<?php echo site_url("Login/olvidoPass")?>"> &nbsp ¿Olvidó su contraseña?</a>
 								</label>
 								<button type="submit" class="btn btn-primary">
 									Entrar
 								</button>					
 							</div>
 						</div>
+						<hr>
 				<?php echo form_close(""); ?>
 				<?php echo form_open('php/signInGoogle/google'); ?>
-						<div class="control-group">
-							O puede entrar con su cuenta Gmail<br>
-
+						<div class="control-group text-center">
 							<button type="submit" class="btn">
-								Entrar con Gmail
+								<div class="pull-right">
+									<img src="/<?php echo config_item('dir_alias') ?>/img/logo_gmail.png" alt="logo gmail" style="width: 50px; height: 20px;">
+								</div>
+								Entrar con&nbsp 
 							</button>
 						</div>
 				<?php echo form_close(""); ?>
