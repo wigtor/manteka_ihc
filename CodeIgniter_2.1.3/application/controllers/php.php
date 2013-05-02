@@ -6,13 +6,15 @@ class Php extends CI_Controller {
    {
 		
       if(!isset($_POST['inputRut'])){   //   Si no recibimos ningún valor proveniente del formulario, significa que el usuario reci?n ingresa.   
-         $this->load->view('login');      //   Por lo tanto le presentamos la pantalla del formulario de ingreso.
+         redirect('/Login/', 'index');
+         //$this->load->view('login');      //   Por lo tanto le presentamos la pantalla del formulario de ingreso.
       }
       else{                        //   Si el usuario ya pasó por la pantalla inicial y presionó el botón "Ingresar"
          $this->form_validation->set_rules('inputRut','','required');      //   Configuramos las validaciones ayudandonos con la librer?a form_validation del Framework Codeigniter
          $this->form_validation->set_rules('inputPassword','password','required');
          if(($this->form_validation->run()==FALSE)){ //   Verificamos si el usuario super? la validaci?n
-            $this->load->view('login'); //   En caso que no, volvemos a presentar la pantalla de login
+            redirect('/Login/', 'index');
+            //$this->load->view('login'); //   En caso que no, volvemos a presentar la pantalla de login
          }
          else{ //   Si ambos campos fueron correctamente rellanados por el usuario,
             $this->load->model('model_usuario');
