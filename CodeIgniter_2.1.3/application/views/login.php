@@ -42,13 +42,16 @@
 								<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 							</div>
 						</div>
+				<?php echo form_close(""); ?>
+				<?php echo form_open('php/signInGoogle/google'); ?>
 						<div class="control-group">
 							O puede entrar con su cuenta Gmail<br>
 
-							<button type="button" class="btn">
+							<button type="submit" class="btn">
 								Entrar con Gmail
 							</button>
 						</div>
+				<?php echo form_close(""); ?>
 			</fieldset>
 		</div>
 		

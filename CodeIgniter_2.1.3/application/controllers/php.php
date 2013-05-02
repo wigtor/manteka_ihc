@@ -55,22 +55,22 @@ class Php extends CI_Controller {
    *  Una vez realizado esto, el usuario se autentifica normalmente.
    */
    function signInGoogle($provider){
+
     $this -> load -> helper('url');
     $this->load->library('session');
     $this -> load -> spark('oauth2/0.4.0');
    //si el proveedor pasado es foursquare
     if($provider == 'foursquare')
     {
-        $provider = $this -> oauth2 -> provider($provider, array(
-        'id' => 'tu_app_id_de_foursquare',
-        'secret' => 'tu_app_secret_de_foursquare', ));
+        //$provider = $this -> oauth2 -> provider($provider, array(
+        //'id' => 'tu_app_id_de_foursquare',
+        //'secret' => 'tu_app_secret_de_foursquare', ));
        //si el proveedor pasado es google
     }else if($provider == 'google')
     {
         $provider = $this -> oauth2 -> provider($provider, array(
-      tu_app_id
-        'id' => 'tu_client_id_de_google',
-        'secret' => 'tu_client_secret_de_google', ));
+        'id' => '412900046548.apps.googleusercontent.com',
+        'secret' => 'RN_R-d6BDT2XYwQdVHB5S9tO', ));
     }
 
     if (!$this -> input -> get('code')) {
