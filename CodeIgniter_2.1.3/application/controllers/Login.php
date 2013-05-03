@@ -90,22 +90,23 @@ class Login extends CI_Controller {
 			$new_pass = $this->randomPassword();
 			/* Seteo la nueva contraseña en el modelo y le doy un tiempo de validez */
 			$this->load->model('model_usuario');
-			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, date('Y-m-d'));
+			$fechaValidez = date("Y-m-d", strtotime(date("Y-m-d")." +1 day"));
+			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, $fechaValidez);
 			if ($existeEmail) {
 				$mensaje = "Su nueva contraseña es: ";
 				$mensaje = $mensaje.$new_pass;
-				$mensaje = $mensaje."\nEsta contraseña es válida sólo por el día de hoy, luego no podrá utilizarla";
-				$mensaje = $mensaje."\nA penas inicie sesión nuevamente cambie su contraseña";
-				$mensaje = $mensaje."\n\nEl equipo de ManteKA";
+				$mensaje = $mensaje."\nEsta contraseña es válida hasta el día ".$fechaValidez.", luego no podrá utilizarla";
+				$mensaje = $mensaje."\nA penas inicie sesión nuevamente cambie su contraseña.";
+				$mensaje = $mensaje."\n\nEl equipo de ManteKA.";
 				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje) == FALSE) {
 					$datos_plantilla["titulo_msj"] = "No se pudo enviar el correo";
-					$datos_plantilla["cuerpo_msj"] = "Existe un problema con el servicio que envía correos electrónicos, comuniquese con el administrador";
+					$datos_plantilla["cuerpo_msj"] = "Existe un problema con el servicio que envía correos electrónicos, comuniquese con el administrador.";
 					$datos_plantilla["tipo_msj"] = "alert-error";
 
 				}
 				else {
 					$datos_plantilla["titulo_msj"] = "Listo";
-					$datos_plantilla["cuerpo_msj"] = "Se ha enviado un correo electrónico a la cuenta '".$destino."' con su nueva contraseña ".$new_pass;
+					$datos_plantilla["cuerpo_msj"] = "Se ha enviado un correo electrónico a la cuenta '".$destino."' con su nueva contraseña.";
 					$datos_plantilla["tipo_msj"] = "alert-success";
 				}
 				
