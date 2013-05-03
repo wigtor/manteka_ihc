@@ -21,6 +21,15 @@ class model_usuario extends CI_Model{
          return $query->row();
       }
    }
+
+   function ValidarRut($rut){         //   Consulta Mysql para buscar en la tabla Usuario aquellos usuarios que coincidan con el rut y password ingresados en pantalla de login
+      $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+      //FALTA HACER QUE VALIDE USANDO LA PASSWORD TEMPORAL
+      $query = $this->db->get('usuario'); //Acá va el nombre de la tabla
+      $res = $query->row();
+      return $res; // Devolvemos al controlador la fila que coincide con la b?squeda. (FALSE en caso que no existir coincidencias)
+      
+   }
    
    function cambiarContrasegna($rut,$password_nva){
       $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
@@ -47,5 +56,6 @@ class model_usuario extends CI_Model{
       $query =$this->db->get('usuario');
       return $query->row();
    }
+
 }
 ?>
