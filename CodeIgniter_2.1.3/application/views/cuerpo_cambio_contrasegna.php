@@ -14,26 +14,32 @@
 			<label>Apellido</label>
 			<input type="text" placeholder="<?php echo $datos['apellido'] ?>"value="<?php echo $datos['apellido'] ?>" disabled>
 		</div>	
+		&nbsp &nbsp
+		<div style ="display:inline-block">
+			<label>Rut</label>
+			<input type="text" placeholder="<?php echo $rut_usuario ?>" value="<?php echo $rut_usuario ?>" disabled>
+		</div>
+		&nbsp &nbsp
+		<div style ="display:inline-block">
+			<label>Tipo de cuenta</label>
+			<input type="text" placeholder="<?php echo $datos['tipo_usuario'] ?>" value="<?php echo $datos['tipo_usuario'] ?>" disabled>
+		</div>
 		<br>
-		<br>
-		<label>Tipo de cuenta</label>
-		<input type="text" placeholder="<?php echo $datos['tipo_usuario'] ?>" value="<?php echo $datos['tipo_usuario'] ?>" disabled>
-
-		
-
-		<label>Rut</label>
-		<input type="text" placeholder="<?php echo $rut_usuario ?>" value="<?php echo $rut_usuario ?>" disabled>
-
-		<label>Teléfono</label>
-		<input type="text" placeholder="<?php echo $datos['telefono'] ?>" value="<?php echo $datos['telefono'] ?>" >
-		
-
-		<label>Correo</label>
-		<input type="text" placeholder="<?php echo $datos['email1'] ?>"  value="<?php echo $datos['email1'] ?>" >
-
-		<label>Correo alternativo</label>
-		<input type="text" placeholder="<?php echo $datos['email2'] ?>" value="<?php echo $datos['email2'] ?>" >
-		
+		<hr>
+		<div style ="display:inline-block">
+			<label>Teléfono</label>
+			<input type="text" placeholder="<?php echo $datos['telefono'] ?>" value="<?php echo $datos['telefono'] ?>" >
+		</div>
+		&nbsp &nbsp
+		<div style ="display:inline-block">
+			<label>Correo</label>
+			<input type="text" placeholder="<?php echo $datos['email1'] ?>"  value="<?php echo $datos['email1'] ?>" >
+		</div>
+		&nbsp &nbsp
+		<div style ="display:inline-block">
+			<label>Correo alternativo</label>
+			<input type="text" placeholder="<?php echo $datos['email2'] ?>" value="<?php echo $datos['email2'] ?>" >
+		</div>
 		<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
 			$hay_error_contrasegna_actual = '';
 			$hay_error_nva_contrasegna = '';
