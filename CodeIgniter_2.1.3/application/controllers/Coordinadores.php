@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Coordinacion extends CI_Controller {
+class Coordinadores extends CI_Controller {
 	
 	/**
 	 * Index Page for this controller.
@@ -43,6 +43,7 @@ class Coordinacion extends CI_Controller {
 		$this->load->model('model_coordinadores');
 		$ListaObjetosCoordinaciones = $this->model_coordinadores->ObtenerTodosCoordinadores();
 		$contador = 0;
+		$resultados = array();
 		/*$resultados = array{ => array{
 			'nombre'=>,
 			'rut'=>,
@@ -55,24 +56,26 @@ class Coordinacion extends CI_Controller {
 			
 		}*/
 		foreach ($ListaObjetosCoordinaciones as $row) {
-			$resultados[$contador]['nombre'] = $row->COORD_NOMBRE;
-			$resultados[$contador]['rut'] = $row->RUT_USUARIO;
-			$resultados[$contador]['e-mail_1'] = $row->CORREO1_USER;
-			$resultados[$contador]['e-mail_2'] = $row->CORREO2_USER;
-			$resultados[$contador]['telefono'] = $row->COORD_TELEFONO;
-			$resultados[$contador]['tipo'] = $row->ID_TIPO;
-			$resultados[$contador]['id'] = $row->ID_COORD;
+			$resultados[$contador] = array(
+				'nombre'=> $row->COORD_NOMBRE,
+				'rut'=> $row->RUT_USUARIO,
+				'e-mail_1'=> $row->CORREO1_USER,
+				'e-mail_2'=> $row->CORREO2_USER,
+				'telefono'=> $row->COORD_TELEFONO,
+				'tipo'=> $row->ID_TIPO,
+				'id'=> $row->ID_COORD,
+			);
 			$contador++;
 		}
+		$datos_plantilla['resultados'] = $resultados;
 
 
 
 
 
 
-
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_ver', $resultados, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_coordinacion', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
     

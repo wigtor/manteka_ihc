@@ -2,7 +2,7 @@
 	<legend>Cuerpo central</legend>
 	
 	<?php
-		echo $resultados[0]['COORD_NOMBRE'];
+		echo $resultados[0]['nombre'];
         
 		?>
 </fieldset>

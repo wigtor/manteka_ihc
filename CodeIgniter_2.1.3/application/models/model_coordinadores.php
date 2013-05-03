@@ -1,5 +1,5 @@
 <?php
-class model_coordinador extends CI_Model{
+class model_coordinadores extends CI_Model{
   /* function ValidarUsuario($rut,$password){         //   Consulta Mysql para buscar en la tabla Usuario aquellos usuarios que coincidan con el rut y password ingresados en pantalla de login
       $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
       $query = $this->db->where('PASSWORD',md5($password));
@@ -47,23 +47,23 @@ class model_coordinador extends CI_Model{
                escape() pueda hacer el mismo trabajo.
             */
             case 'e-mail':
-               this->db->like('CORREO1_USER',this->db->escape_like_str($entrada));
-               this->db->or_like('CORREO2_USER',this->db->escape_like_str($entrada));
+               $this->db->like('CORREO1_USER',$this->db->escape_like_str($entrada));
+               $this->db->or_like('CORREO2_USER',$this->db->escape_like_str($entrada));
                break;
             case 'rut':
-               this->db->like('RUT_USUARIO',this->db->escape_like_str($entrada));
+               $this->db->like('RUT_USUARIO',$this->db->escape_like_str($entrada));
                break;
             case 'nombre':
-               this->db->like('COORD_NOMBRE',this->db->escape_like_str($entrada));
+               $this->db->like('COORD_NOMBRE',$this->db->escape_like_str($entrada));
                break;
             case 'telefono':
-               this->db->like('COORD_TELEFONO',this->db->escape_like_str($entrada));
+               $this->db->like('COORD_TELEFONO',$this->db->escape_like_str($entrada));
                break;
             case 'tipo': //será un criterio válido?
-               this->db->like('ID_TIPO',this->db->escape_like_str($entrada));
+               $this->db->like('ID_TIPO',$this->db->escape_like_str($entrada));
                break;
             case 'id':
-               this->db->like('ID_COORD',this->db->escape_like_str($entrada));
+               $this->db->like('ID_COORD',$this->db->escape_like_str($entrada));
                break;
             default:
                //nada
@@ -71,9 +71,9 @@ class model_coordinador extends CI_Model{
          }
          //Ejecución consulta
          $ObjetoListaResultados=array();
-         this->db->get('coordinador');//equivale a this->db->from()
-         this->db->order_by('COORD_NOMBRE','asc');
-         $ObjetoListaResultados = this->db->result();
+         $this->db->get('coordinador');//equivale a this->db->from()
+         $this->db->order_by('COORD_NOMBRE','asc');
+         $ObjetoListaResultados = $this->db->result();
    	}
 }
 ?>
