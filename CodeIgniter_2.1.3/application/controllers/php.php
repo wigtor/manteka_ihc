@@ -6,13 +6,15 @@ class Php extends CI_Controller {
    {
 		
       if(!isset($_POST['inputRut'])){   //   Si no recibimos ningún valor proveniente del formulario, significa que el usuario reci?n ingresa.   
-         $this->load->view('login');      //   Por lo tanto le presentamos la pantalla del formulario de ingreso.
+         redirect('/Login/', 'index');
+         //$this->load->view('login');      //   Por lo tanto le presentamos la pantalla del formulario de ingreso.
       }
       else{                        //   Si el usuario ya pasó por la pantalla inicial y presionó el botón "Ingresar"
          $this->form_validation->set_rules('inputRut','','required');      //   Configuramos las validaciones ayudandonos con la librer?a form_validation del Framework Codeigniter
          $this->form_validation->set_rules('inputPassword','password','required');
          if(($this->form_validation->run()==FALSE)){ //   Verificamos si el usuario super? la validaci?n
-            $this->load->view('login'); //   En caso que no, volvemos a presentar la pantalla de login
+            redirect('/Login/', 'index');
+            //$this->load->view('login'); //   En caso que no, volvemos a presentar la pantalla de login
          }
          else{ //   Si ambos campos fueron correctamente rellanados por el usuario,
             $this->load->model('model_usuario');
@@ -55,18 +57,16 @@ class Php extends CI_Controller {
    *  Una vez realizado esto, el usuario se autentifica normalmente.
    */
    function signInGoogle($provider){
+    $rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+    if ($rut == TRUE) {
+      redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
+    }
 
     $this -> load -> helper('url');
     $this->load->library('session');
     $this -> load -> spark('oauth2/0.4.0');
-   //si el proveedor pasado es foursquare
-    if($provider == 'foursquare')
-    {
-        //$provider = $this -> oauth2 -> provider($provider, array(
-        //'id' => 'tu_app_id_de_foursquare',
-        //'secret' => 'tu_app_secret_de_foursquare', ));
-       //si el proveedor pasado es google
-    }else if($provider == 'google')
+    //si el proveedor pasado es Google
+    if($provider == 'google')
     {
         $provider = $this -> oauth2 -> provider($provider, array(
         'id' => '412900046548.apps.googleusercontent.com',
@@ -74,30 +74,48 @@ class Php extends CI_Controller {
     }
 
     if (!$this -> input -> get('code')) {
-        // By sending no options it'll come back here
         $url = $provider -> authorize();
 
         redirect($url);
     } else {
         try {
-            // Have a go at creating an access token from the code
+            // Se posee de un Token exitoso enviado por google
             $token = $provider -> access($this->input->get('code'));
 
-            // Use this object to try and get some user details (username, full name, etc)
+            // Se obtiene la información del usuario (Nombre, mail, dirección, foto)
             $user = $provider->get_user_info($token); 
 
-            // Here you should use this information to A) look for a user B) help a new user sign up with existing data.
-            // If you store it all in a cookie and redirect to a registration page this is crazy-simple.
-            //echo "<pre>Tokens: ";
-            //var_dump($token);
-
-            //echo "\n\nUser Info: ";
-            //var_dump($user);
+            // Correo del usuario ingresado
             $mail = $user['email'];
-            echo "Mi correo es: ". $mail;
+            
+            //Cargando modelo para validar correo del usuario ingresado con algún registro en la db
+            $this->load->model('model_usuario');
+            
+            /*
+              * Verificando si existe algún usuario con dicho correo electrónico. 
+              * Resultado de la consulta del modelo. Falso de no encontrar nada o
+              * Las filas correspondientes a los usuarios que posean dicho mail.
+            */
+            $usuario = $this->model_usuario->existe_mail($mail);
+            if ($usuario)
+            {
+              $newdata = array(
+                   'rut'  => $usuario->RUT_USUARIO,
+                   'email'     => $usuario->CORREO1_USER,
+                   'tipo_usuario' => $usuario->ID_TIPO,
+                   'logged_in' => TRUE
+              );
+              $this->session->set_userdata($newdata);
+              redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
+            }
+            else // En caso d eno existir ningún usuario con correo = $mail
+            {
+              redirect("Login", "index");
+            }
+
+            
         } catch (OAuth2_Exception $e) {
-            echo "Error";
-            //show_error('That didnt work: ' . $e);
+            show_error('No se pudo loguear mediante Google :(: ' . $e);
         }
     }
 

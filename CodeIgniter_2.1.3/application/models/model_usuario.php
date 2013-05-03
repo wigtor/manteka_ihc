@@ -47,5 +47,6 @@ class model_usuario extends CI_Model{
       $query =$this->db->get('usuario');
       return $query->row();
    }
+
 }
 ?>
