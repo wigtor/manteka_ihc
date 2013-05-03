@@ -88,7 +88,7 @@ function ordenarFiltro(){
 <div class= "row-fluid">
 	<div class= "span10">
 		<fieldset>
-			<legend>Borrar Alumno</legend>
+			<legend>Borrar Profesor</legend>
 				<div class= "row-fluid">
 					
 		<div class="span6">
@@ -149,30 +149,29 @@ function ordenarFiltro(){
 
 					<div class="span6">
 						<div style="margin-bottom:2%">
-							2.-Detalle del Alumno:
+							2.-Detalle del Profesor:
 						</div>
 						<form id="formBorrar" type="post">
 							<div class="row-fluid">
 								<pre <style="margin-top: 50%; margin-left: 0%;">
-Rut:              <b id="rutDetalle"></b>
-Nombre uno:       <b id="nombreunoDetalle"></b>
-Nombre dos:       <b id="nombredosDetalle" ></b>
-Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-Apellido materno: <b id="apellidomaternoDetalle"></b>
-Carrera:          <b id="carreraDetalle" ></b>
-Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
-								
+RUN:              <b id="rutDetalle"></b>
+Nombre completo
+Correo:           <b id="correoDetalle"></b>
+Mail:
+Telefono:
+Modulo:
+Seccion:
+Tipo: </pre>							
 							</div>
 							<div class= "row-fluid" >
-								<div class= "span9">
-									<div class = "span3 offset5">
-										<button class ="btn"  onclick="eliminarAlumno()" >Eliminar</button>
+								<div class="row" style="width: 1052px; margin-top:10px">		
+									<div class="span2" style="margin-left: 336px;">
+										<button class="btn" type="submit">Eliminar</button>
 									</div>
-									<div class = "span3 ">
-										<button  class ="btn" type="reset" >Cancelar</button>
+									<div class="span1" style="margin-left: -52px;">
+										<button class="btn" type="reset">Cancelar</button>
 									</div>
-								</div>	
+								</div>
 							</div>
 						</form>
 					</div>	
