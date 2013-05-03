@@ -1,9 +1,7 @@
 <div class= "row-fluid">
 	<div class= "span10">	
-		<fieldset>
-			<div>	
+		<fieldset>	
 			<legend>Agregar Alumno</legend>
-			</div>
 			<div>
 				<div class= "row-fluid">
 					<div class= "span6" style="margin-bottom:2%">
@@ -114,14 +112,15 @@
 						
 					</div>
 				</div>
-				<div class="row" style="width: 845px; margin-top:10px">		
-						<div class="span2" style="margin-left: 654px;">
+				<div class="row" style="width: 845px;">		
+						<div class="span2" style="margin-left: 668px;">
 								<button class="btn" type="submit">Agregar</button>
 							</div>
 							<div class="span1" style="margin-left: -32px;">
 								<button class="btn" type="reset">Cancelar</button>
 							</div>
 						</div>
+					</div> 
 			</div>
 		</fieldset>
 	</div>

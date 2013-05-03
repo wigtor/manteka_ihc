@@ -88,9 +88,7 @@ function ordenarFiltro(){
 <div class= "row-fluid">
 	<div class= "span10">
 		<fieldset>
-			<div>
 			<legend>Borrar Alumno</legend>
-			</div>
 			
 				<div class= "row-fluid">
 					
@@ -118,11 +116,11 @@ function ordenarFiltro(){
 					</div>
 				</fieldset>
 			
-			<div class="row-fluid" style="margin-left: 3%;">
+			<div class="row-fluid" style="margin-left: 0%;">
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th style="text-align:center;">Nombre Completo</th>
+							<th style="text-align:left;">Nombre Completo</th>
 							
 						</tr>
 					</thead>
@@ -136,7 +134,7 @@ function ordenarFiltro(){
 							
 							echo '<tr>';
 							echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-										  style="text-align:center;">
+										  style="text-align:left;">
 										  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 							echo '</tr>';
 														
@@ -152,37 +150,32 @@ function ordenarFiltro(){
 
 
 					<div class="span6">
-						<div style="margin-bottom:2%">
+						<div style="margin-bottom:0%">
 							2.-Detalle del Alumno:
 						</div>
 						<form id="formBorrar" type="post">
 							<div class="row-fluid">
-								<pre> <style="margin-top: 50%; margin-left: 0%;">
-								
-									<input type="hidden" id="rutEliminar" value="">
-									Rut:              <b id="rutDetalle"></b>
-									Nombre uno:       <b id="nombreunoDetalle"></b>
-									Nombre dos:       <b id="nombredosDetalle" ></b>
-									Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-									Apellido materno: <b id="apellidomaternoDetalle"></b>
-									Carrera:          <b id="carreraDetalle" ></b>
-									Sección:          <b id="seccionDetalle"></b>
-									Correo:           <b id="correoDetalle"></b>
-								
-
-								
-								</pre>
+								<pre style="margin-top: 2%; padding: 2%">
+Rut:              <b id="rutDetalle"></b>
+Nombre uno:       <b id="nombreunoDetalle"></b>
+Nombre dos:       <b id="nombredosDetalle" ></b>
+Apellido paterno: <b id="apellidopaternoDetalle" ></b>
+Apellido materno: <b id="apellidomaternoDetalle"></b>
+Carrera:          <b id="carreraDetalle" ></b>
+Sección:          <b id="seccionDetalle"></b>
+Correo:           <b id="correoDetalle"></b></pre>
+								<input type="hidden" id="rutEliminar" value="">
 								
 							</div>
 							<div class= "row-fluid" >
-								<div class= "span9">
-									<div class = "span3 offset5">
-										<button class ="btn"  onclick="eliminarAlumno()" >Eliminar</button>
+								<div class="row" style="width: 1052px; margin-top:10px">		
+									<div class="span2" style="margin-left: 336px;">
+										<button class="btn" type="submit">Eliminar</button>
 									</div>
-									<div class = "span3 ">
-										<button  class ="btn" type="reset" >Cancelar</button>
+									<div class="span1" style="margin-left: -52px;">
+										<button class="btn" type="reset">Cancelar</button>
 									</div>
-								</div>	
+								</div>
 							</div>
 						</form>
 					</div>	
