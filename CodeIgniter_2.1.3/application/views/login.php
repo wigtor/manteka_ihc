@@ -4,6 +4,43 @@
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
+
+<script type='text/javascript'>
+	/* Esta función se llama al hacer click en el botón entrar, 
+	* por convención las funciones que utilizan document.getElementById()
+	* deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
+	* Esta función retorna true o false, en caso de ser true el formulario se envía al servidor
+	* Para ver como se configura esto se debe ver como es seteado el evento onsubmit() en el formulario.
+	*/
+	function validacionRut() {
+		var inputRut = document.getElementById("inputRut");
+		var rut = inputRut.value;
+		var inputGuionRut = document.getElementById("inputGuionRut");
+		var guionCaracter = inputGuionRut.value;
+		var resultadoValidacionRut = calculaDigitoVerificador(rut, guionCaracter);
+
+		if (resultadoValidacionRut == DV_CORRECTO) {
+			//Hago el submit
+			return true;
+		}
+		else if (resultadoValidacionRut == DV_NO_VALIDO) {
+			var controlGroupRut = document.getElementById("groupRut");
+			$(controlGroupRut).addClass("error");
+			var spanError = document.getElementById("spanInputRutError");
+			$(spanError).html("El rut introducido no es válido.");
+			return false;
+		}
+		else if (resultadoValidacionRut == DV_INCORRECTO) {
+			var controlGroupRut = document.getElementById("groupRut");
+			$(controlGroupRut).addClass("error");
+			var spanError = document.getElementById("spanInputRutError");
+			$(spanError).html("El dígito verificador o el rut no son válidos.");
+			return false;
+		}
+		return false;
+	}
+</script>
+
 <body>
 		
 		<?php
@@ -19,7 +56,10 @@
 			</div>
 			<fieldset class="span3">
 				<legend>Inicio de sesión</legend>
-				<?php echo form_open('Login/LoginPost/'); ?>
+					<?php
+						$attributes = array('onSubmit' => 'return validacionRut()', 'id' => 'formLogin');
+						echo form_open('Login/LoginPost', $attributes);
+					?>
 						<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
 							$inputRut = '';
 							$inputPassword = '';
@@ -30,19 +70,20 @@
 								$inputRut = 'error';
 							}
 						?>
-						<div class="control-group <?php echo $inputRut ?>">
+						<div class="control-group <?php echo $inputRut ?>" id="groupRut">
 							<label class="control-label" for="inputRut">Rut</label>
 							<div class="controls">
-							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" placeholder=" Ingrese rut, ejemplo: 1756574" value="<?= set_value('inputRut'); ?>">
+							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="<?= set_value('inputRut'); ?>">
 							 	<STRONG>-</STRONG>
-							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="K" value="<?= set_value('inputGuionRut'); ?>">
+							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="0" value="<?= set_value('inputGuionRut'); ?>">
 								<?= form_error('inputRut', '<span class="help-inline">', '</span>');?>
+								<span id="spanInputRutError" class="help-inline"></span>
 							</div>
 						</div>
-						<div class="control-group <?php echo $inputPassword ?>">
+						<div class="control-group <?php echo $inputPassword ?>" id="groupPassword">
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
-								<input style="width:242px" type="password" name="inputPassword" onclick="calculaDigitoVerificador()" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
+								<input style="width:242px" type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
 								<?= form_error('inputPassword', '<span class="help-inline">', '</span>');?>
 							</div>
 						</div>

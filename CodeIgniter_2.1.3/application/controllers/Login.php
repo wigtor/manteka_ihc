@@ -156,6 +156,8 @@ class Login extends CI_Controller {
 	*/
 	public function LoginPost() {
 		$Rut = $this->input->post('inputRut');
+		$dv = $this->input->post('inputGuionRut');
+		$this->form_validation->set_rules('inputGuionRut', 'Dígito verificador', "required"); //Se verifica sólo para que reaparezca al cargar la vista
 		$this->form_validation->set_rules('inputRut', 'usuario', "required|callback_check_userRUT");
 		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$Rut]");
 		
