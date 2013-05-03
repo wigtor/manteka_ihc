@@ -108,9 +108,24 @@ class Php extends CI_Controller {
               $this->session->set_userdata($newdata);
               redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
             }
-            else // En caso d eno existir ningún usuario con correo = $mail
+            else // En caso de no existir ningún usuario con correo = $mail
             {
-              redirect("Login", "index");
+              $datos_plantilla["titulo_msj"] = "Error";
+              $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA";
+              $datos_plantilla["tipo_msj"] = "alert-error";
+
+              /* Finalmente muestro la vista que indica que esto fue realizado correctamente */
+              $datos_plantilla["title"] = "ManteKA";
+              $datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+              $datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+              
+              $datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+              $datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+              //$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+              $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+              //$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+
+
             }
 
             
