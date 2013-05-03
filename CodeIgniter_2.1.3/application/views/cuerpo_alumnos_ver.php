@@ -72,7 +72,7 @@ function ordenarFiltro(){
 			
 				<fieldset>
 					<div class="span10">
-					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro bÃºsqueda">
 						<!--div class="btn-group" style="float: right;">
 						  <a class="btn ">Filtrar por:</a>
 						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -132,8 +132,9 @@ Nombre dos:       <b id="nombredosDetalle" ></b>
 Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
-Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
+SecciÃ³n:          <b id="seccionDetalle"></b>
+Correo:           <b id="correoDetalle"></b>
+</pre>
 
 		</div>
 	</div>
