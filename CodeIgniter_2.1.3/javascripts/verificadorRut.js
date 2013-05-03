@@ -6,13 +6,16 @@ function calculaDigitoVerificador() {
 	var inputGuionRut = document.getElementById("inputGuionRut");
 	var guionCaracter = inputGuionRut.value;
 
-	if(isNaN(rut) || rut.length == 0 || rut.length > 8 ) {
-        alert("Rut malo");
+	if(isNaN(rut) || rut.length == 0 || rut.length > 8 || tiene_letras(rut)) {
+        alert("Rut no valido");
     } 
     else {
-    	if(getDV(rut) == guionCaracter.toLowerCase()) alert("Rut bueno");
+    	if(getDV(rut) == guionCaracter.toLowerCase()) alert("Rut correcto");
+    	else{
+    		alert("Rut incorrecto");
+    	}    	
     }
-    //alert("Rut malo");
+    
                 
 }
  
@@ -26,12 +29,19 @@ function getDV(rut) {
     var resto=11-(total%11)
     return (resto<10)?resto:((resto>10)?0:'k')
 
-	/*
-    nuevo_numero = numero.toString().split("").reverse().join("");
-    for(i=0,j=2,suma=0; i < nuevo_numero.length; i++, ((j==7) ? j=2 : j++)) {
-        suma += (parseInt(nuevo_numero.charAt(i)) * j); 
-    }
-    n_dv = 11 - (suma % 11);
-    return ((n_dv == 11) ? 0 : ((n_dv == 10) ? "K" : n_dv));*/
 }
+
+
+
+function tiene_letras(texto){
+	var letras="abcdefghyjklmnñopqrstuvwxyz";
+    texto = texto.toLowerCase();
+    for(i=0; i<texto.length; i++){
+       if (letras.indexOf(texto.charAt(i),0)!=-1){
+          return true;
+       }
+   }
+   return false;
+}
+
 

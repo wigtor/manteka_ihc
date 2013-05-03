@@ -25,13 +25,13 @@
 							<div class="controls">
 							  <input style="width:200px" type="text" name="inputRut" id="inputRut" placeholder=" Ingrese rut, ejemplo: 1756574" value="<?= set_value('inputRut'); ?>">
 							  <STRONG>-</STRONG>
-							  <input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut" onblur="calculaDigitoVerificador()" placeholder="K" value="<?= set_value('inputGuionRut'); ?>">
+							  <input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="K" value="<?= set_value('inputGuionRut'); ?>">
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
-								<input style="width:242px" type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
+								<input style="width:242px" type="password" name="inputPassword" onclick="calculaDigitoVerificador()" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
 								<div class="LoginUsuariosError"><?= form_error('passwordlogin');?></div>
 							</div>
 						</div>
