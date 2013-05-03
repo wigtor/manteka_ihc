@@ -90,7 +90,8 @@ function ordenarFiltro(){
 					</div>
 				</fieldset>
 			
-			<div class="row-fluid" style="margin-left: 3%;">
+			<div class="row-fluid" style="margin-left: 0%;">
+				<div class="span9">
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -119,6 +120,7 @@ function ordenarFiltro(){
 												
 					</tbody>
 				</table>
+			</div>
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">

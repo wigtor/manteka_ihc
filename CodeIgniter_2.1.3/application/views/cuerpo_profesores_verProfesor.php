@@ -3,7 +3,7 @@
 	<div class="row-fluid">
 		<div class="span6">
 			1.-Listado Profesores
-			<div class="span12"></div>
+			<div class="span9"></div>
 			
 				<fieldset>
 					<div class="span10">
@@ -24,7 +24,7 @@
 					</div>
 				</fieldset>
 			
-			<div class="row-fluid" style="margin-left: 3%;">
+			<div class="row-fluid" style="margin-left: 0%;">
 				<table class="table table-hover">
 					<thead>
 						<tr>
