@@ -74,10 +74,13 @@
             </div>
       	</div>
 		
-		<div>
-			<input type="submit" class="btn btn-primary" value="Cambiar contraseña"></input>
+		<div style ="display:inline-block">
+			<input type="submit" class="btn btn-primary" value="Guardar"></input>
 		</div>
-		
+		&nbsp &nbsp
+		<div style ="display:inline-block">
+			<input type="button" class="btn btn-primary" onclick= "window.location.href='/<?php echo config_item('dir_alias') ?>/index.php/Login/index'" value="Cancelar"></input>
+		</div>
 		
 		
 	</div>
