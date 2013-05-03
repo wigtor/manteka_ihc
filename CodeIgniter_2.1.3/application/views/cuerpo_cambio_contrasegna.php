@@ -1,6 +1,6 @@
 
 <fieldset>
-	<legend>Configuración usuario</legend>
+	<legend>Perfil de usuario</legend>
 	
 	
 	<?php echo form_open('Login/cambiarContrasegnaPost'); ?>
