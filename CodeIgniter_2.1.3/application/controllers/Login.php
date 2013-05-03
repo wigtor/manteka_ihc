@@ -19,6 +19,13 @@ class Login extends CI_Controller {
 	 */
 
 
+
+
+	/******************************************************************************************************************************
+	* Funciones de tipo GET
+	* Acá se ponen las funciones que cargan vistas a través del método GET, sólo muestran vistas.
+	******************************************************************************************************************************/
+
 	/**
 	* Función principal del controlador de Login, es llamado para mostrar la vista de login inicialmente.
 	*/
@@ -131,6 +138,15 @@ class Login extends CI_Controller {
 	}
 
 
+
+
+
+	/******************************************************************************************************************************
+	* Funciones de tipo POST
+	* Por convención, las funciones que terminan en "Post" corresponden a las funciones que son llamadas cuando se envian datos
+	* al servidor a través de un formulario.
+	******************************************************************************************************************************/
+
 	/**
 	* Función llamada desde el login para loguear al usuario.
 	* 
@@ -171,8 +187,13 @@ class Login extends CI_Controller {
 
 
 	/**
+	* Función que es llamada cuando se envía la dirección de correo electrónico para recuperar la contraseña
 	* 
-	* 
+	* Se verifica que el email introducido es válido y se verifica que existe en la base de datos
+	* Si existe un error se vuelve a mostrar la vista olvidoPass()
+	* Si no hubo error se setea la nueva contraseña en la base de datos y se le da cierto periodo de validez (2 días por ahora)
+	* Luego se envía un correo con esta nueva contraseña a la dirección introducida y se muestra una 
+	* vista con el resultado del envío del correo electrónico.
 	*/
 	public function recuperaPassPost() {
 		$this->form_validation->set_rules('email', 'email', "required|email|xss_clean|callback_check_mail_exist");
@@ -226,9 +247,14 @@ class Login extends CI_Controller {
 	
 	
 	
-	/*
-		Por convención, las funciones que terminan en "Post" corresponden a las funciones que son llamadas cuando se envian datos
-		al servidor a través de un formulario.
+	/**
+	* Función que se llama cuando el usuario envía el formulario para cambiar la contraseña
+	* 
+	* Se comprueba que el usuario está logueado, la validez de las variables.
+	* Se comprueba que la contraseña actual introducida es correcta.
+	* Se comprueba de que las contraseñas nuevas y su repetición son iguales.
+	* Si existen errores en las validaciones, se setean los mensajes de error y se llama la vista 
+	* normal para cambiar la contraseña.
 	*/
 	public function cambiarContrasegnaPost() {
 	
@@ -285,9 +311,16 @@ class Login extends CI_Controller {
 	}
 	
 
-	public function check_user_and_password($current_password, $user) {
+	/**
+	* Función de apoyo a las validaciones, comprueba el usuario y la contraseña en la base de datos.
+	* 
+	* @param string $current_password La contraseña actual que se desea comprobar.
+	* @param string $rut El rut del usuario que se desea comprobar junto a la contraseña.
+	* @param return bool Indica con TRUE si el son correctos el usuario y la contraseña según la base de datos.
+	*/
+	public function check_user_and_password($current_password, $rut) {
 		$this->load->model('model_usuario');
-		$logueo = $this->model_usuario->ValidarUsuario($user ,$current_password);
+		$logueo = $this->model_usuario->ValidarUsuario($rut ,$current_password);
 		if ($logueo) {
 			return TRUE;
 		}
@@ -298,9 +331,15 @@ class Login extends CI_Controller {
 	}
 
 
-	public function check_userRUT($user) {
+	/**
+	* Función de apoyo a las validaciones, comprueba que el rut existe en la base de datos.
+	* 
+	* @param string $rut El rut del usuario que se desea comprobar en la base de datos.
+	* @param return bool Indica con TRUE si el rut existe.
+	*/
+	public function check_userRUT($rut) {
 		$this->load->model('model_usuario');
-		$logueo = $this->model_usuario->ValidarRut($user);
+		$logueo = $this->model_usuario->ValidarRut($rut);
 		if ($logueo) {
 			return TRUE;
 		}
@@ -311,6 +350,12 @@ class Login extends CI_Controller {
 	}
 
 
+	/**
+	* Función de apoyo a las validaciones, comprueba que el email introducido existe en la base de datos.
+	* 
+	* @param string $email La dirección de correo que se desea comprobar.
+	* @param return bool Indica con TRUE si el email existe y pertenece a algún usuario.
+	*/
 	public function check_mail_exist($email) {
 		$this->load->model('model_usuario');
 		if ($this->model_usuario->existe_mail($email)) {
@@ -325,6 +370,8 @@ class Login extends CI_Controller {
 
 	/**
 	* Función que genera una contraseña aleatória.
+	* 
+	* @return string Un string de 8 caracteres alfanuméricos con la contraseña generada.
 	*/
 	private function randomPassword() {
 	    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
