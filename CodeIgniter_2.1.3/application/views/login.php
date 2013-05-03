@@ -75,7 +75,7 @@
 							<div class="controls">
 							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="<?= set_value('inputRut'); ?>">
 							 	<STRONG>-</STRONG>
-							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="0" value="<?= set_value('inputGuionRut'); ?>">
+							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="k" value="<?= set_value('inputGuionRut'); ?>">
 								<?= form_error('inputRut', '<span class="help-inline">', '</span>');?>
 								<span id="spanInputRutError" class="help-inline"></span>
 							</div>

@@ -1,12 +1,38 @@
 
 <fieldset>
-	<legend>Cambiar contraseña</legend>
+	<legend>Configuración usuario</legend>
 	
 	
 	<?php echo form_open('Login/cambiarContrasegnaPost'); ?>
 	<div class="error"> 
-		<label>Nombre de usuario</label>
+		<div style ="display:inline-block">
+			<label>Nombre</label>
+			<input type="text" placeholder="<?php echo $rut_usuario ?>" value="<nombre>" disabled>
+		</div>
+		&nbsp &nbsp
+		<div style ="display:inline-block">
+			<label>Apellido</label>
+			<input type="text" placeholder="<?php echo $rut_usuario ?>" value="<apellido>" disabled>
+		</div>	
+		<br>
+		<br>
+		<label>Tipo de cuenta</label>
+		<input type="text" placeholder="<?php echo $rut_usuario ?>" value="<tipo cuenta>" disabled>
+
+		
+
+		<label>Rut</label>
 		<input type="text" placeholder="<?php echo $rut_usuario ?>" value="<?php echo $rut_usuario ?>" disabled>
+
+		<label>Teléfono</label>
+		<input type="text" placeholder="<telefono>" value="<telefono>" >
+		
+
+		<label>Correo</label>
+		<input type="text" placeholder="<correo>" value="<correo>" >
+
+		<label>Correo alternativo</label>
+		<input type="text" placeholder="<correo opcional>" value="<correo alternativo>" >
 		
 		<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
 			$hay_error_contrasegna_actual = '';
@@ -22,6 +48,7 @@
 				$hay_error_nva_contrasegna_rep = 'error';
 			}
 		?>
+		
 
 		<div class="control-group <?php echo $hay_error_contrasegna_actual ?>">  
             <label class="control-label" for="contrasegna_actual">* Contraseña actual</label>  
