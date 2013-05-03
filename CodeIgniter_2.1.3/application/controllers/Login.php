@@ -17,11 +17,16 @@ class Login extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+
+
+	/**
+	* Función principal del controlador de Login, es llamado para mostrar la vista de login inicialmente.
+	*/
 	public function index()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 	    if ($rut == TRUE) {
-	      redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
+	      redirect('/Correo/', '');         // En dicho caso, se redirige a la interfaz principal
 	    }
 	    
 		$datos_plantilla["title"] = "ManteKA login";
@@ -31,6 +36,11 @@ class Login extends CI_Controller {
 		
 	}
 
+
+	/**
+	* Función que carga la vista para que el usuario recupere su contraseña, 
+	* El usuario puede ingresar su email para así enviarle un correo con la contraseña temporal.
+	*/
 	public function olvidoPass()
 	{
 		$datos_plantilla["title"] = "ManteKA";
@@ -40,19 +50,27 @@ class Login extends CI_Controller {
 		
 	}
 
-	private function randomPassword() {
-	    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-	    $pass = array(); //remember to declare $pass as an array
-	    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-	    for ($i = 0; $i < 8; $i++) {
-	        $n = rand(0, $alphaLength);
-	        $pass[] = $alphabet[$n];
-	    }
-	    return implode($pass); //turn the array into a string
-	}
+	/**
+	* Función que se llama al presionar el botón para cerrar sesión.
+	* 
+	* Borra las cookies del usuario para eliminar su sesión.
+	* Luego redirecciona al login. 
+	*/
+	function logout() {
+		$this->session->unset_userdata('rut');
+		$this->session->unset_userdata('email');
+    	$this->session->unset_userdata('loggued_in');
+		redirect('/Login/', ''); //   Lo regresamos a la pantalla de login y pasamos como par?metro el mensaje de error a presentar en pantalla
+   	}
 
-	/*
-		Esta función se usa sólo para enviar el correo de recuperación de contraseña
+
+	/**
+	* Esta función se usa sólo para enviar el correo de recuperación de contraseña
+	* 
+	* @param string $destino Es el mail del destinatario del correo.
+	* @param string $subject Es el tema o título del correo.
+	* @param string $mensaje Es el texto que contiene el correo.
+	* @return bool Indica si se envió correctamente el correo. 
 	*/
 	private function enviarCorreo($destino, $subject, $mensaje) {
 		try {
@@ -71,50 +89,91 @@ class Login extends CI_Controller {
 		}
 	}
 
-	public function check_mail_exist($email) {
-		$this->load->model('model_usuario');
-		if ($this->model_usuario->existe_mail($email)) {
-			return TRUE;
+
+	/**
+	* Esta función muestra la vista para cambiar la contraseña
+	* 
+	* Lleva un argumento que se setea por defecto en un array vacio, 
+	* de esta forma cuando el usuario abre esa vista por primera vez el array está vacio
+	* Cuando la vista es rellamada para mostrarla nuevamente pero con mensajes de error, warnings o success entonces 
+	* este array contiene el mensaje a ser mostrado (ver más abajo como se llama con el array)
+	* 
+	* @param array $mensajes_alert Un arreglo con los mensajes de error que se mostrarán.
+	*/
+	public function cambiarContrasegna($mensajes_alert = array())
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
-		else {
-			$this->form_validation->set_message('check_mail_exist', 'El %s no existe en ManteKA, intente nuevamente.');
-			return FALSE;
+		
+		
+		//$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["title"] = "ManteKA";
+
+		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
+		if (count($mensajes_alert) > 0) {
+			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
 		}
+		$datos_plantilla["menuSuperiorAbierto"] = ""; //Ningún botón está presionado
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_cambio_contrasegna', '', true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["barra_lateral"] = ""; //$this->load->view('templates/barras_laterales/barra_lateral_planificacion', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);
 	}
 
+
+	/**
+	* Función llamada desde el login para loguear al usuario.
+	* 
+	* Valida las variables contra la base de datos, setea los mensajes de error y 
+	* devuelve al login en caso de ser incorrectos los parámetros provienientes desde la vista.
+	* En caso que el login resulte correcto, se setean las cookies con los datos del usuario logueado.
+	*/
 	public function LoginPost() {
 		$Rut = $this->input->post('inputRut');
 		$this->form_validation->set_rules('inputRut', 'usuario', "required|callback_check_userRUT");
 		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$Rut]");
 		
-		if ($this->form_validation->run() == FALSE)
-		{
+		if ($this->form_validation->run() == FALSE) {
 			$this->index(); //Vuelvo a llamar el cambio de contraseña si hubo un error
-		}else{
-			 $this->load->model('model_usuario');
+		}
+		else {
+			$this->load->model('model_usuario');
             $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);   //   comprobamos que el usuario exista en la base de datos y la password ingresada sea correcta
-            if($ExisteUsuarioyPassoword){   // La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
-				      $newdata = array(
-                   'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
-                   'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
-                   'tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
-                   'logged_in' => TRUE
-              );
-				      $this->session->set_userdata($newdata);
-				
-				      redirect('/Correo/', 'index');
-				    }
-            else{   //   Si no logró validar
-               //$data['error']="Rut o password incorrecta, por favor vuelva a intentar";
-		          $this->session->unset_userdata('rut');
-		          $this->session->unset_userdata('email');
-              $this->session->unset_userdata('tipo_usuario');
-		          $this->session->unset_userdata('loggued_in');
-              redirect('/Login/', 'refresh'); //   Lo regresamos a la pantalla de login y pasamos como par?metro el mensaje de error a presentar en pantalla
-            }
+            if($ExisteUsuarioyPassoword) {   // La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
+				$newdata = array(
+					'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
+					'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
+					'tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
+					'logged_in' => TRUE
+              	);
+		      	$this->session->set_userdata($newdata);
+				redirect('/Correo/', 'index');
+			}
+            else { // Si no logró validar
+		       	$this->session->unset_userdata('rut');
+		      	$this->session->unset_userdata('email');
+              	$this->session->unset_userdata('tipo_usuario');
+		      	$this->session->unset_userdata('loggued_in');
+		      	redirect('/Login/', ''); // Lo regresamos a la pantalla de login
+			}
 		}
 	}
 
+
+	/**
+	* 
+	* 
+	*/
 	public function recuperaPassPost() {
 		$this->form_validation->set_rules('email', 'email', "required|email|xss_clean|callback_check_mail_exist");
 		if ($this->form_validation->run() == FALSE)
@@ -165,42 +224,7 @@ class Login extends CI_Controller {
 	}
 
 	
-	/*
-		Esta función muestra la vista para cambiar la contraseña, pero lleva un argumento que se setea por defecto 
-		en un array vacio, de esta forma cuando el usuario abre esa vista por primera vez el array está vacio
-		Cuando la vista es rellamada para mostrarla nuevamente pero con mensajes de error, warnings o success entonces 
-		este array contiene el mensaje a ser mostrado (ver más abajo como se llama con el array)
-	*/
-	public function cambiarContrasegna($mensajes_alert = array())
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		
-		
-		//$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["title"] = "ManteKA";
-
-		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
-		if (count($mensajes_alert) > 0) {
-			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
-		}
-		$datos_plantilla["menuSuperiorAbierto"] = ""; //Ningún botón está presionado
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_cambio_contrasegna', '', true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = ""; //$this->load->view('templates/barras_laterales/barra_lateral_planificacion', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
 	
-	}
 	
 	/*
 		Por convención, las funciones que terminan en "Post" corresponden a las funciones que son llamadas cuando se envian datos
@@ -260,6 +284,7 @@ class Login extends CI_Controller {
 		}
 	}
 	
+
 	public function check_user_and_password($current_password, $user) {
 		$this->load->model('model_usuario');
 		$logueo = $this->model_usuario->ValidarUsuario($user ,$current_password);
@@ -271,6 +296,7 @@ class Login extends CI_Controller {
 			return FALSE;
 		}
 	}
+
 
 	public function check_userRUT($user) {
 		$this->load->model('model_usuario');
@@ -284,29 +310,48 @@ class Login extends CI_Controller {
 		}
 	}
 
-	function logout() {
-		$this->load->library('session');
-		$this->load->helper('url');
-		$this->session->unset_userdata('rut');
-		$this->session->unset_userdata('email');
-    $this->session->unset_userdata('loggued_in');
-		redirect('/Login/', 'refresh'); //   Lo regresamos a la pantalla de login y pasamos como par?metro el mensaje de error a presentar en pantalla
-   }
+
+	public function check_mail_exist($email) {
+		$this->load->model('model_usuario');
+		if ($this->model_usuario->existe_mail($email)) {
+			return TRUE;
+		}
+		else {
+			$this->form_validation->set_message('check_mail_exist', 'El %s no existe en ManteKA, intente nuevamente.');
+			return FALSE;
+		}
+	}
 
 
-      /*
-   *  Función para autentificarse en el sistema mediante una cuenta Google.
-   *  El Controlador solicita la autentificación a Google.
-   *  Una vez realizado esto, el usuario se autentifica normalmente.
-   */
-   function signInGoogle($provider){
+	/**
+	* Función que genera una contraseña aleatória.
+	*/
+	private function randomPassword() {
+	    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+	    $pass = array(); //remember to declare $pass as an array
+	    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+	    for ($i = 0; $i < 8; $i++) {
+	        $n = rand(0, $alphaLength);
+	        $pass[] = $alphabet[$n];
+	    }
+	    return implode($pass); //turn the array into a string
+	}
+
+
+  	/**
+   	* Función para autentificarse en el sistema mediante una cuenta Google.
+   	* 
+   	* El Controlador solicita la autentificación a Google.
+   	* Una vez realizado esto, el usuario se autentifica normalmente.
+   	* 
+   	* @param string $provider Es el proveedor del login, por ahora sólo es válido utilizar "google".
+   	*/
+   public function signInGoogle($provider){
     $rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
     if ($rut == TRUE) {
       redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
     }
 
-    $this -> load -> helper('url');
-    $this->load->library('session');
     $this -> load -> spark('oauth2/0.4.0');
     //si el proveedor pasado es Google
     if($provider == 'google')
