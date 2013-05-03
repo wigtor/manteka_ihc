@@ -57,5 +57,26 @@ class model_usuario extends CI_Model{
       return $query->row();
    }
 
+   /*
+   *  Retorna todos los datos de un usuario específico.
+   *  Dichos datos son:
+   *     Nombre, Apellido, Correo1, Correo2, TIPO_USUARIO
+   *  
+   */
+   function datos_usuario($rut){
+      // La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+      // Se efectúa la captura de cualquier error relacionado con el acceso a la Base de Datos
+      try{
+         $query = $this->db->where('RUT_USUARIO',$rut);
+         $query = $this->db->get('usuario');
+      }
+      catch(Exception $e){
+      // Si se captura un error de cualquier tipo, se devuelve falso.
+         return FALSE;
+      }
+      // Se retorna la fila resultante de la consulta a la Base de Datos
+      // En caso de que no haya una fila resultante, $query->row = 0 (Esto lo realiza la misma operación);
+      return $query->row();
+   }
 }
 ?>
