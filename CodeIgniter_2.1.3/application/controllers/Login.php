@@ -19,6 +19,11 @@ class Login extends CI_Controller {
 	 */
 	public function index()
 	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+	    if ($rut == TRUE) {
+	      redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
+	    }
+	    
 		$datos_plantilla["title"] = "ManteKA login";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
