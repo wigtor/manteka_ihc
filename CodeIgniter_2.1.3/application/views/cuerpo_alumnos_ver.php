@@ -49,8 +49,8 @@ function ordenarFiltro(){
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		alumno = document.getElementById(cont);
-		ocultar=document.getElementById(cont);
+		//alumno = document.getElementById(cont);
+		ocultar =document.getElementById(cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
@@ -73,13 +73,7 @@ function ordenarFiltro(){
 				<fieldset>
 					<div class="span10">
 					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-						<!--div class="btn-group" style="float: right;">
-						  <a class="btn ">Filtrar por:</a>
-						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-						  <ul id="tipoDeFiltro" class="dropdown-menu">
-						    <li><a value="Primer nombre val">Primer nombre</a></li>
-						  </ul>
-						</div-->
+
 						<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
 						<option value="1">Filtrar por Nombre</option>
 						<option value="3">Filtrar por Apellido paterno</option>
@@ -91,7 +85,8 @@ function ordenarFiltro(){
 				</fieldset>
 			
 			<div class="row-fluid" style="margin-left: 0%;">
-				<div class="span9">
+			<div class="span9">
+			<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -120,6 +115,7 @@ function ordenarFiltro(){
 												
 					</tbody>
 				</table>
+			</div><!-- div de estilo mio que pasa jiles-->
 			</div>
 			</div>
 		</div>
