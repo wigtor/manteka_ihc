@@ -53,6 +53,19 @@ class model_correo extends CI_Model{
     $sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
   }
+  public function InsertarCorreo($asunto,$mensaje,$rut,$tipo){
+
+        $this->rut_usuario3 =$rut;
+        $this->asunto = $asunto;
+        $this->cuerpo_email = $mensaje;
+        $this->cod_correo = date("mdHis");
+
+        $this->hora = date("H:i:s");
+        $this->fecha = date("Y-m-d");
+
+        // inserta los campos guardados en la tabla carta
+        $this->db->insert('CARTA', $this);
+    }
 }
 ?>
 

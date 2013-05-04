@@ -70,7 +70,7 @@ class Model_estudiante extends CI_Model {
 			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
 			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
 			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
-			$lista[$contador][5] = "nulo";//$row['CORREO_ESTUDIANTE'];
+			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$lista[$contador][6] = $row['COD_SECCION'];
 			$lista[$contador][7] = $row['COD_CARRERA'];
 			
