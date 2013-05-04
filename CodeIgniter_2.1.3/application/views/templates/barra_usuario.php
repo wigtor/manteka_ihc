@@ -11,13 +11,10 @@
 					</a>
 				    <ul class="dropdown-menu">
 				    	<li>
-							<a href="#">Modificar Usuario</a>
+							<a href="/<?php echo config_item('dir_alias') ?>/index.php/User">Configurar Perfil</a>
 				    	</li>
 				    	<li>
-							<a href="/<?php echo config_item('dir_alias') ?>/index.php/Login/cambiarContrasegna">Cambiar contraseña</a>
-				    	</li>
-				    	<li>
-							<a href="/<?php echo config_item('dir_alias') ?>/index.php/php/logout">Cerrar Sesión</a>
+							<a href="/<?php echo config_item('dir_alias') ?>/index.php/Login/logout">Cerrar Sesión</a>
 				    	</li>
 				    </ul>
 				</li>
