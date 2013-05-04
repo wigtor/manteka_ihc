@@ -3,11 +3,11 @@
 	<div class="row-fluid">
 		<div class="span6">
 			1.-Listado Profesores
-			<div class="span12"></div>
+			<div class="span9"></div>
 			
 				<fieldset>
 					<div class="span10">
-					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro bÃºsqueda">
 						<!--div class="btn-group" style="float: right;">
 						  <a class="btn ">Filtrar por:</a>
 						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -24,7 +24,7 @@
 					</div>
 				</fieldset>
 			
-			<div class="row-fluid" style="margin-left: 3%;">
+			<div class="row-fluid" style="margin-left: 0%;">
 				<table class="table table-hover">
 					<thead>
 						<tr>
