@@ -75,5 +75,38 @@ class model_coordinadores extends CI_Model{
          $this->db->order_by('COORD_NOMBRE','asc');
          $ObjetoListaResultados = $this->db->result();
    	}
+
+      function agregarCoordinador($nombre,$rut,$correo1,$correo2,$telefono,$id,$tipo){
+         $informacion = array('RUT_USUARIO' => $rut, 
+                        'COORD_NOMBRE' => $nombre,
+                        'ID_TIPO' => $tipo,
+                        'ID_COORD' => $id,
+                        'CORREO1_USER' => $correo1,
+                        'CORREO2_USER' => $correo2,
+                        'COORD_TELEFONO' => $telefono,);
+         $this->db->insert('coordinador',$informacion);
+      }
+
+      function borrarCoordinador($nombre,$rut){
+         $this->db->where('COORD_NOMBRE',$nombre);
+         $this->db->or_where('RUT_USUARIO',$rut);
+         $this->db->delete('coordinador');
+      }
+
+      function modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo){
+         $this->db->where('COORD_NOMBRE',$nombreActual);
+         $this->db->or_where('RUT_USUARIO',$rutActual)
+         $informacion = array('RUT_USUARIO' => $rut, 
+                        'COORD_NOMBRE' => $nombre,
+                        'ID_TIPO' => $tipo,
+                        'ID_COORD' => $id,
+                        'CORREO1_USER' => $correo1,
+                        'CORREO2_USER' => $correo2,
+                        'COORD_TELEFONO' => $telefono,);
+         $this->db->update('coordinador',$informacion);
+         
+      }
+
+
 }
 ?>
