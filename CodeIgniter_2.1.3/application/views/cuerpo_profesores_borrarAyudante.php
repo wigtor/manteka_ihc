@@ -44,21 +44,23 @@
 						
 						<div class="span13">
 							<table class="table table-bordered">
-								<thead>
+								<thead bgcolor="#e6e6e6">
 								    <tr>
 								      <th class="span3">RUT</th>
 								      <th class="span3">Paterno</th>
 								      <th class="span3">Materno</th>
 								      <th class="span3">Nombres</th>
 								    </tr>
+								</thead>
 								    <!-- esta fila es solo de ejemplo-->
+								<tbody>
 								    <tr>
 								    	<th>171233496</th>
 								    	<th>Acevedo</th>
-								    	<th>Materno</th>
+								    	<th>Baeza</th>
 								    	<th>Marco Antonio</th>
 								    </tr>
-								</thead>
+								</tbody>
 							</table>
 						</div>
 					
