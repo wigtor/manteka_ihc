@@ -48,8 +48,12 @@ class User extends CI_Controller {
 					'email1'	=>	$datos->CORREO1_USER,
 					'email2'	=>	$datos->CORREO2_USER,
 					'tipo_usuario' => $datos->ID_TIPO,
-					'nombre'	=>	$datos->NOMBRE_USER,
-					'apellido'	=>	$datos->APELLIDO_USER,
+					'nombre1'	=>	$datos->NOMBRE1_USER,
+					'nombre2'	=>	$datos->NOMBRE2_USER,
+					'nombre'	=>  $datos->NOMBRE1_USER." ".$datos->NOMBRE2_USER,
+					'apellido1'	=>	$datos->APELLIDO1_USER,
+					'apellido2'	=>	$datos->APELLIDO2_USER,
+					'apellido'  =>  $datos->APELLIDO1_USER." ".$datos->APELLIDO2_USER,
 					'telefono'	=>	$datos->TELEFONO_USER,
 					'logged_in' => TRUE
               	);

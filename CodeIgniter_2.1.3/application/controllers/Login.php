@@ -165,24 +165,29 @@ class Login extends CI_Controller {
 			$this->index(); //Vuelvo a llamar el cambio de contraseña si hubo un error
 		}
 		else {
-			$this->load->model('model_usuario');
-            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);   //   comprobamos que el usuario exista en la base de datos y la password ingresada sea correcta
-            if($ExisteUsuarioyPassoword) {   // La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
-				$newdata = array(
-					'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
-					'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
-					'tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
-					'logged_in' => TRUE
-              	);
-		      	$this->session->set_userdata($newdata);
-				redirect('/Correo/', 'index');
+			try {
+				$this->load->model('model_usuario');
+	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);   //   comprobamos que el usuario exista en la base de datos y la password ingresada sea correcta
+	            if($ExisteUsuarioyPassoword) {   // La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
+					$newdata = array(
+						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
+						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
+						'tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
+						'logged_in' => TRUE
+	              	);
+			      	$this->session->set_userdata($newdata);
+					redirect('/Correo/', 'index');
+				}
+	            else { // Si no logró validar
+			       	$this->session->unset_userdata('rut');
+			      	$this->session->unset_userdata('email');
+	              	$this->session->unset_userdata('tipo_usuario');
+			      	$this->session->unset_userdata('loggued_in');
+			      	redirect('/Login/', ''); // Lo regresamos a la pantalla de login
+				}
 			}
-            else { // Si no logró validar
-		       	$this->session->unset_userdata('rut');
-		      	$this->session->unset_userdata('email');
-              	$this->session->unset_userdata('tipo_usuario');
-		      	$this->session->unset_userdata('loggued_in');
-		      	redirect('/Login/', ''); // Lo regresamos a la pantalla de login
+			catch (Exception $e) {
+				redirect("/Otros", "databaseError");
 			}
 		}
 	}
@@ -210,7 +215,8 @@ class Login extends CI_Controller {
 			$new_pass = $this->randomPassword();
 			/* Seteo la nueva contraseña en el modelo y le doy un tiempo de validez */
 			$this->load->model('model_usuario');
-			$fechaValidez = date("Y-m-d", strtotime(date("Y-m-d")." +1 day"));
+			$fechaValidez = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')."+86400 minutes"));//date("Y-m-d", strtotime(date("Y-m-d")." +1 day"));
+			//echo 'FECHA VALIDEZ: '.$fechaValidez;
 			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, $fechaValidez);
 			if ($existeEmail) {
 				$mensaje = "Su nueva contraseña es: ";
@@ -321,14 +327,19 @@ class Login extends CI_Controller {
 	* @param return bool Indica con TRUE si el son correctos el usuario y la contraseña según la base de datos.
 	*/
 	public function check_user_and_password($current_password, $rut) {
-		$this->load->model('model_usuario');
-		$logueo = $this->model_usuario->ValidarUsuario($rut ,$current_password);
-		if ($logueo) {
-			return TRUE;
+		try {
+			$this->load->model('model_usuario');
+			$logueo = $this->model_usuario->ValidarUsuario($rut ,$current_password);
+			if ($logueo) {
+				return TRUE;
+			}
+			else {
+				$this->form_validation->set_message('check_user_and_password', 'La %s es incorrecta');
+				return FALSE;
+			}
 		}
-		else {
-			$this->form_validation->set_message('check_user_and_password', 'La %s es incorrecta');
-			return FALSE;
+		catch (Exception $e) {
+			redirect("/Otros", "databaseError");
 		}
 	}
 
@@ -340,14 +351,19 @@ class Login extends CI_Controller {
 	* @param return bool Indica con TRUE si el rut existe.
 	*/
 	public function check_userRUT($rut) {
-		$this->load->model('model_usuario');
-		$logueo = $this->model_usuario->ValidarRut($rut);
-		if ($logueo) {
-			return TRUE;
+		try {
+			$this->load->model('model_usuario');
+			$logueo = $this->model_usuario->ValidarRut($rut);
+			if ($logueo) {
+				return TRUE;
+			}
+			else {
+				$this->form_validation->set_message('check_userRUT', 'El %s no esta en el sistema');
+				return FALSE;
+			}
 		}
-		else {
-			$this->form_validation->set_message('check_userRUT', 'El %s no esta en el sistema');
-			return FALSE;
+		catch (Exception $e) {
+			redirect("/Otros", "databaseError");
 		}
 	}
 
@@ -359,13 +375,18 @@ class Login extends CI_Controller {
 	* @param return bool Indica con TRUE si el email existe y pertenece a algún usuario.
 	*/
 	public function check_mail_exist($email) {
-		$this->load->model('model_usuario');
-		if ($this->model_usuario->existe_mail($email)) {
-			return TRUE;
+		try {
+			$this->load->model('model_usuario');
+			if ($this->model_usuario->existe_mail($email)) {
+				return TRUE;
+			}
+			else {
+				$this->form_validation->set_message('check_mail_exist', 'El %s no existe en ManteKA, intente nuevamente.');
+				return FALSE;
+			}
 		}
-		else {
-			$this->form_validation->set_message('check_mail_exist', 'El %s no existe en ManteKA, intente nuevamente.');
-			return FALSE;
+		catch (Exception $e) {
+			redirect("/Otros", "databaseError");
 		}
 	}
 
