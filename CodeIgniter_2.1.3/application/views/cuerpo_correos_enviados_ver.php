@@ -4,13 +4,19 @@
 
 
 	<script type="text/javascript">
-		function DetalleCorreo(rut,asunto,mail,fecha,hora){		
+		function DetalleCorreo(codigo,rut,hora,fecha,asunto){		
 			document.getElementById("correoEliminar").value = rut;
-			document.getElementById("rutDetalle").innerHTML = rut;					//Emisor
-			document.getElementById("asuntoDetalle").innerHTML = asunto;			//Asunto
-			document.getElementById("cuerpoMail").innerHTML = mail;					//Mail
+			document.getElementById("codigocorreo").innerHTML = codigo;
+			document.getElementById("rutDetalle").innerHTML = rut;	
+			document.getElementById("hora").innerHTML = hora;						//Hora				//Emisor
 			document.getElementById("fecha").innerHTML = fecha;						//Fecha
-			document.getElementById("hora").innerHTML = hora;						//Hora
+			//document.getElementById("cuerpoMail").innerHTML = mail;					//Mail
+			document.getElementById("asuntoDetalle").innerHTML = asunto;			//Asunto
+			//document.getElementById("nombre").innerHTML = nombre;			//Asunto
+			//document.getElementById("apellido").innerHTML = apellido;			//Asunto
+
+
+
 		}
 
 		function selectall(form){  
@@ -62,25 +68,23 @@
 					
 					echo '<tr>';
 					//CheckBox
-					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla. $correos[$contador][1].$comilla.','.$comilla. $correos[$contador][2].$comilla.','.$comilla. $correos[$contador][3].$comilla.','.$comilla. $correos[$contador][4].$comilla.')" 
+					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla.$correos[$contador][1].$comilla.','.$comilla.$correos[$contador][2].$comilla.','.$comilla.$correos[$contador][3].$comilla.','.$comilla.$correos[$contador][4].$comilla.')" 
 						style="text-align:center;">
 						<INPUT TYPE="CHECKBOX" NAME="marca" onClick="disableOthers(this)" /></td>';
 					//Destinatarios
-					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla. $correos[$contador][1].$comilla.','.$comilla. $correos[$contador][2].$comilla.','.$comilla. $correos[$contador][3].$comilla.','.$comilla. $correos[$contador][4].$comilla.')" 
-						style="text-align:left;">
-						'. $correos[$contador][0].'</td>';
+					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla.$correos[$contador][1].$comilla.','.$comilla.$correos[$contador][2].$comilla.','.$comilla.$correos[$contador][3].$comilla.','.$comilla.$correos[$contador][4].$comilla.')" 
+						style="text-align:center;">
+						'. $correos[$contador][1].'</td>';
 					//ASunto
-					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla. $correos[$contador][1].$comilla.','.$comilla. $correos[$contador][2].$comilla.','.$comilla. $correos[$contador][3].$comilla.','.$comilla. $correos[$contador][4].$comilla.')" 
-						style="text-align:left;">
-						'.$correos[$contador][1].'</td>';
+					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla.$correos[$contador][1].$comilla.','.$comilla.$correos[$contador][2].$comilla.','.$comilla.$correos[$contador][3].$comilla.','.$comilla.$correos[$contador][4].$comilla.')" 
+						style="text-align:center;">
+						'.$correos[$contador][4].'</td>';
 					//Correo
-					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla. $correos[$contador][1].$comilla.','.$comilla. $correos[$contador][2].$comilla.','.$comilla. $correos[$contador][3].$comilla.','.$comilla. $correos[$contador][4].$comilla.')" 
-						style="text-align:left;">
-						'.$correos[$contador][2].'</td>';
+					
 					//Fecha
-					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla. $correos[$contador][1].$comilla.','.$comilla. $correos[$contador][2].$comilla.','.$comilla. $correos[$contador][3].$comilla.','.$comilla. $correos[$contador][4].$comilla.')" 
-						style="text-align:left;">
-						'. $correos[$contador][3].' '.$correos[$contador][4].'</td>';	
+					echo '<td  id="'.$contador.'" onclick="DetalleCorreo('.$comilla.$correos[$contador][0].$comilla.','.$comilla.$correos[$contador][1].$comilla.','.$comilla.$correos[$contador][2].$comilla.','.$comilla.$correos[$contador][3].$comilla.','.$comilla.$correos[$contador][4].$comilla.')" 
+						style="text-align:center;">
+						'. $correos[$contador][3].' '.$correos[$contador][2].'</td>';	
 					echo '</tr>';
 															
 					$contador = $contador + 1;
@@ -95,15 +99,12 @@
 		<pre><style="margin-top: 2%; padding: 2%;">
 			<input type="hidden" id="correoEliminar" value="">
 			Correo Enviado.
-			De:             	<b id="rutDetalle"></b>
-			Para:				
-			Asunto:       		<b id="asuntoDetalle"></b>
-			Fecha:				<b id="fecha" ></b>
-			Hora:				<b id="hora" ></b>
-			Mensaje:       		<b id="cuerpoMail" ></b>
-
-
-
+			De:             	<b id="codigocorreo"></b>
+			Para:				<b id="rutDetalle"></b>
+			Asunto:       		<b id="hora"></b>
+			Fecha:				<b id="fecha"></b>
+			Fecha:				<b id="asuntoDetalle"></b>
+			
 		</pre>
 	</form>
 </fieldset>	
