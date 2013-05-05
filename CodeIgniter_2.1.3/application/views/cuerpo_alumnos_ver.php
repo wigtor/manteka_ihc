@@ -67,25 +67,32 @@ function ordenarFiltro(){
 	<legend>Ver Alumnos</legend>
 	<div class="row-fluid">
 		<div class="span6">
-			1.-Listado Alumnos
-			<div class="span12"></div>
-			
-				<fieldset>
-					<div class="span10">
-					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+			<div class="row-fluid">
+				<div class="span6">
+					1.-Listado Alumnos
+				</div>
+			</div>
 
-						<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-						<option value="1">Filtrar por Nombre</option>
-						<option value="3">Filtrar por Apellido paterno</option>
-						<option value="4">Filtrar por Apellido materno</option>
-						<option value="7">Filtrar por Carrera</option>
-						<option value="6">Filtrar por Seccion</option>
-						</select> 
+			<div class="row-fluid">
+				<fieldset>
+					<div class="span12">
+				
+						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+
+							<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+							<option value="1">Filtrar por Nombre</option>
+							<option value="3">Filtrar por Apellido paterno</option>
+							<option value="4">Filtrar por Apellido materno</option>
+							<option value="7">Filtrar por Carrera</option>
+							<option value="6">Filtrar por Seccion</option>
+							</select> 
+						
+					
 					</div>
 				</fieldset>
-			
+			</div>
 			<div class="row-fluid" style="margin-left: 0%;">
-			<div class="span9">
+				<div class="span9">
 			
 					<thead>
 						<tr>
@@ -93,33 +100,33 @@ function ordenarFiltro(){
 							
 						</tr>
 					</thead>
-					<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
-					<table class="table table-hover">
-					<tbody>
-					
-						<?php
-						$contador=0;
-						$comilla= "'";
-						echo '<form id="formDetalle" type="post">';
-						while ($contador<count($rs_estudiantes)){
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+							<tbody>
 							
-							echo '<tr>';
-							echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-										  style="text-align:left;">
-										  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
-							echo '</tr>';
+								<?php
+								$contador=0;
+								$comilla= "'";
+								echo '<form id="formDetalle" type="post">';
+								while ($contador<count($rs_estudiantes)){
+									
+									echo '<tr>';
+									echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
+												  style="text-align:left;">
+												  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								echo '</form>';
+								?>
 														
-							$contador = $contador + 1;
-						}
-						echo '</form>';
-						?>
-												
-					</tbody>
-					</table>
+							</tbody>
+						</table>
 					</div><!-- div de estilo mio que pasa jiles-->
 				
 			
-			</div>
+				</div>
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
