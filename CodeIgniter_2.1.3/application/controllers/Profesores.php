@@ -17,11 +17,6 @@ class Profesores extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index() //Esto hace que el index sea la vista que se desee
-		{
-		//funcion por defecto
-		$this->verProfesores();
-	}
 	
 	public function verProfesores()
 	{
@@ -43,7 +38,9 @@ class Profesores extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		$this->load->model('model_profesor');
+		
 		$listado_profesores['listado_profesores'] = $this->model_profesor->ObtenerProfesor();
+		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_ver', $listado_profesores, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
