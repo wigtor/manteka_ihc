@@ -12,7 +12,6 @@ class Model_estudiante extends CI_Model {
 
     public function InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera) 
 	{
-
 		$data = array(					
 					'RUT_ESTUDIANTE' => $rut_estudiante ,
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
@@ -49,11 +48,7 @@ class Model_estudiante extends CI_Model {
 		}
 		else{
 			return -1;
-		}
-
-
-		
-		
+		}		
     }
 
     public function EliminarEstudiante($rut_estudiante)
