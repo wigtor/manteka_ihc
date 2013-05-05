@@ -241,7 +241,7 @@ function ordenarFiltro(){
 							<div class="span10">
 								<div class="row-fluid">
 									<div class="span3 offset6">
-										<input type="submit" onclick="EditarEstudiante()" value="Guardar">
+										<input type = "button"  onclick="EditarEstudiante()" value="Guardar">
 									</div>
 									<div class="span3">
 										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>
