@@ -1,9 +1,7 @@
 <div class= "row-fluid">
 	<div class= "span10">
 		<fieldset>
-			<div>
 				<legend>Ver Ayudante</legend>
-			</div>
 			<div>
 				<div class="row-fluid">
 					<div class="span6">

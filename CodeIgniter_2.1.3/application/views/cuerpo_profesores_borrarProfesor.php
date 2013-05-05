@@ -1,15 +1,19 @@
 <script type="text/javascript">
-	function hacerSubmitDetalleAlumno(rut_estudiante){
-		var detalle = document.getElementById("formDetalle");
-		detalle.action = "<?php echo site_url("Alumnos/VerPorBoton/") ?>/"+rut_estudiante;
-		detalle.submit();
-		
+	
+	if("<?php echo $mensaje_confirmacion_borrar;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion_borrar;?>"!="-1"){
+				alert("Alumno eliminado correctamente");
+				}
+				else{
+					alert("Error al eliminar");
+				}
 	}
 </script>
 
 <script type="text/javascript">
 	function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera){
-		
+			
+			document.getElementById("rutEliminar").value = rut;
 			document.getElementById("rutDetalle").innerHTML = rut;
 			document.getElementById("nombreunoDetalle").innerHTML = nombre1;
 			document.getElementById("nombredosDetalle").innerHTML = nombre2;
@@ -22,7 +26,25 @@
 	}
 </script>
 
-						
+<script type="text/javascript">
+	function eliminarAlumno(){
+		
+		var rut = document.getElementById("rutEliminar").value;
+		
+		if(rut!=""){
+					var borrar = document.getElementById("formBorrar");
+					borrar.action = "<?php echo site_url("Alumnos/EliminarAlumno/") ?>/"+rut;
+					borrar.submit();
+					
+					
+		}
+		else{
+				alert("Seleecione un estudiante");
+		}
+		
+	}
+</script>
+
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
@@ -49,8 +71,8 @@ function ordenarFiltro(){
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-	
-		ocultar =document.getElementById(cont);
+		alumno = document.getElementById(cont);
+		ocultar=document.getElementById(cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
@@ -63,16 +85,25 @@ function ordenarFiltro(){
 </script>
 
 
-<fieldset>
-	<legend>Ver Alumnos</legend>
-	<div class="row-fluid">
+<div class= "row-fluid">
+	<div class= "span10">
+		<fieldset>
+			<legend>Borrar Profesor</legend>
+				<div class= "row-fluid">
+					
 		<div class="span6">
-			1.-Listado Alumnos
+			1.-Listado Profesores
 			<div class="span12"></div>
-			
 				<fieldset>
 					<div class="span10">
 					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+						<!--div class="btn-group" style="float: right;">
+						  <a class="btn ">Filtrar por:</a>
+						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+						  <ul id="tipoDeFiltro" class="dropdown-menu">
+						    <li><a value="Primer nombre val">Primer nombre</a></li>
+						  </ul>
+						</div-->
 						<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
 						<option value="1">Filtrar por Nombre</option>
 						<option value="3">Filtrar por Apellido paterno</option>
@@ -84,17 +115,13 @@ function ordenarFiltro(){
 				</fieldset>
 			
 			<div class="row-fluid" style="margin-left: 0%;">
-			<div class="span9">
-			
+				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th style="text-align:left;"><br><b>Nombre Completo</b></th>
-							
+							<th style="text-align:left;">Nombre Completo</th>
 						</tr>
 					</thead>
-					<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
-					<table class="table table-hover">
-					<tbody>
+<!--					<tbody>
 					
 						<?php
 						$contador=0;
@@ -104,7 +131,7 @@ function ordenarFiltro(){
 							
 							echo '<tr>';
 							echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-										  style="text-align:left;">
+										  style="text-align:center;">
 										  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 							echo '</tr>';
 														
@@ -112,27 +139,49 @@ function ordenarFiltro(){
 						}
 						echo '</form>';
 						?>
+					
 												
-					</tbody>
-					</table>
-					</div><!-- div de estilo mio que pasa jiles-->
-				
-			
-			</div>
+					</tbody> -->
+				</table>
 			</div>
 		</div>
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-		2.-Detalle Alumnos:
-	    <pre style="margin-top: 2%; padding: 2%">
-Rut:              <b id="rutDetalle"></b>
-Nombre uno:       <b id="nombreunoDetalle"></b>
-Nombre dos:       <b id="nombredosDetalle" ></b>
-Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-Apellido materno: <b id="apellidomaternoDetalle"></b>
-Carrera:          <b id="carreraDetalle" ></b>
-Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
 
-		</div>
+
+					<div class="span6">
+						<div style="margin-bottom:2%">
+							2.-Detalle del Profesor:
+						</div>
+						<form id="formBorrar" type="post">
+							<div class="row-fluid">
+								<pre <style="margin-top: 50%; margin-left: 0%;">
+RUN:              <b id="rutDetalle"></b>
+Nombre completo
+Correo:           <b id="correoDetalle"></b>
+Mail:
+Telefono:
+Modulo:
+Seccion:
+Tipo: </pre>							
+							</div>
+							<div class= "row-fluid" >
+								<div class="row" style="width: 1052px; margin-top:10px">		
+									<div class="span2" style="margin-left: 336px;">
+										<button class="btn" type="submit">Eliminar</button>
+									</div>
+									<div class="span1" style="margin-left: -52px;">
+										<button class="btn" type="reset">Cancelar</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>	
+				</div>
+
+			
+	
+
+			
+		</fieldset>
 	</div>
-</fieldset>
+	</div>
+</div>
