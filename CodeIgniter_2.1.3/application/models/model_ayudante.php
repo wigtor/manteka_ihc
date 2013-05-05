@@ -118,17 +118,23 @@ $sql="SELECT * FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' "; //código M
 
 
 //OPERACIÓN EDITAR AYUDANTE
-    public function EditarAyudante($rut_ayudante)
-    {
-        $this->rut_ayudante = $_POST['rut_ayudante'];
-        $this->nombre1_ayudante = $_POST['nombre1_ayudante'];
-        $this->nombre2_ayudante = $_POST['nombre2_ayudante'];
-        $this->apellido1_ayudante = $_POST['apellido1_ayudante'];
-        $this->apellido2_ayudante = $_POST['apellido2_ayudante'];
-        $this->correo_ayudante = $_POST['correo_ayudante'];
-
-        // se modifican los datos del ayudante
-        $this->db->update('AYUDANTE', $this);
+	public function ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante)
+	{
+		$data = array(					
+					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
+					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
+					'APELLIDO_PATERNO' => $apellido_paterno ,
+					'APELLIDO_MATERNO' => $apellido_materno ,
+					'CORREO_AYUDANTE' => $correo_ayudante
+		);
+		$this->db->where('RUT_AYUDANTE', $rut_ayudante);
+        $datos = $this->db->update('ayudante',$data);
+		if($datos == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}		
     }
 }
 
