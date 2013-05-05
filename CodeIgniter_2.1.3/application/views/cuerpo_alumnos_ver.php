@@ -49,7 +49,7 @@ function ordenarFiltro(){
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		//alumno = document.getElementById(cont);
+	
 		ocultar =document.getElementById(cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
@@ -86,14 +86,15 @@ function ordenarFiltro(){
 			
 			<div class="row-fluid" style="margin-left: 0%;">
 			<div class="span9">
-			<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; margin-top:3%; -webkit-border-radius: 4px" ><!--  para el scroll-->
-				<table class="table table-hover">
+			
 					<thead>
 						<tr>
-							<th style="text-align:left;">Nombre Completo</th>
+							<th style="text-align:left;"><br><b>Nombre Completo</b></th>
 							
 						</tr>
 					</thead>
+					<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
+					<table class="table table-hover">
 					<tbody>
 					
 						<?php
@@ -114,8 +115,10 @@ function ordenarFiltro(){
 						?>
 												
 					</tbody>
-				</table>
-			</div><!-- div de estilo mio que pasa jiles-->
+					</table>
+					</div><!-- div de estilo mio que pasa jiles-->
+				
+			
 			</div>
 			</div>
 		</div>

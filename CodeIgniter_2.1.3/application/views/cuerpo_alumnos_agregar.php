@@ -1,4 +1,16 @@
 <script type="text/javascript">
+	
+	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
+		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
+				alert("Se ha agregado el estudiante");
+				}
+				else{
+					alert("Error al agregar");
+				}
+	}
+</script>
+
+<script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroSeccion").value;
 	var arreglo = new Array();
@@ -161,7 +173,7 @@ function ordenarFiltro(){
 									<div class="controls">
 										<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección">
 									</div>
-									<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+									<div style="border:grey 1px solid;overflow-y:scroll;height:200px" >
 									
 									
 										<table class="table table-hover">
