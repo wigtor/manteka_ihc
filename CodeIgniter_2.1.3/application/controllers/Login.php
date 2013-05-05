@@ -169,10 +169,17 @@ class Login extends CI_Controller {
 				$this->load->model('model_usuario');
 	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);   //   comprobamos que el usuario exista en la base de datos y la password ingresada sea correcta
 	            if($ExisteUsuarioyPassoword) {   // La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
+					if ($ExisteUsuarioyPassoword->ID_TIPO == 2) {
+		            	$tipo_user = "coordinador";
+		            }
+					if ($ExisteUsuarioyPassoword->ID_TIPO == 1) {
+		            	$tipo_user = "profesor";
+		            }
 					$newdata = array(
 						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
 						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
-						'tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
+						'tipo_usuario' => $tipo_user,
+						'nombre_usuario' => $ExisteUsuarioyPassoword->NOMBRE1,
 						'logged_in' => TRUE
 	              	);
 			      	$this->session->set_userdata($newdata);
@@ -419,7 +426,7 @@ class Login extends CI_Controller {
    public function signInGoogle($provider){
     $rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
     if ($rut == TRUE) {
-      redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
+      redirect('/Correo/', '');         // En dicho caso, se redirige a la interfaz principal
     }
 
     $this -> load -> spark('oauth2/0.4.0');
@@ -457,14 +464,21 @@ class Login extends CI_Controller {
             $usuario = $this->model_usuario->existe_mail($mail);
             if ($usuario)
             {
-              $newdata = array(
-                   'rut'  => $usuario->RUT_USUARIO,
-                   'email'     => $usuario->CORREO1_USER,
-                   'tipo_usuario' => $usuario->ID_TIPO,
-                   'logged_in' => TRUE
+            	if ($usuario->ID_TIPO == 2) {
+	            	$tipo_user = "coordinador";
+	            }
+				if ($usuario->ID_TIPO == 1) {
+	            	$tipo_user = "profesor";
+	            }
+              	$newdata = array(
+					'rut'  => $usuario->RUT_USUARIO,
+					'email'     => $usuario->CORREO1_USER,
+					'tipo_usuario' => $tipo_user,
+					'nombre_usuario' => $usuario->NOMBRE1,
+					'logged_in' => TRUE
               );
               $this->session->set_userdata($newdata);
-              redirect('/Correo/', 'index');         // En dicho caso, se redirige a la interfaz principal
+              redirect('/Correo/', '');         // En dicho caso, se redirige a la interfaz principal
             }
             else // En caso de no existir ningún usuario con correo = $mail
             {
