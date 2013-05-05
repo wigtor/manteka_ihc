@@ -45,32 +45,38 @@ $sql="SELECT * FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' "; //código M
 //OPERACIÓN VER A TODOS LOS AYUDANTES
 	public function VerTodosLosAyudantes()
 	{
-		$sql="SELECT * FROM AYUDANTE ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
+		$sql="SELECT * FROM AYUDANTE ORDER BY APELLIDO_PATERNO"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista;
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_AYUDANTE'];
-			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
-			$lista[$contador][2] = $row['NOMBRE2_AYUDANTE'];
-			$lista[$contador][3] = $row['APELLIDO1_AYUDANTE'];
-			$lista[$contador][4] = $row['APELLIDO2_AYUDANTE'];
-			$lista[$contador][5] = $row['CORREO_AYUDANTE'];
+			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
+			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
+			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
+			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$contador = $contador + 1;
 		}
+		
 		return $lista;
 		}
 
+	public function VerSecciones()
+	{
+		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista;
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			$lista[$contador] = $row['COD_SECCION'];
+			$contador = $contador + 1;
+		}
+		
+	return $lista;
+	}
 
-///////////////////////////////////////7
-        $this->rut_ayudante = $_POST['rut_ayudante'];
-        $this->nombre1_ayudante = $_POST['nombre1_ayudante'];
-        $this->nombre2_ayudante = $_POST['nombre2_ayudante'];
-        $this->apellido1_ayudante = $_POST['apellido1_ayudante'];
-        $this->apellido2_ayudante = $_POST['apellido2_ayudante'];
-        $this->correo_ayudante = $_POST['correo_ayudante'];
 
-////////////////////////////////////////77
 
 
 //OPERACIÓN EDITAR AYUDANTE
