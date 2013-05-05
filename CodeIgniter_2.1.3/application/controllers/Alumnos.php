@@ -19,11 +19,13 @@ class Alumnos extends CI_Controller {
 	 */
 	public function verAlumnos()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -43,18 +45,20 @@ class Alumnos extends CI_Controller {
 
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_ver', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	
 	}
 
 		public function eliminarAlumno($rut_estudiante)
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -68,13 +72,13 @@ class Alumnos extends CI_Controller {
 		
 		$this->load->model('Model_estudiante');
 		$confirmacion = $this->Model_estudiante->EliminarEstudiante($rut_estudiante);
-		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);//qué rasca la wa del mensaje, despues lo arreglo con unos if y wa
+		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);//qu? rasca la wa del mensaje, despues lo arreglo con unos if y wa
 		
 
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_borrar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	
 		
@@ -83,11 +87,13 @@ class Alumnos extends CI_Controller {
 	
 	public function agregarAlumnos()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -107,7 +113,7 @@ class Alumnos extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_agregar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 
 		
@@ -115,11 +121,13 @@ class Alumnos extends CI_Controller {
 	
 	public function insertarAlumno()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -149,17 +157,19 @@ class Alumnos extends CI_Controller {
 
 	 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_agregar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);	
 	}
 
 	public function borrarAlumnos()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-		//	redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		//	redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -177,17 +187,19 @@ class Alumnos extends CI_Controller {
         $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_borrar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);	
 	}
 
 	public function editarAlumnos()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -206,18 +218,20 @@ class Alumnos extends CI_Controller {
 
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_editar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
 	
 	public function EditarEstudiante()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		//}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -248,7 +262,7 @@ class Alumnos extends CI_Controller {
 
 	 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_editar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);	
 	}
 

@@ -32,6 +32,8 @@ class Otros extends CI_Controller {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = ""; //ninguno abierto
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -87,6 +89,8 @@ class Otros extends CI_Controller {
 		}
 		else {
 			$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+			$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+			$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 			$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
 			$datos_plantilla["barra_navegacion"] = ""; //No muestro los botones atrás siguiente

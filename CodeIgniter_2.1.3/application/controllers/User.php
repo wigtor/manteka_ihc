@@ -36,6 +36,8 @@ class User extends CI_Controller {
 	    }
 	    
 	    $datos_plantilla["rut_usuario"] = $rut_user = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 
 		
