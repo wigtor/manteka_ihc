@@ -36,6 +36,8 @@ class User extends CI_Controller {
 	    }
 	    
 	    $datos_plantilla["rut_usuario"] = $rut_user = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 
 		
@@ -48,13 +50,13 @@ class User extends CI_Controller {
 					'email1'	=>	$datos->CORREO1_USER,
 					'email2'	=>	$datos->CORREO2_USER,
 					'tipo_usuario' => $datos->ID_TIPO,
-					'nombre1'	=>	$datos->NOMBRE1_USER,
-					'nombre2'	=>	$datos->NOMBRE2_USER,
-					'nombre'	=>  $datos->NOMBRE1_USER." ".$datos->NOMBRE2_USER,
-					'apellido1'	=>	$datos->APELLIDO1_USER,
-					'apellido2'	=>	$datos->APELLIDO2_USER,
-					'apellido'  =>  $datos->APELLIDO1_USER." ".$datos->APELLIDO2_USER,
-					'telefono'	=>	$datos->TELEFONO_USER,
+					'nombre1'	=>	$datos->NOMBRE1,
+					'nombre2'	=>	$datos->NOMBRE2,
+					'nombre'	=>  $datos->NOMBRE1." ".$datos->NOMBRE2,
+					'apellido1'	=>	$datos->APELLIDO1,
+					'apellido2'	=>	$datos->APELLIDO2,
+					'apellido'  =>  $datos->APELLIDO1." ".$datos->APELLIDO2,
+					'telefono'	=>	$datos->TELEFONO,
 					'logged_in' => TRUE
               	);
 		}

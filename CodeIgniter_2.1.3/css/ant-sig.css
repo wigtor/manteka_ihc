@@ -1,0 +1,53 @@
+
+.contenedor_ant_sig{
+  display:block;
+  width:98%;
+  position:relative;
+  margin: 10px auto 20px auto;
+ }
+ .contenedor_ant_sig div.bloque, .contenedor_ant_sig div.final, .contenedor_ant_sig div.inicio{
+    overflow:hidden;
+    float: left;
+    min-height:100px;
+    
+    margin-bottom:10px;
+    width:0%;
+    position:relative;
+    padding: 10px 0 10px 0;
+  }
+  .contenedor_ant_sig div.bloque.activo, .contenedor_ant_sig div.inicio.activo, .contenedor_ant_sig div.final.activo{
+    width:98%;
+    padding: 10px 1% 10px 1%;
+  }
+  .contenedor_ant_sig div.bloque button, .contenedor_ant_sig div.final button, .contenedor_ant_sig div.inicio button, .contenedor_ant_sig input.submit{
+    float:right;
+    margin-right:12px;
+    height:inherit;
+    width:80px;
+    text-align:center;
+  }
+  .box_anterior_siguiente{
+    position:absolute;
+    height:30px;
+    bottom:15px;
+    width:100%;
+    margin-top:15px;
+    padding-top:15px;
+    border-top:1px solid #999;
+  }
+  .box_anterior_siguiente div.barra_navegacion{
+    
+    width:76%;
+    float:left;
+    height:inherit ;
+    line-height:30px;
+  }
+  .box_anterior_siguiente div.barra_navegacion div.elemento_navegacion{
+    float:left;
+    text-align:center;
+    height:inherit ;
+    line-height:30px;
+  }
+  .box_anterior_siguiente div.barra_navegacion div.elemento_navegacion.activo{
+    background-color:grey;
+  }

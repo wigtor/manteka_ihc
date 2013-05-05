@@ -6,11 +6,8 @@ class model_usuario extends CI_Model{
       $query = $this->db->where('PASSWORD_PRIMARIA',md5($password));
 
       $query = $this->db->get('usuario'); //Acá va el nombre de la tabla
-      $res = $query->row();
-      if ($res) {
-         return $res; // Devolvemos al controlador la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias y consulta por la pass temporal)
-      }
-      else { //Si no validó usando la password primaria, uso la password secundaria
+      $filaResultado = $query->row();
+      if ($filaResultado == FALSE) { //Si no validó usando la password primaria, uso la password secundaria
          $this->db->stop_cache();
          $this->db->flush_cache();
          $this->db->stop_cache();
@@ -19,8 +16,10 @@ class model_usuario extends CI_Model{
          $query = $this->db->where('VALIDEZ >', date('Y-m-d H:i:s')); //compruebo que esté dentro del periodo de validez
          $query = $this->db->get('usuario');
          //echo $this->db->last_query(); //Para hacer debug de la query
-         return $query->row();
+         $filaResultado = $query->row();
       }
+
+      return $this->datos_usuario($filaResultado->RUT_USUARIO);
    }
 
    function ValidarRut($rut){         //   Consulta Mysql para buscar en la tabla Usuario aquellos usuarios que coincidan con el rut y password ingresados en pantalla de login
@@ -54,7 +53,7 @@ class model_usuario extends CI_Model{
       $query = $this->db->where('CORREO1_USER', $email);
       $query = $this->db->or_where('CORREO2_USER', $email);
       $query =$this->db->get('usuario');
-      return $query->row();
+      return $this->datos_usuario($query->row()->RUT_USUARIO);
    }
 
    /*
@@ -82,6 +81,7 @@ class model_usuario extends CI_Model{
          $this->db->flush_cache();
          $this->db->stop_cache();
 
+         $this->db->select('usuario.*, NOMBRE1_COORDINADOR AS NOMBRE1, NOMBRE2_COORDINADOR AS NOMBRE2, APELLIDO1_COORDINADOR AS APELLIDO1, APELLIDO2_COORDINADOR AS APELLIDO2, TELEFONO_COORDINADOR AS TELEFONO');
          $this->db->join('coordinador', 'coordinador.rut_usuario3 = usuario.rut_usuario');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
@@ -92,6 +92,7 @@ class model_usuario extends CI_Model{
          $this->db->flush_cache();
          $this->db->stop_cache();
 
+         $this->db->select('usuario.*, NOMBRE1_PROFESOR AS NOMBRE1, NOMBRE2_PROFESOR AS NOMBRE2, APELLIDO1_PROFESOR AS APELLIDO1, APELLIDO2_PROFESOR AS APELLIDO2, TELEFONO_PROFESOR AS TELEFONO');
          $this->db->join('profesor', 'profesor.rut_usuario2 = usuario.rut_usuario');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
