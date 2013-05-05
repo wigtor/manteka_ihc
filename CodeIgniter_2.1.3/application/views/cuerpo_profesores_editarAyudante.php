@@ -2,9 +2,7 @@
 <div class="span10">
 	<div>
 		<fieldset>
-			<div>
 			<legend>Editar Ayudante</legend>
-			</div>
 			<div>
 				<div class="row-fluid">
 					<div class="span6">
