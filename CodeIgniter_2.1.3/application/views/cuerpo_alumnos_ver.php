@@ -86,7 +86,7 @@ function ordenarFiltro(){
 			
 			<div class="row-fluid" style="margin-left: 0%;">
 			<div class="span9">
-			<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
+			<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; margin-top:3%; -webkit-border-radius: 4px" ><!--  para el scroll-->
 				<table class="table table-hover">
 					<thead>
 						<tr>

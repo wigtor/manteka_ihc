@@ -161,7 +161,7 @@ function ordenarFiltro(){
 									<div class="controls">
 										<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección">
 									</div>
-									<div style="border:grey 1px solid;overflow-y:scroll;height:200px" >
+									<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
 									
 									
 										<table class="table table-hover">
