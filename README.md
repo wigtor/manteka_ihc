@@ -15,11 +15,11 @@ Esto es innecesario para la mayoría si usó los datos anteriores, debido a que 
 En el archivo ubicado en 'CodeIgniter_2.1.3\application\config\database.php' se configuran los datos para conectarse 
 a la base de datos, mirar las siguientes lineas de ese archivo:
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'manteka_user';
-$db['default']['password'] = 'manteka_IHC2013-1';
-$db['default']['database'] = 'manteka_db';
-$db['default']['dbdriver'] = 'mysql';
+    $db['default']['hostname'] = 'localhost';
+    $db['default']['username'] = 'manteka_user';
+    $db['default']['password'] = 'manteka_IHC2013-1';
+    $db['default']['database'] = 'manteka_db';
+    $db['default']['dbdriver'] = 'mysql';
 
 ================================
 
@@ -65,19 +65,19 @@ Por ahora configúrenlo con su propia cuenta de correo para realizar pruebas.
 Luego se debe configurar la ruta del archivo 'sendmail.exe' para que wamp sepa donde se encuentra:
 Editar el archivo 'php.ini' ubicado en el directorio: 'C:\wamp\bin\apache\Apache2.2.17\bin\' y dejar las siguientes opciones:
 
-[mail function]
-; For Win32 only.
-; http://php.net/smtp
-;SMTP =
-; http://php.net/smtp-port
-;smtp_port = 25
+    [mail function]
+    ; For Win32 only.
+    ; http://php.net/smtp
+    ;SMTP =
+    ; http://php.net/smtp-port
+    ;smtp_port = 25
 
-; For Win32 only.
-; http://php.net/sendmail-from
-;sendmail_from = you@domain.com
-; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
-; http://php.net/sendmail-path
-sendmail_path = "C:\wamp\sendmail\sendmail.exe -t -i"
+    ; For Win32 only.
+    ; http://php.net/sendmail-from
+    ;sendmail_from = you@domain.com
+    ; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
+    ; http://php.net/sendmail-path
+    sendmail_path = "C:\wamp\sendmail\sendmail.exe -t -i"
 
 ================================
 
@@ -97,7 +97,7 @@ En el repositorio en github se tiene configurado manteka para funcionar en un se
 o alias llamado 'manteka', sin embargo para poder utilizar manteka en otro entorno es posible cambiar esto modificando 
 el archivo 'CodeIgniter_2.1.3\application\config\config.php', al final del archivo se encuentra la linea:
 
-$config['dir_alias'] = "manteka";
+    $config['dir_alias'] = "manteka";
 
 Esto hace que manteka entienda que se ejecuta en un servidor con dirección de ejemplo:
 http://localhost/manteka/
@@ -107,7 +107,7 @@ Si se tiene un servidor en que se instalará manteka en la raiz del servidor web
 Notar que no existe el nombre manteka, no hay un alias. En ese caso la variable señalada anteriormente en el archivo 
 config.php debe ser seteada a un string vacio como se indica a continuación:
 
-$config['dir_alias'] = "";
+    $config['dir_alias'] = "";
 
 
 (Para instalarlo en el diinf debe ser cambiada esta opción, por ejemplo el alias en ese caso es 'anavarrete', o eso creo)

@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 	function hacerSubmitDetalleAlumno(rut_estudiante){
 		var detalle = document.getElementById("formDetalle");
@@ -67,32 +68,24 @@ function ordenarFiltro(){
 	<legend>Ver Alumnos</legend>
 	<div class="row-fluid">
 		<div class="span6">
-			<div class="row-fluid">
-				<div class="span6">
-					1.-Listado Alumnos
-				</div>
-			</div>
-
-			<div class="row-fluid">
+			1.-Listado Alumnos
+			<div class="span12"></div>
+			
 				<fieldset>
-					<div class="span12">
-				
-						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-
-							<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-							<option value="1">Filtrar por Nombre</option>
-							<option value="3">Filtrar por Apellido paterno</option>
-							<option value="4">Filtrar por Apellido materno</option>
-							<option value="7">Filtrar por Carrera</option>
-							<option value="6">Filtrar por Seccion</option>
-							</select> 
-						
-					
+					<div class="span10">
+					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+						<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+						<option value="1">Filtrar por Nombre</option>
+						<option value="3">Filtrar por Apellido paterno</option>
+						<option value="4">Filtrar por Apellido materno</option>
+						<option value="7">Filtrar por Carrera</option>
+						<option value="6">Filtrar por Seccion</option>
+						</select> 
 					</div>
 				</fieldset>
-			</div>
+			
 			<div class="row-fluid" style="margin-left: 0%;">
-				<div class="span9">
+			<div class="span9">
 			
 					<thead>
 						<tr>
@@ -100,33 +93,33 @@ function ordenarFiltro(){
 							
 						</tr>
 					</thead>
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
-						<table class="table table-hover">
-							<tbody>
+					<div style="border:grey 1px solid;overflow-y:scroll;height:400px" >
+					<table class="table table-hover">
+					<tbody>
+					
+						<?php
+						$contador=0;
+						$comilla= "'";
+						echo '<form id="formDetalle" type="post">';
+						while ($contador<count($rs_estudiantes)){
 							
-								<?php
-								$contador=0;
-								$comilla= "'";
-								echo '<form id="formDetalle" type="post">';
-								while ($contador<count($rs_estudiantes)){
-									
-									echo '<tr>';
-									echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-												  style="text-align:left;">
-												  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
-									echo '</tr>';
-																
-									$contador = $contador + 1;
-								}
-								echo '</form>';
-								?>
+							echo '<tr>';
+							echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
+										  style="text-align:left;">
+										  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
+							echo '</tr>';
 														
-							</tbody>
-						</table>
-					</div><!-- div de estilo mio que pasa jiles-->
+							$contador = $contador + 1;
+						}
+						echo '</form>';
+						?>
+												
+					</tbody>
+					</table>
+					</div>
 				
 			
-				</div>
+			</div>
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
@@ -139,8 +132,7 @@ Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b>
-</pre>
+Correo:           <b id="correoDetalle"></b></pre>
 
 		</div>
 	</div>
