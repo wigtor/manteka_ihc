@@ -5,8 +5,7 @@
 
 	<script type="text/javascript">
 		function DetalleCorreo(codigo,rut,hora,fecha,asunto){		
-			document.getElementById("correoEliminar").value = rut;
-			document.getElementById("codigocorreo").innerHTML = codigo;
+			document.getElementById("correoEliminar").value = codigo;
 			document.getElementById("rutDetalle").innerHTML = rut;	
 			document.getElementById("hora").innerHTML = hora;						//Hora				//Emisor
 			document.getElementById("fecha").innerHTML = fecha;						//Fecha
@@ -31,6 +30,7 @@
 		function eliminarCorreo(){
 			var rut = document.getElementById("correoEliminar").value;
 			if(rut!=""){
+				alert("RUT:"+rut);
 				var borrar = document.getElementById("formBorrar");
 				borrar.action = "<?php echo site_url("Correo/EliminarCorreo/") ?>/"+rut;
 				borrar.submit();
@@ -51,9 +51,8 @@
 			
 			<td width="10%" bgcolor="lightgrey" align="center"><INPUT TYPE="CHECKBOX" NAME="marcar" onClick="selectall(formulario)"/></td>
 			<td width="23%" bgcolor="lightgrey"><b>Para:</b></td>
-			<td width="23%" bgcolor="lightgrey"><b>Asunto</b></td>
-			<td width="23%" bgcolor="lightgrey"><b>Correo</b></td>
-			<td width="23%" bgcolor="lightgrey"><b>Fecha</b></td>
+			<td width="36%" bgcolor="lightgrey"><b>Asunto</b></td>
+			<td width="33%" bgcolor="lightgrey"><b>Fecha</b></td>
 			</tr>
 		</table>
 		
@@ -99,11 +98,11 @@
 		<pre><style="margin-top: 2%; padding: 2%;">
 			<input type="hidden" id="correoEliminar" value="">
 			Correo Enviado.
-			De:             	<b id="codigocorreo"></b>
-			Para:				<b id="rutDetalle"></b>
-			Asunto:       		<b id="hora"></b>
+			De:             	<b id="rutDetalle"></b>
+			Para:				<b id=""></b>
+			Asunto:       		<b id="asuntoDetalle"></b>
 			Fecha:				<b id="fecha"></b>
-			Fecha:				<b id="asuntoDetalle"></b>
+			Hora:				<b id="hora"></b>
 			
 		</pre>
 	</form>

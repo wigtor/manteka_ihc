@@ -48,14 +48,14 @@ class model_correo extends CI_Model{
         $i++;  
       }
 
-      $rutestd=$row['RUT_ESTUDIANTE'];
+      $lista[$contador][5]=$row['RUT_ESTUDIANTE'];
 
-      $sql11="SELECT * FROM `estudiante` WHERE RUT_ESTUDIANTE='$rutestd'" ; //código MySQL
+      /*$sql11="SELECT * FROM `estudiante` WHERE RUT_ESTUDIANTE='$rutestd'" ; //código MySQL
       $datos11=mysql_query($sql11);
       if($row=mysql_fetch_array($datos11)){
         $lista[$contador][5] = $row['NOMBRE1_ESTUDIANTE'];
         $lista[$contador][6] = $row['APELLIDO_PATERNO'];
-      }
+      }*/
       $contador = $contador + 1;
     }
 
@@ -66,15 +66,21 @@ class model_correo extends CI_Model{
       $lista[$contador][3] = '';   
       $lista[$contador][4] = '';
       $lista[$contador][5] = '';   
-      $lista[$contador][6] = '';  
+      //$lista[$contador][6] = '';  
     }
        
     return $lista;      
   }
 
-  public function EliminarCorreo($rut_estudiante){
-    $sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+  public function EliminarCorreoEst($correo){
+    $sql="DELETE FROM 'CARTA_ESTUDIANTE' WHERE COD_CORREO = '$correo' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
+  }
+
+  public function EliminarCorreo($correo){
+    $sql="DELETE FROM 'CARTA_' WHERE COD_CORREO = '$correo' "; //código MySQL
+    $datos=mysql_query($sql); //enviar código MySQL
+
   }
 
   public function InsertarCorreo($asunto,$mensaje,$rut,$tipo){
