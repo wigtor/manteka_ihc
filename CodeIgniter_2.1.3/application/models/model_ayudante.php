@@ -38,7 +38,14 @@ public function InsertarAyudante( $rut_ayudante, $nombre1_ayudante, $nombre2_ayu
 // OPERACIÓN PARA ELIMINAR AYUDANTE
     public function EliminarAyudante($rut_ayudante)
     {
-        $db->query("DELETE FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' ");
+		$sql="DELETE FROM AYUDANTE WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		if($datos == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}
     }
     
 //OPERACIÓN PARA VER A UN AYUDANTE
