@@ -162,7 +162,7 @@ public function enviarPost(){
 	$this->load->model('model_correo');
 	$this->load->model('model_correoE');
 
-	$datos['correos']=$this->model_correo->todos();
+
 
 	$to = $this->input->post('to');
 	$asunto =$this->input->post('asunto');
