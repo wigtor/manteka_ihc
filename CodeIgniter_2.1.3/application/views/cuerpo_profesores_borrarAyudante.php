@@ -1,9 +1,7 @@
 <div class="row-fluid">
 	<div class="span10">
 		<fieldset>
-			<div>
 				<legend>Borrar Ayudante</legend>
-			</div>
 			<div class="row-fluid">
 				<div class="span5">
 					<div style="margin-bottom:3%">

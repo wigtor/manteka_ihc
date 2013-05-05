@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	
-	if("<?php echo $mensaje_confirmacion_borrar;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion_borrar;?>"!="-1"){
+	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
+		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
 				alert("Alumno eliminado correctamente");
 				}
 				else{
@@ -135,7 +135,7 @@ function ordenarFiltro(){
 						<?php
 						$contador=0;
 						$comilla= "'";
-						echo '<form id="formDetalle" type="post">';
+						
 						while ($contador<count($rs_estudiantes)){
 							
 							echo '<tr>';
@@ -146,7 +146,7 @@ function ordenarFiltro(){
 														
 							$contador = $contador + 1;
 						}
-						echo '</form>';
+						
 						?>
 												
 					</tbody>
@@ -170,7 +170,7 @@ Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
 Correo:           <b id="correoDetalle"></b></pre>
-								<input type="hidden" id="rutEliminar" value="">
+<input type="hidden" id="rutEliminar" value="">
 								
 							</div>
 							<div class= "row-fluid" >
@@ -181,7 +181,6 @@ Correo:           <b id="correoDetalle"></b></pre>
 
 									<div class = "span2 ">
 										<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','','','')" >Cancelar</button>
-
 									</div>
 								</div>
 							</div>
