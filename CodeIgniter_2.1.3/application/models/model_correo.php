@@ -30,11 +30,11 @@ class model_correo extends CI_Model{
     $contador = 0;
     $lista;
     while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-      $lista[$contador][0] = $row['rut_usuario3'];        //Emisor
-      $lista[$contador][1] = $row['asunto'];              //Asunto
-      $lista[$contador][2] = $row['cuerpo_mail'];         //Cuerpo
-      $lista[$contador][3] = $row['fecha'];               //Fecha
-      $lista[$contador][4] = $row['hora'];                //Hora
+      $lista[$contador][0] = $row['RUT_USUARIO3'];        //Emisor
+      $lista[$contador][1] = $row['ASUNTO'];              //Asunto
+      $lista[$contador][2] = $row['CUERPO_MAIL'];         //Cuerpo
+      $lista[$contador][3] = $row['FECHA'];               //Fecha
+      $lista[$contador][4] = $row['HORA'];                //Hora
       $contador = $contador + 1;
     }
 
