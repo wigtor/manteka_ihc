@@ -73,7 +73,6 @@ function ordenarFiltro(){
 				<fieldset>
 					<div class="span10">
 					<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-
 						<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
 						<option value="1">Filtrar por Nombre</option>
 						<option value="3">Filtrar por Apellido paterno</option>
@@ -132,8 +131,7 @@ Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b>
-</pre>
+Correo:           <b id="correoDetalle"></b></pre>
 
 		</div>
 	</div>

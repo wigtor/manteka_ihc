@@ -104,9 +104,9 @@
 						<div class="control-group text-center">
 							<button type="submit" class="btn">
 								<div class="pull-right">
-									<img src="/<?php echo config_item('dir_alias') ?>/img/logo_gmail.png" alt="logo gmail" style="width: 50px; height: 20px;">
+									<img src="/<?php echo config_item('dir_alias') ?>/img/logo_google.png" alt="logo google" style="width: 55px; height: 20px;">
 								</div>
-								Entrar con&nbsp 
+								Entrar con cuenta de&nbsp 
 							</button>
 						</div>
 				<?php echo form_close(""); ?>
