@@ -1,4 +1,16 @@
 <script type="text/javascript">
+	
+	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
+		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
+				alert("Se ha agregado el estudiante");
+				}
+				else{
+					alert("Error al agregar");
+				}
+	}
+</script>
+
+<script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroSeccion").value;
 	var arreglo = new Array();
