@@ -76,7 +76,7 @@ class Ayudantes extends CI_Controller {
 		$this->load->model('Model_ayudante');
 
 	  
-		$datos_vista = array('secciones' => $this->Model_ayudante->VerSecciones(),'mensaje_confirmacion'=>2);
+		$datos_vista = array('profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
       
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
@@ -84,15 +84,16 @@ class Ayudantes extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
-	public function insertarAlumno()
+	public function insertarAyudante()
 	{
 		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		//if ($rut == FALSE) {
 			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		//}
+
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
+		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
@@ -102,20 +103,22 @@ class Ayudantes extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
+		
+		
 		$this->load->model('Model_ayudante');
 
 		$rut_ayudante = $this->input->get("rut_ayudante");
         $nombre1_ayudante = $this->input->get("nombre1_ayudante");
-        $nombre2_estudiante = $this->input->get("nombre2_ayudante");;
+        $nombre2_ayudante = $this->input->get("nombre2_ayudante");;
         $apellido_paterno = $this->input->get("apellido_paterno");
         $apellido_materno = $this->input->get("apellido_materno");
         $correo_ayudante = $this->input->get("correo_ayudante");
-        $cod_seccion = $this->input->get("cod_seccion");
+        $cod_profesores = $this->input->get("cod_profesores");
 
 		
-        $confirmacion = $this->Model_estudiante->InsertarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante,$cod_seccion);
+        $confirmacion = $this->Model_ayudante->InsertarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante,$cod_profesores);
 	    
-		$datos_vista = array('secciones' => $this->Model_ayudante->VerSecciones(),'mensaje_confirmacion'=>$confirmacion);
+		$datos_vista = array('secciones' => $this->Model_ayudante->VerSecciones(),'mensaje_confirmacion'=>$confirmacion,'profesores' => $this->Model_ayudante->VerTodosLosProfesores());
       
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
