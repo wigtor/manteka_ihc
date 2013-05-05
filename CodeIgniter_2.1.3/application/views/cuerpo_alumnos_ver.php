@@ -1,70 +1,147 @@
+<script type="text/javascript">
+	function hacerSubmitDetalleAlumno(rut_estudiante){
+		var detalle = document.getElementById("formDetalle");
+		detalle.action = "<?php echo site_url("Alumnos/VerPorBoton/") ?>/"+rut_estudiante;
+		detalle.submit();
+		
+	}
+</script>
+
+<script type="text/javascript">
+	function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera){
+		
+			document.getElementById("rutDetalle").innerHTML = rut;
+			document.getElementById("nombreunoDetalle").innerHTML = nombre1;
+			document.getElementById("nombredosDetalle").innerHTML = nombre2;
+			document.getElementById("apellidopaternoDetalle").innerHTML = apePaterno;
+			document.getElementById("apellidomaternoDetalle").innerHTML = apeMaterno;
+			document.getElementById("carreraDetalle").innerHTML = carrera;
+		    document.getElementById("seccionDetalle").innerHTML = seccion;
+			document.getElementById("correoDetalle").innerHTML = correo;
+		
+	}
+</script>
+
+						
+<script type="text/javascript">
+function ordenarFiltro(){
+	var filtroLista = document.getElementById("filtroLista").value;
+	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
+
+	
+	var arreglo = new Array();
+	var alumno;
+	var ocultar;
+	var cont;
+	
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($rs_estudiantes)){
+		echo 'arreglo['.$contadorE.']=new Array();';
+		echo 'arreglo['.$contadorE.'][1] = "'.$rs_estudiantes[$contadorE][1].'";';
+		echo 'arreglo['.$contadorE.'][3] = "'.$rs_estudiantes[$contadorE][3].'";';
+		echo 'arreglo['.$contadorE.'][4] = "'.$rs_estudiantes[$contadorE][4].'";';
+		echo 'arreglo['.$contadorE.'][7] = "'.$rs_estudiantes[$contadorE][7].'";';
+		echo 'arreglo['.$contadorE.'][6] = "'.$rs_estudiantes[$contadorE][6].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	
+	
+	for(cont=0;cont < arreglo.length;cont++){
+	
+		ocultar =document.getElementById(cont);
+		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+			ocultar.style.display='none';
+		}
+		else
+		{
+			ocultar.style.display='';
+		}
+    }
+}
+</script>
+
+
 <fieldset>
-	<legend>Ver alumnos</legend>
-	<div class="span4">
-		<h4>Listado alumnos<h4/><br/>
-		<div class="input-append">
-			<input class="span11" id="appendedDropdownButton" type="text" placeholder="Filtro">
-			<div class="btn-group">
-				<button class="btn dropdown-toggle" data-toggle="dropdown">
-					Filtrar por
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu">
-				<li>Rut</li>
-				<li>Nombre</li>
-				<li>Apellido paterno</li>
-				<li>Apellido materno</li>
-				<li>Correo</li>
-				<li>Carrera</li>
-				<li>Secci?n</li>
-				</ul>
+	<legend>Ver Alumnos</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="row-fluid">
+				<div class="span6">
+					1.-Listado Alumnos
+				</div>
+			</div>
+
+			<div class="row-fluid">
+				<fieldset>
+					<div class="span12">
+				
+						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+
+							<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+							<option value="1">Filtrar por Nombre</option>
+							<option value="3">Filtrar por Apellido paterno</option>
+							<option value="4">Filtrar por Apellido materno</option>
+							<option value="7">Filtrar por Carrera</option>
+							<option value="6">Filtrar por Seccion</option>
+							</select> 
+						
+					
+					</div>
+				</fieldset>
+			</div>
+			<div class="row-fluid" style="margin-left: 0%;">
+				<div class="span9">
+			
+					<thead>
+						<tr>
+							<th style="text-align:left;"><br><b>Nombre Completo</b></th>
+							
+						</tr>
+					</thead>
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+							<tbody>
+							
+								<?php
+								$contador=0;
+								$comilla= "'";
+								echo '<form id="formDetalle" type="post">';
+								while ($contador<count($rs_estudiantes)){
+									
+									echo '<tr>';
+									echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
+												  style="text-align:left;">
+												  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								echo '</form>';
+								?>
+														
+							</tbody>
+						</table>
+					</div><!-- div de estilo mio que pasa jiles-->
+				
+			
+				</div>
 			</div>
 		</div>
-	    <select size=10 style="width:342px" onchange="mostrarDatos(this)">
-	    	<?php
-                foreach ($listado_alumnos as $alumno) {
-                    echo "<option value='".$alumno[0]."'>".$alumno[1]."</option>";
-                }
-            ?>
-        </select>
-	</div>
-	<div class="span1">
-	</div>
-	<div class="span6">
-		<h4>Detalle alumno</h4><br/>
-		<h6>Rut:              <span id="mostrar-rut">     <!-- inyectar valor aqui --> </span></h6>
-		<h6>Nombre:           <span id="mostrar-nombre">  <!-- inyectar valor aqui --> </span></h6>
-        <h6>Apellido paterno: <span id="mostrar-paterno"> <!-- inyectar valor aqui --> </span></h6>
-	    <h6>Apellido materno: <span id="mostrar-materno"> <!-- inyectar valor aqui --> </span></h6>
-        <h6>Correo:           <span id="mostrar-correo">  <!-- inyectar valor aqui --> </span></h6>
-		<h6>Carrera:          <span id="mostrar-carrera"> <!-- inyectar valor aqui --> </span></h6>
-		<h6>Secci?n:          <span id="mostrar-seccion"> <!-- inyectar valor aqui --> </span></h6>
+		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+		2.-Detalle Alumnos:
+	    <pre style="margin-top: 2%; padding: 2%">
+Rut:              <b id="rutDetalle"></b>
+Nombre uno:       <b id="nombreunoDetalle"></b>
+Nombre dos:       <b id="nombredosDetalle" ></b>
+Apellido paterno: <b id="apellidopaternoDetalle" ></b>
+Apellido materno: <b id="apellidomaternoDetalle"></b>
+Carrera:          <b id="carreraDetalle" ></b>
+Sección:          <b id="seccionDetalle"></b>
+Correo:           <b id="correoDetalle"></b>
+</pre>
+
+		</div>
 	</div>
 </fieldset>
-<script type="text/javascript">
-	var arreglo_alumnos = [];
-    <?php  
-    	//pasar datos de php a javascript
-        foreach ($listado_alumnos as $alumno) {
-            echo "var temp = [];";
-            echo "temp = [".$alumno[0].",'".$alumno[1]."','".$alumno[2]."','".$alumno[3]."','".$alumno[4]."','".$alumno[5]."','".$alumno[6]."','".$alumno[7]."'];";
-            echo "arreglo_alumnos[temp[0]] = temp;";
-        }
-    ?>
-    function mostrarDatos(seleccion){
-        //borrar datos de los spans
-        $("#mostrar-rut,#mostrar-nombre, #mostrar-paterno, #mostrar-materno, #mostrar-correo, #mostrar-carrera, #mostrar-seccion").empty();
-        
-        //setear nuevos datos de los spans
-        var id_seccion = seleccion.options[seleccion.selectedIndex].value;
-        $("#mostrar-rut").append(arreglo_alumnos[id_seccion][2]);
-        $("#mostrar-nombre").append(arreglo_alumnos[id_seccion][1]);
-        $("#mostrar-paterno").append(arreglo_alumnos[id_seccion][3]);
-        $("#mostrar-materno").append(arreglo_alumnos[id_seccion][4]);
-        $("#mostrar-correo").append(arreglo_alumnos[id_seccion][5]);
-        $("#mostrar-carrera").append(arreglo_alumnos[id_seccion][6]);
-        $("#mostrar-seccion").append(arreglo_alumnos[id_seccion][7]);
-    }
-	
-	
-</script>

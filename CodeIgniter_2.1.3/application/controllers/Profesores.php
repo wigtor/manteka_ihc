@@ -37,13 +37,33 @@ class Profesores extends CI_Controller {
 		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+
+		/* Esto lo tenía el grupo 2 */
+		/*
 		$this->load->model('model_profesor');
 		
 		$listado_profesores['listado_profesores'] = $this->model_profesor->ObtenerProfesor();
-		
+		*/
+
+
+
+		//cargo el modelo de profesores
+		$this->load->model('Model_profesor');
+
+		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
+
+
+
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_verProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);
+
+		/* Esto lo tenía el grupo 2 */
+		/*
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_ver', $listado_profesores, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
+		*/
 	}
 	
 	public function agregarProfesores()
@@ -71,7 +91,7 @@ class Profesores extends CI_Controller {
 		
 	}
 
-	public function borrarProfesores()
+	public function eliminarProfesores($rut_profesor)
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -90,7 +110,14 @@ class Profesores extends CI_Controller {
 		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarProfesor', '', true); //Esta es la linea que cambia por cada controlador
+
+
+		$this->load->model('Model_profesor');
+		$confirmacion = $this->Model_profesor->EliminarProfesor($rut_profesor);
+		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),'mensaje_confirmacion'=>$confirmacion);
+
+
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
@@ -119,6 +146,29 @@ class Profesores extends CI_Controller {
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
+	}
+
+	public function borrarProfesores(){
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+
+
+		$this->load->model('Model_profesor');
+
+        $datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
+		
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);	
 	}
 
 	public function index() //Esto hace que el index sea la vista que se desee
