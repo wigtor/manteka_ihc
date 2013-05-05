@@ -95,7 +95,7 @@ class model_coordinadores extends CI_Model{
 
       function modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo){
          $this->db->where('COORD_NOMBRE',$nombreActual);
-         $this->db->or_where('RUT_USUARIO',$rutActual)
+         $this->db->or_where('RUT_USUARIO',$rutActual);
          $informacion = array('RUT_USUARIO' => $rut, 
                         'COORD_NOMBRE' => $nombre,
                         'ID_TIPO' => $tipo,
