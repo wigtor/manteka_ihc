@@ -32,7 +32,7 @@
 		</div>
 		&nbsp &nbsp
 		<div style ="display:inline-block">
-			<label>Correo</label>
+			<label>* Correo</label>
 			<input type="text" placeholder="<?php echo $datos['email1'] ?>"  value="<?php echo $datos['email1'] ?>" >
 		</div>
 		&nbsp &nbsp

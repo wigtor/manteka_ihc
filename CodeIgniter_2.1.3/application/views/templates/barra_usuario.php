@@ -11,7 +11,7 @@
 					</a>
 				    <ul class="dropdown-menu">
 				    	<li>
-							<a href="/<?php echo config_item('dir_alias') ?>/index.php/User">Configurar Perfil</a>
+							<a href="/<?php echo config_item('dir_alias') ?>/index.php/Login/cambiarContrasegna">Configurar Perfil</a>
 				    	</li>
 				    	<li>
 							<a href="/<?php echo config_item('dir_alias') ?>/index.php/Login/logout">Cerrar Sesión</a>
