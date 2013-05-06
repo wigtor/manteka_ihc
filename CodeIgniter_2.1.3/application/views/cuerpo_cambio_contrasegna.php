@@ -28,17 +28,17 @@
 		<hr>
 		<div style ="display:inline-block">
 			<label>Teléfono</label>
-			<input type="text" placeholder="<?php echo $datos['telefono'] ?>" value="<?php echo $datos['telefono'] ?>" >
+			<input type="text" name="telefono" placeholder="<?php echo $datos['telefono'] ?>" value="<?php echo $datos['telefono'] ?>" >
 		</div>
 		&nbsp &nbsp
 		<div style ="display:inline-block">
-			<label>Correo</label>
-			<input type="text" placeholder="<?php echo $datos['email1'] ?>"  value="<?php echo $datos['email1'] ?>" >
+			<label>* Correo</label>
+			<input type="text" name="correo1" placeholder="<?php echo $datos['email1'] ?>"  value="<?php echo $datos['email1'] ?>" >
 		</div>
 		&nbsp &nbsp
 		<div style ="display:inline-block">
 			<label>Correo alternativo</label>
-			<input type="text" placeholder="<?php echo $datos['email2'] ?>" value="<?php echo $datos['email2'] ?>" >
+			<input type="text" name="correo2" placeholder="<?php echo $datos['email2'] ?>" value="<?php echo $datos['email2'] ?>" >
 		</div>
 		<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
 			$hay_error_contrasegna_actual = '';
