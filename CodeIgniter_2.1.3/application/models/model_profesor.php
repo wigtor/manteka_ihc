@@ -60,10 +60,10 @@ class Model_profesor extends CI_Model {
 	{
 		$sql="SELECT * FROM PROFESOR ORDER BY APELLIDO1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
-    echo mysql_error();
+		echo mysql_error();
 		$contador = 0;
 		$lista;
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		while ($row = mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			/*$lista[$contador][0] = $row['RUT_PROFESOR'];
 			$lista[$contador][1] = $row['NOMBRE_PROFESOR'];
 			$lista[$contador][2] = $row['APELLIDO_PATERNO'];
@@ -71,7 +71,7 @@ class Model_profesor extends CI_Model {
 			$lista[$contador][4] = $row['CORREO_PROF2'];
 			$lista[$contador][5] = $row['TELEFONO'];
 			$lista[$contador][6] = $row['TIPO'];*/
-
+		
            $lista[$contador][0] = $row['RUT_USUARIO2'];
            $lista[$contador][1] = $row['NOMBRE1_PROFESOR'];
            $lista[$contador][2] = $row['NOMBRE2_PROFESOR'];
