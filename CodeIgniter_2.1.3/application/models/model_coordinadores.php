@@ -18,11 +18,52 @@ class model_coordinadores extends CI_Model{
             array y transformar los objetos en filas para
             obtener la información correspondiente.
    		*/
-   		$query = $this->db->get('coordinador');
-   		$ObjetoListaResultados = $query->result();
-   		return $ObjetoListaResultados;
+		
+		$this->db->select('*');
+		$this->db->from('coordinador');	
+		$this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+		$query = $this->db->get();
+		
+   		/*$query = $this->db->get('coordinador');¨*/
+   		$ObjetoListaResultados = $query->result_array();
+		/*'id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",
+		*/
+		$datos = array();
+		$contador=0;		
+		foreach ($ObjetoListaResultados as $row) {
+                        $datos[$contador] = array(
+								'id'=>intval($row['RUT_USUARIO3']),
+								'rut'=>$row['RUT_USUARIO3'],
+                                'nombre'=> $row['APELLIDO1_COORDINADOR']." ".$row['APELLIDO2_COORDINADOR']." ".$row['NOMBRE1_COORDINADOR']." ".$row['NOMBRE2_COORDINADOR'],
+                                'fono'=> intval($row['TELEFONO_COORDINADOR']),
+								'correo1'=>$row['CORREO1_USER'],
+								'correo2'=>$row['CORREO2_USER'],                                
+                        );
+                        $contador++;
+		}
+   		return $datos;
    	}
 
+	function GetModulos($id){
+		$this->db->select('COD_MODULO_TEM');
+		$this->db->from('MODULO_TEMATICO');
+		$this->db->where('RUT_USUARIO2', $id);
+		$query = $this->db->get();
+		$ObjetoListaResultados = $query->result_array();
+		return $ObjetoListaResultados;		
+	}	
+	
+	function GetSeccion($id){
+		$this->db->select('COD_SECCION');
+		$this->db->from('SESION');
+		$this->db->where('COD_MODULO_TEM', $id);
+		$query = $this->db->get();
+		$ObjetoListaResultados = $query->result_array();	
+		return $ObjetoListaResultados;	
+	}
+	
+	
+		
    	function BuscarCoordinadores($entrada,$criterio){
          /* SUMARIO DE LA FUNCIÓN:
             La función obtiene desde la base de datos

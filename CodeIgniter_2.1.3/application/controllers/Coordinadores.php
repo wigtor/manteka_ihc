@@ -42,26 +42,12 @@ class Coordinadores extends CI_Controller {
 
 		$this->load->model('model_coordinadores');
 		$ListaObjetosCoordinaciones = $this->model_coordinadores->ObtenerTodosCoordinadores();
-		$contador = 0;
-		$resultados = array();
-		foreach ($ListaObjetosCoordinaciones as $row) {
-			$resultados[$contador] = array(
-				'nombre'=> $row->NOMBRE1_COORDINADOR,
-				'rut'=> $row->RUT_USUARIO3,
-				//'e-mail_1'=> $row->CORREO1_USER,
-				//'e-mail_2'=> $row->CORREO2_USER,
-				'telefono'=> $row->TELEFONO_COORDINADOR,
-				//'tipo'=> $row->ID_TIPO,
-				//'id'=> $row->ID_COORD,
-			);
-			$contador++;
-		}
-		$datos_plantilla['resultados'] = $resultados;
-
-
-
-
-
+		//HAY QUE HACER LOS FOR QUE HACE CADA COORDINADOR PARA TENER SUS MÓDULOS Y CADA MÓDULO PARA SU SECCIÓN
+		$modulos = $this->model_coordinadores->GetModulos($ListaObjetosCoordinaciones[2]['id']);//OBTIENE MODULOS CON RUT DE COORDINADORES ES UN ARREGLO
+		$secciones= $this->model_coordinadores->GetSeccion($modulos[0]['COD_MODULO_TEM']);//OBTIENE SECCIONES CON UN CODIGO DE MODULO TEMATICO ES ARREGLO 
+		//ACA DESMENUZAR LA LISTA DE OBJETOS DE COORDINACIONES PARA AGREGARLE MODULOS Y SECCIONES
+		$datos_plantilla['resultados'] = $ListaObjetosCoordinaciones;
+		
 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
@@ -122,7 +108,7 @@ class Coordinadores extends CI_Controller {
 		//descomentar las siguientes líneas cuando se actualice la recepcion de parametros desde la vista
 		//$this->model_coordinadores->modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo)
 
-		$datos_cuerpo_central['listado_coordinadores']= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>2 , 'nombre'=>"segundonombre", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",]];
+		$datos_cuerpo_central['listado_coordinadores']= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>2 , 'nombre'=>	"segundonombre", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",]];
 
 
 
