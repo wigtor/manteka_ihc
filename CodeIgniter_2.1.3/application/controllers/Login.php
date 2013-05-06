@@ -117,6 +117,8 @@ class Login extends CI_Controller {
 		
 		//$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 
 		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
@@ -301,6 +303,8 @@ class Login extends CI_Controller {
 
 			/* Cargo la vista que muestra el mensaje de que la operación se realizó correctamente */
 			$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+			$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+			$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 			$datos_plantilla["title"] = "ManteKA";
 			$datos_plantilla["menuSuperiorAbierto"] = "";
 			$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);

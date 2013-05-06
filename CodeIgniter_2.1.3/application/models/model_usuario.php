@@ -18,7 +18,9 @@ class model_usuario extends CI_Model{
          //echo $this->db->last_query(); //Para hacer debug de la query
          $filaResultado = $query->row();
       }
-
+      if ($filaResultado == FALSE) {
+         return FALSE;
+      }
       return $this->datos_usuario($filaResultado->RUT_USUARIO);
    }
 
@@ -53,7 +55,11 @@ class model_usuario extends CI_Model{
       $query = $this->db->where('CORREO1_USER', $email);
       $query = $this->db->or_where('CORREO2_USER', $email);
       $query =$this->db->get('usuario');
-      return $this->datos_usuario($query->row()->RUT_USUARIO);
+      $user = $query->row();
+      if ($user == FALSE) {
+         return FALSE;
+      }
+      return $this->datos_usuario($user->RUT_USUARIO);
    }
 
    /*
@@ -76,6 +82,9 @@ class model_usuario extends CI_Model{
       // Se retorna la fila resultante de la consulta a la Base de Datos
       // En caso de que no haya una fila resultante, $query->row = 0 (Esto lo realiza la misma operación);
       $filaResultado = $query->row();
+      if ($filaResultado == FALSE) {
+         return FALSE;
+      }
       if ($filaResultado->ID_TIPO == '2') { //Es coordinador
          $this->db->stop_cache();
          $this->db->flush_cache();
