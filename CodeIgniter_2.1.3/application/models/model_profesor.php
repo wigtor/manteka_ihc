@@ -58,10 +58,11 @@ class Model_profesor extends CI_Model {
 	//OPERACIÓN VER A TODOS LOS PROFESORES
 	public function VerTodosLosProfesores()
 	{
-		$sql="SELECT * FROM PROFESOR ORDER BY APELLIDO_PROFESOR"; //código MySQL
+		$sql="SELECT * FROM PROFESOR ORDER BY APELLIDO1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
+    echo mysql_error();
 		$contador = 0;
-		$lista = array();
+		$lista = [];
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			/*$lista[$contador][0] = $row['RUT_PROFESOR'];
 			$lista[$contador][1] = $row['NOMBRE_PROFESOR'];
@@ -74,7 +75,7 @@ class Model_profesor extends CI_Model {
            $lista[$contador][0] = $row['RUT_USUARIO2'];
            $lista[$contador][1] = $row['NOMBRE1_PROFESOR'];
            $lista[$contador][2] = $row['NOMBRE2_PROFESOR'];
-           $lista[$contador][3] = $row['APELLIDO_PROFESOR'];
+           $lista[$contador][3] = $row['APELLIDO1_PROFESOR'];
            $lista[$contador][4] = $row['APELLIDO2_PROFESOR'];
            $lista[$contador][5] = $row['TELEFONO_PROFESOR'];
             $lista[$contador][6]= $row['TIPO_PROFESOR'];
