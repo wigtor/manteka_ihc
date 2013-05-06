@@ -111,5 +111,14 @@ class model_usuario extends CI_Model{
          return FALSE; //Tipo de usuario desconocido
       }
    }
+
+
+   function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
+
+
+
+      
+      return TRUE;
+   }
 }
 ?>
