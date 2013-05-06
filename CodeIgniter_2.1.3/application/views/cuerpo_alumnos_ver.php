@@ -1,11 +1,4 @@
-<script type="text/javascript">
-	function hacerSubmitDetalleAlumno(rut_estudiante){
-		var detalle = document.getElementById("formDetalle");
-		detalle.action = "<?php echo site_url("Alumnos/VerPorBoton/") ?>/"+rut_estudiante;
-		detalle.submit();
-		
-	}
-</script>
+
 
 <script type="text/javascript">
 	function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera){
@@ -15,8 +8,29 @@
 			document.getElementById("nombredosDetalle").innerHTML = nombre2;
 			document.getElementById("apellidopaternoDetalle").innerHTML = apePaterno;
 			document.getElementById("apellidomaternoDetalle").innerHTML = apeMaterno;
-			document.getElementById("carreraDetalle").innerHTML = carrera;
-		    document.getElementById("seccionDetalle").innerHTML = seccion;
+			var carreras = new Array();	
+			<?php
+				$contadorE = 0;
+				while($contadorE<count($carreras)){
+					echo 'carreras['.$contadorE.']=new Array();';
+					echo 'carreras['.$contadorE.'][0]= "'.$carreras[$contadorE][0].'";';//codigo
+					echo 'carreras['.$contadorE.'][1]= "'.$carreras[$contadorE][1].'";';//nombre
+					$contadorE = $contadorE + 1;
+				}
+			?>
+			var cont;
+			for(cont=0;cont < carreras.length;cont++){
+			
+				if(carreras[cont][0] == carrera){
+					 document.getElementById("carreraDetalle").innerHTML = carrera + " - " +carreras[cont][1];
+					 cont = carreras.length;
+				}
+				else
+				{
+					document.getElementById("carreraDetalle").innerHTML = "No tiene";
+				}
+			}
+			document.getElementById("seccionDetalle").innerHTML = seccion;
 			document.getElementById("correoDetalle").innerHTML = correo;
 		
 	}
@@ -83,7 +97,7 @@ function ordenarFiltro(){
 							<option value="1">Filtrar por Nombre</option>
 							<option value="3">Filtrar por Apellido paterno</option>
 							<option value="4">Filtrar por Apellido materno</option>
-							<option value="7">Filtrar por Carrera</option>
+							<option value="7">Filtrar por Código Carrera</option>
 							<option value="6">Filtrar por Seccion</option>
 							</select> 
 						
@@ -133,8 +147,7 @@ function ordenarFiltro(){
 		2.-Detalle Alumnos:
 	    <pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
-Nombre uno:       <b id="nombreunoDetalle"></b>
-Nombre dos:       <b id="nombredosDetalle" ></b>
+Nombres:          <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
 Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>

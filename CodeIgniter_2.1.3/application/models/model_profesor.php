@@ -62,7 +62,7 @@ class Model_profesor extends CI_Model {
 		$datos=mysql_query($sql); //enviar código MySQL
     echo mysql_error();
 		$contador = 0;
-		$lista = [];
+		$lista;
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			/*$lista[$contador][0] = $row['RUT_PROFESOR'];
 			$lista[$contador][1] = $row['NOMBRE_PROFESOR'];

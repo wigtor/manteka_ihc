@@ -40,7 +40,7 @@ class Alumnos extends CI_Controller {
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
+        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'carreras' => $this->Model_estudiante->VerCarreras());
 	      
 
 
