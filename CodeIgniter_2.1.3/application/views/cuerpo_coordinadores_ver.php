@@ -31,8 +31,7 @@
 			            <h4>Fono: ".$coordinador['fono']."</h4>
 			            <h4>Modulo: ".$coordinador['modulos']."</h4>
 			            <h4>Seccion: ".$coordinador['secciones']."</h4>
-			        </div>
-			        ";
+			        </div>";
 			    }
 	        ?>
 	    </div>

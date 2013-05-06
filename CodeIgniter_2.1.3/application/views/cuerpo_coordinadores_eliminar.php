@@ -14,7 +14,7 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 				    <option>#</option>
 				    <option>#</option>
 				</select>
-	            <select id="select-coordinadores" multiple class="span12" size=16 onchange="mostrarDatos(this)">
+	            <select id="select-coordinadores" multiple class="span12" size=20 onchange="mostrarDatos(this)">
 	            <?php
 	                foreach ($listado_coordinadores as $coordinador) {
 	                    echo "<option value='id".$coordinador["id"]."'>".$coordinador['nombre']."</option>";
@@ -22,42 +22,44 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 	            ?>
 	            </select>
 	        </div>
-	        <h4>Seleccionados a eliminar</h4>
-	        <div class="span7" style="overflow-y:scroll;max-height:300px">
-	            <table class="table table-bordered">            
-	                <tr>
-	                    <th>Rut</th>
-	                    <th>Paterno</th>
-	                    <th>Materno</th>
-	                    <th>Nombre</th>
-	                </tr>
-	                <?php 
-	                	foreach ($listado_coordinadores as $coordinador) {
-	                		echo "<tr class ='fila_tabla' id='id".$coordinador['id']."'>";
-		                	echo "<td>1".$coordinador['rut']."</td>";
-		                	echo "<td>2".$coordinador['nombre']."</td>";
-		                	echo "<td>2".$coordinador['nombre']."</td>";
-		                	echo "<td>2".$coordinador['nombre']."</td>";
-		                	echo "</tr>";
-	                	}
-	                	
-	                ?>
-	                
-	            </table>
-	        
-	        </div>
-	        <br/>
-	        <p>
-  				<button class="btn btn-danger" type="button">Eliminar</button>
-			</p>
-	        <div class="span1"></div>
+	        <div class="span9">
+	        	<div class="span12" style="height:70px"></div>
+		        <h4>Seleccionados a eliminar</h4>
+		        <div class="span10" style="overflow-y:scroll;height:300px">
+		            <table class="table table-bordered">            
+		                <tr>
+		                    <th>Rut</th>
+		                    <th>Paterno</th>
+		                    <th>Materno</th>
+		                    <th>Nombre</th>
+		                </tr>
+		                <?php 
+		                	foreach ($listado_coordinadores as $coordinador) {
+		                		echo "<tr class ='fila_tabla' style='display:none;' id='id".$coordinador['id']."'>";
+			                	echo "<td>1".$coordinador['rut']."</td>";
+			                	echo "<td>2".$coordinador['nombre']."</td>";
+			                	echo "<td>2".$coordinador['nombre']."</td>";
+			                	echo "<td>2".$coordinador['nombre']."</td>";
+			                	echo "</tr>";
+		                	}
+		                ?>
+		            </table>
+		        
+		        </div>
+		        
+		        <div class="offset8 span1">
+		        	<br/>
+	  				<button class="btn btn-danger" type="button">Eliminar</button>
+				</div>
+		        <div class="span1"></div>
+		    </div>
 	    </div>
 	</br>
 </fieldset>
 
 <script type="text/javascript">
     $(document).ready(function(){
-    	$(".fila_tabla").hide();
+    	
 
     });
 	function mostrarDatos(seleccion){

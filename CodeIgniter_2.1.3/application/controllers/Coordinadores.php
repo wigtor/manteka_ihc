@@ -41,12 +41,35 @@ class Coordinadores extends CI_Controller {
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
 		$this->load->model('model_coordinadores');
-		$ListaObjetosCoordinaciones = $this->model_coordinadores->ObtenerTodosCoordinadores();
-		//HAY QUE HACER LOS FOR QUE HACE CADA COORDINADOR PARA TENER SUS MÓDULOS Y CADA MÓDULO PARA SU SECCIÓN
-		$modulos = $this->model_coordinadores->GetModulos($ListaObjetosCoordinaciones[2]['id']);//OBTIENE MODULOS CON RUT DE COORDINADORES ES UN ARREGLO
-		$secciones= $this->model_coordinadores->GetSeccion($modulos[0]['COD_MODULO_TEM']);//OBTIENE SECCIONES CON UN CODIGO DE MODULO TEMATICO ES ARREGLO 
-		//ACA DESMENUZAR LA LISTA DE OBJETOS DE COORDINACIONES PARA AGREGARLE MODULOS Y SECCIONES
-		$datos_plantilla['resultados'] = $ListaObjetosCoordinaciones;
+		$ListaObjetosCoordinadores = $this->model_coordinadores->ObtenerTodosCoordinadores();
+		
+		$resultados = [];
+		foreach ($ListaObjetosCoordinadores as $coordinador ) {
+			$array_modulos = $this->model_coordinadores->GetModulos($coordinador['id']);
+			$coordinador['modulos'] = "";
+			$coordinador['secciones'] = "";
+			
+			foreach ($array_modulos as $mod) {
+				$array_secciones = $this->model_coordinadores->GetSeccion($mod['COD_MODULO_TEM']);
+				foreach ($array_secciones as $sec) {
+					if($coordinador['secciones']=="")
+						$coordinador['secciones']= $sec['COD_SECCION'];
+					else
+						$coordinador['secciones']= $coordinador['secciones']. " , ".$sec['COD_SECCION'];
+				}
+
+				if($coordinador['modulos']=="")
+					$coordinador['modulos'] = $mod['COD_MODULO_TEM'];
+				else
+					$coordinador['modulos'] = $coordinador['modulos'] ." , ". $mod['COD_MODULO_TEM'];
+			}
+			
+			array_push($resultados, $coordinador);
+		}
+		
+		
+		
+		$datos_plantilla['listado_coordinadores'] = $resultados;
 		
 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
