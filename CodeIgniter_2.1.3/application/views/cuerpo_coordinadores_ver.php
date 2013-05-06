@@ -12,17 +12,17 @@
 				    <option>#</option>
 				    <option>#</option>
 				</select>
-	            <select id="select-secciones" size=16 onchange="mostrarDatos(this)">
-	            <!--    <?php
-	                    foreach ($listado_secciones as $seccion) {
-	                        echo "<option value='".$seccion["id"]."'>".$seccion['nombre']."</option>";
-	                    }
-	                ?>
-	                -->
+	            <select id="select-coordinadores" size=16 onchange="mostrarDatos(this)">
+	            <?php
+	                foreach ($listado_coordinadores as $coordinador) {
+	                    echo "<option value='".$coordinador["id"]."'>".$coordinador['nombre']."</option>";
+	                }
+	            ?>
 	            </select>
 	        </div>
-	        <h4>Detalle Coordinador</h4>
 	        <div class="span7">
+	        <h4>Detalle Coordinador</h4><br />
+	        
 	            <h4>Coordinador: Solar Fuentes Mauricio Gonzalo</h4>
 	            <h4>Rut: 17555888-4</h4>
 	            <h4>Mail: asd@fasd.com</h4>
