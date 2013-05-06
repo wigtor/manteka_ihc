@@ -1,4 +1,4 @@
-<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario según el botón de la barra superior en que se encuentre -->
+<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario segÃºn el botÃ³n de la barra superior en que se encuentre -->
 	<div class="accordion" id="accordion2">
     	<div class="accordion-group">
 		    <div class="accordion-heading">
@@ -7,8 +7,8 @@
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li class="active"><a href="#">Ver alumnos</a></li>
-					<li><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Agregar alumnos</a></li>
+		        	<li class="active"><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
+					<li><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
 					<li><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
 					<li><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
 		     	</div>

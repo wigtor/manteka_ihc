@@ -1,4 +1,4 @@
-<!-- Contiene información del pié de la página -->
+<!-- Contiene informaciÃ³n del pie de la pÃ¡gina -->
 <footer class="footer" id="footer">
 	<p class="muted">
 	Equipo de desarrollo de IHC 1-2013.
