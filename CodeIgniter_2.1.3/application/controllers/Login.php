@@ -209,7 +209,7 @@ class Login extends CI_Controller {
 						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
 						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
 						'tipo_usuario' => $tipo_user,
-						'id_tipo_usuario' => $$ExisteUsuarioyPassoword->ID_TIPO,
+						'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
 						'nombre_usuario' => $ExisteUsuarioyPassoword->NOMBRE1,
 						'logged_in' => TRUE
 	              	);
@@ -336,7 +336,6 @@ class Login extends CI_Controller {
 		$mail2 = $this->input->post("correo2");
 		$telefono = $this->input->post("telefono");
 		$resultado = $this->model_usuario->cambiarDatosUsuario($rut, $tipo, $telefono, $mail1, $mail2);
-
 		
 
 		/* Cargo la vista que muestra el mensaje de que la operación se realizó correctamente */
@@ -516,7 +515,7 @@ class Login extends CI_Controller {
 					'rut'  => $usuario->RUT_USUARIO,
 					'email'     => $usuario->CORREO1_USER,
 					'tipo_usuario' => $tipo_user,
-					'id_tipo_usuario' => $$ExisteUsuarioyPassoword->ID_TIPO,
+					'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
 					'nombre_usuario' => $usuario->NOMBRE1,
 					'logged_in' => TRUE
               );

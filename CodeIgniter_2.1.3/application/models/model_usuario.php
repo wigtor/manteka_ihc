@@ -114,11 +114,23 @@ class model_usuario extends CI_Model{
 
 
    function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
-
-
-
-      
-      return TRUE;
+      $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+      $query = $this->db->update('usuario', array('CORREO1_USER'=>$mail1, 'CORREO2_USER'=>$mail2)); //Acá va el nombre de la tabla
+      $this->db->stop_cache();
+      $this->db->flush_cache();
+      $this->db->stop_cache();
+      if ($tipo_usuario == 2) { //Coordinador
+         $query = $this->db->where('RUT_USUARIO3',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+         $query = $this->db->update('coordinador', array('TELEFONO_COORDINADOR'=>$telefono)); //Acá va el nombre de la tabla
+      }
+      else if ($tipo_usuario == 1) { //Profesor
+         $query = $this->db->where('RUT_USUARIO2',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+         $query = $this->db->update('profesor', array('TELEFONO_PROFESOR'=>$telefono)); //Acá va el nombre de la tabla
+      }
+      else {
+         return FALSE;
+      }
+      return $tipo_usuario;
    }
 }
 ?>
