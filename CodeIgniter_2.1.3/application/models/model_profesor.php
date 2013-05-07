@@ -11,17 +11,35 @@ class Model_profesor extends CI_Model {
     var $telefono='';
     var $tipo=''; // se refiere a si es profesor normal o coordinador
 	//OPERACIÓN PARA INGRESAR PROFESOR    
-	public function InsertarProfesor() {
-        $this->rut_profesor = $_POST['rut_profesor'];
-        $this->nombre_profesor = $_POST['nombre_profesor'];
-        $this->apellido_paterno = $_POST['apellido_paterno'];
-        $this->correo_prof1 = $_POST['correo_prof1'];
-        $this->correo_prof2 = $_POST['correo_prof2'];
-        $this->telefono = $_POST['telefono'];
-        $this->tipo= $_POST['tipo'];
+	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor) 
+  {
+    $data = array(          
+          'RUT_USUARIO2' => $rut_profesor ,
+          'NOMBRE1_PROFESOR' => $nombre1_profesor ,
+          'NOMBRE2_PROFESOR' => $nombre2_profesor ,
+          'APELLIDO1_PROFESOR' => $apellido1_profesor ,
+          'APELLIDO2_PROFESOR' => $apellido2_profesor,
+          'TELEFONO_PROFESOR' =>  $telefono_profesor,
+          'TIPO_PROFESOR' => $tipo_profesor, 
+    );
 
-        // inserta los campos guardados en la tabla profesor
-        $this->db->insert('PROFESOR', $this);
+        $datos = $this->db->insert('profesor',$data);
+        $id_tipo = 1;
+        $pass = "123";
+    $data2 = array(         
+          'RUT_USUARIO' => $rut_profesor,
+          'ID_TIPO' => $id_tipo,
+          'PASSWORD_PRIMARIA' => $pass,
+          'CORREO1_USER' => $correo_profesor,
+    );
+    $datos2 = $this->db->insert('usuario',$data2);
+    if($datos && $datos2){
+      return 1;
+    }
+    else{
+      return -1;
+    }
+    
     }
 
 
@@ -120,6 +138,36 @@ class Model_profesor extends CI_Model {
       $query = $this->db->get('usuario'); //Ac? va el nombre de la tabla
       return $query->row();    //   Devolvemos al controlador la fila que coincide con la b?squeda. (FALSE en caso que no existir coincidencias)
    }
+
+   public function verModulo()
+  {
+    $sql="SELECT * FROM MODULO_TEMATICO"; //código MySQL
+    $datos=mysql_query($sql); //enviar código MySQL
+    $contador = 0;
+    $lista;
+    while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+      $lista[$contador][0] = $row['COD_MODULO_TEM'];
+      $lista[$contador][3] = $row['NOMBRE_MODULO'];
+      $contador = $contador + 1;
+    }
+    
+    return $lista;
+  }
+
+  public function verSeccion()
+  {
+    $sql="SELECT * FROM SECCION"; //código MySQL
+    $datos=mysql_query($sql); //enviar código MySQL
+    $contador = 0;
+    $lista;
+    while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+      $lista[$contador][0] = $row['COD_SECCION'];
+      $contador = $contador + 1;
+    }
+    
+    return $lista;
+  }
+
 }
 
 ?>
