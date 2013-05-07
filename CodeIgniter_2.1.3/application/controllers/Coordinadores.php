@@ -29,6 +29,7 @@ class Coordinadores extends CI_Controller {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -77,45 +78,55 @@ class Coordinadores extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
     
-    public function crearCoordinador()
+    public function agregarCoordinadores()
     {
     	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		//if ($rut == FALSE) {
-		//	redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		//}
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+			$this->load->model('model_coordinadores');
+			$this->model_coordinadores->agregarCoordinador($_POST['nombre'],$_POST['rut'],$_POST['contrasena'],$_POST['correo1'],$_POST['correo2'],$_POST['fono']);
+			$datos_plantilla["titulo_msj"] = "Coordinador agregado";
+			$datos_plantilla["cuerpo_msj"] = "El nuevo coordinador fue agregado correctamente.";
+			$datos_plantilla["tipo_msj"] = "success-error";
+			$datos_plantilla["redirecTo"] = 'Coordinadores/agregarCoordinadores';
+			$datos_plantilla["nombre_redirecTo"] = "Agregar Coordinador";
+			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+			
+		}
+		else{
+			$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
+			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+			$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+			$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+			$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+			$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-		//$this->load->model('model_coordinadores');
-		//descomentar las siguientes líneas cuando se actualice la recepcion de parametros desde la vista
-		//$this->model_coordinadores->agregarCoordinador($nombre,$rut,$correo1,$correo2,$telefono,$id,$tipo)
+			//si el metodo es post se recibe el formulario
+			
+			$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_crear', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
+			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+			$this->load->view('templates/template_general', $datos_plantilla);
+		}
 
-
-
-
-
-
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_crear', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
+		
     }
     
-    public function modificarCoordinador()
+    public function modificarCoordinadores()
     {
     	   	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
@@ -141,7 +152,7 @@ class Coordinadores extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
     }
 
-    public function eliminarCoordinador()
+    public function eliminarCoordinadores()
     {
     	   	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
