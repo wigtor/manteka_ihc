@@ -1,14 +1,24 @@
-<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario según el botón de la barra superior en que se encuentre -->
+<!--	Barra lateral con las operaciones que puede realizar el usuario cuando se encuentra en el módulo "Alumnos"	-->
 	<?php
-		if (!isset($subVistaLateralAbierta)) { //Con esto se evita que no se haya seteado la variable aún
+		/**
+		*	Determinar qué grupo se encuentra abierto en caso de tenerlos.
+		*	Determinar qué operación está seleccionada
+		*/
+
+		//	Si la variable no se ha seteado, se asume operación principal.
+		if (!isset($subVistaLateralAbierta)) {
 			$subVistaLateralAbierta = "verAlumnos";
 		}
+
+		// Las operaciones por defecto no poseen clases
 		$verAlumnos = "";
 		$agregarAlumnos = "";
 		$editarAlumnos = "";
 		$borrarAlumnos = "";
 		$cambiarSeccionAlumnos = "";
 
+		//	En caso de que tal operación específica este seleccionada.
+		//	La operación seleccionada tiene clase "active"
 		if ($subVistaLateralAbierta == "verAlumnos") {
 			$verAlumnos = 'class="active"';
 		}
@@ -22,6 +32,8 @@
 			$borrarAlumnos = 'class="active"';
 		}
 	?>
+
+	<!--	Barra lateral de alumnos	-->
 	<div class="accordion" id="accordion2">
     	<div class="accordion-group">
 		    <div class="accordion-heading">

@@ -1,8 +1,16 @@
-<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario según el botón de la barra superior en que se encuentre -->
+<!--	Barra lateral con las operaciones que puede realizar el usuario cuando se encuentra en el módulo "Secciones"	-->
 	<?php
-		if (!isset($subVistaLateralAbierta)) { //Con esto se evita que no se haya seteado la variable aún
+		/**
+		*	Determinar qué grupo se encuentra abierto en caso de tenerlos.
+		*	Determinar qué operación está seleccionada
+		*/
+
+		//	Si la variable no se ha seteado, se asume operación principal.
+		if (!isset($subVistaLateralAbierta)) {
 			$subVistaLateralAbierta = "correosEnviados";
 		}
+
+		// Las operaciones por defecto no poseen clases
 		$verProfesores = "";
 		$agregarProfesores = "";
 		$editarProfesores = "";
@@ -16,10 +24,14 @@
 		$editarCoordinadores = "";
 		$borrarCoordinadores = "";
 
+		// Variables que determinan que grupo de operaciones se encuentra abierta
 		$inProfesores = "";
 		$inAyudantes = "";
 		$inCoordinadores = "";
 
+		//	En caso de que tal operación específica este seleccionada.
+		//	La operación seleccionada tiene clase "active"
+		//	Dependiendo de qué operación esta seleccionada, se abre un determinado grupo de acciones
 		if ($subVistaLateralAbierta == "verProfesores") {
 			$verProfesores = 'class="active"';
 			$inProfesores = "in";
@@ -69,6 +81,8 @@
 			$inCoordinadores = "in";
 		}
 	?>
+
+	<!--	Barra lateral de profesores	-->
     <div class="accordion" id="accordion2">
     	<div class="accordion-group">
 		    <div class="accordion-heading">

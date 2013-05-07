@@ -1,4 +1,4 @@
-
+<!--	Vista indicando al usuario que se ha autenitificado correctametne	-->
 		<script type='text/javascript'>
 			function redireccionarAuto() 
 			{
