@@ -77,7 +77,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- nombre uno-->
 								<div class="span4">
 									<div class="control-group">
-										<label maxlength="20" class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre</label>
+										<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre</label>
 									</div>
 								</div>
 								<div class="span5">	

@@ -118,7 +118,7 @@ function ordenarFiltro(){
 									<option value="1">Filtrar por Nombre</option>
 									<option value="3">Filtrar por Apellido paterno</option>
 									<option value="4">Filtrar por Apellido materno</option>
-									<option value="7">Filtrar por Carrera</option>
+									<option value="7">Filtrar por Código Carrera</option>
 									<option value="6">Filtrar por Seccion</option>
 									</select>
 							</div> 
