@@ -127,23 +127,44 @@ $datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario',
 $datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
 $datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
 $datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-$datos_plantilla["mostrarBarraProgreso"] = true; //Cambiar en caso que no se necesite la barra de progreso
+$datos_plantilla["mostrarBarraProgreso"] = false; //Cambiar en caso que no se necesite la barra de progreso
 $datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 $datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
 $this->load->model('Model_estudiante');
-//$this->load->model('Model_profesor');
-//$this->load->model('Model_ayudante');
+$this->load->model('Model_profesor');
+$this->load->model('Model_ayudante');
 
-$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
-//$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
-//$datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
+$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
+					 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
+					 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
 
 
 
 $datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviar' , $datos_vista, true); //Esta es la linea que cambia por cada controlador
 $datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 $this->load->view('templates/template_general', $datos_plantilla);
+
+
+}
+public function cargarTabla(){
+$tipo = $this->input->get('tipo');
+if($tipo==1){
+	$this->load->model('Model_estudiante');	
+	$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
+	$this->load->view('templates/tabla_tipo_destinatario', $datos_vista);
+}
+
+$this->load->model('Model_profesor');
+$this->load->model('Model_ayudante');
+
+$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
+					 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
+					 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
+
+
+
+$this->load->view('templates/tabla_tipo_destinatario', $datos_vista);
 
 
 }
@@ -209,15 +230,18 @@ public function enviarPost(){
 	
 
 	try {
+		
+			$config['mailtype'] = 'html';
+			$this->email->initialize($config);
 			$this->email->from('no-reply@manteka.cl', 'ManteKA');
 			$this->email->to($to);
 			$this->email->subject($asunto);
 			$this->email->message($mensaje);
-			$config['protocol'] = 'mail';
 
-			$this->email->send();
+			if(!$this->email->send())
+				throw new Exception("error en el envio");
+
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo);
-
 			if($tipo=='CARTA_ESTUDIANTE')
 				$this->model_correoE->InsertarCorreoE($rutRecept);
 			else if($tipo=='CARTA_USER')
@@ -228,7 +252,10 @@ public function enviarPost(){
 			
 		}
 		catch (Exception $e) {
-			
+			if($e->getMessage()=="error en el envio")
+				redirect("/Otros/sendMailError", "sendMailError");
+			else
+				redirect("/Otros", "databaseError");
 		}
 	$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
 	$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
