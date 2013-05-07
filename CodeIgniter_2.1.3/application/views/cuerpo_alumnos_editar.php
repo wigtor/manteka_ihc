@@ -41,6 +41,39 @@
 </script>
 
 <script type="text/javascript">
+function ordenarFiltro2(){
+	var filtroLista = document.getElementById("filtroSeccion").value;
+	var arreglo = new Array();
+	var ocultarInput;
+	var ocultarTd;
+	var cont;
+	
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($secciones)){
+		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	
+	
+	for(cont=0;cont < arreglo.length;cont++){
+		ocultarInput=document.getElementById(arreglo[cont]);
+		ocultarTd=document.getElementById("seccionTd_"+cont);
+		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+			ocultarInput.style.display='none';
+			ocultarTd.style.display='none';
+		}
+		else
+		{
+			ocultarInput.style.display='';
+			ocultarTd.style.display='';
+		}
+    }
+}
+</script>
+
+<script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
 	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
@@ -80,7 +113,7 @@ function ordenarFiltro(){
 </script>
 
 <script type="text/javascript">
-	function datosEditarAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo){
+	function datosEditarAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion){
 			
 			
 			document.getElementById("rutEditar").value = rut;
@@ -89,6 +122,7 @@ function ordenarFiltro(){
 			document.getElementById("apellidopaternoEditar").value = apePaterno;
 			document.getElementById("apellidomaternoEditar").value = apeMaterno;
 			document.getElementById("correoEditar").value = correo;
+			document.getElementById(seccion).checked=true;	
 		
 	}
 </script>
@@ -136,7 +170,7 @@ function ordenarFiltro(){
 							while ($contador<count($rs_estudiantes)){
 								
 								echo '<tr>';
-								echo	'<td  id="'.$contador.'" onclick="datosEditarAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.')" 
+								echo	'<td  id="'.$contador.'" onclick="datosEditarAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','.$comilla. $rs_estudiantes[$contador][6].$comilla.')" 
 											  style="text-align:left;">
 											  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 								echo '</tr>';
@@ -157,11 +191,11 @@ function ordenarFiltro(){
 							Complete los datos del formulario para modificar el alumno
 						</div>
 					<!-- AQUI EMPIEZA EL MAMBO-->
-					<form id="FormEditar" type="post">
+					<form id="FormEditar" type="post" onsubmit="EditarEstudiante()">
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">1-.*RUT</label>
+		  							<label class="control-label" for="inputInfo">1-.RUT</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -174,12 +208,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.*Nombre uno</label>
+		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombreunoEditar" name="nombre1_estudiante">
+		    							<input type="text" id="nombreunoEditar" name="nombre1_estudiante" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -187,12 +221,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.*Nombre dos</label>
+		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Segundo nombre</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombredosEditar" name="nombre2_estudiante">
+		    							<input type="text" id="nombredosEditar" name="nombre2_estudiante" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -202,12 +236,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.*Apellido Paterno</label>
+		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Apellido Paterno</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="apellidopaternoEditar" name="apellido_paterno">
+		    							<input type="text" id="apellidopaternoEditar" name="apellido_paterno" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -215,12 +249,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.*Apellido Materno</label>
+		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Materno</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="apellidomaternoEditar" name="apellido_materno">
+		    							<input type="text" id="apellidomaternoEditar" name="apellido_materno" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -228,20 +262,56 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5-.*Correo</label>
+		  							<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Correo</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="correoEditar" name="correo_estudiante">
+		    							<input type="email" placeholder="ejemplo@usach.cl" id="correoEditar" name="correo_estudiante" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
+						
+						<div class="row"> <!-- seccion-->
+								<div class="span5">
+									<div class="control-group">
+										<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar sección</label>
+									</div>
+								</div>
+								<div  class="span6" >
+								
+									<div class="controls">
+										<input type="text" onkeyup="ordenarFiltro2()" id="filtroSeccion" placeholder="Filtro de Sección">
+									</div>
+									<div style="border:grey 1px solid;overflow-y:scroll;height:200px" >
+									
+									
+										<table class="table table-hover">
+											<thead>
+
+											</thead>
+											<tbody>									
+									
+											<?php
+											$contador=0;
+											while ($contador<count($secciones)){
+												echo '<tr>';
+												echo '<td id="seccionTd_'.$contador.'" ><input required id="'.$secciones[$contador].'" value="'.$secciones[$contador].'" name="cod_seccion" type="radio" >'.$secciones[$contador].'</td>';
+												echo '</tr>';
+												$contador = $contador + 1;
+											}
+											?>
+											</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						
 						<div class="row-fluid">
 							<div class="span10">
 								<div class="row-fluid">
 									<div class="span3 offset6">
-										<input type = "button"  onclick="EditarEstudiante()" value="Guardar">
+										<button class ="btn" type="submit" >Guardar</button>
 									</div>
 									<div class="span3">
 										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>

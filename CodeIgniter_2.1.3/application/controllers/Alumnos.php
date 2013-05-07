@@ -211,7 +211,7 @@ class Alumnos extends CI_Controller {
 
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
+        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2,'secciones' => $this->Model_estudiante->VerSecciones());
 	      
 
 
@@ -249,11 +249,12 @@ class Alumnos extends CI_Controller {
 	        $apellido_paterno = $this->input->get("apellido_paterno");
 	        $apellido_materno = $this->input->get("apellido_materno");
 	        $correo_estudiante = $this->input->get("correo_estudiante");
+			$cod_seccion = $this->input->get("cod_seccion");
 
 
-	        $confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante);
+	        $confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
 
-	        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);
+	        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion,'secciones' => $this->Model_estudiante->VerSecciones());
 	      
 
 
