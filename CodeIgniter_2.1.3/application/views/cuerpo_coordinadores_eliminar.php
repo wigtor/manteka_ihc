@@ -1,17 +1,24 @@
 
 <fieldset>
-	<legend>Secciones</legend>
+	<legend>Eliminar Coordinadores</legend>
 	    <div class="row" style="margin-left:30px;"><!--fila-->
 	        <div class="span4">
 	            <h4>Seleccione los coordinadores a eliminar</h4>
-	            <input class="span7" type="text" placeholder="Filtro b&#250;squeda">
-	            <select class="span5">
-				    <option>Filtrar Por...</option>
-				    <option>#</option>
-				    <option>#</option>
-				    <option>#</option>
-				    <option>#</option>
-				</select>
+	            <div class="input-append span9">
+					<input class="span11" id="appendedDropdownButton" type="text" placeholder="Filtro">
+					<div class="btn-group">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<span id="show-filtro">Filtrar por</span>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" id="select-filtro">
+							<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Secciones</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>
+						</ul>
+					</div>
+				</div>
 	            <select id="select-coordinadores" multiple class="span12" size=20 onchange="mostrarDatos(this)">
 	            <?php
 	                foreach ($listado_coordinadores as $coordinador) {
@@ -79,6 +86,15 @@
     		$('#input-eliminar').val($('#select-coordinadores').val());
     	return respuesta;
     }
+    function seleccionar_filtro(option){
+    	$(option).prevent
+    	$('.active').removeClass("active");
+    	$(option).addClass("active");
+    	$("#show-filtro").empty().append($('.active a').text());
+    }
+    $("ul#select-filtro li a").click(function(event) {
+	    event.preventDefault();
+	});
        	
     	
 

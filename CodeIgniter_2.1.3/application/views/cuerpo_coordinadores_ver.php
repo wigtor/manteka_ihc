@@ -4,14 +4,23 @@
 	    <div class="row" style="margin-left:30px;"><!--fila-->
 	        <div class="span4">
 	            <h4>1.- Lista Coordinadores</h4>
-	            <input class="span8" type="text" placeholder="Filtro búsqueda">
-	            <select class="span4">
-				    <option>Filtrar Por...</option>
-				    <option>Nombre</option>
-				    <option>Modulos</option>
-				    <option>Secciones</option>
-				    <option>Correo</option>
-				</select>
+	            <!--olitruco-->
+	            <div class="input-append span9">
+					<input class="span11" id="appendedDropdownButton" type="text" placeholder="Filtro">
+					<div class="btn-group">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<span id="show-filtro">Filtrar por</span>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" id="select-filtro">
+							<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Secciones</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>
+						</ul>
+					</div>
+				</div>
+				<!--olitruco-->
 	            <select id="select-coordinadores" class="span12" size=16 onchange="mostrarDatos(this)">
 	            <?php
 	                foreach ($listado_coordinadores as $coordinador) {
@@ -60,6 +69,15 @@
 
         $("#"+id_coordinador).show();
     }
+    function seleccionar_filtro(option){
+    	$(option).prevent
+    	$('.active').removeClass("active");
+    	$(option).addClass("active");
+    	$("#show-filtro").empty().append($('.active a').text());
+    }
+    $("ul#select-filtro li a").click(function(event) {
+	    event.preventDefault();
+	});
        	
     	
 

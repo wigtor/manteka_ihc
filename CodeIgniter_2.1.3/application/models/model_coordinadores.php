@@ -36,8 +36,8 @@ class model_coordinadores extends CI_Model{
 								'rut'=>$row['RUT_USUARIO3'],
                                 'nombre'=> $row['APELLIDO1_COORDINADOR']." ".$row['APELLIDO2_COORDINADOR']." ".$row['NOMBRE1_COORDINADOR']." ".$row['NOMBRE2_COORDINADOR'],
                                 'fono'=> intval($row['TELEFONO_COORDINADOR']),
-								'correo1'=>$row['CORREO1_USER'],
-								'correo2'=>$row['CORREO2_USER'],                                
+								        'correo1'=>$row['CORREO1_USER'],
+								        'correo2'=>$row['CORREO2_USER'],
                         );
                         $contador++;
 		}
@@ -132,17 +132,27 @@ class model_coordinadores extends CI_Model{
          $this->db->delete('usuario');
       }
 
-      function modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo){
-         $this->db->where('COORD_NOMBRE',$nombreActual);
-         $this->db->or_where('RUT_USUARIO',$rutActual);
-         $informacion = array('RUT_USUARIO' => $rut, 
-                        'COORD_NOMBRE' => $nombre,
-                        'ID_TIPO' => $tipo,
-                        'ID_COORD' => $id,
-                        'CORREO1_USER' => $correo1,
-                        'CORREO2_USER' => $correo2,
-                        'COORD_TELEFONO' => $telefono,);
+      function modificarPassword($id, $pass){
+         $this->db->where('RUT_USUARIO',$id);
+         //$data = array('PASSWORD_PRIMARIA'=>$pass,);
+         $data = array('PASSWORD_PRIMARIA'=>md5($pass),);
+         $this->db->update('usuario', $data);
+      }
+      //no comtempla la modificacion de tipo de usuario.
+      function modificarCoordinador($rutActual,$nombreNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo){
+         //tabla coordinador
+         $this->db->where('RUT_USUARIO3',$rutActual);
+         $informacion = array(
+                        'NOMBRE1_COORDINADOR' => $nombreNuevo,
+                        'TELEFONO_COORDINADOR' => $telefonoNuevo);
          $this->db->update('coordinador',$informacion);
+         //tabla usuario
+         $this->db->where('RUT_USUARIO',$rutActual);
+         $informacion_user = array(
+                        'CORREO1_USER' => $correo1Nuevo,
+                        'CORREO2_USER' => $correo2Nuevo,);
+         $this->db->update('usuario',$informacion_user);
+         
          
       }
       function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
