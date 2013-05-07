@@ -40,6 +40,7 @@
 			<label>Correo alternativo</label>
 			<input type="text" name="correo2" placeholder="<?php echo $datos['email2'] ?>" value="<?php echo $datos['email2'] ?>" >
 		</div>
+		<hr>
 		<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
 			$hay_error_contrasegna_actual = '';
 			$hay_error_nva_contrasegna = '';
