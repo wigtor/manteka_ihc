@@ -40,7 +40,7 @@ class Alumnos extends CI_Controller {
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
+        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'carreras' => $this->Model_estudiante->VerCarreras());
 	      
 
 
@@ -50,7 +50,7 @@ class Alumnos extends CI_Controller {
 
 	}
 
-	public function eliminarAlumno($rut_estudiante)
+	public function eliminarAlumno($rut_estudiante)// alimina un alumno y de ahí carga la vista para seguir eliminando 
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -77,12 +77,10 @@ class Alumnos extends CI_Controller {
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_borrar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
-
-
 	}
 
 
-	public function agregarAlumnos()
+	public function agregarAlumnos()//carga la vista agregar alumnos
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -104,7 +102,7 @@ class Alumnos extends CI_Controller {
 
 		$this->load->model('Model_estudiante');
 
-		        $datos_vista = array('carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones());
+		$datos_vista = array('carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'mensaje_confirmacion'=>2);
 		      
 
 
@@ -116,7 +114,7 @@ class Alumnos extends CI_Controller {
 
 	}
 
-	public function insertarAlumno()
+	public function insertarAlumno()//inserta alumno
 	{
 
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -159,7 +157,7 @@ class Alumnos extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
 
-	public function borrarAlumnos()
+	public function borrarAlumnos()//carga la vista para borrar alumnos
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -189,7 +187,7 @@ class Alumnos extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);	
 	}
 
-	public function editarAlumnos()
+	public function editarAlumnos()//carga ka vista para editar alumnos
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -211,7 +209,7 @@ class Alumnos extends CI_Controller {
 
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
+        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
 	      
 
 
@@ -221,7 +219,7 @@ class Alumnos extends CI_Controller {
 
 	}
 
-	public function EditarEstudiante()
+	public function EditarEstudiante()//edita estudiante
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -249,11 +247,12 @@ class Alumnos extends CI_Controller {
 	        $apellido_paterno = $this->input->get("apellido_paterno");
 	        $apellido_materno = $this->input->get("apellido_materno");
 	        $correo_estudiante = $this->input->get("correo_estudiante");
+			$cod_seccion = $this->input->get("cod_seccion");
 
 
-	        $confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante);
+	        $confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
 
-	        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);
+	        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion,'secciones' => $this->Model_estudiante->VerSecciones());
 	      
 
 
@@ -263,6 +262,44 @@ class Alumnos extends CI_Controller {
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);	
 	}
+	
+			public function cambiarSeccionAlumnos()
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
+		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+
+
+		$this->load->model('Model_estudiante');
+		
+		
+		// Acá no se que hacer xD
+	    //$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),VerCa,'mensaje_confirmacion'=>2);
+		$datos_vista = array('carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
+		
+		
+		
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_cambiarSeccion', $datos_vista, true); //Esta es la linea que cambia por cada controlador
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);	
+	}
+
+	
+	
 
 	public function index() //Esto hace que el index sea la vista que se desee
 	{

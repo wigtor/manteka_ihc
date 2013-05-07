@@ -96,7 +96,6 @@ function ordenarFiltro(){
 		<fieldset>
 			<legend>Borrar Alumno</legend>
 			<div class= "row-fluid">
-					
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6">
@@ -118,7 +117,7 @@ function ordenarFiltro(){
 									<option value="1">Filtrar por Nombre</option>
 									<option value="3">Filtrar por Apellido paterno</option>
 									<option value="4">Filtrar por Apellido materno</option>
-									<option value="7">Filtrar por Carrera</option>
+									<option value="7">Filtrar por Código Carrera</option>
 									<option value="6">Filtrar por Seccion</option>
 									</select>
 							</div> 
@@ -131,7 +130,7 @@ function ordenarFiltro(){
 						
 							<thead>
 								<tr>
-									<th style="text-align:left;">Nombre Completo</th>
+									<th style="text-align:left;"><br><b>Nombre Completo</b></th>
 									
 								</tr>
 							</thead>
@@ -173,8 +172,7 @@ function ordenarFiltro(){
 						<div >
 						<pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
-Nombre uno:       <b id="nombreunoDetalle"></b>
-Nombre dos:       <b id="nombredosDetalle" ></b>
+Nombres:          <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
 Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>

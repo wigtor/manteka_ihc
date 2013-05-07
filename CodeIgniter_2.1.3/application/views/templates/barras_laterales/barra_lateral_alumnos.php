@@ -7,6 +7,7 @@
 		$agregarAlumnos = "";
 		$editarAlumnos = "";
 		$borrarAlumnos = "";
+		$cambiarSeccionAlumnos = "";
 
 		if ($subVistaLateralAbierta == "verAlumnos") {
 			$verAlumnos = 'class="active"';
@@ -33,6 +34,7 @@
 					<li <?php echo $agregarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
 					<li <?php echo $editarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
 					<li <?php echo $borrarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
+					<li <?php echo $cambiarSeccionAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
 		     	</div>
 		    </div>
 	  	</div>

@@ -96,25 +96,33 @@ function ordenarFiltro(){
 <div class="row_fluid">
 	<div class="span10">
 		<fieldset>
-			<div>
 			<legend>Editar Ayudante</legend>
-			</div>
 			<div>
 				<div class="row-fluid">
 					<div class="span6"><!--    INICIO LISTA DE AYUDANTES -->
-					
-						<fieldset>
-							<div class="span10">
-							<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-
-								<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="3">Filtrar por Apellido paterno</option>
-								<option value="4">Filtrar por Apellido materno</option>
-								<option value="0">Filtrar por RUT</option>
-								</select> 
+						<div class="row-fluid">
+							<div class="span6">
+								Seleccione ayudante a modificar
 							</div>
-						</fieldset>
+						</div>
+					
+						
+						<div class="row-fluid">	
+							<div class="span11">
+								<div class="span6">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+								</div>
+								<div class="span6">
+									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<option value="1">Filtrar por Nombre</option>
+									<option value="3">Filtrar por Apellido paterno</option>
+									<option value="4">Filtrar por Apellido materno</option>
+									<option value="0">Filtrar por RUT</option>
+									</select>
+								</div> 
+							</div>
+						</div>
+						
 						
 						<!--AQUÍ VA LA LISTA-->
 						<thead>
@@ -123,7 +131,7 @@ function ordenarFiltro(){
 								
 							</tr>
 						</thead>
-						<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 						<table class="table table-hover">
 						<tbody>
 						
@@ -155,11 +163,11 @@ function ordenarFiltro(){
 							Complete los datos del formulario para modificar el ayudante
 						</div>
 					<!-- AQUI EMPIEZA EL MAMBO-->
-					<form id="FormEditar" type="post">
+					<form id="FormEditar" type="post" onsubmit="EditarEstudiante()">
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">1-.*RUT</label>
+		  							<label class="control-label" for="inputInfo">1-.RUT</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -172,12 +180,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.*Nombre uno</label>
+		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombreunoEditar" name="nombre1_ayudante">
+		    							<input type="text" id="nombreunoEditar" name="nombre1_ayudante" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -185,12 +193,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.*Nombre dos</label>
+		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Segundo nombre</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombredosEditar" name="nombre2_ayudante">
+		    							<input type="text" id="nombredosEditar" name="nombre2_ayudante" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -200,12 +208,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.*Apellido Paterno</label>
+		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Apellido Paterno</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="apellidopaternoEditar" name="apellido_paterno">
+		    							<input type="text" id="apellidopaternoEditar" name="apellido_paterno" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -213,12 +221,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.*Apellido Materno</label>
+		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Materno</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="apellidomaternoEditar" name="apellido_materno">
+		    							<input type="text" id="apellidomaternoEditar" name="apellido_materno" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -226,12 +234,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5-.*Correo</label>
+		  							<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Correo</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="correoEditar" name="correo_ayudante">
+		    							<input type="email" id="correoEditar" name="correo_ayudante" maxlength="19" placeholder="ejemplo@usach.cl" required>
 		  							</div>
 							</div>
 						</div>
@@ -239,7 +247,7 @@ function ordenarFiltro(){
 							<div class="span10">
 								<div class="row-fluid">
 									<div class="span3 offset6">
-										<input type = "button"  onclick="EditarEstudiante()" value="Guardar"> 	
+										<button class ="btn" type="submit" >Guardar</button>
 										</div>
 									<div class="span3">
 										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>

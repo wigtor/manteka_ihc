@@ -74,18 +74,18 @@
 						<div class="control-group <?php echo $inputRut ?>" id="groupRut">
 							<label class="control-label" for="inputRut">Rut</label>
 							<div class="controls">
-							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="<?= set_value('inputRut'); ?>">
+							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="<?php set_value('inputRut'); ?>">
 							 	<STRONG>-</STRONG>
-							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="k" value="<?= set_value('inputGuionRut'); ?>">
-								<?= form_error('inputRut', '<span class="help-inline">', '</span>');?>
+							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="k" value="<?php set_value('inputGuionRut'); ?>">
+								<?php form_error('inputRut', '<span class="help-inline">', '</span>');?>
 								<span id="spanInputRutError" class="help-inline"></span>
 							</div>
 						</div>
 						<div class="control-group <?php echo $inputPassword ?>" id="groupPassword">
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
-								<input style="width:242px" type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?= set_value('inputPassword'); ?>">
-								<?= form_error('inputPassword', '<span class="help-inline">', '</span>');?>
+								<input style="width:242px" type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?php set_value('inputPassword'); ?>">
+								<?php form_error('inputPassword', '<span class="help-inline">', '</span>');?>
 							</div>
 						</div>
 						<div class="control-group">

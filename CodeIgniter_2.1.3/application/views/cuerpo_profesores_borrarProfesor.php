@@ -11,9 +11,8 @@
 </script>
 
 <script type="text/javascript">
-	function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,telefono,tipo){
+	function DetalleProfesor(rut,nombre1,nombre2,apePaterno,apeMaterno,telefono,tipo){
 			
-			document.getElementById("rutEliminar").value = rut;
 			document.getElementById("rutDetalle").innerHTML = rut;
 			document.getElementById("nombreunoDetalle").innerHTML = nombre1;
 			document.getElementById("nombredosDetalle").innerHTML = nombre2;
@@ -21,7 +20,6 @@
 			document.getElementById("apellidomaternoDetalle").innerHTML = apeMaterno;
 			document.getElementById("telefonoDetalle").innerHTML = telefono;
 		    document.getElementById("tipoDetalle").innerHTML = tipo;
-		
 	}
 </script>
 
@@ -33,11 +31,11 @@
 		if(rut!=""){
 					var answer = confirm("¿Está seguro de eliminar este profesor?")
 					if (!answer){
-						var dijoNO = DetalleProfesor("","","","","","");
+						var dijoNO = DetalleProfesor("","","","","","","");
 					}
 
 					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Profesores/EliminarProfesores/") ?>/"+rut;
+					borrar.action = "<?php echo site_url("Profesores/eliminarProfesores/") ?>/"+rut;
 					borrar.submit();
 					
 					
@@ -141,8 +139,8 @@ function ordenarFiltro(){
 								while ($contador<count($rs_profesores)){
 									
 									echo '<tr>';
-									echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_profesores[$contador][0].$comilla.','.$comilla. $rs_profesores[$contador][1].$comilla.','.$comilla. $rs_profesores[$contador][2].$comilla.','.$comilla. $rs_profesores[$contador][3].$comilla.','.$comilla. $rs_profesores[$contador][4].$comilla.','.$comilla. $rs_profesores[$contador][5].$comilla.','. $comilla.$rs_profesores[$contador][6].$comilla.')" 
-												  style="text-align:center;">
+									echo	'<td  id="'.$contador.'" onclick="DetalleProfesor('.$comilla.$rs_profesores[$contador][0].$comilla.','.$comilla. $rs_profesores[$contador][1].$comilla.','.$comilla. $rs_profesores[$contador][2].$comilla.','.$comilla. $rs_profesores[$contador][3].$comilla.','.$comilla. $rs_profesores[$contador][4].$comilla.','.$comilla. $rs_profesores[$contador][5].$comilla.','. $comilla.$rs_profesores[$contador][6].$comilla.')" 
+												  style="text-align:left;">
 												  '. $rs_profesores[$contador][3].' '.$rs_profesores[$contador][4].' ' . $rs_profesores[$contador][1].' '.$rs_profesores[$contador][2].'</td>';
 									echo '</tr>';
 																
@@ -168,13 +166,12 @@ function ordenarFiltro(){
 			<div class="row-fluid">
 				<div>
 			<pre <style="margin-top: 50%; margin-left: 0%;">
-RUN: <b id="rutDetalle"></b>
-Nombres: <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
-Apellido Paterno: <b id="apellidopaternoDetalle"></b>
-Apellido Materno: <b id="apellidomaternoDetalle"></b>
-Correo: 
-Telefono: <b id="telefonoDetalle"></b>
-Tipo: <b id="tipoDetalle"></b> </pre>
+RUN: 			<b id="rutDetalle"></b>
+Nombres:		<b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
+Apellido Paterno: 	<b id="apellidopaternoDetalle"></b>
+Apellido Materno:	<b id="apellidomaternoDetalle"></b>
+Telefono: 		<b id="telefonoDetalle"></b>
+Tipo: 			<b id="tipoDetalle"></b> </pre>
 <input type="hidden" id="rutEliminar" value="">
 				</div>		
 			</div>
@@ -184,7 +181,7 @@ Tipo: <b id="tipoDetalle"></b> </pre>
 						<button class="btn" onclick="eliminarProfesor()" >Eliminar</button>
 					</div>
 					<div class="span3" style="margin-left: -52px;">
-						<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','')" >Cancelar</button>
+						<button  class ="btn" type="reset" onclick="DetalleProfesor('','','','','','','')" >Cancelar</button>
 					</div>
 				</div>
 				
@@ -199,4 +196,4 @@ Tipo: <b id="tipoDetalle"></b> </pre>
 			
 		</fieldset>
 	</div>
-	</div>
+</div>
