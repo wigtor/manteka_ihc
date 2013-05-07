@@ -1,13 +1,11 @@
-<?php
-$listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>2 , 'nombre'=>"segundonombre", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>3 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>4 , 'nombre'=>"segundonombre", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",]];
-?>
+
 <fieldset>
 	<legend>Secciones</legend>
-	    <div class="row"><!--fila-->
-	        <div class="span3">
+	    <div class="row" style="margin-left:30px;"><!--fila-->
+	        <div class="span4">
 	            <h4>Seleccione los coordinadores a eliminar</h4>
-	            <input class="span6" type="text" placeholder="Filtro búsqueda">
-	            <select class="span4">
+	            <input class="span7" type="text" placeholder="Filtro b&#250;squeda">
+	            <select class="span5">
 				    <option>Filtrar Por...</option>
 				    <option>#</option>
 				    <option>#</option>
@@ -22,10 +20,10 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 	            ?>
 	            </select>
 	        </div>
-	        <div class="span9">
+	        <div class="span8">
 	        	<div class="span12" style="height:70px"></div>
 		        <h4>Seleccionados a eliminar</h4>
-		        <div class="span10" style="overflow-y:scroll;height:300px">
+		        <div class="span11" style="overflow-y:scroll;height:300px">
 		            <table class="table table-bordered">            
 		                <tr>
 		                    <th>Rut</th>
@@ -47,9 +45,12 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 		        
 		        </div>
 		        
-		        <div class="offset8 span1">
+		        <div class="offset9 span1">
 		        	<br/>
-	  				<button class="btn btn-danger" type="button">Eliminar</button>
+		        	<form  action="borrarCoordinadores" method="POST" onsubmit="return confirmar();">
+		        		<input type="hidden" name="lista_eliminar" id="input-eliminar">
+	  					<button class="btn btn-danger" type="sumbit">Eliminar</button>
+	  				</form>
 				</div>
 		        <div class="span1"></div>
 		    </div>
@@ -71,6 +72,12 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
         	
 			$("#"+seleccion[row]).show();
         }
+    }
+    function confirmar(){
+    	var respuesta = confirm("Esta seguro de que decea eliminar estos Coordinadores?");
+    	if(respuesta)
+    		$('#input-eliminar').val($('#select-coordinadores').val());
+    	return respuesta;
     }
        	
     	

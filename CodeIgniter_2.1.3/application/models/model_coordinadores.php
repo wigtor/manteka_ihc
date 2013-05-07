@@ -125,6 +125,13 @@ class model_coordinadores extends CI_Model{
          $this->db->delete('coordinador');
       }
 
+      function borrarCoordinadores($array){
+         $this->db->where_in('RUT_USUARIO3',$array);
+         $this->db->delete('coordinador');
+         $this->db->where_in('RUT_USUARIO',$array);
+         $this->db->delete('usuario');
+      }
+
       function modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo){
          $this->db->where('COORD_NOMBRE',$nombreActual);
          $this->db->or_where('RUT_USUARIO',$rutActual);
@@ -161,7 +168,7 @@ class model_coordinadores extends CI_Model{
          $this->db->insert('usuario',$informacion_user);
          $informacion_coord = array('RUT_USUARIO3'          => $rut, 
                                     'NOMBRE1_COORDINADOR'   => $nombre,
-                                    'APELLIDO1_COORDINADOR' => "no",
+                                    'APELLIDO1_COORDINADOR' => "",
                                     'TELEFONO_COORDINADOR'  => $telefono);
          $this->db->insert('coordinador',$informacion_coord);
          

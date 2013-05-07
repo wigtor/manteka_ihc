@@ -98,6 +98,7 @@ class Coordinadores extends CI_Controller {
 			$datos_plantilla["tipo_msj"] = "success-error";
 			$datos_plantilla["redirecTo"] = 'Coordinadores/agregarCoordinadores';
 			$datos_plantilla["nombre_redirecTo"] = "Agregar Coordinador";
+			$datos_plantilla["redirectAuto"] = TRUE;
 			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 			
 		}
@@ -152,36 +153,47 @@ class Coordinadores extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
     }
 
-    public function eliminarCoordinadores()
+    public function borrarCoordinadores()
     {
     	   	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-		$this->load->model('model_coordinadores');
-		//descomentar las siguientes líneas cuando se actualice la recepcion de parametros desde la vista
-		//$this->model_coordinadores->modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo)
+		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+			$this->load->model('model_coordinadores');
+			$this->model_coordinadores->borrarCoordinadores(explode(',', str_replace('id','',$_POST['lista_eliminar'])));
+			$datos_plantilla["titulo_msj"] = "Coordinador(es) eliminados(s)";
+			$datos_plantilla["cuerpo_msj"] = "El(Los) coordinador(es) fueron eliminados correctamente.";
+			$datos_plantilla["tipo_msj"] = "success-error";
+			$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
+			$datos_plantilla["nombre_redirecTo"] = "Eliminar Coordinador";
+			$datos_plantilla["redirectAuto"] = FALSE;
+			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+			
+		}else{
+			$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
+			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+			$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+			$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+			$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+			$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-
-
-
-
-
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_eliminar', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
+			$this->load->model('model_coordinadores');
+			$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadores();
+			
+			$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_eliminar', $datos_cuerpo_central, true); //Esta es la linea que cambia por cada controlador
+			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+			$this->load->view('templates/template_general', $datos_plantilla);
+		}
+		
+		
     }
 
 

@@ -24,11 +24,11 @@
 					</tr>
 					<tr>
 					<td><h6><span class="text-error">(*)</span>Correo 1 :</h6></td>
-					<td><input class ="input-xlarge" name='correo1' type="text" placeholder="ej:edmundo.leiva@usach.cl" required></td>
+					<td><input class ="input-xlarge" name='correo1' type="email" placeholder="ej:edmundo.leiva@usach.cl" required ></td>
 					</tr>
 					<tr>
 					<td><h6><span class="text-error">(*)</span>Correo 2 :</h6></td>
-					<td><input class ="input-xlarge" name='correo2' type="text" placeholder="ej:edmundo.leiva@gmail.com"></td>
+					<td><input class ="input-xlarge" name='correo2' type="email" placeholder="ej:edmundo.leiva@gmail.com"></td>
 					</tr>
 					<tr>
 					<td><h6><span class="text-error">(*)</span>Teléfono :</h6></td>
