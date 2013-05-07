@@ -70,7 +70,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input maxlength="10" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
+											<input maxlength="10" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
 										</div>
 								</div>
 							</div>
@@ -89,7 +89,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- nombre dos-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Nombre dos</label>
+										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Segundo nombre</label>
 									</div>
 								</div>
 								<div class="span5">	

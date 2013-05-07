@@ -20,6 +20,7 @@
 		var apellidoPaterno = document.getElementById("apellidopaternoEditar").value;
 		var apellidoMaterno = document.getElementById("apellidomaternoEditar").value;
 		var correo = document.getElementById("correoEditar").value;
+		var seccion = document.getElementById("<?php$secciones[0]?>");
 	
 		if(rut!="" && nombreUno!="" && nombreDos!="" && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
 					var answer = confirm("¿Está seguro de realizar cambios?")
@@ -35,7 +36,7 @@
 		}
 		else{
 				alert("Inserte todos los datos");
-				var mantenerDatos = datosEditarAlumno(rut,nombreUno,nombreDos,apellidoPaterno,apellidoMaterno,correo);
+				var mantenerDatos = datosEditarAlumno(rut,nombreUno,nombreDos,apellidoPaterno,apellidoMaterno,correo,seccion);
 		}
 	}
 </script>
@@ -314,7 +315,7 @@ function ordenarFiltro(){
 										<button class ="btn" type="submit" >Guardar</button>
 									</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>
+										<button  class ="btn" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarAlumno('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$secciones[0].$comilla.')"';?> >Cancelar</button>
 									</div>
 								</div>
 							</div>
