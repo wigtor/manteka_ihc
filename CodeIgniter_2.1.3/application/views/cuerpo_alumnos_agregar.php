@@ -50,8 +50,9 @@ function ordenarFiltro(){
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
-		<form id="formAgregar" type="post" action="<?php echo site_url("Alumnos/insertarAlumno/")?>">
 			<legend>Agregar Alumno</legend>
+		<form id="formAgregar" type="post" action="<?php echo site_url("Alumnos/insertarAlumno/")?>">
+			
 			
 				<div>
 					<div class= "row-fluid">

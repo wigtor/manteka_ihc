@@ -113,9 +113,9 @@ function ordenarFiltro(){
 						<div class="span6" style="align:right">
 							
 							<div class="controls">
-								<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección">
+								<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección" style="width: 93%">
 							</div>
-							<div style="border:grey 1px solid;overflow-y:scroll;height:200px;" >
+							<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px;-webkit-border-radius: 4px" >
 								<table class="table table-hover">
 									<thead>
 									</thead>
@@ -220,9 +220,9 @@ function ordenarFiltro(){
 						<div class="span6">
 							
 							<div class="controls">
-								<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección">
+								<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección" style:"width:93%">
 							</div>
-							<div style="border:grey 1px solid;overflow-y:scroll;height:200px" >
+							<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px;-webkit-border-radius: 4px" >
 								<table class="table table-hover">
 									<thead>
 									</thead>

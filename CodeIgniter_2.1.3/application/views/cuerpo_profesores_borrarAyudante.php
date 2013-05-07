@@ -127,7 +127,7 @@ function ordenarFiltro(){
 						
 							<thead>
 								<tr>
-									<th style="text-align:left;">Nombre Completo</th>
+									<th style="text-align:left;"><br><b>Nombre Completo</b></th>
 									
 								</tr>
 							</thead>

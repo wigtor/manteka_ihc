@@ -96,25 +96,33 @@ function ordenarFiltro(){
 <div class="row_fluid">
 	<div class="span10">
 		<fieldset>
-			<div>
 			<legend>Editar Ayudante</legend>
-			</div>
 			<div>
 				<div class="row-fluid">
 					<div class="span6"><!--    INICIO LISTA DE AYUDANTES -->
-					
-						<fieldset>
-							<div class="span10">
-							<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-
-								<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="3">Filtrar por Apellido paterno</option>
-								<option value="4">Filtrar por Apellido materno</option>
-								<option value="0">Filtrar por RUT</option>
-								</select> 
+						<div class="row-fluid">
+							<div class="span6">
+								Seleccione ayudante a modificar
 							</div>
-						</fieldset>
+						</div>
+					
+						
+						<div class="row-fluid">	
+							<div class="span11">
+								<div class="span6">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+								</div>
+								<div class="span6">
+									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<option value="1">Filtrar por Nombre</option>
+									<option value="3">Filtrar por Apellido paterno</option>
+									<option value="4">Filtrar por Apellido materno</option>
+									<option value="0">Filtrar por RUT</option>
+									</select>
+								</div> 
+							</div>
+						</div>
+						
 						
 						<!--AQUÍ VA LA LISTA-->
 						<thead>
@@ -123,7 +131,7 @@ function ordenarFiltro(){
 								
 							</tr>
 						</thead>
-						<div style="border:grey 1px solid;overflow-y:scroll;height:400px" ><!--  para el scroll-->
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 						<table class="table table-hover">
 						<tbody>
 						

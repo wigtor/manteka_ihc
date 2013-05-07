@@ -52,98 +52,105 @@ function ordenarFiltro(){
 <div class= "row-fluid">
 	<div class= "span10">
 		<fieldset>
-		<form id="formAgregar" type="post" action="<?php echo site_url("Ayudantes/insertarAyudante/")?>">
 			<legend>Agregar Ayudante</legend>
-			<div class= "row-fluid">
-					<div class= "span6" style="margin-bottom:2%">
+		<form id="formAgregar" type="post" action="<?php echo site_url("Ayudantes/insertarAyudante/")?>">
+			
+				
+				<div class="row-fluid">
+					<div class= "span6" >
 						Complete los datos del formulario para ingresar un ayudante
 					</div>
-			</div>
-			<div class="row_fluid" style="margin-left:2%">
-				<div class="span6">
-					<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">1-.<font color="red">*</font>RUT:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input name="rut_ayudante" maxlength="10" min="1" type="number"  placeholder="Ingrese rut sin dig. verificador" required>
-		  							</div>
-							</div>
-					</div>
-				
-				
-					<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Primer nombre:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" name="nombre1_ayudante" maxlength="19" required >
-		  							</div>
-							</div>
-					</div>
-
-					<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font> Segundo nombre:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" name="nombre2_ayudante" maxlength="19" required >
-		  							</div>
-							</div>
-					</div>
-					
-					<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Apellido Paterno:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" name="apellido_paterno" maxlength="19" required >
-		  							</div>
-							</div>
-					</div>
-
-					<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5-.<font color="red">*</font> Apellido Materno:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" name="apellido_materno" maxlength="19" required >
-		  							</div>
-							</div>
-					</div>
-
-					<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="email" name="correo_ayudante" maxlength="19" placeholder="ejemplo@usach.cl" required >
-		  							</div>
-							</div>
-					</div>
-
 				</div>
+
+				<div class="row-fluid">
+					<div class="span6">
+
+						<div class="row-fluid" >
+							<div class="span5">
+								<div class="control-group">
+							  		<label class="control-label" for="inputInfo">1-.<font color="red">*</font>RUT:</label>
+							  	</div>
+							 </div>
+							 <div class="span5">	
+							  	<div class="controls">
+							    	<input name="rut_ayudante" maxlength="10" min="1" type="number"  placeholder="Ingrese rut sin dig. verificador" required>
+							  	</div>
+							</div>	
+						</div>
+
+						<div class="row-fluid">
+							<div class="span5">
+								<div class="control-group">
+			  						<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Primer nombre:</label>
+			  					</div>
+			  				</div>
+			  				<div class="span5">	
+			  					<div class="controls">
+			    					<input type="text" name="nombre1_ayudante" maxlength="19" required >
+			  					</div>
+							</div>
+						</div>
+
+						<div class="row-fluid">
+								<div class="span5">
+									<div class="control-group">
+			  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font> Segundo nombre:</label>
+			  						</div>
+			  					</div>
+			  					<div class="span5">	
+			  							<div class="controls">
+			    							<input type="text" name="nombre2_ayudante" maxlength="19" required >
+			  							</div>
+								</div>
+						</div>
+					
+						<div class="row-fluid">
+							<div class="span5">
+								<div class="control-group">
+			  						<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Apellido Paterno:</label>
+			  					</div>
+			  				</div>
+			  				<div class="span5">	
+			  					<div class="controls">
+			    					<input type="text" name="apellido_paterno" maxlength="19" required >
+			  					</div>
+							</div>
+						</div>
+
+						<div class="row-fluid">
+							<div class="span5">
+								<div class="control-group">
+			  						<label class="control-label" for="inputInfo">5-.<font color="red">*</font> Apellido Materno:</label>
+			  					</div>
+			  				</div>
+			  				<div class="span5">	
+			  					<div class="controls">
+			    					<input type="text" name="apellido_materno" maxlength="19" required >
+			  					</div>
+							</div>
+
+						</div>
+
+						<div class="row-fluid">
+							<div class="span5">
+								<div class="control-group">
+			  						<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo:</label>
+			  					</div>
+			  				</div>
+			  				<div class="span5">	
+			  					<div class="controls">
+			    					<input type="email" name="correo_ayudante" maxlength="19" placeholder="ejemplo@usach.cl" required >
+			  					</div>
+							</div>
+						</div>
+
+				</div> <!--fin primer segmento-->
+				
+
+
 				<div class="span6">
-					<div class="row">
-						<div class="row"> <!-- seccion-->
+					
+						<div class="row-fluid"> <!-- seccion-->
 							<div class="span5">
 								<div class="control-group">
 									<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar profesor</label>
@@ -163,7 +170,12 @@ function ordenarFiltro(){
 									
 									</div>
 								</fieldset>
-								<div style="border:grey 1px solid;overflow-y:scroll;height:200px" >
+							</div>
+						</div>
+
+						<div class="row-fluid" style="margin-top:2%">
+							<div class="span7 offset5">
+								<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
 								
 								
 									<table class="table table-hover">
@@ -185,18 +197,22 @@ function ordenarFiltro(){
 									</table>
 								</div>
 							</div>
-
 						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row" style="width: 845px;">		
-						<div class="span2" style="margin-left: 654px;">
+
+								
+						<div class="row-fluid" style="margin-top:2%">
+									
+							<div class="span3" style="margin-left:55%">
 								<button type="submit" class="btn">Agregar</button>
 							</div>
-							<div class="span1" style="margin-left: -32px;">
+							<div class="span2" >
 								<button class="btn" type="reset">Cancelar</button>
 							</div>
+							
+						</div>
+
+				</div>
+			</div>
 			</div>
 		</form>				
 		</fieldset>

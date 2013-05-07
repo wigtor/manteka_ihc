@@ -132,9 +132,7 @@ function ordenarFiltro(){
 <div class="row_fluid">
 	<div class="span10">
 		<fieldset>
-			<div>
 			<legend>Editar Alumno</legend>
-			</div>
 			<div>
 				<div class="row-fluid">
 					<div class="span6"><!--    INICIO LISTA DE ALUMNOS -->
