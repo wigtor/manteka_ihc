@@ -133,33 +133,44 @@ class model_usuario extends CI_Model{
    }
 
    /**
-   *  Asigna una nueva contraseña temporal al usuario que posee
-   *  el correo ingresado como parámetro
+   *  Comprueba la existencia de un usuario con un correo ingresado
+   *  como parámetro
    *
-   *  @param string $email Correo electrónico del usuario
-   *  @param string $new_pass_temp Nueva contraseña temporal del usuario
-   *  @param string $date_valid Fecha hasta la que es válida la contraseña
-   *  @return bool Resultado de si se logró o no la operación
+   *  @param string $email Correo electrónico del usuario que se desea encontrar
+   *  @return array Datos del usuario encontrado. En caso de no encontrar devuelve array nulo (FALSE).
    */
    function existe_mail($email) {
+
+      // Se prepara la consulta
       $query = $this->db->where('CORREO1_USER', $email);
       $query = $this->db->or_where('CORREO2_USER', $email);
       $query =$this->db->get('usuario');
+
+      // Se obtiene las filas coincidentes
       $user = $query->row();
+
+      // Si no se encontraron filas, devolver FALSE
       if ($user == FALSE) {
          return FALSE;
       }
+
+      // Devolver los datos del ususario encontrado
       return $this->datos_usuario($user->RUT_USUARIO);
    }
 
-   /*
+   /**
    *  Retorna todos los datos de un usuario específico.
    *  Dichos datos son:
    *     Nombre, Apellido, Correo1, Correo2, TIPO_USUARIO
-   *  
+   *  La obtención de los datos es independiente del tipo de cuenta que sea.
+   *  Luego primero se busca el tipo de cuenta del usuario. En base a esto
+   *  se busca en la tabla de coordinadores o profesores
+   *
+   *  @param string $rut RUT del usuario al que se le desean obtener los datos
+   *  @return array Datos del usuario. En caso de que no se encuentre al usuario, se retorna FALSE
    */
    function datos_usuario($rut){
-      // La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+      // La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
       // Se efectúa la captura de cualquier error relacionado con el acceso a la Base de Datos
       try{
          $query = $this->db->where('RUT_USUARIO',$rut);
@@ -170,23 +181,35 @@ class model_usuario extends CI_Model{
          return FALSE;
       }
       // Se retorna la fila resultante de la consulta a la Base de Datos
-      // En caso de que no haya una fila resultante, $query->row = 0 (Esto lo realiza la misma operación);
+      // En caso de que no haya una fila resultante, se retorna FALSE
       $filaResultado = $query->row();
       if ($filaResultado == FALSE) {
          return FALSE;
       }
-      if ($filaResultado->ID_TIPO == '2') { //Es coordinador
+
+      // Es un usuario del tipo coordinador.
+      // Luego se buscan sus datos en la tabla COORDINADOR
+      if ($filaResultado->ID_TIPO == '2') {
+
+         // Se lipia la caché para realizar una nueva consulta
          $this->db->stop_cache();
          $this->db->flush_cache();
          $this->db->stop_cache();
 
          $this->db->select('usuario.*, NOMBRE1_COORDINADOR AS NOMBRE1, NOMBRE2_COORDINADOR AS NOMBRE2, APELLIDO1_COORDINADOR AS APELLIDO1, APELLIDO2_COORDINADOR AS APELLIDO2, TELEFONO_COORDINADOR AS TELEFONO');
          $this->db->join('coordinador', 'coordinador.rut_usuario3 = usuario.rut_usuario');
+
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
+         
+         // Devolver las filas coincidentes, es decir, los datos del usuario
          return $query->row();
       }
-      else if ($filaResultado->ID_TIPO == '1') { //Es Profesor
+      // Es un usuario del tipo profesor.
+      // Luego se buscan sus datos en la tabla PROFESOR
+      else if ($filaResultado->ID_TIPO == '1') {
+
+         // Se lipia la caché para realizar una nueva consulta
          $this->db->stop_cache();
          $this->db->flush_cache();
          $this->db->stop_cache();
@@ -195,31 +218,68 @@ class model_usuario extends CI_Model{
          $this->db->join('profesor', 'profesor.rut_usuario2 = usuario.rut_usuario');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
+
+         // Devolver las filas coincidentes, es decir, los datos del usuario
          return $query->row();
       }
-      else {
-         return FALSE; //Tipo de usuario desconocido
-      }
-   }
 
-
-   function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
-      $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
-      $query = $this->db->update('usuario', array('CORREO1_USER'=>$mail1, 'CORREO2_USER'=>$mail2)); //Acá va el nombre de la tabla
-      $this->db->stop_cache();
-      $this->db->flush_cache();
-      $this->db->stop_cache();
-      if ($tipo_usuario == 2) { //Coordinador
-         $query = $this->db->where('RUT_USUARIO3',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
-         $query = $this->db->update('coordinador', array('TELEFONO_COORDINADOR'=>$telefono)); //Acá va el nombre de la tabla
-      }
-      else if ($tipo_usuario == 1) { //Profesor
-         $query = $this->db->where('RUT_USUARIO2',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
-         $query = $this->db->update('profesor', array('TELEFONO_PROFESOR'=>$telefono)); //Acá va el nombre de la tabla
-      }
+      // No se ha encontrado un tipo de usuario válido
+      // Luego se retorna FALSE
       else {
          return FALSE;
       }
+   }
+
+   /**
+   *  Cambia datos de perfil de un usuario específico.
+   *  Los datos a cambiar son teléfono, correo principal y correo altenativo.
+   *  El cambio debe ser transparente a si el usuario tiene cuenta del tipo coordinador o profesor.
+   *  Por esta razón se recibe su tipo de cuenta como parámetro.
+   *
+   *  @param string $rut RUT del usuario al que se le cambian los datos
+   *  @param string $tipo_usuario Tipo de cuenta del usuario
+   *  @param int $telefono Nuevo teléfono del usuario
+   *  @param string $mail1 Nuevo correo electrónico del usuario
+   *  @param string $mail2 Nuevo correo altenativo del usuario
+   *  @return int Tipo de cuenta del usuario ingresado. En caso de que no se realice la operación, se devuelve FALSE
+   */
+
+   function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
+
+      // Dado que los correos del usuario se guardan en una tabla independiente de su tipo de cuenta. Se actualizan sus correo directamente
+      
+      // La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
+      $query = $this->db->where('RUT_USUARIO',$rut);
+      $query = $this->db->update('usuario', array('CORREO1_USER'=>$mail1, 'CORREO2_USER'=>$mail2)); //Acá va el nombre de la tabla
+
+      // Se limpia la caché de la consulta
+      $this->db->stop_cache();
+      $this->db->flush_cache();
+      $this->db->stop_cache();
+
+      // Si la cuenta del usuario es del tipo coordinador.
+      // Se debe actualizar sus datos en la tabla COORDINADOR
+      if ($tipo_usuario == 2) {
+         
+         // La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
+         $query = $this->db->where('RUT_USUARIO3',$rut);
+         $query = $this->db->update('coordinador', array('TELEFONO_COORDINADOR'=>$telefono)); //Acá va el nombre de la tabla
+      }
+      
+      // Si la cuenta del usuario es del tipo profesor.
+      // Se debe actualizar sus datos en la tabla PROFESOR
+      else if ($tipo_usuario == 1) {
+         // La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
+         $query = $this->db->where('RUT_USUARIO2',$rut);
+         $query = $this->db->update('profesor', array('TELEFONO_PROFESOR'=>$telefono)); //Acá va el nombre de la tabla
+      }
+
+      // Caso contrario, el tipo de cuenta es desconocido
+      else {
+         return FALSE;
+      }
+
+      // Finalmente. Se retorna el tipo de cuenta del usuario
       return $tipo_usuario;
    }
 }
