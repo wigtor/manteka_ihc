@@ -11,6 +11,7 @@
 					<li><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
 					<li><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
 					<li><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
+					<li><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
 		     	</div>
 		    </div>
 	  	</div>

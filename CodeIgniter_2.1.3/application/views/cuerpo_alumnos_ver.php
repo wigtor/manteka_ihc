@@ -76,7 +76,8 @@ function ordenarFiltro(){
 }
 </script>
 
-
+<div class="row-fluid">
+<div class="span10">
 <fieldset>
 	<legend>Ver Alumnos</legend>
 	<div class="row-fluid">
@@ -86,27 +87,33 @@ function ordenarFiltro(){
 					1.-Listado Alumnos
 				</div>
 			</div>
-
 			<div class="row-fluid">
-				<fieldset>
-					<div class="span12">
-				
-						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-
-							<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-							<option value="1">Filtrar por Nombre</option>
-							<option value="3">Filtrar por Apellido paterno</option>
-							<option value="4">Filtrar por Apellido materno</option>
-							<option value="7">Filtrar por Código Carrera</option>
-							<option value="6">Filtrar por Seccion</option>
-							</select> 
+				<div class="span11">
+					<div class="row-fluid">
 						
-					
+							<div class="span6">
+						
+								<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+							</div>
+
+							<div class="span6">
+									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<option value="1">Filtrar por Nombre</option>
+									<option value="3">Filtrar por Apellido paterno</option>
+									<option value="4">Filtrar por Apellido materno</option>
+									<option value="7">Filtrar por Código Carrera</option>
+									<option value="6">Filtrar por Seccion</option>
+									</select> 
+							</div>
+								
+							
+							
+						
 					</div>
-				</fieldset>
+				</div>
 			</div>
 			<div class="row-fluid" style="margin-left: 0%;">
-				<div class="span9">
+				<!--<div class="span9">-->
 			
 					<thead>
 						<tr>
@@ -140,7 +147,7 @@ function ordenarFiltro(){
 					</div><!-- div de estilo mio que pasa jiles-->
 				
 			
-				</div>
+				<!--</div>-->
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
@@ -158,3 +165,5 @@ Correo:           <b id="correoDetalle"></b>
 		</div>
 	</div>
 </fieldset>
+</div>
+</div>
