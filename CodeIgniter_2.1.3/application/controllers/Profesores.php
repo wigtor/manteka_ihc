@@ -231,8 +231,10 @@ class Profesores extends CI_Controller {
 		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_eliminar', '', true); //Esta es la linea que cambia por cada controlador
+		$this->load->model('Model_profesor');
+		$confirmacion = $this->Model_profesor->EliminarProfesor($rut_estudiante);
+		$datos_vista = array('rs_estudiantes' => $this->Model_profesor->VerTodosLosProfesores(),'mensaje_confirmacion'=>$confirmacion);
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_eliminar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
     }

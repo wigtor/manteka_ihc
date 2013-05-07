@@ -43,19 +43,7 @@ class Model_profesor extends CI_Model {
     }
 
 
-	// OPERACIÓN PARA ELIMINAR PROFESOR
-    public function eliminarProfesor($rut_profesor)
-    {
-       $sql="DELETE FROM PROFESOR WHERE rut_usuario2 = '$rut_profesor' "; //código MySQL
-        $datos=mysql_query($sql); //enviar código MySQL
-        if($datos == true){
-            return 1;
-        }
-        else{
-            return -1;
-        }
-    }
-    
+   
 	//OPERACIÓN PARA VER A UN PROFESOR
     public function VerProfesor($rut_profesor)
     {
@@ -167,6 +155,19 @@ class Model_profesor extends CI_Model {
     
     return $lista;
   }
+
+  public function EliminarProfesor($rut_profesor)
+    {
+    $sql="DELETE FROM PROFESOR WHERE rut_usuario2 = '$rut_estudiante' "; //código MySQL
+    $datos=mysql_query($sql); //enviar código MySQL
+    if($datos == true){
+      return 1;
+    }
+    else{
+      return -1;
+    }
+    }
+
 
 }
 
