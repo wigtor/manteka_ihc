@@ -1,13 +1,15 @@
+<!--	Vista que le indica al usuario que ingrese un correo para que se genere una nueva contraseña temporal	-->
+
 <!DOCTYPE html>
 <html lang="en">
 <?php
-	echo $head						//Esta variable es pasada como parámetro a esta vista
+	echo $head						//	Header de la página. Esta variable es pasada como parámetro a esta vista.
 ?>
 <body>
 	<div id="wrap">
 
 		<?php
-			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
+			echo $banner_portada	//	Banner de la página. Esta variable es pasada como parámetro a esta vista.
 		?>
 		<div class="wrapp row-fluid">
 			<fieldset class="span4 offset4">
