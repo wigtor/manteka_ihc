@@ -4,7 +4,20 @@
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
 <body>
-		
+		<script type='text/javascript'>
+			function redireccionarAuto() 
+			{
+				location.href=<?php echo site_url($redirecTo) ?>;
+			}
+			<?php
+				if (isset($redirectAuto)) {
+					if ($redirectAuto) {
+						echo 'setTimeout ("redireccionarAuto()", 5000);';  //A los 5 segundos se redirecciona automáticamente
+					}
+				}
+			?>
+			
+		</script>
 		<?php
 			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
 		?>

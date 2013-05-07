@@ -33,6 +33,7 @@ class Login extends CI_Controller {
 		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);			// Cabecera a cargar
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);	// Banner a cargar
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
 		$this->load->view('login', $datos_plantilla);													// Se carga la vista
 		
 	}
@@ -54,6 +55,7 @@ class Login extends CI_Controller {
 		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);			// Cabecera a cargar
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);	// Bannera a cargar
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
 		$this->load->view('olvidoPass', $datos_plantilla);												// Se carga la vista
 		
 	}
@@ -316,6 +318,7 @@ class Login extends CI_Controller {
 				$datos_plantilla["redirecTo"] = "Login/index"; // Acá se pone el controlador/metodo hacia donde se redireccionará
 				//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 				$datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+				$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
 				$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 			}
 		}

@@ -4,7 +4,8 @@
 	echo $head						//Esta variable es pasada como parámetro a esta vista
 ?>
 <body>
-		
+	<div id="wrap">
+
 		<?php
 			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
 		?>
@@ -20,10 +21,10 @@
 
 		      	<?php echo form_open('Login/recuperaPassPost/'); ?>
 			      	<?php
-			      	$hay_error_email = '';
-					if (form_error('email') != '') {
-						$hay_error_email = 'error';
-					}
+				      	$hay_error_email = '';
+						if (form_error('email') != '') {
+							$hay_error_email = 'error';
+						}
 					?>
 		      		<div class="control-group <?php echo $hay_error_email ?>">
 			        	<label class="control-label" for="email-input">
@@ -39,8 +40,13 @@
 	        			<input type="submit" class="btn btn-primary" value="Enviar"></input>
 	        			<a class="pull-right" href="<?php echo site_url("Login/index")?>">Volver al inicio de sesión</a>
 	        		</div>
+        		<?php echo form_close(""); ?>
 	      	</fieldset>
     	</div>
-		
+    </div>
+		<?php
+			echo $footer;
+		?>
+
 </body>
 </html>
