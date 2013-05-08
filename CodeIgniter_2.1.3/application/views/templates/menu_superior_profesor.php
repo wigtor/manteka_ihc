@@ -38,16 +38,16 @@
 		<div class="navbar-inner">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>
+					<a class="btn_with_icon" href="<?php echo site_url("Correo/indexProfesor") ?>">M Correos</a>
 				</li>
 				<li <?php echo $Secciones;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
+					<a class="btn_with_icon" href="<?php echo site_url("Secciones/indexProfesor") ?>">K Secciones</a>
 				</li>
 				<li <?php echo $Alumnos;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>
+					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/indexProfesor") ?>">Ù Alumnos</a>
 				</li>
 				<li <?php echo $Informes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Informes/index") ?>">E Informes</a>
+					<a class="btn_with_icon" href="<?php echo site_url("Informes/indexProfesor") ?>">E Informes</a>
 				</li>
 			</ul>
 		</div>

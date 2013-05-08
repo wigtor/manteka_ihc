@@ -40,7 +40,7 @@
 			$agregarProfesores = 'class="active"';
 			$inProfesores = "in";
 		}
-		else if ($subVistaLateralAbierta == "editarProfesores") {
+		else if ($subVistaLateralAbierta == "EditarProfesores") {
 			$editarProfesores = 'class="active"';
 			$inProfesores = "in";
 		}

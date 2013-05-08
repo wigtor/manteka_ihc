@@ -13,45 +13,19 @@
 	}
 </script>
 
-<!--<script type="text/javascript">
-function ordenarFiltro(){
-	var filtroLista = document.getElementById("filtroSeccion").value;
-	var arreglo = new Array();
-	var ocultarInput;
-	var ocultarTd;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($secciones)){
-		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultarInput=document.getElementById(arreglo[cont]);
-		ocultarTd=document.getElementById("seccionTd_"+cont);
-		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultarInput.style.display='none';
-			ocultarTd.style.display='none';
-		}
-		else
-		{
-			ocultarInput.style.display='';
-			ocultarTd.style.display='';
-		}
-    }
-}
-</script>
--->
+
+
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
 			<form id="formAgregar" type="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
 			<legend>Agregar Profesor</legend>
 			<div>
+				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+				</div>
 				<div class= "row-fluid">
 					<div class= "span6" style="margin-bottom:2%">
 						Complete los datos del formulario para ingresar un profesor:
@@ -67,14 +41,14 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="10" minlength="7" type="number" name="rut_profesor" placeholder="Ingrese RUN sin dig. verificador" required>
+		    							<input id="inputInfo" maxlength="10" type="number" min="1" name="rut_profesor" placeholder="Ingrese RUN sin dig. verificador" required>
 		  							</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.*Primer nombre:</label>
+		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -88,12 +62,12 @@ function ordenarFiltro(){
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.*Segundo nombre:</label>
+		  							<label class="control-label" for="inputInfo">3-. Segundo nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" name="nombre2_profesor" maxlength="19" required >
+		    							<input type="text" name="nombre2_profesor" maxlength="19" >
 		  							</div>
 							</div>
 
@@ -102,7 +76,7 @@ function ordenarFiltro(){
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.*Apellido paterno:</label>
+		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido paterno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -116,7 +90,7 @@ function ordenarFiltro(){
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5.*Apellido materno:</label>
+		  							<label class="control-label" for="inputInfo">5.<font color="red">*</font>Apellido materno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -130,7 +104,7 @@ function ordenarFiltro(){
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">6-.*Mail:</label>
+		  							<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -143,7 +117,7 @@ function ordenarFiltro(){
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">7-.*Telefono:</label>
+		  							<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Telefono:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -157,7 +131,7 @@ function ordenarFiltro(){
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">8-.*Tipo:</label>
+		  							<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Tipo:</label>
 		  						</div>
 		  					</div>
 		  					<div  class="span6">
