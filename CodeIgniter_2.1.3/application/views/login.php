@@ -78,17 +78,22 @@
 								$rut_almacenado = set_value('inputRut'); //Está es una excepción de como usar el control de errores
 								//La idea es que si no hay errores, se muestra el rut almacenado en las cookies.
 							}
-							
+							else if (set_value('inputRut') != '') {
+								$rut_almacenado = set_value('inputRut');
+							}
 							else if (!isset($rut_almacenado)) {
 								$rut_almacenado = "";
 								$dv_almacenado = "";
 							}
+
+
 							if (set_value('inputGuionRut') != '') {
 								$dv_almacenado = set_value('inputGuionRut');
 							}
 							else if (!isset($dv_almacenado)) {
 								$dv_almacenado = "";
 							}
+
 
 							if (!isset($recordarme)) {
 								$recordarme = "";

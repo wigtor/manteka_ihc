@@ -225,14 +225,17 @@ class Login extends CI_Controller {
 	            if($ExisteUsuarioyPassoword) {
 	            	
 	            	// Se obtiene el tipo de cuenta que posee el usuario
+	            	$redireccionarA = "index";
 					if ($ExisteUsuarioyPassoword->ID_TIPO == TIPO_USR_COORDINADOR) {
 		            	$tipo_user = "coordinador";
+		            	$redireccionarA = "index";
 		            }
 					if ($ExisteUsuarioyPassoword->ID_TIPO == TIPO_USR_PROFESOR) {
 		            	$tipo_user = "profesor";
+		            	$redireccionarA = "indexProfesor";
 		            }
 
-		            
+
 		            if ($this->input->post('recordarme_check')) {
 	            		$recordarme = TRUE;
 	            		$rut_almacenado = $rut;
@@ -260,7 +263,7 @@ class Login extends CI_Controller {
 			      	$this->session->set_userdata($newdata);
 
 			      	// Redirección a la interfaz principal del sistema
-					redirect('/Correo/', 'index');
+					redirect('/Correo/'.$redireccionarA, "");
 				}
 				// Si no se logró validar
 	            else {
