@@ -95,7 +95,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" name="nombre2_estudiante" maxlength="19" required>
+											<input type="text" name="nombre2_estudiante" maxlength="19">
 										</div>
 								</div>
 

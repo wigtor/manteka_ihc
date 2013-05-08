@@ -13,39 +13,8 @@
 	}
 </script>
 
-<!--<script type="text/javascript">
-function ordenarFiltro(){
-	var filtroLista = document.getElementById("filtroSeccion").value;
-	var arreglo = new Array();
-	var ocultarInput;
-	var ocultarTd;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($secciones)){
-		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultarInput=document.getElementById(arreglo[cont]);
-		ocultarTd=document.getElementById("seccionTd_"+cont);
-		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultarInput.style.display='none';
-			ocultarTd.style.display='none';
-		}
-		else
-		{
-			ocultarInput.style.display='';
-			ocultarTd.style.display='';
-		}
-    }
-}
-</script>
--->
+
+
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
@@ -67,7 +36,7 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="10" minlength="7" type="number" name="rut_profesor" placeholder="Ingrese RUN sin dig. verificador" required>
+		    							<input id="inputInfo" maxlength="10" type="number" min="1" name="rut_profesor" placeholder="Ingrese RUN sin dig. verificador" required>
 		  							</div>
 							</div>
 						</div>
@@ -93,7 +62,7 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" name="nombre2_profesor" maxlength="19" required >
+		    							<input type="text" name="nombre2_profesor" maxlength="19" >
 		  							</div>
 							</div>
 

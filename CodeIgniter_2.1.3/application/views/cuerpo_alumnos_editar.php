@@ -22,7 +22,7 @@
 		var correo = document.getElementById("correoEditar").value;
 		var seccion = document.getElementById("<?php$secciones[0]?>");
 	
-		if(rut!="" && nombreUno!="" && nombreDos!="" && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
+		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
 					var answer = confirm("¿Está seguro de realizar cambios?")
 					if (!answer){
 						var dijoNO = datosEditarAlumno("","","","","","");
@@ -243,7 +243,7 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombredosEditar" name="nombre2_estudiante" maxlength="19" required>
+		    							<input type="text" id="nombredosEditar" name="nombre2_estudiante" maxlength="19" >
 		  							</div>
 							</div>
 						</div>
