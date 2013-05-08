@@ -24,6 +24,11 @@ class Login extends CI_Controller {
 	    if ($rut == TRUE) {
 	      redirect('/Correo/', '');         			// En dicho caso, se redirige a la interfaz principal
 	    }
+	    $recordarme = $this->session->userdata('recordarme');
+	    if ($recordarme == 1) {
+	    	$datos_plantilla['rut_almacenado'] = $this->session->userdata('rut_almacenado');
+	    	$datos_plantilla['dv_almacenado'] = $this->session->userdata('dv_almacenado');
+	    }
 	    
 	    /*
 	     *	Se cargan los datos relevantes en la vista en el arreglo "datos_plantilla"
@@ -226,10 +231,17 @@ class Login extends CI_Controller {
 		            	$tipo_user = "profesor";
 		            }
 
+		            $recordarme = FALSE;
+		            if ($this->input->post('recordarme_check')) {
+	            		$recordarme = TRUE;
+		            }
 		            // Se crea un arreglo con los datos del usuario
 					$newdata = array(
 						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
+						'rut_almacenado' => $ExisteUsuarioyPassoword->RUT_USUARIO, //Usado para el "recordarme"
+						'dv_almacenado' => $dv,
 						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
+						'recordarme' => $recordarme,
 						'tipo_usuario' => $tipo_user,
 						'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
 						'nombre_usuario' => $ExisteUsuarioyPassoword->NOMBRE1,
@@ -247,8 +259,10 @@ class Login extends CI_Controller {
 	            	// Borrar las coockies seteadas bajo el rut de dicho usuario
 			       	$this->session->unset_userdata('rut');
 			      	$this->session->unset_userdata('email');
-	              	$this->session->unset_userdata('tipo_usuario');
 			      	$this->session->unset_userdata('loggued_in');
+			      	$this->session->unset_userdata('id_tipo_usuario');		// Se quita de las coockies la variable id_tipo_usuario
+    				$this->session->unset_userdata('tipo_usuario');			// Se quita de las coockies la variables tipo_usuario
+    				$this->session->unset_userdata('nombre_usuario');			// Se quita de las coockies la variables nombre_usuario
 			      	redirect('/Login/', '');							// Se regresa a la vista de autentificación
 				}
 			}
