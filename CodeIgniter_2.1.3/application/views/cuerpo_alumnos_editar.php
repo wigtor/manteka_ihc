@@ -22,7 +22,7 @@
 		var correo = document.getElementById("correoEditar").value;
 		var seccion = document.getElementById("<?php$secciones[0]?>");
 	
-		if(rut!="" && nombreUno!="" && nombreDos!="" && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
+		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
 					var answer = confirm("¿Está seguro de realizar cambios?")
 					if (!answer){
 						var dijoNO = datosEditarAlumno("","","","","","");
@@ -135,6 +135,12 @@ function ordenarFiltro(){
 			<legend>Editar Alumno</legend>
 			<div>
 				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+
+				</div>
+				<div class="row-fluid">
 					<div class="span6"><!--    INICIO LISTA DE ALUMNOS -->
 						<div class="row-fluid">
 							<div class="span6">
@@ -202,6 +208,7 @@ function ordenarFiltro(){
 						</div>
 					<!-- AQUI EMPIEZA EL MAMBO-->
 					<form id="FormEditar" type="post" onsubmit="EditarEstudiante()">
+
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
@@ -231,12 +238,12 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Segundo nombre</label>
+		  							<label class="control-label" for="inputInfo">3-.Segundo nombre</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombredosEditar" name="nombre2_estudiante" maxlength="19" required>
+		    							<input type="text" id="nombredosEditar" name="nombre2_estudiante" maxlength="19" >
 		  							</div>
 							</div>
 						</div>
@@ -296,6 +303,7 @@ function ordenarFiltro(){
 
 								</div>
 						</div>
+						
 							<div class="row-fluid">
 								<div class="span5 offset4">
 									<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px; width: 127%" >
