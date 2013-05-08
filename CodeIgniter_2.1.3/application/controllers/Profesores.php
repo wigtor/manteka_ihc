@@ -159,6 +159,8 @@ class Profesores extends CI_Controller {
 
 	public function borrarProfesores(){
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
