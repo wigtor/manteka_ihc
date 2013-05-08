@@ -158,7 +158,7 @@ class Model_profesor extends CI_Model {
 
   public function EliminarProfesor($rut_profesor)
     {
-    $sql="DELETE FROM PROFESOR WHERE rut_usuario2 = '$rut_estudiante' "; //código MySQL
+    $sql="DELETE FROM PROFESOR WHERE rut_usuario2 = '$rut_profesor' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
     if($datos == true){
       return 1;
