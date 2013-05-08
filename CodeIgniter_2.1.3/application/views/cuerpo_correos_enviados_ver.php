@@ -143,12 +143,12 @@ if(isset($msj))
 		if(count($correos)!==0)
 		{
 			?>
-			<button class ="btn"  onclick="eliminarCorreo()" >Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo()" >Eliminar seleccionados</button>
 			<?php
 		}
 		?>
 		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" style="font-size:12px;" border="1" cellpadding="5">
+		<table width="98%" align="center" height="30px" style="font-size:12px; margin-top:5%;" border="1" cellpadding="5">
 		<tr>
 		<td width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
 		<td width="8%" bgcolor="lightgrey"><b>Fecha</b></td>
