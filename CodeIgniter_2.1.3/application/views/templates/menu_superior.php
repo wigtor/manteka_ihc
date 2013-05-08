@@ -1,4 +1,9 @@
-<!-- Menu que contiene todos los "casos de uso" (lo más macro) -->
+<!--	Menú que contiene los distintos módulos que soporta el sistema ManteKA							-->
+<!--	Contiene las secciones Correos, Docentes, Secciones, Planificación, Salas, Alumnos, Informes	-->
+<!--	Para cada una de las secciones se determina si está seleccionada o no							-->
+<!--	Se recibe en la vista la variable $menuSuperiorAbierto desde el controlador						-->
+<!--	Determinando cuál es el módulo que está seleccionado											-->
+
 <div class="navbar">
 	<div class="navbar-inner">
 	<ul class="nav">

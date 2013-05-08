@@ -1,17 +1,52 @@
-<!-- Esta es la barra lateral con las operaciones que puede realizar el usuario según el botón de la barra superior en que se encuentre -->
+<!--	Barra lateral con las operaciones que puede realizar el usuario cuando se encuentra en el módulo "Alumnos"	-->
+	<?php
+		/**
+		*	Determinar qué grupo se encuentra abierto en caso de tenerlos.
+		*	Determinar qué operación está seleccionada
+		*/
+
+		//	Si la variable no se ha seteado, se asume operación principal.
+		if (!isset($subVistaLateralAbierta)) {
+			$subVistaLateralAbierta = "verAlumnos";
+		}
+
+		// Las operaciones por defecto no poseen clases
+		$verAlumnos = "";
+		$agregarAlumnos = "";
+		$editarAlumnos = "";
+		$borrarAlumnos = "";
+		$cambiarSeccionAlumnos = "";
+
+		//	En caso de que tal operación específica este seleccionada.
+		//	La operación seleccionada tiene clase "active"
+		if ($subVistaLateralAbierta == "verAlumnos") {
+			$verAlumnos = 'class="active"';
+		}
+		else if ($subVistaLateralAbierta == "agregarAlumnos") {
+			$agregarAlumnos = 'class="active"';
+		}
+		else if ($subVistaLateralAbierta == "editarAlumnos") {
+			$editarAlumnos = 'class="active"';
+		}
+		else if ($subVistaLateralAbierta == "borrarAlumnos") {
+			$borrarAlumnos = 'class="active"';
+		}
+	?>
+
+	<!--	Barra lateral de alumnos	-->
 	<div class="accordion" id="accordion2">
     	<div class="accordion-group">
 		    <div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-				Alumnos
+				Alumnos</a>
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner">
-		        	<li class="active"><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
-					<li><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
-					<li><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
-					<li><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
-					<li><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
+		        	<li <?php echo $verAlumnos; ?> ><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
+					<li <?php echo $agregarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
+					<li <?php echo $editarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
+					<li <?php echo $borrarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
+					<li <?php echo $cambiarSeccionAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
 		     	</div>
 		    </div>
 	  	</div>

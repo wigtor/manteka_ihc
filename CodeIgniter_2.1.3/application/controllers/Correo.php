@@ -45,7 +45,9 @@ class Correo extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "correosRecibidos"; //Usen el mismo nombre del método desde que es llamado (el método actual)
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
@@ -76,7 +78,9 @@ class Correo extends CI_Controller {
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviados_ver', $datos, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "correosEnviados"; //Usen el mismo nombre del método desde que es llamado (el método actual)
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	
 		
@@ -103,112 +107,118 @@ class Correo extends CI_Controller {
 		$datos_vista = array('correos' => $this->model_correo->VerCorreosUser($correo),'mensaje_confirmacion_borrar'=>"1");//qu� rasca la wa del mensaje, despues lo arreglo con unos if y wa	
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviados_ver', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi�n cambia seg�n la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "eliminarCorreo"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi�n cambia seg�n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);		
 	}
 
 
 public function enviarCorreo()
 {
-$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-if ($rut == FALSE) {
-redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-}
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
 
-//cargo el modelo del correo
+		//cargo el modelo del correo
 
-$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-$datos_plantilla["title"] = "ManteKA";
-$datos_plantilla["menuSuperiorAbierto"] = "Correos";
-$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-$datos_plantilla["mostrarBarraProgreso"] = true; //Cambiar en caso que no se necesite la barra de progreso
-$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = "Correos";
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+		$datos_plantilla["mostrarBarraProgreso"] = true; //Cambiar en caso que no se necesite la barra de progreso
+		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-$this->load->model('Model_estudiante');
-//$this->load->model('Model_profesor');
-//$this->load->model('Model_ayudante');
+		$this->load->model('Model_estudiante');
+		//$this->load->model('Model_profesor');
+		//$this->load->model('Model_ayudante');
 
-$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
-//$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
-//$datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
-
-
-
-$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviar' , $datos_vista, true); //Esta es la linea que cambia por cada controlador
-$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-$this->load->view('templates/template_general', $datos_plantilla);
+		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
+		//$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
+		//$datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
 
 
-}
-public function verBorradores()
-{
-$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-if ($rut == FALSE) {
-redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-}
-$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-$datos_plantilla["title"] = "ManteKA";
-$datos_plantilla["menuSuperiorAbierto"] = "Correos";
-$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-//Ac? ponen la l?gica de su controlador, cargan el modelo, consultan a la base de datos, envian los correos, etc
-$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_borradores_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-$this->load->view('templates/template_general', $datos_plantilla);
-
-}
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviar' , $datos_vista, true); //Esta es la linea que cambia por cada controlador
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "enviarCorreo"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);
 
 
-public function enviarPost(){
-
-	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-	if ($rut == FALSE) {
-		redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 	}
-	$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+	public function verBorradores()
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+		redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+				$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+				$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
+		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = "Correos";
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+
+		//Acá ponen la l?gica de su controlador, cargan el modelo, consultan a la base de datos, envian los correos, etc
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_borradores_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "verBorradores"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);
+
+	}
+
+
+	public function enviarPost() {
+
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-	$datos_plantilla["title"] = "ManteKA";
-	$datos_plantilla["menuSuperiorAbierto"] = "Correos";
-	$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-	$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-	$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-	$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-	$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-	$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-	$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-	$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = "Correos";
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
+		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-	$this->load->model('model_correo');
-	$this->load->model('model_correoE');
+		$this->load->model('model_correo');
+		$this->load->model('model_correoE');
 
 
 
-	$to = $this->input->post('to');
-	$asunto =$this->input->post('asunto');
-	$mensaje =$this->input->post('editor');
-	$tipo=$this->input->post('tipo');
-	$rutRecept=$this->input->post('rutRecept');
+		$to = $this->input->post('to');
+		$asunto =$this->input->post('asunto');
+		$mensaje =$this->input->post('editor');
+		$tipo=$this->input->post('tipo');
+		$rutRecept=$this->input->post('rutRecept');
 
 	
 
-	try {
+		try {
 			$this->email->from('no-reply@manteka.cl', 'ManteKA');
 			$this->email->to($to);
 			$this->email->subject($asunto);
@@ -230,16 +240,18 @@ public function enviarPost(){
 		catch (Exception $e) {
 			
 		}
-	$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-	$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-	$this->load->view('templates/template_general', $datos_plantilla);
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "enviarCorreo"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);
 
-}
+	}
 
-public function index() //Esto hace que el index sea la vista que se desee
-{
-$this->correosRecibidos();	
-}
+	public function index() //Esto hace que el index sea la vista que se desee
+	{
+		$this->correosRecibidos();	
+	}
 }
 
 

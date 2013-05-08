@@ -1,127 +1,140 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ *	Clase controlador Login.
+ *	Controlador encargado de presentar las vistas de autentificación (Login)
+ *	y control de usuarios (Cambio de contraseña, perfil, contraseña olvidada).
+ *	Método por defecto (index) carga la vista de Login.
+ */
 class Login extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-
-
-
-
 	/******************************************************************************************************************************
-	* Funciones de tipo GET
-	* Acá se ponen las funciones que cargan vistas a través del método GET, sólo muestran vistas.
+	*	Funciones de tipo GET
+	*	Acá se ponen las funciones que cargan vistas a través del método GET, sólo muestran vistas.
 	******************************************************************************************************************************/
 
 	/**
-	* Función principal del controlador de Login, es llamado para mostrar la vista de login inicialmente.
+	*	Función principal del controlador de Login, es llamado para mostrar la vista de login inicialmente.
+	*	Esta vista sólo es cargada en caso de que el usuario no haya iniciado sesión previamente (con la opción "Recuerdame").
+	*	En dicho caso, será redirigido automáticamente a la vista principal del sistema.
 	*/
 	public function index()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); 		//Se comprueba si el usuario tiene sesión iniciada, mediante almacenamiento de cookies
 	    if ($rut == TRUE) {
-	      redirect('/Correo/', '');         // En dicho caso, se redirige a la interfaz principal
+	      redirect('/Correo/', '');         			// En dicho caso, se redirige a la interfaz principal
 	    }
 	    
-		$datos_plantilla["title"] = "ManteKA login";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$this->load->view('login', $datos_plantilla);
+	    /*
+	     *	Se cargan los datos relevantes en la vista en el arreglo "datos_plantilla"
+	     *	Luego se carga la vista ingresando como parámetros el vector con datos específicos.
+	     *	El vector posee el título de la vista y la cabecera que se debe cargar.
+	     */
+		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);			// Cabecera a cargar
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);	// Banner a cargar
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
+		$this->load->view('login', $datos_plantilla);													// Se carga la vista
 		
 	}
 
 
 	/**
-	* Función que carga la vista para que el usuario recupere su contraseña, 
-	* El usuario puede ingresar su email para así enviarle un correo con la contraseña temporal.
+	*	Función que carga la vista para que el usuario recupere su contraseña.
+	*	El usuario puede ingresar su email para así enviarle un correo con la contraseña temporal.
+	*	
 	*/
 	public function olvidoPass()
 	{
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$this->load->view('olvidoPass', $datos_plantilla);
+		/*
+	     *	Se cargan los datos relevantes en la vista en el arreglo "datos_plantilla"
+	     *	Luego se carga la vista ingresando como parámetros el vector con datos específicos.
+	     *	El vector posee el título de la vista y la cabecera que se debe cargar.
+	     */
+
+		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);			// Cabecera a cargar
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);	// Bannera a cargar
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
+		$this->load->view('olvidoPass', $datos_plantilla);												// Se carga la vista
 		
 	}
 
 	/**
-	* Función que se llama al presionar el botón para cerrar sesión.
-	* 
-	* Borra las cookies del usuario para eliminar su sesión.
-	* Luego redirecciona al login. 
+	*	Función que se llama al presionar el botón para cerrar sesión.
+	*	Borra las cookies del usuario para eliminar su sesión.
+	*	Luego redirecciona al login. 
 	*/
 	function logout() {
-		$this->session->unset_userdata('rut');
-		$this->session->unset_userdata('email');
-    	$this->session->unset_userdata('loggued_in');
-		redirect('/Login/', ''); //   Lo regresamos a la pantalla de login y pasamos como par?metro el mensaje de error a presentar en pantalla
+		// Se regresa al usuario a la pantalla de login y se pasa como parámetro el mensaje de error a presentar en pantalla
+		$this->session->unset_userdata('rut');					// Se quita de las cookies la variable rut
+		$this->session->unset_userdata('email');				// Se quita de las cookies la variable mail
+    	$this->session->unset_userdata('loggued_in');			// Se quita de las coockies la variables loggued_in
+
+		redirect('/Login/', '');								// Redirección al método principal de Login
    	}
 
 
 	/**
-	* Esta función se usa sólo para enviar el correo de recuperación de contraseña
+	*	Función que envía un correo hacia un destinatario desde el correo especificado.
+	*	Esta función se usa sólo para enviar el correo de recuperación de contraseña
 	* 
-	* @param string $destino Es el mail del destinatario del correo.
-	* @param string $subject Es el tema o título del correo.
-	* @param string $mensaje Es el texto que contiene el correo.
-	* @return bool Indica si se envió correctamente el correo. 
+	* 	@param string $destino Es el mail del destinatario del correo.
+	* 	@param string $subject Es el tema o título del correo.
+	* 	@param string $mensaje Es el texto que contiene el correo.
+	* 	@return bool indica si se envió correctamente el correo. 
 	*/
 	private function enviarCorreo($destino, $subject, $mensaje) {
+
+		/*
+		*	Se intenta enviar el correo, capturando un error en caso
+		*	de que no se pueda realizar.
+		*/
 		try {
-			$this->email->from('no-reply@manteka.cl', 'ManteKA');
-			$this->email->to($destino);
-			$this->email->subject($subject);
-			$this->email->message($mensaje);
-
-
-			$this->email->send();
+			$this->email->from('no-reply@manteka.cl', 'ManteKA');		// Envío del correo desde e-mail "no-reply@manteka.cl". Autor ManteKA
+			$this->email->to($destino);									// Destinatario del correo
+			$this->email->subject($subject);							// Asunto del correo
+			$this->email->message($mensaje);							// Mensaje del correo
+			$this->email->send();										// Envío del correo
 			//echo $this->email->print_debugger();
-			return TRUE;
+			return TRUE;												// Retorna verdadero en caso de que se haya enviado satisfactoriamente
 		}
 		catch (Exception $e) {
-			return FALSE;
+			return FALSE;												// Se captura el error, y se retorna Falso en caso de que haya habido problemas
 		}
 	}
 
 
 	/**
-	* Esta función muestra la vista para cambiar la contraseña
+	*	Esta función muestra la vista para cambiar la contraseña
+	*	Lleva un argumento que se setea por defecto en un array vacio, 
+	*	de esta forma cuando el usuario abre esa vista por primera vez el array está vacio
+	*	Cuando la vista es rellamada para mostrarla nuevamente pero con mensajes de error, warnings o success entonces 
+	*	este array contiene el mensaje a ser mostrado (ver más abajo como se llama con el array)
 	* 
-	* Lleva un argumento que se setea por defecto en un array vacio, 
-	* de esta forma cuando el usuario abre esa vista por primera vez el array está vacio
-	* Cuando la vista es rellamada para mostrarla nuevamente pero con mensajes de error, warnings o success entonces 
-	* este array contiene el mensaje a ser mostrado (ver más abajo como se llama con el array)
-	* 
-	* @param array $mensajes_alert Un arreglo con los mensajes de error que se mostrarán.
+	*	@param array $mensajes_alert Un arreglo con los mensajes de error que se mostrarán.
 	*/
 	public function cambiarContrasegna($mensajes_alert = array())
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut');							// Se comprueba si el usuario tiene sesión iniciada
 	    if ($rut == FALSE) {
-	      redirect('/Login/', 'index');         // En dicho caso, se redirige a la interfaz principal
+	      redirect('/Login/', 'index');         						// En dicho caso, se redirige a la interfaz principal
 	    }
 	    
-	    $datos_plantilla["rut_usuario"] = $rut_user = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
+	    /*
+	    *	Se cargan en un arreglo información para pasarla a la vista
+	    *	una vez se cargue.
+	    */
+	    $datos_plantilla["rut_usuario"] = $rut_user = $this->session->userdata('rut');		// Rut del usuario
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');	// Nombre del usuario
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');		// Tipo de cuenta del usuario
+		$datos_plantilla["title"] = "ManteKA";												// Título de la vista
 
 		
-		$this->load->model('model_usuario');
+		$this->load->model('model_usuario');												// Se carga el Modelo para utilizar sus funciones
 
+		// Se busca al usuario con un rut específico
+		// En caso de encontrarlo se obtienen todos sus datos
 		if ($datos = $this->model_usuario->datos_usuario($rut_user))
 		{
 			$newdata = array(
@@ -179,32 +192,38 @@ class Login extends CI_Controller {
 
 	/**
 	* Función llamada desde el login para loguear al usuario.
-	* 
-	* Valida las variables contra la base de datos, setea los mensajes de error y 
+	* Valida las variables en la base de datos, setea los mensajes de error y 
 	* devuelve al login en caso de ser incorrectos los parámetros provienientes desde la vista.
 	* En caso que el login resulte correcto, se setean las cookies con los datos del usuario logueado.
 	*/
 	public function LoginPost() {
 		$Rut = $this->input->post('inputRut');
 		$dv = $this->input->post('inputGuionRut');
-		$this->form_validation->set_rules('inputGuionRut', 'Dígito verificador', "required"); //Se verifica sólo para que reaparezca al cargar la vista
+		$this->form_validation->set_rules('inputGuionRut', 'Dígito verificador', "required"); // Se verifica sólo para que reaparezca al cargar la vista
 		$this->form_validation->set_rules('inputRut', 'usuario', "required|callback_check_userRUT");
 		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$Rut]");
 		
 		if ($this->form_validation->run() == FALSE) {
-			$this->index(); //Vuelvo a llamar el cambio de contraseña si hubo un error
+			$this->index(); // Se vuelve al Login en caso de error
 		}
 		else {
 			try {
 				$this->load->model('model_usuario');
-	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);   //   comprobamos que el usuario exista en la base de datos y la password ingresada sea correcta
-	            if($ExisteUsuarioyPassoword) {   // La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
+				//  Se coprueba que el usuario exista en la base de datos y la password ingresada sea correcta
+	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);
+
+	            //	La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
+	            if($ExisteUsuarioyPassoword) {
+	            	
+	            	// Se obtiene el tipo de cuenta que posee el usuario
 					if ($ExisteUsuarioyPassoword->ID_TIPO == 2) {
 		            	$tipo_user = "coordinador";
 		            }
 					if ($ExisteUsuarioyPassoword->ID_TIPO == 1) {
 		            	$tipo_user = "profesor";
 		            }
+
+		            // Se crea un arreglo con los datos del usuario
 					$newdata = array(
 						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
 						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
@@ -213,17 +232,27 @@ class Login extends CI_Controller {
 						'nombre_usuario' => $ExisteUsuarioyPassoword->NOMBRE1,
 						'logged_in' => TRUE
 	              	);
+
+	              	// Se setean nuevas cookies con los datos del usuario
 			      	$this->session->set_userdata($newdata);
+
+			      	// Redirección a la interfaz principal del sistema
 					redirect('/Correo/', 'index');
 				}
-	            else { // Si no logró validar
+				// Si no se logró validar
+	            else {
+	            	// Borrar las coockies seteadas bajo el rut de dicho usuario
 			       	$this->session->unset_userdata('rut');
 			      	$this->session->unset_userdata('email');
 	              	$this->session->unset_userdata('tipo_usuario');
 			      	$this->session->unset_userdata('loggued_in');
-			      	redirect('/Login/', ''); // Lo regresamos a la pantalla de login
+			      	redirect('/Login/', '');							// Se regresa a la vista de autentificación
 				}
 			}
+			/*
+			*	En caso de que haya habido algún error en el proceso
+			*	Se captura dicho error, y se redirige a una vista indicando que ha existido un error durante el procesamiento de la información
+			*/
 			catch (Exception $e) {
 				redirect("/Otros", "databaseError");
 			}
@@ -232,13 +261,12 @@ class Login extends CI_Controller {
 
 
 	/**
-	* Función que es llamada cuando se envía la dirección de correo electrónico para recuperar la contraseña
-	* 
-	* Se verifica que el email introducido es válido y se verifica que existe en la base de datos
-	* Si existe un error se vuelve a mostrar la vista olvidoPass()
-	* Si no hubo error se setea la nueva contraseña en la base de datos y se le da cierto periodo de validez (2 días por ahora)
-	* Luego se envía un correo con esta nueva contraseña a la dirección introducida y se muestra una 
-	* vista con el resultado del envío del correo electrónico.
+	*	Función que es llamada cuando se envía la dirección de correo electrónico para recuperar la contraseña
+	*	Se verifica que el email introducido es válido y se verifica que existe en la base de datos
+	*	Si existe un error se vuelve a mostrar la vista olvidoPass()
+	*	Si no hubo error se setea la nueva contraseña en la base de datos y se le da cierto periodo de validez (2 días por ahora)
+	*	Luego se envía un correo con esta nueva contraseña a la dirección introducida y se muestra una 
+	*	vista con el resultado del envío del correo electrónico.
 	*/
 	public function recuperaPassPost() {
 		$this->form_validation->set_rules('email', 'email', "required|email|xss_clean|callback_check_mail_exist");
@@ -257,17 +285,22 @@ class Login extends CI_Controller {
 			//echo 'FECHA VALIDEZ: '.$fechaValidez;
 			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, $fechaValidez);
 			if ($existeEmail) {
+
+				// Se define el mensaje a ser enviado
 				$mensaje = "Su nueva contraseña es: ";
 				$mensaje = $mensaje.$new_pass;
 				$mensaje = $mensaje."\nEsta contraseña es válida hasta el día ".$fechaValidez.", luego no podrá utilizarla";
 				$mensaje = $mensaje."\nA penas inicie sesión nuevamente cambie su contraseña.";
 				$mensaje = $mensaje."\n\nEl equipo de ManteKA.";
+
+				// Si hubo un error al enviar el mensaje, indicar al usuario
 				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje) == FALSE) {
 					$datos_plantilla["titulo_msj"] = "No se pudo enviar el correo";
 					$datos_plantilla["cuerpo_msj"] = "Existe un problema con el servicio que envía correos electrónicos, comuniquese con el administrador.";
 					$datos_plantilla["tipo_msj"] = "alert-error";
 
 				}
+				// Caso contrario, indicar que la operación ha sido satisfactoria
 				else {
 					$datos_plantilla["titulo_msj"] = "Listo";
 					$datos_plantilla["cuerpo_msj"] = "Se ha enviado un correo electrónico a la cuenta '".$destino."' con su nueva contraseña.";
@@ -276,15 +309,16 @@ class Login extends CI_Controller {
 				
 
 
-				/* Finalmente muestro la vista que indica que esto fue realizado correctamente */
+				/* Finalmente se muestra la vista que indica que esto fue realizado correctamente */
 				$datos_plantilla["title"] = "ManteKA";
 				$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 				$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
 				
-				$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-				$datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+				$datos_plantilla["redirectAuto"] = FALSE; // Esto indica si por javascript se va a redireccionar luego de 5 segundos
+				$datos_plantilla["redirecTo"] = "Login/index"; // Acá se pone el controlador/metodo hacia donde se redireccionará
 				//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 				$datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+				$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
 				$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 			}
 		}
@@ -294,26 +328,32 @@ class Login extends CI_Controller {
 	
 	
 	/**
-	* Función que se llama cuando el usuario envía el formulario para cambiar la contraseña
-	* 
-	* Se comprueba que el usuario está logueado, la validez de las variables.
-	* Se comprueba que la contraseña actual introducida es correcta.
-	* Se comprueba de que las contraseñas nuevas y su repetición son iguales.
-	* Si existen errores en las validaciones, se setean los mensajes de error y se llama la vista 
-	* normal para cambiar la contraseña.
+	*	Función que se llama cuando el usuario envía el formulario para cambiar la contraseña
+	*	Se comprueba que el usuario está logueado, la validez de las variables.
+	*	Se comprueba que la contraseña actual introducida es correcta.
+	*	Se comprueba de que las contraseñas nuevas y su repetición son iguales.
+	*	Si existen errores en las validaciones, se setean los mensajes de error y se llama la vista 
+	*	normal para cambiar la contraseña.
 	*/
 	public function cambiarContrasegnaPost() {
 	
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			redirect('/Login/', ''); // Se redirecciona a login si no tiene sesión iniciada
 		}
+
+		// Se carga el modelo de usuarios
 		$this->load->model('model_usuario');
+
+		// Si existe contraseña actual
 		if ($this->input->post('contrasegna_actual')) {
+			// Se identifican las validaciones que deben realizarse para el cambio de contraseña
 			$this->form_validation->set_rules('contrasegna_actual', 'Contraseña actual', "required|xss_clean|callback_check_user_and_password[$rut]");
 			$this->form_validation->set_rules('nva_contrasegna_rep', 'Confirmación de contraseña', 'required|min_length[5]|max_length[100]|matches[nva_contrasegna]|xss_clean');
 			$this->form_validation->set_rules('nva_contrasegna', 'Contraseña nueva', 'required|min_length[5]|max_length[100]|xss_clean');
 			$this->form_validation->set_error_delimiters('<div class="error alert alert-error">', '</div>');
+
+			// Si la validación es incorrecta
 			if ($this->form_validation->run() == FALSE)
 			{
 				/* Se debe setear un array asociativo con 3 keys: "titulo_msj", "cuerpo_msj" y "tipo_msj"
@@ -325,11 +365,16 @@ class Login extends CI_Controller {
 				$mensaje_alert["titulo_msj"] = "Hay un problema para cambiar la contraseña";
 				$mensaje_alert["cuerpo_msj"] = "Revise los campos señalados más abajo e intente nuevamente";
 				$mensaje_alert['tipo_msj'] = "alert-error";
-				$this->cambiarContrasegna($mensaje_alert); //Vuelvo a llamar el cambio de contraseña si hubo un error
+				$this->cambiarContrasegna($mensaje_alert); //	Vuelvo a llamar el cambio de contraseña si hubo un error con el mensaje apropiado
+
+				// Terminar
 				return ;
 			}
+
+			// Caso contrario, cambiar la contraseña mediante el modelo
 			$resultado = $this->model_usuario->cambiarContrasegna($rut ,md5($this->input->post('nva_contrasegna')));
 		}
+		
 		//Falta implementar función que actualiza los datos del usuario como los mails y el teléfono
 		$tipo = $this->session->userdata('id_tipo_usuario');
 		$mail1 = $this->input->post("correo1");
@@ -368,24 +413,36 @@ class Login extends CI_Controller {
 	
 
 	/**
-	* Función de apoyo a las validaciones, comprueba el usuario y la contraseña en la base de datos.
+	*	Función de apoyo a las validaciones, comprueba el usuario y la contraseña en la base de datos.
 	* 
-	* @param string $current_password La contraseña actual que se desea comprobar.
-	* @param string $rut El rut del usuario que se desea comprobar junto a la contraseña.
-	* @param return bool Indica con TRUE si el son correctos el usuario y la contraseña según la base de datos.
+	*	@param string $current_password La contraseña actual que se desea comprobar.
+	*	@param string $rut El rut del usuario que se desea comprobar junto a la contraseña.
+	*	@param return bool Indica con TRUE si el son correctos el usuario y la contraseña según la base de datos.
 	*/
 	public function check_user_and_password($current_password, $rut) {
+
+		// Intentar validad el usuario mediante el modelo
 		try {
+
+			// Se carga el modelo de usuarios
 			$this->load->model('model_usuario');
+
+			// Se intenta validar al usuario con su contraseña mediante el modelo
 			$logueo = $this->model_usuario->ValidarUsuario($rut ,$current_password);
+
+			// Si la autentificación es correcta, devolver TRUE
 			if ($logueo) {
 				return TRUE;
 			}
+
+			// Si la autentificación es false, retornar FALSE
 			else {
 				$this->form_validation->set_message('check_user_and_password', 'La %s es incorrecta');
 				return FALSE;
 			}
 		}
+
+		// En caso de que haya un error en la operación, señalarselo al usuario con una vista apropiada
 		catch (Exception $e) {
 			redirect("/Otros", "databaseError");
 		}
@@ -393,23 +450,34 @@ class Login extends CI_Controller {
 
 
 	/**
-	* Función de apoyo a las validaciones, comprueba que el rut existe en la base de datos.
+	*	Función de apoyo a las validaciones, comprueba que el rut existe en la base de datos.
 	* 
-	* @param string $rut El rut del usuario que se desea comprobar en la base de datos.
-	* @param return bool Indica con TRUE si el rut existe.
+	*	@param string $rut El rut del usuario que se desea comprobar en la base de datos.
+	*	@param return bool Indica con TRUE si el rut existe.
 	*/
 	public function check_userRUT($rut) {
+
+		// Intentar validar si existe un RUT específico en la base de datos
 		try {
+
+			// Se carga el modelo
 			$this->load->model('model_usuario');
+
+			// Validar la existencia del RUT
 			$logueo = $this->model_usuario->ValidarRut($rut);
+
+			// Si existe, devolver TRUE
 			if ($logueo) {
 				return TRUE;
 			}
+
+			// Si no existe, devolver FALSE
 			else {
 				$this->form_validation->set_message('check_userRUT', 'El %s no esta en el sistema');
 				return FALSE;
 			}
 		}
+		// En caso de que haya un error en la operación, señalarselo al usuario con una vista apropiada
 		catch (Exception $e) {
 			redirect("/Otros", "databaseError");
 		}
@@ -417,22 +485,34 @@ class Login extends CI_Controller {
 
 
 	/**
-	* Función de apoyo a las validaciones, comprueba que el email introducido existe en la base de datos.
+	*	Función de apoyo a las validaciones, comprueba que el email introducido existe en la base de datos.
 	* 
-	* @param string $email La dirección de correo que se desea comprobar.
-	* @param return bool Indica con TRUE si el email existe y pertenece a algún usuario.
+	*	@param string $email La dirección de correo que se desea comprobar.
+	*	@param return bool Indica con TRUE si el email existe y pertenece a algún usuario.
 	*/
 	public function check_mail_exist($email) {
+
+		// Intentar validar si existe un correo en el sistema
 		try {
+
+			// Se carga el modelo
 			$this->load->model('model_usuario');
+			
+			// Validar la existencia del mail en la base de datos, mediante el modelo
+
+			// Si existe, retornar TRUE
 			if ($this->model_usuario->existe_mail($email)) {
 				return TRUE;
 			}
+
+			// Si no existe, retorar FALSE
 			else {
 				$this->form_validation->set_message('check_mail_exist', 'El %s no existe en ManteKA, intente nuevamente.');
 				return FALSE;
 			}
 		}
+
+		// En caso de que haya un error en la operación, señalarselo al usuario con una vista apropiada
 		catch (Exception $e) {
 			redirect("/Otros", "databaseError");
 		}
@@ -440,49 +520,59 @@ class Login extends CI_Controller {
 
 
 	/**
-	* Función que genera una contraseña aleatória.
+	*	Función que genera una contraseña aleatória.
 	* 
-	* @return string Un string de 8 caracteres alfanuméricos con la contraseña generada.
+	*	@return string Un string de 8 caracteres alfanuméricos con la contraseña generada.
 	*/
 	private function randomPassword() {
-	    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-	    $pass = array(); //remember to declare $pass as an array
-	    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+	    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";		// Alfabeto para la generación aleatoria de una cadena
+	    $pass = array();
+	    $alphaLength = strlen($alphabet) - 1; // Largo del alfabeto
+
+    	// Algoritmo para la generación de caracteres aleatorios
 	    for ($i = 0; $i < 8; $i++) {
 	        $n = rand(0, $alphaLength);
 	        $pass[] = $alphabet[$n];
 	    }
-	    return implode($pass); //turn the array into a string
+	    return implode($pass); // En base a un array de caracteres, retornar un string
 	}
 
 
   	/**
-   	* Función para autentificarse en el sistema mediante una cuenta Google.
+   	*	Función para autentificarse en el sistema mediante una cuenta Google.
    	* 
-   	* El Controlador solicita la autentificación a Google.
-   	* Una vez realizado esto, el usuario se autentifica normalmente.
+   	*	El Controlador solicita la autentificación a Google.
+   	*	Una vez realizado esto, el usuario se autentifica normalmente.
+	*
+   	*	Para esto se utiliza el protoloco OAuth 2.0 para utilizar la API de autentificación
+   	*	de distintos proveedores. Para este caso se utiliza sólo Google
    	* 
-   	* @param string $provider Es el proveedor del login, por ahora sólo es válido utilizar "google".
+   	*	@param string $provider Es el proveedor del login, por ahora sólo es válido utilizar "google".
    	*/
    public function signInGoogle($provider){
     $rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
     if ($rut == TRUE) {
-      redirect('/Correo/', '');         // En dicho caso, se redirige a la interfaz principal
+      redirect('/Correo/', '');         	// En dicho caso, se redirige a la interfaz principal
     }
 
+    /*
+    *	Se carga la herramienta OAuth 2.0.
+    *	Protocolo para la utilización de APIs de otros sistemas registrados
+    */
     $this -> load -> spark('oauth2/0.4.0');
-    //si el proveedor pasado es Google
+    
+    // Si el proveedor pasado es Google
     if($provider == 'google')
     {
         $provider = $this -> oauth2 -> provider($provider, array(
-        'id' => '412900046548.apps.googleusercontent.com',
-        'secret' => 'RN_R-d6BDT2XYwQdVHB5S9tO', ));
+        'id' => '412900046548.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
+        'secret' => 'RN_R-d6BDT2XYwQdVHB5S9tO', ));						// Clave secreta del cliente
     }
 
-    if (!$this -> input -> get('code')) {
+    if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
         $url = $provider -> authorize();
 
-        redirect($url);
+        redirect($url);													// Redirección a este mismo método
     } else {
         try {
             // Se posee de un Token exitoso enviado por google
@@ -511,6 +601,8 @@ class Login extends CI_Controller {
 				if ($usuario->ID_TIPO == 1) {
 	            	$tipo_user = "profesor";
 	            }
+
+	            // Se crea un arreglo con los datos encontrados del usuario
               	$newdata = array(
 					'rut'  => $usuario->RUT_USUARIO,
 					'email'     => $usuario->CORREO1_USER,
@@ -519,10 +611,18 @@ class Login extends CI_Controller {
 					'nombre_usuario' => $usuario->NOMBRE1,
 					'logged_in' => TRUE
               );
+              
+              // Carga los datos en las cookies
               $this->session->set_userdata($newdata);
-              redirect('/Correo/', '');         // En dicho caso, se redirige a la interfaz principal
+
+              // Se redirige a la interfaz principal una vez que se ha autentificado
+              redirect('/Correo/', '');
             }
-            else // En caso de no existir ningún usuario con correo = $mail
+
+            // En caso de no existir ningún usuario con el correo ingresado
+            // Se indica al usuario mediante una vista, brindándole de dos opciones, volver a la autentificación mediane Google o 
+            // regresar al Login principal
+            else
             {
               $datos_plantilla["titulo_msj"] = "Error";
               $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA";
@@ -542,8 +642,7 @@ class Login extends CI_Controller {
 
 
             }
-
-            
+        // En caso de que haya habido un error en la operación
         } catch (OAuth2_Exception $e) {
             show_error('No se pudo loguear mediante Google :(: ' . $e);
         }

@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-	echo $head						//Esta variable es pasada como parámetro a esta vista
+	echo $head						//	Header de la página. Esta variable es pasada como parámetro a esta vista
 ?>
-<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
-
-<script type='text/javascript'>
-	/* Esta función se llama al hacer click en el botón entrar, 
-	* por convención las funciones que utilizan document.getElementById()
-	* deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
-	* Esta función retorna true o false, en caso de ser true el formulario se envía al servidor
-	* Para ver como se configura esto se debe ver como es seteado el evento onsubmit() en el formulario.
-	*/
-	function validacionRut() {
-		var inputRut = document.getElementById("inputRut");
-		var rut = inputRut.value;
-		var inputGuionRut = document.getElementById("inputGuionRut");
-		var guionCaracter = inputGuionRut.value;
-		var resultadoValidacionRut = calculaDigitoVerificador(rut, guionCaracter);
-
-		if (resultadoValidacionRut == DV_CORRECTO) {
-			//Hago el submit
-			return true;
-		}
-		else if (resultadoValidacionRut == DV_NO_VALIDO) {
-			var controlGroupRut = document.getElementById("groupRut");
-			$(controlGroupRut).addClass("error");
-			var spanError = document.getElementById("spanInputRutError");
-			$(spanError).html("El rut introducido no es válido.");
-			return false;
-		}
-		else if (resultadoValidacionRut == DV_INCORRECTO) {
-			var controlGroupRut = document.getElementById("groupRut");
-			$(controlGroupRut).addClass("error");
-			var spanError = document.getElementById("spanInputRutError");
-			$(spanError).html("El dígito verificador o el rut no son válidos.");
-			return false;
-		}
-		return false;
-	}
-</script>
 
 <body>
-		
+	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
+
+	<script type='text/javascript'>
+		/* Esta función se llama al hacer click en el botón entrar, 
+		* por convención las funciones que utilizan document.getElementById()
+		* deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
+		* Esta función retorna true o false, en caso de ser true el formulario se envía al servidor
+		* Para ver como se configura esto se debe ver como es seteado el evento onsubmit() en el formulario.
+		*/
+		function validacionRut() {
+			var inputRut = document.getElementById("inputRut");
+			var rut = inputRut.value;
+			var inputGuionRut = document.getElementById("inputGuionRut");
+			var guionCaracter = inputGuionRut.value;
+			var resultadoValidacionRut = calculaDigitoVerificador(rut, guionCaracter);
+
+			// Si el resultado de la validación es satisfactorio
+			if (resultadoValidacionRut == DV_CORRECTO) {
+				// Realizar un submit
+				return true;
+			}
+			// Caso en que la validación entregue un error de validación
+			else if (resultadoValidacionRut == DV_NO_VALIDO) {
+				// Se especifican las clases para los elementos, de tal manera de que se le indique al usuario el error
+				var controlGroupRut = document.getElementById("groupRut");
+				$(controlGroupRut).addClass("error");
+				var spanError = document.getElementById("spanInputRutError");
+				$(spanError).html("El rut introducido no es válido.");
+				return false;
+			}
+			// Caso que el RUT ingresado sea incorrecto
+			else if (resultadoValidacionRut == DV_INCORRECTO) {
+				// Se especifican las clases para los elementos, de tal manera de que se le indique al usuario el error
+				var controlGroupRut = document.getElementById("groupRut");
+				$(controlGroupRut).addClass("error");
+				var spanError = document.getElementById("spanInputRutError");
+				$(spanError).html("El dígito verificador o el rut no son válidos.");
+				return false;
+			}
+			return false;
+		}
+	</script>
+
+	<div id="wrap">
 		<?php
-			echo $banner_portada	//Esta variable es pasada como parámetro a esta vista
+			echo $banner_portada	//	Banner de la página. Esta variable es pasada como parámetro a esta vista
 		?>
 		<div class="row-fluid">
 			<div class="span7 offset1">
@@ -60,7 +66,8 @@
 						$attributes = array('onSubmit' => 'return validacionRut()', 'id' => 'formLogin');
 						echo form_open('Login/LoginPost', $attributes);
 					?>
-						<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
+						<?php
+						/* Cambiar la clase al objeto, para que se muestre un error en la validación. */
 							$inputRut = '';
 							$inputPassword = '';
 							if (form_error('inputPassword') != '') {
@@ -90,7 +97,7 @@
 						<div class="control-group">
 							<div class="controls">
 								<label class="checkbox">
-									<input type="checkbox"> Recordarme&nbsp
+									<input type="checkbox"> Recordarme&nbsp;
 									<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 								</label>
 								<button type="submit" class="btn btn-primary">
@@ -106,12 +113,15 @@
 								<div class="pull-right">
 									<img src="/<?php echo config_item('dir_alias') ?>/img/logo_google.png" alt="logo google" style="width: 55px; height: 20px;">
 								</div>
-								Entrar con cuenta de&nbsp 
+								Entrar con cuenta de&nbsp; 
 							</button>
 						</div>
 				<?php echo form_close(""); ?>
 			</fieldset>
 		</div>
-		
+	</div>
+	<?php
+		echo $footer;
+	?>
 </body>
 </html>
