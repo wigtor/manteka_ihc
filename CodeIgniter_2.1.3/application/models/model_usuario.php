@@ -197,7 +197,7 @@ class model_usuario extends CI_Model{
          $this->db->stop_cache();
 
          $this->db->select('usuario.*, NOMBRE1_COORDINADOR AS NOMBRE1, NOMBRE2_COORDINADOR AS NOMBRE2, APELLIDO1_COORDINADOR AS APELLIDO1, APELLIDO2_COORDINADOR AS APELLIDO2, TELEFONO_COORDINADOR AS TELEFONO');
-         $this->db->join('coordinador', 'coordinador.rut_usuario3 = usuario.rut_usuario');
+         $this->db->join('coordinador', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
 
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
@@ -215,7 +215,7 @@ class model_usuario extends CI_Model{
          $this->db->stop_cache();
 
          $this->db->select('usuario.*, NOMBRE1_PROFESOR AS NOMBRE1, NOMBRE2_PROFESOR AS NOMBRE2, APELLIDO1_PROFESOR AS APELLIDO1, APELLIDO2_PROFESOR AS APELLIDO2, TELEFONO_PROFESOR AS TELEFONO');
-         $this->db->join('profesor', 'profesor.rut_usuario2 = usuario.rut_usuario');
+         $this->db->join('profesor', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
 
