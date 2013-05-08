@@ -28,6 +28,7 @@ class Otros extends CI_Controller {
 	public function notFound()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
@@ -39,7 +40,12 @@ class Otros extends CI_Controller {
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		if ($id_tipo_usuario == TIPO_USR_PROFESOR) {
+			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior_profesor', $datos_plantilla, true);
+		}
+		else {
+			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+		}
 		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
 		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
@@ -106,7 +112,52 @@ class Otros extends CI_Controller {
 		}
 		
 	}
-	
+	public function sendMailError()
+	{
+		$datos_plantilla["titulo_msj"] = "Error en la conexión";
+		$datos_plantilla["cuerpo_msj"] = "No se pudo enviar el correo deseado, revise su conexión a internet o vuleva a intentarlo mas tarde.";
+		$datos_plantilla["tipo_msj"] = "alert-danger";
+		$datos_plantilla["title"] = "ManteKA";
+		$datos_plantilla["menuSuperiorAbierto"] = ""; //ninguno abierto
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		$datos_plantilla["barra_lateral"] = ""; //Esta linea también cambia según la vista como la anterior
+
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			//Caso en que no se está logueado
+			$datos_plantilla["barra_usuario"] = "";
+			$datos_plantilla["menu_superior"] = "";
+			$datos_plantilla["barra_navegacion"] = "";
+			$datos_plantilla["barra_progreso_atras_siguiente"] = "";
+			
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Login/"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["nombre_redirecTo"] = "inicio se sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla); //Esta es la linea que cambia por cada controlador
+
+		}
+		else {
+			$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
+			$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+			$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
+			$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
+			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
+			$datos_plantilla["barra_navegacion"] = ""; //No muestro los botones atrás siguiente
+			$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
+			$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
+			
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Correo/correosRecibidos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["redirecFrom"] = "Correo/enviarCorreo"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["nombre_redirecTo"] = "inbox"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$datos_plantilla["cuerpo_central"] = $this->load->view('templates/big_msj_logueado', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
+			$this->load->view('templates/template_general', $datos_plantilla);
+		}
+		
+	}	
 
 	/**
 	* La función por defecto al ejecutar este controlador es el error de PageNotFound

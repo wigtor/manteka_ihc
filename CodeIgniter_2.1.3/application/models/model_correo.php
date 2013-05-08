@@ -73,28 +73,30 @@ class model_correo extends CI_Model{
   }
 
   public function EliminarCorreoEst($correo){
-    $sql="DELETE FROM 'CARTA_ESTUDIANTE' WHERE COD_CORREO = '$correo' "; //código MySQL
+    $sql="DELETE FROM 'carta_estudiante' WHERE COD_CORREO = '$correo' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
   }
 
   public function EliminarCorreo($correo){
-    $sql="DELETE FROM 'CARTA_' WHERE COD_CORREO = '$correo' "; //código MySQL
+    $sql="DELETE FROM 'carta' WHERE COD_CORREO = '$correo' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
 
   }
 
-  public function InsertarCorreo($asunto,$mensaje,$rut,$tipo){
+  public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date){
 
-        $this->rut_usuario3 =$rut;
-        $this->asunto = $asunto;
-        $this->cuerpo_email = $mensaje;
-        $this->cod_correo = date("mdHis");
 
-        $this->hora = date("H:i:s");
-        $this->fecha = date("Y-m-d");
+
+        $this->RUT_USUARIO3 =$rut;
+        $this->ASUNTO = $asunto;
+        $this->CUERPO_EMAIL = $mensaje;
+        $this->COD_CORREO = $date;
+
+        $this->HORA = date("H:i:s");
+        $this->FECHA = date("Y-m-d");
 
         // inserta los campos guardados en la tabla carta
-        $this->db->insert('CARTA', $this);
+        $this->db->insert('carta', $this);
     }
 }
 ?>

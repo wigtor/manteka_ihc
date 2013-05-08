@@ -19,10 +19,10 @@ class Ayudantes extends CI_Controller {
 	 */
 	public function verAyudantes()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		//}
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
@@ -45,7 +45,9 @@ class Ayudantes extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_verAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "verAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
@@ -59,10 +61,10 @@ class Ayudantes extends CI_Controller {
 
 	public function agregarAyudantes()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		//}
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
@@ -84,20 +86,26 @@ class Ayudantes extends CI_Controller {
       
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "agregarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
 	public function insertarAyudante()
 	{
-		//$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		//if ($rut == FALSE) {
-			//redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		//}
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
 
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
+		
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
+	
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
@@ -126,18 +134,22 @@ class Ayudantes extends CI_Controller {
       
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', '', true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);	
+
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "agregarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
+		$this->load->view('templates/template_general', $datos_plantilla);
+		
 	}
 	
 	
 
 	public function editarAyudantes()
 	{
-		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}*/
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
@@ -161,7 +173,9 @@ class Ayudantes extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "editarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
@@ -169,10 +183,10 @@ class Ayudantes extends CI_Controller {
 	
 	public function EditarAyudante()
 	{
-		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}*/
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
@@ -209,7 +223,9 @@ class Ayudantes extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "editarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
@@ -218,10 +234,10 @@ class Ayudantes extends CI_Controller {
 
 	public function borrarAyudantes()
 	{
-		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}*/
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
@@ -244,20 +260,26 @@ class Ayudantes extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "borrarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
 
 	public function EliminarAyudante($rut_ayudante)
 	{
-		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}*/
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
+		
+		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
+		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
+	
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
 		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
 		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
@@ -275,7 +297,9 @@ class Ayudantes extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "borrarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}

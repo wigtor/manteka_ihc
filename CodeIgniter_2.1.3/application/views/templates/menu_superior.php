@@ -1,76 +1,75 @@
-<!-- Menu que contiene todos los "casos de uso" (lo más macro) -->
-<div class="navbar">
-	<div class="navbar-inner">
-	<ul class="nav">
-		<?php 
-			if ($menuSuperiorAbierto == "Correos") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-			<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>
-		</li>
-		<?php 
-			if ($menuSuperiorAbierto == "Docentes") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-			<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docentes</a>
-		</li>
-		<?php 
-			if ($menuSuperiorAbierto == "Secciones") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-			<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
-		</li>
-		<?php 
-			if ($menuSuperiorAbierto == "Planificacion") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-		<a class="btn_with_icon" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a></li>
-		<?php 
-			if ($menuSuperiorAbierto == "Salas") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-			<a class="btn_with_icon" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
-		</li>
-		<?php 
-			if ($menuSuperiorAbierto == "Alumnos") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-			<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>
-		</li>
-		<?php 
-			if ($menuSuperiorAbierto == "Informes") {
-				echo '<li class="active">';
-			}
-			else {
-				echo '<li>';
-			}
-		?>
-			<a class="btn_with_icon" href="<?php echo site_url("Informes/index") ?>">E Informes</a>
-		</li>
-	</ul>
+<!--	Menú que contiene los distintos módulos que soporta el sistema ManteKA							-->
+<!--	Contiene las secciones Correos, Docentes, Secciones, Planificación, Salas, Alumnos, Informes	-->
+<!--	Para cada una de las secciones se determina si está seleccionada o no							-->
+<!--	Se recibe en la vista la variable $menuSuperiorAbierto desde el controlador						-->
+<!--	Determinando cuál es el módulo que está seleccionado											-->
+
+<?php
+	//	Si la variable no se ha seteado, se asume operación principal.
+		if (!isset($menuSuperiorAbierto)) {
+			$menuSuperiorAbierto = "Correos";
+		}
+
+		// Las operaciones por defecto no poseen clases
+		$Correos = "";
+		$Docentes = "";
+		$Secciones = "";
+		$Planificacion = "";
+		$Salas = "";
+		$Alumnos = "";
+		$Informes = "";
+
+		//	En caso de que tal operación específica este seleccionada.
+		//	La operación seleccionada tiene clase "active"
+		if ($menuSuperiorAbierto == "Correos") {
+			$Correos = 'class="active"';
+		}
+		else if ($menuSuperiorAbierto == "Docentes") {
+			$Docentes = 'class="active"';
+		}
+		else if ($menuSuperiorAbierto == "Secciones") {
+			$Secciones = 'class="active"';
+		}
+		else if ($menuSuperiorAbierto == "Planificacion") {
+			$Planificacion = 'class="active"';
+		}
+		else if ($menuSuperiorAbierto == "Salas") {
+			$Salas = 'class="active"';
+		}
+		else if ($menuSuperiorAbierto == "Alumnos") {
+			$Alumnos = 'class="active"';
+		}
+		else if ($menuSuperiorAbierto == "Informes") {
+			$Informes = 'class="active"';
+		}
+
+
+?>
+
+	<div class="navbar">
+		<div class="navbar-inner">
+			<ul class="nav">
+				<li <?php echo $Correos;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>
+				</li>
+				<li <?php echo $Docentes;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docentes</a>
+				</li>
+				<li <?php echo $Secciones;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
+				</li>
+				<li <?php echo $Planificacion;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a>
+				</li>
+				<li <?php echo $Salas;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
+				</li>
+				<li <?php echo $Alumnos;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>
+				</li>
+				<li <?php echo $Informes;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Informes/index") ?>">E Informes</a>
+				</li>
+			</ul>
+		</div>
 	</div>
-</div>

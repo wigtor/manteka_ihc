@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php
-		echo $head						//Esta variable es pasada como parámetro a esta vista
+		echo $head						//	Esta variable es pasada como parámetro a esta vista
 	?>
 <body >
 	<div id="wrap">
-		<?php //NO SE DONDE PONER ESTO PARA QUE SE VEA BIEN
-			echo $barra_usuario		//Esta variable es pasada como parámetro a esta vista
+		<?php
+			echo $barra_usuario		//	Barra de control de usuario
 		?>
 		<?php
-			echo $banner_portada;	//Esta variable es pasada como parámetro a esta vista
+			echo $banner_portada;	//	Banner del sitio Web
 		?>
 		<?php
-			echo $menu_superior;		//Esta variable es pasada como parámetro a esta vista
+			echo $menu_superior;	//	Barra con los menúes
 		?>
-		<!-- Ahora debe ir el código de la barra lateral y la carga de la vista más interna -->
+		<!-- Ahora debe ir el código de la barra lateral y el contenido de la operación -->
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2">
 					<!--Sidebar content-->
 					<?php
-						echo $barra_lateral;		//Esta variable es pasada como parámetro a esta vista
+						echo $barra_lateral;		//	Barra Lateral
 					?>
 				</div>
 				<div class="span10">
 					<div>
 						<?php
-							//Se muestra un mensaje de alerta en caso de que se haya seteado
+							//	Se muestra un mensaje de alerta en caso de que se haya seteado. Se pasa desde el controlador.
 							if (isset($mensaje_alert)) {
-								echo $mensaje_alert;		//Esta variable es pasada como parámetro a esta vista
+								echo $mensaje_alert;		//	Mensaje de alerta
 							}
 						?>
 					
@@ -37,17 +37,22 @@
 					<!-- Barra de navegación con botones undo-redo -->
 					<div style="min-height: 310px">
 						<?php
+							//	Se asume por defecto que la barra de undo-redo se carga
+							//	Si la variable no ha sido seteada, se muestra la barra de navegación
 							if (!isset($mostrarBarra_navegacion)) {
 								echo $barra_navegacion;
 							}
+							//	Si la variable está seteada en TRUE, cargar la barra undo-redo
 							else if ($mostrarBarra_navegacion == TRUE){
 								echo $barra_navegacion;
 							}
-							//Si no está entonces no se hace ningún echo
+							//	Si no está entonces no se carga la barra
 						?>
-						<!--Body content-->
+						
+						<!--	Body content									-->
+						<!--	Cuerpo central de la operación (de la vista)	-->
 						<?php
-							echo $cuerpo_central;		//Esta variable es pasada como parámetro a esta vista
+							echo $cuerpo_central;		//	Cuerpo central pasado como parámetro desde el controlador
 						?>
 					</div>
 					<div class="row-fluid">

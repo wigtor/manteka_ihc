@@ -34,11 +34,11 @@
 					echo "<input name='id' type='hidden' value='".$coordinador['id']."'>";
 					echo "<br/><table>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Nombre completo:</h6></td><td><input required name='nombre' class ='input-xlarge' type='text' placeholder='ej:SOLAR FUENTES MAURICIO IGNACIO' default='".$coordinador['nombre']."' value='".$coordinador['nombre']."'></td></tr>";
-					echo "<tr><td><h6><span class='text-error'>(*)</span>Contraseña:</h6></td><td><input name='contrasena' class ='input-xlarge'  type='text' placeholder='*******'  ></td></tr>";
-					echo "<tr><td><h6><span class='text-error'>(*)</span>Reingresar contraseña:</h6></td><td><input name='contrasena2' class ='input-xlarge' type='text' placeholder='*******'  ></td></tr>";
+					echo "<tr><td><h6><span class='text-error'>(*)</span>Contrase?a:</h6></td><td><input name='contrasena' class ='input-xlarge'  type='text' placeholder='*******'  ></td></tr>";
+					echo "<tr><td><h6><span class='text-error'>(*)</span>Reingresar contrase?a:</h6></td><td><input name='contrasena2' class ='input-xlarge' type='text' placeholder='*******'  ></td></tr>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Correo 1:</h6></td><td><input name='correo1' required class ='input-xlarge' type='email' placeholder='ej:edmundo.leiva@usach.cl' default='".$coordinador['correo1']."' value='".$coordinador['correo1']."'></td></tr>";
 					echo "<tr><td><h6>Correo 2 :</h6></td><td><input name='correo2' class ='input-xlarge' type='email' placeholder='ej:edmundo@gmail.com' default='".$coordinador['correo2']."' value='".$coordinador['correo2']."'></td></tr>";
-					echo "<tr><td><h6><span class='text-error'>(*)</span>Teléfono:</h6></td><td><input name='fono' required class ='input-xlarge' type='text' placeholder='ej:9-87654321' default='".$coordinador['fono']."' value='".$coordinador['fono']."'></td></tr>";
+					echo "<tr><td><h6><span class='text-error'>(*)</span>Tel?fono:</h6></td><td><input name='fono' required class ='input-xlarge' type='text' placeholder='ej:9-87654321' default='".$coordinador['fono']."' value='".$coordinador['fono']."'></td></tr>";
 					echo "<tr><td></td><td>Los campos con <span class='text-error'>(*)</span> son obligatorios</td></tr>";
 					echo "</table>";
 					echo "<br/><div class='span7 offset5' id='botones-guardar-cancelar'><button type='submit' class='btn' type='button'>Guardar</button><a class='btn offset1' href='/manteka/index.php/Coordinadores/modificarCoordinador/'>Cancelar</a></div>";
@@ -82,7 +82,7 @@
 	function validar(form){
 		if($('input[name="contrasena"]').val() != "" || $('input[name="contrasena2"]').val()!= ""){
 			if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
-				alert("Las contraseñas no coinciden.");
+				alert("Las contrase?as no coinciden.");
 				return false;
 			}else{
 				return true;

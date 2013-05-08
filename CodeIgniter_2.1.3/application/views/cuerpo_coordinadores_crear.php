@@ -15,11 +15,11 @@
 					<td><input class ="input-xlarge" name='rut' type="text" placeholder="ej:5946896-3" required pattern="([0-9]{8}|[0-9]{7})-([0-9]{1}|k)" ></td>
 					</tr>			
 					<tr>
-					<td><h6><span class="text-error">(*)</span>Contraseña:</h6></td>
+					<td><h6><span class="text-error">(*)</span>ContraseÃ±a:</h6></td>
 					<td><input class ="input-xlarge" name='contrasena'  type="text" placeholder="*******" required></td>
 					</tr>
 					<tr>
-					<td><h6><span class="text-error">(*)</span>Confirmar contraseña:</h6></td>
+					<td><h6><span class="text-error">(*)</span>Confirmar contraseÃ±a:</h6></td>
 					<td><input class ="input-xlarge" name='contrasena2' type="text" placeholder="*******" required></td>
 					</tr>
 					<tr>
@@ -31,7 +31,7 @@
 					<td><input class ="input-xlarge" name='correo2' type="email" placeholder="ej:edmundo.leiva@gmail.com"></td>
 					</tr>
 					<tr>
-					<td><h6><span class="text-error">(*)</span>Teléfono:</h6></td>
+					<td><h6><span class="text-error">(*)</span>TelÃ©fono:</h6></td>
 					<td><input class ="input-xlarge" name='fono' type="text" placeholder="ej:9-87654321" required></td>
 					</tr>
 					<tr>
@@ -53,7 +53,7 @@
 <script type="text/javascript">
 function validar(form){
 	if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
-		alert("Las contraseñas no coinciden.");
+		alert("Las contrase?as no coinciden.");
 		return false;
 	}else{
 		return true;
