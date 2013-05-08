@@ -25,10 +25,10 @@ class Modulos extends CI_Controller {
 
 	public function verModulos()
 	{
-		/*$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}*/
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["title"] = "ManteKA";
 		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
@@ -41,7 +41,9 @@ class Modulos extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_ver', '', true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_modulos', '', true); //Esta linea también cambia según la vista como la anterior
+		//Ahora se especifica que vista estÃ¡ abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "verModulos"; //Usen el mismo nombre de la secciÃ³n donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_modulos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
     

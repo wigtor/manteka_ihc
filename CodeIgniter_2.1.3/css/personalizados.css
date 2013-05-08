@@ -1,4 +1,4 @@
-/* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
+/* Ac? se muestran datos de los css personalizados, para as? no editar el archivo bootstrap.css */
 
 .click_lista{
     border-right-style: solid;
@@ -183,8 +183,9 @@
 }
 
 footer {
+	margin-top: -20px;
 	font-size: 10px;
-	height: 40px;
+	height: 20px;
 	text-align: center;
 }
 
@@ -194,8 +195,9 @@ footer {
 }
 
 #wrap {
-	min-height:575px;
-	height: 95%;
+	min-height: 95%;
+	padding-bottom:30px;
+	height: 100%;
 }
 
 @font-face{
@@ -241,4 +243,8 @@ font-family: 'MyWebFont';
 
 .progress_bar {
 	background-color: rgb(0, 165, 215);
+}
+
+html,body{
+    height: 96%;
 }

@@ -32,14 +32,15 @@ class Model_estudiante extends CI_Model {
 		
     }
 	
-	public function ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante)
+	public function ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$seccion)
 	{
 		$data = array(					
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
 					'APELLIDO_PATERNO' => $apellido_paterno ,
 					'APELLIDO_MATERNO' => $apellido_materno ,
-					'CORREO_ESTUDIANTE' => $correo_estudiante
+					'CORREO_ESTUDIANTE' => $correo_estudiante,
+					'COD_SECCION'=>$seccion
 		);
 		$this->db->where('RUT_ESTUDIANTE', $rut_estudiante);
         $datos = $this->db->update('estudiante',$data);
@@ -100,7 +101,7 @@ class Model_estudiante extends CI_Model {
 			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$lista[$contador][6] = $row['COD_SECCION'];
 			$lista[$contador][7] = $row['COD_CARRERA'];
-			
+
 			$contador = $contador + 1;
 		}
 		return $lista;

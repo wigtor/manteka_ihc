@@ -1,14 +1,3 @@
-<!---->
-
-<script type="text/javascript">
-	function hacerSubmitDetalleProfesor(rut_profesor){
-		var detalle = document.getElementById("formDetalle");
-		detalle.action = "<?php echo site_url("Profesor/VerPorBoton/") ?>/"+rut_profesor;
-		detalle.submit();
-		
-	}
-</script>
-
 <script type="text/javascript">
 	function DetalleProfesor(rut,nombre1,nombre2,apePaterno,apeMaterno,telefono,tipo){
 		
@@ -19,7 +8,6 @@
 			document.getElementById("apellidomaternoDetalle").innerHTML = apeMaterno;
 			document.getElementById("telefonoDetalle").innerHTML = telefono;
 		    document.getElementById("tipoDetalle").innerHTML = tipo;
-		
 	}
 </script>
 
@@ -119,10 +107,9 @@ function ordenarFiltro(){
 							
 							echo '<tr>';
 							echo	'<td  id="'.$contador.'" onclick="DetalleProfesor('.$comilla.$rs_profesores[$contador][0].$comilla.','.$comilla. $rs_profesores[$contador][1].$comilla.','.$comilla. $rs_profesores[$contador][2].$comilla.','.$comilla. $rs_profesores[$contador][3].$comilla.','.$comilla. $rs_profesores[$contador][4].$comilla.','.$comilla. $rs_profesores[$contador][5].$comilla.','. $comilla.$rs_profesores[$contador][6].$comilla.')" 
-										  style="text-align:center;">
+										  style="text-align:left;">
 										  '. $rs_profesores[$contador][3].' '.$rs_profesores[$contador][4].' ' . $rs_profesores[$contador][1].' '.$rs_profesores[$contador][2].'</td>';
 							echo '</tr>';
-														
 							$contador = $contador + 1;
 						}
 						echo '</form>';
@@ -138,13 +125,13 @@ function ordenarFiltro(){
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle Profesor:
 	    <pre style="margin-top: 2%; padding: 2%">
- Rut: <b id="rutDetalle"></b>
- Nombre: <b id="nombreunoDetalle"></b>
- Apellido Paterno: <b id="apellidopaternoDetalle" ></b>
- Apellido Materno: <b id="apellidomaternoDetalle" ></b>
- Correo:           <!--<b id="mailDetalle" ></b>-->
- Telefono: <b id="telefonoDetalle" ></b>
- Tipo: <b id="tipoDetalle"></b></pre>
+ Rut: 				<b id="rutDetalle"></b>
+ Nombres:			<b id="nombreunoDetalle"></b> <b id="nombredosDetalle"></b>
+ Apellido Paterno: 		<b id="apellidopaternoDetalle" ></b>
+ Apellido Materno: 		<b id="apellidomaternoDetalle" ></b>
+ Correo:           	<b id="mailDetalle" ></b>
+ Telefono: 			<b id="telefonoDetalle" ></b>
+ Tipo: 				<b id="tipoDetalle"></b></pre>
 
 		</div>
 	</div>
