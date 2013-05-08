@@ -248,8 +248,8 @@ class Profesores extends CI_Controller {
 		//cargo el modelo de profesores
 		$this->load->model('Model_profesor');
 			
-			$nombre_profe = $this->input->get("nombre_profe");
-			$list = preg_split('/[\s]/',$nombre_profe);
+			$nombre_1 = $this->input->get("nombre_1");
+			$nombre_2 = $this->input->get("nombre_2");
 			$apellidoPaterno_profe= $this->input->get("apellidoPaterno_profe");
 			$apellidoMaterno_profe= $this->input->get("apellidoMaterno_profe");
 	        $run_profe = $this->input->get("run_profe");
@@ -259,7 +259,7 @@ class Profesores extends CI_Controller {
 	        $seccion_profe = $this->input->get("seccion_profe");
 			$tipo_profe = $this->input->get("tipo_profe");
 			
-		 $confirmacion = $this->Model_profesor->EditarProfesor($run_profe,$telefono_profe,$tipo_profe, $list[0], $list[1], $apellidoPaterno_profe,$apellidoMaterno_profe);
+		 $confirmacion = $this->Model_profesor->EditarProfesor($run_profe,$telefono_profe,$tipo_profe, $nombre_1, $nombre_2, $apellidoPaterno_profe,$apellidoMaterno_profe);
 		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior

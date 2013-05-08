@@ -3,7 +3,8 @@
 	function EditarProfesor(){
 							
 		var rut = document.getElementById("runProfeEdit").value;
-		var nombre =document.getElementById("nombreProfeEdit").value;
+		var nombre1 =document.getElementById("nombreProfeEdit1").value;
+		var nombre2 =document.getElementById("nombreProfeEdit2").value;
 		var apellidoPaterno =document.getElementById("apellidoPaternoProfeEdit").value;
 		var apellidoMaterno =document.getElementById("apellidoMaternoProfeEdit").value;
 		//var correo = document.getElementById("mailProfeEdit").value;
@@ -11,7 +12,7 @@
 	//	var modulo = document.getElementById("moduloProfeEdit").value;
 		//var seccion = document.getElementById("seccionProfeEdit").value;
 	//	var tipo = document.getElementById("tipoProfeEdit").value;
-		if(rut!="" && nombre!="" && telefono!="" && apellidoPaterno!="" && apellidoMaterno!=""){
+		if(rut!="" && nombre1!="" && nombre2!="" && telefono!="" && apellidoPaterno!="" && apellidoMaterno!=""){
 					var answer = confirm("¿Está seguro de realizar cambios?");
 					if (!answer){
 						var dijoNO = datosEditarProfesor("","","","","","");
@@ -24,7 +25,7 @@
 		}
 		else{
 				alert("Inserte todos los datos");
-				var mantenerDatos = datosEditarProfesor(rut,nombre,nombre,apellidoPaterno,apellidoMaterno,telefono);
+				var mantenerDatos = datosEditarProfesor(rut,nombre1,nombre2,apellidoPaterno,apellidoMaterno,telefono);
 		}
 	}
 </script>
@@ -34,7 +35,8 @@
 			
 			
 			document.getElementById("runProfeEdit").value = rut;
-			document.getElementById("nombreProfeEdit").value = nombre1+" "+nombre2;
+			document.getElementById("nombreProfeEdit1").value = nombre1;
+			document.getElementById("nombreProfeEdit2").value = nombre2;
 			document.getElementById("apellidoPaternoProfeEdit").value = apellido1;
 			document.getElementById("apellidoMaternoProfeEdit").value = apellido2;
 		//	document.getElementById("moduloProfeEdit").value = modulo;
@@ -189,12 +191,24 @@ function ordenarFiltro2(){
 							<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Nombre completo:</label>
+										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre:</label>
 									</div>
 								</div>
 								<div class="span5">	
 									<div class="controls">
-										<input type="text" id="nombreProfeEdit" name="nombre_profe" required>
+										<input type="text" id="nombreProfeEdit1" name="nombre_1" required>
+									</div>
+								</div>
+							</div>
+														<div class="row-fluid">
+								<div class="span4">
+									<div class="control-group">
+										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Segundo nombre:</label>
+									</div>
+								</div>
+								<div class="span5">	
+									<div class="controls">
+										<input type="text" id="nombreProfeEdit2" name="nombre_2" required>
 									</div>
 								</div>
 							</div>
