@@ -90,7 +90,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- nombre dos-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Segundo nombre</label>
+										<label class="control-label" for="inputInfo">3-.Segundo nombre</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -104,7 +104,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- ape paterno-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Apellido Paterno</label>
+										<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Paterno</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -117,7 +117,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- ape materno-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Materno</label>
+										<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Apellido Materno</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -130,7 +130,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- correo-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Correo</label>
+										<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -148,7 +148,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- carrera-->
 								<div class="span5">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Asignar Carrera</label>
+										<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar Carrera</label>
 									</div>
 								</div>
 								<div  class="span6">
@@ -169,7 +169,7 @@ function ordenarFiltro(){
 							<div class="row"> <!-- seccion-->
 								<div class="span5">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar sección</label>
+										<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Asignar sección</label>
 									</div>
 								</div>
 								<div  class="span6" >

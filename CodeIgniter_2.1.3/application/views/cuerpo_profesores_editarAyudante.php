@@ -99,6 +99,11 @@ function ordenarFiltro(){
 			<legend>Editar Ayudante</legend>
 			<div>
 				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorio</font>
+					</div>
+				</div>
+				<div class="row-fluid">
 					<div class="span6"><!--    INICIO LISTA DE AYUDANTES -->
 						<div class="row-fluid">
 							<div class="span6">
@@ -193,7 +198,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Segundo nombre</label>
+		  							<label class="control-label" for="inputInfo">3-. Segundo nombre</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -208,7 +213,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Apellido Paterno</label>
+		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Paterno</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -221,7 +226,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Materno</label>
+		  							<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Apellido Materno</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -234,7 +239,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Correo</label>
+		  							<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
