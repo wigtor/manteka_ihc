@@ -41,7 +41,7 @@
 				Modulos</a>
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verModulos; ?> ><a href="<?php site_url("Modulos/verModulos")?>">Ver m?dulos</a></li>
 					<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar m?dulos</a></li>
 					<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar m?dulos</a></li>

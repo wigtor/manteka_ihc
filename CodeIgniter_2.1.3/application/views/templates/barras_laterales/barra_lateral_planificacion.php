@@ -12,23 +12,41 @@
 
 		// Las operaciones por defecto no poseen clases
 		$verPlanificacion = "";
-		$agregarPlanificacion = "";
 		$editarPlanificacion = "";
-		$borrarPlanificacion = "";
+		$verModulos = "";
+		$agregarModulos = "";
+		$editarModulos = "";
+		$borrarModulos = "";
+
+		// Variables que determinan que grupo de operaciones se encuentra abierta
+		$inPlanificacion = "";
+		$inModulos = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
 		if ($subVistaLateralAbierta == "verPlanificacion") {
 			$verPlanificacion = 'class="active"';
-		}
-		else if ($subVistaLateralAbierta == "agregarPlanificacion") {
-			$agregarPlanificacion = 'class="active"';
+			$inPlanificacion = 'in';
 		}
 		else if ($subVistaLateralAbierta == "editarPlanificacion") {
 			$editarPlanificacion = 'class="active"';
+			$inPlanificacion = 'in';
 		}
-		else if ($subVistaLateralAbierta == "borrarPlanificacion") {
-			$borrarPlanificacion = 'class="active"';
+		else if ($subVistaLateralAbierta == "verModulos") {
+			$verModulos = 'class="active"';
+			$inModulos = 'in';
+		}
+		else if ($subVistaLateralAbierta == "agregarModulos") {
+			$agregarModulos = 'class="active"';
+			$inModulos = 'in';
+		}
+		else if ($subVistaLateralAbierta == "editarModulos") {
+			$editarModulos = 'class="active"';
+			$inModulos = 'in';
+		}
+		else if ($subVistaLateralAbierta == "borrarModulos") {
+			$borrarModulos = 'class="active"';
+			$inModulos = 'in';
 		}
 	?>
 
@@ -39,10 +57,10 @@
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
 				Planificación</a>
 		    </div>
-		    <div id="collapseTwo" class="accordion-body collapse in">
-		    	<div class="accordion-inner">
-		        	<li class="active"><a href="<?php site_url("Planificacion/verPlanificacion")?>">Ver planificación</a></li>
-					<li><a href="<?php echo site_url("Planificacion/editarPlanificacion")?>">Editar planificación</a></li>
+		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inPlanificacion; ?>">
+		    	<div class="accordion-inner nav nav-list">
+		        	<li <?php echo $verPlanificacion; ?> ><a href="<?php site_url("Planificacion/verPlanificacion")?>">Ver planificación</a></li>
+					<li <?php echo $editarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/editarPlanificacion")?>">Editar planificación</a></li>
 		     	</div>
 		    </div>
 	  </div>
@@ -51,12 +69,12 @@
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
 				Módulos</a>
 		    </div>
-		    <div id="collapseThree" class="accordion-body collapse">
-		    	<div class="accordion-inner">
-					<li <?php echo $verPlanificacion; ?> ><a href="<?php echo site_url("Modulos/verPlanificacion")?>">Ver módulos</a></li>
-		        	<li <?php echo $agregarPlanificacion; ?> ><a href="<?php echo site_url("Modulos/agregarPlanificacion")?>">Agregar módulos</a></li>
-					<li <?php echo $editarPlanificacion; ?> ><a href="<?php echo site_url("Modulos/editarPlanificacion")?>">Editar módulos</a></li>
-					<li <?php echo $borrarPlanificacion; ?> ><a href="<?php echo site_url("Modulos/borrarPlanificacion")?>">Borrar módulos</a></li>
+		    <div id="collapseThree" class="accordion-body collapse <?php echo $inModulos; ?>">
+		    	<div class="accordion-inner nav nav-list">
+					<li <?php echo $verModulos; ?> ><a href="<?php echo site_url("Modulos/verPlanificacion")?>">Ver módulos</a></li>
+		        	<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
+					<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
+					<li <?php echo $borrarModulos; ?> ><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>
 		     	</div>
 		    </div>
 	  </div>
