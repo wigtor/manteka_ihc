@@ -1,0 +1,118 @@
+fieldset
+{
+	clear:both;
+	border-color:lightblue;
+	margin-bottom:15px;
+	margin-top:-10px;
+}
+
+fieldset legend
+{
+	color:#0088CC;
+	font-size:18px;
+}
+
+.filaPersona
+{
+	cursor:pointer;
+}
+
+.btn
+{
+	margin-bottom:20px;
+	margin-right:1%;
+	float:right;
+}
+
+.listaDestinatarios
+{
+	padding-left:5px;
+	padding-right:5px;
+	margin-right:1%;
+	margin-left:1%;
+	margin-top:2.8%;
+	margin-bottom:1%;
+	width:97%;
+}
+
+.detallesEmail
+{
+	padding-left:5px;
+	padding-right:5px;
+	margin-right:1%;
+	margin-left:1%;
+	margin-top:2.8%;
+	margin-bottom:1%;
+	width:97%;
+}
+
+.tituloPre
+{
+	float:left;
+}
+
+.tituloPreTxt
+{
+	font-size:10pt;
+	color:#666666;
+	float:left;
+	margin-left:1%;
+	line-height:35px;
+	font-weight:bold;
+}
+
+#sinCorreos
+{
+	font-size:10pt;
+	color:#666666;
+	float:left;
+	margin-top:2%;
+	margin-left:1%;
+	line-height:35px;
+	font-weight:bold;
+}
+
+.etiqueta
+{
+	margin-left:30px;
+	text-decoration:underline;
+	font-weight:bold;
+}
+
+.txt
+{
+	margin-left:30px;
+	margin-bottom:-10px;
+}
+
+.txt2
+{
+	margin-left:30px;
+	margin-bottom:-25px;
+}
+
+#msjEliminacion1
+{
+	width:30%;
+	font-size:9pt;
+	color:green;
+	height:20px;
+	padding:10px;
+	border:1.5px solid green; 
+	background-color:#CCFFCC;
+	margin-bottom:20px;
+	border-radius:8px;
+}
+
+#msjEliminacion2
+{
+	width:45%;
+	font-size:9pt;
+	color:red;
+	height:20px;
+	padding:10px;
+	border:1.5px solid green; 
+	background-color:#ffcccc;
+	margin-bottom:20px;
+	border-radius:8px;
+}
