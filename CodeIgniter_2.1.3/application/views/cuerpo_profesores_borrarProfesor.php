@@ -34,11 +34,11 @@
 					if (!answer){
 						var dijoNO = DetalleProfesor("","","","","","","");
 					}
-
+					else{
 					var borrar = document.getElementById("formBorrar");
 					borrar.action = "<?php echo site_url("Profesores/eliminarProfesores/") ?>/"+rut;
 					borrar.submit();
-					
+					}
 					
 		}
 		else{
