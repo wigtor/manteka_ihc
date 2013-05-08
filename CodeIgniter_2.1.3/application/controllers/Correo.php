@@ -61,7 +61,7 @@ class Correo extends CI_Controller {
 
 		//cargo el modelo del correo
 		$this->load->model('model_correo');
-		$datos = array('correos' => $this->model_correo->VerCorreosUser($rut));
+		$datos=array('listaEnviados'=>$this->model_correo->VerCorreosUser($rut), 'msj'=>$msj);
 		
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
@@ -101,16 +101,24 @@ class Correo extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
-		$this->load->model('model_correo');
-		$this->model_correo->EliminarCorreoEst($correo);
-		$this->model_correo->EliminarCorreo($correo);
-		$datos_vista = array('correos' => $this->model_correo->VerCorreosUser($correo),'mensaje_confirmacion_borrar'=>"1");//qu� rasca la wa del mensaje, despues lo arreglo con unos if y wa	
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviados_ver', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "eliminarCorreo"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi�n cambia seg�n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);		
+		if(isset($_POST['seleccion']))
+		{
+			$temp=$_POST['seleccion'];
+			$correos = explode(";",$temp);
+			$this->load->model('model_correo');
+			$this->model_correo->EliminarCorreo($correos);
+			if(isset($estado))
+				unset($estado);
+			$estado="1";
+			redirect('/Correo/correosEnviados/'.$estado);
+		}
+		else
+		{
+			if(isset($estado))
+				unset($estado);
+			$estado="0";
+			redirect('/Correo/correosEnviados/'.$estado);
+		}	
 	}
 
 
