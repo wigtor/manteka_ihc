@@ -83,12 +83,14 @@ class model_correo extends CI_Model{
 
   }
 
-  public function InsertarCorreo($asunto,$mensaje,$rut,$tipo){
+  public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date){
+
+
 
         $this->rut_usuario3 =$rut;
         $this->asunto = $asunto;
         $this->cuerpo_email = $mensaje;
-        $this->cod_correo = date("mdHis");
+        $this->cod_correo = $date;
 
         $this->hora = date("H:i:s");
         $this->fecha = date("Y-m-d");
