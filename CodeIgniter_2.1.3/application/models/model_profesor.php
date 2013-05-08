@@ -163,19 +163,18 @@ class Model_profesor extends CI_Model {
     return $lista;
   }
 
-  public function verSeccion()
-  {
-    $sql="SELECT * FROM SECCION"; //código MySQL
-    $datos=mysql_query($sql); //enviar código MySQL
-    $contador = 0;
-    $lista;
-    while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-      $lista[$contador][0] = $row['COD_SECCION'];
-      $contador = $contador + 1;
-    }
-    
-    return $lista;
-  }
+	public function verSeccion(){
+		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista;
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			$lista[$contador] = $row['COD_SECCION'];
+			$contador = $contador + 1;
+		}
+		
+		return $lista;
+	}
 
   public function EliminarProfesor($rut_profesor)
     {
