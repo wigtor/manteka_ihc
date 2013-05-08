@@ -37,3 +37,7 @@
 	    </div>
 	</br>
 </fieldset>
+
+<script type="text/javascript">
+	alert("En esta vista esta solo implementada la parte visual. Ninguna funcionalidad está disponible.")
+</script>
