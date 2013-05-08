@@ -2,9 +2,9 @@
  
 class model_correoU extends CI_Model {
         public function InsertarCorreoU($rutRecept,$date){
-        $this->cod_correo=$date;
-        $this->rut_estudiante=$rutRecept ;
-        $this->db->insert('CARTA_USER',$this);
+        $this->COD_CORREO=$date;
+        $this->RUT_ESTUDIANTE=$rutRecept ;
+        $this->db->insert('carta_user',$this);
     }
 }
  
