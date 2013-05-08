@@ -12,12 +12,12 @@
 			</button>
 			<ul class="dropdown-menu" id="select-filtro">
 				<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
-				<li onclick="seleccionar_filtro(this)"><a href >Rut</a></li>
-				<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>
+				<!--<li onclick="seleccionar_filtro(this)"><a href >Rut</a></li>
+				<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>  //no implementado aun-->
 			</ul>
 		</div>
 	</div>
-	    <select size=18 style="width:342px" onchange="mostrarDatos(this)">
+	    <select id="select-coordinadores" size=18 style="width:342px" onchange="mostrarDatos(this)">
 			<?php 
 				foreach ($listado_coordinadores as $coordinador){
 					echo "<option value='id".$coordinador['id']."'>".$coordinador['nombre']."</option>";
@@ -30,7 +30,7 @@
 			<h4>Complete los siguientes datos para modificar un coordinador:</h4><br/>
 			<?php 
 				foreach ($listado_coordinadores as $coordinador){
-					echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/modificarCoordinadores/'>";
+					echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/modificarCoordinadores/' onsubmit='return validar(this)'>";
 					echo "<input name='id' type='hidden' value='".$coordinador['id']."'>";
 					echo "<br/><table>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Nombre completo:</h6></td><td><input required name='nombre' class ='input-xlarge' type='text' placeholder='ej:SOLAR FUENTES MAURICIO IGNACIO' default='".$coordinador['nombre']."' value='".$coordinador['nombre']."'></td></tr>";
@@ -79,6 +79,50 @@
     $("ul#select-filtro li a").click(function(event) {
 	    event.preventDefault();
 	});
+	function validar(form){
+		if($('input[name="contrasena"]').val() != "" || $('input[name="contrasena2"]').val()!= ""){
+			if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
+				alert("Las contraseñas no coinciden.");
+				return false;
+			}else{
+				return true;
+			};
+		}
+		return true;
+}
+
+jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
+    return this.each(function() {
+        var select = this;
+        var options = [];
+        $(select).find('option').each(function() {
+            options.push({value: $(this).val(), text: $(this).text()});
+        });
+        $(select).data('options', options);
+        $(textbox).bind('change keyup', function() {
+        	$('option').attr("selected",false);
+            var options = $(select).empty().data('options');
+            var search = $(this).val().trim();
+            var regex = new RegExp(search,"gi");
+          
+            $.each(options, function(i) {
+                var option = options[i];
+                if(option.text.match(regex) !== null) {
+                    $(select).append(
+                       $('<option>').text(option.text).val(option.value)
+                    );
+                }
+            });
+            if (selectSingleMatch === true && $(select).children().length === 1) {
+                $(select).children().get(0).selected = true;
+            }
+        });            
+    });
+};
+
+$(function() {
+    $('#select-coordinadores').filterByText($('#appendedDropdownButton'), true);
+});
 
        	
     	

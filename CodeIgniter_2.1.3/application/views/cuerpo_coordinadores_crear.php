@@ -3,7 +3,7 @@
 		<div class="span7">
 		<div class="span12">
 			<h4>Complete los siguientes datos para agregar un coordinador:</h4><br/>
-			<form  method="POST" class="span9" action="/manteka/index.php/Coordinadores/agregarCoordinadores/">
+			<form  method="POST" class="span9" onsubmit="return validar(this)" action="/manteka/index.php/Coordinadores/agregarCoordinadores/">
 				<br/>
 				<table>
 					<tr>
@@ -48,3 +48,16 @@
 		</div>
 	</div>	
 </fieldset>
+
+
+<script type="text/javascript">
+function validar(form){
+	if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
+		alert("Las contraseñas no coinciden.");
+		return false;
+	}else{
+		return true;
+	};
+}
+
+</script>
