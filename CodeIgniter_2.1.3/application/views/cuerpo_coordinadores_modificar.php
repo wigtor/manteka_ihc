@@ -30,7 +30,7 @@
 			<h4>Complete los siguientes datos para modificar un coordinador:</h4><br/>
 			<?php 
 				foreach ($listado_coordinadores as $coordinador){
-					echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/modificarCoordinadores/' onsubmit='return validar(this)'>";
+					echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/editarCoordinadores/' onsubmit='return validar(this)'>";
 					echo "<input name='id' type='hidden' value='".$coordinador['id']."'>";
 					echo "<br/><table>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Nombre completo:</h6></td><td><input required name='nombre' class ='input-xlarge' type='text' placeholder='ej:SOLAR FUENTES MAURICIO IGNACIO' default='".$coordinador['nombre']."' value='".$coordinador['nombre']."'></td></tr>";
