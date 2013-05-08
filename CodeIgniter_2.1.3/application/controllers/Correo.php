@@ -140,11 +140,11 @@ public function enviarCorreo()
 
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_profesor');
-		$this->load->model('Model_ayudante');
+		//$this->load->model('Model_ayudante');
 
 		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
 							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
-							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
+							 /*'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes()*/);
 
 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_enviar' , $datos_vista, true); //Esta es la linea que cambia por cada controlador
@@ -232,6 +232,7 @@ public function enviarCorreo()
 		$mensaje =$this->input->post('editor');
 		$tipo=$this->input->post('tipo');
 		$rutRecept=$this->input->post('rutRecept');
+		$date=date("mdHis");
 
 	
 
@@ -247,13 +248,13 @@ public function enviarCorreo()
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
 
-			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo);
+			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date);
 			if($tipo=='CARTA_ESTUDIANTE')
-				$this->model_correoE->InsertarCorreoE($rutRecept);
+				$this->model_correoE->InsertarCorreoE($rutRecept,$date);
 			else if($tipo=='CARTA_USER')
-				$this->model_correoU->InsertarCorreoU($rutRecept);
+				$this->model_correoU->InsertarCorreoU($rutRecept,$date);
 			else if($tipo=='CARTA_AYUDANTE')
-				$this->model_correoU->InsertarCorreoA($rutRecept);
+				$this->model_correoU->InsertarCorreoA($rutRecept,$date);
 			;
 			
 		}
