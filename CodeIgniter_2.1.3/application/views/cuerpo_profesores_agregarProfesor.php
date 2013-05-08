@@ -21,6 +21,11 @@
 			<form id="formAgregar" type="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
 			<legend>Agregar Profesor</legend>
 			<div>
+				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+				</div>
 				<div class= "row-fluid">
 					<div class= "span6" style="margin-bottom:2%">
 						Complete los datos del formulario para ingresar un profesor:
@@ -43,7 +48,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.*Primer nombre:</label>
+		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -57,7 +62,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-.*Segundo nombre:</label>
+		  							<label class="control-label" for="inputInfo">3-. Segundo nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -71,7 +76,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.*Apellido paterno:</label>
+		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido paterno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -85,7 +90,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5.*Apellido materno:</label>
+		  							<label class="control-label" for="inputInfo">5.<font color="red">*</font>Apellido materno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -99,7 +104,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">6-.*Mail:</label>
+		  							<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -112,7 +117,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">7-.*Telefono:</label>
+		  							<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Telefono:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -126,7 +131,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">8-.*Tipo:</label>
+		  							<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Tipo:</label>
 		  						</div>
 		  					</div>
 		  					<div  class="span6">
