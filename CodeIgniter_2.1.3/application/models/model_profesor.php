@@ -91,18 +91,39 @@ class Model_profesor extends CI_Model {
 		}
 
 	//OPERACIÓN EDITAR PROFESOR
-    public function EditarProfesor($rut_profesor)
+    public function EditarProfesor($run_profe,$telefono_profe,$tipo_profe,$nom1, $nom2, $ape1,$ape2)
     {
-        $this->rut_profesor = $_POST['rut_profesor'];
-        $this->nombre_profesor = $_POST['nombre_profesor'];
-        $this->apellido_paterno = $_POST['apellido_paterno'];
-        $this->correo_prof1 = $_POST['correo_prof1'];
-        $this->correo_prof2 = $_POST['correo_prof2'];
-        $this->telefono = $_POST['telefono'];
-        $this->tipo= $_POST['tipo'];
+		$data = array(					
+					'RUT_USUARIO2' => $run_profe ,
+					'NOMBRE1_PROFESOR' => $nom1 ,
+					'NOMBRE2_PROFESOR' => $nom2,
+					'APELLIDO1_PROFESOR' => $ape1 ,
+					'APELLIDO2_PROFESOR' => $ape2,
+					'TELEFONO_PROFESOR'=>$telefono_profe,
+					'TIPO_PROFESOR' => $tipo_profe,
 
-        // se modifican los datos del profesor
-        $this->db->update('PROFESOR', $this);
+		);
+		$this->db->where('RUT_USUARIO2', $run_profe);
+        $datos = $this->db->update('profesor',$data);
+		
+		/*$data1=array(
+			'CORREO1_USER'=> $$modu ,
+		
+		);
+		$this->db->where('RUT_USUARIO', $run_profe);
+        $datos1 = $this->db->update('usuario',$data1);
+		
+
+		$this->db->where('RUT_USUARIO2', $run_profe);
+        $datos1 = $this->db->update('modulo_tematico',$modu);
+		
+		*/
+		if($datos == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}	
     }
     //Función get que obtiene profesores, si se le da un argumento obtiene cantidad de profesores
 	/*$this->db->select('*');
