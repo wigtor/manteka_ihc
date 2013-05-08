@@ -28,6 +28,7 @@ class Login extends CI_Controller {
 	    if ($recordarme == 1) {
 	    	$datos_plantilla['rut_almacenado'] = $this->session->userdata('rut_almacenado');
 	    	$datos_plantilla['dv_almacenado'] = $this->session->userdata('dv_almacenado');
+	    	$datos_plantilla['recordarme'] = $this->session->userdata('recordarme');
 	    }
 	    
 	    /*
@@ -205,11 +206,11 @@ class Login extends CI_Controller {
 	* En caso que el login resulte correcto, se setean las cookies con los datos del usuario logueado.
 	*/
 	public function LoginPost() {
-		$Rut = $this->input->post('inputRut');
+		$rut = $this->input->post('inputRut');
 		$dv = $this->input->post('inputGuionRut');
 		$this->form_validation->set_rules('inputGuionRut', 'Dígito verificador', "required"); // Se verifica sólo para que reaparezca al cargar la vista
 		$this->form_validation->set_rules('inputRut', 'usuario', "required|callback_check_userRUT");
-		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$Rut]");
+		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$rut]");
 		
 		if ($this->form_validation->run() == FALSE) {
 			$this->index(); // Se vuelve al Login en caso de error
@@ -231,15 +232,22 @@ class Login extends CI_Controller {
 		            	$tipo_user = "profesor";
 		            }
 
-		            $recordarme = FALSE;
+		            
 		            if ($this->input->post('recordarme_check')) {
 	            		$recordarme = TRUE;
+	            		$rut_almacenado = $rut;
+	            		$dv_almacenado = $dv;
+		            }
+		            else {
+		            	$recordarme = FALSE;
+		            	$rut_almacenado = "";
+		            	$dv_almacenado = "";
 		            }
 		            // Se crea un arreglo con los datos del usuario
 					$newdata = array(
 						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
-						'rut_almacenado' => $ExisteUsuarioyPassoword->RUT_USUARIO, //Usado para el "recordarme"
-						'dv_almacenado' => $dv,
+						'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
+						'dv_almacenado' => $dv_almacenado,
 						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
 						'recordarme' => $recordarme,
 						'tipo_usuario' => $tipo_user,

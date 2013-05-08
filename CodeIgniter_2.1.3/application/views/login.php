@@ -89,6 +89,16 @@
 							else if (!isset($dv_almacenado)) {
 								$dv_almacenado = "";
 							}
+
+							if (!isset($recordarme)) {
+								$recordarme = "";
+							}
+							else if ($recordarme){
+								$recordarme = "checked";
+							}
+							else {
+								$recordarme = "";
+							}
 						?>
 						<div class="control-group <?php echo $inputRut ?>" id="groupRut">
 							<label class="control-label" for="inputRut">Rut</label>
@@ -110,7 +120,7 @@
 						<div class="control-group">
 							<div class="controls">
 								<label class="checkbox">
-									<input type="checkbox" name="recordarme_check"> Recordarme&nbsp;
+									<input type="checkbox" name="recordarme_check" <?php echo $recordarme;?> >Recordarme&nbsp;
 									<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 								</label>
 								<button type="submit" class="btn btn-primary">
