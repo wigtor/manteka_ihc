@@ -195,7 +195,9 @@ public function enviarCorreo()
 
 		//Ac? ponen la l?gica de su controlador, cargan el modelo, consultan a la base de datos, envian los correos, etc
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_correos_borradores_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "verBorradores"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
 

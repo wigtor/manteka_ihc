@@ -12,10 +12,7 @@
 
 		// Las operaciones por defecto no poseen clases
 		$Correos = "";
-		$Docentes = "";
 		$Secciones = "";
-		$Planificacion = "";
-		$Salas = "";
 		$Alumnos = "";
 		$Informes = "";
 
@@ -24,17 +21,8 @@
 		if ($menuSuperiorAbierto == "Correos") {
 			$Correos = 'class="active"';
 		}
-		else if ($menuSuperiorAbierto == "Docentes") {
-			$Docentes = 'class="active"';
-		}
 		else if ($menuSuperiorAbierto == "Secciones") {
 			$Secciones = 'class="active"';
-		}
-		else if ($menuSuperiorAbierto == "Planificacion") {
-			$Planificacion = 'class="active"';
-		}
-		else if ($menuSuperiorAbierto == "Salas") {
-			$Salas = 'class="active"';
 		}
 		else if ($menuSuperiorAbierto == "Alumnos") {
 			$Alumnos = 'class="active"';
@@ -52,17 +40,8 @@
 				<li <?php echo $Correos;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>
 				</li>
-				<li <?php echo $Docentes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docentes</a>
-				</li>
 				<li <?php echo $Secciones;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
-				</li>
-				<li <?php echo $Planificacion;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a>
-				</li>
-				<li <?php echo $Salas;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
 				</li>
 				<li <?php echo $Alumnos;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>

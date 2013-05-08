@@ -69,7 +69,10 @@ class Login extends CI_Controller {
 		// Se regresa al usuario a la pantalla de login y se pasa como parámetro el mensaje de error a presentar en pantalla
 		$this->session->unset_userdata('rut');					// Se quita de las cookies la variable rut
 		$this->session->unset_userdata('email');				// Se quita de las cookies la variable mail
-    	$this->session->unset_userdata('loggued_in');			// Se quita de las coockies la variables loggued_in
+    	$this->session->unset_userdata('loggued_in');			// Se quita de las coockies la variable loggued_in
+    	$this->session->unset_userdata('id_tipo_usuario');		// Se quita de las coockies la variable id_tipo_usuario
+    	$this->session->unset_userdata('tipo_usuario');			// Se quita de las coockies la variables tipo_usuario
+    	$this->session->unset_userdata('nombre_usuario');			// Se quita de las coockies la variables nombre_usuario
 
 		redirect('/Login/', '');								// Redirección al método principal de Login
    	}
@@ -216,10 +219,10 @@ class Login extends CI_Controller {
 	            if($ExisteUsuarioyPassoword) {
 	            	
 	            	// Se obtiene el tipo de cuenta que posee el usuario
-					if ($ExisteUsuarioyPassoword->ID_TIPO == 2) {
+					if ($ExisteUsuarioyPassoword->ID_TIPO == TIPO_USR_COORDINADOR) {
 		            	$tipo_user = "coordinador";
 		            }
-					if ($ExisteUsuarioyPassoword->ID_TIPO == 1) {
+					if ($ExisteUsuarioyPassoword->ID_TIPO == TIPO_USR_PROFESOR) {
 		            	$tipo_user = "profesor";
 		            }
 
@@ -595,10 +598,10 @@ class Login extends CI_Controller {
             $usuario = $this->model_usuario->existe_mail($mail);
             if ($usuario)
             {
-            	if ($usuario->ID_TIPO == 2) {
+            	if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
 	            	$tipo_user = "coordinador";
 	            }
-				if ($usuario->ID_TIPO == 1) {
+				if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
 	            	$tipo_user = "profesor";
 	            }
 
