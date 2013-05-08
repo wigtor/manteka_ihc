@@ -78,6 +78,7 @@
 								$rut_almacenado = set_value('inputRut'); //Está es una excepción de como usar el control de errores
 								//La idea es que si no hay errores, se muestra el rut almacenado en las cookies.
 							}
+							
 							else if (set_value('inputRut') != '') {
 								$rut_almacenado = set_value('inputRut');
 							}
@@ -111,7 +112,7 @@
 							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="<?php echo $rut_almacenado; ?>">
 							 	<STRONG>-</STRONG>
 							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="k" value="<?php echo $dv_almacenado; ?>">
-								<?php form_error('inputRut', '<span class="help-inline">', '</span>');?>
+								<?php echo form_error('inputRut', '<span class="help-inline">', '</span>');?>
 								<span id="spanInputRutError" class="help-inline"></span>
 							</div>
 						</div>
@@ -119,7 +120,7 @@
 							<label class="control-label" for="inputPassword">Contraseña</label>
 							<div class="controls">
 								<input style="width:242px" type="password" name="inputPassword" id="inputPassword" placeholder="  Ingrese su contraseña" value="<?php echo set_value('inputPassword'); ?>">
-								<?php form_error('inputPassword', '<span class="help-inline">', '</span>');?>
+								<?php echo form_error('inputPassword', '<span class="help-inline">', '</span>');?>
 							</div>
 						</div>
 						<div class="control-group">
