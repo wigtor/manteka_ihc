@@ -13,9 +13,9 @@
 						</button>
 						<ul class="dropdown-menu" id="select-filtro">
 							<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
-							<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
+							<!--<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
 							<li onclick="seleccionar_filtro(this)"><a href >Secciones</a></li>
-							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li> por implementar aun.-->
 						</ul>
 					</div>
 				</div>
