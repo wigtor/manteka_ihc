@@ -129,7 +129,6 @@ function ordenarFiltro(){
  Nombres:			<b id="nombreunoDetalle"></b> <b id="nombredosDetalle"></b>
  Apellido Paterno: 		<b id="apellidopaternoDetalle" ></b>
  Apellido Materno: 		<b id="apellidomaternoDetalle" ></b>
- Correo:           	<b id="mailDetalle" ></b>
  Telefono: 			<b id="telefonoDetalle" ></b>
  Tipo: 				<b id="tipoDetalle"></b></pre>
 

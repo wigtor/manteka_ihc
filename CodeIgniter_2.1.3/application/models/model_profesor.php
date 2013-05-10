@@ -13,6 +13,17 @@ class Model_profesor extends CI_Model {
 	//OPERACIÓN PARA INGRESAR PROFESOR    
 	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor) 
   {
+  	$id_tipo = 1;
+    $pass = "123";
+    $data2 = array(         
+          'RUT_USUARIO' => $rut_profesor,
+          'ID_TIPO' => $id_tipo,
+          'PASSWORD_PRIMARIA' => md5($pass),
+          'CORREO1_USER' => $correo_profesor,
+    );
+    
+    $datos2 = $this->db->insert('usuario',$data2);
+    
     $data = array(          
           'RUT_USUARIO2' => $rut_profesor ,
           'NOMBRE1_PROFESOR' => $nombre1_profesor ,
@@ -23,16 +34,8 @@ class Model_profesor extends CI_Model {
           'TIPO_PROFESOR' => $tipo_profesor, 
     );
 
-        $datos = $this->db->insert('profesor',$data);
-        $id_tipo = 1;
-        $pass = "123";
-    $data2 = array(         
-          'RUT_USUARIO' => $rut_profesor,
-          'ID_TIPO' => $id_tipo,
-          'PASSWORD_PRIMARIA' => $pass,
-          'CORREO1_USER' => $correo_profesor,
-    );
-    $datos2 = $this->db->insert('usuario',$data2);
+    $datos = $this->db->insert('profesor',$data);
+
     if($datos && $datos2){
       return 1;
     }
