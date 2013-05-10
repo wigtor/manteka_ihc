@@ -89,6 +89,10 @@ class Profesores extends CI_Controller {
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarProfesor', '', true); //Esta es la linea que cambia por cada controlador
 
+		$datos_vista = array('mensaje_confirmacion'=>2);
+        $datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
+		
+		
 		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
 		$datos_plantilla["subVistaLateralAbierta"] = "agregarProfesores"; //Usen el mismo nombre de la sección donde debe estar
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
