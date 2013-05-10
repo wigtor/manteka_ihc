@@ -90,7 +90,7 @@
 				Profesores</a>
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse <?php echo $inProfesores; ?>">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verProfesores?>><a href="<?php echo site_url("Profesores/verProfesores")?>">Ver profesores</a></li>
 	        		<li <?php echo $agregarProfesores; ?> ><a href="<?php echo site_url("Profesores/agregarProfesores")?>">Agregar profesores</a></li>
 					<li <?php echo $editarProfesores; ?> ><a href="<?php echo site_url("Profesores/editarProfesores")?>">Editar  profesores</a></li>
@@ -104,7 +104,7 @@
 				Ayudantes</a>
 		    </div>
 		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inAyudantes; ?>">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
 					<li <?php echo $agregarAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/agregarAyudantes")?>">Agregar ayudantes</a></li>
 					<li <?php echo $editarAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Editar ayudantes</a></li>
@@ -118,11 +118,11 @@
 				Coordinadores</a>
 		    </div>
 		    <div id="collapseThree" class="accordion-body collapse <?php echo $inCoordinadores; ?>">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/verCoordinadores")?>">Ver coordinadores</a></li>
-					<li <?php echo $agregarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/agregarCoordinadores")?>">Agregar coordinador</a></li>
-					<li <?php echo $editarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/editarCoordinadores")?>">Editar coordinador</a></li>
-					<li <?php echo $borrarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/borrarCoordinadores")?>">Borrar coordinador</a></li>
+					<li <?php echo $agregarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/agregarCoordinadores")?>">Agregar coordinadores</a></li>
+					<li <?php echo $editarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/editarCoordinadores")?>">Editar coordinadores</a></li>
+					<li <?php echo $borrarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/borrarCoordinadores")?>">Borrar coordinadores</a></li>
 		     	</div>
 		    </div>
 	  </div>

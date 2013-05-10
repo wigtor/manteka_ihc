@@ -40,7 +40,7 @@
 				Secciones</a>
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse in">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verSecciones; ?> ><a href="<?php echo site_url("Secciones/verSecciones")?>">Ver secciones</a></li>
 	        		<li <?php echo $agregarSecciones; ?> ><a href="<?php echo site_url("Secciones/agregarSecciones")?>">Agregar secciones</a></li>
 					<li <?php echo $editarSecciones; ?> ><a href="<?php echo site_url("Secciones/editarSecciones")?>">Editar secciones</a></li>

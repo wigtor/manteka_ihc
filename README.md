@@ -2,6 +2,56 @@ manteka_ihc
 Lea la wiki para seguir las instrucciones de instalación de WAMPP y clonar el repositorio
 
 =================================
+¿Cómo arreglar problemas de merge localmente? (entre el github que tienen en su computador y el repositorio)
+Paso 1:
+Abrir la consola de github mediante el programa github, abrir el repositorio, click en "tools" (aparece arriba)
+y luego "open a shell here"
+
+Paso 2:
+Escribir en la consola:
+    git checkout master
+    
+Paso 3:
+Escribir en la consola:
+    git pull https://github.com/USUARIO/manteka_ihc.git BRANCHNAME
+Donde "USUARIO" es el nombre del usuario dueño del repositorio de su grupo (scrum master de su grupo)
+"BRANCHNAME" es un nombre cualquiera con que van a nombrar a su rama local con cambios. Por ejemplo: cambios7Mayo_mario
+
+Paso 4:
+El paso anterior les va a mostrar los nombres de todos los archivos que tienen conflictos, deben abrir estos archivos 
+utilizando su editor de texto preferido y buscar los siguiente tipos de código:
+
+    >>>>>> HEAD
+    //código cualquiera, es el que se encuentra en el repositorio remoto (github.com)
+    
+    =========
+    //Código local que tiene conflictos con la sección de código que está arriba de los signos igual.
+    =========3546323b23451b14cdf23f
+    
+Ese número extraño que aparece al final es un hash para identificar sus cambios, lo que escribí es un ejemplo.
+Esta es una forma que tiene github para delimitar las lineas de código que tienen conflictos.
+Deben editar las partes del archivo que tengan algo como lo indicado anteriormente, escoger con que lineas de código se quedan
+Finalmente borrar las lineas que dicen ">>>> HEAD", "=======" y "=========3546323b23451b14cdf23f", además de borrar
+las lineas de código con que no se quieren quedar.
+Luego de arreglar todos los archivos con conflictos y todos los conflictos que haya en cada archivo, guarden los archivos.
+
+Paso 5:
+Escribir en la consola:
+    git commit -a
+Se abrirá el notepad, cierrenlo.
+
+Paso 6: 
+Escribir en la consola:
+    git push origin master
+    
+    
+Con esto es suficiente, el último paso hace que se suban los cambios al repositorio de su grupo, 
+luego de esto es recomendable que hable con su grupo indicando que se hizo un merge con conflictos y 
+que se avise inmediatamente si se han perdido lineas de código.
+(revisen los historiales de github y restauren las lineas perdidas en caso de que ocurran problemas así)
+
+
+=================================
 CONFIGURACIÓN DE LA BASE DE DATOS
 A continuación se presentan los datos de configuración de la base de datos, 
 los cuales deben ser configurados en el gestor de mysql que utilice (phpmyAdmin por ejemplo)

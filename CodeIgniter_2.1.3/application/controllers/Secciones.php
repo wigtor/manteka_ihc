@@ -59,6 +59,8 @@ class Secciones extends CI_Controller {
 		$this->load->model('model_secciones');
 		$secciones['secciones'] = $this->model_secciones->ObtenerTodasSecciones();
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_secciones_ver', $secciones, true); //Esta es la linea que cambia por cada controlador
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "verSecciones"; //Usen el mismo nombre de la sección donde debe estar
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_secciones', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 
@@ -87,6 +89,8 @@ class Secciones extends CI_Controller {
 		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_secciones_agregar', '', true); //Esta es la linea que cambia por cada controlador
+		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
+		$datos_plantilla["subVistaLateralAbierta"] = "agregarSecciones"; //Usen el mismo nombre de la sección donde debe estar
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_secciones', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		

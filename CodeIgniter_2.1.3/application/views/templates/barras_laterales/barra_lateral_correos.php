@@ -80,7 +80,7 @@
 				Correos</a>
 		    </div>
 		    <div id="collapseOne" class="accordion-body collapse <?php echo $inCorreos; ?>">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $correosEnviados; ?> ><a href="<?php echo site_url("Correo/correosEnviados")?>">Correos enviados</a></li>
 	        		<li <?php echo $enviarCorreo; ?> ><a href="<?php echo site_url("Correo/enviarCorreo")?>">Enviar correo</a></li>
 					<li <?php echo $verBorradores; ?> ><a href="<?php echo site_url("Correo/verBorradores")?>">Ver borradores</a></li>
@@ -93,7 +93,7 @@
 				Plantillas</a>
 		    </div>
 		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inPlantillas; ?>">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $agregarPlantillas; ?> ><a href="<?php echo site_url("Plantillas/agregarPlantillas")?>">Agregar plantillas</a></li>
 					<li <?php echo $editarPlantillas; ?> ><a href="<?php echo site_url("Plantillas/editarPlantillas")?>">Editar plantillas</a></li>
 					<li <?php echo $borrarPlantillas; ?> ><a href="<?php echo site_url("Plantillas/borrarPlantillas")?>">Borrar plantillas</a></li>
@@ -106,7 +106,7 @@
 				Grupos de contactos</a>
 		    </div>
 		    <div id="collapseThree" class="accordion-body collapse <?php echo $inGrupos; ?>">
-		    	<div class="accordion-inner">
+		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verGrupos; ?> ><a href="<?php echo site_url("GruposContactos/verGrupos")?>">Ver grupos</a></li>
 					<li <?php echo $agregarGrupos; ?> ><a href="<?php echo site_url("GruposContactos/agregarGrupos")?>">Agregar grupos</a></li>
 					<li <?php echo $editarGrupos; ?> ><a href="<?php echo site_url("GruposContactos/editarGrupos")?>">Editar grupos</a></li>

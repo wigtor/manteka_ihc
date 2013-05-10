@@ -1,19 +1,24 @@
-<?php
-$listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>2 , 'nombre'=>"segundonombre", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>3 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",],['id'=>4 , 'nombre'=>"segundonombre", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",]];
-?>
+
 <fieldset>
-	<legend>Secciones</legend>
-	    <div class="row"><!--fila-->
-	        <div class="span3">
+	<legend>Eliminar Coordinadores</legend>
+	    <div class="row" style="margin-left:30px;"><!--fila-->
+	        <div class="span4">
 	            <h4>Seleccione los coordinadores a eliminar</h4>
-	            <input class="span6" type="text" placeholder="Filtro búsqueda">
-	            <select class="span4">
-				    <option>Filtrar Por...</option>
-				    <option>#</option>
-				    <option>#</option>
-				    <option>#</option>
-				    <option>#</option>
-				</select>
+	            <div class="input-append span9">
+					<input class="span11" id="appendedDropdownButton" type="text" placeholder="Filtro">
+					<div class="btn-group">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<span id="show-filtro">Filtrar por</span>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" id="select-filtro">
+							<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
+							<!--<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Secciones</a></li>
+							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li> por implementar aun.-->
+						</ul>
+					</div>
+				</div>
 	            <select id="select-coordinadores" multiple class="span12" size=20 onchange="mostrarDatos(this)">
 	            <?php
 	                foreach ($listado_coordinadores as $coordinador) {
@@ -22,10 +27,10 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 	            ?>
 	            </select>
 	        </div>
-	        <div class="span9">
+	        <div class="span8">
 	        	<div class="span12" style="height:70px"></div>
 		        <h4>Seleccionados a eliminar</h4>
-		        <div class="span10" style="overflow-y:scroll;height:300px">
+		        <div class="span11" style="overflow-y:scroll;height:300px">
 		            <table class="table table-bordered">            
 		                <tr>
 		                    <th>Rut</th>
@@ -47,9 +52,12 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 		        
 		        </div>
 		        
-		        <div class="offset8 span1">
+		        <div class="offset9 span1">
 		        	<br/>
-	  				<button class="btn btn-danger" type="button">Eliminar</button>
+		        	<form  action="borrarCoordinadores" method="POST" onsubmit="return confirmar();">
+		        		<input type="hidden" name="lista_eliminar" id="input-eliminar">
+	  					<button class="btn btn-danger" type="sumbit">Eliminar</button>
+	  				</form>
 				</div>
 		        <div class="span1"></div>
 		    </div>
@@ -72,8 +80,55 @@ $listado_coordinadores= [['id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contra
 			$("#"+seleccion[row]).show();
         }
     }
+    function confirmar(){
+    	var respuesta = confirm("Esta seguro de que decea eliminar estos Coordinadores?");
+    	if(respuesta)
+    		$('#input-eliminar').val($('#select-coordinadores').val());
+    	return respuesta;
+    }
+    function seleccionar_filtro(option){
+    	$(option).prevent
+    	$('.active').removeClass("active");
+    	$(option).addClass("active");
+    	$("#show-filtro").empty().append($('.active a').text());
+    }
+    $("ul#select-filtro li a").click(function(event) {
+	    event.preventDefault();
+	});
        	
-    	
+
+jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
+    return this.each(function() {
+        var select = this;
+        var options = [];
+        $(select).find('option').each(function() {
+            options.push({value: $(this).val(), text: $(this).text()});
+        });
+        $(select).data('options', options);
+        $(textbox).bind('change keyup', function() {
+        	$('option').attr("selected",false);
+            var options = $(select).empty().data('options');
+            var search = $(this).val().trim();
+            var regex = new RegExp(search,"gi");
+          
+            $.each(options, function(i) {
+                var option = options[i];
+                if(option.text.match(regex) !== null) {
+                    $(select).append(
+                       $('<option>').text(option.text).val(option.value)
+                    );
+                }
+            });
+            if (selectSingleMatch === true && $(select).children().length === 1) {
+                $(select).children().get(0).selected = true;
+            }
+        });            
+    });
+};
+
+$(function() {
+    $('#select-coordinadores').filterByText($('#appendedDropdownButton'), true);
+});    	
 
 
 </script>

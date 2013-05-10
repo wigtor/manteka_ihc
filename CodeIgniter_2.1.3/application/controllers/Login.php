@@ -24,6 +24,12 @@ class Login extends CI_Controller {
 	    if ($rut == TRUE) {
 	      redirect('/Correo/', '');         			// En dicho caso, se redirige a la interfaz principal
 	    }
+	    $recordarme = $this->session->userdata('recordarme');
+	    if ($recordarme == 1) {
+	    	$datos_plantilla['rut_almacenado'] = $this->session->userdata('rut_almacenado');
+	    	$datos_plantilla['dv_almacenado'] = $this->session->userdata('dv_almacenado');
+	    	$datos_plantilla['recordarme'] = $this->session->userdata('recordarme');
+	    }
 	    
 	    /*
 	     *	Se cargan los datos relevantes en la vista en el arreglo "datos_plantilla"
@@ -69,7 +75,10 @@ class Login extends CI_Controller {
 		// Se regresa al usuario a la pantalla de login y se pasa como parámetro el mensaje de error a presentar en pantalla
 		$this->session->unset_userdata('rut');					// Se quita de las cookies la variable rut
 		$this->session->unset_userdata('email');				// Se quita de las cookies la variable mail
-    	$this->session->unset_userdata('loggued_in');			// Se quita de las coockies la variables loggued_in
+    	$this->session->unset_userdata('loggued_in');			// Se quita de las coockies la variable loggued_in
+    	$this->session->unset_userdata('id_tipo_usuario');		// Se quita de las coockies la variable id_tipo_usuario
+    	$this->session->unset_userdata('tipo_usuario');			// Se quita de las coockies la variables tipo_usuario
+    	$this->session->unset_userdata('nombre_usuario');			// Se quita de las coockies la variables nombre_usuario
 
 		redirect('/Login/', '');								// Redirección al método principal de Login
    	}
@@ -197,11 +206,11 @@ class Login extends CI_Controller {
 	* En caso que el login resulte correcto, se setean las cookies con los datos del usuario logueado.
 	*/
 	public function LoginPost() {
-		$Rut = $this->input->post('inputRut');
+		$rut = $this->input->post('inputRut');
 		$dv = $this->input->post('inputGuionRut');
 		$this->form_validation->set_rules('inputGuionRut', 'Dígito verificador', "required"); // Se verifica sólo para que reaparezca al cargar la vista
 		$this->form_validation->set_rules('inputRut', 'usuario', "required|callback_check_userRUT");
-		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$Rut]");
+		$this->form_validation->set_rules('inputPassword', 'contraseña', "required|callback_check_user_and_password[$rut]");
 		
 		if ($this->form_validation->run() == FALSE) {
 			$this->index(); // Se vuelve al Login en caso de error
@@ -216,17 +225,34 @@ class Login extends CI_Controller {
 	            if($ExisteUsuarioyPassoword) {
 	            	
 	            	// Se obtiene el tipo de cuenta que posee el usuario
-					if ($ExisteUsuarioyPassoword->ID_TIPO == 2) {
+	            	$redireccionarA = "index";
+					if ($ExisteUsuarioyPassoword->ID_TIPO == TIPO_USR_COORDINADOR) {
 		            	$tipo_user = "coordinador";
+		            	$redireccionarA = "index";
 		            }
-					if ($ExisteUsuarioyPassoword->ID_TIPO == 1) {
+					if ($ExisteUsuarioyPassoword->ID_TIPO == TIPO_USR_PROFESOR) {
 		            	$tipo_user = "profesor";
+		            	$redireccionarA = "indexProfesor";
 		            }
 
+
+		            if ($this->input->post('recordarme_check')) {
+	            		$recordarme = TRUE;
+	            		$rut_almacenado = $rut;
+	            		$dv_almacenado = $dv;
+		            }
+		            else {
+		            	$recordarme = FALSE;
+		            	$rut_almacenado = "";
+		            	$dv_almacenado = "";
+		            }
 		            // Se crea un arreglo con los datos del usuario
 					$newdata = array(
 						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
+						'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
+						'dv_almacenado' => $dv_almacenado,
 						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
+						'recordarme' => $recordarme,
 						'tipo_usuario' => $tipo_user,
 						'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
 						'nombre_usuario' => $ExisteUsuarioyPassoword->NOMBRE1,
@@ -237,15 +263,17 @@ class Login extends CI_Controller {
 			      	$this->session->set_userdata($newdata);
 
 			      	// Redirección a la interfaz principal del sistema
-					redirect('/Correo/', 'index');
+					redirect('/Correo/'.$redireccionarA, "");
 				}
 				// Si no se logró validar
 	            else {
 	            	// Borrar las coockies seteadas bajo el rut de dicho usuario
 			       	$this->session->unset_userdata('rut');
 			      	$this->session->unset_userdata('email');
-	              	$this->session->unset_userdata('tipo_usuario');
 			      	$this->session->unset_userdata('loggued_in');
+			      	$this->session->unset_userdata('id_tipo_usuario');		// Se quita de las coockies la variable id_tipo_usuario
+    				$this->session->unset_userdata('tipo_usuario');			// Se quita de las coockies la variables tipo_usuario
+    				$this->session->unset_userdata('nombre_usuario');			// Se quita de las coockies la variables nombre_usuario
 			      	redirect('/Login/', '');							// Se regresa a la vista de autentificación
 				}
 			}
@@ -595,10 +623,10 @@ class Login extends CI_Controller {
             $usuario = $this->model_usuario->existe_mail($mail);
             if ($usuario)
             {
-            	if ($usuario->ID_TIPO == 2) {
+            	if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
 	            	$tipo_user = "coordinador";
 	            }
-				if ($usuario->ID_TIPO == 1) {
+				if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
 	            	$tipo_user = "profesor";
 	            }
 
