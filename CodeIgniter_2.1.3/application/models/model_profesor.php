@@ -10,7 +10,25 @@ class Model_profesor extends CI_Model {
     var $correo_prof2='';
     var $telefono='';
     var $tipo=''; // se refiere a si es profesor normal o coordinador
-	//OPERACIÓN PARA INGRESAR PROFESOR    
+
+	
+	/**
+	* Inserta un profesor en la base de datos
+	*
+	* Guarda las variables a insertar en el array data luego se llama a la función insert y se guarda el resultado de la inserción
+	* en la variable 'datos', esto corresponde a la inserción en la tabla usuarios. Siguiente se debe insertar en la tabla profesores, donde se repite el procedimiento. 
+	* Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	*
+	* @param string $rut_profesor Rut del profesor a insertar
+	* @param string $nombre1_profesor Primer nombre del profesor a insertar
+	* @param string $nombre2_profesor Segundo nombre del profesor a insertar
+	* @param string $apellido1_profesor Primer apellido del profesor a insertar
+	* @param string $apellido2_profesor Segundo apellido del profesor a insertar
+	* @param string $correo_profesor Correo del ayudante a insertar
+	* @param string $telefono_profesor Telefono del profesor a insertar
+	* @param string $tipo_profesor Tipo del profesor a insertar
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
 	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor) 
   {
   	$id_tipo = 1;
@@ -47,24 +65,16 @@ class Model_profesor extends CI_Model {
 
 
    
-	//OPERACIÓN PARA VER A UN PROFESOR
-    public function VerProfesor($rut_profesor)
-    {
-		$sql="SELECT * FROM PROFESOR WHERE rut_profesor = '$rut_profesor' "; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
-		$row=mysql_fetch_array($datos);
-		$profesor[0] = $row['RUT_USUARIO2'];
-		$profesor[1] = $row['NOMBRE1_PROFESOR'];
-        $profesor[2] = $row['NOMBRE2_PROFESOR'];
-		$profesor[3] = $row['APELLIDO_PROFESOR'];
-        $profesor[4] = $row['APELLIDO2_PROFESOR'];
-		$profesor [5] = $row['TELEFONO_PROFESOR'];
-		$profesor [6] = $row['TIPO_PROFESOR'];
-		
-		return $profesor;
-    }
 
-	//OPERACIÓN VER A TODOS LOS PROFESORES
+	
+	/**
+	* Obtiene los datos de todos los profesores de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada profesor y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los profesores del sistema
+	*/
 	public function VerTodosLosProfesores()
 	{
 		$sql="SELECT * FROM PROFESOR ORDER BY APELLIDO1_PROFESOR"; //código MySQL
@@ -73,13 +83,6 @@ class Model_profesor extends CI_Model {
 		$contador = 0;
 		$lista;
 		while ($row = mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			/*$lista[$contador][0] = $row['RUT_PROFESOR'];
-			$lista[$contador][1] = $row['NOMBRE_PROFESOR'];
-			$lista[$contador][2] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][3] = $row['CORREO_PROF1'];
-			$lista[$contador][4] = $row['CORREO_PROF2'];
-			$lista[$contador][5] = $row['TELEFONO'];
-			$lista[$contador][6] = $row['TIPO'];*/
 		
            $lista[$contador][0] = $row['RUT_USUARIO2'];
            $lista[$contador][1] = $row['NOMBRE1_PROFESOR'];
@@ -93,7 +96,21 @@ class Model_profesor extends CI_Model {
 		return $lista;
 		}
 
-	//OPERACIÓN EDITAR PROFESOR
+	/**
+	* Edita la información de un profesor en la base de datos
+	*
+	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
+	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $run_profe Rut del profesor al que se le actualizan los demás datos
+	* @param string $telefono_profe Correo a editar del profesor
+	* @param string $tipo_profe Correo a editar del profesor
+	* @param string $nom1 Primer nombre a editar del profesor
+	* @param string $nom2 Segundo nombre a editar del profesor
+	* @param string $ape1 Apellido paterno del profesor
+	* @param string $ape2 Apellido mateno del profesor
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
     public function EditarProfesor($run_profe,$telefono_profe,$tipo_profe,$nom1, $nom2, $ape1,$ape2)
     {
 		$data = array(					
@@ -109,18 +126,6 @@ class Model_profesor extends CI_Model {
 		$this->db->where('RUT_USUARIO2', $run_profe);
         $datos = $this->db->update('profesor',$data);
 		
-		/*$data1=array(
-			'CORREO1_USER'=> $$modu ,
-		
-		);
-		$this->db->where('RUT_USUARIO', $run_profe);
-        $datos1 = $this->db->update('usuario',$data1);
-		
-
-		$this->db->where('RUT_USUARIO2', $run_profe);
-        $datos1 = $this->db->update('modulo_tematico',$modu);
-		
-		*/
 		if($datos == true){
 			return 1;
 		}
@@ -128,29 +133,16 @@ class Model_profesor extends CI_Model {
 			return -1;
 		}	
     }
-    //Función get que obtiene profesores, si se le da un argumento obtiene cantidad de profesores
-	/*$this->db->select('*');
-	$this->db->from('blogs');
-	$this->db->join('comments', 'comments.id = blogs.id');
-	$query = $this->db->get();
-	$data = $this->db->query("SELECT *	FROM profesor"); // the entries for the relevant month and year
-	    return $data->result_array();
-	*/
-	
-	function ObtenerProfesor(){	
-		$this->db->select('*');
-		$this->db->from('profesor');
-		$data = $this->db->get();
-	    return $data->result_array();
-	}
-   
-   function ValidarUsuario($rut,$password){         //   Consulta Mysql para buscar en la tabla Usuario aquellos usuarios que coincidan con el rut y password ingresados en pantalla de login
-      $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
-      $query = $this->db->where('PASSWORD',md5($password));
-      $query = $this->db->get('usuario'); //Ac? va el nombre de la tabla
-      return $query->row();    //   Devolvemos al controlador la fila que coincide con la b?squeda. (FALSE en caso que no existir coincidencias)
-   }
 
+
+	/**
+	* Obtiene los datos de todos los modulos de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada modulo y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los modulos del sistema
+	*/
    public function verModulo()
   {
     $sql="SELECT * FROM MODULO_TEMATICO"; //código MySQL
@@ -166,6 +158,14 @@ class Model_profesor extends CI_Model {
     return $lista;
   }
 
+	/**
+	* Obtiene los datos de todas las secciones de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el código de cada sección y se va guardando en un arreglo
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todas las secciones del sistema
+	*/
 	public function verSeccion(){
 		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
@@ -179,7 +179,17 @@ class Model_profesor extends CI_Model {
 		return $lista;
 	}
 
-  public function EliminarProfesor($rut_profesor)
+	
+	/**
+	* Eliminar un profesor de la base de datos
+	*
+	* Recibe el rut de un profesor para que se elimine éste y sus datos asociados de la base de datos. Se crea la consulta y luego se ejecuta ésta.
+	* Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	*
+	* @param string $rut_profesor Rut del profesor que se eliminará de la base de datos
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
+	public function EliminarProfesor($rut_profesor)
     {
     $sql="DELETE FROM PROFESOR WHERE rut_usuario2 = '$rut_profesor' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
