@@ -71,7 +71,7 @@ class Alumnos extends CI_Controller {
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
 	* Siguiente a esto se cargan los datos para las plantillas de la página.
 	* Se carga el modelo de estudiantes, se cargan los datos de la vista con la lista 'rs_estudiantes' que contiene toda la información de los
-	* estudiantes del sistema y se envia un 'mensaje_confirmacion' que sirve en la vista para que ésta sepa que se está cargando la página por primera vez y no que hace poco se haya borrado algún alumno
+	* estudiantes del sistema y se envia un 'mensaje_confirmacion' que sirve en la vista para que ésta sepa que se está cargando la página por primera vez.
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
@@ -113,7 +113,7 @@ class Alumnos extends CI_Controller {
 	* Se carga el modelo de estudiantes, se llama a la función EliminarEstudiante para eliminar el estudiante con el rut que se le pasa como parametro
 	* y es el que se ha recibido como parametro de esta funcion desde la vista. El resultado de la operación de eliminar desde el modelo se recibe en la variable 'confirmacion'
 	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
-	* Luego se cargan los datos de la vista con la lista 'rs_estudiantes' que contiene toda la información de los estudiantes.
+	* Luego se cargan los datos de la vista con la lista 'rs_estudiantes' para que se de la opción a escojer un nuevo estudiante a eliminar.
 	* Finalmente se carga la vista con todos los datos.
 	*
 	* @param string $rut_estudiante
@@ -255,8 +255,9 @@ class Alumnos extends CI_Controller {
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
 	* Siguiente a esto se cargan los datos para las plantillas de la página.
 	* Se carga el modelo de estudiantes, se cargan los datos de la vista con la lista 'secciones' que contienen los datos necesarios para que el usuario
-	* escoja en la vista este parametro para  editar la información del alumno. También se envía un mensaje de confirmación con valor 2, que indica que se está cargando
-	* por primera ves la vista de editar alumnos. Se envía también la lista de todos los estudiantes para que de ahí se escoja al que se quiere editar en la vista.
+	* escoja en la vista este parametro para  editar la información del alumno.
+	* También se envía un mensaje de confirmación con valor 2, que indica que se está cargando por primera ves la vista de editar alumnos.
+	* Se envía también la lista de todos los estudiantes para que de ahí se escoja al que se quiere editar en la vista.
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
