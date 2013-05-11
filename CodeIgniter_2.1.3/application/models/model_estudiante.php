@@ -49,10 +49,10 @@ class Model_estudiante extends CI_Model {
     }
 	
 	/**
-	* Inserta un estudiante en la base de datos
+	* Edita la información de un estudiante en la base de datos
 	*
-	* Guarda las variables a insertar en el array data luego se llama a la función insert y se guarda el resultado de la inserción
-	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
+	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
 	*
 	* @param string $rut_estudiante Rut del estudiante al que se le actualizan los demás datos
 	* @param string $nombre1_estudiante Primer nombre a editar del estudiante
