@@ -17,6 +17,17 @@ class Ayudantes extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+	 
+	 	 
+	/**
+	* Manda a la vista 'cuerpo_profesores_verAyudante' los datos necesarios para su funcionamiento
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se cargan los datos de la vista con la lista 'rs_ayudantes' que contiene toda la información de los
+	* ayudantes del sistema. Finalmente se carga la vista con todos los datos.
+	*
+	*/
 	public function verAyudantes()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -57,8 +68,16 @@ class Ayudantes extends CI_Controller {
 		$this->verAyudantes();
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////
-
+	/**
+	* Manda a la vista 'cuerpo_profesores_agregarAyudante' los datos necesarios para su funcionamiento
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se cargan los datos de la vista con la lista 'profesores' para que en la vista se escoja el profesor asociado al ayudante
+	* También se envía un mensaje de confirmación con valor 2, que indica que se está cargando
+	* por primera ves la vista de agregar ayudante. Finalmente se carga la vista con todos los datos.
+	*
+	*/
 	public function agregarAyudantes()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -92,6 +111,21 @@ class Ayudantes extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
+	
+	
+	/**
+	* Inserta un ayudante al sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_agregarAyudante'
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se llama a la función InsertarAyudante para ingresar al ayudante
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Luego se cargan los datos de la vista con la lista 'profesores' para que esté habilitada para nuevos ingresos.
+	* Finalmente se carga la vista con todos los datos.
+	*
+	*/
 	public function insertarAyudante()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -143,7 +177,17 @@ class Ayudantes extends CI_Controller {
 	}
 	
 	
-
+	/**
+	* Manda a la vista 'cuerpo_profesores_editarAyudante' los datos necesarios para su funcionamiento
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se cargan los datos de la vista con la lista 'rs_ayudantes' que contiene la lista de todos los ayudantes para que desde ahí en la vista
+	* se escoja un un ayudante a editar.
+	* También se envía un mensaje de confirmación con valor 2, que indica que se está cargando por primera ves la vista de editar ayudantes.
+	* Finalmente se carga la vista con todos los datos.
+	*
+	*/
 	public function editarAyudantes()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -180,7 +224,19 @@ class Ayudantes extends CI_Controller {
 		
 	}
 	
-	
+	/**
+	* Edita la información de un ayudante del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_editarAyudante'
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se llama a la función ActualizarAyudante para editar el ayudante
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de esta operacion se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Luego se cargan los datos de la vista con la lista 'rs_ayudantes' para que esté habilitada para nuevas ediciones.
+	* Finalmente se carga la vista con todos los datos.
+	*
+	*/
 	public function EditarAyudante()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -204,8 +260,6 @@ class Ayudantes extends CI_Controller {
 		
 		$this->load->model('Model_ayudante');
 
-        $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>2);
-      
 
 		$rut_ayudante = $this->input->get("rut_ayudante");
 	    $nombre1_ayudante = $this->input->get("nombre1_ayudante");
@@ -230,8 +284,16 @@ class Ayudantes extends CI_Controller {
 		
 	}
 	
-	
-
+	/**
+	* Manda a la vista 'cuerpo_profesores_borrarAyudante' los datos necesarios para su funcionamiento
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se cargan los datos de la vista con la lista 'rs_ayudantes' que contiene toda la información de los
+	* ayudantes del sistema y se envia un 'mensaje_confirmacion' que sirve en la vista para que ésta sepa que se está cargando la página por primera vez.
+	* Finalmente se carga la vista con todos los datos.
+	*
+	*/
 	public function borrarAyudantes()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
@@ -267,6 +329,19 @@ class Ayudantes extends CI_Controller {
 		
 	}
 
+	/**
+	* Elimina un ayudante del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_borrarAyudante'
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de ayudantes, se llama a la función EliminarAyudante para eliminar el ayudante con el rut que se le pasa como parametro
+	* y es el que se ha recibido como parametro en esta funcion desde la vista. El resultado de la operación de eliminar desde el modelo se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Luego se cargan los datos de la vista con la lista 'rs_ayudantes' para que se de la opción a escojer un nuevo ayudante a eliminar.
+	* Finalmente se carga la vista con todos los datos.
+	*
+	* @param string $rut_estudiante
+	*/
 	public function EliminarAyudante($rut_ayudante)
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
