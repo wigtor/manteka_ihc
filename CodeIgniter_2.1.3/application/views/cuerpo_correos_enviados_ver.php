@@ -90,10 +90,8 @@ function selectall(form)
 
 <script type="text/javascript">
 /** 
-* Esta función permite eliminar el correo que se encuentre marcado con su checkbox, sin embargo, no se encuentra funcional
-* aunque las consultas respectivas declaradas en el modelo de Correo asociadas a esta función sen encuentran implementadas
-* sólo falto la conexión adecuada para permitir esta funcionalidad.
-* Algo que si queda pendiente y que está en un 0% de implementación es la eliminación en grupo (varios checkbox marcados)
+* Esta función permite eliminar el correo que se encuentre marcado con su checkbox, también es posible la eliminación en 
+* grupo (varios checkbox marcados).
 */
 function eliminarCorreo()
 {
