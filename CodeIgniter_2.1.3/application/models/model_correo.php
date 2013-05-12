@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Modelo principal para la administración básica de correos electrónicos.
+* Modelo principal para la administraci?n b?sica de correos electr?nicos.
 *
-* Permite ver, consultar, insertar y eliminar correos electrónicos, en las tablas
+* Permite ver, consultar, insertar y eliminar correos electr?nicos, en las tablas
 * utilizadas por el controlador de correo.
 *
 * @package Correo
@@ -13,13 +13,12 @@
 class model_correo extends CI_Model
 {
 	/**
-	* Obtiene los correos electrónicos enviados por un usuario.
+	* Obtiene los correos electr?nicos enviados por un usuario.
 	*
-	* Obtiene toda la información de los correos electrónicos enviados por un usuario,
+	* Obtiene toda la informaci?n de los correos electr?nicos enviados por un usuario,
 	* junto con la lista de estudiantes, profesores y ayudantes a los cuales se le ha
 	* enviado cada uno de dichos correos.
-	*
-	* La función devuelve un array donde cada elemento (excepto el primero) corresponde a otro array formado
+	* La funci?n devuelve un array donde cada elemento (excepto el primero) corresponde a otro array formado
 	* por 5 arrays que son:
 	* 1. array cuyos valores son los datos del correo.
 	* 2. array (estudiantes) formado por varios arrays donde cada array contiene los valores de un estudiante
@@ -30,15 +29,13 @@ class model_correo extends CI_Model
 	*    receptor del correo almacenado en 1.
 	* 5. array (coordinadores) formado por varios arrays donde cada array contiene los valores de un coordinador
 	*    receptor del correo almacenado en 1.
-	*
-	* El primer elemento del array devuelto por la función corresponde a un entero que puede ser 1 ó -1 y se
-	* utiliza para indicar el estado de la función. (-1 indica que la obtención de los correos no se ejecutó
-	* correctamente, y 1 indica que el resultado de la función es totalmente válido.)
-	*
+	* El primer elemento del array devuelto por la funci?n corresponde a un entero que puede ser 1 ? -1 y se
+	* utiliza para indicar el estado de la funci?n. (-1 indica que la obtenciÃ³n de los correos no se ejecut?
+	* correctamente, y 1 indica que el resultado de la funci?n es totalmente vÃ¡lido.)
 	* param int $variable
 	* return array $listaCompleta
 	*
-	* @author: Claudio Rojas (CR) y Diego García (DGM). 
+	* @author: Claudio Rojas (CR) y Diego Garc?a (DGM). 
 	*/
 	public function VerCorreosUser($variable)
 	{
@@ -61,7 +58,7 @@ class model_correo extends CI_Model
 				$correo['asunto']=$row['ASUNTO'];
 				array_push($lista,$correo);
 				
-				/* Para cada correo se obtienen los destinatarios agrupados por categoría. */
+				/* Para cada correo se obtienen los destinatarios agrupados por categor?a. */
 				$codigo=$row['COD_CORREO'];
 				$sql1="SELECT RUT_ESTUDIANTE FROM carta_estudiante WHERE COD_CORREO='$codigo'";
 				$sql2="SELECT RUT_AYUDANTE FROM carta_ayudante WHERE COD_CORREO='$codigo'";
@@ -161,7 +158,7 @@ class model_correo extends CI_Model
 				array_push($lista, $coordinadores);
 				array_push($listaCompleta, $lista);
 			}
-			/* Se agrega la variable de estado 1 al array que será retornado. */
+			/* Se agrega la variable de estado 1 al array que ser? retornado. */
 			array_unshift($listaCompleta,1);
 			
 			return $listaCompleta;
@@ -170,8 +167,8 @@ class model_correo extends CI_Model
 		{
 			$listaCompleta=array();
 			
-			/* Se agrega la variable de estado -1 al array que será retornado.
-			Para indicar que la operación no se realizó correctamente. */
+			/* Se agrega la variable de estado -1 al array que ser? retornado.
+			Para indicar que la operaci?n no se realiz? correctamente. */
 			array_unshift($listacompleta,-1);
 			
 			return $listaCompleta;
@@ -179,7 +176,7 @@ class model_correo extends CI_Model
 	}
 	
 	/**
-	* Elimina 1 o varios correos de la base de datos de la aplicación.
+	* Elimina 1 o varios correos de la base de datos de la aplicaci?n.
 	*
 	* Para cada correo se elimina los datos de dicho correo en todas las
 	* tablas que asocien correos a destinatarios y tambien en la tabla
@@ -187,12 +184,11 @@ class model_correo extends CI_Model
 	* En el array de entrada se especifican los identificadores de todos
 	* los correos a eliminar.
 	* En el array de salida se especifica el resultado de la consulta de
-	* de la eliminación para cada correo. 
+	* de la eliminaci?n para cada correo. 
 	*
-	* param array $correos
-	* return array $resultados
-	*
-	* @author Diego García (DGM)
+	* @param array $correos
+	* @return array $resultados
+	* @author Diego Garc?a (DGM)
 	*
 	*/
 	public function EliminarCorreo($correos)
@@ -225,17 +221,15 @@ class model_correo extends CI_Model
 	*
 	* Permite insertar correos a la tabla "carta"
 	* para su posterior consulta.
+	* Si la inserci?n es correcta, la funci?n retorna 1, en
+	* caso contrario, retornar? -1.
 	*
-	* Si la inserción es correcta, la función retorna 1, en
-	* caso contrario, retornará -1.
-	*
-	* param string $asunto
-	* param string $mensaje
-	* param int $rut
-	* param int $tipo
-	* param date $codCorreo
-	* return int
-	*
+	* @param string $asunto
+	* @param string $mensaje
+	* @param int $rut
+	* @param int $tipo
+	* @param date $codCorreo
+	* @return int
 	* @author Byron Lanas (BL)
 	*
 	*/
