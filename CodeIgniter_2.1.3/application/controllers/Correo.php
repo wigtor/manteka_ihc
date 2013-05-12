@@ -19,7 +19,6 @@ class Correo extends CI_Controller {
 	* Permite cargar el layout y la vista correspondiente a la bandeja
 	* de entrada de correos electrónicos. Es decir, permite ver los
 	* correos recibidos.
-	*
 	* El resultado de esta función es el renderizado de la vista correspondiente
 	* a la bandeja de entrada.
 	*
@@ -59,7 +58,6 @@ class Correo extends CI_Controller {
 	* Permite cargar el layout y la vista correspondiente a la bandeja
 	* de salida de correos electrónicos. Es decir, permite ver los
 	* correos enviados.
-	*
 	* El resultado de esta función es el renderizado de la vista correspondiente
 	* a la bandeja de salida.
 	*
@@ -108,7 +106,6 @@ class Correo extends CI_Controller {
 	* redirecciona a la vista de correos enviados, adjuntando la variable
 	* "estado" para señalar si la eliminación se realizó correctamente o no
 	* y mostrar así un mensaje al usuario con el resultado de la operación.
-	*
 	* El resultado de esta función es la eliminación de los correos señalados
 	* y un redireccionamiento a la bandeja de correos enviados, indicando el
 	* resultado de la operación.
@@ -159,7 +156,6 @@ class Correo extends CI_Controller {
 	* de nuevos correos electrónicos. Para lo cual, se obtiene de
 	* la lista de todos los posibles destinatarios, antes de realizar
 	* el renderizado de la vista.
-	*
 	* El resultado de esta función es el renderizado de la vista correspondiente
 	* al envío de correos nuevos, suministrando además la lista de todos los posibles
 	* destinatarios, agrupados en "profesores", alumnos y ayudantes.
@@ -211,7 +207,6 @@ class Correo extends CI_Controller {
 	* en el sistema para renderizarlos dentro de una tabla, con el fin de que
 	* el usuario que envía el correo, puede seleccionar al destinatario a partir
 	* de dicha tabla.
-	*
 	* El resultado de esta función es la obtención de una tabla con la lista de
 	* todos los posibles destinatarios agrupados por categoría: estudiantes, profesores
 	* y ayudantes.
@@ -242,7 +237,6 @@ class Correo extends CI_Controller {
 	*
 	* Permite cargar el layout y la vista correspondiente a la bandeja
 	* de borradores de correos electrónicos.
-	*
 	* El resultado de esta función es el renderizado de la vista correspondiente
 	* a la bandeja de borradores.
 	*
@@ -283,7 +277,6 @@ class Correo extends CI_Controller {
 	* Permite el envío de un nuevo correo electrónico.
 	*
 	* Esta función es la que realiza el envio de un correo propiamente tal.
-	*
 	* El resultado de esta función es un nuevo correo electrónico enviado
 	* y el registro de dicho correo en las tablas correspondientes.
 	* O un mensaje de error, en caso de que el correo no haya podido ser

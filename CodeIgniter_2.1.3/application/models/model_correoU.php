@@ -10,8 +10,7 @@ class model_correoU extends CI_Model {
    *  @param string $rutRecept del usuario recibe el mensaje
    *  @param string $date codigo del correo que se obtiene dependiendo de la fecha y hora
    */
-
-        public function InsertarCorreoU($rutRecept,$date){
+    public function InsertarCorreoU($rutRecept,$date){
         $this->COD_CORREO=$date;
         $this->RUT_ESTUDIANTE=$rutRecept ;
         $this->db->insert('carta_user',$this);
