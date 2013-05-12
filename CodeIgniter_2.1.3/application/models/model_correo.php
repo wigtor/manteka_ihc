@@ -1,10 +1,47 @@
 <?php
+
+/**
+* Modelo principal para la administraci?n b?sica de correos electr?nicos.
+*
+* Permite ver, consultar, insertar y eliminar correos electr?nicos, en las tablas
+* utilizadas por el controlador de correo.
+*
+* @package Correo
+* @author Grupo 3
+*
+*/
 class model_correo extends CI_Model
 {
+	/**
+	* Obtiene los correos electr?nicos enviados por un usuario.
+	*
+	* Obtiene toda la informaci?n de los correos electr?nicos enviados por un usuario,
+	* junto con la lista de estudiantes, profesores y ayudantes a los cuales se le ha
+	* enviado cada uno de dichos correos.
+	* La funci?n devuelve un array donde cada elemento (excepto el primero) corresponde a otro array formado
+	* por 5 arrays que son:
+	* 1. array cuyos valores son los datos del correo.
+	* 2. array (estudiantes) formado por varios arrays donde cada array contiene los valores de un estudiante
+	*    receptor del correo almacenado en 1.
+	* 3. array (ayudantes) formado por varios arrays donde cada array contiene los valores de un ayudante
+	*    receptor del correo almacenado en 1.
+	* 4. array (profesores) formado por varios arrays donde cada array contiene los valores de un profesor
+	*    receptor del correo almacenado en 1.
+	* 5. array (coordinadores) formado por varios arrays donde cada array contiene los valores de un coordinador
+	*    receptor del correo almacenado en 1.
+	* El primer elemento del array devuelto por la funci?n corresponde a un entero que puede ser 1 ? -1 y se
+	* utiliza para indicar el estado de la funci?n. (-1 indica que la obtención de los correos no se ejecut?
+	* correctamente, y 1 indica que el resultado de la funci?n es totalmente válido.)
+	* param int $variable
+	* return array $listaCompleta
+	*
+	* @author: Claudio Rojas (CR) y Diego Garc?a (DGM). 
+	*/
 	public function VerCorreosUser($variable)
 	{
 		try
 		{
+			/* Se obtienen todos los correos enviados por un usuario. */
 			$sql="SELECT * FROM carta WHERE rut_usuario3='$variable'";
 			$datos=mysql_query($sql);
 			$listaCompleta=array();
@@ -20,6 +57,8 @@ class model_correo extends CI_Model
 				$correo['cuerpo_email']=$row['CUERPO_EMAIL'];
 				$correo['asunto']=$row['ASUNTO'];
 				array_push($lista,$correo);
+				
+				/* Para cada correo se obtienen los destinatarios agrupados por categor?a. */
 				$codigo=$row['COD_CORREO'];
 				$sql1="SELECT RUT_ESTUDIANTE FROM carta_estudiante WHERE COD_CORREO='$codigo'";
 				$sql2="SELECT RUT_AYUDANTE FROM carta_ayudante WHERE COD_CORREO='$codigo'";
@@ -37,6 +76,9 @@ class model_correo extends CI_Model
 				while($row3=mysql_fetch_array($datos3))
 					array_push($rutDestinoUsuarios,$row['RUT_USUARIO']);
 				$estudiantes=array();
+				
+				/* Para cada destinatario estudiante del correo actual se obtienen los datos de
+				del estudiante. */
 				foreach($rutDestinoEstudiantes as $rutEstudiante)
 				{
 					$sqlEstudiante="SELECT * FROM estudiante WHERE RUT_ESTUDIANTE='$rutEstudiante'";
@@ -56,6 +98,9 @@ class model_correo extends CI_Model
 					}
 				}
 				$ayudantes=array();
+				
+				/* Para cada destinatario ayudante del correo actual se obtienen los datos de
+				del ayudante. */
 				foreach($rutDestinoAyudantes as $rutAyudante)
 				{
 					$sqlAyudante="SELECT * FROM ayudante WHERE RUT_AYUDANTE='$rutAyudante'";
@@ -74,6 +119,9 @@ class model_correo extends CI_Model
 				}
 				$profesores=array();
 				$coordinadores=array();
+				
+				/* Para cada destinatario profesor o coordinador del correo actual se obtienen los datos de
+				del profesor o coordinador. */
 				foreach($rutDestinoUsuarios as $rutUsuario)
 				{
 					$sqlProfesor="SELECT * FROM profesor WHERE RUT_PROFESOR='$rutUsuario'";
@@ -110,16 +158,39 @@ class model_correo extends CI_Model
 				array_push($lista, $coordinadores);
 				array_push($listaCompleta, $lista);
 			}
+			/* Se agrega la variable de estado 1 al array que ser? retornado. */
 			array_unshift($listaCompleta,1);
+			
 			return $listaCompleta;
 		}
 		catch(Exception $e)
 		{
 			$listaCompleta=array();
+			
+			/* Se agrega la variable de estado -1 al array que ser? retornado.
+			Para indicar que la operaci?n no se realiz? correctamente. */
 			array_unshift($listacompleta,-1);
+			
+			return $listaCompleta;
 		}
 	}
 	
+	/**
+	* Elimina 1 o varios correos de la base de datos de la aplicaci?n.
+	*
+	* Para cada correo se elimina los datos de dicho correo en todas las
+	* tablas que asocien correos a destinatarios y tambien en la tabla
+	* principal de guardado de correos enviados.
+	* En el array de entrada se especifican los identificadores de todos
+	* los correos a eliminar.
+	* En el array de salida se especifica el resultado de la consulta de
+	* de la eliminaci?n para cada correo. 
+	*
+	* @param array $correos
+	* @return array $resultados
+	* @author Diego Garc?a (DGM)
+	*
+	*/
 	public function EliminarCorreo($correos)
 	{
 		$resultados1=array();
@@ -145,11 +216,28 @@ class model_correo extends CI_Model
 		return $resultadosFinales;
 	}
 	
-	public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date)
+	/**
+	* Inserta un correo enviado a la base de datos.
+	*
+	* Permite insertar correos a la tabla "carta"
+	* para su posterior consulta.
+	* Si la inserci?n es correcta, la funci?n retorna 1, en
+	* caso contrario, retornar? -1.
+	*
+	* @param string $asunto
+	* @param string $mensaje
+	* @param int $rut
+	* @param int $tipo
+	* @param date $codCorreo
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+	public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$codCorreo)
 	{
 		try
 		{
-			$this->COD_CORREO=$date;
+			$this->COD_CORREO=$codCorreo;
 			$this->RUT_USUARIO3=$rut;
 			$this->ID_PLANTILLA=null;
 			$this->HORA = date("H:i:s");
@@ -166,5 +254,3 @@ class model_correo extends CI_Model
     }
 }
 ?>
-
-

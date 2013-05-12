@@ -1,8 +1,18 @@
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
 
 <script type='text/javascript'>
+
+/** 
+* Esta función se llama al hacer click en el botón enviar, 
+* por convención las funciones que utilizan document.getElementById()
+* deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
+* Para ver como se configura esto se debe ver como es seteado el evento onsubmit() en el formulario.
+* Esta función se encarga de evitar el envio de mails sin destinatario o sin asunto ni cuerpo de correo
+* en caso de no contar con solo asunto o cuerpo decuerpo de correo pide confirmacion 
+*/
 function validacionSeleccion()
 {
+
 	var rutRecept = document.getElementById("rutRecept").value;
 	
 	if (rutRecept!="")
@@ -28,12 +38,23 @@ function validacionSeleccion()
 </script>
 
 <script type='text/javascript'>
+
+
+/** 
+* Esta función muestra el segundo paso para mandar un correo
+*/
+
 function pasoUnoDos()
 {
 	$('#cuadroEnviar').css({display:'none'});
 	$('#cuadroEnvio').css({display:'none'});
 	$('#cuadroDestinatario').css({display:'block'});
 }
+
+/** 
+* Esta función devuelve al primer paso para mandar un correo
+*/
+
 </script>
 
 <script type='text/javascript'>
@@ -46,6 +67,11 @@ function pasoDosUno()
 </script>
 
 <script type='text/javascript'>
+
+/** 
+* Esta función muestra el tercer paso para mandar un correo
+*/
+
 function pasoDosTres()
 {
 	var rutRecept = document.getElementById("rutRecept").value;
@@ -63,6 +89,12 @@ function pasoDosTres()
 </script>
 
 <script type='text/javascript'>
+
+
+/** 
+* Esta función devuelve al segundo paso para mandar un correo
+*/
+
 function pasoTresDos()
 {
 	$('#cuadroEnvio').css({display:'none'});
@@ -72,6 +104,12 @@ function pasoTresDos()
 </script>
 
 <script type='text/javascript'>
+
+/**
+* Esta función se llama al escribir en el filtro de busqueda, 
+* Esta función elimina los resultados que no coincidan con el filtro de busqueda
+*/
+
 function ordenarFiltro(filtroLista)
 {
 	var tipoDeDestinatario = document.getElementById("tipoDeDestinatario").value;
@@ -113,7 +151,14 @@ function ordenarFiltro(filtroLista)
 </script>
 
 <script type='text/javascript'>
-function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera,numero)
+
+
+/**
+* Esta función se llama al hacer click en el botón enviar, 
+* Esta función muestra los detalles de la persona seleccinada y guarda su rut y correo para el envio
+*/ 
+
+function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera)
 {
 	document.getElementById("rutDetalle").innerHTML = rut;
 	document.getElementById("to").value=correo;
@@ -291,7 +336,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 		$rs_receptor[$contador][3].$comilla.','.$comilla. 
 		$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
 		','. $comilla.$rs_receptor[$contador][6].$comilla.','.$comilla. $rs_receptor[$contador][7].$comilla.
-		','.$comilla.$contador.$comilla.')"style="text-align:left;">'. $rs_receptor[$contador][3].
+		')"style="text-align:left;">'. $rs_receptor[$contador][3].
 		' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
 		'</td>';
 		echo '</tr>';
