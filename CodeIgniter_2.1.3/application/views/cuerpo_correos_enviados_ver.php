@@ -1,6 +1,13 @@
 ﻿<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
 
 <script type="text/javascript">
+/** 
+* Esta función se llama al clickear un correo de la bandeja de correos enviados, En primera instancia muestra el detalle
+* de dicho correo y a la vez ocultando la bandeja de correos mostrando sólo el detalle del correo seleccionado. 
+* por convención las funciones que utilizan document.getElementById()
+* deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
+* Para ver como se configura esto se debe ver en el evento onclick() en donde están contenidos los correos (bandeja) .
+*/
 function DetalleCorreo(plantilla,hora,fecha,cuerpo,asunto)
 {		
 	if(plantilla=="")
@@ -21,6 +28,11 @@ function DetalleCorreo(plantilla,hora,fecha,cuerpo,asunto)
 </script>
 
 <script type="text/javascript">
+/** 
+* Esta función se llama al clickear el botón que se encuentra en el Detalle del Correo, para poder mostrar nuevamente la 
+* bandeja de correos enviados y ocultar el detalle del correo que se estaba mostrando.
+* Para ver como se configura esto se debe ver en el evento onclick() del botón que se encuentra en el Detalle de Correo.
+*/
 function volverCorreosRecibidos()
 {		
 	$('#cuadroDestinoCorreo').css({display:'none'});
@@ -30,6 +42,15 @@ function volverCorreosRecibidos()
 </script>
 
 <script type="text/javascript">
+/** 
+* Esta función recibe como argumento un string que tiene concatenado todos los detalles del correo
+* (destinaario, fecha, hora, mensaje, asunto, etc). Además indica con un número (el primer caracter) el tipo de destinatiario
+* del correo (alumno, ayudante, profesor, coordinador) de esta forma se sabe que en lista se pdorá mostrar la información
+* contenida en el string.
+* La función en éste instante se encuentra incompleta ya que la su funcionalidad está orientada a sólo 1 destinatario
+* pero se pretende mostrar todos los destinatarios de un mismo correo.
+*/
+
 function DestinoCorreo(destino)
 {		
 	var personaE="Este email no fue enviado a ningún estudiante";
@@ -49,6 +70,13 @@ function DestinoCorreo(destino)
 </script>
 
 <script type="text/javascript">
+/** 
+* Esta función se llama al hacer click en el checkbox principal, permitiendo marcar o desmarcar (según sea el caso) cada checkbox
+* de los correos enviados del usuario. 
+* Para marcar o desmarcar los checkbox, sólo se reconocen los elementos de tipo checkbox dentro del formulario, no se 
+* hace una dsitinción o búsqueda por id del checkbox.
+* Para ver como se configura esto se debe ver en el evento onclick() en donde se está creando el checkbox principal.
+*/
 function selectall(form)
 {
 	var formulario=eval(form);  
@@ -61,6 +89,10 @@ function selectall(form)
 </script>
 
 <script type="text/javascript">
+/** 
+* Esta función permite eliminar el correo que se encuentre marcado con su checkbox, también es posible la eliminación en 
+* grupo (varios checkbox marcados).
+*/
 function eliminarCorreo()
 {
 	var checked_ids = [];
