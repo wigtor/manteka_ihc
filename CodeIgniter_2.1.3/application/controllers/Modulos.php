@@ -65,5 +65,5 @@ class Modulos extends CI_Controller {
 
 }
 
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */
+/* End of file Modulos.php */
+/* Location: ./application/controllers/Modulos.php */
