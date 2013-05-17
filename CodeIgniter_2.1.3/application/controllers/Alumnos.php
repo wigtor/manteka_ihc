@@ -374,10 +374,8 @@ class Alumnos extends CI_Controller {
 
 		$this->load->model('Model_estudiante');
 		
-		
-		// Acá no se que hacer xD
-	    //$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),VerCa,'mensaje_confirmacion'=>2);
-		$datos_vista = array('carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
+
+		$datos_vista = array('carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
 		
 		
 		
