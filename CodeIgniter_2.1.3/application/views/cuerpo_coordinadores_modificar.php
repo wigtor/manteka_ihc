@@ -1,3 +1,12 @@
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista modificar coordinadores en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Modificar Coordinador</legend>
 	<div class="span4">

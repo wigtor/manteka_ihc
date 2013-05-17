@@ -1,5 +1,22 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+* Este Archivo corresponde al los controladores para la tabla de coordinadores en Manteka.
+*
+* @package    Manteka
+* @subpackage Controllers
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
 
+
+/**
+* Clase coordinadores del proyecto manteka.
+*
+* En esta clase se detallan los controladores necesarios para las operaciones crud de la tabla coordinadores.
+*
+* @package    Manteka
+* @subpackage Controllers
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
 class Coordinadores extends CI_Controller {
 	
 	/**

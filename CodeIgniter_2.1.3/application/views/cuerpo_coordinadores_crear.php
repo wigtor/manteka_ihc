@@ -1,3 +1,12 @@
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista crear coordinadores en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Agregar Coordinador</legend>
 		<div class="span7">

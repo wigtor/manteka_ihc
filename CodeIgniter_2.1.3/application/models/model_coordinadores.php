@@ -1,4 +1,22 @@
 <?php
+/**
+* Este Archivo corresponde al modelo de la tabla coordinadores segun MVC en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Models
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+
+
+/**
+* Clase model_coordinadores del proyecto manteka.
+*
+* En esta clase se detallan los metodos de el modelo necesarios para las operaciones crud de la tabla coordinadores.
+*
+* @package    Manteka
+* @subpackage Models
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
 class model_coordinadores extends CI_Model{
   /* function ValidarUsuario($rut,$password){         //   Consulta Mysql para buscar en la tabla Usuario aquellos usuarios que coincidan con el rut y password ingresados en pantalla de login
       $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
@@ -7,6 +25,15 @@ class model_coordinadores extends CI_Model{
       return $query->row();    //   Devolvemos al controlador la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias)
    }*/
 
+
+      /**
+      * Obtiene una lista con todos los coordinadores y su informacion de usuario.
+      *
+      * Obtiene una listac con todos los coordinadores uniendo su informacion con la presente en la tabla usuarios.
+      *
+      * @param none
+      * @return array $datos  datos de los coordinadores
+      */
    	function ObtenerTodosCoordinadores(){
    		/* SUMARIO DE LA FUNCIÓN:
    			La función simplemente obtiene desde la base de datos
@@ -44,6 +71,13 @@ class model_coordinadores extends CI_Model{
    		return $datos;
    	}
 
+
+   /**
+   * Obtiene una lista con todos los modulos para un corrdinador
+   *
+   * @param int $id identificador primario para el coordinador consultado
+   * @return array $ObjetoListaResultados arreglo con los modulos para el coordinador de la entrada
+   */
 	function GetModulos($id){
 		$this->db->select('COD_MODULO_TEM');
 		$this->db->from('MODULO_TEMATICO');
@@ -53,6 +87,13 @@ class model_coordinadores extends CI_Model{
 		return $ObjetoListaResultados;		
 	}	
 	
+
+   /**
+   * Obtiene una lista con todas las secciones para un modulo
+   *
+   * @param int $id identificador primario para el modulo consultado
+   * @return array $ObjetoListaResultados arreglo con las secciones para el modulo de la entrada
+   */
 	function GetSeccion($id){
 		$this->db->select('COD_SECCION');
 		$this->db->from('sesion');
@@ -63,7 +104,13 @@ class model_coordinadores extends CI_Model{
 	}
 	
 	
-		
+		/**
+      * Obtiene una lista con todos los coordinadores para un criterio especifico
+      *
+      * @param string $etrada valor con el cual se compara el criterio.
+      * @param string $criterio criterio segun el cual se hara la comparacion.
+      * @return array $ObjetoListaResultados arreglo con los coordinadores para la consulta.
+      */
    	function BuscarCoordinadores($entrada,$criterio){
          /* SUMARIO DE LA FUNCIÓN:
             La función obtiene desde la base de datos
@@ -118,7 +165,13 @@ class model_coordinadores extends CI_Model{
    	}
 
       
-
+      /**
+      * Borra un coordinador segun su nombre o rut.
+      *
+      * @param string $nombre nombre segun el cual se buscará el coordinador para eliminar.
+      * @param string $rut rut segun el cual se buscará el coordinador para eliminar
+      * @return none
+      */
       function borrarCoordinador($nombre,$rut){
          $this->db->where('COORD_NOMBRE',$nombre);
          $this->db->or_where('RUT_USUARIO',$rut);
