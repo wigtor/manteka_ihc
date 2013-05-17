@@ -71,7 +71,7 @@
 		    </div>
 		    <div id="collapseThree" class="accordion-body collapse <?php echo $inModulos; ?>">
 		    	<div class="accordion-inner nav nav-list">
-					<li <?php echo $verModulos; ?> ><a href="<?php echo site_url("Modulos/verPlanificacion")?>">Ver módulos</a></li>
+					<li <?php echo $verModulos; ?> ><a href="<?php echo site_url("Modulos/verModulos")?>">Ver módulos</a></li>
 		        	<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
 					<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
 					<li <?php echo $borrarModulos; ?> ><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>

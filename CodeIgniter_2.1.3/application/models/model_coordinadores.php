@@ -29,7 +29,7 @@ class model_coordinadores extends CI_Model{
 		/*'id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",
 		*/
 		$datos = array();
-		$contador=0;		
+		$contador = 0;		
 		foreach ($ObjetoListaResultados as $row) {
                         $datos[$contador] = array(
 								'id'=>intval($row['RUT_USUARIO3']),
@@ -55,7 +55,7 @@ class model_coordinadores extends CI_Model{
 	
 	function GetSeccion($id){
 		$this->db->select('COD_SECCION');
-		$this->db->from('SESION');
+		$this->db->from('sesion');
 		$this->db->where('COD_MODULO_TEM', $id);
 		$query = $this->db->get();
 		$ObjetoListaResultados = $query->result_array();	
@@ -162,7 +162,7 @@ class model_coordinadores extends CI_Model{
          $this->db->stop_cache();
          $this->db->flush_cache();
          $this->db->stop_cache();
-         if ($tipo_usuario == 2) { //Coordinador
+         if ($tipo_usuario == TIPO_USR_COORDINADOR) { //Coordinador, constante definida en archivo constants del framework
             $query = $this->db->where('RUT_USUARIO3',$rut);   //   La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
             $query = $this->db->update('coordinador', array('TELEFONO_COORDINADOR'=>$telefono)); //Acá va el nombre de la tabla
          }
@@ -171,7 +171,7 @@ class model_coordinadores extends CI_Model{
 
       function agregarCoordinador($nombre,$rut,$contrasena,$correo1,$correo2,$telefono){
          $informacion_user = array('RUT_USUARIO'=> $rut,
-                                    'ID_TIPO'=> 2 ,
+                                    'ID_TIPO'=> TIPO_USR_COORDINADOR ,
                                     'PASSWORD_PRIMARIA'=>$contrasena ,
                                     'CORREO1_USER'=>$correo1 ,
                                     'CORREO2_USER'=>$correo2 );

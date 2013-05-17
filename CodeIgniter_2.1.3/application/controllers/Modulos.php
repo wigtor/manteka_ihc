@@ -40,7 +40,9 @@ class Modulos extends CI_Controller {
 		$datos_plantilla["mostrarBarraProgreso"] = TRUE; //Cambiar en caso que no se necesite la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_ver', '', true); //Esta es la linea que cambia por cada controlador
+		$this->load->model("Model_modulo");
+		$datos_vista = array('rs_modulos' => $this->Model_modulo->VerModulos());
+		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_ver', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
 		$datos_plantilla["subVistaLateralAbierta"] = "verModulos"; //Usen el mismo nombre de la sección donde debe estar
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_modulos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
@@ -65,5 +67,5 @@ class Modulos extends CI_Controller {
 
 }
 
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */
+/* End of file Modulos.php */
+/* Location: ./application/controllers/Modulos.php */
