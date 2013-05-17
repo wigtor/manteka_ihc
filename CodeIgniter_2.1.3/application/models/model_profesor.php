@@ -31,8 +31,8 @@ class Model_profesor extends CI_Model {
 	*/
 	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor) 
   {
-  	$id_tipo = 1;
-    $pass = "123";
+  	$id_tipo = TIPO_USR_PROFESOR
+    $pass = $rut_profesor;
     $data2 = array(         
           'RUT_USUARIO' => $rut_profesor,
           'ID_TIPO' => $id_tipo,
@@ -77,7 +77,7 @@ class Model_profesor extends CI_Model {
 	*/
 	public function VerTodosLosProfesores()
 	{
-		$sql="SELECT * FROM PROFESOR ORDER BY APELLIDO1_PROFESOR"; //código MySQL
+		$sql="SELECT * FROM profesor ORDER BY APELLIDO1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		echo mysql_error();
 		$contador = 0;
@@ -150,8 +150,8 @@ class Model_profesor extends CI_Model {
     $contador = 0;
     $lista;
     while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-      $lista[$contador][0] = $row['COD_MODULO_TEM'];
-      $lista[$contador][3] = $row['NOMBRE_MODULO'];
+      $lista[$contador][0] = $row['cod_modulo_tem'];
+      $lista[$contador][3] = $row['nombre_modulo'];
       $contador = $contador + 1;
     }
     
@@ -167,12 +167,12 @@ class Model_profesor extends CI_Model {
 	* @return array $lista Contiene la información de todas las secciones del sistema
 	*/
 	public function verSeccion(){
-		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
+		$sql="SELECT cod_seccion FROM SECCION"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista;
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador] = $row['COD_SECCION'];
+			$lista[$contador] = $row['cod_seccion'];
 			$contador = $contador + 1;
 		}
 		
@@ -191,7 +191,7 @@ class Model_profesor extends CI_Model {
 	*/
 	public function EliminarProfesor($rut_profesor)
     {
-    $sql="DELETE FROM PROFESOR WHERE rut_usuario2 = '$rut_profesor' "; //código MySQL
+    $sql="DELETE FROM profesor WHERE RUT_USUARIO2 = '$rut_profesor' "; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
     if($datos == true){
       return 1;
