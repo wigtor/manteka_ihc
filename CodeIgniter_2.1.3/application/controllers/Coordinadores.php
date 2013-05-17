@@ -34,11 +34,29 @@ class Coordinadores extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+	 
+	  /**
+      * Función de Inicio de Controlador.
+      *
+	  * Función en la cual el navegador va a redirigir la página principal de los coordinadores
+	  * a la vista verCoordinadores	  
+      * @param none.      
+      * @return none
+      */
 	public function index() //Esto hace que el index sea la vista que se desee
 	{
 		$this->verCoordinadores();
 	}
 
+	
+	 /**
+      * Función que muestra los coordinadores del sistema.
+      *
+	  * Se muestra en pantalla todos los coordinadores con sus datos correspondientes,
+	  * además se cargan todas las plantillas para el sitio.
+      * @param none.      
+      * @return none
+      */
 	public function verCoordinadores()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -98,6 +116,14 @@ class Coordinadores extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
     
+	/**
+      * Función en la que se ingresa un Coordinador al sistema.
+      *
+	  * Se cargan las plantillas correspondientes al sitio, y en el cuerpo un formulario en el cual 
+	  * se deben ingresar todos los datos del Coordinador que se desea agregar.
+      * @param none.      
+      * @return none
+      */
     public function agregarCoordinadores()
     {
     	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -142,7 +168,18 @@ class Coordinadores extends CI_Controller {
 
 
     }
-    
+	
+	
+    /**
+      * Función que edita un Coordinador.
+      *
+	  * Se muestra en pantalla todos los coordinadores con sus datos correspondientes,se escoge uno y
+	  * se realiza la edición de los datos antiguos que se tenían del coordinador, los datos modificados son
+	  * enviados al modelo para actualizar los datos en la base de datos
+	  * 
+      * @param none.      
+      * @return none
+      */
     public function editarCoordinadores()
     {
     	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -193,7 +230,17 @@ class Coordinadores extends CI_Controller {
 		}
 		
     }
-
+	
+	
+	/**
+      * Función que elimina un Coordinador.
+      *
+	  * Se muestra en pantalla todos los coordinadores con sus datos correspondientes, se debe escoger
+	  * alguno y será eliminado del sistema.
+	  *
+	  * @param none.      
+      * @return none
+      */
     public function borrarCoordinadores()
     {
        	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
