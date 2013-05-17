@@ -75,6 +75,8 @@ class model_coordinadores extends CI_Model{
    /**
    * Obtiene una lista con todos los modulos para un corrdinador
    *
+   * Con el rut como parametro de entrada obtiene todo los módules correspondientes para un coordinador.   
+   *
    * @param int $id identificador primario para el coordinador consultado
    * @return array $ObjetoListaResultados arreglo con los modulos para el coordinador de la entrada
    */
@@ -91,6 +93,8 @@ class model_coordinadores extends CI_Model{
    /**
    * Obtiene una lista con todas las secciones para un modulo
    *
+   * Función que obtiene todas las secciones para un módulo que a su vez tiene un profesor asocciado
+   * la forma de retorno es una lista con todas las secciones correspondientes
    * @param int $id identificador primario para el modulo consultado
    * @return array $ObjetoListaResultados arreglo con las secciones para el modulo de la entrada
    */
@@ -163,11 +167,13 @@ class model_coordinadores extends CI_Model{
          $this->db->order_by('COORD_NOMBRE','asc');
          $ObjetoListaResultados = $this->db->result();
    	}
-
-      
+     
+	 
       /**
       * Borra un coordinador segun su nombre o rut.
       *
+	  * Funciòn que elimina un Coordinador con el o nombre como valor de entrada
+	  *
       * @param string $nombre nombre segun el cual se buscará el coordinador para eliminar.
       * @param string $rut rut segun el cual se buscará el coordinador para eliminar
       * @return none
@@ -177,7 +183,17 @@ class model_coordinadores extends CI_Model{
          $this->db->or_where('RUT_USUARIO',$rut);
          $this->db->delete('coordinador');
       }
-
+	  
+	  
+	  /**
+      * Borra un coordinador segun su rut.
+      *
+	  * Funciòn que elimina un Coordinador con el rut como valor de entrada,
+	  * este elimina de la tabla usuario y la tabla coordinador.
+	  *
+      * @param string $array rut segun el cual se buscará el coordinador para eliminar
+      * @return none
+      */	
       function borrarCoordinadores($array){
          $this->db->where_in('RUT_USUARIO3',$array);
          $this->db->delete('coordinador');
@@ -185,12 +201,39 @@ class model_coordinadores extends CI_Model{
          $this->db->delete('usuario');
       }
 
+	  
+	   /**
+      * Modifica la password de un coordinador.
+      *
+	  * Funciòn modifica la password de un cordinador, primero encuentra el coordinador luego
+	  * codifica la password con md5 y finalmente inserta lo obtenido a la tabla usuario
+	  *
+      * @param string $id rut del coordinador al cual se le modificará el rut.
+      * @param string $pass password nueva que desea utilizar.
+      * @return none
+      */
       function modificarPassword($id, $pass){
          $this->db->where('RUT_USUARIO',$id);
          //$data = array('PASSWORD_PRIMARIA'=>$pass,);
          $data = array('PASSWORD_PRIMARIA'=>md5($pass),);
          $this->db->update('usuario', $data);
       }
+	  
+		
+	 /**
+      * Modifica los datos de un Coordinador, no los de la tabla Usuario.
+      *
+	  * Funciòn modifica los datos como el nombre, los emails y el teléfono para la tabla
+	  * Coordinadores, es importante señalar que no realiza el cambio para la tabla Usuarios,
+	  * esto se hace en la función siguiente.
+	 *
+      * @param string $nombreNuevo nombre del coordinador que modificó sus datos.
+	  * @param string $rutActual rut del coordinador que modificó sus datos.
+	  * @param string $correo1Nuevo correo electrónico del coordinador que modificó sus datos.
+	  * @param string $correo2Nuevo cooreo electrónico alternativo del coordinador que modificó sus datos.
+	  * @param string $telefonoNuevo número de teléfono del coordinador que modificó sus datos.
+      * @return none
+      */		
       //no comtempla la modificacion de tipo de usuario.
       function modificarCoordinador($rutActual,$nombreNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo){
          //tabla coordinador
@@ -205,8 +248,21 @@ class model_coordinadores extends CI_Model{
                         'CORREO1_USER' => $correo1Nuevo,
                         'CORREO2_USER' => $correo2Nuevo,);
          $this->db->update('usuario',$informacion_user);
-         
-         
+      
+	  
+      /**
+      * Modifica los datos del Coordinador como Usuario.
+      *
+	  * Luego de realizar la función de cambiar los datos en la tabla Coordinador, viene esta función
+	  * la cual cambia los datos del coordinador para la tabla usuario.
+	  *
+      * @param string $rut rut del coordinador ingresado en el formulario.
+	  * @param int $tipo_usuario tipo de usuario del que se editó
+	  * @param int $telefono número telefónico del coordinador
+	  * @param string $mail1 correo electrónico del coordinador ingresado.
+	  * @param string $mail2 correo electrónico del coordinador ingresado.
+      * @return none
+      */  
       }
       function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
          $query = $this->db->where('RUT_USUARIO',$rut);
@@ -221,7 +277,22 @@ class model_coordinadores extends CI_Model{
          }
          return TRUE;
       }
-
+	  
+	  
+	 /**
+      * Agregar Coordinador.
+      *
+	  * Función que ingresa todos los datos obtenidos del formulario a la base de datos, ingresando el coordinador
+	  * a la tabla tanto Usuario como Coordinador.
+	  *
+      * @param string $nombre nombre del coordinador ingresado en el formulario.
+	  * @param string $rut rut del coordinador ingresado en el formulario.
+	  * @param string $contrasena contraseña del coordinador ingresada desde el formulario.
+	  * @param string $correo1 correo electrónico del coordinador ingresado.
+	  * @param string $correo2 cooreo electrónico alternativo del coordinador ingresado.
+	  * @param string $telefono número de teléfono del coordinador ingresado.
+      * @return none
+      */
       function agregarCoordinador($nombre,$rut,$contrasena,$correo1,$correo2,$telefono){
          $informacion_user = array('RUT_USUARIO'=> $rut,
                                     'ID_TIPO'=> TIPO_USR_COORDINADOR ,
