@@ -280,7 +280,8 @@ class Profesores extends CI_Controller {
 		$this->load->model('Model_profesor');
 		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$datos_plantilla["subVistaLateralAbierta"] = "editarProfesores"; //Usen el mismo nombre de la sección donde debe estar
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
