@@ -17,7 +17,7 @@ class Model_modulo extends CI_Model {
 	*/
 
 	public function VerModulos(){
-		$sql="SELECT * FROM MODULO_TEMATICO ORDER BY NOMBRE_MODULO"; 
+		$sql="SELECT * FROM MODULO_TEMATICO"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista;

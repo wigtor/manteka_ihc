@@ -28,7 +28,19 @@
 		</div>
 		
 		<div class="span1">
-		  .
+			<?php
+				/*$contador=0;
+				while ($contador<count($rs_modulos)){
+					
+					echo '<tr>';
+					echo	'<td  id="'.$contador.'" style="text-align:left;">'
+					echo 	$rs_modulos[$contador][0].' '.$rs_modulos[$contador][1].' '.$rs_modulos[$contador][2].' '.$rs_modulos[$contador][3].' '.$rs_modulos[$contador][4];
+					echo 	'</td>';
+					echo '</tr>';
+												
+					$contador = $contador + 1;
+				}*/
+			?>
 		</div>
 		
 		<div class="span7">
