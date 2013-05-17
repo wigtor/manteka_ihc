@@ -31,7 +31,7 @@ class Model_profesor extends CI_Model {
 	*/
 	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor) 
   {
-  	$id_tipo = TIPO_USR_PROFESOR
+  	$id_tipo = TIPO_USR_PROFESOR;
     $pass = $rut_profesor;
     $data2 = array(         
           'RUT_USUARIO' => $rut_profesor,
