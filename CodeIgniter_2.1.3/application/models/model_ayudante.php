@@ -7,8 +7,22 @@ class Model_ayudante extends CI_Model {
     var $apellido2_ayudante='';    
     var $correo_ayudante='';
 
-//OPERACIÓN PARA INGRESAR AYUDANTE    
-public function InsertarAyudante( $rut_ayudante, $nombre1_ayudante, $nombre2_ayudante, $apellido1_ayudante, $apellido2_ayudante, $correo_ayudante, $cod_profesor) {
+	/**
+	* Inserta un ayudante en la base de datos
+	*
+	* Guarda las variables a insertar en el array data luego se llama a la función insert y se guarda el resultado de la inserción
+	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	*
+	* @param string $rut_ayudante Rut del ayudante a insertar
+	* @param string $nombre1_ayudante Primer nombre del ayudante a insertar
+	* @param string $nombre2_ayudante Segundo nombre del ayudante a insertar
+	* @param string $apellido1_ayudante Primer apellido del ayudante a insertar
+	* @param string $apellido2_ayudante Segundo apellido del ayudante a insertar
+	* @param string $correo_ayudante Correo del ayudante a insertar
+	* @param string $cod_profesor Código del profesor asociado al ayudante
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/	
+	public function InsertarAyudante( $rut_ayudante, $nombre1_ayudante, $nombre2_ayudante, $apellido1_ayudante, $apellido2_ayudante, $correo_ayudante, $cod_profesor) {
 		$data1 = array(					
 					'RUT_AYUDANTE' => $rut_ayudante ,
 					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
@@ -35,7 +49,15 @@ public function InsertarAyudante( $rut_ayudante, $nombre1_ayudante, $nombre2_ayu
 		
     }
 
-// OPERACIÓN PARA ELIMINAR AYUDANTE
+	/**
+	* Eliminar un ayudante de la base de datos
+	*
+	* Recibe el rut de un ayudante para que se elimine éste y sus datos asociados de la base de datos. Se crea la consulta y luego se ejecuta ésta.
+	* Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	*
+	* @param string $rut_ayudante Rut del ayudante que se eliminará de la base de datos
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
     public function EliminarAyudante($rut_ayudante)
     {
 		$sql="DELETE FROM AYUDANTE WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
@@ -48,23 +70,16 @@ public function InsertarAyudante( $rut_ayudante, $nombre1_ayudante, $nombre2_ayu
 		}
     }
     
-//OPERACIÓN PARA VER A UN AYUDANTE
-    public function VerAyudante($rut_ayudante)
-    {
-$sql="SELECT * FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' "; //código MySQL
-  	$datos=mysql_query($sql); //enviar código MySQL
-		$row=mysql_fetch_array($datos);
-    $ayudante;
-		$ayudante[0] = $row['RUT_AYUDANTE'];
-		$ayudante[1] = $row['NOMBRE1_AYUDANTE'];
-  	$ayudante[2] = $row['NOMBRE2_AYUDANTE'];
-		$ayudante[3] = $row['APELLIDO1_AYUDANTE'];
-  	$ayudante[4] = $row['APELLIDO2_AYUDANTE'];
-		$ayudante[5] = $row['CORREO_AYUDANTE'];
-		return $ayudante;
-    }
 
-//OPERACIÓN VER A TODOS LOS AYUDANTES
+
+	/**
+	* Obtiene los datos de todos los ayudantes de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada ayudante y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los ayudantes del sistema
+	*/
 	public function VerTodosLosAyudantes()
 	{
 		$sql="SELECT * FROM AYUDANTE ORDER BY APELLIDO_PATERNO"; //código MySQL
@@ -84,7 +99,15 @@ $sql="SELECT * FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' "; //código M
 		return $lista;
 		}
 		
-	public function VerTodosLosProfesores()
+	/**
+	* Obtiene los datos de todos los profesores de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada profesor y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los profesores del sistema
+	*/
+		public function VerTodosLosProfesores()
 	{
 		$sql="SELECT * FROM PROFESOR ORDER BY NOMBRE1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
@@ -100,6 +123,14 @@ $sql="SELECT * FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' "; //código M
 		return $lista;
 		}
 
+	/**
+	* Obtiene los datos de todas las secciones de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el código de cada sección y se va guardando en un arreglo
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todas las secciones del sistema
+	*/
 	public function VerSecciones()
 	{
 		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
@@ -116,8 +147,21 @@ $sql="SELECT * FROM AYUDANTE WHERE rut_ayudante = '$rut_ayudante' "; //código M
 
 
 
-
-//OPERACIÓN EDITAR AYUDANTE
+	
+	/**
+	* Edita la información de un ayudante en la base de datos
+	*
+	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
+	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $rut_ayudante Rut del ayudante al que se le actualizan los demás datos
+	* @param string $nombre1_ayudante Primer nombre a editar del ayudante
+	* @param string $nombre2_ayudante Segundo nombre a editar del ayudante
+	* @param string $apellido_paterno Apellido paterno del ayudante
+	* @param string $apellido_materno Apellido mateno del ayudante
+	* @param string $correo_ayudante Correo a editar del ayudante
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
 	public function ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante)
 	{
 		$data = array(					

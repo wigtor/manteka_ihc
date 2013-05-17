@@ -10,6 +10,22 @@ class Model_estudiante extends CI_Model {
     var $cod_seccion='';
     var $cod_carrera='';
 
+	/**
+	* Inserta un estudiante en la base de datos
+	*
+	* Guarda las variables a insertar en el array data luego se llama a la función insert y se guarda el resultado de la inserción
+	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	*
+	* @param string $rut_estudiante Rut del estudiante a insertar
+	* @param string $nombre1_estudiante Primer nombre del estudiante a insertar
+	* @param string $nombre2_estudiante Segundo nombre del estudiante a insertar
+	* @param string $apellido_paterno Apellido paterno del estudiante a insertar
+	* @param string $apellido_materno Apellido mateno del estudiante a insertar
+	* @param string $correo_estudiante Correo del estudiante a insertar
+	* @param string $cod_seccion Código de la sección del estudiante a insertar
+	* @param string $cod_carrera Código de carrera del estudiante a insertar
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
     public function InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera) 
 	{
 		$data = array(					
@@ -32,6 +48,21 @@ class Model_estudiante extends CI_Model {
 		
     }
 	
+	/**
+	* Edita la información de un estudiante en la base de datos
+	*
+	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
+	* en la variable 'datos'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $rut_estudiante Rut del estudiante al que se le actualizan los demás datos
+	* @param string $nombre1_estudiante Primer nombre a editar del estudiante
+	* @param string $nombre2_estudiante Segundo nombre a editar del estudiante
+	* @param string $apellido_paterno Apellido paterno del estudiante
+	* @param string $apellido_materno Apellido mateno del estudiante
+	* @param string $correo_estudiante Correo a editar del estudiante
+	* @param string $cod_seccion Código de la sección a editar del estudiante
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
 	public function ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$seccion)
 	{
 		$data = array(					
@@ -52,6 +83,15 @@ class Model_estudiante extends CI_Model {
 		}		
     }
 
+	/**
+	* Eliminar un estudiante de la base de datos
+	*
+	* Recibe el rut de un estudiante para que se elimine éste y sus datos asociados de la base de datos. Se crea la consulta y luego se ejecuta ésta.
+	* Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	*
+	* @param string $rut_estudiante Rut del estudiante que se eliminará de la base de datos
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
     public function EliminarEstudiante($rut_estudiante)
     {
 		$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
@@ -64,32 +104,19 @@ class Model_estudiante extends CI_Model {
 		}
     }
     
-//operaciones para ver y editar datos de un estudiante
-
-
-    public function VerEstudiante($rut_estudiante)
-    {
-
-		$sql="SELECT * FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
-		$row=mysql_fetch_array($datos);
-		$estudiante[0] = $row['RUT_ESTUDIANTE'];
-		$estudiante[1] = $row['NOMBRE1_ESTUDIANTE'];
-		$estudiante[2] = $row['NOMBRE2_ESTUDIANTE'];
-		$estudiante[3] = $row['APELLIDO_PATERNO'];
-		$estudiante[4] = $row['APELLIDO_MATERNO'];
-		$estudiante[5] = "nulo";//$row['CORREO_ESTUDIANTE'];
-		$estudiante[6] = $row['COD_SECCION'];
-		$estudiante[7] = $row['COD_CARRERA'];
-		return $estudiante;
-		
-    }
-
+	/**
+	* Obtiene los datos de todos lo estudiantes de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada estudiante y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los estudiantes del sistema
+	*/
 	public function VerTodosLosEstudiantes()
 	{
 		
-		$sql="SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		$sql="SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO"; 
+		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista;
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
@@ -107,23 +134,19 @@ class Model_estudiante extends CI_Model {
 		return $lista;
 		}
 	
-    public function EditarEstudiante($rut_estudiante)
-    {
-        $this->rut_estudiante = $_POST['rut_estudiante'];
-        $this->nombre1_estudiante = $_POST['nombre1_estudiante'];
-        $this->nombre2_estudiante = $_POST['nombre2_estudiante'];
-        $this->apellido_paterno = $_POST['apellido_paterno'];
-        $this->apellido_materno = $_POST['apellido_materno'];
-        $this->correo_estudiante = $_POST['correo_estudiante'];
-        $this->cod_seccion = $_POST['cod_seccion'];
-        $this->cod_carrera = $_POST['cod_carrera'];
-        // se modifican los datos del estudiante
-        $this->db->update('ESTUDIANTE', $this);
-    }
+	
+	/**
+	* Obtiene los datos de todas las carreras de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada carrera y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todas las carreras del sistema
+	*/
 	public function VerCarreras()
 	{
-		$sql="SELECT * FROM CARRERA"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		$sql="SELECT * FROM CARRERA"; 
+		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista;
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
@@ -135,7 +158,15 @@ class Model_estudiante extends CI_Model {
 		
 		return $lista;
 	}
-	
+
+	/**
+	* Obtiene los datos de todas las secciones de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el código de cada sección y se va guardando en un arreglo
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todas las secciones del sistema
+	*/	
 	public function VerSecciones()
 	{
 		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
