@@ -85,7 +85,7 @@ class Model_ayudante extends CI_Model {
 		$sql="SELECT * FROM AYUDANTE ORDER BY APELLIDO_PATERNO"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_AYUDANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
