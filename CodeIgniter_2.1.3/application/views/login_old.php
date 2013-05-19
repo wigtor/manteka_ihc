@@ -5,12 +5,7 @@
 ?>
 
 <body>
-	 <link href="/<?php echo config_item('dir_alias') ?>/css/especial.css" rel="stylesheet" type="text/css">
-	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
-	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jQuery.js"></script>
-     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.bpopup.min.js"></script>
-     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/funcionAyuda.js"></script>
-     
+	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
 
 	<script type='text/javascript'>
 		/* Esta función se llama al hacer click en el botón entrar, 
@@ -67,8 +62,7 @@
 			</div>
 			<fieldset class="span3">
 				<legend>Inicio de sesión</legend>
-					<div  id="my-button" class="pull-right pull-top" ><a class="btn_with_icon_solo" style="position: absolute; font-size: 45px !important; margin-top: -15px; margin-left: -25px;" href="<?php echo site_url("Ayuda/index") ?>">R</a></div>
-					<div id="element_to_pop_up"><img src="/<?php echo config_item('dir_alias') ?>/img/ayudaInicio.png"></div>
+					<div class="pull-right pull-top" ><a class="btn_with_icon_solo" style="position: absolute; font-size: 45px !important; margin-top: -15px; margin-left: -25px;" href="<?php echo site_url("Ayuda/index") ?>">R</a></div>
 					<?php
 						$attributes = array('onSubmit' => 'return validacionRut()', 'id' => 'formLogin');
 						echo form_open('Login/LoginPost', $attributes);
