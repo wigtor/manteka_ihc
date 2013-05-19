@@ -36,16 +36,11 @@ class Alumnos extends MasterManteka {
 	public function verAlumnos()
 	{
 		
-		
-
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
         $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'carreras' => $this->Model_estudiante->VerCarreras());
-	      
-
-
-		
+	     
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -326,7 +321,7 @@ class Alumnos extends MasterManteka {
 
 		$rut_estudiante = $this->input->get("rut_estudiante");
 	        $nombre1_estudiante = $this->input->get("nombre1_estudiante");
-	        $nombre2_estudiante = $this->input->get("nombre2_estudiante");;
+	        $nombre2_estudiante = $this->input->get("nombre2_estudiante");
 	        $apellido_paterno = $this->input->get("apellido_paterno");
 	        $apellido_materno = $this->input->get("apellido_materno");
 	        $correo_estudiante = $this->input->get("correo_estudiante");
@@ -349,36 +344,51 @@ class Alumnos extends MasterManteka {
 	
 	public function cambiarSeccionAlumnos()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-
 
 		$this->load->model('Model_estudiante');
 		
 
-		$datos_vista = array('carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
+		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
 		
+
+		$subMenuLateralAbierto = "cambiarSeccionAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cambiarSeccion', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+	
+	}
+	
+		public function HacerCambiarSeccionAlumnos()
+	{
+		//@ViewBag.Test = data[0]; // Data will be set to P1
+		$this->load->model('Model_estudiante');
+		$seccion1 = $this->input->get('cod_seccion1');
+		$seccion2 = $this->input->get('cod_seccion2');
 		
+		$cambiarDesde = $this->input->get('botonCambio');
 		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_cambiarSeccion', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["subVistaLateralAbierta"] = "cambiarSeccionAlumnos"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);	
+		if($cambiarDesde=="1"){
+				$lista_seleccionados = $this->input->get('seleccionadosS1');
+				$seccionOUT = $this->input->get('cod_seccion2');
+				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
+		}
+		else{
+				$lista_seleccionados = $this->input->get('seleccionadosS2');
+				$seccionOUT = $this->input->get('cod_seccion1');
+				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
+		}
+		//echo count($lista_seleccionados);
+		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion,'seccion1'=>$seccion1,'seccion2'=>$seccion2);
+	
+		$subMenuLateralAbierto = "cambiarSeccionAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cambiarSeccion', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+	
 	}
 
 	

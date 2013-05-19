@@ -181,6 +181,24 @@ class Model_estudiante extends CI_Model {
 		return $lista;
 	}
 	
+	function CambioDeSecciones($seccionOUT,$listaRut){
+			$contador = 0;
+			$confirmacion = 1;
+			while ($contador<count($listaRut)){
+				$data = array(
+               'COD_SECCION' => $seccionOUT
+				);
+				$this->db->where('RUT_ESTUDIANTE', $listaRut[$contador]);
+				$datos = $this->db->update('estudiante',$data);
+				if($datos != true){
+					$confirmacion = -1;
+				}
+	
+			$contador = $contador + 1;
+			}
+			return 1;
+	}
+	
 }
  
 ?>
