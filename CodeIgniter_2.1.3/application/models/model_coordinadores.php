@@ -46,7 +46,7 @@ class model_coordinadores extends CI_Model{
 
 	function GetModulos($id){
 		$this->db->select('COD_MODULO_TEM');
-		$this->db->from('MODULO_TEMATICO');
+		$this->db->from('modulo_tematico');
 		$this->db->where('RUT_USUARIO2', $id);
 		$query = $this->db->get();
 		$ObjetoListaResultados = $query->result_array();
