@@ -54,10 +54,13 @@
 		        
 		        <div class="offset9 span1">
 		        	<br/>
-		        	<form  action="borrarCoordinadores" method="POST" onsubmit="return confirmar();">
+			        	<?php
+							$attributes = array('onSubmit' => 'return confirmar()');
+							echo form_open('Coordinadores/borrarCoordinadores', $attributes);
+						?>
 		        		<input type="hidden" name="lista_eliminar" id="input-eliminar">
 	  					<button class="btn btn-danger" type="sumbit">Eliminar</button>
-	  				</form>
+	  				<?php echo form_close(""); ?>
 				</div>
 		        <div class="span1"></div>
 		    </div>

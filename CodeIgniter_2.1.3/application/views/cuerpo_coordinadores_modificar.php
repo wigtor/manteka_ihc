@@ -30,7 +30,9 @@
 			<h4>Complete los siguientes datos para modificar un coordinador:</h4><br/>
 			<?php 
 				foreach ($listado_coordinadores as $coordinador){
-					echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/editarCoordinadores/' onsubmit='return validar(this)'>";
+					$attributes = array('onSubmit' => 'return validar(this)', 'class' => 'span9', 'id' =>"id".$coordinador['id']);
+					echo form_open('Coordinadores/editarCoordinadores', $attributes);
+					//echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/editarCoordinadores/' onsubmit='return validar(this)'>";
 					echo "<input name='id' type='hidden' value='".$coordinador['id']."'>";
 					echo "<br/><table>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Nombre completo:</h6></td><td><input required name='nombre' class ='input-xlarge' type='text' placeholder='ej:SOLAR FUENTES MAURICIO IGNACIO' default='".$coordinador['nombre']."' value='".$coordinador['nombre']."'></td></tr>";
@@ -42,7 +44,7 @@
 					echo "<tr><td></td><td>Los campos con <span class='text-error'>(*)</span> son obligatorios</td></tr>";
 					echo "</table>";
 					echo "<br/><div class='span7 offset5' id='botones-guardar-cancelar'><button type='submit' class='btn' type='button'>Guardar</button><a class='btn offset1' href='/manteka/index.php/Coordinadores/modificarCoordinador/'>Cancelar</a></div>";
-					echo "</form><!-- span9-->";
+					echo form_close(""); echo "<!-- span9-->";
 				}
 				
 			?>
