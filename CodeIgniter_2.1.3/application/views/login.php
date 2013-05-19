@@ -62,6 +62,7 @@
 			</div>
 			<fieldset class="span3">
 				<legend>Inicio de sesión</legend>
+					<div class="pull-right pull-top" ><a class="btn_with_icon_solo" style="position: absolute; font-size: 45px !important; margin-top: -15px; margin-left: -25px;" href="<?php echo site_url("Ayuda/index") ?>">R</a></div>
 					<?php
 						$attributes = array('onSubmit' => 'return validacionRut()', 'id' => 'formLogin');
 						echo form_open('Login/LoginPost', $attributes);

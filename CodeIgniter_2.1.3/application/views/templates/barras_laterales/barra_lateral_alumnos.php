@@ -31,6 +31,9 @@
 		else if ($subVistaLateralAbierta == "borrarAlumnos") {
 			$borrarAlumnos = 'class="active"';
 		}
+		else if ($subVistaLateralAbierta == "cambiarSeccionAlumnos") {
+			$cambiarSeccionAlumnos = 'class="active"';
+		}
 	?>
 
 	<!--	Barra lateral de alumnos	-->
