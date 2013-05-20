@@ -41,10 +41,10 @@
 		                <?php 
 		                	foreach ($listado_coordinadores as $coordinador) {
 		                		echo "<tr class ='fila_tabla' style='display:none;' id='id".$coordinador['id']."'>";
-			                	echo "<td>1".$coordinador['rut']."</td>";
-			                	echo "<td>2".$coordinador['nombre']."</td>";
-			                	echo "<td>2".$coordinador['nombre']."</td>";
-			                	echo "<td>2".$coordinador['nombre']."</td>";
+			                	echo "<td>".$coordinador['rut']."</td>";
+			                	echo "<td>".$coordinador['nombre']."</td>";
+			                	echo "<td>".$coordinador['nombre']."</td>";
+			                	echo "<td>".$coordinador['nombre']."</td>";
 			                	echo "</tr>";
 		                	}
 		                ?>
