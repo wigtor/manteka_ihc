@@ -12,13 +12,13 @@
 					</div>
 					
 					<div class="row-fluid"> <!-- nombre uno-->
-						<div class="span11">
+						<div class="span12">
 								<div class="span4">
 									<div class="control-group">
 										<label  class="control-label" for="inputInfo">1-.<font color="red">*</font>Nombre Módulo</label>
 									</div>
 								</div>
-								<div class="span5">	
+								<div class="span7">	
 										<div class="controls">
 											<input type="text" name="nombre1_estudiante" maxlength="19"  >
 										</div>

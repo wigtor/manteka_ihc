@@ -10,23 +10,16 @@
 						</div>
 					</div>
 				<div class="row-fluid">
-					<div class="span11">
+					<div class="span13">
 					
 						<div class="row-fluid">
-							<div class="span6">
+							<div class="span9">
 								<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 							</div>
 						
 
-							<div class="span6">
-									
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Nombre</option>
-									<option value="3">Filtrar por Apellido paterno</option>
-									<option value="4">Filtrar por Apellido materno</option>
-									<option value="7">Filtrar por Código Carrera</option>
-									<option value="6">Filtrar por Seccion</option>
-									</select>
+							<div class="span3">	
+									<button class="btn"  >Buscar</button>
 							</div> 
 						</div>
 					</div>
@@ -37,16 +30,16 @@
 						
 							<thead>
 								<tr>
-									<th style="text-align:left;"><br><b>Nombre Completo</b></th>
+									<th style="text-align:left;"><br><b>Nombre Módulos</b></th>
 									
 								</tr>
 							</thead>
-							<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
+							<div style="border:#cccccc  1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px">
 								<table class="table table-hover">
 									<tbody>
 									
 										<?php
-										$contador=0;
+										/*$contador=0;
 										$comilla= "'";
 										
 										while ($contador<count($rs_estudiantes)){
@@ -58,7 +51,7 @@
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
-										}
+										}*/
 										
 										?>
 																
@@ -70,38 +63,71 @@
 				</div>
 			
 
-				<div class="span6">
-					<div style="margin-bottom:0%">
-							2.-Detalle del Alumno:
-					</div>
-					<form id="formBorrar" type="post">
-					<div class="row-fluid">
-						<div >
-						<pre style="margin-top: 2%; padding: 2%">
-Rut:              <b id="rutDetalle"></b>
-Nombres:          <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
-Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-Apellido materno: <b id="apellidomaternoDetalle"></b>
-Carrera:          <b id="carreraDetalle" ></b>
-Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
-<input type="hidden" id="rutEliminar" value="">
-								
-						</div>
-					</div>
-					<div class= "row-fluid" >
-						<div class="row-fluid" style=" margin-top:10px; margin-left:54%">		
-							<div class="span3 ">
-								<button class="btn" onclick="eliminarAlumno()" >Eliminar</button>
-							</div>
+				<div class="span6" style="margin-left: 2%; padding: 0%; ">
+			2. Detalle Módulo Temático
+			<div class ="row-fluid">
+				<pre style="margin-top: 2%; padding: 2%; height:6%">
+Nombre del Módulo:	Módulo 1
+Profesor Lider: 	Mauricio Marín
 
-							<div class = "span3 ">
-								<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','','','')" >Cancelar</button>
-							</div>
+			</pre>
+				
+			</div>
+			<div class="row-fluid">
+				<div class="row-fluid">
+						<div class="span6">
+							3. Sesiones del Módulo Temático
 						</div>
-					</div>
-					</form>
-				</div>	
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+									
+									
+					<table class="table table-hover">
+						<thead>
+
+						</thead>
+						<tbody>									
+									
+											
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="row-fluid" style="margin-top:2%">
+						<div class="span7">
+							4. Profesores del Módulo Temático
+						</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+									
+									
+					<table class="table table-hover">
+						<thead>
+
+						</thead>
+						<tbody>									
+									
+											
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row-fluid" style="margin-top: 2%; margin-left:54%">
+				<div class="span3">
+					<button class="btn"  >Eliminar</button>
+				</div>
+				<div class="span3">
+					<button class="btn"  >Cancelar</button>
+				</div>
+			</div>
+
+
+		</div>
 			</div>
 
 			
