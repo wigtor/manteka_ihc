@@ -23,6 +23,8 @@ class model_secciones extends CI_Model{
    		}
    		return $StringResultados;
    	}
+	
+
 
  
 }

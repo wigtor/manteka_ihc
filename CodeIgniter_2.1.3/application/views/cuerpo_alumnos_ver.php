@@ -93,7 +93,7 @@ function ordenarFiltro(){
 						
 							<div class="span6">
 						
-								<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+								<input id="filtroLista"   type="text" placeholder="Filtro búsqueda" style="width:90%">
 							</div>
 
 							<div class="span6">
