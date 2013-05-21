@@ -241,25 +241,25 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		if ($rut == false)
 			redirect('/Login/', '');
-			
 
-		
 		/* Se obtienen los datos del correo a enviar, asi como también,
 		el tipo de destinatario al cual va dirijido. Además se cargan los
 		modelos necesarios para guardar el correo una vez que es enviado. */
 		$this->load->model('model_correo');
-		$this->load->model('model_correoE');
+		$this->load->model('model_correo_e');
+
 		$to = $this->input->post('to');
 		$asunto =$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
-		$tipo=$this->input->post('tipo');
-		$rutRecept=$this->input->post('rutRecept');
-		$date=date("mdHis");
+		$tipo = $this->input->post('tipo');
+		$rutRecept = $this->input->post('rutRecept');
+		$date = date("mdHis");
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
 		en las tablas correspondientes.
 		Si el envío fracasa, se muestra un mensaje de error. */
+		
 		try 
 		{
 			$config['mailtype'] = 'html';
@@ -272,7 +272,7 @@ class Correo extends MasterManteka {
 				throw new Exception("error en el envio");
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date);
 			if($tipo=='CARTA_ESTUDIANTE')
-				$this->model_correoE->InsertarCorreoE($rutRecept,$date);
+				$this->model_correo_e->InsertarCorreoE($rutRecept,$date);
 			else if($tipo=='CARTA_USER')
 				$this->model_correoU->InsertarCorreoU($rutRecept,$date);
 			else if($tipo=='CARTA_AYUDANTE')
@@ -286,7 +286,7 @@ class Correo extends MasterManteka {
 				redirect("/Otros", "databaseError");
 		}
 		
-$datos_cuerpo = array(); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
+		$datos_cuerpo = array(); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
 		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR

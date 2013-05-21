@@ -1,6 +1,6 @@
 <?php
  
-class model_correoE extends CI_Model {
+class model_correo_e extends CI_Model {
 
    /**
    *  Identifica si en la base de datos existe un usuario con una contraseña identica a la ingresada como parámetro.
@@ -11,10 +11,10 @@ class model_correoE extends CI_Model {
    *  @param string $date codigo del correo que se obtiene dependiendo de la fecha y hora
    */
     public function InsertarCorreoE($rutRecept,$date){
-      $this->COD_CORREO=$date ;
-      $this->RUT_ESTUDIANTE=$rutRecept ;
-      $this->db->insert('carta_estudiante',$this);
+      $datos = array();
+      $datos['COD_CORREO'] = $date;
+      $datos['RUT_ESTUDIANTE'] = $rutRecept;
+      $this->db->insert('carta_estudiante', $datos);
     }
 }
- 
 ?>

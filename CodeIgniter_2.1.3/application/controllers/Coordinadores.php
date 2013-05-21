@@ -66,42 +66,33 @@ class Coordinadores extends MasterManteka {
     
     public function agregarCoordinadores()
     {
-    	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 			$this->load->model('model_coordinadores');
-			$this->model_coordinadores->agregarCoordinador($_POST['nombre'],$_POST['rut'],$_POST['contrasena'],$_POST['correo1'],$_POST['correo2'],$_POST['fono']);
+			$this->model_coordinadores->agregarCoordinador($_POST['nombre'],$_POST['rut'],md5($_POST['contrasena']),$_POST['correo1'],$_POST['correo2'],$_POST['fono']);
+
 			$datos_plantilla["titulo_msj"] = "Coordinador agregado";
 			$datos_plantilla["cuerpo_msj"] = "El nuevo coordinador fue agregado correctamente.";
-			$datos_plantilla["tipo_msj"] = "success-error";
+			$datos_plantilla["tipo_msj"] = "alert-success";
 			$datos_plantilla["redirecTo"] = 'Coordinadores/agregarCoordinadores';
 			$datos_plantilla["nombre_redirecTo"] = "Agregar Coordinador";
 			$datos_plantilla["redirectAuto"] = TRUE;
-			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 
 		}
-		else{
-			$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-			$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-			$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-			$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-			$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);	
-			$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_crear', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-			//Ahora se especifica que vista estÃ¡ abierta para mostrar correctamente el menu lateral
-			$datos_plantilla["subVistaLateralAbierta"] = "agregarCoordinadores"; //Usen el mismo nombre de la secciÃ³n donde debe estar
-			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-			$this->load->view('templates/template_general', $datos_plantilla);
+		else {
+			
+			$datos_cuerpo = array(); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
+			//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
+
+			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
+			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+			*/
+			$subMenuLateralAbierto = 'agregarCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarTodo("Docentes", "cuerpo_coordinadores_crear", "barra_lateral_profesores", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	
 		}
     }
     
@@ -158,47 +149,32 @@ class Coordinadores extends MasterManteka {
 
     public function borrarCoordinadores()
     {
-       	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 			$this->load->model('model_coordinadores');
 			$this->model_coordinadores->borrarCoordinadores(explode(',', str_replace('id','',$_POST['lista_eliminar'])));
+			
 			$datos_plantilla["titulo_msj"] = "Coordinador(es) eliminados(s)";
 			$datos_plantilla["cuerpo_msj"] = "El(Los) coordinador(es) fueron eliminados correctamente.";
-			$datos_plantilla["tipo_msj"] = "success-error";
+			$datos_plantilla["tipo_msj"] = "alert-success";
 			$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
 			$datos_plantilla["nombre_redirecTo"] = "Eliminar Coordinador";
-			$datos_plantilla["redirectAuto"] = FALSE;
-			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 			
 		}else{
-			$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-			$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-			$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-			$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-			$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-
 			$this->load->model('model_coordinadores');
 			$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadores();
-			
-			$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_eliminar', $datos_cuerpo_central, true); //Esta es la linea que cambia por cada controlador
-			//Ahora se especifica que vista estÃ¡ abierta para mostrar correctamente el menu lateral
-			$datos_plantilla["subVistaLateralAbierta"] = "borrarCoordinadores"; //Usen el mismo nombre de la secciÃ³n donde debe estar
-			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-			$this->load->view('templates/template_general', $datos_plantilla);
+
+			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
+			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+			*/
+			$subMenuLateralAbierto = 'borrarCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarTodo("Docentes", "cuerpo_coordinadores_eliminar", "barra_lateral_profesores", $datos_cuerpo_central, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	
 		}
 		
     }

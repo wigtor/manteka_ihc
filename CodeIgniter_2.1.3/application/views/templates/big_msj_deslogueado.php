@@ -33,7 +33,7 @@
 		    			echo '<a class="pull-left" href="'.site_url($redirecFrom).'">Volver</a>';
 		    	}
 		    	?>
-	        	<a class="pull-right" href="<?php echo site_url($redirecTo) ?>">Ir al <?php echo $nombre_redirecTo ?></a>
+	        	<a class="pull-right" href="<?php echo site_url($redirecTo) ?>">Ir a <?php echo $nombre_redirecTo ?></a>
 			</div>
     	</div>
 		

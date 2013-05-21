@@ -3,7 +3,10 @@
 		<div class="span7">
 		<div class="span12">
 			<h4>Complete los siguientes datos para agregar un coordinador:</h4><br/>
-			<form  method="POST" class="span9" onsubmit="return validar(this)" action="/manteka/index.php/Coordinadores/agregarCoordinadores/">
+				<?php
+					$attributes = array('onSubmit' => 'return validar(this)', 'class' => 'span9');
+					echo form_open('Coordinadores/agregarCoordinadores', $attributes);
+				?>
 				<br/>
 				<table>
 					<tr>
@@ -16,11 +19,11 @@
 					</tr>			
 					<tr>
 					<td><h6><span class="text-error">(*)</span>Contraseña:</h6></td>
-					<td><input class ="input-xlarge" name='contrasena'  type="text" placeholder="*******" required></td>
+					<td><input class ="input-xlarge" name='contrasena'  type="password" placeholder="*******" required></td>
 					</tr>
 					<tr>
 					<td><h6><span class="text-error">(*)</span>Confirmar contraseña:</h6></td>
-					<td><input class ="input-xlarge" name='contrasena2' type="text" placeholder="*******" required></td>
+					<td><input class ="input-xlarge" name='contrasena2' type="password" placeholder="*******" required></td>
 					</tr>
 					<tr>
 					<td><h6><span class="text-error">(*)</span>Correo 1:</h6></td>
@@ -44,7 +47,7 @@
 					<button class="btn" type="submit">Agregar</button>
 					<a class="btn" href="/manteka/index.php/Coordinadores/verCoordinadores/" type="button">Cancelar</a>
 				</div>
-			</form>
+			<?php echo form_close(""); ?>
 		</div>
 	</div>	
 </fieldset>

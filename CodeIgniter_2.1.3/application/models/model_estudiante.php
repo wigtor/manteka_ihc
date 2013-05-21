@@ -94,7 +94,7 @@ class Model_estudiante extends CI_Model {
 	*/
     public function EliminarEstudiante($rut_estudiante)
     {
-		$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$sql="DELETE FROM estudiante WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		if($datos == true){
 			return 1;
@@ -114,11 +114,17 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function VerTodosLosEstudiantes()
 	{
-		
-		$sql="SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO"; 
+		/*
+		$this->db->order_by("APELLIDO_PATERNO", "asc"); 
+		$query = $this->db->get('estudiante'); //Acá va el nombre de la tabla
+		// Se obtiene la fila del resultado de la consulta a la base de datos
+		$filaResultado = $query->row();
+		return $filaResultado;
+		*/
+		$sql="SELECT * FROM estudiante ORDER BY APELLIDO_PATERNO"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
@@ -132,7 +138,8 @@ class Model_estudiante extends CI_Model {
 			$contador = $contador + 1;
 		}
 		return $lista;
-		}
+		
+	}
 	
 	
 	/**
@@ -145,10 +152,17 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function VerCarreras()
 	{
-		$sql="SELECT * FROM CARRERA"; 
+		/*
+		$query = $this->db->get('carrera'); //Acá va el nombre de la tabla
+		// Se obtiene la fila del resultado de la consulta a la base de datos
+		$filaResultado = $query->row();
+		return $filaResultado;
+		*/
+
+		$sql="SELECT * FROM carrera"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_CARRERA'];
 			$lista[$contador][1] = $row['NOMBRE_CARRERA'];
@@ -169,10 +183,10 @@ class Model_estudiante extends CI_Model {
 	*/	
 	public function VerSecciones()
 	{
-		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
+		$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador] = $row['COD_SECCION'];
 			$contador = $contador + 1;
