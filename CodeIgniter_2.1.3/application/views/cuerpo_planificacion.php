@@ -1,6 +1,32 @@
 
 <fieldset>
-	<legend>Cuerpo central</legend>
-	Hola mundo, este es el formulario que se muestra al cliente<br>
-	La barra y los botones que aparecen abajo se activan s髄o si es necesario
+	<legend>Planificaci贸n</legend>
+	<table class="table-striped table table-hover center">
+		<thead>
+			<tr>
+				<th>Coordinaci贸n</th>
+				<th>Secci贸n</th>
+				<th>Profesor</th>
+				<th>M贸dulo Tematico</th>
+				<th>Sesi贸n</th>
+				<th>Sala</th>
+				<th>Bloque</th>
+				<th>Hora</th>
+				<th>D铆a</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+				$h = 0;
+				while ( $h<= 10) {
+					echo "<tr>";
+					for ($i=0; $i < 9; $i++) { 
+						echo "<td> Prueba".$i." </td>";
+					}
+					echo "</tr>";
+					$h++;
+				}						
+			?>			
+		</tbody>
+	</table>
 </fieldset>
