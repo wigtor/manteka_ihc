@@ -4,7 +4,6 @@
 	<table class="table-striped table table-hover center">
 		<thead>
 			<tr>
-				<th>Coordinación</th>
 				<th>Sección</th>
 				<th>Profesor</th>
 				<th>Módulo Tematico</th>
@@ -17,15 +16,23 @@
 		</thead>
 		<tbody>
 			<?php
-				$h = 0;
-				while ( $h<= 10) {
-					echo "<tr>";
-					for ($i=0; $i < 9; $i++) { 
-						echo "<td> Prueba".$i." </td>";
-					}
-					echo "</tr>";
-					$h++;
-				}						
+
+			$columnas = 'seccion.COD_SECCION, profesor.NOMBRE1_PROFESOR, profesor.NOMBRE2_PROFESOR, profesor.APELLIDO1_PROFESOR, profesor.APELLIDO2_PROFESOR, modulo_tematico.NOMBRE_MODULO, sesion.DESCRIPCION_SESION, sala.NUM_SALA, horario.COD_DIA, horario.COD_MODULO';
+			foreach ($lista as $fila) {
+				echo '<tr>';
+				echo '<td>'.$fila['COD_SECCION'].'</td>';
+				echo '<td>'.$fila['NOMBRE1_PROFESOR'].' '.$fila['NOMBRE2_PROFESOR'].' '.$fila['APELLIDO1_PROFESOR'].' '.$fila['APELLIDO2_PROFESOR'].'</td>';
+				echo '<td>'.$fila['NOMBRE_MODULO'].'</td>';
+				echo '<td>'.$fila['DESCRIPCION_SESION'].'</td>';
+				echo '<td>'.$fila['NUM_SALA'].'</td>';
+				echo '<td>'.$fila['COD_DIA'].$fila['COD_MODULO'].'</td>';
+				echo '<td>'.$fila['COD_DIA'].'</td>';
+				echo '<td>'.$fila['COD_MODULO'].'</td>';
+
+				echo '</tr>';
+			}
+
+								
 			?>			
 		</tbody>
 	</table>
