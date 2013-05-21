@@ -26,8 +26,8 @@
 				echo '<td>'.$fila['DESCRIPCION_SESION'].'</td>';
 				echo '<td>'.$fila['NUM_SALA'].'</td>';
 				echo '<td>'.$fila['COD_DIA'].$fila['COD_MODULO'].'</td>';
-				echo '<td>'.$fila['COD_DIA'].'</td>';
 				echo '<td>'.$fila['COD_MODULO'].'</td>';
+				echo '<td>'.$fila['COD_DIA'].'</td>';
 
 				echo '</tr>';
 			}
