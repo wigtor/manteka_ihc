@@ -54,11 +54,23 @@ Profesor Lider: 	Mauricio Marín
 
 						</pre>
 					
-					</div>	
-
+					</div>
 					<div class="row-fluid">
+						<div class="row-fluid" style="margin-top:2%">
+							<div class="span8">
+								4. Descripción Actual del Módulo Temático
+							</div>
+						</div>
+						<pre style="margin-top: 2%; padding: 2%; height:6%">
+
+
+						</pre>
+					</div>
+
+
+					<div class="row-fluid" style="margin-top:8%">
 							<div class="span6">
-								4. Sesiones del Módulo Temático
+								5. Sesiones del Módulo Temático
 							</div>
 					</div>
 
@@ -84,7 +96,7 @@ Profesor Lider: 	Mauricio Marín
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span7">
-								5. Profesores del Módulo Temático
+								6. Profesores del Módulo Temático
 							</div>
 					</div>
 
@@ -117,7 +129,7 @@ Profesor Lider: 	Mauricio Marín
 				<div class="span6" style="margin-left: 2%; padding: 0%; ">
 					<div class="row-fluid">
 						<div class="span6">
-							6. Cambiar Nombre del módulo
+							7. Cambiar Nombre del módulo
 						</div>
 					</div>
 
@@ -134,12 +146,11 @@ Profesor Lider: 	Mauricio Marín
 						</div>
 					</div>
 
-
-
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span6">
-								7. Cambiar Profesor Lider 
+								8. Cambiar Profesor Lider 
 							</div>
+
 					</div>
 
 					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px; margin-top:2%" >
@@ -159,9 +170,28 @@ Profesor Lider: 	Mauricio Marín
 							<button class ="btn" type="submit" >Cambiar</button>
 					</div>
 
-					<div class="row-fluid" style="margin-top:18%;">
+
+					<div class="row-fluid" style="margin-top:19%">
+							<div class="span8">
+								9. Cambiar Descripción del Módulo 
+							</div>
+							
+					</div>
+					<div class="row-fluid" style="margin-top:1%">
+						<pre style="margin-top: 2%; padding: 2%; height:6%">
+
+
+						</pre>
+					</div>
+
+					<div class="row-fluid" style=" text-align: right">
+							<button class ="btn" type="submit" >Cambiar</button>
+					</div>
+
+
+					<div class="row-fluid" >
 							<div class="span6">
-								8. Agregar Sesiones al Módulo
+								10. Agregar Sesiones al Módulo
 							</div>
 					</div>
 
@@ -184,8 +214,8 @@ Profesor Lider: 	Mauricio Marín
 					</div>
 
 					<div class="row-fluid" style="margin-top:2%">
-							<div class="span6">
-								9. Agregar Profesores al Módulo 
+							<div class="span8">
+								11. Agregar Profesores al Módulo 
 							</div>
 					</div>
 
@@ -206,6 +236,8 @@ Profesor Lider: 	Mauricio Marín
 					<div class="row-fluid" style="margin-top:2%; text-align: right">
 							<button class ="btn" type="submit" >Agregar</button>
 					</div>
+
+					
 			
 			
 			
