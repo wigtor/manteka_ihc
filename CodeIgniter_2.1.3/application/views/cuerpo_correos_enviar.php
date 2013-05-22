@@ -117,7 +117,6 @@ function ordenarFiltro(filtroLista)
 	var receptor;
 	var ocultar;
 	var cont;
-
 	<?php
 	$contadorE = 0;
 	$rs_receptor=$rs_estudiantes;
@@ -329,8 +328,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	while ($contador<count($rs_receptor))
 	{
 		echo '<tr>';
-		echo '<td id="'.$contador.'
-		"onclick="DetalleAlumno('.$comilla.$rs_receptor[$contador][0].
+		echo '<td id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_receptor[$contador][0].
 		$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
 		','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
 		$rs_receptor[$contador][3].$comilla.','.$comilla. 

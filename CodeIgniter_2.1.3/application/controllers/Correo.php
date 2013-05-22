@@ -55,7 +55,7 @@ class Correo extends MasterManteka {
 	* @author: Claudio Rojas (CR)
 	*
 	*/
-	public function correosEnviados()
+	public function correosEnviados($msj=null)
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 		$rut = $this->session->userdata('rut');
