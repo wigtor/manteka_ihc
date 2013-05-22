@@ -112,7 +112,7 @@ class Model_ayudante extends CI_Model {
 		$sql="SELECT * FROM PROFESOR ORDER BY NOMBRE1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
-		$lista;
+		$lista=array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_USUARIO2'];
 			$lista[$contador][1] = $row['NOMBRE1_PROFESOR'];
@@ -136,7 +136,7 @@ class Model_ayudante extends CI_Model {
 		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
-		$lista;
+		$lista=array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador] = $row['COD_SECCION'];
 			$contador = $contador + 1;

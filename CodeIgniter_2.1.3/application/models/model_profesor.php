@@ -81,7 +81,7 @@ class Model_profesor extends CI_Model {
 		$datos=mysql_query($sql); //enviar código MySQL
 		echo mysql_error();
 		$contador = 0;
-		$lista;
+		$lista=array();
 		while ($row = mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 		
            $lista[$contador][0] = $row['RUT_USUARIO2'];
@@ -148,7 +148,7 @@ class Model_profesor extends CI_Model {
     $sql="SELECT * FROM MODULO_TEMATICO"; //código MySQL
     $datos=mysql_query($sql); //enviar código MySQL
     $contador = 0;
-    $lista;
+    $lista=array();
     while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
       $lista[$contador][0] = $row['cod_modulo_tem'];
       $lista[$contador][3] = $row['nombre_modulo'];
@@ -170,7 +170,7 @@ class Model_profesor extends CI_Model {
 		$sql="SELECT cod_seccion FROM SECCION"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
-		$lista;
+		$lista=array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador] = $row['cod_seccion'];
 			$contador = $contador + 1;
