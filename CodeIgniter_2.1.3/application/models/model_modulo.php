@@ -33,6 +33,25 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 
+	public function ModificarModulo($cod_modulo_tem,$rut_usuario2,$cod_equipo,$nombre_modulo,$descripcion_modulo)
+	{
+		$data = array(					
+					'COD_MODULO_TEM' => $cod_modulo_tem ,
+					'RUT_USUARIO2' => $rut_usuario2 ,
+					'COD_EQUIPO' => $cod_equipo ,
+					'NOMBRE_MODULO' => $nombre_modulo ,
+					'DESCRIPCION_MODULO' => $descripcion_modulo
+		);
+		$this->db->where('COD_MODULO_TEM', $cod_modulo_tem);
+        $datos = $this->db->update('modulo_tematico',$data);
+		if($datos == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}		
+    }
+
 }
 
 ?>
