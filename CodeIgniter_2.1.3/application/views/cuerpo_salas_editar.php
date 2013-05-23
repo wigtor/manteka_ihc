@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 	
 	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
@@ -17,6 +18,7 @@
 		var num_sala = document.getElementById("num_salaEditar").value;
 		var ubicacion =	document.getElementById("ubicacionEditar").value;
 		var capacidad=	document.getElementById("capacidadEditar").value;
+		
 		if(cod_sala!="" && num_sala!=""  && capacidad!="" && ubicacion!="" ){
 					var answer = confirm("¿Está seguro de realizar cambios?")
 					if (!answer){
@@ -71,7 +73,7 @@ function ordenarFiltro(){
 </script>
 
 <script type="text/javascript">
-	function datosEditarSala(cod_sala,num_sala,ubicacion,capacidad,implemento){
+	function datosEditarSala(cod_sala,num_sala,ubicacion,capacidad){
 			
 			
 			document.getElementById("cod_salaEditar").value = cod_sala;
@@ -176,7 +178,7 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="number" id="num_salaEditar" name="num_sala" maxlength="19" required>
+		    							<input type="text" id="num_salaEditar" name="num_sala" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -189,7 +191,7 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="number" id="capacidadEditar" name="capacidad" maxlength="19" required>
+		    							<input type="text" id="capacidadEditar" name="capacidad" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -204,8 +206,7 @@ function ordenarFiltro(){
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<textarea id="ubicacionEditar" name="ubicacion" rows="5" cols="30" required>
-										</textarea>
+		    							<input type="text" id="ubicacionEditar" name="ubicacion" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -226,7 +227,7 @@ function ordenarFiltro(){
 										$contador=0;
 										while ($contador<count($implemento)){
 											echo '<tr>';
-											echo '<td title="'.$implemento[$contador][1]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox">'.' '.$implemento[$contador][1].'</td>';
+											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}
@@ -247,7 +248,7 @@ function ordenarFiltro(){
 										<button class ="btn" type="submit" >Guardar</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" onclick="datosEditarSalas('','','','','','')" >Cancelar</button>
+										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>
 									</div>
 								</div>
 							</div>

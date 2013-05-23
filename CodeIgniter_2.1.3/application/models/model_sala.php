@@ -16,32 +16,29 @@ class Model_sala extends CI_Model {
 	* @param string $num_sala numero de sala a insertar
 	* @param string $capacidad capacidad de la sala a insertar
 	* @param string $ubicacion ubicacion de la sala a insertar
-	*/
-	public function InsertarSala( $cod_sala, $num_sala, $ubicacion, $capacidad, $implementos) {
-		if($num_sala=="") return 2;
+	
+	public function InsertarSala( $cod_sala, $num_sala, $capacidad, $ubicacion, $implemento) {
 		$data1 = array(					
-					'COD_SALA' => $num_sala ,
+					'COD_SALA' => $cod_sala ,
 					'NUM_SALA' => $num_sala ,
+					'CAPACIDAD' => $capacidad ,
 					'UBICACION' => $ubicacion ,
-					'CAPACIDAD' => $capacidad
 					
 		);
-		if($num_sala !="" && $ubicacion!="" && $capacidad!=""){
-			$this->db->insert('SALA',$data1);}
+        $datos1 = $this->db->insert('sala',$data1);
 		
 	   $contador = 0;
-   	   while ($contador <count($implementos)) {
+   	   while ($contador <count(%implemento)) {
 		 $data2 = array(					
-					'COD_SALA' => $num_sala,
-					'COD_IMPLEMENTO' => $implementos[$contador]
+					'COD_SALA' => $cod_sala,
+					'COD_IMPLEMENTO' => $implemento[$contador]
 		);
-				if($implementos[$contador]!=null){
-				$datos2 = $this->db->insert('sala_implemento',$data2);}
-				$contador++;
+        $datos2 = $this->db->insert('sala_implemento',$data2);
+            $contador++;
          }
 
 	
-		if($data1){
+		if($datos1 && $datos2){
 			return 1;
 		}
 		else{
@@ -146,7 +143,6 @@ class Model_sala extends CI_Model {
 	*/
 	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos)
 	{
-		if($cod_sala=="") return 2;
 		$data = array(	
 					'COD_SALA' => $cod_sala,
 					'NUM_SALA' => $num_sala,					
@@ -154,25 +150,19 @@ class Model_sala extends CI_Model {
 					'CAPACIDAD' => $capacidad 
 		);
 		$this->db->where('COD_SALA', $cod_sala);
-		$this->db->update('SALA',$data); 
-		$contador = 0;
+        $datos = $this->db->update('sala',$data);
+        $contador = 0;
+   	    
    	    while ($contador <count($implementos)) {
-			if($implementos[$contador]!=null){
-			 if($contador==0){ // se ejecuta una sola vez
-				$this->db->where('COD_SALA', $cod_sala);
-				$this->db->delete('SALA_IMPLEMENTO'); 
-			 }
-			 $data2 = array(					
-						'COD_SALA' => $cod_sala,
-						'COD_IMPLEMENTO' => $implementos[$contador]
-			);
-
-				
-				$datos2 = $this->db->insert('sala_implemento',$data2);}
-				$contador++;
+		 $data2 = array(					
+					'COD_SALA' => $cod_sala,
+					'COD_IMPLEMENTO' => $implementos[$contador]
+		);
+        $datos2 = $this->db->update('sala_implemento',$data2);
+            $contador++;
          }
          
-		if($data == true){
+		if($datos == true){
 			return 1;
 		}
 		else{
