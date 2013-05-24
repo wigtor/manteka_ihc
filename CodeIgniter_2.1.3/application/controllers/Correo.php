@@ -140,12 +140,12 @@ class Correo extends MasterManteka {
 
 			
 		$this->load->model('Model_estudiante');
-		//$this->load->model('Model_profesor');
-		//$this->load->model('Model_ayudante');
+		$this->load->model('Model_profesor');
+		$this->load->model('Model_ayudante');
+		$this->load->model('Model_usuario');
 		$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
-							 /*'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
-							 /*'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes()*/);
-
+							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
+ 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/
@@ -175,20 +175,7 @@ class Correo extends MasterManteka {
 	*/
 	public function cargarTabla() 
 	{
-		$tipo = $this->input->get('tipo');
-		/* Si el usuario es de tipo 1, se carga sólo la lista de estudiantes */
-		if($tipo==1){
-			$this->load->model('Model_estudiante');	
-			$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes());
-			$this->load->view('templates/tabla_tipo_destinatario', $datos_vista);
-		}
-		/* Si el usuario no es de tipo 1, se cargan la lista de estudiantes, de profesores y de ayudantes. */
-		$this->load->model('Model_profesor');
-		$this->load->model('Model_ayudante');
-		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
-							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
-							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
-		$this->load->view('templates/tabla_tipo_destinatario', $datos_vista);
+		
 	}
 	
 	/**
