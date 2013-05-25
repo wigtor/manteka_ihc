@@ -26,11 +26,13 @@ class Correo extends MasterManteka {
 	*
 	* @author: Byron Lanas (BL)
 	*/
-	public function correosRecibidos()
+	public function correosRecibidos($msj=null)
 	{
 
-		$datos_cuerpo = array(); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
-		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$datos_cuerpo = array('listaRecibidos'=>$this->model_correo->VerCorreosUser($rut), 'msj'=>$msj);
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -120,6 +122,46 @@ class Correo extends MasterManteka {
 			redirect('/Correo/correosEnviados/'.$estado);
 		}	
 	}
+		/**
+	* Permite eliminar uno o varios correos de la bandeja de correos recibidos.
+	*
+	* A través del método post se obtienen los identificadores de los correos
+	* que se desean eliminar, luego se procede a la eliminación a través del
+	* de la función "EliminarCorreoRecibido" del modelo de correos, y finalmente se
+	* redirecciona a la vista de correos enviados, adjuntando la variable
+	* "estado" para señalar si la eliminación se realizó correctamente o no
+	* y mostrar así un mensaje al usuario con el resultado de la operación.
+	* El resultado de esta función es la eliminación de los correos señalados
+	* y un redireccionamiento a la bandeja de correos enviados, indicando el
+	* resultado de la operación.
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function eliminarCorreoRecibido()
+	{
+		$rut = $this->session->userdata('rut');
+
+		/* Sólo se eliminan correos si la variable post que contiene los correos a eliminar está definida*/
+		if(isset($_POST['seleccion']))
+		{
+			$temp=$_POST['seleccion'];
+			$correos = explode(";",$temp);
+			$this->load->model('model_correo');
+			$this->model_correo->EliminarCorreo($correos);
+			if(isset($estado))
+				unset($estado);
+			$estado="1";
+			redirect('/Correo/correosRecibidos/'.$estado);
+		}
+		else
+		{
+			if(isset($estado))
+				unset($estado);
+			$estado="0";
+			redirect('/Correo/correosRecibidos/'.$estado);
+		}	
+	}
 
 	/**
 	* Permite visualizar la vista para el envío de nuevos correos.
@@ -159,24 +201,7 @@ class Correo extends MasterManteka {
 
 	}
 	
-	/**
-	* Permite listar los posibles destinatarios de un correo.
-	*
-	* Permite obtener la lista de estudiantes, ayudantes y profesores registrados
-	* en el sistema para renderizarlos dentro de una tabla, con el fin de que
-	* el usuario que envía el correo, puede seleccionar al destinatario a partir
-	* de dicha tabla.
-	* El resultado de esta función es la obtención de una tabla con la lista de
-	* todos los posibles destinatarios agrupados por categoría: estudiantes, profesores
-	* y ayudantes.
-	*
-	* @author: Byron Lanas (BL)
-	*
-	*/
-	public function cargarTabla() 
-	{
-		
-	}
+
 	
 	/**
 	* Permite visualizar la bandeja de borradores de correos.
@@ -249,6 +274,7 @@ class Correo extends MasterManteka {
 		
 		try 
 		{
+			date_default_timezone_set("Chile/Continental");
 			$config['mailtype'] = 'html';
 			$this->email->initialize($config);
 			$this->email->from('no-reply@manteka.cl', 'ManteKA');
@@ -273,18 +299,8 @@ class Correo extends MasterManteka {
 				redirect("/Otros", "databaseError");
 		}
 		
-		$datos_cuerpo = array(); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
-		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
-
-		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
-		*/
-		$subMenuLateralAbierto = 'correosRecibidos'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarTodo("Correos", "cuerpo_correos", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$estado="2";
+			redirect('/Correo/correosRecibidos/'.$estado);
 
 
 	}
