@@ -16,29 +16,32 @@ class Model_sala extends CI_Model {
 	* @param string $num_sala numero de sala a insertar
 	* @param string $capacidad capacidad de la sala a insertar
 	* @param string $ubicacion ubicacion de la sala a insertar
-	
-	public function InsertarSala( $cod_sala, $num_sala, $capacidad, $ubicacion, $implemento) {
+	*/
+	public function InsertarSala( $cod_sala, $num_sala, $ubicacion, $capacidad, $implementos) {
+		if($num_sala=="") return 2;
 		$data1 = array(					
-					'COD_SALA' => $cod_sala ,
+					'COD_SALA' => $num_sala ,
 					'NUM_SALA' => $num_sala ,
-					'CAPACIDAD' => $capacidad ,
 					'UBICACION' => $ubicacion ,
+					'CAPACIDAD' => $capacidad
 					
 		);
-        $datos1 = $this->db->insert('sala',$data1);
+		if($num_sala !="" && $ubicacion!="" && $capacidad!=""){
+			$this->db->insert('SALA',$data1);}
 		
 	   $contador = 0;
-   	   while ($contador <count(%implemento)) {
+   	   while ($contador <count($implementos)) {
 		 $data2 = array(					
-					'COD_SALA' => $cod_sala,
-					'COD_IMPLEMENTO' => $implemento[$contador]
+					'COD_SALA' => $num_sala,
+					'COD_IMPLEMENTO' => $implementos[$contador]
 		);
-        $datos2 = $this->db->insert('sala_implemento',$data2);
-            $contador++;
+				if($implementos[$contador]!=null){
+				$datos2 = $this->db->insert('sala_implemento',$data2);}
+				$contador++;
          }
 
 	
-		if($datos1 && $datos2){
+		if($data1){
 			return 1;
 		}
 		else{
@@ -56,7 +59,7 @@ class Model_sala extends CI_Model {
 	* @param string $cod_sala codigo de la sala que se eliminará de la base de datos
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function EliminarAyudante($cod_sala)
+    public function EliminarSala($cod_sala)
     {
 
 		$this->db->where('COD_SALA', $cod_sala);
@@ -98,8 +101,37 @@ class Model_sala extends CI_Model {
 		}
 		
 		return $lista;
-		}
+	}
 	
+
+
+
+	/**
+	* Obtiene los datos de todas las salas de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todas las salas en el sistema
+	*/
+	public function VerTodasLasSalas()
+	{
+		$sql="SELECT * FROM SALA ORDER BY COD_SALA"; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista = array();
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			$lista[$contador][0] = $row['COD_SALA'];
+			$lista[$contador][1] = $row['NUM_SALA'];
+			$lista[$contador][2] = $row['UBICACION'];
+			$lista[$contador][3] = $row['CAPACIDAD'];
+			$contador = $contador + 1;
+		}
+		
+		return $lista;
+		}
+
+
 	/**
 	* Edita la información de una sala en la base de datos
 	*
@@ -112,16 +144,35 @@ class Model_sala extends CI_Model {
 	* @param string $ubicacion ubicaciona  editar de la sala
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function ActualizarSala($cod_sala,$num_sala,$capacidad,$ubicacion)
+	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos)
 	{
+		if($cod_sala=="") return 2;
 		$data = array(	
-					'NUM_SALA' => $num_sala,			
-					'CAPACIDAD' => $capacidad ,
-					'UBICACION' => $ubicacion ,
+					'COD_SALA' => $cod_sala,
+					'NUM_SALA' => $num_sala,					
+					'UBICACION' => $ubicacion,			
+					'CAPACIDAD' => $capacidad 
 		);
 		$this->db->where('COD_SALA', $cod_sala);
-        $datos = $this->db->update('sala',$data);
-		if($datos == true){
+		$this->db->update('SALA',$data); 
+		$contador = 0;
+   	    while ($contador <count($implementos)) {
+			if($implementos[$contador]!=null){
+			 if($contador==0){ // se ejecuta una sola vez
+				$this->db->where('COD_SALA', $cod_sala);
+				$this->db->delete('SALA_IMPLEMENTO'); 
+			 }
+			 $data2 = array(					
+						'COD_SALA' => $cod_sala,
+						'COD_IMPLEMENTO' => $implementos[$contador]
+			);
+
+				
+				$datos2 = $this->db->insert('sala_implemento',$data2);}
+				$contador++;
+         }
+         
+		if($data == true){
 			return 1;
 		}
 		else{
