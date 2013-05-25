@@ -136,12 +136,12 @@ El mensaje fue enviado satisfactoriamente.
 		if(count($correos)!==0)
 		{
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo()" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo() " ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
 			<?php
 		}
 		?>
 		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
 		<thead>
 		<th width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
 		<th width="23%" bgcolor="lightgrey"><b>De</b></td>
