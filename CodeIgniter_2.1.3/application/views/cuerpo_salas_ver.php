@@ -132,9 +132,8 @@ function ordenarFiltro(){
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle de la Sala:
-	    <pre style="margin-top: 2%; padding: 2%">
-		
-Codigo sala:   <b id="cod_sala"></b>
+	  <pre style="margin-top: 0%; margin-left: 0%;">
+Codigo sala:    <b id="cod_sala"></b>
 Numero sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicacion:      <b id="ubicacion"></b>

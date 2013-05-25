@@ -238,11 +238,14 @@ function ordenarFiltro(){
 					<div class="row-fluid" style="width: 386px;">		
 
 
-					<br>
-					Si desea modificar los implementos de la sala, elija entre los siguientes:
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
 					
-					Implementos actuales:	<center><p id="impDetalle"></p></center>
+					Implementos actuales:<center><p id="impDetalle"></p></center>
+					<br><br>
+					Si desea modificar los implementos de la sala, elija entre los siguientes:
+					
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:105px; -webkit-border-radius: 4px" >
+					
+					
 					<table class="table table-hover">
 										<thead>
 
@@ -270,7 +273,7 @@ function ordenarFiltro(){
 		
 
 
-
+						<br>
 						<div class="row-fluid">
 							<div class="span10">
 								<div class="row-fluid">
