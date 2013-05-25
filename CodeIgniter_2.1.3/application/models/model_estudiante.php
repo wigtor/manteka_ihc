@@ -210,7 +210,7 @@ class Model_estudiante extends CI_Model {
 	
 			$contador = $contador + 1;
 			}
-			return 1;
+			return $confirmacion;
 	}
 	
 }

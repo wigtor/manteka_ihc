@@ -18,8 +18,9 @@
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
-			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/agregarSalas/")?>">
 			<legend>Agregar Sala</legend>
+			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/agregarSalas/")?>">
+			
 			<div>
 				<div class="row-fluid">
 					<div class="span6">
@@ -53,7 +54,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="3" type="number" min="1" name="num_sala" placeholder="Numero de personas. Ej:80" required>
+		    							<input id="inputInfo" maxlength="3" type="number" min="1" name="capacidad" placeholder="Numero de personas. Ej:80" required>
 		  							</div>
 							</div>
 						</div>
@@ -102,22 +103,15 @@
 									
 					</div>
 					</div>
-					<div class="row" style="width: 840px;">		
-				<div class= "row-fluid">
-					<div class= "span6" style="margin-bottom:2%">
-
-
-
-					</div>
-				</div>
-
-						<div class="span2" style="margin-left: 654px;">
-								<button class="btn" type="submit">Agregar</button>
-							</div>
-							<div class="span1" style="margin-left: -32px;">
-								<button class="btn" type="reset">Cancelar</button>
-							</div>
+					<div class="row-fluid" style="margin-top: 2%">
+		
+						<div class= "span4" style="margin-left:4%">
+							<button class ="btn" type="submit" >Agregar</button>
 						</div>
+						<div class= "span3" style="margin-left:0%">
+							<button class ="btn" type="reset" >Cancelar</button>
+						</div>
+					</div>
 					</div> 
 
 					
