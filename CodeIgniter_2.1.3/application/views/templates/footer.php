@@ -1,5 +1,5 @@
 <!-- Contiene información del pie de la página -->
-<footer class="footer" id="footer">
+<footer class="footer" id="footer" style="min-width:820px;">
 	<p class="muted">
 	Equipo de desarrollo de IHC 1-2013.
 	Compatible con:

@@ -392,7 +392,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 			<div class="control-group span4">
 				<label class="control-label" for="filtroPorTipoDeDestinatario">Filtrar por tipo destinatario</label>
 				<div class="controls">
-					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" >
+					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" class="input-large">
 						<option  value="0">Todos</option>
 						<option  value="1">Alumnos</option>
 						<option  value="2">Profesore</option>
@@ -407,7 +407,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" >
+					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="input-large">
 						<option  value="0">Todos</option>
 						<option  value="1">profe1</option>
 						<option  value="2">profe2</option>
@@ -421,7 +421,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorCarrera">Filtrar por carrera</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorCarrera" title="Tipo de destinatario" >
+					<select id="filtroPorCarrera" title="Tipo de destinatario" class="input-large">
 						<option  value="0">Todos</option>
 						<option  value="1">Ing civil informática</option>
 						<option  value="2">Ing civil en minas</option>
@@ -437,7 +437,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorModuloTematico" title="Tipo de destinatario" >
+					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="input-large">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>
@@ -452,7 +452,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorSeccion" title="Tipo de destinatario" >
+					<select id="filtroPorSeccion" title="Tipo de destinatario" class="input-large">
 						<option  value="0">Todas</option>
 						<option  value="a1">A-01</option>
 						<option  value="b2">B-02</option>
@@ -467,7 +467,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque horario</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" >
+					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="input-large">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>
