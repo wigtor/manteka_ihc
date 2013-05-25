@@ -79,6 +79,9 @@ class Model_sala extends CI_Model {
     
 
 
+	
+	
+	
 	/**
 	* Obtiene los datos de todos los implementos de la base de datos
 	*
@@ -103,6 +106,35 @@ class Model_sala extends CI_Model {
 		return $lista;
 	}
 	
+		/**
+	* Obtiene los datos de todos los implementos de una determinada sala en la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los implementos del sistema
+	*/
+	public function VerTodosLosImplementosSala()
+	{
+		$sql="SELECT * FROM SALA_IMPLEMENTO "; //código MySQL
+		$datos1=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista=array();
+		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+			$cod=$row1['COD_IMPLEMENTO'];
+			$sql1="SELECT * FROM IMPLEMENTO WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
+			$datos=mysql_query($sql1); //enviar código MySQL
+			while ($row=mysql_fetch_array($datos)) {
+				$lista[$contador][0] = $row1['COD_SALA'];
+				$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
+				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
+				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
+			}
+			$contador++;
+		}
+		return $lista;
+	}
+
 
 
 
