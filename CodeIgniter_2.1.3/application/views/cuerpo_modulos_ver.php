@@ -1,104 +1,108 @@
-
-<fieldset>
-	<legend>M骴ulos</legend>
-	Instrucciones
-	<br>
-	<br>
-	<div class="container-fluid">
-	  <div class="row-fluid">
-		<div class="span4">
-			1. Escoja un m骴ulo de la lista
-			<br>
-			<br>
-			<form class="navbar-search pull-left">
-				<input type="text" class="search-query" placeholder="Filtro por nombre">
-			</form>
-			<br>
-			<br>
-			<br>
-			<select multiple="multiple">
-				<option>Comunicaci髇 y Medios</option>
-				<option>Estrategias de Comunicaci髇</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>
-			</select>
-			<br>
-			<br>
-		</div>
-		
-		<div class="span1">
-			<?php
-				/*$contador=0;
-				while ($contador<count($rs_modulos)){
-					
-					echo '<tr>';
-					echo	'<td  id="'.$contador.'" style="text-align:left;">'
-					echo 	$rs_modulos[$contador][0].' '.$rs_modulos[$contador][1].' '.$rs_modulos[$contador][2].' '.$rs_modulos[$contador][3].' '.$rs_modulos[$contador][4];
-					echo 	'</td>';
-					echo '</tr>';
-												
-					$contador = $contador + 1;
-				}*/
-			?>
-		</div>
-		
-		<div class="span7">
-			2. Detalle m骴ulo tem醫ico
-			<div class ="container-fluid">
-				<div class ="row-fluid">
-					<div class ="span5">
-						<br>
-						<b>Nombre del m骴ulo: 
-						<br>
-						<br>
-						<br>
-						Profesor jefe: 
-						<br>
-						<br>
-						<br>
-						Lista de profesores: 
-						<br>
-						<br>
-						<br>
-						Secciones que lo cursan: </b>
-						<br>
-						<br>
+<div>
+	<div class="span10">
+		<fieldset>
+			<legend>Ver M贸dulos</legend>
+	  		<div class="row-fluid">
+				<div class="span6">
+					<div class="row-fluid">
+						<div class="span6">
+							1. Escoja un m贸dulo de la lista
+						</div>
 					</div>
-					
-					<div class ="span7">
-						<br>
-						<b>Comunicaci髇 y Medios</b>
-						<br>
-						<br>
-						<br>
-						<a href="//" target="Mauricio Mar韓">Mauricio Mar韓</a>
-						<br>
-						<br>
-						<br>
-						<select>
-							<option>Edmundo Leiva</option>
-							<option>Profe 2</option>
-							<option>Profe 3</option>
-							<option>Profe 4</option>
-							<option>Profe 5</option>
-						</select>
-						<br>
-						<br>
-						<select>
-							<option>A-01</option>
-							<option>Cord 2</option>
-							<option>Cord 3</option>
-							<option>Cord 4</option>
-							<option>Cord 5</option>
-						</select>
-						<br>
-						<br>
+				<div class="row-fluid">
+					<div class="span11">
+						<div class="row-fluid">
+							<div class="span8">
+								<input id="filtroLista"   type="text" placeholder="Filtro b煤squeda" style="width:90%">
+							</div>
+							<div class="span3">
+								<button class ="btn" type="submit" >Buscar</button>
+							</div>
+						</div>
 					</div>
 				</div>
+
+				<div class="row-fluid" style="margin-left: 0%; width:90%">
+					<thead>
+						<tr>
+							<th style="text-align:left;"><br><b>Nombre del m贸dulo</b></th>
+							
+						</tr>
+					</thead>
+
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+							<tbody>
+							
+								
+														
+							</tbody>
+						</table>
+					</div>
+				</div>	
+			
+		</div>
+		
+		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+			2. Detalle M贸dulo Tem谩tico
+			<div class ="row-fluid">
+				<pre style="margin-top: 2%; padding: 2%; height:6%">
+Nombre del M贸dulo:	M贸dulo 1
+Profesor Lider: 	Mauricio Mar铆n
+
+			</pre>
+				
 			</div>
+			<div class="row-fluid">
+				<div class="row-fluid">
+						<div class="span6">
+							3. Sesiones del M贸dulo Tem谩tico
+						</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+									
+									
+					<table class="table table-hover">
+						<thead>
+
+						</thead>
+						<tbody>									
+									
+											
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="row-fluid" style="margin-top:2%">
+						<div class="span7">
+							4. Profesores del M贸dulo Tem谩tico
+						</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+									
+									
+					<table class="table table-hover">
+						<thead>
+
+						</thead>
+						<tbody>									
+									
+											
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
 		</div>
 	  </div>
-	</div>
+
 	
-</fieldset>
+		</fieldset>
+	</div>
+</div>

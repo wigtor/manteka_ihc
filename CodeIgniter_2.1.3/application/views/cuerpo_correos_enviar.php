@@ -1,4 +1,6 @@
+<!--
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
+-->
 
 <script type='text/javascript'>
 
@@ -346,6 +348,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 }
 </script>
 
+
 <fieldset id="cuadroEnviar">
     <legend>&nbsp;Enviar correo&nbsp;</legend>
 	<div class="inicio" title="Paso 1: Selección de plantilla">
@@ -368,111 +371,299 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	</div>
 </fieldset>
 	
+
 <fieldset id="cuadroDestinatario" style="display:none;">
 	<legend>&nbsp;Enviar correo&nbsp;</legend>
 	<div class="bloque" title="Paso 2: Seleccionar destinatario(s)">
-	<div class="texto2">
-	Paso 2: Seleccione destinatario.
+		<h5>
+			Paso 2: Seleccione destinatario.
+		</h5>
 	</div>
-	
-	<div id="contenedorFilter">
-	<div id="contenedorFiltro1">
-	<div id="pcs" class="seleccion">
-	<input id="filtroLista" name="filtroLista" style="font-size:9pt;font-weight:bold;"onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Filtro búsqueda">
-	<select id="tipoDeDestinatario" title="Tipo de destinatario" onChange="showDestinatarios(this.value)">
-	<option value="1">Estudiantes</option>
-	<option value="2">Profesores</option>
-	<option value="3">Ayudantes</option>
-	</select>
-	</div>
-	</div>
-	<div id="contenedorFiltro2">
-	<fieldset id="lista">
-	<table id="tabla" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
-	<thead>
-	<tr>
-	<th style="text-align:left;width:600px;">Nombre Completo</th>
-	</tr>
-	</thead>
-	<tbody id="test">
-                                
-	<?php
-	//TD DEL ESTUDIANTE
-	$rs_receptor=$rs_estudiantes;
-	$contador=0;
-	$comilla= "'";
-	echo '<form id="formDetalleEstudiante" type="post">';    
-	while ($contador<count($rs_receptor))
-	{
-		echo '<tr>';
-		echo '<td id="'.$contador.'" class="td_estudiante" onclick="DetalleAlumno('.$comilla.$rs_receptor[$contador][0].
-		$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
-		','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
-		$rs_receptor[$contador][3].$comilla.','.$comilla. 
-		$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
-		','. $comilla.$rs_receptor[$contador][6].$comilla.','.$comilla. $rs_receptor[$contador][7].$comilla.
-		')"style="text-align:left;">'. $rs_receptor[$contador][3].
-		' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
-		'</td>';
-		echo '</tr>';
-		$contador = $contador + 1;
-	}
-	
-	echo '</form>';
-	//TD DEL PROFESOR                                
-	$rs_receptor=$rs_profesores;
-	$contador=0;
-	$comilla= "'";
-	echo '<form id="formDetalleProfesor" type="post">';
-                                    
-	while ($contador<count($rs_receptor))
-	{
-		echo '<tr>';
-		echo '<td id="'.$contador.'" class="td_profesor" style="display:none" onclick="DetalleProfesor('.$comilla.$rs_receptor[$contador][0].
-		$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
-		','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
-		$rs_receptor[$contador][3].$comilla.','.$comilla. 
-		$rs_receptor[$contador][4].$comilla.')"style="text-align:left;">'. $rs_receptor[$contador][3].
-		' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
-		'</td>';
-		echo '</tr>';
-		$contador = $contador + 1;
-	}
-	
-	echo '</form>';
+	<div id="filtrosSelect">
+		<div class="row-fluid">
+			 <div class="control-group span9">
+				<label class="control-label" for="filtroLista">Ingrese el nombre de quien busca o parte de su nombre</label>
+				<div class="controls">
+					<input id="filtroLista" name="filtroLista" style="font-size:9pt;font-weight:bold;" onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Filtro búsqueda">
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorTipoDeDestinatario">Filtrar por tipo destinatario</label>
+				<div class="controls">
+					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" >
+						<option  value="0">Todos</option>
+						<option  value="1">Alumnos</option>
+						<option  value="2">Profesore</option>
+						<option value="3">Ayudantes</option>
+						<option value="4">Coordinadores</option>
+					</select>
+				</div>
+			</div>
 
-	//TD DEL AYUDANTE
 
-	$rs_receptor=$rs_ayudantes;
-	$contador=0;
-	$comilla= "'";
-	echo '<form id="formDetalleAyudante" type="post">';
-                                    
-	while ($contador<count($rs_receptor))
-	{
-		echo '<tr>';
-		echo '<td id="'.$contador.'" class="td_ayudante" style="display:none" onclick="DetalleAyudante('.$comilla.$rs_receptor[$contador][0].
-		$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
-		','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
-		$rs_receptor[$contador][3].$comilla.','.$comilla. 
-		$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
-		')"style="text-align:left;">'. $rs_receptor[$contador][3].
-		' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
-		'</td>';
-		echo '</tr>';
-		$contador = $contador + 1;
-	}
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" >
+						<option  value="0">Todos</option>
+						<option  value="1">profe1</option>
+						<option  value="2">profe2</option>
+						<option value="3">profe3</option>
+						<option value="4">profe4</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorCarrera">Filtrar por carrera</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorCarrera" title="Tipo de destinatario" >
+						<option  value="0">Todos</option>
+						<option  value="1">Ing civil informática</option>
+						<option  value="2">Ing civil en minas</option>
+						<option value="3">Ing civil elétrica</option>
+						<option value="4">Ing  industrial</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorModuloTematico" title="Tipo de destinatario" >
+						<option  value="0">Todos</option>
+						<option  value="1">Unidad 1</option>
+						<option  value="2">Unidad 2</option>
+						<option value="3">Unidad 3</option>
+						<option value="4">Unidad 4</option>
+						<option value="5">Unidad 5</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorSeccion" title="Tipo de destinatario" >
+						<option  value="0">Todas</option>
+						<option  value="a1">A-01</option>
+						<option  value="b2">B-02</option>
+						<option value="c3">C-03</option>
+						<option value="d4">D-04</option>
+						<option value="e5">E-05</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque horario</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" >
+						<option  value="0">Todos</option>
+						<option  value="1">Unidad 1</option>
+						<option  value="2">Unidad 2</option>
+						<option value="3">Unidad 3</option>
+						<option value="4">Unidad 4</option>
+						<option value="5">Unidad 5</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Este es el listado de resultados del filtro -->
+	<div id="listasDeDestinatarios" class="row-fluid">
+		<div id="listaResultadosFiltro" class="span5">
+			<table id="tabla" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+				<thead>
+					<tr>
+						<th >
+							<input type="checkbox" id="seleccionarTodosDelFiltro">
+						</th>
+						<th>
+							Resultados del filtro
+						</th>
+					</tr>
+				</thead>
+
+
+				<tbody>
+					<tr>
+						<td >
+							<input type="checkbox" id="seleccionarTodosDelFiltro">
+						</td>
+						<td>
+							Juan Perez Torres
+						</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Este es el botón que está entremedio de los dos listados -->
+		<div class="span2 text-center">
+			<div class="btn">Agregar</div>
+		</div>
+
+		<!-- Este es el listado de destinatarios seleccionados para el envío -->
+		<div id="listaDestinatarios" class="span5">
+			<table id="tabla" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+				<thead>
+					<tr>
+						<th>
+							Destinatarios seleccionados
+						</th>
+						<th >
+							<input type="checkbox" id="seleccionarTodosDelFiltro">
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Botones atrás y siguiente -->
+	<div class="row-fluid">
+		<ul class="pager pull-right">
+			<li>
+				<div class ="btn" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</div>
+			</li>
+			<li>
+				<div class ="btn" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</div>
+			</li>
+		</ul>
+	</div>
+</fieldset>
+
+
+
+
+<!-- PARTE ANTIGUA DE LA PARTE DE LA SELECCIÓN DE DESTINATARIOS -->
+<fieldset id="cuadroDestinatario_old" style="display:none;">
+	<legend>&nbsp;Enviar correo&nbsp;</legend>
+	<div class="bloque" title="Paso 2: Seleccionar destinatario(s)">
+		<div class="texto2">
+			Paso 2: Seleccione destinatario.
+		</div>
 	
-	echo '</form>';
-	?>
-	</tbody>
-	</table>
-	<script type="text/javascript">
-	addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
-	</script> 
-	</fieldset>
-	</div>
-	</div>
+		<div id="contenedorFilter">
+			<div id="contenedorFiltro1">
+				<div id="pcs" class="seleccion">
+					<input id="filtroLista" name="filtroLista" style="font-size:9pt;font-weight:bold;" onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Filtro búsqueda">
+					<select id="tipoDeDestinatario" title="Tipo de destinatario" >
+						<option  value="1">Estudiantes</option>
+						<option  value="2">Profesores</option>
+						<option value="3">Ayudantes</option>
+					</select>
+				</div>
+			</div>
+			
+
+			<div id="contenedorFiltro2">
+				<fieldset id="lista">
+				<table id="tabla" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+				<thead>
+				<tr>
+				<th style="text-align:left;width:600px;">Nombre Completo</th>
+				</tr>
+				</thead>
+				<tbody id="test">
+			                                
+				<?php
+				//TD DEL ESTUDIANTE
+				$rs_receptor=$rs_estudiantes;
+				$contador=0;
+				$comilla= "'";
+				echo '<form id="formDetalleEstudiante" type="post">';    
+				while ($contador<count($rs_receptor))
+				{
+					echo '<tr>';
+					echo '<td id="'.$contador.'" class="td_estudiante" onclick="DetalleAlumno('.$comilla.$rs_receptor[$contador][0].
+					$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
+					','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
+					$rs_receptor[$contador][3].$comilla.','.$comilla. 
+					$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
+					','. $comilla.$rs_receptor[$contador][6].$comilla.','.$comilla. $rs_receptor[$contador][7].$comilla.
+					')"style="text-align:left;">'. $rs_receptor[$contador][3].
+					' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
+					'</td>';
+					echo '</tr>';
+					$contador = $contador + 1;
+				}
+				
+				echo '</form>';
+				//TD DEL PROFESOR                                
+				$rs_receptor=$rs_profesores;
+				$contador=0;
+				$comilla= "'";
+				echo '<form id="formDetalleProfesor" type="post">';
+			                                    
+				while ($contador<count($rs_receptor))
+				{
+					echo '<tr>';
+					echo '<td id="'.$contador.'" class="td_profesor" style="display:none" onclick="DetalleProfesor('.$comilla.$rs_receptor[$contador][0].
+					$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
+					','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
+					$rs_receptor[$contador][3].$comilla.','.$comilla. 
+					$rs_receptor[$contador][4].$comilla.')"style="text-align:left;">'. $rs_receptor[$contador][3].
+					' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
+					'</td>';
+					echo '</tr>';
+					$contador = $contador + 1;
+				}
+				
+				echo '</form>';
+
+				//TD DEL AYUDANTE
+
+				$rs_receptor=$rs_ayudantes;
+				$contador=0;
+				$comilla= "'";
+				echo '<form id="formDetalleAyudante" type="post">';
+			                                    
+				while ($contador<count($rs_receptor))
+				{
+					echo '<tr>';
+					echo '<td id="'.$contador.'" class="td_ayudante" style="display:none" onclick="DetalleAyudante('.$comilla.$rs_receptor[$contador][0].
+					$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
+					','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
+					$rs_receptor[$contador][3].$comilla.','.$comilla. 
+					$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
+					')"style="text-align:left;">'. $rs_receptor[$contador][3].
+					' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
+					'</td>';
+					echo '</tr>';
+					$contador = $contador + 1;
+				}
+				
+				echo '</form>';
+				?>
+				</tbody>
+				</table>
+				<script type="text/javascript">
+						addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
+				</script>
+
+
+
+		</div>
 	</div>
 	
 	<div class="span5" style="margin-left: 2%; padding: 0%;">
@@ -508,9 +699,8 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	</pre>
 	</div>
 	<div class="menu">
-	<button class ="btn" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</button>
-	<button class ="btn" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</button>
-	</div>
+		<button class ="btn" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</button>
+		<button class ="btn" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</button>
 	</div>
 </fieldset>
 

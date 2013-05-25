@@ -1,6 +1,11 @@
+
+
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Salas extends CI_Controller {
+require_once APPPATH.'controllers/Master.php'; 
+
+class Salas extends MasterManteka {
+
 	
 	/**
 	 * Index Page for this controller.
@@ -24,49 +29,70 @@ class Salas extends CI_Controller {
 
 	public function verSalas()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Salas";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = TRUE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		
-		//L?gica del controlador
-		
-		
-		
-		
 		
 
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_salas_ver', '', true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_salas', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$datos_vista = 0;		
+		$subMenuLateralAbierto = "verSalas"; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	
+	
 	}
 
-	public function crearSalas()
+	public function agregarSalas()
     {
-    	//
+		$datos_vista = 0;		
+		$subMenuLateralAbierto = "agregarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		
+
+		$this->load->model('Model_sala');
+		$cod_sala = $this->input->get("cod_sala");
+        $num_sala = $this->input->get("num_sala");
+        $ubicacion = $this->input->get("ubicacion");;
+        $capacidad = $this->input->get("capacidad");
+		$implementos = $this->input->get("cod_implemento");
+        $confirmacion = $this->Model_sala->InsertarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos);
+	    
+	  
+		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);
+		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+	
     }
     
-    public function modificarSalas()
+    public function editarSalas()
     {
-    	//
+    	$datos_vista = 0;		
+		$subMenuLateralAbierto = "editarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		
+
+		$this->load->model('Model_sala');
+
+		$cod_sala = $this->input->get("cod_sala");
+	    $num_sala = $this->input->get("num_sala");
+		$ubicacion = $this->input->get("ubicacion");;
+		$capacidad = $this->input->get("capacidad");
+
+		$implementos = $this->input->get("cod_implemento");
+		echo $implementos[0];
+
+        $confirmacion = $this->Model_sala->ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos);
+	  
+	  
+		$datos_vista = array('rs_sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>$confirmacion,'implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);
+		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
     }
 
-    public function eliminarSalas()
+    public function borrarSalas()
     {
     	//
     }
