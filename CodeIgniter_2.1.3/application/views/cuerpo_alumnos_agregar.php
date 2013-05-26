@@ -201,19 +201,29 @@ function ordenarFiltro(){
 								</div>
 
 							</div>
+							<div class="row" style="margin-top:2%">
+								<div class="span3 offset5">
+									<button class="btn" type="submit" style="width:102px">
+										<div class= "btn_with_icon_solo">Ã</div>
+										&nbsp Agregar
+
+									</button>
+								</div>
+								<div class="span3">
+									<button class="btn" type="submit" style="width:105px">
+										<div class= "btn_with_icon_solo">Â</div>
+										&nbsp Cancelar
+
+									</button>
+								</div>
+
+							</div>
 							
 						</div>
 					</div>
 
 				</div>
-					<div class="row" style="width: 845px; margin-top:10px">		
-							<div class="span2" style="margin-left: 654px;">
-									<button class="btn" type="submit">Agregar</button>
-								</div>
-								<div class="span1" style="margin-left: -32px;">
-									<button class="btn" type="reset">Cancelar</button>
-								</div>
-							</div>
+					
 				</div> 
 			</div>
 		</form>
