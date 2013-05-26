@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/personalizados.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/ant-sig.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/contents.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/faq.css" type="text/css" media="all" />
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-transition.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-alert.js"></script>
@@ -27,4 +28,5 @@
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/config.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/build-config.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/styles.js"></script>
+    <script src="/<?php echo config_item('dir_alias') ?>/javascripts/faq.js"></script>
 </head>

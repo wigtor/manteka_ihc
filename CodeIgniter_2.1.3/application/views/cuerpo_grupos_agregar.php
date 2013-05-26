@@ -1,3 +1,12 @@
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista agregar grupos de contacto en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Agregar grupo de contacto</legend></br>
 	<div class="span6">
@@ -27,7 +36,7 @@
 				<li>Apellido materno</li>
 				<li>Correo</li>
 				<li>Carrera</li>
-				<li>Sección</li>
+				<li>Secciï¿½n</li>
 				</ul>
 			</div>
 		</div>
@@ -46,5 +55,5 @@
 </fieldset>
 
 <script type="text/javascript">
-	alert("En esta vista esta solo implementada la parte visual. Ninguna funcionalidad está disponible.")
+	alert("En esta vista esta solo implementada la parte visual. Ninguna funcionalidad estï¿½ disponible.")
 </script>

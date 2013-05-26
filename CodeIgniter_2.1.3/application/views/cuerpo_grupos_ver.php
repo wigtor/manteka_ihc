@@ -1,3 +1,12 @@
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista ver grupos de contacto en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Grupos</legend>
 	    <div class="row"><!--fila-->

@@ -1,14 +1,23 @@
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista modificar grupos de contacto en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Agregar grupo de contacto</legend></br>
 	<div class="span4">
 		<h4>Seleccionar grupo:<h4/></br>
 			<div class="span12">
-				<input class ="input-xlarge" type="text" placeholder="Filtro de búsqueda">
+				<input class ="input-xlarge" type="text" placeholder="Filtro de bï¿½squeda">
 				<select size=13 style="width:285px">
 				<option>IHC</option>
 				<option>Manteka</option>
 				<option>Grupo A</option>
-				<option>Agrupación marilyn</option>
+				<option>Agrupaciï¿½n marilyn</option>
 				</select>
 			</div>	
 	</div>
@@ -45,10 +54,10 @@
 				<ul class="dropdown-menu">
 				<li>Nombre</li>
 				<li>Rut</li>
-				<li>Contraseña</li>
-				<li>Reingresar contraseña</li>
+				<li>Contraseï¿½a</li>
+				<li>Reingresar contraseï¿½a</li>
 				<li>Correo </li>
-				<li>Teléfono</li>
+				<li>Telï¿½fono</li>
 				</ul>
 			</div>
 		</div>
@@ -68,5 +77,5 @@
 </fieldset>
 
 <script type="text/javascript">
-	alert("En esta vista esta solo implementada la parte visual. Ninguna funcionalidad está disponible.")
+	alert("En esta vista esta solo implementada la parte visual. Ninguna funcionalidad estï¿½ disponible.")
 </script>

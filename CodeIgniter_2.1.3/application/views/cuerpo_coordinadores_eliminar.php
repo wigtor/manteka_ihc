@@ -1,4 +1,13 @@
 
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista eliminar coordinadores en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Eliminar Coordinadores</legend>
 	    <div class="row" style="margin-left:30px;"><!--fila-->
@@ -41,10 +50,10 @@
 		                <?php 
 		                	foreach ($listado_coordinadores as $coordinador) {
 		                		echo "<tr class ='fila_tabla' style='display:none;' id='id".$coordinador['id']."'>";
-			                	echo "<td>1".$coordinador['rut']."</td>";
-			                	echo "<td>2".$coordinador['nombre']."</td>";
-			                	echo "<td>2".$coordinador['nombre']."</td>";
-			                	echo "<td>2".$coordinador['nombre']."</td>";
+			                	echo "<td>".$coordinador['rut']."</td>";
+			                	echo "<td>".$coordinador['nombre']."</td>";
+			                	echo "<td>".$coordinador['nombre']."</td>";
+			                	echo "<td>".$coordinador['nombre']."</td>";
 			                	echo "</tr>";
 		                	}
 		                ?>
@@ -54,10 +63,13 @@
 		        
 		        <div class="offset9 span1">
 		        	<br/>
-		        	<form  action="borrarCoordinadores" method="POST" onsubmit="return confirmar();">
+			        	<?php
+							$attributes = array('onSubmit' => 'return confirmar()');
+							echo form_open('Coordinadores/borrarCoordinadores', $attributes);
+						?>
 		        		<input type="hidden" name="lista_eliminar" id="input-eliminar">
 	  					<button class="btn btn-danger" type="sumbit">Eliminar</button>
-	  				</form>
+	  				<?php echo form_close(""); ?>
 				</div>
 		        <div class="span1"></div>
 		    </div>
