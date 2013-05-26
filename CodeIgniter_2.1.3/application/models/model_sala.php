@@ -61,19 +61,22 @@ class Model_sala extends CI_Model {
 	*/
     public function EliminarSala($cod_sala)
     {
-
-		$this->db->where('COD_SALA', $cod_sala);
-		$this->db->delete('SALA_IMPLEMENTO'); 
+		if($cod_sala==""){ return 2;}
+		else{
 		
-		$this->db->where('COD_SALA', $cod_sala);
-		$this->db->delete('SALA'); 
+		$sql="DELETE FROM sala_implemento WHERE COD_SALA = '$cod_sala' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		
+		$sql1="DELETE FROM sala WHERE COD_SALA = '$cod_sala' "; //código MySQL
+		$datos1=mysql_query($sql1); //enviar código MySQL
 
 
-		if($datos == true){
+		if($datos == true && $datos1==true){
 			return 1;
 		}
 		else{
 			return -1;
+		}
 		}
     }
     

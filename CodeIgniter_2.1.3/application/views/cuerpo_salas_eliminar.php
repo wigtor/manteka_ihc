@@ -1,10 +1,24 @@
 <script type="text/javascript">
+	
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
+				alert("Sala eliminada correctamente");
+				}
+				else{
+					alert("Error al eliminar");
+				}
+	}
+</script>
+
+<script type="text/javascript">
 	function DetalleSala(cod_sala,num_sala,ubicacion,capacidad){
-		
+	
+			document.getElementById("codEliminar").value = cod_sala;
 			document.getElementById("cod_sala").innerHTML = cod_sala;
 			document.getElementById("num_sala").innerHTML = num_sala;
 			document.getElementById("capacidad").innerHTML = capacidad;
 			document.getElementById("ubicacion").innerHTML = ubicacion;
+			
 			var imp= new Array();	
 			<?php
 				$contadorE = 0;
@@ -28,7 +42,29 @@
 			
 	}
 </script>
-
+<script type="text/javascript">
+	function eliminarSala(){
+		
+		var cod = document.getElementById("codEliminar").value;
+		
+		if(cod!=""){
+					var answer = confirm("¿Está seguro de eliminar esta sala?")
+					if (!answer){
+						var dijoNO = DetalleSala("","","","","","","");
+					}
+					else{
+					var borrar = document.getElementById("formBorrar");
+					borrar.action = "<?php echo site_url("Salas/EliminarSalas/") ?>/"+cod;
+					borrar.submit();
+					}
+					
+		}
+		else{
+				alert("Selecione una sala");
+		}
+		
+	}
+</script>
 						
 <script type="text/javascript">
 function ordenarFiltro(){
@@ -67,7 +103,7 @@ function ordenarFiltro(){
 <div class="row-fluid">
 <div class="span10">
 <fieldset>
-	<legend>Ver Sala</legend>
+	<legend>Eliminar Sala</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="row-fluid">
@@ -130,18 +166,34 @@ function ordenarFiltro(){
 				<!--</div>-->
 			</div>
 		</div>
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+		<div class="span6">
+			<div style="margin-bottom:2%">
 		2.-Detalle de la Sala:
-	    <pre style="margin-top: 2%; padding: 2%">
-		
-Codigo sala:   <b id="cod_sala"></b>
-Numero sala:    <b id="num_sala"></b>
-Capacidad:      <b id="capacidad" ></b>
-Ubicacion:      <b id="ubicacion"></b>
-Implementos:    <b id="impDetalle"></b>
-</pre>
-
 		</div>
+	   <form id="formBorrar" type="post" >
+			<div class="row-fluid">
+				<div>
+			<pre style="margin-top: 0%; margin-left: 0%;">
+Codigo sala:    <b id="cod_sala"></b>
+Numero sala:    <b id="num_sala"></b> 
+Capacidad: 	<b id="capacidad"></b>
+Ubicacion:	<b id="ubicacion"></b>
+Implementos  <b id="impDetalle"></b></pre>
+<input type="hidden" id="codEliminar" value="">
+				</div>		
+			</div>
+								<div class="row-fluid">
+									<div class="span3 offset6">
+										<button class ="btn" onclick="eliminarSala()" >Eliminar</button>
+										</div>
+									<div class="span3">
+										<button  class ="btn" type="reset" onclick="DetalleSala('','','','','','')" >Cancelar</button>
+									</div>
+								</div>
+		</form>
+		</div>
+
 	</div>
 </fieldset>
+</div>
 </div>
