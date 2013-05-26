@@ -1,6 +1,12 @@
 ﻿<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
 
 <script type="text/javascript">
+
+var id;
+var extended=false;
+var destinoaux;
+
+
 /** 
 * Esta función se llama al clickear un correo de la bandeja de correos enviados, En primera instancia muestra el detalle
 * de dicho correo y a la vez ocultando la bandeja de correos mostrando sólo el detalle del correo seleccionado. 
@@ -8,64 +14,53 @@
 * deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
 * Para ver como se configura esto se debe ver en el evento onclick() en donde están contenidos los correos (bandeja) .
 */
-function DetalleCorreo(plantilla,hora,fecha,cuerpo,asunto)
+function DetalleCorreo(hora,fecha,asunto,id,destino)
 {		
-	if(plantilla=="")
-		plantilla="No se utilizó plantilla para este correo.";
-	if(cuerpo=="")
-		plantilla="Este correo se envío sin cuerpo.";
-	if(asunto=="")
-		asunto="Este correo se envío sin asunto.";
 	document.getElementById("fecha").innerHTML=fecha;
 	document.getElementById("hora").innerHTML=hora;
-	document.getElementById("plantilla").innerHTML=plantilla;
 	document.getElementById("asuntoDetalle").innerHTML=asunto;
-	document.getElementById("cuerpoMail").innerHTML=cuerpo;
+	document.getElementById("cuerpoMail").innerHTML=document.getElementById("c"+id).value;
+	
+	this.id=id;
+	if(extended){
+		;
+		document.getElementById("destinos").innerHTML=destinoaux;
+		extended= false;
+			
+	}else{
+		destinoaux=destino
+		document.getElementById("destinos").innerHTML=destino.substring(0,5 );
+		extended= true;	
+	}
+
+	
 	$('#cuadroEnviados').css({display:'none'});
-	$('#cuadroDestinoCorreo').css({display:'none'});
 	$('#cuadroDetalleCorreo').css({display:'block'});
 }
-</script>
 
-<script type="text/javascript">
 /** 
 * Esta función se llama al clickear el botón que se encuentra en el Detalle del Correo, para poder mostrar nuevamente la 
 * bandeja de correos enviados y ocultar el detalle del correo que se estaba mostrando.
 * Para ver como se configura esto se debe ver en el evento onclick() del botón que se encuentra en el Detalle de Correo.
 */
-function volverCorreosRecibidos()
+function volverCorreosEnviados()
 {		
-	$('#cuadroDestinoCorreo').css({display:'none'});
 	$('#cuadroDetalleCorreo').css({display:'none'});
 	$('#cuadroEnviados').css({display:'block'});
 }
-</script>
 
-<script type="text/javascript">
 /** 
-* Esta función recibe como argumento un string que tiene concatenado todos los detalles del correo
-* (destinaario, fecha, hora, mensaje, asunto, etc). Además indica con un número (el primer caracter) el tipo de destinatiario
-* del correo (alumno, ayudante, profesor, coordinador) de esta forma se sabe que en lista se pdorá mostrar la información
-* contenida en el string.
-* La función en éste instante se encuentra incompleta ya que la su funcionalidad está orientada a sólo 1 destinatario
-* pero se pretende mostrar todos los destinatarios de un mismo correo.
+* Esta función alterna 
 */
 
-function DestinoCorreo(destino)
+function DestinoCorreo()
 {		
-	var personaE="Este email no fue enviado a ningún estudiante";
-	var personaA="Este email no fue enviado a ningún ayudante";
-	var personaP="Este email no fue enviado a ningún profesor";
-	var personaC="Este email no fue enviado a ningún coordinador";
-	if(destino.substr(0,1)=="1")
-		personaE=destino.substr(1);
-	document.getElementById("destinoE").innerHTML=personaE;
-	document.getElementById("destinoA").innerHTML=personaA;
-	document.getElementById("destinoP").innerHTML=personaP;
-	document.getElementById("destinoC").innerHTML=personaC;
-	$('#cuadroEnviados').css({display:'none'});
-	$('#cuadroDetalleCorreo').css({display:'none'});
-	$('#cuadroDestinoCorreo').css({display:'block'});
+	var fecha=document.getElementById("fecha").innerHTML;
+	var hora=document.getElementById("hora").innerHTML;
+	var asunto=document.getElementById("asuntoDetalle").innerHTML;
+	
+	var destino=document.getElementById("destinos").innerHTML;
+	DetalleCorreo(hora,fecha,asunto,id,destino);
 }
 </script>
 
@@ -110,7 +105,6 @@ function eliminarCorreo()
 			$('#cuadroEnviados').css({display:'none'});
 			$('#msjEliminacion1').css({display:'none'});
 			$('#msjEliminacion2').css({display:'none'});
-			$('#cuadroDestinoCorreo').css({display:'none'});
 			$('#cuadroDetalleCorreo').css({display:'none'});
 			$('#cRC').css({display:'block'});
 			if(checked_ids[0]=="marcar")
@@ -175,25 +169,21 @@ if(isset($msj))
 		if(count($correos)!==0)
 		{
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo()" >Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo()" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
 			<?php
 		}
 		?>
 		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" style="font-size:12px; margin-top:5%;" border="1" cellpadding="5">
-		<tr>
-		<td width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-		<td width="8%" bgcolor="lightgrey"><b>Fecha</b></td>
-		<td width="8%" bgcolor="lightgrey"><b>Hora</b></td>
-		<td width="27%" bgcolor="lightgrey"><b>Asunto</b></td>
-		<td width="12%" bgcolor="lightgrey"><b>N° destinatarios</b></td>
-		<td width="13%" bgcolor="lightgrey"><b>Lista destinatarios</b></td>
-		<td width="7%" bgcolor="lightgrey"><b>Detalles</b></td>
-		</tr>
-		</table>
+		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
+		<thead>
+		<th width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
+		<th width="23%" bgcolor="lightgrey"><b>Para</b></td>
+		<th width="27%" bgcolor="lightgrey"><b>Mensaje</b></td>
+		<th width="8%" bgcolor="lightgrey"><b>Fecha</b></td>
+		<th width="8%" bgcolor="lightgrey"><b>Hora</b></td>
+		</thead>
 		
-		<div style="width:100%;height:200px;overflow:auto;">
-		<table class="table-hover" height="35px" width="98%" align="center" cellpadding="5" style="font-size:12px;border-bottom:solid 1px gray;border-left:solid 1px gray;border-right:solid 1px gray;color:#666666;font-weight:bold">
+		
 		<tbody>
 		<?php
 		if(count($correos)===0)
@@ -210,45 +200,50 @@ if(isset($msj))
 			while($contador<count($correos))
 			{	
 				$destino='';
+				$para='';
 				$total=0;
 				if(count($estudiantesEnviados[0])!=0)
 				{
 					$total+=count($estudiantesEnviados);
-					$destino='11. <font color=blue><b>RUT: </b></font>'.$estudiantesEnviados[0][0]['rut_estudiante'].'  <font color=blue><b>NOMBRE: </b></font>'.$estudiantesEnviados[0][0]['nombre1_estudiante'].' '.$estudiantesEnviados[0][0]['nombre2_estudiante'].' '.$estudiantesEnviados[0][0]['apellido_paterno'].' '.$estudiantesEnviados[0][0]['apellido_materno'].'  <font color=blue><b>CORREO: </b></font>'.$estudiantesEnviados[0][0]['correo_estudiante'].'  <font color=blue><b>CARRERA: </b></font>'.$estudiantesEnviados[0][0]['cod_carrera'].'  <font color=blue><b>SECCIÓN: </b></font>'.$estudiantesEnviados[0][0]['cod_seccion'];
-				}
+					$destino=$estudiantesEnviados[0][0]['nombre1_estudiante'].' '.$estudiantesEnviados[0][0]['apellido_paterno'].' '.$estudiantesEnviados[0][0]['apellido_materno'].' &lt'.$estudiantesEnviados[0][0]['correo_estudiante'].'&gt';
+					$para=$estudiantesEnviados[0][0]['nombre1_estudiante'].' '.$estudiantesEnviados[0][0]['apellido_paterno'].' '.$estudiantesEnviados[0][0]['apellido_materno'];
+				}	
 				if(count($ayudantesEnviados[0])!=0)
 				{
 					$total+=count($ayudantesEnviados);
-					$destino='21. <font color=blue><b>RUT: </b></font>'.$ayudantesEnviados[0][0]['rut_ayudante'].'  <font color=blue><b>NOMBRE: </b></font>'.$ayudantesEnviados[0][0]['nombre1_ayudante'].' '.$ayudantesEnviados[0][0]['nombre2_ayudante'].' '.$ayudantesEnviados[0][0]['apellido_paterno'].' '.$ayudantesEnviados[0][0]['apellido_materno'].'  <font color=blue><b>CORREO: </b></font>'.$ayudantesEnviados[0][0]['correo_ayudante'];
+					$destino=$ayudantesEnviados[0][0]['nombre1_ayudante'].' '.$ayudantesEnviados[0][0]['apellido_paterno'].' '.$ayudantesEnviados[0][0]['apellido_materno'].' &lt'.$ayudantesEnviados[0][0]['correo_ayudante'].'&gt';
+					$para=$ayudantesEnviados[0][0]['nombre1_ayudante'].' '.$ayudantesEnviados[0][0]['apellido_paterno'].' '.$ayudantesEnviados[0][0]['apellido_materno'];
 				}
 				if(count($profesoresEnviados[0])!=0)
 				{
 					$total+=count($profesoresEnviados);
-					$destino='31. <font color=blue><b>RUT: </b></font>'.$profesoresEnviados[0][0]['rut_usuario2'].'  <font color=blue><b>NOMBRE: </b></font>'.$profesoresEnviados[0][0]['nombre1_profesor'].' '.$profesoresEnviados[0][0]['nombre2_profesor'].' '.$profesoresEnviados[0][0]['apellido1_profesor'].' '.$profesoresEnviados[0][0]['apellido2_profesor'].'  <font color=blue><b>TIPO: </b></font>'.$profesoresEnviados[0][0]['tipo_profesor'];
+					$destino=$profesoresEnviados[0][0]['nombre1_profesor'].' '.$profesoresEnviados[0][0]['apellido1_profesor'].' '.$profesoresEnviados[0][0]['apellido2_profesor'];
+					$para=$profesoresEnviados[0][0]['nombre1_profesor'].' '.$profesoresEnviados[0][0]['apellido1_profesor'].' '.$profesoresEnviados[0][0]['apellido2_profesor'];
 				}
 				if(count($coordinadoresEnviados[0])!=0)
 				{
 					$total+=count($coordinadoresEnviados);
-					$destino='41. <font color=blue><b>RUT: </b></font>'.$coordinadoresEnviados[0][0]['rut_usuario3'].'  <font color=blue><b>NOMBRE: </b></font>'.$coordinadoresEnviados[0][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[0][0]['nombre2_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido2_coordinador'];
+					$destino=$coordinadoresEnviados[0][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido2_coordinador'];
+					$para=$coordinadoresEnviados[0][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido2_coordinador'];
 				}
 				if($destino!='')
 				{
-					echo '<tr>';
-					echo '<td width="5%" id="'.$contador.'"
-					style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" name="'.$correos[$contador]['cod_correo'].'" onClick="disableOthers(this)"/></td>';
-			
-					echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;">'. $correos[$contador]['fecha'].'</td>';
-			
-					echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;">'.$correos[$contador]['hora'].'</td>';
-			
-					echo '<td width="27%" id="'.$contador.'" style="text-align:left;padding-left:7px;">'. $correos[$contador]['asunto'].'</td>';
+					echo '<tr >';
+				echo '<td width="5%" id="'.$contador.'"
+				style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" name="'.$correos[$contador]['cod_correo'].'" onClick="disableOthers(this)"/></td>';
+		
+				echo '<td width="23%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">Para: '.$para.'</td>';		
 
-					echo '<td width="12%" id="'.$contador.'" style="text-align:left;padding-left:7px;">'.$total.'</td>';
-			
-					echo '<td width="13%" id="'.$contador.'" style="text-align:left;padding-left:7px;"><a id="opener2" href="javascript:DestinoCorreo('.$comilla.$destino.$comilla.')">Ver</a></td>';
-			
-					echo '<td width="7%" id="'.$contador.'" style="text-align:left;padding-left:7px;"><a id="opener1" href="javascript:DetalleCorreo('.$comilla.$correos[$contador]['id_plantilla'].$comilla.','.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['cuerpo_email'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.')">Ver</a></td>';
-					echo '</tr>';
+				echo '<textarea id="c'.$contador.'" style="display:none;">'.$correos[$contador]['cuerpo_email'].'</textarea>';
+				
+				echo '<td width="27%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">'.substr('<b>' .$correos[$contador]['asunto']. '</b> - '.strip_tags( $correos[$contador]['cuerpo_email']),0,50).'......</td>';
+		
+				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">'. $correos[$contador]['fecha'].'</td>';
+		
+				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">'. $correos[$contador]['hora'].'</td>';
+				echo '</tr>';
+				
+				
 				}
 				$contador = $contador + 1;
 			}
@@ -256,7 +251,7 @@ if(isset($msj))
 		?>
 		</tbody>
 		</table>
-		</div>
+		
 		<input type="hidden" id="seleccion" name="seleccion" value="">
 		</form>
 		<?php
@@ -278,28 +273,14 @@ if(isset($msj))
 <fieldset id="cuadroDetalleCorreo" style="display:none;">
 	<legend>&nbsp;Correos enviados <font color="black">:::</font> detalles&nbsp;</legend>
 	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
-	<button class="btn" style="margin-right:1%;" onclick="volverCorreosRecibidos()">Volver a correos enviados</button>
+	<button class="btn" style="margin-right:1%;" onclick="volverCorreosEnviados()"><div class="btn_with_icon_solo"><</div> Volver</button>
 	</div>
 	</br>
+	
 	<pre class="detallesEmail">
-	<div class="etiqueta">Fecha de envío:</div><div class="txt" type="text" id="fecha"></div>
-	<div class="etiqueta">Hora de envío:</div><div class="txt" type="text" id="hora"></div>
-	<div class="etiqueta">Plantilla:</div><div class="txt" type="text" id="plantilla"></div>
-	<div class="etiqueta">Asunto:</div><div class="txt" type="text" id="asuntoDetalle"></div>
-	<div class="etiqueta">Cuerpo:</div><div class="txt2" type="text" id="cuerpoMail"></div>
-	</pre>
-</fieldset>
-
-<fieldset id="cuadroDestinoCorreo" style="display:none;">
-	<legend>&nbsp;Correos enviados <font color="black">:::</font> destinatarios&nbsp;</legend>
-	<div class="tituloPre2"><div class="tituloPreTxt">Destinatarios del correo seleccionado</div>
-	<button class="btn" style="margin-right:1%;" onclick="volverCorreosRecibidos()">Volver a correos enviados</button>
-	</div>
-	</br>
-	<pre class="listaDestinatarios">
-	<div class="etiqueta">Estudiantes:</div><div class="txt" type="select" id="destinoE"></div>
-	<div class="etiqueta">Ayudantes:</div><div class="txt" type="select" id="destinoA"></div>
-	<div class="etiqueta">Profesores:</div><div class="txt" type="select" id="destinoP"></div>
-	<div class="etiqueta">Coordinadores:</div><div class="txt2" type="select" id="destinoC"></div>
+<div style="text-align:right;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
+  <table class="table table-hover"><td onClick="DestinoCorreo()">Para:<b  class="txt" type="select" id="destinos"></b></td></table>
+  Asunto:  <b  id="asuntoDetalle"></b>
+  <fieldset id="cuerpoMail" style=" height:250px;"></fieldset>
 	</pre>
 </fieldset>
