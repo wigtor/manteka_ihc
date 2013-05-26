@@ -47,6 +47,46 @@
 		$(icono_cargando).show();
 	}
 
+
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+		//if (texto.trim() != "") {
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>", /* Se setea la url del controlador que responderá */
+				data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var tablaResultados = document.getElementById("listadoResultados");
+					var nodoTexto;
+					$(tablaResultados).empty();
+					var arrayRespuesta = jQuery.parseJSON(respuesta);
+					for (var i = 0, option, td; i < arrayRespuesta.length; i++) {
+						option =  document.createElement('option');
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						option.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
+						option.setAttribute("onClick", "detalleAlumno(this)");
+						option.appendChild(nodoTexto);
+						tablaResultados.appendChild(option);
+					}
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+			});
+
+			/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+		//}
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
+
 </script>
 
 <fieldset>
@@ -62,46 +102,46 @@
 				<div class="span11">
 					<div class="row-fluid">
 						<div class="span6">
-							<input id="filtroLista" type="text" placeholder="Filtro búsqueda" style="width:90%">
+							<input id="filtroLista" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda" style="width:90%">
 						</div>
 						<div class="span6">
-							<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="2">Filtrar por Apellido paterno</option>
-								<option value="3">Filtrar por Apellido materno</option>
-								<option value="4">Filtrar por Código Carrera</option>
-								<option value="5">Filtrar por Seccion</option>
+							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+								<option value="1">Filtrar por nombre</option>
+								<option value="2">Filtrar por apellido paterno</option>
+								<option value="3">Filtrar por apellido materno</option>
+								<option value="4">Filtrar por carrera</option>
+								<option value="5">Filtrar por seccion</option>
 								<option value="6">Filtrar por bloque horario</option>
 							</select> 
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<b>Nombre Completo</b>
 			<div class="row-fluid" style="margin-left: 0%;">
-				<!--<div class="span9">-->
-			
-					<thead>
-						<tr>
-							<th style="text-align:left;"><br><b>Nombre Completo</b></th>
-						</tr>
-					</thead>
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
-						<table class="table table-hover">
+					<select id="listadoResultados" class="span12" multiple="multiple" style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll -->
+						<!-- vacio, se carga por javascript usando ajax -->
+						
+						<!--
+						<table id="listadoResultados" class="table table-hover">
 							<tbody>
-								<?php
+								<?php /*
 								foreach ($rs_estudiantes as $row)
 								{
 									echo '<tr>
 										<td id="estudiante_'.$row->rut.'" onClick="detalleAlumno(this)">'.
 										$row->nombre1." ".$row->nombre2.
 										" ".$row->apellido1." ".$row->apellido2.'</td>
-										</tr>';
+										</tr>
+										';
 								}
+								*/
 								?>
 														
 							</tbody>
-						</table>
-					</div><!-- div de estilo mio que pasa jiles-->
+						</table> -->
+					</select><!-- div de estilo mio que pasa jiles-->
 				
 			
 				<!--</div>-->

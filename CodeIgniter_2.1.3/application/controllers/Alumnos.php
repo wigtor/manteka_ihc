@@ -3,7 +3,6 @@
 require_once APPPATH.'controllers/Master.php'; 
 
 class Alumnos extends MasterManteka {
-	
 	 
 	/**
 	* Manda a la vista 'cuerpo_alumnos_ver' los datos necesarios para su funcionamiento
@@ -376,8 +375,9 @@ class Alumnos extends MasterManteka {
 	* Recibe como parámetro el rut del estudiante
 	*/
 	public function postDetallesAlumnos() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
-			echo 'No estás logueado!!';
+			//echo 'No estás logueado!!';
 			return;
 		}
 
@@ -386,6 +386,20 @@ class Alumnos extends MasterManteka {
 		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
 		echo json_encode($resultado);
 	}
+
+	public function postBusquedaAlumnos() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltro');
+		$tipoFiltro = $this->input->post('tipoFiltro');
+		$this->load->model('Model_estudiante');
+
+		$resultado = $this->Model_estudiante->getAlumnosByFilter($tipoFiltro, $textoFiltro);
+		echo json_encode($resultado);
+	}
+
 }
 
 /* End of file Alumnos.php */
