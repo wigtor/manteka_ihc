@@ -4,6 +4,8 @@
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		rut_clickeado = idElem.substring("estudiante_".length, idElem.length);
+		//var rut_clickeado = elemTabla;
+
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
@@ -63,14 +65,26 @@
 					var nodoTexto;
 					$(tablaResultados).empty();
 					var arrayRespuesta = jQuery.parseJSON(respuesta);
+					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						tr.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
+						tr.setAttribute("onClick", "detalleAlumno(this)");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+						tablaResultados.appendChild(tr);
+					}
+					/*
 					for (var i = 0, option, td; i < arrayRespuesta.length; i++) {
 						option =  document.createElement('option');
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						option.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
-						option.setAttribute("onClick", "detalleAlumno(this)");
+						option.setAttribute("value", arrayRespuesta[i].rut);
+						option.setAttribute("onClick", "detalleAlumno(this.value)");
 						option.appendChild(nodoTexto);
 						tablaResultados.appendChild(option);
 					}
+					*/
 
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
@@ -118,33 +132,18 @@
 				</div>
 			</div>
 
-			<b>Nombre Completo</b>
-			<div class="row-fluid" style="margin-left: 0%;">
-					<select id="listadoResultados" class="span12" multiple="multiple" style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll -->
-						<!-- vacio, se carga por javascript usando ajax -->
-						
-						<!--
-						<table id="listadoResultados" class="table table-hover">
-							<tbody>
-								<?php /*
-								foreach ($rs_estudiantes as $row)
-								{
-									echo '<tr>
-										<td id="estudiante_'.$row->rut.'" onClick="detalleAlumno(this)">'.
-										$row->nombre1." ".$row->nombre2.
-										" ".$row->apellido1." ".$row->apellido2.'</td>
-										</tr>
-										';
-								}
-								*/
-								?>
-														
-							</tbody>
-						</table> -->
-					</select><!-- div de estilo mio que pasa jiles-->
-				
 			
-				<!--</div>-->
+			<div class="row-fluid" style="margin-left: 0%;">
+				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+					<table id="listadoResultados" class="table table-hover">
+						<thead>
+							<b>Nombre Completo</b>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
