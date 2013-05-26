@@ -4,25 +4,6 @@ require_once APPPATH.'controllers/Master.php';
 
 class Alumnos extends MasterManteka {
 	
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	 
-	 
-	 
-	 
 	 
 	/**
 	* Manda a la vista 'cuerpo_alumnos_ver' los datos necesarios para su funcionamiento
@@ -39,7 +20,7 @@ class Alumnos extends MasterManteka {
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'carreras' => $this->Model_estudiante->VerCarreras());
+        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->getAllAlumnos());
 	     
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -387,6 +368,23 @@ class Alumnos extends MasterManteka {
 	public function index() //Esto hace que el index sea la vista que se desee
 	{
 		$this->verAlumnos();
+	}
+
+
+	/**
+	* Método que responde a una solicitud de post para pedir los datos de un estudiante
+	* Recibe como parámetro el rut del estudiante
+	*/
+	public function postDetallesAlumnos() {
+		if (!$this->isLogged()) {
+			echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('rut');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
+		echo json_encode($resultado);
 	}
 }
 

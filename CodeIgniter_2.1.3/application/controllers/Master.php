@@ -8,13 +8,26 @@
 */
 class MasterManteka extends CI_Controller {
 
+
+	protected function isLogged() {
+		$rut = $this->session->userdata('rut');
+		if ($rut == FALSE)
+			return FALSE;
+		$this->load->model('model_usuario');
+		$resultado = $this->model_usuario->ValidarRut($rut);
+		if ($resultado == FALSE) {
+			return FALSE;
+		}
+		return TRUE;
+	}
+
 	/**
 	* Método que carga completamente una vista de manteka.
 	* 
 	* Se hace una comprobación del usuario si está logueado
 	* 
 	*/
-	public function cargarTodo($titulo, $cuerpo_a_cargar, $barra_lateral, $datos_cuerpo, $tipos_usuarios_permitidos, 
+	protected function cargarTodo($titulo, $cuerpo_a_cargar, $barra_lateral, $datos_cuerpo, $tipos_usuarios_permitidos, 
 		$subMenuLateralAbierto = '' , $mostrarBarraProgreso = FALSE)
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
@@ -87,7 +100,7 @@ class MasterManteka extends CI_Controller {
 	* Se hace una comprobación del usuario si está logueado
 	* 
 	*/
-	public function cargarMsjLogueado($datos_cuerpo, $tipos_usuarios_permitidos)
+	protected function cargarMsjLogueado($datos_cuerpo, $tipos_usuarios_permitidos)
 	{
 		
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
