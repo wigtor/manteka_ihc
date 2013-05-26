@@ -16,11 +16,13 @@
 
 
 <div class= "row-fluid">
-	<div class= "span10">	
+	<div class= "span10">
+
 		<fieldset>
+			<legend>Agregar Profesor</legend>	
 			<form id="formAgregar" type="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
-			<legend>Agregar Profesor</legend>
-			<div>
+			
+			<div class="row-fluid">
 				<div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -143,19 +145,39 @@
 								</div>
 								</div>
 						</div>
-					<div class="row" style="width: 845px;">		
-						<div class="span2" style="margin-left: 654px;">
-								<button class="btn" type="submit">Agregar</button>
+						<!--<div class="row" style="">		
+							<div class="span2" style="margin-left: 654px;">
+								<button class="btn" type="submit" style="width:102px">
+									<div class= "btn_with_icon_solo">Ã</div>
+									&nbsp Agregar
+								</button>
 							</div>
-							<div class="span1" style="margin-left: -32px;">
-								<button class="btn" type="reset">Cancelar</button>
+							<div class="span2" style="margin-left: -32px;">
+								<button class="btn" type="reset" style="width: 105px">
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
 							</div>
-						</div>
+						</div>-->
 					</div> 
 
 					
 				</div>
-			</div>
+			</div> 
+			<div class="row-fluid" style="">		
+							<div class="span2 offset8" style="width:11%" >
+								<button class="btn" type="submit" style="width:102px">
+									<div class= "btn_with_icon_solo">Ã</div>
+									&nbsp Agregar
+								</button>
+							</div>
+							<div class="span2" >
+								<button class="btn" type="reset" style="width: 105px">
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
+							</div>
+						</div>
 			</form>
 		</fieldset>
 	</div>

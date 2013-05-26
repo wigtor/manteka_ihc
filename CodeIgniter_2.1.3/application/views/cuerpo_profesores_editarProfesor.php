@@ -254,13 +254,19 @@ function ordenarFiltro2(){
 								</div>
 							</div>
 							<div class="row-fluid">
-								<div class="span11" style="margin-top:2%; margin-left:43%">
+								<div class="span11" style="margin-top:2%">
 									<div class="row-fluid">
-										<div class="span3">
-											<button class="btn" type="submit">Modificar</button>
+										<div class="span4 " style="margin-left:37%; width: 27%">
+											<button class="btn" style="width: 108px"type="submit">
+												<div class= "btn_with_icon_solo">Ã</div>
+												&nbsp Modificar
+											</button>
 										</div>
-										<div class="span3">
-											<button  class ="btn" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarProfesor('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.')"';?> >Cancelar</button>
+										<div class="span4">
+											<button  class ="btn" style="width:106px" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarProfesor('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.')"';?> >
+												<div class= "btn_with_icon_solo">Â</div>
+												&nbsp Cancelar
+											</button>
 										</div>
 									</div>
 								</div>
