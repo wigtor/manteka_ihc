@@ -145,7 +145,7 @@ El mensaje fue enviado satisfactoriamente.
 		<thead>
 		<th width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
 		<th width="23%" bgcolor="lightgrey"><b>De</b></td>
-		<th width="27%" bgcolor="lightgrey"><b>Asunto</b></td>
+		<th width="27%" bgcolor="lightgrey"><b>Mensaje</b></td>
 		<th width="8%" bgcolor="lightgrey"><b>Fecha</b></td>
 		<th width="8%" bgcolor="lightgrey"><b>Hora</b></td>
 		</thead>
@@ -179,7 +179,7 @@ El mensaje fue enviado satisfactoriamente.
 
 				echo '<textarea id="c'.$contador.'" style="display:none;">'.$correos[$contador]['cuerpo_email'].'</textarea>';
 				
-				echo '<td width="27%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">'.substr('<b>' .$correos[$contador]['asunto']. '</b> '.strip_tags( $correos[$contador]['cuerpo_email']),0,50).'......</td>';
+				echo '<td width="27%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">'.substr('<b>' .$correos[$contador]['asunto']. '</b> - '.strip_tags( $correos[$contador]['cuerpo_email']),0,50).'......</td>';
 		
 				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">'. $correos[$contador]['fecha'].'</td>';
 		
@@ -211,16 +211,16 @@ El mensaje fue enviado satisfactoriamente.
 	?>
 </fieldset>
 
-<fieldset id="cuadroDetalleCorreo" style="display:none;" >
+<fieldset id="cuadroDetalleCorreo" style="display:none; " >
 	<legend>&nbsp;Correos recibidos <font color="black">:::</font> detalles&nbsp;</legend>
 	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
 	<button class="btn" style="margin-right:1%;" onclick="volverCorreosRecibidos()"><div class="btn_with_icon_solo"><</div> Volver</button>
 	</div>
 	</br>
 	<pre class="detallesEmail">
-	                                                                                                                       <b style="text-align:right;" id="fecha"> </b>  <b style="text-align:right;"x| id="hora"></b>
+<div style="text-align:right;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
   De:     <b >ManteKA</b>
   Asunto: <b id="asuntoDetalle"></b>
-  <fieldset id="cuerpoMail"></fieldset>
+  <fieldset id="cuerpoMail" style=" height:250px;"></fieldset>
 	</pre>
 </fieldset>

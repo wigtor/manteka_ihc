@@ -261,7 +261,7 @@ class Correo extends MasterManteka {
 		$this->load->model('model_correo_e');
 
 		$to = $this->input->post('to');
-		$asunto =$this->input->post('asunto');
+		$asunto ="[ManteKA] ".$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
 		$tipo = $this->input->post('tipo');
 		$rutRecept = $this->input->post('rutRecept');
