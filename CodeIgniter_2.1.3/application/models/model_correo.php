@@ -242,7 +242,7 @@ class model_correo extends CI_Model
 			$this->ID_PLANTILLA=null;
 			date_default_timezone_set("Chile/Continental");
 			$this->HORA = date("H:i:s");
-			$this->FECHA = date("d-m-Y");
+			$this->FECHA = date("Y-m-d");
 			$this->CUERPO_EMAIL = $mensaje;
 			$this->ASUNTO=$asunto;
 			$this->db->insert('carta', $this);
