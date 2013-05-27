@@ -53,7 +53,7 @@
 					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>
 				</li>
 				<li <?php echo $Docentes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docentes</a>
+					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docencia</a>
 				</li>
 				<li <?php echo $Secciones;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
