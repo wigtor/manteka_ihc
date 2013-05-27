@@ -179,6 +179,55 @@ class Model_profesor extends CI_Model {
 		return $lista;
 	}
 
+	public function getDetallesProfesor($rut) {
+		$this->db->select('RUT_USUARIO2 AS rut');
+		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
+		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
+		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+		$this->db->select('TELEFONO_PROFESOR AS telefono');
+		$this->db->select('TIPO_PROFESOR AS tipo');
+		$this->db->where('RUT_USUARIO2', $rut);
+		$query = $this->db->get('profesor');
+		return $query->row();
+	}
+
+	public function getProfesoresByFilter($tipoFiltro, $texto)
+	{
+
+		//Sólo para acordarse
+		define("BUSCAR_POR_NOMBRE", 1);
+		define("BUSCAR_POR_APELLIDO1", 2);
+		define("BUSCAR_POR_APELLIDO2", 3);
+		
+
+		$attr_filtro = "";
+		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+			$attr_filtro = "NOMBRE1_PROFESOR";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+			$attr_filtro = "APELLIDO1_PROFESOR";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+			$attr_filtro = "APELLIDO2_PROFESOR";
+		}
+		else {
+			return array(); //No es válido, devuelvo vacio
+		}
+
+		$this->db->select('RUT_USUARIO2 AS rut');
+		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
+		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
+		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+		$this->db->select('TELEFONO_PROFESOR AS telefono');
+		$this->db->select('TIPO_PROFESOR AS tipo');
+		$this->db->order_by('APELLIDO1_PROFESOR', 'asc');
+		$this->db->like($attr_filtro, $texto);
+		$query = $this->db->get('profesor');
+		return $query->result();
+	}
+
 	
 	/**
 	* Eliminar un profesor de la base de datos
