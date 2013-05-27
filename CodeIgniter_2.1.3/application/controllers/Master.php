@@ -114,14 +114,18 @@ class MasterManteka extends CI_Controller {
 		$datos_plantilla["rut_usuario"] = $rut;
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $tipo_usuario;
+		
 		if ($rut == FALSE)
 			redirect('/Login/', '');
+		
 		$esValido = FALSE;
+		
 		foreach ($tipos_usuarios_permitidos as $user_permitido) {
 			if ($user_permitido == $id_tipo_usuario) {
 				$esValido = TRUE;
 			}
 		}
+
 		if (!$esValido) {
 			redirect('/Login/', ''); //Redirijo si el usuario no puede usar esta vista
 		}

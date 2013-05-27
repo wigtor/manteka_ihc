@@ -648,7 +648,7 @@ class Login extends CI_Controller {
 					'email'     => $usuario->CORREO1_USER,
 					'recordarme' => $recordarme,
 					'tipo_usuario' => $tipo_user,
-					'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
+					'id_tipo_usuario' => $usuario->ID_TIPO,
 					'nombre_usuario' => $usuario->NOMBRE1,
 					'logged_in' => TRUE
               );
