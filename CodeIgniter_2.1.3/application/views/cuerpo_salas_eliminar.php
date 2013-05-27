@@ -54,7 +54,7 @@
 					}
 					else{
 					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Salas/EliminarSalas/") ?>/"+cod;
+					borrar.action = "<?php echo site_url("Salas/borrarSalas/") ?>/";
 					borrar.submit();
 					}
 					
@@ -170,7 +170,7 @@ function ordenarFiltro(){
 			<div style="margin-bottom:2%">
 		2.-Detalle de la Sala:
 		</div>
-	   <form id="formBorrar" type="post" >
+	   <form id="formBorrar" type="post" method="post" >
 			<div class="row-fluid">
 				<div>
 			<pre style="margin-top: 0%; margin-left: 0%;">
@@ -179,7 +179,7 @@ Numero sala:    <b id="num_sala"></b>
 Capacidad: 	<b id="capacidad"></b>
 Ubicacion:	<b id="ubicacion"></b>
 Implementos  <b id="impDetalle"></b></pre>
-<input type="hidden" id="codEliminar" value="">
+<input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
 				</div>		
 			</div>
 								<div class="row-fluid">

@@ -110,7 +110,7 @@ class Model_sala extends CI_Model {
 	}
 	
 		/**
-	* Obtiene los datos de todos los implementos de una determinada sala en la base de datos
+	* Obtiene los datos de todos los implementos de todas las salas en la base de datos
 	*
 	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
 	* Finalmente se retorna la lista con los datos. 
@@ -133,6 +133,61 @@ class Model_sala extends CI_Model {
 				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
 				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
 			}
+			$contador++;
+		}
+		return $lista;
+	}
+
+	
+	
+			/**
+	* Obtiene los datos de todos los implementos de una sala en la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los implementos del sistema
+	*/
+	public function ImplementosParticulares($cod_sala)
+	{
+		$sql="SELECT * FROM SALA_IMPLEMENTO WHERE COD_SALA ='$cod_sala' "; //código MySQL
+		$datos1=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista=array();
+		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+			$cod=$row1['COD_IMPLEMENTO'];
+			$sql1="SELECT * FROM IMPLEMENTO WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
+			$datos=mysql_query($sql1); //enviar código MySQL
+			while ($row=mysql_fetch_array($datos)) {
+				$lista[$contador][0] = $row1['COD_SALA'];
+				$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
+				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
+				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
+			}
+			$contador++;
+		}
+		return $lista;
+	}
+	
+				/**
+	* Obtiene los datos de todos los implementos que no tiene la sala en la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento ausente y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los implementos ausentes en la sala del sistema
+	*/
+	public function ImplementosAusentes($cod_sala)
+	{
+		$sql="SELECT * FROM IMPLEMENTO WHERE COD_IMPLEMENTO NOT IN(SELECT COD_IMPLEMENTO FROM SALA_IMPLEMENTO WHERE COD_SALA ='$cod_sala' )";
+		$datos1=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista=array();
+		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+			$lista[$contador][0] = $cod_sala;
+			$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
+			$lista[$contador][2] = $row1['NOMBRE_IMPLEMENTO'];
+			$lista[$contador][3] = $row1['DESCRIPCION_IMPLEMENTO'];
 			$contador++;
 		}
 		return $lista;
@@ -166,7 +221,33 @@ class Model_sala extends CI_Model {
 		return $lista;
 		}
 
+	/**
+	* Obtiene los datos de una sala de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de una sala en el sistema
+	*/
+	public function VerSala($cod_sala)
+	{
+		$sql="SELECT * FROM SALA WHERE COD_SALA='$cod_sala'"; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista = array();
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			$lista[$contador][0] = $row['COD_SALA'];
+			$lista[$contador][1] = $row['NUM_SALA'];
+			$lista[$contador][2] = $row['UBICACION'];
+			$lista[$contador][3] = $row['CAPACIDAD'];
+			$contador = $contador + 1;
+		}
+		
+		return $lista;
+		}
 
+		
+		
 	/**
 	* Edita la información de una sala en la base de datos
 	*
@@ -179,9 +260,11 @@ class Model_sala extends CI_Model {
 	* @param string $ubicacion ubicaciona  editar de la sala
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos)
+	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA)
 	{
-		if($cod_sala=="") return 2;
+		if($cod_sala=="" || $num_sala=="" || $ubicacion=="" || $capacidad=="") return 2;
+		
+		
 		$data = array(	
 					'COD_SALA' => $cod_sala,
 					'NUM_SALA' => $num_sala,					
@@ -191,19 +274,26 @@ class Model_sala extends CI_Model {
 		$this->db->where('COD_SALA', $cod_sala);
 		$this->db->update('SALA',$data); 
 		$contador = 0;
+		$sql="DELETE FROM sala_implemento WHERE COD_SALA = '$cod_sala' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
    	    while ($contador <count($implementos)) {
-			if($implementos[$contador]!=null){
-			 if($contador==0){ // se ejecuta una sola vez
-				$this->db->where('COD_SALA', $cod_sala);
-				$this->db->delete('SALA_IMPLEMENTO'); 
-			 }
+
+			 if($implementos[$contador]!=NULL){
 			 $data2 = array(					
 						'COD_SALA' => $cod_sala,
 						'COD_IMPLEMENTO' => $implementos[$contador]
-			);
-
-				
-				$datos2 = $this->db->insert('sala_implemento',$data2);}
+			);	
+				$datos2 = $this->db->insert('SALA_IMPLEMENTO',$data2);}
+				$contador++;
+         }
+		$contador = 0;
+   	    while ($contador <count($implementosA)) {
+			 if($implementosA[$contador]!=NULL){
+			 $data3 = array(					
+						'COD_SALA' => $cod_sala,
+						'COD_IMPLEMENTO' => $implementosA[$contador]
+			);	
+				$datos3 = $this->db->insert('SALA_IMPLEMENTO',$data3);}
 				$contador++;
          }
          
@@ -214,6 +304,7 @@ class Model_sala extends CI_Model {
 			return -1;
 		}		
     }
+	
 }
 
 ?>
