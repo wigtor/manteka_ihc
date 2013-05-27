@@ -690,6 +690,15 @@ class Login extends CI_Controller {
     }
 
    }
+   public function postLoguearse() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+
+		$rut = $this->input->post('rutEnvio');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
+		echo json_encode($resultado);
+	}
+
 
 }
 
