@@ -98,6 +98,9 @@ class MasterManteka extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
 
+	protected function cargarPlantillaVer() {
+		$datos_plantilla["cuerpo_central"] = $this->load->view('templates/cuerpo_ver', $datos_cuerpo, TRUE);
+	}
 	/**
 	* Método que carga completamente la vista para mostrar un mensaje
 	* 

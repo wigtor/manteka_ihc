@@ -7,137 +7,157 @@
 * @author     Grupo 2 IHC 1-2013 Usach
 */
 ?>
+
+<script>
+	function detalleCoordinador(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
+		//var rut_clickeado = elemTabla;
+
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Coordinadores/postDetallesCoordinador") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rutDetalle = document.getElementById("rutDetalle");
+				var nombre1Detalle = document.getElementById("nombre1Detalle");
+				var nombre2Detalle = document.getElementById("nombre2Detalle");
+				var apellido1Detalle = document.getElementById("apellido1Detalle");
+				var apellido2Detalle = document.getElementById("apellido2Detalle");
+				var moduloDetalle = document.getElementById("moduloDetalle");
+				var fonoDetalle = document.getElementById("fonoDetalle");
+				var seccionesDetalle = document.getElementById("seccionesDetalle");
+				var correoDetalle = document.getElementById("correoDetalle");
+				
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rutDetalle).html(datos.rut);
+				$(nombre1Detalle).html(datos.nombre1);
+				$(nombre2Detalle).html(datos.nombre2);
+				$(apellido1Detalle).html(datos.apellido1);
+				$(apellido2Detalle).html(datos.apellido2);
+				$(moduloDetalle).html(datos.modulo);
+				$(fonoDetalle).html(datos.fono);
+				$(seccionesDetalle).html(datos.secciones);
+				$(correoDetalle).html(datos.correo);
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
+
+
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Coordinadores/postBusquedacoordinadores") ?>", /* Se setea la url del controlador que responderá */
+			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultados");
+				var nodoTexto;
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					tr.setAttribute("id", "coordinador_"+arrayRespuesta[i].rut);
+					tr.setAttribute("onClick", "detalleCoordinador(this)");
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
+
+</script>
+
 <fieldset>
-	<legend>Ver Coordinadores</legend>
-	    <div class="row" style="margin-left:30px;"><!--fila-->
-	        <div class="span4">
-	            <h4>1.- Lista Coordinadores</h4>
-	            <!--olitruco-->
-	            <div class="input-append span9">
-					<input class="span11" id="filtro-texto" type="text" placeholder="Filtro">
-					<div class="btn-group">
-						<button class="btn dropdown-toggle" data-toggle="dropdown">
-							<span id="show-filtro">Filtrar por</span>
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" id="select-filtro">
-							<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
-							<!--<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
-							<li onclick="seleccionar_filtro(this)"><a href >Secciones</a></li>
-							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>--> <!--no implementado aun-->
-						</ul>
+	<legend>Ver coordinadores</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="row-fluid">
+				<div class="span6">
+					1.-Listado coordinadores
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span11">
+					<div class="row-fluid">
+						<div class="span6">
+							<input id="filtroLista" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda" style="width:90%">
+						</div>
+						<div class="span6">
+							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+								<option value="1">Filtrar por nombre</option>
+								<option value="2">Filtrar por apellido paterno</option>
+								<option value="3">Filtrar por apellido materno</option>
+								<option value="4">Filtrar por módulo temático</option>
+								<option value="5">Filtrar por seccion</option>
+								<option value="6">Filtrar por bloque horario</option>
+							</select> 
+						</div>
 					</div>
 				</div>
-				<!--olitruco-->
-	            <select id="select-coordinadores" class="span12" size=16 onchange="mostrarDatos(this)">
-	            <?php
-	                foreach ($listado_coordinadores as $coordinador) {
-	                    echo "<option modulo='".$coordinador["modulos"]."' secciones='".$coordinador["secciones"]."' mail='".$coordinador["correo1"]."' value='id".$coordinador["id"]."'>".$coordinador['nombre']."</option>";
-	                }
-	            ?>
-	            </select>
-	        </div>
-	        <!--<div class="span5 offset1" style="margin-top: 7%; padding: 2%">
-	 			<h6>Rut: <span id="rutDetalle"></span></h6>
-	 			<h6>Nombre: <span id="nombreunoDetalle"></span></h6>
-	 			<h6>Apellido Paterno: <span id="apellidopaternoDetalle" ></span></h6>
-	 			<h6>Apellido Materno: <span id="apellidomaternoDetalle" ></span></h6>
-	 			<h6>Correo:           <span id="mailDetalle" ></span></h6>
-	 			<h6>Telefono: <span id="telefonoDetalle" ></span></h6>
-	 			<h6>Tipo: <span id="tipoDetalle"></span></h6>
-	 		</div>-->
-	        <?php 
-	        	foreach ($listado_coordinadores as $coordinador) {
-		        	echo "<div class='span7 offset1 visualizar-coordinador' id='id".$coordinador['id']."'>
-			            <h5>Detalle Coordinador</h5><br />
-			        
-			            <h6>Coordinador: ".$coordinador['nombre']."</h6>
-			            <h6>Rut: ".$coordinador['rut']."</h6>
-			            <h6>Mail: ".$coordinador['correo1']."</h6>
-			            <h6>Fono: ".$coordinador['fono']."</h6>
-			            <h6>Modulo: ".$coordinador['modulos']."</h6>
-			            <h6>Seccion: ".$coordinador['secciones']."</h6>
-			        </div>";
-			    }
-	        ?>
-	    </div>
-	</br>
+			</div>
+
+			
+			<div class="row-fluid" style="margin-left: 0%;">
+				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+					<table id="listadoResultados" class="table table-hover">
+						<thead>
+							<b>Nombre Completo</b>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+		2.-Detalle coordinador:
+	    <pre style="margin-top: 2%; padding: 2%">
+Rut:              <b id="rutDetalle"></b>
+Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
+Apellido paterno: <b id="apellido1Detalle" ></b>
+Apellido materno: <b id="apellido2Detalle"></b>
+Módulo temático:  <b id="moduloDetalle"></b>
+Fono:             <b id="fonoDetalle" ></b>
+Secciones:        <b id="seccionesDetalle"></b>
+Correo:           <b id="correoDetalle"></b>
+		</pre>
+		</div>
+	</div>
 </fieldset>
-
-<script type="text/javascript">
-	var tipo_filtro = "Nombre";
-
-    $(document).ready(function(){
-    	$(".visualizar-coordinador").hide();
-
-    });
-	function mostrarDatos(seleccion){
-
-        
-        var id_coordinador = seleccion.options[seleccion.selectedIndex].value;
-        $(".visualizar-coordinador").hide();
-
-        $("#"+id_coordinador).show();
-    }
-    function seleccionar_filtro(option){
-    	$(option).prevent
-    	$('.active').removeClass("active");
-    	$(option).addClass("active");
-    	$("#show-filtro").empty().append($('.active a').text());
-    	tipo_filtro = $('.active a').text();
-    }
-    $("ul#select-filtro li a").click(function(event) {
-	    event.preventDefault();
-	});
-
-
-	
-</script>
-
-<script type="text/javascript">
-
-
-jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
-        return this.each(function() {
-            var select = this;
-            var options = [];
-            $(select).find('option').each(function() {
-                options.push({value: $(this).val(), text: $(this).text(), modulos: $(this).attr("modulos"), secciones: $(this).attr("secciones"), mail: $(this).attr("mail") });
-            });
-            $(select).data('options', options);
-            $(textbox).bind('change keyup', function() {
-            	$('option').attr("selected",false);
-                var options = $(select).empty().data('options');
-                var search = $(this).val().trim();
-                var regex = new RegExp(search,"gi");
-              
-                $.each(options, function(i) {
-                    var option = options[i];
-                    var strToComp = option.text;
-                    if(tipo_filtro == "Modulos")
-                    	strToComp = option.modulos;
-                    if(tipo_filtro == "Secciones")
-                    	strToComp = option.secciones;
-                    if(tipo_filtro == "Correo")
-                    	strToComp = option.mail;
-                    //alert("alerta -"+ tipo_filtro+" ---> "+ strToComp);
-
-                    
-                    if(strToComp.match(regex) !== null) {
-                        $(select).append(
-                           $('<option>').text(option.text).val(option.value).attr('modulos', option.modulos).attr('secciones', option.secciones).attr('mail',option.mail).attr('modulos', option.modulos)
-                        );
-                    }
-                });
-                if (selectSingleMatch === true && $(select).children().length === 1) {
-                    $(select).children().get(0).selected = true;
-                }
-            });            
-        });
-    };
-
-    $(function() {
-        $('#select-coordinadores').filterByText($('#filtro-texto'), true);
-    });
-</script>
-

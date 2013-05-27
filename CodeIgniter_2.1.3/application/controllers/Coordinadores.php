@@ -235,6 +235,35 @@ class Coordinadores extends MasterManteka {
 		
     }
 
+    /**
+	* Método que responde a una solicitud de post para pedir los datos de un estudiante
+	* Recibe como parámetro el rut del estudiante
+	*/
+	public function postDetallesCoordinadores() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('rut');
+		$this->load->model('model_coordinadores');
+		$resultado = $this->model_coordinadores->getDetallesCoordinador($rut);
+		echo json_encode($resultado);
+	}
+
+	public function postBusquedaCoordinadores() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltro');
+		$tipoFiltro = $this->input->post('tipoFiltro');
+		$this->load->model('model_coordinadores');
+
+		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($tipoFiltro, $textoFiltro);
+		echo json_encode($resultado);
+	}
 
 }
 
