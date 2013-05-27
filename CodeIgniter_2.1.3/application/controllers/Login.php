@@ -623,17 +623,30 @@ class Login extends CI_Controller {
             $usuario = $this->model_usuario->existe_mail($mail);
             if ($usuario)
             {
+            	// Se obtiene el tipo de cuenta que posee el usuario
+            	$redireccionarA = "index";
+
             	if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
 	            	$tipo_user = "coordinador";
+	            	$redireccionarA = "index";
 	            }
 				if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
 	            	$tipo_user = "profesor";
+	            	$redireccionarA = "indexProfesor";
 	            }
+
+	            // Se asume "Recordarme desclickeado"
+	            $recordarme = FALSE;
+            	$rut_almacenado = "";
+            	$dv_almacenado = "";
 
 	            // Se crea un arreglo con los datos encontrados del usuario
               	$newdata = array(
 					'rut'  => $usuario->RUT_USUARIO,
+					'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
+					'dv_almacenado' => $dv_almacenado,
 					'email'     => $usuario->CORREO1_USER,
+					'recordarme' => $recordarme,
 					'tipo_usuario' => $tipo_user,
 					'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
 					'nombre_usuario' => $usuario->NOMBRE1,
@@ -644,7 +657,7 @@ class Login extends CI_Controller {
               $this->session->set_userdata($newdata);
 
               // Se redirige a la interfaz principal una vez que se ha autentificado
-              redirect('/Correo/', '');
+              redirect('/Correo/'.$redireccionarA, "");
             }
 
             // En caso de no existir ningún usuario con el correo ingresado
