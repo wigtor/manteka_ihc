@@ -94,8 +94,8 @@ class Model_estudiante extends CI_Model {
 	*/
     public function EliminarEstudiante($rut_estudiante)
     {
-		$sql="DELETE FROM estudiante WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$datos = $this->db->delete('ESTUDIANTE', array('rut_estudiante' => $rut_estudiante)); 
 		if($datos == true){
 			return 1;
 		}

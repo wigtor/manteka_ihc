@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
 	
 	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
@@ -80,6 +79,27 @@ function ordenarFiltro(){
 			document.getElementById("num_salaEditar").value = num_sala;
 			document.getElementById("ubicacionEditar").value = ubicacion;
 			document.getElementById("capacidadEditar").value = capacidad;
+			var imp= new Array();	
+			<?php
+				$contadorE = 0;
+				while($contadorE<count($salaImplemento)){
+					echo 'imp['.$contadorE.']=new Array();';
+					echo 'imp['.$contadorE.'][0]= "'.$salaImplemento[$contadorE][0].'";';//sala
+					echo 'imp['.$contadorE.'][1]= "'.$salaImplemento[$contadorE][2].'";';//nombre
+					echo 'imp['.$contadorE.'][2]= "'.$salaImplemento[$contadorE][3].'";';//descripcion	
+					$contadorE = $contadorE + 1;
+				}
+			?>
+			var cont;
+			var algo='\n';
+			for(cont=0;cont < imp.length;cont++){
+				if(imp[cont][0]==cod_sala ){
+					algo= algo+"		"+imp[cont][1]+'\n';				
+				}
+			}
+			
+			document.getElementById("impDetalle").innerHTML=algo; 	
+			
 	}
 </script>
 
@@ -91,7 +111,7 @@ function ordenarFiltro(){
 			<div>
 				<div class="row-fluid">
 					<div class="span6">
-						<font color="red">*Campos Obligatorio</font>
+						<font color="red">*Campos Obligatorios</font>
 					</div>
 				</div>
 				<div class="row-fluid">
@@ -201,21 +221,30 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font>Ubicacion:</label>
+
+		  							<label class="control-label" for="inputInfo">3-.*Ubicacion:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="ubicacionEditar" name="ubicacion" maxlength="19" required>
+		    							<textarea id="ubicacionEditar" name="ubicacion" rows="5" cols="30" required>
+										</textarea>
 		  							</div>
 							</div>
+
 						</div>
+						
 
-					<div class="row" style="width: 386px;">		
+					<div class="row-fluid" style="width: 386px;">		
 
-					<br>
-					Seleccione los implementos que tiene la sala:
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+
+					
+					Implementos actuales:<center><p id="impDetalle"></p></center>
+					<br><br>
+					Si desea modificar los implementos de la sala, elija entre los siguientes:
+					
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:105px; -webkit-border-radius: 4px" >
+					
 					
 					<table class="table table-hover">
 										<thead>
@@ -225,6 +254,7 @@ function ordenarFiltro(){
 								
 										<?php
 										$contador=0;
+										
 										while ($contador<count($implemento)){
 											echo '<tr>';
 											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
@@ -232,15 +262,18 @@ function ordenarFiltro(){
 											$contador = $contador + 1;
 										}
 										?>
+								
+								
 										</tbody>
 					</table>
 						
 					</div>
+
 					</div>
 		
 
 
-
+						<br>
 						<div class="row-fluid">
 							<div class="span10">
 								<div class="row-fluid">

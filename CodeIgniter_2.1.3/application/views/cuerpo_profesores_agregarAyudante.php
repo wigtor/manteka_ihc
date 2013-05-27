@@ -77,7 +77,7 @@ function ordenarFiltro(){
 							 </div>
 							 <div class="span5">	
 							  	<div class="controls">
-							    	<input name="rut_ayudante" maxlength="10" min="1" type="number"  placeholder="Ingrese rut sin dig. verificador" required>
+							    	<input name="rut_ayudante" maxlength="10" min="1" type="number"  placeholder="Ej:17785874" required>
 							  	</div>
 							</div>	
 						</div>
@@ -143,7 +143,7 @@ function ordenarFiltro(){
 			  				</div>
 			  				<div class="span5">	
 			  					<div class="controls">
-			    					<input type="email" name="correo_ayudante" maxlength="19" placeholder="ejemplo@usach.cl" required >
+			    					<input type="email" name="correo_ayudante" maxlength="19" placeholder="nombre_usuario@miemail.com" required >
 			  					</div>
 							</div>
 						</div>
@@ -206,11 +206,17 @@ function ordenarFiltro(){
 								
 						<div class="row-fluid" style="margin-top:2%">
 									
-							<div class="span3" style="margin-left:55%">
-								<button type="submit" class="btn">Agregar</button>
+							<div class="span3 " style="margin-left:45%; width:27%">
+								<button type="submit" style="width: 102px"class="btn">
+									<div class= "btn_with_icon_solo">Ã</div>
+									&nbsp Agregar
+								</button>
 							</div>
-							<div class="span2" >
-								<button class="btn" type="reset">Cancelar</button>
+							<div class="span3" >
+								<button class="btn" style="width:105px"type="reset">
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
 							</div>
 							
 						</div>

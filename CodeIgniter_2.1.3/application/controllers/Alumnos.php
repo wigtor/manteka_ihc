@@ -116,7 +116,7 @@ class Alumnos extends MasterManteka {
 	*
 	* @param string $rut_estudiante
 	*/
-	public function eliminarAlumno($rut_estudiante)// alimina un alumno y de ahí carga la vista para seguir eliminando 
+	public function eliminarAlumno()// alimina un alumno y de ahí carga la vista para seguir eliminando 
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -137,8 +137,10 @@ class Alumnos extends MasterManteka {
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
 		$this->load->model('Model_estudiante');
+		$rut_estudiante =$this->input->post("rut_estudiante");
+
 		$confirmacion = $this->Model_estudiante->EliminarEstudiante($rut_estudiante);
-		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);//qu? rasca la wa del mensaje, despues lo arreglo con unos if y wa
+		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);//
 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_borrar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["subVistaLateralAbierta"] = "eliminarAlumnos"; //Usen el mismo nombre de la sección donde debe estar
