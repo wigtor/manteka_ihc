@@ -103,7 +103,7 @@ class Model_estudiante extends CI_Model {
 			return -1;
 		}
     }
-    
+
 	/**
 	* Obtiene los datos de todos lo estudiantes de la base de datos
 	*
@@ -141,6 +141,90 @@ class Model_estudiante extends CI_Model {
 		
 	}
 	
+
+	/**
+	* Obtiene los nombre y rut de todos los estudiantes del sistema
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada estudiante y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los estudiantes del sistema
+	*/
+	public function getAllAlumnos()
+	{
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->order_by("APELLIDO_PATERNO", "asc");
+		$query = $this->db->get('estudiante');
+		return $query->result();
+	}
+
+	public function getAlumnosByFilter($tipoFiltro, $texto)
+	{
+
+		//Sólo para acordarse
+		define("BUSCAR_POR_NOMBRE", 1);
+		define("BUSCAR_POR_APELLIDO1", 2);
+		define("BUSCAR_POR_APELLIDO2", 3);
+		define("BUSCAR_POR_CARRERA", 4);
+		define("BUSCAR_POR_SECCION", 5);
+		define("BUSCAR_POR_BLOQUEHORARIO", 6);
+
+		$attr_filtro = "";
+		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+			$attr_filtro = "NOMBRE1_ESTUDIANTE";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+			$attr_filtro = "APELLIDO_PATERNO";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+			$attr_filtro = "APELLIDO_MATERNO";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
+			$attr_filtro = "NOMBRE_CARRERA";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_SECCION) {
+			$attr_filtro = "COD_SECCION";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
+			return array(); //No implementado aún
+			//$attr_filtro = "NOMBRE1_ESTUDIANTE";
+		}
+		else {
+			return array(); //No es válido, devuelvo vacio
+		}
+
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->order_by('APELLIDO_PATERNO', 'asc');
+		$this->db->like($attr_filtro, $texto);
+		$query = $this->db->get('estudiante');
+		return $query->result();
+	}
+
+
+	public function getDetallesEstudiante($rut) {
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->select('CORREO_ESTUDIANTE AS correo');
+		$this->db->select('NOMBRE_CARRERA AS carrera');
+		$this->db->select('COD_SECCION AS seccion');
+		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->where('RUT_ESTUDIANTE', $rut);
+		$query = $this->db->get('estudiante');
+		return $query->row();
+	}
+
 	
 	/**
 	* Obtiene los datos de todas las carreras de la base de datos
