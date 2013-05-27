@@ -88,8 +88,12 @@ class MasterManteka extends CI_Controller {
 		$datos_plantilla["subVistaLateralAbierta"] = $subMenuLateralAbierto;
 
 		//Se carga la barra lateral
+		if($barra_lateral != ''){
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/'.$barra_lateral, $datos_plantilla, TRUE);
-
+		}
+		else{
+			$datos_plantilla["barra_lateral"] = '';
+		}
 		//Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
