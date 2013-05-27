@@ -60,7 +60,7 @@ class Model_ayudante extends CI_Model {
 	*/
     public function EliminarAyudante($rut_ayudante)
     {
-		$sql="DELETE FROM AYUDANTE WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
+		$sql="DELETE FROM ayudante WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		if($datos == true){
 			return 1;
@@ -82,7 +82,7 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerTodosLosAyudantes()
 	{
-		$sql="SELECT * FROM AYUDANTE ORDER BY APELLIDO_PATERNO"; //código MySQL
+		$sql="SELECT * FROM ayudante ORDER BY APELLIDO_PATERNO"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
@@ -109,7 +109,7 @@ class Model_ayudante extends CI_Model {
 	*/
 		public function VerTodosLosProfesores()
 	{
-		$sql="SELECT * FROM PROFESOR ORDER BY NOMBRE1_PROFESOR"; //código MySQL
+		$sql="SELECT * FROM profesor ORDER BY NOMBRE1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
@@ -133,7 +133,7 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerSecciones()
 	{
-		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
+		$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();

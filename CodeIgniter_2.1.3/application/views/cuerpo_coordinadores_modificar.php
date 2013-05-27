@@ -1,3 +1,12 @@
+<?php
+/**
+* Este Archivo corresponde al cuerpo central de la vista modificar coordinadores en el proyecto Manteka.
+*
+* @package    Manteka
+* @subpackage Views
+* @author     Grupo 2 IHC 1-2013 Usach
+*/
+?>
 <fieldset>
 	<legend>Modificar Coordinador</legend>
 	<div class="span4">
@@ -30,19 +39,21 @@
 			<h4>Complete los siguientes datos para modificar un coordinador:</h4><br/>
 			<?php 
 				foreach ($listado_coordinadores as $coordinador){
-					echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/editarCoordinadores/' onsubmit='return validar(this)'>";
+					$attributes = array('onSubmit' => 'return validar(this)', 'class' => 'span9', 'id' =>"id".$coordinador['id']);
+					echo form_open('Coordinadores/editarCoordinadores', $attributes);
+					//echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/editarCoordinadores/' onsubmit='return validar(this)'>";
 					echo "<input name='id' type='hidden' value='".$coordinador['id']."'>";
 					echo "<br/><table>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Nombre completo:</h6></td><td><input required name='nombre' class ='input-xlarge' type='text' placeholder='ej:SOLAR FUENTES MAURICIO IGNACIO' default='".$coordinador['nombre']."' value='".$coordinador['nombre']."'></td></tr>";
-					echo "<tr><td><h6><span class='text-error'>(*)</span>Contrase?a:</h6></td><td><input name='contrasena' class ='input-xlarge'  type='text' placeholder='*******'  ></td></tr>";
-					echo "<tr><td><h6><span class='text-error'>(*)</span>Reingresar contrase?a:</h6></td><td><input name='contrasena2' class ='input-xlarge' type='text' placeholder='*******'  ></td></tr>";
+					echo "<tr><td><h6><span class='text-error'>(*)</span>Contraseña:</h6></td><td><input name='contrasena' class ='input-xlarge'  type='text' placeholder='*******'  ></td></tr>";
+					echo "<tr><td><h6><span class='text-error'>(*)</span>Reingresar contraseña:</h6></td><td><input name='contrasena2' class ='input-xlarge' type='text' placeholder='*******'  ></td></tr>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Correo 1:</h6></td><td><input name='correo1' required class ='input-xlarge' type='email' placeholder='ej:edmundo.leiva@usach.cl' default='".$coordinador['correo1']."' value='".$coordinador['correo1']."'></td></tr>";
 					echo "<tr><td><h6>Correo 2 :</h6></td><td><input name='correo2' class ='input-xlarge' type='email' placeholder='ej:edmundo@gmail.com' default='".$coordinador['correo2']."' value='".$coordinador['correo2']."'></td></tr>";
 					echo "<tr><td><h6><span class='text-error'>(*)</span>Tel?fono:</h6></td><td><input name='fono' required class ='input-xlarge' type='text' placeholder='ej:9-87654321' default='".$coordinador['fono']."' value='".$coordinador['fono']."'></td></tr>";
 					echo "<tr><td></td><td>Los campos con <span class='text-error'>(*)</span> son obligatorios</td></tr>";
 					echo "</table>";
 					echo "<br/><div class='span7 offset5' id='botones-guardar-cancelar'><button type='submit' class='btn' type='button'>Guardar</button><a class='btn offset1' href='/manteka/index.php/Coordinadores/modificarCoordinador/'>Cancelar</a></div>";
-					echo "</form><!-- span9-->";
+					echo form_close(""); echo "<!-- span9-->";
 				}
 				
 			?>

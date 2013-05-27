@@ -20,7 +20,7 @@
 		var apellidoPaterno = document.getElementById("apellidopaternoEditar").value;
 		var apellidoMaterno = document.getElementById("apellidomaternoEditar").value;
 		var correo = document.getElementById("correoEditar").value;
-		var seccion = document.getElementById("<?php$secciones[0]?>");
+		var seccion = document.getElementById("<?php $secciones[0]?>");
 	
 		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
 					var answer = confirm("¿Está seguro de realizar cambios?")

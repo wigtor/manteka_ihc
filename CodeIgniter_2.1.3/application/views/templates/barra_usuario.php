@@ -11,7 +11,7 @@
 				</a>
 			    <ul class="dropdown-menu">
 			    	<li>
-						<a href="/<?php echo config_item('dir_alias') ?>/index.php/Otros/preguntasFrecuentes"> Preguntas Frecuentes</a>
+						<a href="/<?php echo config_item('dir_alias') ?>/index.php/Ayuda/preguntasFrecuentes"> Preguntas Frecuentes</a>
 			    	</li>
 			    	<li>
 						<a href="/<?php echo config_item('dir_alias') ?>/index.php/Otros/manualUsuario">Manual de Usuario</a>
