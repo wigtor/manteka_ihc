@@ -37,6 +37,7 @@
 					var answer = confirm("¿Está seguro de eliminar este estudiante?")
 					if (!answer){
 						var dijoNO = DetalleAlumno("","","","","","","","");
+						return false;
 					}
 					else{
 		
@@ -47,6 +48,7 @@
 		}
 		else{
 				alert("Selecione un estudiante");
+				return false;
 		}
 	}
 </script>
@@ -93,7 +95,7 @@ function ordenarFiltro(){
 
 <div class= "row-fluid">
 	<div class= "span10">
-		<form id="FormBorrar" type="post" onsubmit="eliminarAlumno()"  >
+		<form id="FormBorrar" type="post" onsubmit="eliminarAlumno();return false" method="post">
 		<fieldset>
 			<legend>Borrar Alumno</legend>
 			<div class= "row-fluid">
@@ -192,7 +194,7 @@ Correo:           <b id="correoDetalle"></b></pre>
 							</div>
 
 							<div class = "span3 ">
-								<button  class ="btn" type="reset" style="width: 105px">
+								<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','','','')" style="width: 105px">
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>

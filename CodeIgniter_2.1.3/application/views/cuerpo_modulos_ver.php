@@ -37,7 +37,11 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 		$contadorE = $contadorE + 1;
 	}
 	?>
-	
+	for(cont=0;cont < arreglo.length;cont++){
+		document.getElementById("tabla_sesion_"+arreglo[cont][0]).style.display='none';
+		document.getElementById("tabla_profesor_"+arreglo[cont][2]).style.display='none';
+		document.getElementById("tabla_requisito_"+arreglo[cont][0]).style.display='none';
+    }
 
 	document.getElementById("tabla_sesion_"+codigo_modulo).style.display='';
 	document.getElementById("tabla_profesor_"+codigo_equipo).style.display='';
