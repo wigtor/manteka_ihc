@@ -599,11 +599,9 @@ class Login extends MasterManteka {
             	$redireccionarA = "index";
 
             	if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
-	            	$tipo_user = "coordinador";
 	            	$redireccionarA = "index";
 	            }
 				if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
-	            	$tipo_user = "profesor";
 	            	$redireccionarA = "indexProfesor";
 	            }
 
@@ -614,14 +612,14 @@ class Login extends MasterManteka {
 
 	            // Se crea un arreglo con los datos encontrados del usuario
               	$newdata = array(
-					'rut'  => $usuario->RUT_USUARIO,
+					'rut'  => $usuario->rut,
 					'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
 					'dv_almacenado' => $dv_almacenado,
-					'email'     => $usuario->CORREO1_USER,
+					'email'     => $usuario->email1,
 					'recordarme' => $recordarme,
-					'tipo_usuario' => $tipo_user,
+					'tipo_usuario' => $usuario->tipo_usuario,
 					'id_tipo_usuario' => $usuario->ID_TIPO,
-					'nombre_usuario' => $usuario->NOMBRE1
+					'nombre_usuario' => $usuario->nombre1
               );
               
               // Carga los datos en las cookies
