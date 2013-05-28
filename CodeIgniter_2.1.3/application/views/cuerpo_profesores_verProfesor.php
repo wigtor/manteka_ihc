@@ -1,56 +1,106 @@
-<script type="text/javascript">
-	function DetalleProfesor(rut,nombre1,nombre2,apePaterno,apeMaterno,telefono,tipo){
+<script>
+	function detalleProfesor(elemTabla){
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		rut_clickeado = idElem.substring("profesor_".length, idElem.length);
+		//var rut_clickeado = elemTabla;
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Profesores/postDetallesProfesor") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rutDetalle = document.getElementById("rutDetalle");
+				var nombre1Detalle = document.getElementById("nombre1Detalle");
+				var nombre2Detalle = document.getElementById("nombre2Detalle");
+				var apellido1Detalle = document.getElementById("apellido1Detalle");
+				var apellido2Detalle = document.getElementById("apellido2Detalle");
+				var telefonoDetalle = document.getElementById("telefonoDetalle");
+				//var correoDetalle = document.getElementById("correoDetalle");
+				var tipoDetalle = document.getElementById("tipoDetalle");
+				
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rutDetalle).html(datos.rut);
+				$(nombre1Detalle).html(datos.nombre1);
+				$(nombre2Detalle).html(datos.nombre2);
+				$(apellido1Detalle).html(datos.apellido1);
+				$(apellido2Detalle).html(datos.apellido2);
+				$(telefonoDetalle).html(datos.telefono);
+				//$(correoDetalle).html(datos.correo);
+				$(tipoDetalle).html(datos.tipo);
+				
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
 		
-			document.getElementById("rutDetalle").innerHTML = rut;
-			document.getElementById("nombreunoDetalle").innerHTML = nombre1;
-			document.getElementById("nombredosDetalle").innerHTML = nombre2;
-			document.getElementById("apellidopaternoDetalle").innerHTML = apePaterno;
-			document.getElementById("apellidomaternoDetalle").innerHTML = apeMaterno;
-			document.getElementById("telefonoDetalle").innerHTML = telefono;
-		    document.getElementById("tipoDetalle").innerHTML = tipo;
-	}
-</script>
-
-
-<script type="text/javascript">
-function ordenarFiltro(){
-	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
-
-	
-	var arreglo = new Array();
-	var profesor;
-	var ocultar;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($rs_profesores)){
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$rs_profesores[$contadorE][1].'";';
-		echo 'arreglo['.$contadorE.'][3] = "'.$rs_profesores[$contadorE][3].'";';
-		echo 'arreglo['.$contadorE.'][4] = "'.$rs_profesores[$contadorE][4].'";';
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 		
-		$contadorE = $contadorE + 1;
+		
 	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-	
-		ocultar =document.getElementById(cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
-		}
-		else
-		{
-			ocultar.style.display='';
-		}
-    }
-}
+
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+		//if (texto.trim() != "") {
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Profesores/postBusquedaProfesores") ?>", /* Se setea la url del controlador que responderá */
+				data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var tablaResultados = document.getElementById("listadoResultados");
+					var nodoTexto;
+					$(tablaResultados).empty();
+					var arrayRespuesta = jQuery.parseJSON(respuesta);
+					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						tr.setAttribute("id", "profesor_"+arrayRespuesta[i].rut);
+						tr.setAttribute("onClick", "detalleProfesor(this)");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+						tablaResultados.appendChild(tr);
+					}
+					/*
+					for (var i = 0, option, td; i < arrayRespuesta.length; i++) {
+						option =  document.createElement('option');
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						option.setAttribute("value", arrayRespuesta[i].rut);
+						option.setAttribute("onClick", "detalleAlumno(this.value)");
+						option.appendChild(nodoTexto);
+						tablaResultados.appendChild(option);
+					}
+					*/
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+			});
+
+			/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+		//}
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
 </script>
-
-
 
 
 
@@ -61,77 +111,54 @@ function ordenarFiltro(){
 		<div class="span6">
 			<div class="row-fluid">
 				<div class="span6">
-					1.-Listado Profesores
+					1.-Listado profesores
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span11">
+					<div class="row-fluid">
+						<div class="span6">
+							<input id="filtroLista" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda" style="width:90%">
+						</div>
+						<div class="span6">
+							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+								<option value="1">Filtrar por nombre</option>
+								<option value="2">Filtrar por apellido paterno</option>
+								<option value="3">Filtrar por apellido materno</option>
+							</select> 
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="row-fluid">
-				
-					<div class="span11">
-						<div class="row-fluid">
-							<div class="span6">
-								<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
-							</div>
-							<div class="span6 " >
-								<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="3">Filtrar por Apellido paterno</option>
-								<option value="4">Filtrar por Apellido materno</option>
-								</select> 
-							</div>
-						</div>
-
-						
-					</div>
-				
-			</div>
+			
 			<div class="row-fluid" style="margin-left: 0%;">
-				<div class="span11">
-					<thead>
-						<tr>
-							<th style="text-align:left;"><br><b>Nombre Completo</b></th>
-						</tr>
+				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+					<table id="listadoResultados" class="table table-hover">
+						<thead>
+							<b>Nombre Completo</b>
+						</thead>
+						<tbody>
 
-					</thead>
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-
-					<table class="table table-hover">
-					
-					<tbody>
-					
-						<?php
-						$contador=0;
-						$comilla= "'";
-						echo '<form id="formDetalle" type="post">';
-						while ($contador<count($rs_profesores)){
-							
-							echo '<tr>';
-							echo	'<td  id="'.$contador.'" onclick="DetalleProfesor('.$comilla.$rs_profesores[$contador][0].$comilla.','.$comilla. $rs_profesores[$contador][1].$comilla.','.$comilla. $rs_profesores[$contador][2].$comilla.','.$comilla. $rs_profesores[$contador][3].$comilla.','.$comilla. $rs_profesores[$contador][4].$comilla.','.$comilla. $rs_profesores[$contador][5].$comilla.','. $comilla.$rs_profesores[$contador][6].$comilla.')" 
-										  style="text-align:left;">
-										  '. $rs_profesores[$contador][3].' '.$rs_profesores[$contador][4].' ' . $rs_profesores[$contador][1].' '.$rs_profesores[$contador][2].'</td>';
-							echo '</tr>';
-							$contador = $contador + 1;
-						}
-						echo '</form>';
-						?>
-												
-					</tbody> 
+						</tbody>
 					</table>
-					</div>
 				</div>
 			</div>
 		</div>
-
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle Profesor:
 	    <pre style="margin-top: 2%; padding: 2%">
- Rut: 				<b id="rutDetalle"></b>
- Nombres:			<b id="nombreunoDetalle"></b> <b id="nombredosDetalle"></b>
- Apellido Paterno: 		<b id="apellidopaternoDetalle" ></b>
- Apellido Materno: 		<b id="apellidomaternoDetalle" ></b>
- Telefono: 			<b id="telefonoDetalle" ></b>
- Tipo: 				<b id="tipoDetalle"></b></pre>
-
+Rut:              <b id="rutDetalle"></b>
+Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
+Apellido paterno: <b id="apellido1Detalle" ></b>
+Apellido materno: <b id="apellido2Detalle"></b>
+Telefono: 		  <b id="telefonoDetalle" ></b>
+Tipo: 			  <b id="tipoDetalle"></b>
+		</pre>
 		</div>
 	</div>
 </fieldset>
+
+
+
+
