@@ -4,7 +4,7 @@
 
 require_once APPPATH.'controllers/Master.php'; 
 
-class Salas extends MasterManteka {
+class Sesiones extends MasterManteka {
 
 	
 	/**
@@ -39,7 +39,7 @@ class Salas extends MasterManteka {
 		/*$this->load->model('Model_sala');
 		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());*/
 
-		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_ver', "barra_lateral_sesiones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
 	public function agregarSesiones()
@@ -61,7 +61,7 @@ class Salas extends MasterManteka {
 	    
 	  
 		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);*/
-		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_agregar', "barra_lateral_sesiones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	
     }
