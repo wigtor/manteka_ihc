@@ -1,1 +1,5 @@
-cuerpo_sesiones_agregar
+<fieldset>
+	<legend>Módulos</legend>
+	holi :)
+	
+</fieldset>
