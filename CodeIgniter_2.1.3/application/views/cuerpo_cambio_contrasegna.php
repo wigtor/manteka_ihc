@@ -6,13 +6,13 @@
 	<?php echo form_open('Login/cambiarContrasegnaPost'); ?>
 	<div class="error"> 
 		<div style ="display:inline-block">
-			<label>Nombre</label>
-			<input type="text" placeholder="<?php echo $datos['nombre'] ?>" value="<?php echo $datos['nombre'] ?>" disabled>
+			<label>Nombres</label>
+			<input type="text" placeholder="<?php echo $datos->nombre1." ".$datos->nombre2 ?>" value="<?php echo $datos->nombre1." ".$datos->nombre2 ?>" disabled>
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
-			<label>Apellido</label>
-			<input type="text" placeholder="<?php echo $datos['apellido'] ?>" value="<?php echo $datos['apellido'] ?>" disabled>
+			<label>Apellidos</label>
+			<input type="text" placeholder="<?php echo $datos->apellido1." ".$datos->apellido2 ?>" value="<?php echo $datos->apellido1." ".$datos->apellido2 ?>" disabled>
 		</div>	
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
@@ -22,23 +22,23 @@
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
 			<label>Tipo de cuenta</label>
-			<input type="text" placeholder="<?php echo $datos['tipo_usuario'] ?>" value="<?php echo $datos['tipo_usuario'] ?>" disabled>
+			<input type="text" placeholder="<?php echo $datos->tipo_usuario ?>" value="<?php echo $datos->tipo_usuario ?>" disabled>
 		</div>
 		<br>
 		<hr>
 		<div style ="display:inline-block">
 			<label>Teléfono</label>
-			<input type="text" name="telefono" placeholder="<?php echo $datos['telefono'] ?>" value="<?php echo $datos['telefono'] ?>" >
+			<input type="text" name="telefono" placeholder="<?php echo $datos->telefono ?>" value="<?php echo $datos->telefono ?>" >
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
 			<label>* Correo</label>
-			<input type="text" name="correo1" placeholder="<?php echo $datos['email1'] ?>"  value="<?php echo $datos['email1'] ?>" >
+			<input type="text" name="correo1" placeholder="<?php echo $datos->email1 ?>"  value="<?php echo $datos->email1 ?>" >
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
 			<label>Correo alternativo</label>
-			<input type="text" name="correo2" placeholder="<?php echo $datos['email2'] ?>" value="<?php echo $datos['email2'] ?>" >
+			<input type="text" name="correo2" placeholder="<?php echo $datos->email2 ?>" value="<?php echo $datos->email2 ?>" >
 		</div>
 		<hr>
 		<?php /* Con esto hago que cambie la class del control-group a 'error' en caso de que exista un error en la validación */
@@ -82,11 +82,11 @@
       	</div>
 		
 		<div style ="display:inline-block">
-			<input type="submit" class="btn btn-primary" value="Guardar">
+			<input type="submit" class="btn" value="Guardar">
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
-			<input type="button" class="btn btn-primary" onclick= "window.location.href='/<?php echo config_item('dir_alias') ?>/index.php/Login/index'" value="Cancelar">
+			<input type="button" class="btn" onclick= "window.location.href='/<?php echo config_item('dir_alias') ?>/index.php/Login/index'" value="Cancelar">
 		</div>
 	</div>
 	<?php echo form_close(""); ?>
