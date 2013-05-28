@@ -14,6 +14,27 @@
 </script>
 
 <script type="text/javascript">
+function comprobarUsoRut(){
+	var rut_tentativo = document.getElementById("rut_tentativo");
+	var arreglo = new Array();
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($lista_rut)){
+		echo 'arreglo['.$contadorE.'] = "'.$lista_rut[$contadorE].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	var cont;
+	for(cont=0;cont < arreglo.length;cont++){
+		if(arreglo[cont] == rut_tentativo.value){
+			alert("Rut ya está en uso en el sistema");
+			rut_tentativo.value = "";
+			return;
+		}
+    }
+
+
+}
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroSeccion").value;
 	var arreglo = new Array();
@@ -31,15 +52,15 @@ function ordenarFiltro(){
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		ocultarInput=document.getElementById(arreglo[cont]);
+		desmarcar=document.getElementById(arreglo[cont]);
 		ocultarTd=document.getElementById("seccionTd_"+cont);
 		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultarInput.style.display='none';
+			desmarcar.checked = false;
 			ocultarTd.style.display='none';
 		}
 		else
 		{
-			ocultarInput.style.display='';
+			
 			ocultarTd.style.display='';
 		}
     }
@@ -51,7 +72,7 @@ function ordenarFiltro(){
 	<div class= "span10">	
 		<fieldset>
 			<legend>Agregar Alumno</legend>
-		<form id="formAgregar" type="post" action="<?php echo site_url("Alumnos/insertarAlumno/")?>">
+		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Alumnos/insertarAlumno/")?>">
 			
 			
 				<div>
@@ -71,7 +92,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input maxlength="10" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
+											<input id="rut_tentativo" onblur="comprobarUsoRut()" max="999999999" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
 										</div>
 								</div>
 							</div>
@@ -135,7 +156,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="email" name="correo_estudiante" maxlength="19" placeholder="ejemplo@usach.cl" required>
+											<input type="email" name="correo_estudiante" maxlength="199" placeholder="ejemplo@usach.cl" required>
 										</div>
 								</div>
 
@@ -210,7 +231,7 @@ function ordenarFiltro(){
 									</button>
 								</div>
 								<div class="span3">
-									<button class="btn" type="submit" style="width:105px">
+									<button class="btn" type="reset" style="width:105px">
 										<div class= "btn_with_icon_solo">Â</div>
 										&nbsp Cancelar
 

@@ -67,7 +67,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<textarea name="ubicacion" rows="5" cols="30" required>
+		    							<textarea name="ubicacion" maxlength="100" required>
 										</textarea>
 		  							</div>
 							</div>
