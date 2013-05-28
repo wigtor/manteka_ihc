@@ -189,6 +189,9 @@ class Model_profesor extends CI_Model {
 		$this->db->select('TIPO_PROFESOR AS tipo');
 		$this->db->where('RUT_USUARIO2', $rut);
 		$query = $this->db->get('profesor');
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->row();
 	}
 
@@ -225,6 +228,9 @@ class Model_profesor extends CI_Model {
 		$this->db->order_by('APELLIDO1_PROFESOR', 'asc');
 		$this->db->like($attr_filtro, $texto);
 		$query = $this->db->get('profesor');
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->result();
 	}
 

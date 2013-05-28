@@ -180,6 +180,74 @@ class Model_ayudante extends CI_Model {
 			return -1;
 		}		
     }
+
+
+
+    public function getAyudantesByFilter($tipoFiltro, $texto)
+   	{
+
+      //Sólo para acordarse
+      define("BUSCAR_POR_NOMBRE", 1);
+      define("BUSCAR_POR_APELLIDO1", 2);
+      define("BUSCAR_POR_APELLIDO2", 3);
+      define("BUSCAR_POR_CORREO", 4);
+
+      $attr_filtro = "";
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $attr_filtro = "NOMBRE1_AYUDANTE";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+         $attr_filtro = "APELLIDO1_AYUDANTE";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+         $attr_filtro = "APELLIDO2_AYUDANTE";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_CORREO) {
+         $attr_filtro = "CORREO_AYUDANTE";
+      }
+      else {
+         return array(); //No es válido, devuelvo vacio
+      }
+
+      $this->db->select('RUT_AYUDANTE AS rut');
+      $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+      $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+      $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+      $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+      $this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
+      $this->db->like($attr_filtro, $texto);
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $this->db->or_like("NOMBRE2_AYUDANTE", $texto);
+      }
+      $query = $this->db->get('ayudante');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->result();
+   }
+
+
+   public function getDetallesAyudante($rut) {
+      $this->db->select('ayudante.RUT_AYUDANTE AS rut');
+      $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+      $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+      $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+      $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+      $this->db->select('CORREO_AYUDANTE AS correo');
+      $this->db->select('NOMBRE1_PROFESOR AS nombre1_profe');
+      $this->db->select('NOMBRE2_PROFESOR AS nombre2_profe');
+      $this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
+      $this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
+      $this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
+      $this->db->join('profesor', 'profesor.RUT_USUARIO2 = ayu_profe.RUT_USUARIO2', 'LEFT OUTER');
+      $this->db->where('ayudante.RUT_AYUDANTE', $rut);
+      $query = $this->db->get('ayudante');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->row();
+   }
+
 }
 
 ?>
