@@ -17,7 +17,6 @@
 		var num_sala = document.getElementById("num_sala").value;
 		var ubicacion =	document.getElementById("ubicacion").value;
 		var capacidad =	document.getElementById("capacidad").value;
-		alert("cod"+cod_sala+"num "+num_sala+" "+ubicacion+" "+capacidad);
 		if( num_sala!=""  && capacidad!="" && ubicacion!="" ){
 					var answer = confirm("¿Está seguro de realizar cambios?")
 					if (!answer){
@@ -73,7 +72,7 @@ function ordenarFiltro(){
 
 <script type="text/javascript">
 	function datosEditarSala(cod_sala,num_sala,ubicacion,capacidad){
-			
+			document.getElementById("cod_sala").value = '';
 			document.getElementById("codEditar").value = cod_sala;
 			var editar = document.getElementById("formDetalle");
 			editar.action = "<?php echo site_url("Salas/editarSalas/") ?>/";

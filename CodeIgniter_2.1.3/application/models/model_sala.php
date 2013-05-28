@@ -53,8 +53,8 @@ class Model_sala extends CI_Model {
 	/**
 	* Eliminar sala de la base de datos
 	*
-	* Recibe el codigo de la sala para que se elimine éste y sus datos asociados de la base de datos. Se crea la consulta y luego se ejecuta ésta.
-	* Finalmente se retorna 1 o -1 si es que se realizó la inserción correctamente o no.
+	* Recibe el codigo de la sala para que se elimine ésta y sus datos asociados de la base de datos. Se crea la consulta y luego se ejecuta ésta.
+	* Finalmente se retorna 1 o -1 si es que se realizó la eliminación correctamente o no.
 	*
 	* @param string $cod_sala codigo de la sala que se eliminará de la base de datos
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación

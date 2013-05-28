@@ -106,7 +106,7 @@ function ordenarFiltro(){
                 <div class="span7">
                     <div class="row-fluid">
                         <div class="span5">
-                            3.-Información de la sección
+                            2.-Información de la sección
                         </div>
                     </div>
                     <div class="row-fluid">
@@ -135,7 +135,7 @@ echo '</tr>';
 
                     <div class="row-fluid">
                         <div class="span5">
-                            4.-Lista de Alumnos
+                            3.-Lista de Alumnos
                         </div>
                     </div>
                     
@@ -175,7 +175,7 @@ echo '</tr>';
 						</div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
          </form>
