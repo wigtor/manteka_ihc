@@ -98,6 +98,18 @@ class Model_ayudante extends CI_Model {
 		
 		return $lista;
 		}
+
+		public function getAllAyudantes()
+	{
+		$this->db->select('RUT_AYUDANTE AS rut');
+		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->order_by("APELLIDO_PATERNO", "asc");
+		$query = $this->db->get('ayudante');
+		return $query->result();
+	}
 		
 	/**
 	* Obtiene los datos de todos los profesores de la base de datos

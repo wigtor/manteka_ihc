@@ -96,6 +96,19 @@ class Model_profesor extends CI_Model {
 		return $lista;
 		}
 
+
+		public function getAllProfesores()
+	{
+		$this->db->select('RUT_USUARIO2 AS rut');
+		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
+		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
+		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+		$this->db->order_by("APELLIDO1_PROFESOR", "asc");
+		$query = $this->db->get('profesor');
+		return $query->result();
+	}
+
 	/**
 	* Edita la información de un profesor en la base de datos
 	*

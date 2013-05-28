@@ -3,15 +3,7 @@
 -->
 
 <script type='text/javascript'>
-
-function getDestinatarios(valor){
-	$.get("application/ajax/ajax_enviar_correo.php", { valor:valor }, function(data)
-	{
-     alert(data); 
-   	}, "html");
-}
-
-
+var arrayRespuesta;
 /** 
 * Esta función se llama al hacer click en el botón enviar, 
 * por convención las funciones que utilizan document.getElementById()
@@ -120,40 +112,31 @@ function pasoTresDos()
 * Esta función elimina los resultados que no coincidan con el filtro de busqueda
 */
 
-function ordenarFiltro(filtroLista)
-{
-	var tipoDeDestinatario = document.getElementById("tipoDeDestinatario").value;
+function ordenarFiltro(filtroLista){
 	var arreglo = new Array();
+	var arregloOcultados = new Array();
 	var receptor;
 	var ocultar;
 	var cont;
-	<?php
-	$contadorE = 0;
-	$rs_receptor=$rs_estudiantes;
-	while($contadorE<count($rs_receptor))
+	var filtroListaSplit = filtroLista.split(" ");
+	for(cont=0;cont < arrayRespuesta.length;cont++)
 	{
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$rs_receptor[$contadorE][1].'";';
-		echo 'arreglo['.$contadorE.'][3] = "'.$rs_receptor[$contadorE][3].'";';
-		echo 'arreglo['.$contadorE.'][4] = "'.$rs_receptor[$contadorE][4].'";';
-		echo 'arreglo['.$contadorE.'][7] = "'.$rs_receptor[$contadorE][7].'";';
-		echo 'arreglo['.$contadorE.'][6] = "'.$rs_receptor[$contadorE][6].'";';
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	for(cont=0;cont < arreglo.length;cont++)
-	{
-		receptor = document.getElementById(cont);
 		ocultar=document.getElementById(cont);
-		if(0 > arreglo[cont][3].toLowerCase ().indexOf(filtroLista.toLowerCase ())&
-			0 > arreglo[cont][4].toLowerCase ().indexOf(filtroLista.toLowerCase ())&
-			0 > arreglo[cont][1].toLowerCase ().indexOf(filtroLista.toLowerCase ()))
-		{
-			ocultar.style.display='none';
+		for(contadorF = 0;contadorF < filtroListaSplit.length;contadorF++){
+				if(0 > arrayRespuesta[cont].nombre1.toLowerCase ().indexOf(filtroListaSplit[contadorF].toLowerCase ())&
+				0 > arrayRespuesta[cont].apellido1.toLowerCase ().indexOf(filtroListaSplit[contadorF].toLowerCase ())&
+				0 > arrayRespuesta[cont].apellido2.toLowerCase ().indexOf(filtroListaSplit[contadorF].toLowerCase ()))
+				{
+					arregloOcultados[cont]='ocultado';
+				}
 		}
-		else
-		{
-			ocultar.style.display='block';
+	}
+	for (cont = 0; cont < arrayRespuesta.length; cont++) {
+		ocultar=document.getElementsByClassName(cont);
+		if(arregloOcultados[cont]=='ocultado'){
+			ocultar[0].style.display='none';
+		}else{
+			ocultar[0].style.display='block';
 		}
 	}
 }
@@ -247,33 +230,75 @@ var arrayOfClickClasses = new Array();
 var activeRow = false;
 var activeRowClickArray = new Array();
     
-function showDestinatarios(tipoDeDestinatario){
-	if(tipoDeDestinatario==1){
-		$('.detalle').empty();
-		$('.td_estudiante').css({display:'block'});
-		$('.td_profesor').css({display:'none'});
-		$('.td_ayudante').css({display:'none'});
-		$('#preest').css({display:'block'});
-		$('#preprof').css({display:'none'});
-		$('#preayud').css({display:'none'});
-	}else if(tipoDeDestinatario==2){
-		$('.detalle').empty();
-		$('.td_estudiante').css({display:'none'});
-		$('.td_profesor').css({display:'block'});
-		$('.td_ayudante').css({display:'none'});
-		$('#preest').css({display:'none'});
-		$('#preprof').css({display:'block'});
-		$('#preayud').css({display:'none'});
-	}else{
-		$('.detalle').empty();
-		$('.td_estudiante').css({display:'none'});
-		$('.td_profesor').css({display:'none'});
-		$('.td_ayudante').css({display:'block'});
-		$('#preest').css({display:'none'});
-		$('#preprof').css({display:'none'});
-		$('#preayud').css({display:'block'});
-	}
+function showDestinatarios(value){
+	var destinatario = value;
+		//if (texto.trim() != "") {
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>", /* Se setea la url del controlador que responderá */
+				data: { destinatario: destinatario}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var tablaResultados = document.getElementById("tabla");
+					var nodoTexto;
+					$(tablaResultados).empty();
+					var thead = document.createElement('thead');
+					var tr = document.createElement('tr');
+					var th = document.createElement('th');
+					var check = document.createElement('input');
+					var tbody = document.createElement('tbody');
+					check.type='checkbox';
+					check.checked=false;
+					th.appendChild(check);
+					tr.appendChild(th);
+					th = document.createElement('th');
+					nodoTexto = document.createTextNode("Nombre Completo");
+					th.appendChild(nodoTexto);
+					tr.appendChild(th);
+					thead.appendChild(tr);
+					tablaResultados.appendChild(thead);
+					arrayRespuesta = JSON.parse(respuesta);
+					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						check = document.createElement('input');
+						check.type='checkbox';
+						check.checked=false;
+						td.appendChild(check);
+						tr.appendChild(td);
+						td = document.createElement('td');
+						tr.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
+						tr.setAttribute("class",i);
+						tr.setAttribute("onClick", "detalleAlumno(this)");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+						tbody.appendChild(tr);
+						tablaResultados.appendChild(tbody);
+					}
+					/*
+					for (var i = 0, option, td; i < arrayRespuesta.length; i++) {
+						option =  document.createElement('option');
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						option.setAttribute("value", arrayRespuesta[i].rut);
+						option.setAttribute("onClick", "detalleAlumno(this.value)");
+						option.appendChild(nodoTexto);
+						tablaResultados.appendChild(option);
+					}
+					*/
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+			});
+
+			/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+		//}
 }
+
+$(document).ready(showDestinatarios(1));
 function highlightTableRow()
 {
 	var tableObj = this.parentNode;
@@ -392,7 +417,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 			<div class="control-group span4">
 				<label class="control-label" for="filtroPorTipoDeDestinatario">Filtrar por tipo destinatario</label>
 				<div class="controls">
-					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" class="input-large">
+					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" class="input-large" onChange="showDestinatarios(this.value)">
 						<option  value="0">Todos</option>
 						<option  value="1">Alumnos</option>
 						<option  value="2">Profesore</option>
@@ -498,6 +523,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 
 
 				<tbody>
+					<form id="formDetalle" type="post">
 					<tr>
 						<td >
 							<input type="checkbox" id="seleccionarTodosDelFiltro">
@@ -506,12 +532,13 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 							Juan Perez Torres
 						</td>
 					</tr>
-
-
+					</form>
 				</tbody>
 			</table>
 		</div>
-
+<script>
+addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
+</script>
 		<!-- Este es el botón que está entremedio de los dos listados -->
 		<div class="span2 text-center">
 			<div class="btn">Agregar</div>

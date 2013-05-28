@@ -333,4 +333,31 @@ class Correo extends MasterManteka {
 	{
 		$this->correosRecibidos();
 	}
+
+	public function postBusquedaAlumnosTipo() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$destinatario = $this->input->post('destinatario');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_profesor');
+		$this->load->model('Model_ayudante');
+
+		switch ($destinatario) {
+			case 1:
+				$resultado = $this->Model_estudiante->getAllAlumnos();
+				break;
+			case 2:
+				$resultado = $this->Model_profesor->getAllProfesores();
+				break;
+			case 3:
+				$resultado = $this->Model_ayudante->getAllAyudantes();
+				break;
+			default:
+				# code...
+				break;
+		}
+		echo json_encode($resultado);
+	}
 }
