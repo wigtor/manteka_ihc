@@ -10,6 +10,41 @@ class Model_estudiante extends CI_Model {
     var $cod_seccion='';
     var $cod_carrera='';
 
+	
+	public function getAllRut(){
+	   	$lista = array();
+   		$contador = 0;
+		
+		//lista usuarios
+		$this->db->select('RUT_USUARIO');
+		$this->db->from('usuario');
+		$query = $this->db->get();
+		$datos = $query->result();
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->RUT_USUARIO;
+            $contador++;
+   		}
+		//lista ayudantes
+		$this->db->select('RUT_AYUDANTE');
+		$this->db->from('ayudante');
+		$query = $this->db->get();
+		$datos = $query->result();
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->RUT_AYUDANTE;
+            $contador++;
+   		}
+		//lista alumnos
+		$this->db->select('RUT_ESTUDIANTE');
+		$this->db->from('estudiante');
+		$query = $this->db->get();
+		$datos = $query->result();
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->RUT_ESTUDIANTE;
+            $contador++;
+   		}
+   		return $lista;  	
+	}
+	
 	/**
 	* Inserta un estudiante en la base de datos
 	*
@@ -94,8 +129,8 @@ class Model_estudiante extends CI_Model {
 	*/
     public function EliminarEstudiante($rut_estudiante)
     {
-		$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$datos = $this->db->delete('ESTUDIANTE', array('rut_estudiante' => $rut_estudiante)); 
 		if($datos == true){
 			return 1;
 		}
@@ -103,7 +138,7 @@ class Model_estudiante extends CI_Model {
 			return -1;
 		}
     }
-    
+
 	/**
 	* Obtiene los datos de todos lo estudiantes de la base de datos
 	*
@@ -114,11 +149,17 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function VerTodosLosEstudiantes()
 	{
-		
-		$sql="SELECT * FROM ESTUDIANTE ORDER BY APELLIDO_PATERNO"; 
+		/*
+		$this->db->order_by("APELLIDO_PATERNO", "asc"); 
+		$query = $this->db->get('estudiante'); //Acá va el nombre de la tabla
+		// Se obtiene la fila del resultado de la consulta a la base de datos
+		$filaResultado = $query->row();
+		return $filaResultado;
+		*/
+		$sql="SELECT * FROM estudiante ORDER BY APELLIDO_PATERNO"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
@@ -132,8 +173,93 @@ class Model_estudiante extends CI_Model {
 			$contador = $contador + 1;
 		}
 		return $lista;
-		}
+		
+	}
 	
+
+	/**
+	* Obtiene los nombre y rut de todos los estudiantes del sistema
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada estudiante y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los estudiantes del sistema
+	*/
+	public function getAllAlumnos()
+	{
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->order_by("APELLIDO_PATERNO", "asc");
+		$query = $this->db->get('estudiante');
+		return $query->result();
+	}
+
+	public function getAlumnosByFilter($tipoFiltro, $texto)
+	{
+
+		//Sólo para acordarse
+		define("BUSCAR_POR_NOMBRE", 1);
+		define("BUSCAR_POR_APELLIDO1", 2);
+		define("BUSCAR_POR_APELLIDO2", 3);
+		define("BUSCAR_POR_CARRERA", 4);
+		define("BUSCAR_POR_SECCION", 5);
+		define("BUSCAR_POR_BLOQUEHORARIO", 6);
+
+		$attr_filtro = "";
+		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+			$attr_filtro = "NOMBRE1_ESTUDIANTE";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+			$attr_filtro = "APELLIDO_PATERNO";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+			$attr_filtro = "APELLIDO_MATERNO";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
+			$attr_filtro = "NOMBRE_CARRERA";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_SECCION) {
+			$attr_filtro = "COD_SECCION";
+		}
+		else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
+			return array(); //No implementado aún
+			//$attr_filtro = "NOMBRE1_ESTUDIANTE";
+		}
+		else {
+			return array(); //No es válido, devuelvo vacio
+		}
+
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->order_by('APELLIDO_PATERNO', 'asc');
+		$this->db->like($attr_filtro, $texto);
+		$query = $this->db->get('estudiante');
+		return $query->result();
+	}
+
+
+	public function getDetallesEstudiante($rut) {
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->select('CORREO_ESTUDIANTE AS correo');
+		$this->db->select('NOMBRE_CARRERA AS carrera');
+		$this->db->select('COD_SECCION AS seccion');
+		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->where('RUT_ESTUDIANTE', $rut);
+		$query = $this->db->get('estudiante');
+		return $query->row();
+	}
+
 	
 	/**
 	* Obtiene los datos de todas las carreras de la base de datos
@@ -145,10 +271,17 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function VerCarreras()
 	{
-		$sql="SELECT * FROM CARRERA"; 
+		/*
+		$query = $this->db->get('carrera'); //Acá va el nombre de la tabla
+		// Se obtiene la fila del resultado de la consulta a la base de datos
+		$filaResultado = $query->row();
+		return $filaResultado;
+		*/
+
+		$sql="SELECT * FROM carrera"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_CARRERA'];
 			$lista[$contador][1] = $row['NOMBRE_CARRERA'];
@@ -169,16 +302,34 @@ class Model_estudiante extends CI_Model {
 	*/	
 	public function VerSecciones()
 	{
-		$sql="SELECT COD_SECCION FROM SECCION"; //código MySQL
+		$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
-		$lista;
+		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador] = $row['COD_SECCION'];
 			$contador = $contador + 1;
 		}
 		
 		return $lista;
+	}
+	
+	function CambioDeSecciones($seccionOUT,$listaRut){
+			$contador = 0;
+			$confirmacion = 1;
+			while ($contador<count($listaRut)){
+				$data = array(
+               'COD_SECCION' => $seccionOUT
+				);
+				$this->db->where('RUT_ESTUDIANTE', $listaRut[$contador]);
+				$datos = $this->db->update('estudiante',$data);
+				if($datos != true){
+					$confirmacion = -1;
+				}
+	
+			$contador = $contador + 1;
+			}
+			return $confirmacion;
 	}
 	
 }

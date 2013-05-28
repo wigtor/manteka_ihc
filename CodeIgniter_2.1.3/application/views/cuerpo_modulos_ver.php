@@ -1,104 +1,214 @@
+<script type="text/javascript">
+function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
+	document.getElementById(nombre_modulo).value = nombre_modulo;
+	document.getElementById(descripcion_modulo).value = descripcion;
+	
+	profesor_lider = document.getElementById(profesor_lider);
+	var profesores_lideres = new Array();
+	var cont;
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($profesores)){
+		echo 'profesores_lideres['.$contadorE.']=new Array();';
+		echo 'profesores_lideres['.$contadorE.'][0] = "'.$profesor_lider[$contadorE][0].'";';
+		echo 'profesores_lideres['.$contadorE.'][1] = "'.$profesor_lider[$contadorE][1].'";';
+		echo 'profesores_lideres['.$contadorE.'][2] = "'.$profesor_lider[$contadorE][2].'";';
+		echo 'profesores_lideres['.$contadorE.'][3] = "'.$profesor_lider[$contadorE][3].'";';
+		echo 'profesores_lideres['.$contadorE.'][4] = "'.$profesor_lider[$contadorE][4].'";';
+		echo 'profesores_lideres['.$contadorE.'][5] = "'.$profesor_lider[$contadorE][5].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	for(cont=0;cont < profesores_lideres.length;cont++){
+		if(cod_equipo == profesores_lideres[cont][0]){
+			profesor_lider.value = profesores_lideres[cont][2]+" "+profesores_lideres[cont][3]+" "+profesores_lideres[cont][4]+" "+profesores_lideres[cont][5];
+			cont = profesores_lideres.length;
+		}
+    }
+	
+	var arreglo = new Array();
+	
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($profesores)){
+		echo 'arreglo['.$contadorE.']=new Array();';
+		echo 'arreglo['.$contadorE.'][0] = "'.$modulos[$contadorE][0].'";';//cod modulo tem
+		echo 'arreglo['.$contadorE.'][1] = "'.$modulos[$contadorE][2].'";';//cod equipo
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	for(cont=0;cont < arreglo.length;cont++){
+		document.getElementById("tabla_sesion_"+arreglo[cont][0]).style.display='none';
+		document.getElementById("tabla_profesor_"+arreglo[cont][2]).style.display='none';
+		document.getElementById("tabla_requisito_"+arreglo[cont][0]).style.display='none';
+    }
 
-<fieldset>
-	<legend>M骴ulos</legend>
-	Instrucciones
-	<br>
-	<br>
-	<div class="container-fluid">
-	  <div class="row-fluid">
-		<div class="span4">
-			1. Escoja un m骴ulo de la lista
-			<br>
-			<br>
-			<form class="navbar-search pull-left">
-				<input type="text" class="search-query" placeholder="Filtro por nombre">
-			</form>
-			<br>
-			<br>
-			<br>
-			<select multiple="multiple">
-				<option>Comunicaci髇 y Medios</option>
-				<option>Estrategias de Comunicaci髇</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>
-			</select>
-			<br>
-			<br>
+	document.getElementById("tabla_sesion_"+codigo_modulo).style.display='';
+	document.getElementById("tabla_profesor_"+codigo_equipo).style.display='';
+	document.getElementById("tabla_requisito_"+codigo_modulo).style.display='';
+}
+</script>
+
+<div>
+	<div class="span10">
+		<fieldset>
+			<legend>Ver M贸dulos</legend>
+	  		<div class="row-fluid">
+				<div class="span6">
+					<div class="row-fluid">
+						<div class="span6">
+							1. Escoja un m贸dulo de la lista
+						</div>
+					</div>
+
+
+				<div class="row-fluid" style="margin-left: 0%; width:90%">
+					<thead>
+						<tr>
+							<th style="text-align:left;"><br><b>Nombre del m贸dulo</b></th>
+							
+						</tr>
+					</thead>
+
+
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+							<tbody>		
+								<?php
+								$contador=0;
+								$comilla= "'";
+								while ($contador<count($modulos)){
+									
+									echo '<tr>';
+									echo	'<td  id="td_modulo_'.$modulos[$contador][0].'" onclick="DetalleModulo('.$comilla.$modulos[$contador][0].$comilla.','.$comilla. $modulos[$contador][3].$comilla.','.$comilla. $modulos[$contador][2].$comilla.','.$comilla. $modulos[$contador][4].$comilla.')" 
+												  style="text-align:left;">
+												  '. $modulos[$contador][3].'</td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								?>														
+							</tbody>
+						</table>
+					</div>
+				</div>	
+			
 		</div>
 		
-		<div class="span1">
-			<?php
-				/*$contador=0;
-				while ($contador<count($rs_modulos)){
-					
-					echo '<tr>';
-					echo	'<td  id="'.$contador.'" style="text-align:left;">'
-					echo 	$rs_modulos[$contador][0].' '.$rs_modulos[$contador][1].' '.$rs_modulos[$contador][2].' '.$rs_modulos[$contador][3].' '.$rs_modulos[$contador][4];
-					echo 	'</td>';
-					echo '</tr>';
-												
-					$contador = $contador + 1;
-				}*/
-			?>
-		</div>
-		
-		<div class="span7">
-			2. Detalle m骴ulo tem醫ico
-			<div class ="container-fluid">
-				<div class ="row-fluid">
-					<div class ="span5">
-						<br>
-						<b>Nombre del m骴ulo: 
-						<br>
-						<br>
-						<br>
-						Profesor jefe: 
-						<br>
-						<br>
-						<br>
-						Lista de profesores: 
-						<br>
-						<br>
-						<br>
-						Secciones que lo cursan: </b>
-						<br>
-						<br>
-					</div>
-					
-					<div class ="span7">
-						<br>
-						<b>Comunicaci髇 y Medios</b>
-						<br>
-						<br>
-						<br>
-						<a href="//" target="Mauricio Mar韓">Mauricio Mar韓</a>
-						<br>
-						<br>
-						<br>
-						<select>
-							<option>Edmundo Leiva</option>
-							<option>Profe 2</option>
-							<option>Profe 3</option>
-							<option>Profe 4</option>
-							<option>Profe 5</option>
-						</select>
-						<br>
-						<br>
-						<select>
-							<option>A-01</option>
-							<option>Cord 2</option>
-							<option>Cord 3</option>
-							<option>Cord 4</option>
-							<option>Cord 5</option>
-						</select>
-						<br>
-						<br>
-					</div>
+		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+			2. Detalle M贸dulo Tem谩tico
+			<div class ="row-fluid">
+				<pre style="margin-top: 2%; padding: 2%; height:6%">
+Nombre del m贸dulo:	<input type="text" id="nombre_modulo"></input>
+Profesor lider: 	<input type="text" id="profesor_lider"></input>
+Descripci贸n m贸dulo: <input type="text" id="descripcion_modulo"></input>
+
+			</pre>
+				
+			</div>
+			<div class="row-fluid">
+				<div class="row-fluid">
+						<div class="span6">
+							3. Sesiones del M贸dulo Tem谩tico
+						</div>
 				</div>
 			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >																		
+					<?php
+					$contador=0;
+					while ($contador<count($sesiones)){
+					$codigo_actual = $sesiones[$contador][1];
+					echo  '<table id="tabla_sesion_'.$sesiones[$contador][1].'" class="table table-hover" style="display:none">';
+					echo 	'<thead>';
+					echo	'</thead>';
+					echo	'<tbody>';	
+					
+						while($contador<count($sesiones) && $codigo_actual == $sesiones[$contador][1]){
+							echo '<tr>';
+							echo	'<td  title="'.$sesiones[$contador][2].'" style="text-align:left;">'.$sesiones[$contador][0].'</td>';
+							echo '</tr>';
+							$contador = $contador + 1;
+						}
+					echo 	'</tbody>';
+					echo '</table>';
+					}
+					?>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="row-fluid" style="margin-top:2%">
+						<div class="span7">
+							4. Profesores del M贸dulo Tem谩tico
+						</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+									
+						<?php
+						$contador=0;
+						while ($contador<count($equipos)){
+						$codigo_actual = $equipos[$contador][0];
+						echo  '<table id="tabla_profesor_'.$equipos[$contador][0].'" class="table table-hover" style="display:none">';
+						echo 	'<thead>';
+						echo	'</thead>';
+						echo	'<tbody>';	
+						
+							while($contador<count($equipos) && $codigo_actual == $equipos[$contador][0]){
+								echo '<tr>';
+								echo	'<td  style="text-align:left;">
+							  '.$equipos[$contador][1].' :'.$equipos[$contador][2].' '.$equipos[$contador][3].' '.$equipos[$contador][4].' '.$equipos[$contador][5].'</td>';
+								echo '</tr>';
+							$contador = $contador + 1;
+							}
+						echo 	'</tbody>';
+						echo '</table>';
+						}
+						?>
+					</table>
+				</div>
+			</div>
+			
+			
+			<div class="row-fluid">
+				<div class="row-fluid" style="margin-top:2%">
+						<div class="span7">
+							5. Requisitos del M贸dulo Tem谩tico
+						</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+									
+					<?php	
+					$contador=0;
+					while ($contador<count($requisitos)){
+					$codigo_actual = $requisitos[$contador][0];
+					echo  '<table id="tabla_requisito_'.$requisitos[$contador][0].'" class="table table-hover" style="display:none">';
+					echo 	'<thead>';
+					echo	'</thead>';
+					echo	'<tbody>';	
+					
+						while($contador<count($requisitos) && $codigo_actual == $requisitos[$contador][0]){
+							echo '<tr>';
+							echo	'<td  style="text-align:left;">'.$requisitos[$contador][2].' , c贸digo: '.$requisitos[$contador][1].'</td>';
+							echo '</tr>';
+							$contador = $contador + 1;
+						}
+					echo 	'</tbody>';
+					echo '</table>';
+					}
+					?>	
+				</div>
+			</div>
+			
+
+
 		</div>
 	  </div>
-	</div>
+
 	
-</fieldset>
+		</fieldset>
+	</div>
+</div>

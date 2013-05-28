@@ -42,9 +42,13 @@
 
 					</div>
 					
-					<div class="row-fluid" style="margin-left:82%; margin-top:2%">
+					<div class="row-fluid" style="margin-left:77%; margin-top:2%">
 						<div class="span2">
-							<button class="btn" type="submit">Agregar</button>
+							<button class="btn" type="submit" style="width:102px">
+								<div class= "btn_with_icon_solo">Ã</div>
+								&nbsp Agregar
+
+							</button>
 						</div>
 					</div>
 

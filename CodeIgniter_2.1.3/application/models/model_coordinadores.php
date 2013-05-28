@@ -82,7 +82,7 @@ class model_coordinadores extends CI_Model{
    */
 	function GetModulos($id){
 		$this->db->select('COD_MODULO_TEM');
-		$this->db->from('MODULO_TEMATICO');
+		$this->db->from('modulo_tematico');
 		$this->db->where('RUT_USUARIO2', $id);
 		$query = $this->db->get();
 		$ObjetoListaResultados = $query->result_array();
@@ -308,6 +308,68 @@ class model_coordinadores extends CI_Model{
          
       }
 
+
+      public function getCoordinadoresByFilter($tipoFiltro, $texto)
+   {
+
+      //Sólo para acordarse
+      define("BUSCAR_POR_NOMBRE", 1);
+      define("BUSCAR_POR_APELLIDO1", 2);
+      define("BUSCAR_POR_APELLIDO2", 3);
+      define("BUSCAR_POR_MODULO", 4);
+      define("BUSCAR_POR_SECCION", 5);
+      define("BUSCAR_POR_BLOQUEHORARIO", 6);
+
+      $attr_filtro = "";
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $attr_filtro = "NOMBRE1_COORDINADOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+         $attr_filtro = "APELLIDO1_COORDINADOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+         $attr_filtro = "APELLIDO2_COORDINADOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_MODULO) {
+         $attr_filtro = "MODULO_TEMATICO";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_SECCION) {
+         $attr_filtro = "COD_SECCION";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
+         return array(); //No implementado aún
+         //$attr_filtro = "NOMBRE1_ESTUDIANTE";
+      }
+      else {
+         return array(); //No es válido, devuelvo vacio
+      }
+
+      $this->db->select('RUT_USUARIO3 AS rut');
+      $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+      $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+      $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+      $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+      $this->db->order_by('APELLIDO1_COORDINADOR', 'asc');
+      $this->db->like($attr_filtro, $texto);
+      $query = $this->db->get('coordinador');
+      return $query->result();
+   }
+
+
+   public function getDetallesCoordinador($rut) {
+      $this->db->select('RUT_USUARIO3 AS rut');
+      $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+      $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+      $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+      $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->select('TELEFONO_COORDINADOR AS fono');
+      $this->db->select('CORREO1_USER AS correo');
+      $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+      $this->db->where('RUT_USUARIO3', $rut);
+      $query = $this->db->get('coordinador');
+      return $query->row();
+   }
 
 }
 ?>

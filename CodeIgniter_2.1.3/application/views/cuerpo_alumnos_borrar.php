@@ -37,16 +37,18 @@
 					var answer = confirm("¿Está seguro de eliminar este estudiante?")
 					if (!answer){
 						var dijoNO = DetalleAlumno("","","","","","","","");
+						return false;
 					}
 					else{
 		
-					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Alumnos/EliminarAlumno/") ?>/"+rut;
+					var borrar = document.getElementById("FormBorrar");
+					borrar.action ="<?php echo site_url("Alumnos/eliminarAlumno/");?>"
 					borrar.submit();
 					}
 		}
 		else{
 				alert("Selecione un estudiante");
+				return false;
 		}
 	}
 </script>
@@ -93,6 +95,7 @@ function ordenarFiltro(){
 
 <div class= "row-fluid">
 	<div class= "span10">
+		<form id="FormBorrar" type="post" onsubmit="eliminarAlumno();return false" method="post">
 		<fieldset>
 			<legend>Borrar Alumno</legend>
 			<div class= "row-fluid">
@@ -113,7 +116,7 @@ function ordenarFiltro(){
 
 							<div class="span6">
 									
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<select id="tipoDeFiltro" title="Tipo de filtro" >
 									<option value="1">Filtrar por Nombre</option>
 									<option value="3">Filtrar por Apellido paterno</option>
 									<option value="4">Filtrar por Apellido materno</option>
@@ -167,7 +170,6 @@ function ordenarFiltro(){
 					<div style="margin-bottom:0%">
 							2.-Detalle del Alumno:
 					</div>
-					<form id="formBorrar" type="post">
 					<div class="row-fluid">
 						<div >
 						<pre style="margin-top: 2%; padding: 2%">
@@ -178,26 +180,33 @@ Apellido materno: <b id="apellidomaternoDetalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
 Correo:           <b id="correoDetalle"></b></pre>
-<input type="hidden" id="rutEliminar" value="">
+<input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
 								
 						</div>
 					</div>
-					<div class= "row-fluid" >
-						<div class="row-fluid" style=" margin-top:10px; margin-left:54%">		
-							<div class="span3 ">
-								<button class="btn" onclick="eliminarAlumno()" >Eliminar</button>
+					<div class="row" style="margin-top: 2%">
+	
+							<div class="span3 offset6">
+								<button class="btn" type="submit" style="width: 93px">
+									<div class= "btn_with_icon_solo">b</div>
+									&nbsp Borrar
+								</button>
 							</div>
 
 							<div class = "span3 ">
-								<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','','','')" >Cancelar</button>
+								<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','','','')" style="width: 105px">
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
 							</div>
-						</div>
+
 					</div>
-					</form>
+					
 				</div>	
 			</div>
 
 			
 		</fieldset>
+		</form>
 	</div>
 </div>

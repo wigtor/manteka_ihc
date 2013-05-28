@@ -178,13 +178,19 @@ Correo:           <b id="correoDetalle"></b></pre>
 						</div>
 					</div>
 					<div class= "row-fluid" >
-						<div class="row-fluid" style=" margin-top:10px; margin-left:54%">		
+						<div class="row-fluid" style=" margin-top:10px; margin-left:50%">		
 							<div class="span3 ">
-								<button class="btn" onclick="eliminarAyudante()" >Eliminar</button>
+								<button class="btn" style="width: 93px" onclick="eliminarAyudante()" >
+									<div class= "btn_with_icon_solo">b</div>
+									&nbsp Borrar
+								</button>
 							</div>
 
 							<div class = "span3 ">
-								<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','')" >Cancelar</button>
+								<button  class ="btn" style="width: 105px" type="reset" onclick="DetalleAlumno('','','','','','')" >
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
 							</div>
 						</div>
 					</div>
