@@ -22,13 +22,26 @@
 		function validacionRut() {
 			var inputRut = document.getElementById("inputRut");
 			var rut = inputRut.value;
+			RecepcionRut = rut;
 			var inputGuionRut = document.getElementById("inputGuionRut");
 			var guionCaracter = inputGuionRut.value;
 			var resultadoValidacionRut = calculaDigitoVerificador(rut, guionCaracter);
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
 
 			// Si el resultado de la validación es satisfactorio
 			if (resultadoValidacionRut == DV_CORRECTO) {
 				// Realizar un submit
+				$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Login/postLoguearse") ?>", /* Se setea la url del controlador que responderá */
+				data: { rutEnvio: RecepcionRut}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var datos = jQuery.parseJSON(respuesta);
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+				});
 				return true;
 			}
 			// Caso en que la validación entregue un error de validación
@@ -38,6 +51,16 @@
 				$(controlGroupRut).addClass("error");
 				var spanError = document.getElementById("spanInputRutError");
 				$(spanError).html("El rut introducido no es válido.");
+				$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Login/postLoguearse") ?>", /* Se setea la url del controlador que responderá */
+				data: { rutEnvio: RecepcionRut}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var datos = jQuery.parseJSON(respuesta);
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+				});
 				return false;
 			}
 			// Caso que el RUT ingresado sea incorrecto
@@ -47,6 +70,16 @@
 				$(controlGroupRut).addClass("error");
 				var spanError = document.getElementById("spanInputRutError");
 				$(spanError).html("El dígito verificador o el rut no son válidos.");
+				$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Login/postLoguearse") ?>", /* Se setea la url del controlador que responderá */
+				data: { rutEnvio: RecepcionRut}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var datos = jQuery.parseJSON(respuesta);
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+				});
 				return false;
 			}
 			return false;
@@ -136,9 +169,16 @@
 									<input type="checkbox" name="recordarme_check" <?php echo $recordarme;?> >Recordarme&nbsp;
 									<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>
 								</label>
-								<button type="submit" class="btn btn-primary">
-									Entrar
-								</button>					
+								<div class="row">
+									<div class="span4 offset1">
+										<button type="submit" class="btn btn-primary">
+											Entrar
+										</button>	
+									</div>
+									<div class="span2">
+										<img id="icono_cargando" src="/<?php echo config_item('dir_alias') ?>/img/procesando.gif" style="display:none; width:25px; height:25px;">
+									</div>
+								</div>				
 							</div>
 						</div>
 						<hr>

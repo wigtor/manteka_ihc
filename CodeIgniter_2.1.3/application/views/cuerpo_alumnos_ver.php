@@ -104,12 +104,12 @@
 </script>
 
 <fieldset>
-	<legend>Ver Alumnos</legend>
+	<legend>Ver alumnos</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="row-fluid">
 				<div class="span6">
-					1.-Listado Alumnos
+					1.-Listado alumnos
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -126,7 +126,7 @@
 								<option value="4">Filtrar por carrera</option>
 								<option value="5">Filtrar por seccion</option>
 								<option value="6">Filtrar por bloque horario</option>
-							</select> 
+							</select>
 						</div>
 					</div>
 				</div>
@@ -147,7 +147,7 @@
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-		2.-Detalle Alumnos:
+		2.-Detalle alumno:
 	    <pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
