@@ -75,7 +75,7 @@ class Model_profesor extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todos los profesores del sistema
 	*/
-	public function VerTodosLosProfesores()
+	/*public function VerTodosLosProfesores()
 	{
 		$sql="SELECT * FROM profesor ORDER BY APELLIDO1_PROFESOR"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
@@ -96,7 +96,7 @@ class Model_profesor extends CI_Model {
 		return $lista;
 		}
 
-
+*/
 		public function getAllProfesores()
 	{
 		$this->db->select('RUT_USUARIO2 AS rut');

@@ -147,7 +147,7 @@ class Model_estudiante extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todos los estudiantes del sistema
 	*/
-	public function VerTodosLosEstudiantes()
+	/*public function VerTodosLosEstudiantes()
 	{
 		/*
 		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc"); 
@@ -156,7 +156,7 @@ class Model_estudiante extends CI_Model {
 		$filaResultado = $query->row();
 		return $filaResultado;
 		*/
-		$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
+		/*$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista = array();
@@ -175,7 +175,7 @@ class Model_estudiante extends CI_Model {
 		return $lista;
 		
 	}
-	
+	*/
 
 	/**
 	* Obtiene los nombre y rut de todos los estudiantes del sistema

@@ -80,7 +80,7 @@ class Model_ayudante extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todos los ayudantes del sistema
 	*/
-	public function VerTodosLosAyudantes()
+	/*public function VerTodosLosAyudantes()
 	{
 		$sql="SELECT * FROM ayudante ORDER BY APELLIDO_PATERNO"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
@@ -98,7 +98,7 @@ class Model_ayudante extends CI_Model {
 		
 		return $lista;
 		}
-
+*/
 		public function getAllAyudantes()
 	{
 		$this->db->select('RUT_AYUDANTE AS rut');
@@ -108,6 +108,10 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('APELLIDO_MATERNO AS apellido2');
 		$this->db->order_by("APELLIDO_PATERNO", "asc");
 		$query = $this->db->get('ayudante');
+		if ($query == FALSE) {
+			$query = array();
+			return $query;
+		}
 		return $query->result();
 	}
 		
