@@ -16,43 +16,109 @@ class Model_modulo extends CI_Model {
 	* @return array $lista Contiene la información de todos los módulos del sistema
 	*/
 
-	public function VerModulos(){//esta función será modificada
-		$sql="SELECT * FROM MODULO_TEMATICO"; 
-		$datos=mysql_query($sql); 
+	
+	public function VerModulos(){
+		$query = $this->db->get('MODULO_TEMATICO');
+		$datos = $query->result();
 		$contador = 0;
 		$lista = array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['COD_MODULO_TEM'];
-			$lista[$contador][1] = $row['RUT_USUARIO2'];
-			$lista[$contador][2] = $row['COD_EQUIPO'];
-			$lista[$contador][3] = $row['NOMBRE_MODULO'];
-			$lista[$contador][4] = $row['DESCRIPCION_MODULO'];
+		foreach ($datos as $row) {  
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_MODULO_TEM;
+			$lista[$contador][1] = $row->RUT_USUARIO2;
+			$lista[$contador][2] = $row->COD_EQUIPO;
+			$lista[$contador][3] = $row->NOMBRE_MODULO;
+			$lista[$contador][4] = $row->DESCRIPCION_MODULO;
 
 			$contador = $contador + 1;
 		}
 		return $lista;
 	}
-	public function listaNombreModulos(){
-   		$query = $this->db->get('modulo_tematico');
-   		$ObjetoListaResultados = $query->result();
-   		$StringResultados = array();
-   		$contador = 0;
-   		foreach ($ObjetoListaResultados as $row) {
-   			$StringResultados[$contador] = $row->NOMBRE_MODULO;
-            $contador++;
-   		}
-   		return $StringResultados;  	
-	}
-	public function listaSesionesParaAddModulo(){
-		$sql="SELECT * FROM MODULO_TEMATICO"; 
-		$datos=mysql_query($sql); 
+	
+	public function VerEquipoModulo(){
+		$this->db->select('*');
+		$this->db->from('profesor');
+		$this->db->join('profe_equi_lider', 'profe_equi_lider.rut_usuario2 = profesor.rut_usuario2');
+		$query = $this->db->get();	
+		$datos = $query->result();
 		$contador = 0;
 		$lista = array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) { 
 			$lista[$contador] = array();
-			$lista[$contador][0] = $row['COD_SESION'];
-			$lista[$contador][1] = $row['COD_MODULO_TEM'];
-			$lista[$contador][2] = $row['DESCRIPCION'];
+			$lista[$contador][0] = $row->COD_EQUIPO;
+			$lista[$contador][1] = $row->RUT_USUARIO2;
+			$lista[$contador][2] = $row->NOMBRE1_PROFESOR;
+			$lista[$contador][3] = $row->NOMBRE2_PROFESOR;
+			$lista[$contador][4] = $row->APELLIDO1_PROFESOR;
+			$lista[$contador][5] = $row->APELLIDO2_PROFESOR;
+			$contador = $contador + 1;
+		}
+		return $lista;
+	}
+	
+	public function VerProfeLiderModulo(){
+		$this->db->select('*');
+		$this->db->from('profesor');
+		$this->db->join('profe_equi_lider', 'profe_equi_lider.lider_profesor = profesor.rut_usuario2');
+		$query = $this->db->get();	
+		$datos = $query->result();
+		$contador = 0;
+		$lista = array();
+		foreach ($datos as $row) {  
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_EQUIPO;
+			$lista[$contador][1] = $row->LIDER_PROFESOR;
+			$lista[$contador][2] = $row->NOMBRE1_PROFESOR;
+			$lista[$contador][3] = $row->NOMBRE2_PROFESOR;
+			$lista[$contador][4] = $row->APELLIDO1_PROFESOR;
+			$lista[$contador][5] = $row->APELLIDO2_PROFESOR;
+			$contador = $contador + 1;
+		}
+		return $lista;
+	}
+	
+	public function VerRequisitoModulo(){
+		$this->db->select('*');
+		$this->db->from('requisito_modulo');
+		$this->db->join('requisito', 'requisito.cod_requisito = requisito_modulo.cod_requisito');
+		$query = $this->db->get();	
+		
+		$datos = $query->result();
+		$contador = 0;
+		$lista = array();
+		foreach ($datos as $row) {  
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_MODULO_TEM;
+			$lista[$contador][1] = $row->COD_REQUISITO;
+			$lista[$contador][2] = $row->NOMBRE_REQUISITO;
+			$contador = $contador + 1;
+		}
+		return $lista;
+	}
+	
+	
+	
+	public function listaNombreModulos(){
+   		$query = $this->db->get('modulo_tematico');
+   		$datos = $query->result();
+   		$lista = array();
+   		$contador = 0;
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->NOMBRE_MODULO;
+            $contador++;
+   		}
+   		return $lista;  	
+	}
+	public function listaSesionesParaAddModulo(){
+		$query = $this->db->get('sesion');	
+		$datos = $query->result(); 
+		$contador = 0;
+		$lista = array();
+		foreach ($datos as $row) { 
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_SESION;
+			$lista[$contador][1] = $row->COD_MODULO_TEM;
+			$lista[$contador][2] = $row->DESCRIPCION_SESION;
 			$contador = $contador + 1;
 		}
 		return $lista;

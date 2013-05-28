@@ -10,6 +10,41 @@ class Model_estudiante extends CI_Model {
     var $cod_seccion='';
     var $cod_carrera='';
 
+	
+	public function getAllRut(){
+	   	$lista = array();
+   		$contador = 0;
+		
+		//lista usuarios
+		$this->db->select('RUT_USUARIO');
+		$this->db->from('usuario');
+		$query = $this->db->get();
+		$datos = $query->result();
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->RUT_USUARIO;
+            $contador++;
+   		}
+		//lista ayudantes
+		$this->db->select('RUT_AYUDANTE');
+		$this->db->from('ayudante');
+		$query = $this->db->get();
+		$datos = $query->result();
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->RUT_AYUDANTE;
+            $contador++;
+   		}
+		//lista alumnos
+		$this->db->select('RUT_ESTUDIANTE');
+		$this->db->from('estudiante');
+		$query = $this->db->get();
+		$datos = $query->result();
+   		foreach ($datos as $row) {
+   			$lista[$contador] = $row->RUT_ESTUDIANTE;
+            $contador++;
+   		}
+   		return $lista;  	
+	}
+	
 	/**
 	* Inserta un estudiante en la base de datos
 	*
