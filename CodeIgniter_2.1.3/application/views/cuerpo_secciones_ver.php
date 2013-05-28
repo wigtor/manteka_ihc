@@ -1,66 +1,184 @@
-<fieldset>
-    <legend>Secciones</legend>
-    <div><!--fila-->
-        <div class="span3">
-            <h4>Escoja una seccion de la lista</h4>
-            <input type="text" placeholder="Filtro b�squeda"><br/>
-            <select id="select-secciones" size=16 onchange="mostrarDatos(this)">
-                <?php
-                    foreach ($listado_secciones as $seccion) {
-                        echo "<option value='".$seccion[0]."'>".$seccion[1]."</option>";
-                    }
-                ?>
-                
-            </select>
-        </div>
-        <h4>Vea la informacion de la seccion seleccionada</h4>
-        <h6>Profesor: <span id="mostrar-profesor"> <!-- inyectar valor aqui --> </span></h6>
-        <h6>Modulo:   <span id="mostrar-modulo">   <!-- inyectar valor aqui --> </span></h6>
-        <h6>Horario:  <span id="mostrar-horario">  <!-- inyectar valor aqui --> </span></h6>
-        <h6>Sala:     <span id="mostrar-sala">     <!-- inyectar valor aqui --> </span></h6>
-        <div class="span9" style="overflow:auto; height:200px">
-            <table id="mostrar-tabla_alumnos" class="table table-bordered" >            
-                <tr>
-                    <th>Carrera</th>
-                    <th>Rut</th>
-                    <th>Paterno</th>
-                    <th>Materno</th>
-                    <th>Nombres</th>
-                    <th>Mail</th>
-                </tr>
-                <!-- aqui se inyectar� con javascript la lista de alumnos de la seccion elegida -->
-            </table>
-        </div>
-    </div>
-</br>
-<fieldset>
 <script type="text/javascript">
-    var arreglo_secciones = [];
-    <?php  
-        foreach ($listado_secciones as $seccion) {
-            echo "var temp = [];";
-            echo "temp = [".$seccion[0].",'".$seccion[1]."','".$seccion[2]."','".$seccion[3]."','".$seccion[4]."','".$seccion[5]."','".$seccion[6]."'];";
-            echo "arreglo_secciones[temp[0]] = temp;";
-        }
-    ?>
-    function mostrarDatos(seleccion){
-        //borrar datos de los spans
-        $("#mostrar-profesor,#mostrar-modulo, #mostrar-horario, #mostrar-sala, #mostrar-tabla_alumnos").empty();
-        
-        //setear nuevos datos de los spans
-        var id_seccion = seleccion.options[seleccion.selectedIndex].value;
-        $("#mostrar-profesor").append(arreglo_secciones[id_seccion][2]);
-        $("#mostrar-modulo").append(  arreglo_secciones[id_seccion][3]);
-        $("#mostrar-horario").append( arreglo_secciones[id_seccion][4]);
-        $("#mostrar-sala").append(    arreglo_secciones[id_seccion][5]);
-        var string_linea ="<tr><th>Carrera</th><th>Rut</th><th>Paterno</th><th>Materno</th><th>Nombres</th><th>Mail</th></tr>"+arreglo_secciones[id_seccion][6];
-        $("#mostrar-tabla_alumnos").append(string_linea);
+	function DetalleSeccion(cod_seccion){
+			document.getElementById("seccion").value = cod_seccion;
+			var editar = document.getElementById("formDetalle");
+			editar.action = "<?php echo site_url("Secciones/verSecciones/") ?>/";
+			editar.submit();
+			
+	}
+</script>
 
-    }
-</script>
 <script type="text/javascript">
-    
-    
-    
-    
+function ordenarFiltro(){
+	var filtroLista = document.getElementById("filtroLista").value;
+	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
+
+	
+	var arreglo = new Array();
+	var sala;
+	var ocultar;
+	var cont;
+	
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($seccion)){
+		echo 'arreglo['.$contadorE.']=new Array();';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	
+	
+	for(cont=0;cont < arreglo.length;cont++){
+		ocultar=document.getElementById(cont);
+		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+			ocultar.style.display='none';
+		}
+		else
+		{
+			ocultar.style.display='';
+		}
+    }
+}
 </script>
+
+<div class="row-fluid">
+    <div class= "span11">
+        <fieldset>
+            	<form id="formDetalle" type="post" method="post">
+            <legend>Ver Sección</legend>
+            
+            <div class="row-fluid">
+                <div class="span5">
+                    <div class="row-fluid">
+                        <div class="span7">
+                            1.-*Seleccionar sección
+                        </div>
+					</div>
+<div class="row-fluid">
+				<div class="span11">
+					<div class="row-fluid">	
+							<div class="span11">
+								<div class="span6">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+								</div>
+								<div class="span6">
+									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<option value="1">Filtrar por Nombre</option>
+									</select>
+								</div> 
+							</div>
+						</div>
+						
+				</div>
+			</div>
+			<div class="row-fluid" style="margin-left: 0%;">
+				<!--<div class="span9">-->
+
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+							<tbody>
+								<input id="seccion" type="text" name="cod_seccion" style="display:none">
+								<?php
+								$contador=0;
+								$comilla= "'";
+								
+								while ($contador<count($seccion)){
+									
+									echo '<tr>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][0].' </td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								
+								?>
+														
+							</tbody>
+						</table>
+					</div>
+				
+			
+				<!--</div>-->
+			</div>
+
+                </div>
+                <div class="span7">
+                    <div class="row-fluid">
+                        <div class="span5">
+                            3.-Información de la sección
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+	<pre style="margin-top: 0%; margin-left: 0%;">
+	<?php
+	$contador=0;
+	$comilla= "'";
+					
+while ($contador<count($secc)){
+	
+echo '<tr>';
+echo '<td id="rs_seccion_'.$contador.'" > 
+Sección: '.$secc[$contador][0].' </td>';
+echo '<td id="rs_seccion_'.$contador.'" > 
+Día: '.$secc[$contador][2].' </td>';
+echo '<td id="rs_seccion_'.$contador.'" > 
+Módulo: '.$secc[$contador][1].' </td>';
+echo '</tr>'; 
+	$contador =$contador+1 ;
+}
+								
+?>
+
+                        </pre>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span5">
+                            4.-Lista de Alumnos
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row-fluid">
+                        <div class="span13">
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+                            <table class="table table-bordered">
+                                <thead  bgcolor="#e6e6e6">
+                                    <tr>
+                                        <th class="span2">Carrera</th>
+                                        <th class="span2">RUT</th>
+                                        <th class="span3">Apellido paterno</th>
+                                        <th class="span3">Apellido materno</th>
+                                        <th class="span9">Nombres</th>
+                                    </tr>
+                                </thead>
+                                    <!-- esta fila es solo de ejemplo-->
+                                <tbody>
+                                    	<?php
+										$contador=0;
+										while ($contador<count($rs_estudiantes)){
+											echo '<tr>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][7].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][0].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][3].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][4].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].' </td>';
+											echo '</tr>';
+											$contador = $contador + 1;
+										}
+										?>
+									
+                                </tbody>
+                                
+                            </table>
+						</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+         </form>
+        </fieldset>
+    </div>
+</div>

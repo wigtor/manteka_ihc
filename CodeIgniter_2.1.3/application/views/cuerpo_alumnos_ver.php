@@ -55,47 +55,43 @@
 		var inputTextoFiltro = document.getElementById('filtroLista');
 		var valorSelector = selectorFiltro.value;
 		var texto = inputTextoFiltro.value;
-		//if (texto.trim() != "") {
-			$.ajax({
-				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>", /* Se setea la url del controlador que responderá */
-				data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					var tablaResultados = document.getElementById("listadoResultados");
-					var nodoTexto;
-					$(tablaResultados).empty();
-					var arrayRespuesta = jQuery.parseJSON(respuesta);
-					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
-						tr = document.createElement('tr');
-						td = document.createElement('td');
-						tr.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
-						tr.setAttribute("onClick", "detalleAlumno(this)");
-						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-						tablaResultados.appendChild(tr);
-					}
-					/*
-					for (var i = 0, option, td; i < arrayRespuesta.length; i++) {
-						option =  document.createElement('option');
-						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						option.setAttribute("value", arrayRespuesta[i].rut);
-						option.setAttribute("onClick", "detalleAlumno(this.value)");
-						option.appendChild(nodoTexto);
-						tablaResultados.appendChild(option);
-					}
-					*/
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>", /* Se setea la url del controlador que responderá */
+			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultados");
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, th, thead, nodoTexto;
+				thead = document.createElement('thead');
+				tr = document.createElement('tr');
+				th = document.createElement('th');
+				nodoTexto = document.createTextNode("Nombre Completo");
+				th.appendChild(nodoTexto);
+				tr.appendChild(th);
+				thead.appendChild(tr);
+				tablaResultados.appendChild(thead);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					tr.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
+					tr.setAttribute("onClick", "detalleAlumno(this)");
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
 
-					/* Quito el div que indica que se está cargando */
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
-					}
-			});
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
 
-			/* Muestro el div que indica que se está cargando... */
-			var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).show();
-		//}
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 	}
 
 	//Se cargan por ajax
@@ -104,40 +100,30 @@
 </script>
 
 <fieldset>
-	<legend>Ver Alumnos</legend>
+	<legend>Ver alumnos</legend>
 	<div class="row-fluid">
 		<div class="span6">
-			<div class="row-fluid">
-				<div class="span6">
-					1.-Listado Alumnos
-				</div>
+			1.-Listado alumnos
+			<div class="controls controls-row">
+				<input class="span6" id="filtroLista" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+				
+				<select class="span6" id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+					<option value="1">Filtrar por nombre</option>
+					<option value="2">Filtrar por apellido paterno</option>
+					<option value="3">Filtrar por apellido materno</option>
+					<option value="4">Filtrar por carrera</option>
+					<option value="5">Filtrar por seccion</option>
+					<option value="6">Filtrar por bloque horario</option>
+				</select>
 			</div>
-			<div class="row-fluid">
-				<div class="span11">
-					<div class="row-fluid">
-						<div class="span6">
-							<input id="filtroLista" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda" style="width:90%">
-						</div>
-						<div class="span6">
-							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por nombre</option>
-								<option value="2">Filtrar por apellido paterno</option>
-								<option value="3">Filtrar por apellido materno</option>
-								<option value="4">Filtrar por carrera</option>
-								<option value="5">Filtrar por seccion</option>
-								<option value="6">Filtrar por bloque horario</option>
-							</select> 
-						</div>
-					</div>
-				</div>
-			</div>
-
 			
 			<div class="row-fluid" style="margin-left: 0%;">
 				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 					<table id="listadoResultados" class="table table-hover">
 						<thead>
-							<b>Nombre Completo</b>
+							<tr>
+								<th>Nombre Completo</th>
+							</tr>
 						</thead>
 						<tbody>
 
@@ -147,7 +133,7 @@
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-		2.-Detalle Alumnos:
+		2.-Detalle alumno:
 	    <pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>

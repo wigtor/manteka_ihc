@@ -1,12 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
+
 /**
  *	Clase controlador Login.
  *	Controlador encargado de presentar las vistas de autentificación (Login)
  *	y control de usuarios (Cambio de contraseña, perfil, contraseña olvidada).
  *	Método por defecto (index) carga la vista de Login.
  */
-class Login extends CI_Controller {
+class Login extends MasterManteka {
 
 	/******************************************************************************************************************************
 	*	Funciones de tipo GET
@@ -125,11 +127,6 @@ class Login extends CI_Controller {
 	*/
 	public function cambiarContrasegna($mensajes_alert = array())
 	{
-		$rut = $this->session->userdata('rut');							// Se comprueba si el usuario tiene sesión iniciada
-	    if ($rut == FALSE) {
-	      redirect('/Login/', 'index');         						// En dicho caso, se redirige a la interfaz principal
-	    }
-	    
 	    /*
 	    *	Se cargan en un arreglo información para pasarla a la vista
 	    *	una vez se cargue.
@@ -137,56 +134,31 @@ class Login extends CI_Controller {
 	    $datos_plantilla["rut_usuario"] = $rut_user = $this->session->userdata('rut');		// Rut del usuario
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');	// Nombre del usuario
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');		// Tipo de cuenta del usuario
-		$datos_plantilla["title"] = "ManteKA";												// Título de la vista
 
 		
 		$this->load->model('model_usuario');												// Se carga el Modelo para utilizar sus funciones
 
 		// Se busca al usuario con un rut específico
 		// En caso de encontrarlo se obtienen todos sus datos
-		if ($datos = $this->model_usuario->datos_usuario($rut_user))
-		{
-			$newdata = array(
-					'rut'  => $datos->RUT_USUARIO,
-					'email1'	=>	$datos->CORREO1_USER,
-					'email2'	=>	$datos->CORREO2_USER,
-					'tipo_usuario' => $datos->ID_TIPO,
-					'nombre1'	=>	$datos->NOMBRE1,
-					'nombre2'	=>	$datos->NOMBRE2,
-					'nombre'	=>  $datos->NOMBRE1." ".$datos->NOMBRE2,
-					'apellido1'	=>	$datos->APELLIDO1,
-					'apellido2'	=>	$datos->APELLIDO2,
-					'apellido'  =>  $datos->APELLIDO1." ".$datos->APELLIDO2,
-					'telefono'	=>	$datos->TELEFONO,
-					'logged_in' => TRUE
-              	);
-		}
-		else{
-
-		}
-
-		$datos_plantilla["datos"] = $newdata;
+		$datos = $this->model_usuario->datos_usuario($rut_user);
 		
 		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
 		if (count($mensajes_alert) > 0) {
 			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
 		}
 
-		// Cargando y armando la página
-		$datos_plantilla["menuSuperiorAbierto"] = ""; //Ningún botón está presionado
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_cambio_contrasegna', '', true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = ""; //$this->load->view('templates/barras_laterales/barra_lateral_planificacion', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		
-		$this->load->view('templates/template_general', $datos_plantilla);
-
+		$datos_plantilla = array();
+		$datos_plantilla["datos"] = $datos;
+		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
+		if (count($mensajes_alert) > 0) {
+			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
+		}
+		$subMenuLateralAbierto = '';
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarTodo("", "cuerpo_cambio_contrasegna", "", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	
 	}
 
 
@@ -218,8 +190,9 @@ class Login extends CI_Controller {
 		else {
 			try {
 				$this->load->model('model_usuario');
+				$inputPass = $this->input->post('inputPassword');
 				//  Se coprueba que el usuario exista en la base de datos y la password ingresada sea correcta
-	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($_POST['inputRut'],$_POST['inputPassword']);
+	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($rut, $inputPass);
 
 	            //	La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
 	            if($ExisteUsuarioyPassoword) {
@@ -248,15 +221,14 @@ class Login extends CI_Controller {
 		            }
 		            // Se crea un arreglo con los datos del usuario
 					$newdata = array(
-						'rut'  => $ExisteUsuarioyPassoword->RUT_USUARIO,
+						'rut'  => $ExisteUsuarioyPassoword->rut,
 						'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
 						'dv_almacenado' => $dv_almacenado,
-						'email'     => $ExisteUsuarioyPassoword->CORREO1_USER,
+						'email'     => $ExisteUsuarioyPassoword->correo1,
 						'recordarme' => $recordarme,
 						'tipo_usuario' => $tipo_user,
 						'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
-						'nombre_usuario' => $ExisteUsuarioyPassoword->NOMBRE1,
-						'logged_in' => TRUE
+						'nombre_usuario' => $ExisteUsuarioyPassoword->nombre1
 	              	);
 
 	              	// Se setean nuevas cookies con los datos del usuario
@@ -623,28 +595,38 @@ class Login extends CI_Controller {
             $usuario = $this->model_usuario->existe_mail($mail);
             if ($usuario)
             {
+            	// Se obtiene el tipo de cuenta que posee el usuario
+            	$redireccionarA = "index";
+
             	if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
-	            	$tipo_user = "coordinador";
+	            	$redireccionarA = "index";
 	            }
 				if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
-	            	$tipo_user = "profesor";
+	            	$redireccionarA = "indexProfesor";
 	            }
+
+	            // Se asume "Recordarme desclickeado"
+	            $recordarme = FALSE;
+            	$rut_almacenado = "";
+            	$dv_almacenado = "";
 
 	            // Se crea un arreglo con los datos encontrados del usuario
               	$newdata = array(
-					'rut'  => $usuario->RUT_USUARIO,
-					'email'     => $usuario->CORREO1_USER,
-					'tipo_usuario' => $tipo_user,
-					'id_tipo_usuario' => $ExisteUsuarioyPassoword->ID_TIPO,
-					'nombre_usuario' => $usuario->NOMBRE1,
-					'logged_in' => TRUE
+					'rut'  => $usuario->rut,
+					'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
+					'dv_almacenado' => $dv_almacenado,
+					'email'     => $usuario->email1,
+					'recordarme' => $recordarme,
+					'tipo_usuario' => $usuario->tipo_usuario,
+					'id_tipo_usuario' => $usuario->ID_TIPO,
+					'nombre_usuario' => $usuario->nombre1
               );
               
               // Carga los datos en las cookies
               $this->session->set_userdata($newdata);
 
               // Se redirige a la interfaz principal una vez que se ha autentificado
-              redirect('/Correo/', '');
+              redirect('/Correo/'.$redireccionarA, "");
             }
 
             // En caso de no existir ningún usuario con el correo ingresado
@@ -677,6 +659,15 @@ class Login extends CI_Controller {
     }
 
    }
+   public function postLoguearse() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+
+		$rut = $this->input->post('rutEnvio');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
+		echo json_encode($resultado);
+	}
+
 
 }
 

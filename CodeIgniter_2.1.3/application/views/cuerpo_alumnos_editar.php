@@ -333,17 +333,23 @@ function ordenarFiltro(){
 							
 						
 						
-						<div class="row-fluid">
-							<div class="span11" style="margin-top:2%; margin-left:43%">
-								<div class="row-fluid">
-									<div class="span3">
-										<button class ="btn" type="submit" >Guardar</button>
+						<div class="row" style= "margin-top:2%">
+
+
+									<div class="span3" style="margin-left:37%">
+										<button class ="btn" type="submit" style="width:108px" >
+											<div class= "btn_with_icon_solo">Ã</div>
+											&nbsp Modificar
+										</button>
 									</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarAlumno('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$secciones[0].$comilla.')"';?> >Cancelar</button>
+										<button  class ="btn" type="reset" style="width:105px" <?php $comilla= "'"; echo 'onclick="datosEditarAlumno('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$secciones[0].$comilla.')"';?> >
+											<div class= "btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
-								</div>
-							</div>
+
+
 						</div>
 					</form>	
 				</div>

@@ -309,5 +309,70 @@ class model_coordinadores extends CI_Model{
       }
 
 
+      public function getCoordinadoresByFilter($tipoFiltro, $texto)
+      {
+
+      //Sólo para acordarse
+      define("BUSCAR_POR_NOMBRE", 1);
+      define("BUSCAR_POR_APELLIDO1", 2);
+      define("BUSCAR_POR_APELLIDO2", 3);
+      define("BUSCAR_POR_CORREO", 4);
+
+      $attr_filtro = "";
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $attr_filtro = "NOMBRE1_COORDINADOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+         $attr_filtro = "APELLIDO1_COORDINADOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+         $attr_filtro = "APELLIDO2_COORDINADOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_CORREO) {
+         $attr_filtro = "CORREO1_USER";
+      }
+      else {
+         return array(); //No es válido, devuelvo vacio
+      }
+
+      $this->db->select('RUT_USUARIO3 AS rut');
+      $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+      $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+      $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+      $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+      $this->db->order_by('APELLIDO1_COORDINADOR', 'asc');
+      $this->db->like($attr_filtro, $texto);
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $this->db->or_like("NOMBRE2_COORDINADOR", $texto);
+      }
+      if ($tipoFiltro == BUSCAR_POR_CORREO) {
+         $this->db->or_like("CORREO2_USER", $texto);
+      }
+      $query = $this->db->get('coordinador');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->result();
+   }
+
+
+   public function getDetallesCoordinador($rut) {
+      $this->db->select('RUT_USUARIO3 AS rut');
+      $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+      $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+      $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+      $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->select('TELEFONO_COORDINADOR AS fono');
+      $this->db->select('CORREO1_USER AS correo');
+      $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+      $this->db->where('RUT_USUARIO3', $rut);
+      $query = $this->db->get('coordinador');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->row();
+   }
+
 }
 ?>

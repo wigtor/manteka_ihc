@@ -53,36 +53,7 @@ class Coordinadores extends MasterManteka {
       */
 	public function verCoordinadores()
 	{
-		$this->load->model('model_coordinadores');
-		$ListaObjetosCoordinadores = $this->model_coordinadores->ObtenerTodosCoordinadores();
-		
-		$resultados = array();
-		foreach ($ListaObjetosCoordinadores as $coordinador ) {
-			$array_modulos = $this->model_coordinadores->GetModulos($coordinador['id']);
-			$coordinador['modulos'] = "";
-			$coordinador['secciones'] = "";
-			
-			foreach ($array_modulos as $mod) {
-				$array_secciones = $this->model_coordinadores->GetSeccion($mod['COD_MODULO_TEM']);
-				foreach ($array_secciones as $sec) {
-					if($coordinador['secciones']=="")
-						$coordinador['secciones']= $sec['COD_SECCION'];
-					else
-						$coordinador['secciones']= $coordinador['secciones']. " , ".$sec['COD_SECCION'];
-				}
-
-				if($coordinador['modulos']=="")
-					$coordinador['modulos'] = $mod['COD_MODULO_TEM'];
-				else
-					$coordinador['modulos'] = $coordinador['modulos'] ." , ". $mod['COD_MODULO_TEM'];
-			}
-			
-			array_push($resultados, $coordinador);
-		}
-		$datos_plantilla['listado_coordinadores'] = $resultados;
-		
-		
-
+		$datos_plantilla = array();
 		$subMenuLateralAbierto = 'verCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -235,6 +206,39 @@ class Coordinadores extends MasterManteka {
 		
     }
 
+    /**
+	* Método que responde a una solicitud de post para pedir los datos de un estudiante
+	* Recibe como parámetro el rut del estudiante
+	*/
+	public function postDetallesCoordinador() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('rut');
+		$this->load->model('model_coordinadores');
+		$resultado = $this->model_coordinadores->getDetallesCoordinador($rut);
+		echo json_encode($resultado);
+	}
+
+	public function postBusquedaCoordinadores() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltro');
+		$tipoFiltro = $this->input->post('tipoFiltro');
+		$this->load->model('model_coordinadores');
+
+		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($tipoFiltro, $textoFiltro);
+		if ($resultado == "") {
+			echo "[]";
+			return;
+		}
+		echo json_encode($resultado);
+	}
 
 }
 

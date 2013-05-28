@@ -196,9 +196,21 @@ class model_usuario extends CI_Model{
          $this->db->flush_cache();
          $this->db->stop_cache();
 
-         $this->db->select('usuario.*, NOMBRE1_COORDINADOR AS NOMBRE1, NOMBRE2_COORDINADOR AS NOMBRE2, APELLIDO1_COORDINADOR AS APELLIDO1, APELLIDO2_COORDINADOR AS APELLIDO2, TELEFONO_COORDINADOR AS TELEFONO');
+         $this->db->select('RUT_USUARIO AS rut');
+         $this->db->select('usuario.ID_TIPO');
+         $this->db->select('PASSWORD_PRIMARIA');
+         $this->db->select('PASSWORD_TEMPORAL');
+         $this->db->select('VALIDEZ');
+         $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+         $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+         $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+         $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+         $this->db->select('TELEFONO_COORDINADOR AS telefono');
+         $this->db->select('CORREO1_USER AS email1');
+         $this->db->select('CORREO2_USER AS email2');
+         $this->db->select('NOMBRE_TIPO AS tipo_usuario');
          $this->db->join('coordinador', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
-
+         $this->db->join('tipo_user', 'usuario.ID_TIPO = tipo_user.ID_TIPO');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
          
@@ -214,8 +226,21 @@ class model_usuario extends CI_Model{
          $this->db->flush_cache();
          $this->db->stop_cache();
 
-         $this->db->select('usuario.*, NOMBRE1_PROFESOR AS NOMBRE1, NOMBRE2_PROFESOR AS NOMBRE2, APELLIDO1_PROFESOR AS APELLIDO1, APELLIDO2_PROFESOR AS APELLIDO2, TELEFONO_PROFESOR AS TELEFONO');
+         $this->db->select('RUT_USUARIO AS rut');
+         $this->db->select('ID_TIPO');
+         $this->db->select('PASSWORD_PRIMARIA');
+         $this->db->select('PASSWORD_TEMPORAL');
+         $this->db->select('VALIDEZ');
+         $this->db->select('NOMBRE1_PROFESOR AS nombre1');
+         $this->db->select('NOMBRE2_PROFESOR AS nombre2');
+         $this->db->select('APELLIDO1_PROFESOR AS apellido1');
+         $this->db->select('APELLIDO2_PROFESOR AS apellido2');
+         $this->db->select('TELEFONO_PROFESOR AS telefono');
+         $this->db->select('CORREO1_USER AS email1');
+         $this->db->select('CORREO2_USER AS email2');
+         $this->db->select('NOMBRE_TIPO AS tipo_usuario');
          $this->db->join('profesor', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+         $this->db->join('tipo_user', 'usuario.ID_TIPO = tipo_user.ID_TIPO');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
 

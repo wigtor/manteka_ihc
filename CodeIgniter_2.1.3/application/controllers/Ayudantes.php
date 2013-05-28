@@ -1,6 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ayudantes extends CI_Controller {
+require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
+
+class Ayudantes extends MasterManteka {
 	
 	/**
 	 * Index Page for this controller.
@@ -30,37 +32,12 @@ class Ayudantes extends CI_Controller {
 	*/
 	public function verAyudantes()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		$this->load->model('Model_ayudante');
-
-        $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
-      
-
-		
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_verAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "verAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$datos_plantilla = array();
+		$subMenuLateralAbierto = 'verAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", "cuerpo_profesores_verAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	
 	public function index() //Esto hace que el index sea la vista que se desee
@@ -379,5 +356,40 @@ class Ayudantes extends CI_Controller {
 		
 	}
 
+
+
+	/**
+	* Método que responde a una solicitud de post para pedir los datos de un ayudante
+	* Recibe como parámetro el rut del estudiante
+	*/
+	public function postDetallesAyudante() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('rut');
+		$this->load->model('Model_ayudante');
+		$resultado = $this->Model_ayudante->getDetallesAyudante($rut);
+		echo json_encode($resultado);
+	}
+
+	public function postBusquedaAyudantes() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltro');
+		$tipoFiltro = $this->input->post('tipoFiltro');
+		$this->load->model('Model_ayudante');
+
+		$resultado = $this->Model_ayudante->getAyudantesByFilter($tipoFiltro, $textoFiltro);
+		if ($resultado == "") {
+			echo "[]";
+			return;
+		}
+		echo json_encode($resultado);
+	}
 
 }

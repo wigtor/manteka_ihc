@@ -1,6 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Profesores extends CI_Controller {
+require_once APPPATH.'controllers/Master.php'; 
+
+class Profesores extends MasterManteka {
 	
 	/**
 	 * Index Page for this controller.
@@ -63,6 +65,36 @@ class Profesores extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 
 
+	}
+	/**
+	* Método que responde a una solicitud de post para pedir los datos de un profesor
+	* Recibe como parámetro el rut del profesor
+	*/
+	public function postDetallesProfesor() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('rut');
+		$this->load->model('Model_profesor');
+		$resultado = $this->Model_profesor->getDetallesProfesor($rut);
+		echo json_encode($resultado);
+	}
+
+	public function postBusquedaProfesores() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltro');
+		$tipoFiltro = $this->input->post('tipoFiltro');
+		$this->load->model('Model_profesor');
+
+		$resultado = $this->Model_profesor->getProfesoresByFilter($tipoFiltro, $textoFiltro);
+		echo json_encode($resultado);
+		
 	}
 	
 	/**
