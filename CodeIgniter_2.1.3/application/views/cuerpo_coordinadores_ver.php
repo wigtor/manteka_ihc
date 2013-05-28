@@ -23,16 +23,13 @@
 			url: "<?php echo site_url("Coordinadores/postDetallesCoordinador") ?>", /* Se setea la url del controlador que responderá */
 			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-
 				/* Obtengo los objetos HTML donde serán escritos los resultados */
 				var rutDetalle = document.getElementById("rutDetalle");
 				var nombre1Detalle = document.getElementById("nombre1Detalle");
 				var nombre2Detalle = document.getElementById("nombre2Detalle");
 				var apellido1Detalle = document.getElementById("apellido1Detalle");
 				var apellido2Detalle = document.getElementById("apellido2Detalle");
-				var moduloDetalle = document.getElementById("moduloDetalle");
 				var fonoDetalle = document.getElementById("fonoDetalle");
-				var seccionesDetalle = document.getElementById("seccionesDetalle");
 				var correoDetalle = document.getElementById("correoDetalle");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
@@ -44,9 +41,7 @@
 				$(nombre2Detalle).html(datos.nombre2);
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
-				$(moduloDetalle).html(datos.modulo);
 				$(fonoDetalle).html(datos.fono);
-				$(seccionesDetalle).html(datos.secciones);
 				$(correoDetalle).html(datos.correo);
 
 				/* Quito el div que indica que se está cargando */
@@ -124,7 +119,7 @@
 								<option value="2">Filtrar por apellido paterno</option>
 								<option value="3">Filtrar por apellido materno</option>
 								<option value="4">Filtrar por módulo temático</option>
-								<option value="5">Filtrar por seccion</option>
+								<option value="5">Filtrar por sección</option>
 								<option value="6">Filtrar por bloque horario</option>
 							</select> 
 						</div>
@@ -153,9 +148,7 @@ Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
-Módulo temático:  <b id="moduloDetalle"></b>
 Fono:             <b id="fonoDetalle" ></b>
-Secciones:        <b id="seccionesDetalle"></b>
 Correo:           <b id="correoDetalle"></b>
 		</pre>
 		</div>

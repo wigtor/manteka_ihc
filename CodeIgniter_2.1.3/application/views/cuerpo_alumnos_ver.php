@@ -126,7 +126,7 @@
 								<option value="4">Filtrar por carrera</option>
 								<option value="5">Filtrar por seccion</option>
 								<option value="6">Filtrar por bloque horario</option>
-							</select> 
+							</select>
 						</div>
 					</div>
 				</div>

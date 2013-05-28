@@ -239,7 +239,7 @@ class Coordinadores extends MasterManteka {
 	* Método que responde a una solicitud de post para pedir los datos de un estudiante
 	* Recibe como parámetro el rut del estudiante
 	*/
-	public function postDetallesCoordinadores() {
+	public function postDetallesCoordinador() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';

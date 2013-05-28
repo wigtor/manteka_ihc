@@ -322,16 +322,16 @@ class model_coordinadores extends CI_Model{
 
       $attr_filtro = "";
       if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-         $attr_filtro = "NOMBRE1_ESTUDIANTE";
+         $attr_filtro = "NOMBRE1_COORDINADOR";
       }
       else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-         $attr_filtro = "APELLIDO_PATERNO";
+         $attr_filtro = "APELLIDO1_COORDINADOR";
       }
       else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-         $attr_filtro = "APELLIDO_MATERNO";
+         $attr_filtro = "APELLIDO2_COORDINADOR";
       }
-      else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
-         $attr_filtro = "NOMBRE_CARRERA";
+      else if ($tipoFiltro == BUSCAR_POR_MODULO) {
+         $attr_filtro = "MODULO_TEMATICO";
       }
       else if ($tipoFiltro == BUSCAR_POR_SECCION) {
          $attr_filtro = "COD_SECCION";
@@ -344,31 +344,30 @@ class model_coordinadores extends CI_Model{
          return array(); //No es válido, devuelvo vacio
       }
 
-      $this->db->select('RUT_ESTUDIANTE AS rut');
-      $this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
-      $this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-      $this->db->select('APELLIDO_PATERNO AS apellido1');
-      $this->db->select('APELLIDO_MATERNO AS apellido2');
-      $this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-      $this->db->order_by('APELLIDO_PATERNO', 'asc');
+      $this->db->select('RUT_USUARIO3 AS rut');
+      $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+      $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+      $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+      $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+      $this->db->order_by('APELLIDO1_COORDINADOR', 'asc');
       $this->db->like($attr_filtro, $texto);
-      $query = $this->db->get('estudiante');
+      $query = $this->db->get('coordinador');
       return $query->result();
    }
 
 
    public function getDetallesCoordinador($rut) {
-      $this->db->select('RUT_ESTUDIANTE AS rut');
-      $this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
-      $this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-      $this->db->select('APELLIDO_PATERNO AS apellido1');
-      $this->db->select('APELLIDO_MATERNO AS apellido2');
-      $this->db->select('CORREO_ESTUDIANTE AS correo');
-      $this->db->select('NOMBRE_CARRERA AS carrera');
-      $this->db->select('COD_SECCION AS seccion');
-      $this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-      $this->db->where('RUT_ESTUDIANTE', $rut);
-      $query = $this->db->get('estudiante');
+      $this->db->select('RUT_USUARIO3 AS rut');
+      $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+      $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+      $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+      $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->select('TELEFONO_COORDINADOR AS fono');
+      $this->db->select('CORREO1_USER AS correo');
+      $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+      $this->db->where('RUT_USUARIO3', $rut);
+      $query = $this->db->get('coordinador');
       return $query->row();
    }
 
