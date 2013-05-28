@@ -45,14 +45,15 @@ function ordenarFiltro(){
 <div class="row-fluid">
     <div class= "span11">
         <fieldset>
+			<legend>Ver Sección</legend>
             	<form id="formDetalle" type="post" method="post">
-            <legend>Ver Sección</legend>
+            
             
             <div class="row-fluid">
                 <div class="span5">
                     <div class="row-fluid">
                         <div class="span7">
-                            1.-*Seleccionar sección
+                            1.-Seleccionar sección
                         </div>
 					</div>
 <div class="row-fluid">
@@ -144,7 +145,7 @@ echo '</tr>';
                         <div class="span13">
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
                             <table class="table table-bordered">
-                                <thead  bgcolor="#e6e6e6">
+                                <thead  bgcolor="#e6e6e6"  style="position:block">
                                     <tr>
                                         <th class="span2">Carrera</th>
                                         <th class="span2">RUT</th>
