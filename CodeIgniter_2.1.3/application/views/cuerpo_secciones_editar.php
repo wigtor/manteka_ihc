@@ -1,142 +1,239 @@
+<script type="text/javascript">
+	
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
+				alert("Seccion editada correctamente");
+			
+		}	
+		else{
+			alert("Error al editar");
+		}
+	
+	}
+</script>
+
+<script type="text/javascript">
+	function DetalleSeccion(cod_seccion){
+			document.getElementById("cod_seccion").value = cod_seccion;
+			document.getElementById("rs_seccion").value = "";
+			var borrar = document.getElementById("formEditar");
+			borrar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
+			borrar.submit();
+			
+	}
+</script>
+
+<script type="text/javascript">
+	function editarSeccion(){
+		var cod=ocument.getElementById("rs_seccion").value;
+		if(cod!=""){ 
+					var answer = confirm("¿Está seguro de editar esta sección?")
+					if (!answer){
+						var dijoNO = DetalleSeccion("");
+					}
+					else{
+					var editar = document.getElementById("formEditar");
+					editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
+					editar.submit();
+					}
+					
+		}
+		else{
+				alert("Selecione una seccion");
+		}
+		
+	}
+</script>
+
+<script type="text/javascript">
+function ordenarFiltro(){
+	var filtroLista = document.getElementById("filtroLista").value;
+	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
+
+	
+	var arreglo = new Array();
+	var sala;
+	var ocultar;
+	var cont;
+	
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($seccion)){
+		echo 'arreglo['.$contadorE.']=new Array();';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	
+	
+	for(cont=0;cont < arreglo.length;cont++){
+		ocultar=document.getElementById(cont);
+		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+			ocultar.style.display='none';
+		}
+		else
+		{
+			ocultar.style.display='';
+		}
+    }
+}
+</script>
+
 <div class="row-fluid">
-	<div class= "span11">
-		<fieldset>
-			
-			<legend>Editar Sección</legend>
-			
-			<div class="row-fluid">
-				<div class="span5">
-					<div class="row-fluid">
-						<div class="span5">
-							1.-*Seleccionar sección
-						</div>
-						<div class="row-fluid" style="border: 1px solid #cccccc; -webkit-border-radius: 4px; overflow-y:scroll; height:150px; margin-top: 2%">
-
-
-						</div>
-
+    <div class= "span11">
+        <fieldset> 
+		<legend>Editar Sección</legend>
+            	<form id="formEditar" type="post" method="post">
+           <div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
 					</div>
-
-					<div class="row-fluid" style="margin-top:11%">
-						<div class="span6">
-							2.-Sección actual a editar
-						</div>
-					</div>
-
-					<div class="row-fluid" style="margin-top:2%">
-						<pre >
-Sección:
-						</pre>
-					</div>
-
-					<div class="row-fluid" style="margin-top:2%">
-						<div class="span6">
-							3.-Editar número de la sección
-						</div>
-						<div class="span2">
-							<input type="text" id="info" class="span5">
-							<input type="text" id="info" class="span5">
-							
-						</div>
-						<div class="span2">
-							<button class="btn" type="submit" style="width:108px">
-								<div class= "btn_with_icon_solo">Ã</div>
-								&nbsp Modificar
-
-							</button>
-						</div>
-
-					</div>
-					
-
 				</div>
-				<div class="span7">
-					<div class="row-fluid" >
-						<div class="span5">
-							4.-Agregar estudiantes
-						</div>
+            
+            <div class="row-fluid">
+			
+                <div class="span5">
+                    <div class="row-fluid">
+                        <div class="span7">
+                            1.-Seleccionar sección
+                        </div>
 					</div>
-					<div class="row-fluid" >
-						<div class="span7">
-							<input type="text" id="info" class="span13" placeholder="Filtro búsqueda">
+<div class="row-fluid">
+				<div class="span11">
+					<div class="row-fluid">	
+							<div class="span11">
+								<div class="span6">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+								</div>
+								<div class="span6">
+									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<option value="1">Filtrar por Nombre</option>
+									</select>
+								</div> 
+							</div>
 						</div>
-						<div class="span5">
-							<select class="span13">
-								  <option>1</option>
-								  <option>2</option>
-								  <option>3</option>
-								  <option>4</option>
-								  <option>5</option>
-							</select>
-
-						</div>
-
-					</div>
-					<div class="row-fluid" style="border: 1px solid #cccccc; -webkit-border-radius: 4px; overflow-y:scroll; height:100px; margin-top: 2%">
-
-
-					</div>
-					
-					<div class="row-fluid" style="margin-left:82%; margin-top:2%">
-						<div class="span2">
-							<button class="btn" type="submit" style="width:102px">
-								<div class= "btn_with_icon_solo">Ã</div>
-								&nbsp agregar
-
-							</button>
-						</div>
-					</div>
-
-
-
-					<div class="row-fluid" >
-						<div class="span5">
-							5.-Lista de Alumnos
-						</div>
-					</div>
-					
-					<div class="row-fluid" >
-						<div class="span13" style="text-align:justify">
-							A continuación se muestran los alumnos que se encuentran agregados a la sección. Si desea eliminar a un alumno de la sección, seleccione la o las casilla(s)
-							correspondiente(s) y haga click en "Eliminar Seleccionados".
-						</div>
-					</div>
-					<div class="row-fluid" style="margin-top:2%">
-						<div class="span13" style="margin-top:3%" >
-							<table class="table table-bordered">
-								<thead  bgcolor="#e6e6e6">
-								    <tr>
-								    	<th><input type="checkbox"></th>
-								    	<th class="span2">Carrera</th>
-								    	<th class="span2">RUT</th>
-								    	<th class="span3">Paterno</th>
-								    	<th class="span3">Materno</th>
-								    	<th class="span9">Nombres</th>
-								    </tr>
-								</thead>
-								    <!-- esta fila es solo de ejemplo-->
-								<tbody>
-								    <tr>
-								    	<th><input type="checkbox"></th>
-								    	<th>1853</th>
-								    	<th>171233496</th>
-								    	<th>Acevedo</th>
-								    	<th>Baeza</th>
-								    	<th>Marco Antonio</th>
-								    </tr>
-								</tbody>
-								
-							</table>
-						</div>
-					</div>
-					<div class="row-fluid" style="margin-left:72%">
-						<div class="span4">
-							<button class="btn" type="submit">Eliminar seleccionados</button>
-						</div>
-					</div>
+						
 				</div>
 			</div>
+			<div class="row-fluid" style="margin-left: 0%;">
+				<!--<div class="span9">-->
+
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+							<tbody>
+								<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
+								<?php
+								$contador=0;
+								$comilla= "'";
+								
+								while ($contador<count($seccion)){
+									
+									echo '<tr>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								
+								?>
+														
+							</tbody>
+						</table>
+					</div>
+				
 			
-		</fieldset>
-	</div>
+				<!--</div>-->
+			</div>
+
+                </div>
+                <div class="span7">
+                    <div class="row-fluid">
+                        <div class="span5">
+                            2.-Información de la sección
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+							<div class="span4">
+								<div class="control-group">
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
+		  						</div>	
+							</div>
+								<div class="span5">	
+		  							<div class="controls">
+									<?php
+									
+									if(count($secc)==1){
+									
+		    							echo '<tr>';
+										echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][0].'" maxlength="10" min="1" type="text">'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="rs_seccion" name="rs_seccion" value=" " maxlength="0" min="0" type="text" >'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
+							</div>
+                      
+                    </div>
+					<br>
+                    <div class="row-fluid">
+                        <div class="span5">
+                            3.-Lista de Alumnos
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row-fluid">
+                        <div class="span13">
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+                            <table class="table table-bordered">
+                                <thead  bgcolor="#e6e6e6">
+                                    <tr>
+                                        <th class="span2">Carrera</th>
+                                        <th class="span2">RUT</th>
+                                        <th class="span3">Apellido paterno</th>
+                                        <th class="span3">Apellido materno</th>
+                                        <th class="span9">Nombres</th>
+                                    </tr>
+                                </thead>
+                                    <!-- esta fila es solo de ejemplo-->
+                                <tbody>
+                                    	<?php
+										$contador=0;
+										while ($contador<count($rs_estudiantes)){
+											echo '<tr>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][7].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][0].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][3].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][4].' </td>';
+											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].' </td>';
+											echo '</tr>';
+											$contador = $contador + 1;
+										}
+										?>
+									
+                                </tbody>
+                                
+                            </table>
+						</div>
+                        </div>
+                    </div>
+					<br>
+                                <div class="row-fluid">
+									<div class="span3 offset6">
+										<button class ="btn">Editar</button>
+										</div>
+									<div class="span3">
+										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" >Cancelar</button>
+									</div>
+								</div> 
+                </div>
+				
+            </div>
+         </form>
+        </fieldset>
+    </div>
 </div>

@@ -54,6 +54,7 @@ class Model_secciones extends CI_Model{
 		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_SECCION'];
+			$lista[$contador][1] = $row['NOMBRE_SECCION'];
 			$contador = $contador + 1;
 		}}
 		return $lista;
@@ -70,14 +71,23 @@ class Model_secciones extends CI_Model{
 	public function VerSeccion($cod_seccion)
 	{
 	//sala horario, horario, dia
+	
+		$lista=array();
+	
+		
+		$sql3="SELECT * FROM SECCION WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
+		$datos3=mysql_query($sql3); 
+		$contador3 = 0;
+		while ($row3=mysql_fetch_array($datos3)) { 
+			$lista[0][0] = $row3['NOMBRE_SECCION'];
+			$contador3 = $contador3 + 1;
+		}
+		
+		
 		$sql="SELECT * FROM SALA_HORARIO WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
-		$contador = 0;
-		$lista=array();
-		
-		$lista[$contador][0] = $cod_seccion;
+		$contador = 0;	
 		if (false != $datos) {
-
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			
 			$hora=$row['COD_HORARIO'];
@@ -94,8 +104,14 @@ class Model_secciones extends CI_Model{
 				}
 			}
 			$contador = $contador + 1;
-		}}
-		if($contador==0){
+		}
+		}
+		if($contador==0 && $cod_seccion!=''){
+			$lista[$contador][1] = '';
+			$lista[$contador][2] = '';
+		}
+		if($cod_seccion==''){
+			$lista[$contador][0] = '';
 			$lista[$contador][1] = '';
 			$lista[$contador][2] = '';
 			

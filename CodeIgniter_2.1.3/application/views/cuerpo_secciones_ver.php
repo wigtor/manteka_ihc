@@ -87,7 +87,7 @@ function ordenarFiltro(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][0].' </td>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -122,9 +122,9 @@ echo '<tr>';
 echo '<td id="rs_seccion_'.$contador.'" > 
 Sección: '.$secc[$contador][0].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
-Día: '.$secc[$contador][2].' </td>';
+Día:     '.$secc[$contador][2].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
-Módulo: '.$secc[$contador][1].' </td>';
+Módulo:  '.$secc[$contador][1].' </td>';
 echo '</tr>'; 
 	$contador =$contador+1 ;
 }

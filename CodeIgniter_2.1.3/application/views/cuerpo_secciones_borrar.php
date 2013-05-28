@@ -153,24 +153,22 @@ function ordenarFiltro(){
 	<pre style="margin-top: 0%; margin-left: 0%;">
 	<?php
 	$contador=0;
-	$comilla= "'";
-					
+	$comilla= "'";					
 while ($contador<count($secc)){
-	
 echo '<tr>';
 echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][0].'" maxlength="3" min="1" type="hidden">
-Seccion: '.$secc[0][0].'</td>';
-
+Sección: '.$secc[0][0].'</td>';
 echo '<td id="rs_dia" > 
-Día: '.$secc[0][2].' </td>';
+Día:     '.$secc[0][2].' </td>';
 echo '<td id="rs_modulo" > 
-Módulo: '.$secc[0][1].' </td>';
+Módulo:  '.$secc[0][1].' </td>';
 echo '</tr>'; 
-	$contador =count($secc) ;
+$contador =count($secc) ;
 }
 								
 ?>
-                        </pre>
+       
+						</pre>
                     </div>
 
                     <div class="row-fluid">
