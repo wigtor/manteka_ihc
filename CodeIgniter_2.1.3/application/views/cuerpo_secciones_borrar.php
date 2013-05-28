@@ -83,15 +83,16 @@ function ordenarFiltro(){
 
 <div class="row-fluid">
     <div class= "span11">
-        <fieldset>
+        <fieldset> 
+		<legend>Borrar Sección</legend>
             	<form id="formBorrar" type="post" method="post">
-            <legend>Borrar Sección</legend>
+           
             
             <div class="row-fluid">
                 <div class="span5">
                     <div class="row-fluid">
                         <div class="span7">
-                            1.-*Seleccionar sección
+                            1.-Seleccionar sección
                         </div>
 					</div>
 <div class="row-fluid">

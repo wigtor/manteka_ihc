@@ -99,12 +99,13 @@ class Model_sala extends CI_Model {
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_IMPLEMENTO'];
 			$lista[$contador][1] = $row['NOMBRE_IMPLEMENTO'];
 			$lista[$contador][2] = $row['DESCRIPCION_IMPLEMENTO'];
 			$contador = $contador + 1;
-		}
+		}}
 		
 		return $lista;
 	}
@@ -123,18 +124,20 @@ class Model_sala extends CI_Model {
 		$datos1=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
+		if (false != $datos1) {
 		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
 			$cod=$row1['COD_IMPLEMENTO'];
 			$sql1="SELECT * FROM IMPLEMENTO WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
 			$datos=mysql_query($sql1); //enviar código MySQL
+			if (false != $datos) {
 			while ($row=mysql_fetch_array($datos)) {
 				$lista[$contador][0] = $row1['COD_SALA'];
 				$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
 				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
 				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
-			}
+			}}
 			$contador++;
-		}
+		}}
 		return $lista;
 	}
 
@@ -154,18 +157,20 @@ class Model_sala extends CI_Model {
 		$datos1=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
+		if (false != $datos1) {
 		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
 			$cod=$row1['COD_IMPLEMENTO'];
 			$sql1="SELECT * FROM IMPLEMENTO WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
 			$datos=mysql_query($sql1); //enviar código MySQL
+			if (false != $datos) {
 			while ($row=mysql_fetch_array($datos)) {
 				$lista[$contador][0] = $row1['COD_SALA'];
 				$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
 				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
 				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
-			}
+			}}
 			$contador++;
-		}
+		}}
 		return $lista;
 	}
 	
@@ -183,12 +188,14 @@ class Model_sala extends CI_Model {
 		$datos1=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
+		if (false != $datos1) {
 		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $cod_sala;
 			$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
 			$lista[$contador][2] = $row1['NOMBRE_IMPLEMENTO'];
 			$lista[$contador][3] = $row1['DESCRIPCION_IMPLEMENTO'];
 			$contador++;
+		}
 		}
 		return $lista;
 	}
@@ -210,6 +217,7 @@ class Model_sala extends CI_Model {
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_SALA'];
 			$lista[$contador][1] = $row['NUM_SALA'];
@@ -217,7 +225,7 @@ class Model_sala extends CI_Model {
 			$lista[$contador][3] = $row['CAPACIDAD'];
 			$contador = $contador + 1;
 		}
-		
+		}
 		return $lista;
 		}
 
@@ -235,6 +243,7 @@ class Model_sala extends CI_Model {
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_SALA'];
 			$lista[$contador][1] = $row['NUM_SALA'];
@@ -242,7 +251,7 @@ class Model_sala extends CI_Model {
 			$lista[$contador][3] = $row['CAPACIDAD'];
 			$contador = $contador + 1;
 		}
-		
+		}
 		return $lista;
 		}
 

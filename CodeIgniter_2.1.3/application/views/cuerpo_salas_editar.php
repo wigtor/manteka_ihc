@@ -85,8 +85,9 @@ function ordenarFiltro(){
 <div class="row_fluid">
 	<div class="span10">
 		<fieldset>
+		<legend>Editar Sala</legend>
 		 <form id="formDetalle" type="post" method="post">
-			<legend>Editar Sala</legend>
+			
 			<div>
 				<div class="row-fluid">
 					<div class="span6">
@@ -97,7 +98,7 @@ function ordenarFiltro(){
 					<div class="span6"><!--    INICIO LISTA SALA -->
 						<div class="row-fluid">
 							<div class="span6">
-								Seleccione la sala a modificar
+							1.-Seleccione la sala a modificar
 							</div>
 						</div>
 					
@@ -117,12 +118,7 @@ function ordenarFiltro(){
 						
 						
 						<!--AQUÍ VA LA LISTA-->
-						<thead>
-							<tr>
-								<th style="text-align:left;"><br><b>Salas</b></th>
-								
-							</tr>
-						</thead>
+						
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 						<table class="table table-hover">
 						<tbody>
@@ -152,7 +148,7 @@ function ordenarFiltro(){
 					</div> <!--    FIN DE LISTA SALAS -->
 					<div class="span6">
 						<div style="margin-bottom:2%">
-							Complete los datos del formulario para modificar la sala
+							2.- Complete los datos del formulario para modificar la sala
 							
 						</div>
 
@@ -160,7 +156,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Codigo sala: </label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Código sala: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -185,7 +181,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Numero sala: </label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Número sala: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -211,7 +207,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font>Capacidad: </label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Capacidad: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -238,7 +234,7 @@ function ordenarFiltro(){
 							<div class="span4">
 								<div class="control-group">
 
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font>Ubicacion:</label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Ubicación:</label>
 		  						</div>
 		  					</div>
 							
