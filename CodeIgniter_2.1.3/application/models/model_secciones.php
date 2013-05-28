@@ -19,6 +19,7 @@ class Model_secciones extends CI_Model{
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista=array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
@@ -30,6 +31,7 @@ class Model_secciones extends CI_Model{
 			$lista[$contador][7] = $row['COD_CARRERA'];
 
 			$contador = $contador + 1;
+		}
 		}
 		return $lista;
 	}
@@ -48,11 +50,12 @@ class Model_secciones extends CI_Model{
 		$sql="SELECT * FROM SECCION ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
-		$lista;
+		$lista=array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_SECCION'];
 			$contador = $contador + 1;
-		}
+		}}
 		return $lista;
 	}
 	
@@ -73,6 +76,8 @@ class Model_secciones extends CI_Model{
 		$lista=array();
 		
 		$lista[$contador][0] = $cod_seccion;
+		if (false != $datos) {
+
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			
 			$hora=$row['COD_HORARIO'];
@@ -89,7 +94,7 @@ class Model_secciones extends CI_Model{
 				}
 			}
 			$contador = $contador + 1;
-		}
+		}}
 		if($contador==0){
 			$lista[$contador][1] = '';
 			$lista[$contador][2] = '';
@@ -115,9 +120,10 @@ class Model_secciones extends CI_Model{
 		$sql1="SELECT * FROM ESTUDIANTE WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
 		$datos1=mysql_query($sql1); 
 		$contador = 0;
+		if (false != $datos1) {
 		while ($row=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
 			$contador = $contador + 1;
-		}
+		}}
 		if($contador==0){
 			$sql="DELETE FROM seccion WHERE COD_SECCION = '$cod_seccion' "; //código MySQL
 			$datos=mysql_query($sql); //enviar código MySQL
