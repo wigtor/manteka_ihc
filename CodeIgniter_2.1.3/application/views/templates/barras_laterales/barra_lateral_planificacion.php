@@ -107,10 +107,10 @@
 			</div>
 			<div id="collapseFour" class="accordion-body collapse <?php echo $inSesiones; ?>">
 				<div class="accordion-inner nav nav-list">
-					<li <?php echo $verSesiones; ?> ><a href="<?php echo site_url("Modulos/verSesiones")?>">Ver sesiones</a></li>
-					<li <?php echo $agregarSesiones; ?> ><a href="<?php echo site_url("Modulos/agregarSesiones")?>">Agregar sesiones</a></li>
-					<li <?php echo $editarSesiones; ?> ><a href="<?php echo site_url("Modulos/editarSesiones")?>">Editar sesiones</a></li>
-					<li <?php echo $borrarSesiones; ?> ><a href="<?php echo site_url("Modulos/borrarSesiones")?>">Borrar sesiones</a></li>
+					<li <?php echo $verSesiones; ?> ><a href="<?php echo site_url("Sesiones/verSesiones")?>">Ver sesiones</a></li>
+					<li <?php echo $agregarSesiones; ?> ><a href="<?php echo site_url("Sesiones/agregarSesiones")?>">Agregar sesiones</a></li>
+					<li <?php echo $editarSesiones; ?> ><a href="<?php echo site_url("Sesiones/editarSesiones")?>">Editar sesiones</a></li>
+					<li <?php echo $borrarSesiones; ?> ><a href="<?php echo site_url("Sesiones/borrarSesiones")?>">Borrar sesiones</a></li>
 				</div>
 			</div>
 		</div>
