@@ -4,47 +4,12 @@ class Model_estudiante extends CI_Model {
     public $rut_estudiante = 0;
     var $nombre1_estudiante = '';
     var $nombre2_estudiante  = '';
-    var $APELLIDO1_ESTUDIANTE='';
-    var $APELLIDO2_ESTUDIANTE='';
+    var $apellido_paterno='';
+    var $apellido_materno='';
     var $correo_estudiante='';
     var $cod_seccion='';
     var $cod_carrera='';
 
-	
-	public function getAllRut(){
-	   	$lista = array();
-   		$contador = 0;
-		
-		//lista usuarios
-		$this->db->select('RUT_USUARIO');
-		$this->db->from('usuario');
-		$query = $this->db->get();
-		$datos = $query->result();
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->RUT_USUARIO;
-            $contador++;
-   		}
-		//lista ayudantes
-		$this->db->select('RUT_AYUDANTE');
-		$this->db->from('ayudante');
-		$query = $this->db->get();
-		$datos = $query->result();
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->RUT_AYUDANTE;
-            $contador++;
-   		}
-		//lista alumnos
-		$this->db->select('RUT_ESTUDIANTE');
-		$this->db->from('estudiante');
-		$query = $this->db->get();
-		$datos = $query->result();
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->RUT_ESTUDIANTE;
-            $contador++;
-   		}
-   		return $lista;  	
-	}
-	
 	/**
 	* Inserta un estudiante en la base de datos
 	*
@@ -54,21 +19,21 @@ class Model_estudiante extends CI_Model {
 	* @param string $rut_estudiante Rut del estudiante a insertar
 	* @param string $nombre1_estudiante Primer nombre del estudiante a insertar
 	* @param string $nombre2_estudiante Segundo nombre del estudiante a insertar
-	* @param string $APELLIDO1_ESTUDIANTE Apellido paterno del estudiante a insertar
-	* @param string $APELLIDO2_ESTUDIANTE Apellido mateno del estudiante a insertar
+	* @param string $apellido_paterno Apellido paterno del estudiante a insertar
+	* @param string $apellido_materno Apellido mateno del estudiante a insertar
 	* @param string $correo_estudiante Correo del estudiante a insertar
 	* @param string $cod_seccion Código de la sección del estudiante a insertar
 	* @param string $cod_carrera Código de carrera del estudiante a insertar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$APELLIDO1_ESTUDIANTE,$APELLIDO2_ESTUDIANTE,$correo_estudiante,$cod_seccion,$cod_carrera) 
+    public function InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera) 
 	{
 		$data = array(					
 					'RUT_ESTUDIANTE' => $rut_estudiante ,
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO1_ESTUDIANTE' => $APELLIDO1_ESTUDIANTE ,
-					'APELLIDO2_ESTUDIANTE' => $APELLIDO2_ESTUDIANTE ,
+					'APELLIDO_PATERNO' => $apellido_paterno ,
+					'APELLIDO_MATERNO' => $apellido_materno ,
 					'CORREO_ESTUDIANTE' => $correo_estudiante ,
 					'COD_SECCION' =>  $cod_seccion ,
 					'COD_CARRERA' => $cod_carrera 
@@ -92,19 +57,19 @@ class Model_estudiante extends CI_Model {
 	* @param string $rut_estudiante Rut del estudiante al que se le actualizan los demás datos
 	* @param string $nombre1_estudiante Primer nombre a editar del estudiante
 	* @param string $nombre2_estudiante Segundo nombre a editar del estudiante
-	* @param string $APELLIDO1_ESTUDIANTE Apellido paterno del estudiante
-	* @param string $APELLIDO2_ESTUDIANTE Apellido mateno del estudiante
+	* @param string $apellido_paterno Apellido paterno del estudiante
+	* @param string $apellido_materno Apellido mateno del estudiante
 	* @param string $correo_estudiante Correo a editar del estudiante
 	* @param string $cod_seccion Código de la sección a editar del estudiante
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$APELLIDO1_ESTUDIANTE,$APELLIDO2_ESTUDIANTE,$correo_estudiante,$seccion)
+	public function ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$seccion)
 	{
 		$data = array(					
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO1_ESTUDIANTE' => $APELLIDO1_ESTUDIANTE ,
-					'APELLIDO2_ESTUDIANTE' => $APELLIDO2_ESTUDIANTE ,
+					'APELLIDO_PATERNO' => $apellido_paterno ,
+					'APELLIDO_MATERNO' => $apellido_materno ,
 					'CORREO_ESTUDIANTE' => $correo_estudiante,
 					'COD_SECCION'=>$seccion
 		);
@@ -129,8 +94,8 @@ class Model_estudiante extends CI_Model {
 	*/
     public function EliminarEstudiante($rut_estudiante)
     {
-		//$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
-		$datos = $this->db->delete('ESTUDIANTE', array('rut_estudiante' => $rut_estudiante)); 
+		$sql="DELETE FROM estudiante WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
 		if($datos == true){
 			return 1;
 		}
@@ -147,16 +112,16 @@ class Model_estudiante extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todos los estudiantes del sistema
 	*/
-	/*public function VerTodosLosEstudiantes()
+	public function VerTodosLosEstudiantes()
 	{
 		/*
-		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc"); 
+		$this->db->order_by("APELLIDO_PATERNO", "asc"); 
 		$query = $this->db->get('estudiante'); //Acá va el nombre de la tabla
 		// Se obtiene la fila del resultado de la consulta a la base de datos
 		$filaResultado = $query->row();
 		return $filaResultado;
 		*/
-		/*$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
+		$sql="SELECT * FROM estudiante ORDER BY APELLIDO_PATERNO"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista = array();
@@ -164,8 +129,8 @@ class Model_estudiante extends CI_Model {
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
-			$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
-			$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
+			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
+			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
 			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$lista[$contador][6] = $row['COD_SECCION'];
 			$lista[$contador][7] = $row['COD_CARRERA'];
@@ -175,7 +140,7 @@ class Model_estudiante extends CI_Model {
 		return $lista;
 		
 	}
-	*/
+	
 
 	/**
 	* Obtiene los nombre y rut de todos los estudiantes del sistema
@@ -190,14 +155,10 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
-		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->order_by("APELLIDO_PATERNO", "asc");
 		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			$query = array();
-			return $query;
-		}
 		return $query->result();
 	}
 
@@ -217,10 +178,10 @@ class Model_estudiante extends CI_Model {
 			$attr_filtro = "NOMBRE1_ESTUDIANTE";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-			$attr_filtro = "APELLIDO1_ESTUDIANTE";
+			$attr_filtro = "APELLIDO_PATERNO";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-			$attr_filtro = "APELLIDO2_ESTUDIANTE";
+			$attr_filtro = "APELLIDO_MATERNO";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
 			$attr_filtro = "NOMBRE_CARRERA";
@@ -229,7 +190,7 @@ class Model_estudiante extends CI_Model {
 			$attr_filtro = "COD_SECCION";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
-			return array(); //No implementado aún mientras no esté la parte de planificación
+			return array(); //No implementado aún
 			//$attr_filtro = "NOMBRE1_ESTUDIANTE";
 		}
 		else {
@@ -239,18 +200,12 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
+		$this->db->order_by('APELLIDO_PATERNO', 'asc');
 		$this->db->like($attr_filtro, $texto);
-		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-			$this->db->or_like("NOMBRE2_ESTUDIANTE", $texto);
-		}
 		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			return array();
-		}
 		return $query->result();
 	}
 
@@ -259,17 +214,14 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		$this->db->select('APELLIDO_PATERNO AS apellido1');
+		$this->db->select('APELLIDO_MATERNO AS apellido2');
 		$this->db->select('CORREO_ESTUDIANTE AS correo');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
 		$this->db->select('COD_SECCION AS seccion');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->where('RUT_ESTUDIANTE', $rut);
 		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			return array();
-		}
 		return $query->row();
 	}
 
