@@ -2,7 +2,7 @@
 	
 	if("<?php echo $mensaje_confirmacion;?>"!="2"){
 		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
-				alert("Seccion editada correctamente");
+				alert("Sección editada correctamente");
 			
 		}	
 		else{
@@ -15,24 +15,40 @@
 <script type="text/javascript">
 	function DetalleSeccion(cod_seccion){
 			document.getElementById("cod_seccion").value = cod_seccion;
-			document.getElementById("rs_seccion").value = "";
-			var borrar = document.getElementById("formEditar");
-			borrar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
-			borrar.submit();
-			
+			var imp= new Array();	
+			<?php
+			$contadorE = 0;
+				while($contadorE<count($seccion)){
+				
+					echo 'imp['.$contadorE.']=new Array();';
+					echo 'imp['.$contadorE.'][0]= "'.$seccion[$contadorE][0].'";';//codigo
+					echo 'imp['.$contadorE.'][1]= "'.$seccion[$contadorE][1].'";';//nombre
+					$contadorE = $contadorE + 1;
+				}
+			?>
+			var cont;
+			var algo='';
+			for(cont=0;cont < imp.length;cont++){
+				if(imp[cont][0]==cod_seccion ){
+					algo= imp[cont][1];				
+				}
+			}
+			var cadena=algo.split('-');
+			document.getElementById("rs_seccion").value = cadena[0];
+			document.getElementById("rs_seccion2").value = cadena[1];
 	}
 </script>
 
 <script type="text/javascript">
-	function editarSeccion(){
-		var cod=ocument.getElementById("rs_seccion").value;
+	function EditarSeccion(){
+		var cod=document.getElementById("cod_seccion").value;
 		if(cod!=""){ 
 					var answer = confirm("¿Está seguro de editar esta sección?")
 					if (!answer){
 						var dijoNO = DetalleSeccion("");
 					}
 					else{
-					var editar = document.getElementById("formEditar");
+					var editar = document.getElementById("FormEditar");
 					editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
 					editar.submit();
 					}
@@ -83,8 +99,8 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Editar Sección</legend>
-            	<form id="formEditar" type="post" method="post">
-           <div class="row-fluid">
+			<form id="formDetalle" type="post" method="post">
+            <div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
 					</div>
@@ -98,7 +114,7 @@ function ordenarFiltro(){
                             1.-Seleccionar sección
                         </div>
 					</div>
-<div class="row-fluid">
+				<div class="row-fluid">
 				<div class="span11">
 					<div class="row-fluid">	
 							<div class="span11">
@@ -121,7 +137,7 @@ function ordenarFiltro(){
 					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 						<table class="table table-hover">
 							<tbody>
-								<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
+							
 								<?php
 								$contador=0;
 								$comilla= "'";
@@ -146,90 +162,50 @@ function ordenarFiltro(){
 			</div>
 
                 </div>
-                <div class="span7">
+                <div class="span6">
                     <div class="row-fluid">
                         <div class="span5">
                             2.-Información de la sección
                         </div>
                     </div>
+					<form id="FormEditar" type="post" method="post" onsubmit="EditarSeccion()">
+					<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
                     <div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
+									
 		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
 		  						</div>	
 							</div>
+													
 								<div class="span5">	
 		  							<div class="controls">
-									<?php
+									<tr>
+									<td><input id="rs_seccion" name="rs_seccion"  maxlength="10" min="1" type="text" class="span2"></td>
+									</tr>	
+									<td class="span2">-</td>
+									<tr>
+									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="10" min="1" type="text" class="span2"></td>
+									</tr>										
 									
-									if(count($secc)==1){
-									
-		    							echo '<tr>';
-										echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][0].'" maxlength="10" min="1" type="text">'.'</td>';
-										echo '</tr>';						
-										}
-									else{
-									    echo '<tr>';
-										echo '<td><input id="rs_seccion" name="rs_seccion" value=" " maxlength="0" min="0" type="text" >'.'</td>';
-										echo '</tr>';	
-									}
-		  							?>
 									</div>
 							</div>
                       
                     </div>
 					<br>
-                    <div class="row-fluid">
-                        <div class="span5">
-                            3.-Lista de Alumnos
-                        </div>
-                    </div>
                     
                     
-                    <div class="row-fluid">
-                        <div class="span13">
-						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
-                            <table class="table table-bordered">
-                                <thead  bgcolor="#e6e6e6">
-                                    <tr>
-                                        <th class="span2">Carrera</th>
-                                        <th class="span2">RUT</th>
-                                        <th class="span3">Apellido paterno</th>
-                                        <th class="span3">Apellido materno</th>
-                                        <th class="span9">Nombres</th>
-                                    </tr>
-                                </thead>
-                                    <!-- esta fila es solo de ejemplo-->
-                                <tbody>
-                                    	<?php
-										$contador=0;
-										while ($contador<count($rs_estudiantes)){
-											echo '<tr>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][7].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][0].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][3].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][4].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].' </td>';
-											echo '</tr>';
-											$contador = $contador + 1;
-										}
-										?>
-									
-                                </tbody>
-                                
-                            </table>
-						</div>
-                        </div>
-                    </div>
+
 					<br>
                                 <div class="row-fluid">
 									<div class="span3 offset6">
-										<button class ="btn">Editar</button>
+										<button class ="btn" type="submit" >Guardar</button>
 										</div>
 									<div class="span3">
 										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" >Cancelar</button>
 									</div>
 								</div> 
+					</form>	
                 </div>
 				
             </div>

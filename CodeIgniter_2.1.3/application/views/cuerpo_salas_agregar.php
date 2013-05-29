@@ -3,7 +3,7 @@
 	
 	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
 		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha agregado exitosamente la sala");
+				alert("Sala agregada correctamente");
 				
 				}
 				else{

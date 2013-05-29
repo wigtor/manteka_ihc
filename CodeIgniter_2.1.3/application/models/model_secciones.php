@@ -156,7 +156,69 @@ class Model_secciones extends CI_Model{
 		}
 		}
     }
+	
+	
+	/**
+	* Edita la información de una seccion en la base de datos
+	*
+	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
+	* en la variable 'data'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $cod_seccion codigo de la seccion a la que se le actualizan los demás datos
+	* @param string $nombre_seccion1 letra del nombre de la seccion a editar
+	* @param string $nombre_seccion2 número del nombre de la seccion a editar
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
+	public function AgregarSeccion($nombre_seccion1,$nombre_seccion2)
+	{
+		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
+		
+		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$data = array(	
+					'COD_SECCION' => $nombre,
+					'NOMBRE_SECCION' => $nombre	
+		);
+		$this->db->insert('SECCION',$data); 
+		
+         
+		if($data == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}		
+    }
 
+	/**
+	* Agregar la información de una seccion en la base de datos
+	*
+	* Guarda las variables a agregar en el array data luego se llama a la función insert y se guarda el resultado de la inserción
+	* en la variable 'data'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $nombre_seccion1 letra del nombre de la seccion a agregar
+	* @param string $nombre_seccion2 número del nombre de la seccion a agregar
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
+	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
+	{
+		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
+		
+		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$data = array(	
+					'COD_SECCION' => $cod_seccion,
+					'NOMBRE_SECCION' => $nombre	
+		);
+		$this->db->where('COD_SECCION', $cod_seccion);
+		$this->db->update('SECCION',$data); 
+		
+         
+		if($data == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}		
+    }
  
 }
 ?>
