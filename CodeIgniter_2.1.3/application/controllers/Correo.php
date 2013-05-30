@@ -263,7 +263,6 @@ class Correo extends MasterManteka {
 		$to = $this->input->post('to');
 		$asunto ="[ManteKA] ".$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
-		$tipo = $this->input->post('tipo');
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("ymdHis");
 
@@ -278,7 +277,7 @@ class Correo extends MasterManteka {
 			$config['mailtype'] = 'html';
 			$this->email->initialize($config);
 			$this->email->from('no-reply@manteka.cl', 'ManteKA');
-			$this->email->to($to);
+			$this->email->to(implode(",",$to));
 			$this->email->subject($asunto);
 			$this->email->message($mensaje);
 			if(!$this->email->send())

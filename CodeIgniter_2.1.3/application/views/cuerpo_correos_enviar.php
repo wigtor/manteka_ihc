@@ -76,13 +76,30 @@ function pasoDosUno()
 
 function pasoDosTres()
 {
-	var rutRecept = document.getElementById("rutRecept").value;
+	var rutRecept = [];
+	var to = "";
+	//var rutRecept = document.getElementById("rutRecept").value;
+	for(var i =0;i < arrayRespuesta.length;i++){
+		var tr = document.getElementById(i);
+		var check = tr.childNodes[0].childNodes[0].checked;
+		if(check){
+			rutRecept.push(tr.getAttribute("rut"));
+			if(to==""){
+				to = tr.getAttribute("correo");
+			}else{
+				to = to + ", " + tr.getAttribute("correo");
+			}
+		}
+	}
+
 	if (rutRecept=="")
 	{
 		alert("Debe seleccionar un destinatario para continuar");
 	}
 	else
 	{
+		document.getElementById("to").value=to;
+		document.getElementById("rutRecept").value=rutRecept;
 		$('#cuadroDestinatario').css({display:'none'});
 		$('#cuadroEnviar').css({display:'none'});
 		$('#cuadroEnvio').css({display:'block'});
@@ -271,7 +288,6 @@ function showDestinatarios(value){
 						tr.appendChild(td);
 						td = document.createElement('td');
 						tr.setAttribute("id", i);
-						tr.setAttribute('onClick',"detalleAlumno(this)");
 						tr.setAttribute("style","width:100%");
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
 						tr.setAttribute('rut',arrayRespuesta[i].rut);
@@ -286,8 +302,6 @@ function showDestinatarios(value){
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
-					document.getElementById("to").value="all_gom@yahoo.com";
-					document.getElementById("rutRecept").value="16940203";
 					}
 			});
 
@@ -523,7 +537,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	<!-- Este es el listado de resultados del filtro -->
 	<div id="listasDeDestinatarios" class="row-fluid">
 		<div id="listaResultadosFiltro" class="span5">
-			<table id="tabla" class="table table-hover table-bordered" style="width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+			<table id="tabla" name="tabla" class="table table-hover table-bordered" style="width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
 				<thead>
 					<tr>
 						<th >
@@ -773,8 +787,6 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	echo form_textarea($data);
 	?>
 	</div>
-	<?php
-	echo form_hidden('tipo', 'CARTA_ESTUDIANTE');?>
 	<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
 	</div>
 	<div class="menu2">
