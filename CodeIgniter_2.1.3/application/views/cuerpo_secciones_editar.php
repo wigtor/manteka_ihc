@@ -48,14 +48,20 @@
 						var dijoNO = DetalleSeccion("");
 					}
 					else{
-					var editar = document.getElementById("FormEditar");
-					editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
-					editar.submit();
+					var patron = "[0-9]"; //solo numeros enteros positivos
+					if (document.getElementById("rs_seccion2").value.match(patron)) {    
+						var editar = document.getElementById("FormEditar");
+						editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
+						editar.submit();
+					}
+					else {
+						alert("Error:La sección no tiene la estructura Letra-Número");
+					}
 					}
 					
 		}
 		else{
-				alert("Selecione una seccion");
+				alert("Selecione una sección");
 		}
 		
 	}
@@ -99,7 +105,7 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Editar Sección</legend>
-			<form id="formDetalle" type="post" method="post">
+			<form id="FormEditar" type="post" method="post" onsubmit="EditarSeccion();return false">
             <div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -166,15 +172,17 @@ function ordenarFiltro(){
                     <div class="row-fluid">
                         <div class="span5">
                             2.-Información de la sección
+							
                         </div>
                     </div>
-					<form id="FormEditar" type="post" method="post" onsubmit="EditarSeccion()">
+					
 					<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
                     <div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
 									
 		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
+									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-3)</i>
 		  						</div>	
 							</div>
 													
@@ -205,7 +213,7 @@ function ordenarFiltro(){
 										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" >Cancelar</button>
 									</div>
 								</div> 
-					</form>	
+					
                 </div>
 				
             </div>
