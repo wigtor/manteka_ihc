@@ -396,7 +396,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 </fieldset>
 	
 
-<fieldset id="cuadroDestinatario_old" style="display:none;">
+<fieldset id="cuadroDestinatario" style="display:none;">
 	<legend>&nbsp;Enviar correo&nbsp;</legend>
 	<div class="bloque" title="Paso 2: Seleccionar destinatario(s)">
 		<h5>
@@ -582,7 +582,7 @@ addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
 
 
 <!-- PARTE ANTIGUA DE LA PARTE DE LA SELECCIÓN DE DESTINATARIOS -->
-<fieldset id="cuadroDestinatario" style="display:none;">
+<fieldset id="cuadroDestinatario_old" style="display:none;">
 	<legend>&nbsp;Enviar correo&nbsp;</legend>
 	<div class="bloque" title="Paso 2: Seleccionar destinatario(s)">
 		<div class="texto2">

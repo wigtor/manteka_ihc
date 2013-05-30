@@ -125,9 +125,7 @@ if(isset($msj))
 }
 ?>
 
-<div id="cRC" style="display:none; position:relative; z-index:3; margin-top:10%; width:78%; text-align:center;">
-<img src="/<?php echo config_item('dir_alias') ?>/img/procesando.gif" class="imgProcesando"/>
-</div>
+
 
 <fieldset id="cuadroEnviados">
 	<legend>&nbsp;Correos enviados&nbsp;</legend>
