@@ -65,6 +65,32 @@ class Sesiones extends MasterManteka {
 
 	
     }
+
+    public function postDetallesSesiones() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('cod');
+		$this->load->model('Model_sesiones');
+		$resultado = $this->Model_estudiante->getDetallesEstudiante($sesion);
+		echo json_encode($resultado);
+	}
+
+	public function postBusquedaSesiones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltro');
+		$tipoFiltro = $this->input->post('tipoFiltro');
+		$this->load->model('Model_sesiones');
+
+		$resultado = $this->Model_estudiante->getByFilter($tipoFiltro, $textoFiltro);
+		echo json_encode($resultado);
+	}
     
     
 	
