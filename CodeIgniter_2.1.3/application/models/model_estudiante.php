@@ -123,6 +123,7 @@ class Model_estudiante extends CI_Model {
 		*/
 		$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
 		$datos=mysql_query($sql); 
+		echo mysql_error();
 		$contador = 0;
 		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
@@ -155,9 +156,10 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
-		$this->db->order_by("APELLIDO_PATERNO", "asc");
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		$this->db->select('CORREO_ESTUDIANTE as correo');
+		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
 		$query = $this->db->get('estudiante');
 		return $query->result();
 	}

@@ -86,6 +86,7 @@ class Model_ayudante extends CI_Model {
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
+		echo mysql_error();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_AYUDANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
@@ -104,10 +105,10 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('RUT_AYUDANTE AS rut');
 		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
 		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
-		$this->db->order_by("APELLIDO_PATERNO", "asc");
-		$query = $this->db->get('ayudantes');
+		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+		$this->db->order_by("APELLIDO1_AYUDANTE", "asc");
+		$query = $this->db->get('ayudante');
 		if ($query == FALSE) {
 			$query = array();
 			return $query;
