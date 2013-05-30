@@ -2,7 +2,7 @@
 	
 	if("<?php echo $mensaje_confirmacion;?>"!="2"){
 		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
-				alert("Seccion editada correctamente");
+				alert("Seccion agregada correctamente");
 			
 		}	
 		else{
@@ -12,6 +12,35 @@
 	}
 </script>
 
+<script type="text/javascript">
+	function AgregarSeccion(){
+		var rs=document.getElementById("rs_seccion").value;
+		var rs2=document.getElementById("rs_seccion2").value;
+		if(rs!="" || rs2!=""){ 
+					var patron = "^[0-9]{2}$"; //dos números enteros positivos en la primera parte del nombre de la sección
+					var patron2 = "^([A-Z]{1}|[a-z]{1})$"; //una letra en la primera parte del nombre de la sección
+					if (document.getElementById("rs_seccion2").value.match(patron)) {    
+						if (document.getElementById("rs_seccion").value.match(patron2)) {  
+							var agregar= document.getElementById("formDetalle");
+							agregar.action = "<?php echo site_url("Secciones/agregarSecciones/") ?>/";
+							agregar.submit();
+						}
+						else {
+							alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
+						}
+					}
+					else {
+						alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
+					}
+					
+					
+		}
+		else{
+				alert("No se han ingresado todos los datos");
+		}
+		
+	}
+</script>
 
 <div class="row-fluid">
     <div class= "span11">
@@ -40,18 +69,18 @@
 								<div class="control-group">
 									
 		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
-									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-3)</i>
+									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 		  						</div>	
 							</div>
 													
 								<div class="span5">	
 		  							<div class="controls">
 									<tr>
-									<td><input id="rs_seccion" name="rs_seccion"  maxlength="10" min="1" type="text" class="span2"></td>
+									<td><input id="rs_seccion" name="rs_seccion"  maxlength="1" min="1" type="text" class="span2"></td>
 									</tr>	
 									<td class="span2">-</td>
 									<tr>
-									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="10" min="1" type="text" class="span2"></td>
+									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="2" min="2" type="text" class="span2"></td>
 									</tr>										
 									
 									</div>

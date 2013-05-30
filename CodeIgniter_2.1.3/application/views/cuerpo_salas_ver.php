@@ -1,7 +1,6 @@
 <script type="text/javascript">
 	function DetalleSala(cod_sala,num_sala,ubicacion,capacidad){
 		
-			document.getElementById("cod_sala").innerHTML = cod_sala;
 			document.getElementById("num_sala").innerHTML = num_sala;
 			document.getElementById("capacidad").innerHTML = capacidad;
 			document.getElementById("ubicacion").innerHTML = ubicacion;
@@ -19,7 +18,7 @@
 			var cont;
 			var algo='\n';
 			for(cont=0;cont < imp.length;cont++){
-				if(imp[cont][0]==document.getElementById("cod_sala").innerHTML ){
+				if(imp[cont][0]==cod_sala){
 					algo= algo+"		"+imp[cont][1]+'\n';				
 				}
 			}
@@ -133,7 +132,6 @@ function ordenarFiltro(){
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle de la Sala:
 	  <pre style="margin-top: 0%; margin-left: 0%;">
-Código sala:    <b id="cod_sala"></b>
 Número sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicación:      <b id="ubicacion"></b>
