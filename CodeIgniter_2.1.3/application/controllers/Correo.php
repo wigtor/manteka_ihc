@@ -265,7 +265,7 @@ class Correo extends MasterManteka {
 		$mensaje =$this->input->post('editor');
 		$tipo = $this->input->post('tipo');
 		$rutRecept = $this->input->post('rutRecept');
-		$date = date("mdHis");
+		$date = date("ymdHis");
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
@@ -283,9 +283,9 @@ class Correo extends MasterManteka {
 			$this->email->message($mensaje);
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
-			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date);
+			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date,$rutRecept);
 			if($tipo=='CARTA_ESTUDIANTE')
-				$this->model_correo_e->InsertarCorreoE($rutRecept,$date);
+			echo	$this->model_correo_e->InsertarCorreoE($rutRecept,$date);
 			else if($tipo=='CARTA_USER')
 				$this->model_correoU->InsertarCorreoU($rutRecept,$date);
 			else if($tipo=='CARTA_AYUDANTE')

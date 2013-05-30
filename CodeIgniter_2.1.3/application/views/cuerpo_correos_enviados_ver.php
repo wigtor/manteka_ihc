@@ -22,16 +22,11 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 	document.getElementById("cuerpoMail").innerHTML=document.getElementById("c"+id).value;
 	
 	this.id=id;
-	if(extended){
-		;
-		document.getElementById("destinos").innerHTML=destinoaux;
-		extended= false;
-			
-	}else{
-		destinoaux=destino
+
+		destinoaux=destino;
 		document.getElementById("destinos").innerHTML=destino.substring(0,5 );
-		extended= true;	
-	}
+
+	
 
 	
 	$('#cuadroEnviados').css({display:'none'});
@@ -49,19 +44,8 @@ function volverCorreosEnviados()
 	$('#cuadroEnviados').css({display:'block'});
 }
 
-/** 
-* Esta función alterna 
-*/
 
-function DestinoCorreo()
-{		
-	var fecha=document.getElementById("fecha").innerHTML;
-	var hora=document.getElementById("hora").innerHTML;
-	var asunto=document.getElementById("asuntoDetalle").innerHTML;
-	
-	var destino=document.getElementById("destinos").innerHTML;
-	DetalleCorreo(hora,fecha,asunto,id,destino);
-}
+
 </script>
 
 <script type="text/javascript">
@@ -103,8 +87,6 @@ function eliminarCorreo()
 		if (confirm('Estás a punto de eliminar correos.\n¿Realmente deseas continuar?'))
 		{
 			$('#cuadroEnviados').css({display:'none'});
-			$('#msjEliminacion1').css({display:'none'});
-			$('#msjEliminacion2').css({display:'none'});
 			$('#cuadroDetalleCorreo').css({display:'none'});
 			$('#cRC').css({display:'block'});
 			if(checked_ids[0]=="marcar")
@@ -123,17 +105,20 @@ if(isset($msj))
 	if($msj==1)
 	{
 		?>
-		<p id="msjEliminacion1">
-		Eliminación de correo(s) realizada satisfactoriamente !!!
-		</p>
+		    <div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 Eliminación de correo(s) realizada satisfactoriamente !!!
+    		</div>	
 		<?php
 	}
 	else if($msj==0)
 	{
 		?>
-		<p id="msjEliminacion2">
-		Eliminación de correo(s) no se pudo realizar. Contacta al administrador del sistema.
-		</p>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 La eliminación de correo(s) no se pudo realizar. Contacta al administrador del sistema.
+    		</div>		
+
 		<?php
 	}
 	unset($msj);
@@ -168,24 +153,13 @@ if(isset($msj))
 		}
 		if(count($correos)!==0)
 		{
+	
+	
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo()" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo()" style="margin-bottom:20px; margin-right:1%; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
 			<?php
 		}
-		?>
-		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
-		<thead>
-		<th width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-		<th width="23%" bgcolor="lightgrey"><b>Para</b></td>
-		<th width="27%" bgcolor="lightgrey"><b>Mensaje</b></td>
-		<th width="8%" bgcolor="lightgrey"><b>Fecha</b></td>
-		<th width="8%" bgcolor="lightgrey"><b>Hora</b></td>
-		</thead>
-		
-		
-		<tbody>
-		<?php
+
 		if(count($correos)===0)
 		{
 			?>
@@ -198,7 +172,21 @@ if(isset($msj))
 		else
 		{
 			while($contador<count($correos))
-			{	
+			{			
+				?>
+		<form name="formulario" id="formu" method="post">
+		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
+		<tr class="info">
+		<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
+		<td width="23%" ><b>Para</b></td>
+		<td width="27%" ><b>Mensaje</b></td>
+		<td width="8%" ><b>Fecha</b></td>
+		<td width="8%" ><b>Hora</b></td>
+		</tr>
+		
+		
+		<tbody>
+		<?php
 				$destino='';
 				$para='';
 				$total=0;
@@ -273,14 +261,45 @@ if(isset($msj))
 <fieldset id="cuadroDetalleCorreo" style="display:none;">
 	<legend>&nbsp;Correos enviados <font color="black">:::</font> detalles&nbsp;</legend>
 	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
-	<button class="btn" style="margin-right:1%;" onclick="volverCorreosEnviados()"><div class="btn_with_icon_solo"><</div> Volver</button>
+	<button class="btn" style="margin-bottom:20px; margin-right:1%; float:right;" onclick="volverCorreosEnviados()"><div class="btn_with_icon_solo"><</div> Volver</button>
 	</div>
 	</br>
-	
+
 	<pre class="detallesEmail">
-<div style="text-align:right;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
-  <table class="table table-hover"><td onClick="DestinoCorreo()">Para:<b  class="txt" type="select" id="destinos"></b></td></table>
-  Asunto:  <b  id="asuntoDetalle"></b>
-  <fieldset id="cuerpoMail" style=" height:250px;"></fieldset>
+<div style="text-align:right; margin-bottom:0%;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0%; border-top:0px;">
+<td style="text-align:left; margin:0%;  border-top:0px" > Para: <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div></td>
+</table>  Asunto:  <b  id="asuntoDetalle"></b>
+  <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
 	</pre>
 </fieldset>
+ <script type="text/javascript">
+  $(document).ready(function() {
+  	$("[rel=details]").tooltip({
+  		placement : 'bottom', 
+  		html: 'true', 
+  		title : '<div style="text-color:white;"><strong>Muestra detalles</strong></div>',
+  		trigger:'hover',
+  	});
+  	
+  });
+
+    $(window).load(function() {
+  	  $("[rel=details]").popover({
+	placement : 'bottom', 
+    content: get_popover_content,
+    html: true,
+    trigger: 'click'
+});
+  	
+  });
+
+function get_popover_content() {
+	fecha=document.getElementById("fecha").innerHTML;
+	hora=document.getElementById("hora").innerHTML;
+	asunto=document.getElementById("asuntoDetalle").innerHTML;
+	content='<table class="pop" style=" background-color: #0040FF; color:white; width:100%;"><tr ><td >Para:</td><td><strong>'+destinoaux+'</strong></td></tr><tr><td>Asunto: </td><td><strong>'+asunto+'</strong></td></tr><tr><td>Fecha:  </td><td><strong>'+fecha  +'</strong></td><tr><td>Hora:   </td><td><strong>'+    hora+'</strong></td></tr></table>';
+        return content;
+}
+  
+
+  	</script>

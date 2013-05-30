@@ -17,12 +17,7 @@ fieldset legend
 	cursor:pointer;
 }
 
-.btn
-{
-	margin-bottom:20px;
-	margin-right:1%;
-	float:right;
-}
+
 
 .listaDestinatarios
 {
@@ -79,11 +74,7 @@ fieldset legend
 	font-weight:bold;
 }
 
-.txt
-{
-	margin-left:30px;
-	margin-bottom:-10px;
-}
+
 
 .txt2
 {
@@ -91,28 +82,58 @@ fieldset legend
 	margin-bottom:-25px;
 }
 
-#msjEliminacion1
-{
-	width:30%;
-	font-size:9pt;
-	color:green;
-	height:20px;
-	padding:10px;
-	border:1.5px solid green; 
-	background-color:#CCFFCC;
-	margin-bottom:20px;
-	border-radius:8px;
+.tooltip-inner {
+	background-color: blue; color: #fff;
 }
 
-#msjEliminacion2
-{
-	width:45%;
-	font-size:9pt;
-	color:red;
-	height:20px;
-	padding:10px;
-	border:1.5px solid green; 
-	background-color:#ffcccc;
-	margin-bottom:20px;
-	border-radius:8px;
+
+.pop tbody tr:hover > td, .table-hover tbody tr:hover > th {
+background-color: #0040FF;
+border:0px;
+
 }
+
+.pop tbody tr > td, .pop tbody tr:hover > th {
+background-color: #0040FF;
+border:0px;
+
+}
+
+ .popover {
+ 	min-width: 600px;
+    background: #0040FF;
+    border-color: transparent;
+    color: white;
+    content:white;
+    width: 90%;
+}
+
+.popover .arrow,
+.popover .arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.popover .arrow:after {
+  content: "";
+}
+.popover.bottom .arrow {
+  left: 50%;
+  border-top-width: 0;
+  border-bottom-color: #999;
+  border-bottom-color: #0040FF;
+}
+.popover.bottom .arrow:after {
+  top: 1px;
+  border-top-width: 0;
+  border-bottom-color: #0040FF;
+}
+
+
+
+
+
+

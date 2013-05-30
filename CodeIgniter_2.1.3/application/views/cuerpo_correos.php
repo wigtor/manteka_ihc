@@ -73,8 +73,6 @@ function eliminarCorreo()
 		if (confirm('Estás a punto de eliminar correos.\n¿Realmente deseas continuar?'))
 		{
 			$('#cuadroRecibidos').css({display:'none'});
-			$('#msjEliminacion1').css({display:'none'});
-			$('#msjEliminacion2').css({display:'none'});
 			$('#cuadroDestinoCorreo').css({display:'none'});
 			$('#cRC').css({display:'block'});
 			if(checked_ids[0]=="marcar")
@@ -93,22 +91,28 @@ if(isset($msj))
 	if($msj==1)
 	{
 		?>
-		<p style="margin: 5px 0px 10px 0px;" id="msjEliminacion1">Eliminación de correo(s) realizada satisfactoriamente !!!</p>
+		    <div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 Eliminación de correo(s) realizada satisfactoriamente !!!
+    		</div>	
 		<?php
 	}
 	else if($msj==0)
 	{
 		?>
-		<p style="margin: 5px 0px 10px 0px;" id="msjEliminacion2">
-Eliminación de correo(s) no se pudo realizar. Contacta al administrador del sistema.
-		</p>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 La eliminación de correo(s) no se pudo realizar. Contacta al administrador del sistema.
+    		</div>		
+
 		<?php
 	}else if($msj==2)
 	{
 		?>
-		<p style="margin: 5px 0px 10px 0px;" id="msjEliminacion1">
-El mensaje fue enviado satisfactoriamente.
-		</p>
+		<div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 El mensaje fue enviado satisfactoriamente.
+    		</div>
 		<?php
 	}
 	unset($msj);
@@ -136,25 +140,10 @@ El mensaje fue enviado satisfactoriamente.
 		if(count($correos)!==0)
 		{
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo() " ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo() " style="margin-bottom:20px; margin-right:1%; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
 			<?php
 		}
-		?>
-		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
-		<thead>
-		<th width="5%" bgcolor="lightgrey" style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-		<th width="23%" bgcolor="lightgrey"><b>De</b></td>
-		<th width="27%" bgcolor="lightgrey"><b>Mensaje</b></td>
-		<th width="8%" bgcolor="lightgrey"><b>Fecha</b></td>
-		<th width="8%" bgcolor="lightgrey"><b>Hora</b></td>
-		</thead>
 
-		
-
-		
-		<tbody>
-		<?php
 		if(count($correos)===0)
 		{
 			?>
@@ -168,7 +157,22 @@ El mensaje fue enviado satisfactoriamente.
 		{
 			while($contador<count($correos))
 			{	
+		?>
+		<form name="formulario" id="formu" method="post">
+		<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
+		<tr class="info">
+		<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
+		<td width="23%" ><b>De</b></td>
+		<td width="27%" ><b>Mensaje</b></td>
+		<td width="8%" ><b>Fecha</b></td>
+		<td width="8%" ><b>Hora</b></td>
+		</tr>
 
+		
+
+		
+		<tbody>
+		<?php
 				$total=0;
 
 				echo '<tr >';
@@ -214,13 +218,13 @@ El mensaje fue enviado satisfactoriamente.
 <fieldset id="cuadroDetalleCorreo" style="display:none; " >
 	<legend>&nbsp;Correos recibidos <font color="black">:::</font> detalles&nbsp;</legend>
 	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
-	<button class="btn" style="margin-right:1%;" onclick="volverCorreosRecibidos()"><div class="btn_with_icon_solo"><</div> Volver</button>
+	<button class="btn"  onclick="volverCorreosRecibidos()" style="margin-bottom:20px; margin-right:1%; float:right;" ><div class="btn_with_icon_solo"><</div> Volver</button>
 	</div>
 	</br>
 	<pre class="detallesEmail">
 <div style="text-align:right;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
   De:     <b >ManteKA</b>
   Asunto: <b id="asuntoDetalle"></b>
-  <fieldset id="cuerpoMail" style=" height:250px;"></fieldset>
+  <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
 	</pre>
 </fieldset>

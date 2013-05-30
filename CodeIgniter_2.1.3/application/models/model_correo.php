@@ -60,9 +60,9 @@ class model_correo extends CI_Model
 				
 				/* Para cada correo se obtienen los destinatarios agrupados por categor?a. */
 				$codigo=$row['COD_CORREO'];
-				$sql1="SELECT RUT_ESTUDIANTE FROM carta_estudiante WHERE COD_CORREO='$codigo'";
-				$sql2="SELECT RUT_AYUDANTE FROM carta_ayudante WHERE COD_CORREO='$codigo'";
-				$sql3="SELECT RUT_USUARIO FROM carta_user WHERE COD_CORREO='$codigo'";
+				$sql1="SELECT RUT_ESTUDIANTE FROM cartar_estudiante WHERE COD_CORREO='$codigo'";
+				$sql2="SELECT RUT_AYUDANTE FROM cartar_ayudante WHERE COD_CORREO='$codigo'";
+				$sql3="SELECT RUT_USUARIO FROM cartar_user WHERE COD_CORREO='$codigo'";
 				$rutDestinoEstudiantes=array();
 				$rutDestinoAyudantes=array();
 				$rutDestinoUsuarios=array();
@@ -91,8 +91,8 @@ class model_correo extends CI_Model
 						$estudiante['cod_seccion']=$rowDatosEstudiante['COD_SECCION'];
 						$estudiante['nombre1_estudiante']=$rowDatosEstudiante['NOMBRE1_ESTUDIANTE'];
 						$estudiante['nombre2_estudiante']=$rowDatosEstudiante['NOMBRE2_ESTUDIANTE'];
-						$estudiante['apellido_paterno']=$rowDatosEstudiante['APELLIDO_PATERNO'];
-						$estudiante['apellido_materno']=$rowDatosEstudiante['APELLIDO_MATERNO'];
+						$estudiante['apellido_paterno']=$rowDatosEstudiante['APELLIDO1_ESTUDIANTE'];
+						$estudiante['apellido_materno']=$rowDatosEstudiante['APELLIDO2_ESTUDIANTE'];
 						$estudiante['correo_estudiante']=$rowDatosEstudiante['CORREO_ESTUDIANTE'];
 						array_push($estudiantes,$estudiante);
 					}
@@ -111,8 +111,8 @@ class model_correo extends CI_Model
 						$ayudante['rut_ayudante']=$rowDatosAyudante['RUT_AYUDANTE'];
 						$ayudante['nombre1_ayudante']=$rowDatosAyudante['NOMBRE1_AYUDANTE'];
 						$ayudante['nombre2_ayudante']=$rowDatosAyudante['NOMBRE2_AYUDANTE'];
-						$ayudante['apellido_paterno']=$rowDatosAyudante['APELLIDO_PATERNO'];
-						$ayudante['apellido_materno']=$rowDatosAyudante['APELLIDO_MATERNO'];
+						$ayudante['apellido_paterno']=$rowDatosAyudante['APELLIDO1_AYUDANTE'];
+						$ayudante['apellido_materno']=$rowDatosAyudante['APELLIDO2_AYUDANTE'];
 						$ayudante['correo_ayudante']=$rowDatosAyudante['CORREO_AYUDANTE'];
 						array_push($ayudantes,$ayudante);
 					}
@@ -200,11 +200,11 @@ class model_correo extends CI_Model
 		$resultadosFinales=array();
 		foreach($correos as $correo)
 		{
-			$sqlEliminarCorreoEstudiante="DELETE FROM carta_estudiante WHERE COD_CORREO='$correo'";
+			$sqlEliminarCorreoEstudiante="DELETE FROM cartar_estudiante WHERE COD_CORREO='$correo'";
 			$resultados1[$correo][$resultado]=mysql_query($sqlEliminarCorreoEstudiante);
-			$sqlEliminarCorreoAyudante="DELETE FROM carta_ayudante WHERE COD_CORREO='$correo'";
+			$sqlEliminarCorreoAyudante="DELETE FROM cartar_ayudante WHERE COD_CORREO='$correo'";
 			$resultados2[$correo][$resultado]=mysql_query($sqlEliminarCorreoAyudante);
-			$sqlEliminarCorreoUsuario="DELETE FROM carta_usuario WHERE COD_CORREO='$correo'";
+			$sqlEliminarCorreoUsuario="DELETE FROM cartar_usuario WHERE COD_CORREO='$correo'";
 			$resultados3[$correo][$resultado]=mysql_query($sqlEliminarCorreoUsuario);
 			$sqlEliminarCorreo="DELETE FROM carta WHERE COD_CORREO='$correo'";
 			$resultados4[$correo][$resultado]=mysql_query($sqlEliminarCorreo);
@@ -233,20 +233,24 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-	public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$codCorreo)
+	public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$codCorreo,$rutRecept)
 	{
 		try
 		{
 			$this->COD_CORREO=$codCorreo;
-			$this->RUT_USUARIO3=$rut;
+			$this->COD_BORRADOR=null;
 			$this->ID_PLANTILLA=null;
+			$this->RUT_USUARIO3=$rut;
+			$this->RUT_USUARIO=$rut;
+			
 			date_default_timezone_set("Chile/Continental");
 			$this->HORA = date("H:i:s");
 			$this->FECHA = date("Y-m-d");
 			$this->CUERPO_EMAIL = $mensaje;
 			$this->ASUNTO=$asunto;
 			$this->db->insert('carta', $this);
-			return 1;
+			 $e = $this->db->_error_message();  
+			return $e;
 		}
 		catch(Exception $e)
 		{

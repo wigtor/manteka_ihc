@@ -121,7 +121,7 @@ class Model_estudiante extends CI_Model {
 		$filaResultado = $query->row();
 		return $filaResultado;
 		*/
-		$sql="SELECT * FROM estudiante ORDER BY APELLIDO_PATERNO"; 
+		$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista = array();
@@ -129,8 +129,8 @@ class Model_estudiante extends CI_Model {
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
-			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
+			$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
 			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$lista[$contador][6] = $row['COD_SECCION'];
 			$lista[$contador][7] = $row['COD_CARRERA'];

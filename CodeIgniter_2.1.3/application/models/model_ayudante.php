@@ -82,7 +82,7 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerTodosLosAyudantes()
 	{
-		$sql="SELECT * FROM ayudante ORDER BY APELLIDO_PATERNO"; //código MySQL
+		$sql="SELECT * FROM ayudante ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
@@ -90,8 +90,8 @@ class Model_ayudante extends CI_Model {
 			$lista[$contador][0] = $row['RUT_AYUDANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_AYUDANTE'];
-			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][3] = $row['APELLIDO1_AYUDANTE'];
+			$lista[$contador][4] = $row['APELLIDO2_AYUDANTE'];
 			$lista[$contador][5] = $row['CORREO_AYUDANTE'];
 			$contador = $contador + 1;
 		}
