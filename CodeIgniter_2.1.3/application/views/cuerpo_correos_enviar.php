@@ -150,12 +150,14 @@ function ordenarFiltro(filtroLista){
 * Esta función muestra los detalles de la persona seleccinada y guarda su rut y correo para el envio
 */ 
 //,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera
-function DetalleAlumno(rut,correo)
+function detalleAlumno(elemtable)
 {	
 	//document.getElementById("rutDetalleEstudiante").innerHTML = rut;
+	var idElem = elemtable.id;
+	rut = document.getElementById(idElem).getAttribute("rut");
+	correo = document.getElementById(idElem).getAttribute("correo");
 	document.getElementById("to").value=correo;
 	document.getElementById("rutRecept").value=rut;
-	alert(rut);
 	/*document.getElementById("nombreunoDetalleEstudiante").innerHTML = nombre1;
 	document.getElementById("nombredosDetalleEstudiante").innerHTML = nombre2;
 	document.getElementById("apellidopaternoDetalleEstudiante").innerHTML = apePaterno;
@@ -241,7 +243,7 @@ function showDestinatarios(value){
 				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 					var tablaResultados = document.getElementById('tabla');
 					var nodoTexto;
-					$(tablaResultados).empty();
+					$(tablaResultados).empty();		
 					arrayRespuesta = JSON.parse(respuesta);
 					var thead = document.createElement('thead');
 					thead.setAttribute("style","width:100%");
@@ -269,7 +271,7 @@ function showDestinatarios(value){
 						tr.appendChild(td);
 						td = document.createElement('td');
 						tr.setAttribute("id", i);
-						tr.setAttribute('onclick', 'DetalleAlumno(this.rut)');
+						tr.setAttribute('onClick',"detalleAlumno(this)");
 						tr.setAttribute("style","width:100%");
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
 						tr.setAttribute('rut',arrayRespuesta[i].rut);
@@ -280,7 +282,6 @@ function showDestinatarios(value){
 						tbody.appendChild(tr);
 					}
 					tablaResultados.appendChild(tbody);
-					addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
 
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
@@ -296,8 +297,22 @@ function showDestinatarios(value){
 		//}
 }
 
-$(document).ready(showDestinatarios(1));
+function showCarreras(){
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>",
+		data:{},
+		success: function(respuesta){
+			var filtroCarrera = getElementById("filtroPorCarrera");
 
+			filtroCarrera.empty();
+
+		}
+	});
+}
+
+$(document).ready(showDestinatarios(0));
+$(document).ready(showCarreras());
 function highlightTableRow()
 {
 	var tableObj = this.parentNode;
@@ -446,11 +461,11 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
 					<select id="filtroPorCarrera" title="Tipo de destinatario" class="input-large">
-						<option  value="0">Todos</option>
+					<!--	<option  value="0">Todos</option>
 						<option  value="1">Ing civil informática</option>
 						<option  value="2">Ing civil en minas</option>
 						<option value="3">Ing civil elétrica</option>
-						<option value="4">Ing  industrial</option>
+						<option value="4">Ing  industrial</option> -->
 					</select>
 				</div>
 			</div>
@@ -536,7 +551,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 			</table>
 		</div>
 <script>
-addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
+//addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
 </script>
 		<!-- Este es el botón que está entremedio de los dos listados -->
 		<div class="span2 text-center">
@@ -684,7 +699,7 @@ addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
 				</tbody>
 				</table>
 				<script type="text/javascript">
-						addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
+						//addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
 				</script>
 
 

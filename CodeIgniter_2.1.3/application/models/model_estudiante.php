@@ -164,6 +164,8 @@ class Model_estudiante extends CI_Model {
 		return $query->result();
 	}
 
+
+
 	public function getAlumnosByFilter($tipoFiltro, $texto)
 	{
 

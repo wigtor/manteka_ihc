@@ -340,11 +340,16 @@ class Correo extends MasterManteka {
 			return;
 		}
 		$destinatario = $this->input->post('destinatario');
+		$this->load->model('Model_filtro');
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_profesor');
 		$this->load->model('Model_ayudante');
+		$this->load->model('Model_coordinadores');
 
 		switch ($destinatario) {
+			case 0:
+				$resultado = $this->Model_filtro->getAll();
+				break;
 			case 1:
 				$resultado = $this->Model_estudiante->getAllAlumnos();
 				break;
@@ -354,10 +359,21 @@ class Correo extends MasterManteka {
 			case 3:
 				$resultado = $this->Model_ayudante->getAllAyudantes();
 				break;
+			case 4:
+				$resultado = $this->Model_coordinadores->getAllCoordinadores();
 			default:
 				# code...
 				break;
 		}
 		echo json_encode($resultado);
+	}
+
+	public function postCarreras(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->gelAllCarreras();
+		return $resultado;
 	}
 }
