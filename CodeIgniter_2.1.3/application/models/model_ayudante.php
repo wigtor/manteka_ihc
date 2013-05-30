@@ -82,16 +82,17 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerTodosLosAyudantes()
 	{
-		$sql="SELECT * FROM ayudante ORDER BY APELLIDO_PATERNO"; //código MySQL
+		$sql="SELECT * FROM ayudante ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
+		echo mysql_error();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_AYUDANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_AYUDANTE'];
-			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][3] = $row['APELLIDO1_AYUDANTE'];
+			$lista[$contador][4] = $row['APELLIDO2_AYUDANTE'];
 			$lista[$contador][5] = $row['CORREO_AYUDANTE'];
 			$contador = $contador + 1;
 		}
@@ -104,10 +105,10 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('RUT_AYUDANTE AS rut');
 		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
 		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
-		$this->db->order_by("APELLIDO_PATERNO", "asc");
-		$query = $this->db->get('ayudantes');
+		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+		$this->db->order_by("APELLIDO1_AYUDANTE", "asc");
+		$query = $this->db->get('ayudante');
 		if ($query == FALSE) {
 			$query = array();
 			return $query;

@@ -132,11 +132,11 @@ function ordenarFiltro(filtroLista){
 		}
 	}
 	for (cont = 0; cont < arrayRespuesta.length; cont++) {
-		ocultar=document.getElementsByClassName(cont);
+		ocultar=document.getElementById(cont);
 		if(arregloOcultados[cont]=='ocultado'){
-			ocultar[0].style.display='none';
+			ocultar.style.display='none';
 		}else{
-			ocultar[0].style.display='block';
+			ocultar.style.display='block';
 		}
 	}
 }
@@ -149,19 +149,20 @@ function ordenarFiltro(filtroLista){
 * Esta función se llama al hacer click en el botón enviar, 
 * Esta función muestra los detalles de la persona seleccinada y guarda su rut y correo para el envio
 */ 
-
-function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera)
-{
-	document.getElementById("rutDetalleEstudiante").innerHTML = rut;
+//,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera
+function DetalleAlumno(rut,correo)
+{	
+	//document.getElementById("rutDetalleEstudiante").innerHTML = rut;
 	document.getElementById("to").value=correo;
 	document.getElementById("rutRecept").value=rut;
-	document.getElementById("nombreunoDetalleEstudiante").innerHTML = nombre1;
+	alert(rut);
+	/*document.getElementById("nombreunoDetalleEstudiante").innerHTML = nombre1;
 	document.getElementById("nombredosDetalleEstudiante").innerHTML = nombre2;
 	document.getElementById("apellidopaternoDetalleEstudiante").innerHTML = apePaterno;
 	document.getElementById("apellidomaternoDetalleEstudiante").innerHTML = apeMaterno;
 	document.getElementById("carreraDetalleEstudiante").innerHTML = carrera;
 	document.getElementById("seccionDetalleEstudiante").innerHTML = seccion;
-	document.getElementById("correoDetalleEstudiante").innerHTML = correo;
+	document.getElementById("correoDetalleEstudiante").innerHTML = correo;*/
 	  
 }
 </script>
@@ -238,26 +239,27 @@ function showDestinatarios(value){
 				url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>", /* Se setea la url del controlador que responderá */
 				data: { destinatario: destinatario}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					var tablaResultados = document.getElementById("tabla");
+					var tablaResultados = document.getElementById('tabla');
 					var nodoTexto;
 					$(tablaResultados).empty();
+					arrayRespuesta = JSON.parse(respuesta);
 					var thead = document.createElement('thead');
+					thead.setAttribute("style","width:100%");
+					var tbody = document.createElement('tbody');
 					var tr = document.createElement('tr');
 					var th = document.createElement('th');
 					var check = document.createElement('input');
-					var tbody = document.createElement('tbody');
 					check.type='checkbox';
 					check.checked=false;
 					th.appendChild(check);
-					tr.appendChild(th);
+					thead.appendChild(th);
 					th = document.createElement('th');
-					nodoTexto = document.createTextNode("Nombre Completo");
+					nodoTexto =document.createTextNode('Nombre Completo');
 					th.appendChild(nodoTexto);
-					tr.appendChild(th);
-					thead.appendChild(tr);
+					thead.appendChild(th);
 					tablaResultados.appendChild(thead);
-					arrayRespuesta = JSON.parse(respuesta);
-					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
+					tbody.setAttribute("style","width:100%");
+					for (var i = 0; i < arrayRespuesta.length; i++) {
 						tr = document.createElement('tr');
 						td = document.createElement('td');
 						check = document.createElement('input');
@@ -266,29 +268,25 @@ function showDestinatarios(value){
 						td.appendChild(check);
 						tr.appendChild(td);
 						td = document.createElement('td');
-						tr.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
-						tr.setAttribute("class",i);
-						tr.setAttribute("onClick", "detalleAlumno(this)");
+						tr.setAttribute("id", i);
+						tr.setAttribute('onclick', 'DetalleAlumno(this.rut)');
+						tr.setAttribute("style","width:100%");
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						tr.setAttribute('rut',arrayRespuesta[i].rut);
+						tr.setAttribute('correo',arrayRespuesta[i].correo);
 						td.appendChild(nodoTexto);
+						td.setAttribute("style","width:100%");
 						tr.appendChild(td);
 						tbody.appendChild(tr);
-						tablaResultados.appendChild(tbody);
 					}
-					/*
-					for (var i = 0, option, td; i < arrayRespuesta.length; i++) {
-						option =  document.createElement('option');
-						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						option.setAttribute("value", arrayRespuesta[i].rut);
-						option.setAttribute("onClick", "detalleAlumno(this.value)");
-						option.appendChild(nodoTexto);
-						tablaResultados.appendChild(option);
-					}
-					*/
+					tablaResultados.appendChild(tbody);
+					addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
 
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
+					document.getElementById("to").value="all_gom@yahoo.com";
+					document.getElementById("rutRecept").value="16940203";
 					}
 			});
 
@@ -299,6 +297,7 @@ function showDestinatarios(value){
 }
 
 $(document).ready(showDestinatarios(1));
+
 function highlightTableRow()
 {
 	var tableObj = this.parentNode;
@@ -509,7 +508,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	<!-- Este es el listado de resultados del filtro -->
 	<div id="listasDeDestinatarios" class="row-fluid">
 		<div id="listaResultadosFiltro" class="span5">
-			<table id="tabla" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+			<table id="tabla" class="table table-hover table-bordered" style="width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
 				<thead>
 					<tr>
 						<th >
