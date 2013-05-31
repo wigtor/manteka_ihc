@@ -19,6 +19,7 @@ class Model_secciones extends CI_Model{
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista=array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
@@ -30,6 +31,7 @@ class Model_secciones extends CI_Model{
 			$lista[$contador][7] = $row['COD_CARRERA'];
 
 			$contador = $contador + 1;
+		}
 		}
 		return $lista;
 	}
@@ -48,11 +50,13 @@ class Model_secciones extends CI_Model{
 		$sql="SELECT * FROM SECCION ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
-		$lista;
+		$lista=array();
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_SECCION'];
+			$lista[$contador][1] = $row['NOMBRE_SECCION'];
 			$contador = $contador + 1;
-		}
+		}}
 		return $lista;
 	}
 	
@@ -67,10 +71,23 @@ class Model_secciones extends CI_Model{
 	public function VerSeccion($cod_seccion)
 	{
 	//sala horario, horario, dia
+	
+		$lista=array();
+	
+		
+		$sql3="SELECT * FROM SECCION WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
+		$datos3=mysql_query($sql3); 
+		$contador3 = 0;
+		while ($row3=mysql_fetch_array($datos3)) { 
+			$lista[0][0] = $row3['NOMBRE_SECCION'];
+			$contador3 = $contador3 + 1;
+		}
+		
+		
 		$sql="SELECT * FROM SALA_HORARIO WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
-		$contador = 0;
-		$lista=array();
+		$contador = 0;	
+		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			
 			$hora=$row['COD_HORARIO'];
@@ -82,17 +99,126 @@ class Model_secciones extends CI_Model{
 				$sql2="SELECT * FROM DIA WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
 				$datos2=mysql_query($sql2); 
 				while ($row2=mysql_fetch_array($datos2)) { 
-					$lista[$contador][0] = $row['COD_SECCION'];
 					$lista[$contador][1] = $row1['NOMBRE_HORARIO'];
 					$lista[$contador][2] = $row2['NOMBRE_DIA'];
 				}
 			}
 			$contador = $contador + 1;
 		}
+		}
+		if($contador==0 && $cod_seccion!=''){
+			$lista[$contador][1] = '';
+			$lista[$contador][2] = '';
+		}
+		if($cod_seccion==''){
+			$lista[$contador][0] = '';
+			$lista[$contador][1] = '';
+			$lista[$contador][2] = '';
+			
+		}
+		
 		return $lista;
 	}
 
+		/**
+	* Eliminar seccion de la base de datos
+	*
+	* Recibe el codigo de la seccion para que se elimine ésta y sus datos asociados de la base de datos. Se crea la consulta y luego se ejecuta ésta.
+	* Finalmente se retorna 1 o -1 si es que se realizó la eliminacion correctamente o no.
+	*
+	* @param string $cod_sala codigo de la seccion que se eliminará de la base de datos
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
+    public function EliminarSeccion($cod_seccion)
+    {
+		if($cod_seccion==""){ return 2;}
+		else{
+		$sql1="SELECT * FROM ESTUDIANTE WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
+		$datos1=mysql_query($sql1); 
+		$contador = 0;
+		if (false != $datos1) {
+		while ($row=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+			$contador = $contador + 1;
+		}}
+		if($contador==0){
+			$sql="DELETE FROM seccion WHERE COD_SECCION = '$cod_seccion' "; //código MySQL
+			$datos=mysql_query($sql); //enviar código MySQL
+		}
+		else{return 3;}
+		
 
+
+		if($datos == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}
+		}
+    }
+	
+	
+	/**
+	* Edita la información de una seccion en la base de datos
+	*
+	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
+	* en la variable 'data'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $cod_seccion codigo de la seccion a la que se le actualizan los demás datos
+	* @param string $nombre_seccion1 letra del nombre de la seccion a editar
+	* @param string $nombre_seccion2 número del nombre de la seccion a editar
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
+	public function AgregarSeccion($nombre_seccion1,$nombre_seccion2)
+	{
+		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
+		
+		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$data = array(	
+					'COD_SECCION' => $nombre,
+					'NOMBRE_SECCION' => $nombre	
+		);
+		$this->db->insert('SECCION',$data); 
+		
+         
+		if($data == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}		
+    }
+
+	/**
+	* Agregar la información de una seccion en la base de datos
+	*
+	* Guarda las variables a agregar en el array data luego se llama a la función insert y se guarda el resultado de la inserción
+	* en la variable 'data'. Finalmente se retorna 1 o -1 si es que se realizó la operación correctamente o no.
+	*
+	* @param string $nombre_seccion1 letra del nombre de la seccion a agregar
+	* @param string $nombre_seccion2 número del nombre de la seccion a agregar
+	* @return int 1 o -1 en caso de éxito o fracaso en la operación
+	*/
+	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
+	{
+		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
+		
+		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$data = array(	
+					'COD_SECCION' => $cod_seccion,
+					'NOMBRE_SECCION' => $nombre	
+		);
+		$this->db->where('COD_SECCION', $cod_seccion);
+		$this->db->update('SECCION',$data); 
+		
+         
+		if($data == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}		
+    }
  
 }
 ?>

@@ -15,20 +15,33 @@
 		$agregarSecciones = "";
 		$editarSecciones = "";
 		$borrarSecciones = "";
+		$asignarAseccion = "";
+
+		$inAsignaciones = "";
+		$inSecciones = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
 		if ($subVistaLateralAbierta == "verSecciones") {
 			$verSecciones = 'class="active"';
+			$inSecciones = "in";
+
 		}
 		else if ($subVistaLateralAbierta == "agregarSecciones") {
 			$agregarSecciones = 'class="active"';
+			$inSecciones = "in";
 		}
 		else if ($subVistaLateralAbierta == "editarSecciones") {
 			$editarSecciones = 'class="active"';
+			$inSecciones = "in";
 		}
 		else if ($subVistaLateralAbierta == "borrarSecciones") {
 			$borrarSecciones = 'class="active"';
+			$inSecciones = "in";
+		}
+		else if ($subVistaLateralAbierta == "asignarAseccion"){
+			$asignarAseccion = 'class="active"';
+			$inAsignaciones="in";
 		}
 	?>
 
@@ -39,12 +52,24 @@
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
 				Secciones</a>
 		    </div>
-		    <div id="collapseOne" class="accordion-body collapse in">
+		    <div id="collapseOne" class="accordion-body collapse <?php echo $inSecciones; ?>">
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verSecciones; ?> ><a href="<?php echo site_url("Secciones/verSecciones")?>">Ver secciones</a></li>
 	        		<li <?php echo $agregarSecciones; ?> ><a href="<?php echo site_url("Secciones/agregarSecciones")?>">Agregar secciones</a></li>
 					<li <?php echo $editarSecciones; ?> ><a href="<?php echo site_url("Secciones/editarSecciones")?>">Editar secciones</a></li>
 					<li <?php echo $borrarSecciones; ?> ><a href="<?php echo site_url("Secciones/borrarSecciones")?>">Borrar secciones</a></li>
+		     	</div>
+		    </div>
+	  	</div>
+
+	  	<div class="accordion-group">
+		    <div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+				Asignaciones</a>
+		    </div>
+		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inAsignaciones; ?>">
+		    	<div class="accordion-inner nav nav-list">
+					<li <?php echo $asignarAseccion; ?> ><a href="<?php echo site_url("Secciones/asignarAsecciones")?>">Agregar asignación</a></li>
 		     	</div>
 		    </div>
 	  	</div>

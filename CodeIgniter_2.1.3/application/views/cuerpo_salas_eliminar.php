@@ -54,7 +54,7 @@
 					}
 					else{
 					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Salas/EliminarSalas/") ?>/"+cod;
+					borrar.action = "<?php echo site_url("Salas/borrarSalas/") ?>/";
 					borrar.submit();
 					}
 					
@@ -116,11 +116,11 @@ function ordenarFiltro(){
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
 									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Numero</option>
+									<option value="1">Filtrar por Número</option>
 									</select>
 								</div> 
 							</div>
@@ -130,13 +130,7 @@ function ordenarFiltro(){
 			</div>
 			<div class="row-fluid" style="margin-left: 0%;">
 				<!--<div class="span9">-->
-			
-					<thead>
-						<tr>
-							<th style="text-align:left;"><br><b>Sala</b></th>
-							
-						</tr>
-					</thead>
+
 					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 						<table class="table table-hover">
 							<tbody>
@@ -170,16 +164,16 @@ function ordenarFiltro(){
 			<div style="margin-bottom:2%">
 		2.-Detalle de la Sala:
 		</div>
-	   <form id="formBorrar" type="post" >
+	   <form id="formBorrar" type="post" method="post" >
 			<div class="row-fluid">
 				<div>
 			<pre style="margin-top: 0%; margin-left: 0%;">
-Codigo sala:    <b id="cod_sala"></b>
-Numero sala:    <b id="num_sala"></b> 
+Código sala:    <b id="cod_sala"></b>
+Número sala:    <b id="num_sala"></b> 
 Capacidad: 	<b id="capacidad"></b>
-Ubicacion:	<b id="ubicacion"></b>
+Ubicación:	<b id="ubicacion"></b>
 Implementos  <b id="impDetalle"></b></pre>
-<input type="hidden" id="codEliminar" value="">
+<input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
 				</div>		
 			</div>
 								<div class="row-fluid">
