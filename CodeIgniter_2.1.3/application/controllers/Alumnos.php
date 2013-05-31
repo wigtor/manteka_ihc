@@ -269,19 +269,19 @@ class Alumnos extends MasterManteka {
 	{
 		//@ViewBag.Test = data[0]; // Data will be set to P1
 		$this->load->model('Model_estudiante');
-		$seccion1 = $this->input->get('cod_seccion1');
-		$seccion2 = $this->input->get('cod_seccion2');
+		$seccion1 = $this->input->post('cod_seccion1');
+		$seccion2 = $this->input->post('cod_seccion2');
 		
-		$cambiarDesde = $this->input->get('botonCambio');
+		$cambiarDesde = $this->input->post('botonCambio');
 		
 		if($cambiarDesde=="1"){
-				$lista_seleccionados = $this->input->get('seleccionadosS1');
-				$seccionOUT = $this->input->get('cod_seccion2');
+				$lista_seleccionados = $this->input->post('seleccionadosS1');
+				$seccionOUT = $this->input->post('cod_seccion2');
 				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
 		}
 		else{
-				$lista_seleccionados = $this->input->get('seleccionadosS2');
-				$seccionOUT = $this->input->get('cod_seccion1');
+				$lista_seleccionados = $this->input->post('seleccionadosS2');
+				$seccionOUT = $this->input->post('cod_seccion1');
 				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
 		}
 		//echo count($lista_seleccionados);
