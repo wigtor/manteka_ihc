@@ -389,4 +389,34 @@ class Correo extends MasterManteka {
 		$resultado = $this->Model_filtro->getAlumnosByCarrera($codigo);
 		echo json_encode($resultado);
 	}
+
+	public function postAlumnosByProfesor(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$profesor = $this->input->post('profesor');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAlumnosByProfesor($profesor);
+		echo json_encode($resultado);
+
+	}
+
+	public function postAlumnosByFiltro(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$profesor = $this->input->post('profesor');
+		$codigo = $this->input->post('codigo');
+		$this->load->model('Model_filtro');
+		if($profesor == ""){
+			$resultado = $this->Model_filtro->getAlumnosByCarrera($codigo);
+		}else{
+			if($codigo==""){
+			$resultado = $this->Model_filtro->getAlumnosByProfesor($profesor);
+			}else{
+			$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo);
+			}
+		}
+		echo json_encode($resultado);
+	}
 }
