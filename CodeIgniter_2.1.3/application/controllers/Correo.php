@@ -264,7 +264,7 @@ class Correo extends MasterManteka {
 		$asunto ="[ManteKA] ".$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
 		$rutRecept = $this->input->post('rutRecept');
-		$date = date("ymdHis");
+		$date = date("mdHis");
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda

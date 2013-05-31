@@ -42,7 +42,24 @@ function volverCorreosRecibidos()
 * hace una dsitinción o búsqueda por id del checkbox.
 * Para ver como se configura esto se debe ver en el evento onclick() en donde se está creando el checkbox principal.
 */
+
 function selectall(form)
+{
+	var formulario=eval(form);  
+	for (var i=0,len=formulario.elements.length; i<len;i++)  
+	{  
+		if (formulario.elements[i].type=="checkbox")
+			formulario.elements[i].checked=formulario.elements[0].checked; 
+	}
+}
+</script>
+
+<script type="text/javascript">
+/** 
+* Esta función se llama al hacer click en los botones para < y > para cambiar los correos mostrados
+*/
+
+function showCorreos()
 {
 	var formulario=eval(form);  
 	for (var i=0,len=formulario.elements.length; i<len;i++)  
@@ -61,6 +78,7 @@ function selectall(form)
 function eliminarCorreo()
 {
 	var checked_ids = [];
+
 	for(i=0;i<document.formulario.elements.length;i++)
 	{
 		if((document.formulario[i].type=='checkbox') && (document.formulario[i].checked==true))
@@ -72,14 +90,15 @@ function eliminarCorreo()
 	{
 		if (confirm('Estás a punto de eliminar correos.\n¿Realmente deseas continuar?'))
 		{
-			$('#cuadroRecibidos').css({display:'none'});
-			$('#cuadroDestinoCorreo').css({display:'none'});
-			$('#cRC').css({display:'block'});
 			if(checked_ids[0]=="marcar")
 				checked_ids.shift();
-			document.getElementById('seleccion').value=checked_ids.join(";");
+			document.getElementById('seleccion').value=checked_ids.join(";");			
+			$('#cuadroRecibidos').css({display:'none'});
+			$('#cuadroDestinoCorreo').css({display:'none'});
+
 			formulario.action="<?php echo site_url("Correo/EliminarCorreoRecibido")?>";
 			formulario.submit();
+
 		}
 	}
 }
@@ -119,9 +138,7 @@ if(isset($msj))
 }
 ?>
 
-<div id="cRC" style="display:none; position:relative; z-index:3; margin-top:10%; width:78%; text-align:center;">
-<img src="/<?php echo config_item('dir_alias') ?>/img/procesando.gif" class="imgProcesando"/>
-</div>
+
 
 <fieldset id="cuadroRecibidos">
 	<legend>&nbsp;Correos Recibidos&nbsp;</legend>
@@ -140,7 +157,7 @@ if(isset($msj))
 		if(count($correos)!==0)
 		{
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo() " style="margin-bottom:20px; margin-right:1%; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo() " style=" margin-right:1%; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
 			<?php
 		}
 
@@ -158,8 +175,14 @@ if(isset($msj))
 			while($contador<count($correos))
 			{	
 		?>
+	    <ul class="pager" style="text-align:right;margin:0px">
+    		<li><a href="#">Previous</a></li>
+   	 		<li><a href="#">Next</a></li>
+		</ul>
 		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
+
+		<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:1%; margin-bottom:0px">
+			
 		<tr class="info">
 		<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
 		<td width="23%" ><b>De</b></td>
