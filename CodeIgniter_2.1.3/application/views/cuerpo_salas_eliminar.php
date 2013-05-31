@@ -33,7 +33,7 @@
 			var cont;
 			var algo='\n';
 			for(cont=0;cont < imp.length;cont++){
-				if(imp[cont][0]==document.getElementById("cod_sala").innerHTML ){
+				if(imp[cont][0]==cod_sala ){
 					algo= algo+"		"+imp[cont][1]+'\n';				
 				}
 			}
@@ -168,7 +168,7 @@ function ordenarFiltro(){
 			<div class="row-fluid">
 				<div>
 			<pre style="margin-top: 0%; margin-left: 0%;">
-Código sala:    <b id="cod_sala"></b>
+<input id="cod_sala" type="text" name="cod_sala" value="" style="display:none">
 Número sala:    <b id="num_sala"></b> 
 Capacidad: 	<b id="capacidad"></b>
 Ubicación:	<b id="ubicacion"></b>

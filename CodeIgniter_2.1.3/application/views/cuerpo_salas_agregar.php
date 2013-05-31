@@ -93,7 +93,7 @@
 										$contador=0;
 										while ($contador<count($implemento)){
 											echo '<tr>';
-											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
+											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}

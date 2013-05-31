@@ -48,14 +48,26 @@
 						var dijoNO = DetalleSeccion("");
 					}
 					else{
-					var editar = document.getElementById("FormEditar");
-					editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
-					editar.submit();
+					var patron = "^[0-9]{2}$"; //dos números enteros positivos en la primera parte del nombre de la sección
+					var patron2 = "^([A-Z]{1}|[a-z]{1})$"; //una letra en la primera parte del nombre de la sección
+					if (document.getElementById("rs_seccion2").value.match(patron)) {    
+						if (document.getElementById("rs_seccion").value.match(patron2)) {  
+							var editar = document.getElementById("FormEditar");
+							editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
+							editar.submit();
+						}
+						else {
+							alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
+						}
+					}
+					else {
+						alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
+					}
 					}
 					
 		}
 		else{
-				alert("Selecione una seccion");
+				alert("Selecione una sección");
 		}
 		
 	}
@@ -99,7 +111,7 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Editar Sección</legend>
-			<form id="formDetalle" type="post" method="post">
+			<form id="FormEditar" type="post" method="post" onsubmit="EditarSeccion();return false">
             <div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -166,26 +178,28 @@ function ordenarFiltro(){
                     <div class="row-fluid">
                         <div class="span5">
                             2.-Información de la sección
+							
                         </div>
                     </div>
-					<form id="FormEditar" type="post" method="post" onsubmit="EditarSeccion()">
+					
 					<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
                     <div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
 									
 		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
+									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 		  						</div>	
 							</div>
 													
 								<div class="span5">	
 		  							<div class="controls">
 									<tr>
-									<td><input id="rs_seccion" name="rs_seccion"  maxlength="10" min="1" type="text" class="span2"></td>
+									<td><input id="rs_seccion" name="rs_seccion"  maxlength="10" min="2" maxlength="1" type="text" class="span2"></td>
 									</tr>	
 									<td class="span2">-</td>
 									<tr>
-									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="10" min="1" type="text" class="span2"></td>
+									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="10" min="2" maxlength="2" type="text" class="span2"></td>
 									</tr>										
 									
 									</div>
@@ -205,7 +219,7 @@ function ordenarFiltro(){
 										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" >Cancelar</button>
 									</div>
 								</div> 
-					</form>	
+					
                 </div>
 				
             </div>
