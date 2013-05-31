@@ -376,7 +376,7 @@ class Correo extends MasterManteka {
 			return;
 		}
 		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->gelAllCarreras();
-		return $resultado;
+		$resultado = $this->Model_filtro->getAllCarreras();
+		echo json_encode($resultado);
 	}
 }

@@ -4,6 +4,7 @@
 
 <script type='text/javascript'>
 var arrayRespuesta;
+var arrayCarreras;
 /** 
 * Esta función se llama al hacer click en el botón enviar, 
 * por convención las funciones que utilizan document.getElementById()
@@ -51,6 +52,7 @@ function pasoUnoDos()
 	$('#cuadroEnviar').css({display:'none'});
 	$('#cuadroEnvio').css({display:'none'});
 	$('#cuadroDestinatario').css({display:'block'});
+	document.getElementById('filtroPorCarrera').disabled=true;
 }
 
 /** 
@@ -302,6 +304,10 @@ function showDestinatarios(value){
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
+					if(destinatario==1){
+						document.getElementById('filtroPorCarrera').disabled=false;
+						showCarreras();
+					}
 					}
 			});
 
@@ -314,19 +320,19 @@ function showDestinatarios(value){
 function showCarreras(){
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>",
+		url: "<?php echo site_url("Correo/postCarreras") ?>",
 		data:{},
 		success: function(respuesta){
-			var filtroCarrera = getElementById("filtroPorCarrera");
-
-			filtroCarrera.empty();
-
+			var filtroCarrera = document.getElementById("filtroPorCarrera");
+			arrayCarreras = JSON.parse(respuesta);
+			for(var i=0;i<arrayCarreras.length;i++){
+				filtroCarrera.add(new Option(arrayCarreras[i].carrera,arrayCarreras[i].carrera));
+			}
 		}
 	});
 }
 
 $(document).ready(showDestinatarios(0));
-$(document).ready(showCarreras());
 function highlightTableRow()
 {
 	var tableObj = this.parentNode;
@@ -475,8 +481,8 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
 					<select id="filtroPorCarrera" title="Tipo de destinatario" class="input-large">
-					<!--	<option  value="0">Todos</option>
-						<option  value="1">Ing civil informática</option>
+						<option  value="0">Todos</option>
+						<!--<option  value="1">Ing civil informática</option>
 						<option  value="2">Ing civil en minas</option>
 						<option value="3">Ing civil elétrica</option>
 						<option value="4">Ing  industrial</option> -->
