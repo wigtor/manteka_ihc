@@ -187,6 +187,8 @@ class Model_profesor extends CI_Model {
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
 		$this->db->select('TELEFONO_PROFESOR AS telefono');
 		$this->db->select('TIPO_PROFESOR AS tipo');
+		$this->db->select('CORREO1_USER AS correo');
+		 $this->db->join('usuario', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
 		$this->db->where('RUT_USUARIO2', $rut);
 		$query = $this->db->get('profesor');
 		if ($query == FALSE) {
