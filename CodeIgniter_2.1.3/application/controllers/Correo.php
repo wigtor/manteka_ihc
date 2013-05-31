@@ -249,6 +249,8 @@ class Correo extends MasterManteka {
 	*/
 	public function enviarPost()
 	{
+
+
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 		$rut = $this->session->userdata('rut');
 		if ($rut == false)
@@ -266,7 +268,7 @@ class Correo extends MasterManteka {
 		$asunto ="[ManteKA] ".$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
 		$rutRecept = $this->input->post('rutRecept');
-		$date = date("mdHis");
+		$date = date("YmdHis");
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
@@ -284,11 +286,14 @@ class Correo extends MasterManteka {
 			$this->email->message($mensaje);
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
+
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept);
-			echo	$this->model_correo_e->InsertarCorreoE($rutRecept,$date);
-				$this->model_correo_u->InsertarCorreoU($rutRecept,$date);
-				$this->model_correo_a->InsertarCorreoA($rutRecept,$date);
-			;
+			$cod=$this->model_correo->getCodigo($date);
+			
+				$this->model_correo_e->InsertarCorreoE($rutRecept,$cod);
+				$this->model_correo_u->InsertarCorreoU($rutRecept,$cod);
+				$this->model_correo_a->InsertarCorreoA($rutRecept,$cod);
+			
 		}
 		catch (Exception $e) {
 			if($e->getMessage()=="error en el envio")
@@ -298,7 +303,7 @@ class Correo extends MasterManteka {
 		}
 		
 		$estado="2";
-			redirect('/Correo/correosRecibidos/'.$estado);
+		redirect('/Correo/correosRecibidos/'.$estado);
 
 
 	}

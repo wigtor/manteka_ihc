@@ -240,7 +240,7 @@ class model_correo extends CI_Model
 			$this->COD2_CORREO=$codCorreo;
 			$this->COD_BORRADOR=null;
 			$this->ID_PLANTILLA=null;
-			$this->RUT_USUARIO3=$rut;
+			
 			$this->RUT_USUARIO=$rut;
 			
 			date_default_timezone_set("Chile/Continental");
@@ -251,6 +251,28 @@ class model_correo extends CI_Model
 			$this->db->insert('carta', $this);
 			 $e = $this->db->_error_message();  
 			return $e;
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
+    	public function getCodigo($codCorreo)
+	{
+		try
+		{
+			$this->db->select('COD_CORREO');
+			$this->db->where('COD2_CORREO', $codCorreo); 
+			$this->db->limit(1);
+			$query = $this->db->get('carta');
+			 $e = $this->db->_error_message(); 
+			
+			foreach ($query->result() as $row)
+			{
+			    return $row->COD_CORREO;
+			}
+
+
 		}
 		catch(Exception $e)
 		{
