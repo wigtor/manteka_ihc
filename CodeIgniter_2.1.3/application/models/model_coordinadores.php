@@ -380,8 +380,11 @@ class model_coordinadores extends CI_Model{
       $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
       $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
       $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+      $this->db->select('CORREO1_USER AS correo');
+      $this->db->from('coordinador');
+      $this->db->join('usuario','coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
       $this->db->order_by("APELLIDO1_COORDINADOR", "asc");
-      $query = $this->db->get('coordinador');
+      $query = $this->db->get();
       if ($query == FALSE) {
          $query = array();
          return $query;

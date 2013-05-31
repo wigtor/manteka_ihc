@@ -104,8 +104,11 @@ class Model_profesor extends CI_Model {
 		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+		$this->db->select('CORREO1_USER AS correo');
+		$this->db->from('profesor');
+		$this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
 		$this->db->order_by("APELLIDO1_PROFESOR", "asc");
-		$query = $this->db->get('profesor');
+		$query = $this->db->get();
 		if ($query == FALSE) {
 			$query = array();
 			return $query;
