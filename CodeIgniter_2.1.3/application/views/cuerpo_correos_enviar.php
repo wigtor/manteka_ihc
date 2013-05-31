@@ -311,11 +311,21 @@ function showDestinatarios(value){
 						showCarreras();
 						showProfesores();
 						showSecciones();
+						showHorarios();
+						showModulosTematicos();
+						document.getElementById('filtroPorBloqueHorario').disabled=false;
+						document.getElementById('filtroPorModuloTematico').disabled=false;
 						document.getElementById('filtroPorCarrera').disabled=false;
 						document.getElementById('filtroPorProfesorEncargado').disabled=false;
 						document.getElementById('filtroPorSeccion').disabled=false;
 					}else if(destinatario ==2){
 						showSecciones();
+						showHorarios();
+						showModulosTematicos();
+						document.getElementById('filtroPorModuloTematico').selectedIndex=0;
+						document.getElementById('filtroPorModuloTematico').disabled=false;
+						document.getElementById('filtroPorBloqueHorario').selectedIndex=0;
+						document.getElementById('filtroPorBloqueHorario').disabled=false;
 						document.getElementById('filtroPorProfesorEncargado').selectedIndex=0;
 						document.getElementById('filtroPorProfesorEncargado').disabled=true;
 						document.getElementById('filtroPorCarrera').selectedIndex=0;
@@ -323,6 +333,10 @@ function showDestinatarios(value){
 						document.getElementById('filtroPorSeccion').disabled=false;
 					}
 					else{
+						document.getElementById('filtroPorModuloTematico').selectedIndex=0;
+						document.getElementById('filtroPorModuloTematico').disabled=true;
+						document.getElementById('filtroPorBloqueHorario').selectedIndex=0;
+						document.getElementById('filtroPorBloqueHorario').disabled=true;
 						document.getElementById('filtroPorProfesorEncargado').selectedIndex=0;
 						document.getElementById('filtroPorProfesorEncargado').disabled=true;
 						document.getElementById('filtroPorCarrera').selectedIndex=0;
@@ -409,6 +423,51 @@ function showSecciones(){
 			$(icono_cargando).show();
 }
 
+function showHorarios(){
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postHorarios") ?>",
+		data:{},
+		success: function(respuesta){
+			var filtroHorario = document.getElementById("filtroPorBloqueHorario");
+			arrayHorarios = JSON.parse(respuesta);
+			filtroHorario.selectedIndex=0;
+			$('#filtroPorBloqueHorario').empty();
+			filtroHorario.add(new Option("Todos",""));
+			for (var i = 0; i < arrayHorarios.length; i++) {
+				filtroHorario.add(new Option(arrayHorarios[i].nombre,arrayHorarios[i].codigo));
+			}
+			var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+		}
+	});
+		/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+}
+
+function showModulosTematicos(){
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postModulosTematicos") ?>",
+		data:{},
+		success: function(respuesta){
+			var filtroModuloTematico = document.getElementById("filtroPorModuloTematico");
+			arrayModulosTematicos = JSON.parse(respuesta);
+			filtroModuloTematico.selectedIndex=0;
+			$('#filtroPorModuloTematico').empty();
+			filtroModuloTematico.add(new Option("Todos",""));
+			for (var i = 0; i < arrayModulosTematicos.length; i++) {
+				filtroModuloTematico.add(new Option(arrayModulosTematicos[i].nombre,arrayModulosTematicos[i].codigo));
+			}
+			var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+		}
+	});
+		/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+}
 
 function showAlumnosByCarrera(value){
 	var codigo = value;

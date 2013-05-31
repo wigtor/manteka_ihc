@@ -153,6 +153,22 @@ class Model_filtro extends CI_Model {
 		$query = $this->db->get('seccion');
 		return $query->result();
 	}
+
+	public function getAllHorarios(){
+		$this->db->select('NOMBRE_HORARIO AS nombre');
+		$this->db->select('COD_HORARIO AS codigo');
+		$this->db->order_by("COD_DIA","asc");
+		$query = $this->db->get('horario');
+		return $query->result();
+	}
+
+	public function getAllModulosTematicos(){
+		$this->db->select('NOMBRE_MODULO AS nombre');
+		$this->db->select('COD_MODULO_TEM');
+		$this->db->order_by("NOMBRE_MODULO","asc");
+		$query = $this->db->get('modulo_tematico');
+		return $query->result();
+	}
 }
 
 ?>

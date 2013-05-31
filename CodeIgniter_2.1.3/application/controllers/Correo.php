@@ -431,4 +431,22 @@ class Correo extends MasterManteka {
 		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion);
 		echo json_encode($resultado);
 	}
+
+	public function postHorarios(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllHorarios();
+		echo json_encode($resultado);
+	}
+
+	public function postModulosTematicos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllModulosTematicos();
+		echo json_encode($resultado);
+	}
 }
