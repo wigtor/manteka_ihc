@@ -259,6 +259,8 @@ class Correo extends MasterManteka {
 		modelos necesarios para guardar el correo una vez que es enviado. */
 		$this->load->model('model_correo');
 		$this->load->model('model_correo_e');
+		$this->load->model('model_correo_u');
+		$this->load->model('model_correo_a');
 
 		$to = $this->input->post('to');
 		$asunto ="[ManteKA] ".$this->input->post('asunto');
@@ -277,18 +279,15 @@ class Correo extends MasterManteka {
 			$config['mailtype'] = 'html';
 			$this->email->initialize($config);
 			$this->email->from('no-reply@manteka.cl', 'ManteKA');
-			$this->email->to(implode(",",$to));
+			$this->email->to($to);
 			$this->email->subject($asunto);
 			$this->email->message($mensaje);
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
-			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date,$rutRecept);
-			if($tipo=='CARTA_ESTUDIANTE')
+			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept);
 			echo	$this->model_correo_e->InsertarCorreoE($rutRecept,$date);
-			else if($tipo=='CARTA_USER')
-				$this->model_correoU->InsertarCorreoU($rutRecept,$date);
-			else if($tipo=='CARTA_AYUDANTE')
-				$this->model_correoU->InsertarCorreoA($rutRecept,$date);
+				$this->model_correo_u->InsertarCorreoU($rutRecept,$date);
+				$this->model_correo_a->InsertarCorreoA($rutRecept,$date);
 			;
 		}
 		catch (Exception $e) {

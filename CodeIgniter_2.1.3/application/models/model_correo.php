@@ -233,7 +233,7 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-	public function InsertarCorreo($asunto,$mensaje,$rut,$tipo,$codCorreo,$rutRecept)
+	public function InsertarCorreo($asunto,$mensaje,$rut,$codCorreo,$rutRecept)
 	{
 		try
 		{

@@ -169,22 +169,23 @@ if(isset($msj))
 		}
 		else
 		{
+			?>
+			<form name="formulario" id="formu" method="post">
+			<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
+			<tr class="info">
+			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
+			<td width="23%" ><b>Para</b></td>
+			<td width="27%" ><b>Mensaje</b></td>
+			<td width="8%" ><b>Fecha</b></td>
+			<td width="8%" ><b>Hora</b></td>
+			</tr>
+			
+			
+			<tbody>
+			<?php		
 			while($contador<count($correos))
 			{			
-				?>
-		<form name="formulario" id="formu" method="post">
-		<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
-		<tr class="info">
-		<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-		<td width="23%" ><b>Para</b></td>
-		<td width="27%" ><b>Mensaje</b></td>
-		<td width="8%" ><b>Fecha</b></td>
-		<td width="8%" ><b>Hora</b></td>
-		</tr>
-		
-		
-		<tbody>
-		<?php
+
 				$destino='';
 				$para='';
 				$total=0;

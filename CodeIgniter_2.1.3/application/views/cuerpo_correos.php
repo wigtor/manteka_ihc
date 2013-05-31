@@ -172,30 +172,31 @@ if(isset($msj))
 		}
 		else
 		{
+			?>
+		    <ul class="pager" style="text-align:right;margin:0px">
+	    		<li><a href="#">Previous</a></li>
+	   	 		<li><a href="#">Next</a></li>
+			</ul>
+			<form name="formulario" id="formu" method="post">
+
+			<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:1%; margin-bottom:0px">
+				
+			<tr class="info">
+			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
+			<td width="23%" ><b>De</b></td>
+			<td width="27%" ><b>Mensaje</b></td>
+			<td width="8%" ><b>Fecha</b></td>
+			<td width="8%" ><b>Hora</b></td>
+			</tr>
+
+			
+
+			
+			<tbody>
+			<?php		
 			while($contador<count($correos))
 			{	
-		?>
-	    <ul class="pager" style="text-align:right;margin:0px">
-    		<li><a href="#">Previous</a></li>
-   	 		<li><a href="#">Next</a></li>
-		</ul>
-		<form name="formulario" id="formu" method="post">
 
-		<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:1%; margin-bottom:0px">
-			
-		<tr class="info">
-		<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-		<td width="23%" ><b>De</b></td>
-		<td width="27%" ><b>Mensaje</b></td>
-		<td width="8%" ><b>Fecha</b></td>
-		<td width="8%" ><b>Hora</b></td>
-		</tr>
-
-		
-
-		
-		<tbody>
-		<?php
 				$total=0;
 
 				echo '<tr >';
