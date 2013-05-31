@@ -42,7 +42,7 @@ class model_correo extends CI_Model
 		try
 		{
 			/* Se obtienen todos los correos enviados por un usuario. */
-			$sql="SELECT * FROM carta WHERE rut_usuario3='$variable'";
+			$sql="SELECT * FROM carta WHERE rut_usuario='$variable'";
 			$datos=mysql_query($sql);
 			$listaCompleta=array();
 			while($row=mysql_fetch_array($datos))
@@ -50,7 +50,7 @@ class model_correo extends CI_Model
 				$lista = array();
 				$correo = array();
 				$correo['cod_correo']=$row['COD_CORREO'];
-				$correo['rut_usuario3']=$row['RUT_USUARIO3'];
+				$correo['rut_usuario3']=$row['RUT_USUARIO'];
 				$correo['id_plantilla']=$row['ID_PLANTILLA'];
 				$correo['hora']=$row['HORA']; 
 				$correo['fecha']=$row['FECHA'];
@@ -237,7 +237,7 @@ class model_correo extends CI_Model
 	{
 		try
 		{
-			$this->COD_CORREO=$codCorreo;
+			$this->COD2_CORREO=$codCorreo;
 			$this->COD_BORRADOR=null;
 			$this->ID_PLANTILLA=null;
 			$this->RUT_USUARIO3=$rut;
