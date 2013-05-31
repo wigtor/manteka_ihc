@@ -1,14 +1,20 @@
 <script type="text/javascript">
 	
 	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
-				alert("Seccion agregada correctamente");
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
+				alert("Sección agregada correctamente");
 			
-		}	
-		else{
-			alert("Error al editar");
 		}
-	
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al agregar la sección");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("Una sección con el mismo ya se ha ingresado");
+				}
+			}
+		}
 	}
 </script>
 
@@ -16,7 +22,7 @@
 	function AgregarSeccion(){
 		var rs=document.getElementById("rs_seccion").value;
 		var rs2=document.getElementById("rs_seccion2").value;
-		if(rs!="" || rs2!=""){ 
+		if(rs!="" && rs2!=""){ 
 					var patron = "^[0-9]{2}$"; //dos números enteros positivos en la primera parte del nombre de la sección
 					var patron2 = "^([A-Z]{1}|[a-z]{1})$"; //una letra en la primera parte del nombre de la sección
 					if (document.getElementById("rs_seccion2").value.match(patron)) {    
@@ -46,7 +52,7 @@
     <div class= "span11">
         <fieldset> 
 		<legend>Agregar Sección</legend>
-			<form id="formDetalle" type="post" method="post">
+			<form id="formAgregar" type="post" method="post" onsubmit="AgregarSeccion();return false">
             <div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -62,7 +68,7 @@
                             1.-Información de la sección
                         </div>
                     </div>
-					<form id="formEditar" type="post" method="post" onsubmit="editarSeccion()">
+					
 					<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
                     <div class="row-fluid">
 							<div class="span4">
@@ -100,7 +106,7 @@
 										<button  class ="btn" type="reset" >Cancelar</button>
 									</div>
 								</div> 
-					</form>	
+					
                 </div>
 				
             </div>

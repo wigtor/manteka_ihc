@@ -1,16 +1,23 @@
 <script type="text/javascript">
 	
 	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
 				alert("Sección editada correctamente");
 			
-		}	
-		else{
-			alert("Error al editar");
 		}
-	
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al editar la sección");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("No se puede editar,una sección con el mismo ya se ha ingresado");
+				}
+			}
+		}
 	}
 </script>
+
 
 <script type="text/javascript">
 	function DetalleSeccion(cod_seccion){

@@ -3,9 +3,9 @@
 	if("<?php echo $mensaje_confirmacion;?>"!="2"){
 		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
 			if("<?php echo $mensaje_confirmacion;?>"!="3"){
-				alert("Seccion eliminada correctamente");
+				alert("Sección eliminada correctamente");
 			}
-			else{alert("Seccion con alumnos,no se puede eliminar");}	
+			else{alert("Sección con alumnos,no se puede eliminar");}	
 		}
 		else{
 			alert("Error al eliminar");
@@ -126,7 +126,7 @@ function ordenarFiltro(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][0].' </td>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -156,7 +156,7 @@ function ordenarFiltro(){
 	$comilla= "'";					
 while ($contador<count($secc)){
 echo '<tr>';
-echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][0].'" maxlength="3" min="1" type="hidden">
+echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][3].'" maxlength="3" min="1" type="hidden">
 Sección: '.$secc[0][0].'</td>';
 echo '<td id="rs_dia" > 
 Día:     '.$secc[0][2].' </td>';

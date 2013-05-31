@@ -14,25 +14,25 @@ class Model_secciones extends CI_Model{
 	*/
 	public function VerTodosLosEstudiantes($cod_seccion)
 	{
-		
-		$sql="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
-		$datos=mysql_query($sql); 
-		$contador = 0;
 		$lista=array();
+		if($cod_seccion!=''){
+		$sql="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;	
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
-			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
-			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
-			$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
-			$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
-			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
-			$lista[$contador][6] = $row['COD_SECCION'];
-			$lista[$contador][7] = $row['COD_CARRERA'];
+			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+				$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
+				$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
+				$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
+				$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
+				$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
+				$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
+				$lista[$contador][6] = $row['COD_SECCION'];
+				$lista[$contador][7] = $row['COD_CARRERA'];
 
-			$contador = $contador + 1;
-		}
-		}
+				$contador = $contador + 1;
+			}
+		}}
 		return $lista;
 	}
 	
@@ -112,7 +112,7 @@ class Model_secciones extends CI_Model{
 			$lista[$contador][2] = '';
 			
 		}
-		
+		$lista[$contador][3] = $cod_seccion;
 		return $lista;
 	}
 
@@ -170,6 +170,20 @@ class Model_secciones extends CI_Model{
 		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
 		
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if( $row['NOMBRE_SECCION']==$nombre){
+			$var=1;
+			}
+			$contador = $contador + 1;
+		}}
+		
+		if($var!=1){
 		$data = array(	
 					'NOMBRE_SECCION' => $nombre	
 		);
@@ -181,7 +195,8 @@ class Model_secciones extends CI_Model{
 		}
 		else{
 			return -1;
-		}		
+		}}
+		else return 3;
     }
 
 	/**
@@ -197,8 +212,23 @@ class Model_secciones extends CI_Model{
 	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
 	{
 		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
-		
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$var=0;
+		$lista=array();
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if($row['COD_SECCION']!=$cod_seccion){
+				if( $row['NOMBRE_SECCION']==$nombre){
+				$var=1;
+				}
+			}
+			$contador = $contador + 1;
+		}}
+		
+		if($var!=1){
 		$data = array(	
 					'COD_SECCION' => $cod_seccion,
 					'NOMBRE_SECCION' => $nombre	
@@ -212,7 +242,8 @@ class Model_secciones extends CI_Model{
 		}
 		else{
 			return -1;
-		}		
+		}}
+		else{return 3;}
     }
  
 }
