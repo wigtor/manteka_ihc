@@ -155,7 +155,7 @@ function ordenarFiltro(filtroLista){
 		if(arregloOcultados[cont]=='ocultado'){
 			ocultar.style.display='none';
 		}else{
-			ocultar.style.display='block';
+			ocultar.style.display='';
 		}
 	}
 }
@@ -252,15 +252,8 @@ var arrayOfClickClasses = new Array();
 var activeRow = false;
 var activeRowClickArray = new Array();
     
-function showDestinatarios(value){
-	var destinatario = value;
-		//if (texto.trim() != "") {
-			$.ajax({
-				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>", /* Se setea la url del controlador que responderá */
-				data: { destinatario: destinatario}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					var tablaResultados = document.getElementById('tabla');
+function muestraTabla(respuesta){
+	var tablaResultados = document.getElementById('tabla');
 					var nodoTexto;
 					$(tablaResultados).empty();		
 					arrayRespuesta = JSON.parse(respuesta);
@@ -304,16 +297,38 @@ function showDestinatarios(value){
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
+}
+function showDestinatarios(value){
+	var destinatario = value;
+		//if (texto.trim() != "") {
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>", /* Se setea la url del controlador que responderá */
+				data: { destinatario: destinatario}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					muestraTabla(respuesta);
 					if(destinatario==1){
 						showCarreras();
 						showProfesores();
+						showSecciones();
 						document.getElementById('filtroPorCarrera').disabled=false;
 						document.getElementById('filtroPorProfesorEncargado').disabled=false;
-					}else{
+						document.getElementById('filtroPorSeccion').disabled=false;
+					}else if(destinatario ==2){
+						showSecciones();
 						document.getElementById('filtroPorProfesorEncargado').selectedIndex=0;
 						document.getElementById('filtroPorProfesorEncargado').disabled=true;
 						document.getElementById('filtroPorCarrera').selectedIndex=0;
 						document.getElementById('filtroPorCarrera').disabled=true;
+						document.getElementById('filtroPorSeccion').disabled=false;
+					}
+					else{
+						document.getElementById('filtroPorProfesorEncargado').selectedIndex=0;
+						document.getElementById('filtroPorProfesorEncargado').disabled=true;
+						document.getElementById('filtroPorCarrera').selectedIndex=0;
+						document.getElementById('filtroPorCarrera').disabled=true;
+						document.getElementById('filtroPorSeccion').selectedIndex=0;
+						document.getElementById('filtroPorSeccion').disabled=true;
 					}
 					}
 			});
@@ -371,6 +386,30 @@ function showProfesores(){
 			$(icono_cargando).show();
 }
 
+function showSecciones(){
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postSecciones") ?>",
+		data:{},
+		success: function(respuesta){
+			var filtroSeccion = document.getElementById("filtroPorSeccion");
+			arraySecciones = JSON.parse(respuesta);
+			filtroSeccion.selectedIndex=0;
+			$('#filtroPorSeccion').empty();
+			filtroSeccion.add(new Option("Todos",""));
+			for (var i = 0; i < arraySecciones.length; i++) {
+				filtroSeccion.add(new Option(arraySecciones[i].codigo,arraySecciones[i].codigo));
+			}
+			var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+		}
+	});
+		/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+}
+
+
 function showAlumnosByCarrera(value){
 	var codigo = value;
 	if(codigo==""){
@@ -381,114 +420,45 @@ function showAlumnosByCarrera(value){
 		url: "<?php echo site_url("Correo/postAlumnosByCarrera") ?>",
 		data:{ codigo: codigo},
 		success: function(respuesta){
-			var tablaResultados = document.getElementById('tabla');
-					var nodoTexto;
-					$(tablaResultados).empty();		
-					arrayRespuesta = JSON.parse(respuesta);
-					var thead = document.createElement('thead');
-					thead.setAttribute("style","width:100%");
-					var tbody = document.createElement('tbody');
-					var tr = document.createElement('tr');
-					var th = document.createElement('th');
-					var check = document.createElement('input');
-					check.type='checkbox';
-					check.checked=false;
-					th.appendChild(check);
-					thead.appendChild(th);
-					th = document.createElement('th');
-					nodoTexto =document.createTextNode('Nombre Completo');
-					th.appendChild(nodoTexto);
-					thead.appendChild(th);
-					tablaResultados.appendChild(thead);
-					tbody.setAttribute("style","width:100%");
-					for (var i = 0; i < arrayRespuesta.length; i++) {
-						tr = document.createElement('tr');
-						td = document.createElement('td');
-						check = document.createElement('input');
-						check.type='checkbox';
-						check.checked=false;
-						td.appendChild(check);
-						tr.appendChild(td);
-						td = document.createElement('td');
-						tr.setAttribute("id", i);
-						tr.setAttribute("style","width:100%");
-						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						tr.setAttribute('rut',arrayRespuesta[i].rut);
-						tr.setAttribute('correo',arrayRespuesta[i].correo);
-						td.appendChild(nodoTexto);
-						td.setAttribute("style","width:100%");
-						tr.appendChild(td);
-						tbody.appendChild(tr);
-					}
-					tablaResultados.appendChild(tbody);
-
-					/* Quito el div que indica que se está cargando */
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
+			muestraTabla(respuesta);
 		}
-	})
+	});
 }
 }
 
 function showAlumnosByFiltro(){
+	var destinatario = document.getElementById('filtroPorTipoDeDestinatario').value;
 	var codigo = document.getElementById('filtroPorCarrera').value;
 	var profesor = document.getElementById('filtroPorProfesorEncargado').value;
-	if(codigo=="" && profesor==""){
+	var seccion = document.getElementById('filtroPorSeccion').value;
+	if(destinatario==1){
+	if(codigo=="" && profesor=="" && seccion==""){
 		showDestinatarios(1);
 	}else{
-	$.ajax({
-		type: "POST",
-		url: "<?php echo site_url("Correo/postAlumnosByFiltro") ?>",
-		data:{ codigo: codigo, profesor: profesor},
-		success: function(respuesta){
-			var tablaResultados = document.getElementById('tabla');
-					var nodoTexto;
-					$(tablaResultados).empty();	
-					alert(respuesta);	
-					arrayRespuesta = JSON.parse(respuesta);
-					var thead = document.createElement('thead');
-					thead.setAttribute("style","width:100%");
-					var tbody = document.createElement('tbody');
-					var tr = document.createElement('tr');
-					var th = document.createElement('th');
-					var check = document.createElement('input');
-					check.type='checkbox';
-					check.checked=false;
-					th.appendChild(check);
-					thead.appendChild(th);
-					th = document.createElement('th');
-					nodoTexto =document.createTextNode('Nombre Completo');
-					th.appendChild(nodoTexto);
-					thead.appendChild(th);
-					tablaResultados.appendChild(thead);
-					tbody.setAttribute("style","width:100%");
-					for (var i = 0; i < arrayRespuesta.length; i++) {
-						tr = document.createElement('tr');
-						td = document.createElement('td');
-						check = document.createElement('input');
-						check.type='checkbox';
-						check.checked=false;
-						td.appendChild(check);
-						tr.appendChild(td);
-						td = document.createElement('td');
-						tr.setAttribute("id", i);
-						tr.setAttribute("style","width:100%");
-						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						tr.setAttribute('rut',arrayRespuesta[i].rut);
-						tr.setAttribute('correo',arrayRespuesta[i].correo);
-						td.appendChild(nodoTexto);
-						td.setAttribute("style","width:100%");
-						tr.appendChild(td);
-						tbody.appendChild(tr);
-					}
-					tablaResultados.appendChild(tbody);
-
-					/* Quito el div que indica que se está cargando */
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
+		$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Correo/postAlumnosByFiltro") ?>",
+			data:{ codigo: codigo, profesor: profesor, seccion: seccion},
+			success: function(respuesta){
+				muestraTabla(respuesta);
+			}
+		});
+	}
+	}else{
+		if(seccion==""){
+			showDestinatarios(2);
+		}else{
+			$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Correo/postProfesoresByFiltro") ?>",
+			data:{ seccion: seccion},
+			success: function(respuesta){
+				alert(respuesta);
+				muestraTabla(respuesta);
+			}
+		});
 		}
-	})
-}
+	}
 }
 
 function showAlumnosByProfesor(value){
@@ -501,52 +471,9 @@ function showAlumnosByProfesor(value){
 		url: "<?php echo site_url("Correo/postAlumnosByProfesor") ?>",
 		data:{ profesor: profesor},
 		success: function(respuesta){
-			var tablaResultados = document.getElementById('tabla');
-					var nodoTexto;
-					$(tablaResultados).empty();		
-					arrayRespuesta = JSON.parse(respuesta);
-					var thead = document.createElement('thead');
-					thead.setAttribute("style","width:100%");
-					var tbody = document.createElement('tbody');
-					var tr = document.createElement('tr');
-					var th = document.createElement('th');
-					var check = document.createElement('input');
-					check.type='checkbox';
-					check.checked=false;
-					th.appendChild(check);
-					thead.appendChild(th);
-					th = document.createElement('th');
-					nodoTexto =document.createTextNode('Nombre Completo');
-					th.appendChild(nodoTexto);
-					thead.appendChild(th);
-					tablaResultados.appendChild(thead);
-					tbody.setAttribute("style","width:100%");
-					for (var i = 0; i < arrayRespuesta.length; i++) {
-						tr = document.createElement('tr');
-						td = document.createElement('td');
-						check = document.createElement('input');
-						check.type='checkbox';
-						check.checked=false;
-						td.appendChild(check);
-						tr.appendChild(td);
-						td = document.createElement('td');
-						tr.setAttribute("id", i);
-						tr.setAttribute("style","width:100%");
-						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-						tr.setAttribute('rut',arrayRespuesta[i].rut);
-						tr.setAttribute('correo',arrayRespuesta[i].correo);
-						td.appendChild(nodoTexto);
-						td.setAttribute("style","width:100%");
-						tr.appendChild(td);
-						tbody.appendChild(tr);
-					}
-					tablaResultados.appendChild(tbody);
-
-					/* Quito el div que indica que se está cargando */
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
+					
 		}
-	})
+	});
 }
 }
 
@@ -729,7 +656,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorSeccion" title="Tipo de destinatario" class="input-large">
+					<select id="filtroPorSeccion" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
 						<option  value="0">Todas</option>
 						<option  value="a1">A-01</option>
 						<option  value="b2">B-02</option>

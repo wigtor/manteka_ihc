@@ -31,7 +31,10 @@ class Model_filtro extends CI_Model {
 		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
-		$query = $this->db->get('profesor');
+		$this->db->select('CORREO1_USER as correo');
+		$this->db->from('profesor');
+		$this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+		$query = $this->db->get();
 		$array2 = $query->result();
 
 		$this->db->select('RUT_AYUDANTE AS rut');
@@ -48,7 +51,10 @@ class Model_filtro extends CI_Model {
 		$this->db->select('NOMBRE2_COORDINADOR AS nombre2');
 		$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
 		$this->db->select('APELLIDO2_COORDINADOR AS apellido2');
-		$query = $this->db->get('coordinador');
+		$this->db->select('CORREO1_USER as correo');
+		$this->db->from('coordinador');
+		$this->db->join('usuario','coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+		$query = $this->db->get();
 		$array4 = $query->result();
 
 		$resulta=array_merge($array1,$array2,$array3,$array4);
@@ -100,7 +106,7 @@ class Model_filtro extends CI_Model {
 		return $query->result();
 	}
 
-	public function getAlumnosByFiltro($profesor,$codigo){
+	public function getAlumnosByFiltro($profesor,$codigo,$seccion){
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
@@ -112,10 +118,39 @@ class Model_filtro extends CI_Model {
 		$this->db->join('carrera','estudiante.COD_CARRERA = carrera.COD_CARRERA');
 		$this->db->join('profe_seccion','estudiante.COD_SECCION = profe_seccion.COD_SECCION');
 		$this->db->join('profesor','profe_seccion.RUT_USUARIO2 = profesor.RUT_USUARIO2');
+		if($profesor!=""){
 		$this->db->where('profesor.RUT_USUARIO2',$profesor);
+		}
+		if($codigo!=""){
 		$this->db->where('estudiante.COD_CARRERA',$codigo);
+		}
+		if($seccion!=""){
+			$this->db->where('estudiante.COD_SECCION',$seccion);
+		}
 		$this->db->order_by("APELLIDO1_ESTUDIANTE","asc");
 		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function getProfesoresByFiltro($seccion){
+		$this->db->select('profe_seccion.RUT_USUARIO2 AS rut');
+		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
+		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
+		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+		$this->db->select('CORREO1_USER as correo');
+		$this->db->from('profe_seccion');
+		$this->db->join('usuario','profe_seccion.RUT_USUARIO2 = usuario.RUT_USUARIO');
+		$this->db->join('profesor','profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2');
+		$this->db->where('profe_seccion.COD_SECCION',$seccion);
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function getAllSecciones(){
+		$this->db->select('COD_SECCION as codigo');
+		$this->db->order_by("COD_SECCION","asc");
+		$query = $this->db->get('seccion');
 		return $query->result();
 	}
 }

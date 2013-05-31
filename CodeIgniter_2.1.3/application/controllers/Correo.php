@@ -380,6 +380,15 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	public function postSecciones(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllSecciones();
+		echo json_encode($resultado);
+	}
+
 	public function postAlumnosByCarrera(){
 		if(!$this->isLogged()){
 			return;
@@ -407,16 +416,19 @@ class Correo extends MasterManteka {
 		}
 		$profesor = $this->input->post('profesor');
 		$codigo = $this->input->post('codigo');
+		$seccion = $this->input->post('seccion');
 		$this->load->model('Model_filtro');
-		if($profesor == ""){
-			$resultado = $this->Model_filtro->getAlumnosByCarrera($codigo);
-		}else{
-			if($codigo==""){
-			$resultado = $this->Model_filtro->getAlumnosByProfesor($profesor);
-			}else{
-			$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo);
-			}
+		$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion);
+		echo json_encode($resultado);
+	}
+
+	public function postProfesoresByFiltro(){
+		if(!$this->isLogged()){
+			return;
 		}
+		$seccion = $this->input->post('seccion');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion);
 		echo json_encode($resultado);
 	}
 }
