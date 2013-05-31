@@ -189,7 +189,7 @@ class model_usuario extends CI_Model{
 
       // Es un usuario del tipo coordinador.
       // Luego se buscan sus datos en la tabla COORDINADOR
-      if ($filaResultado->ID_TIPO == '2') {
+      if ($filaResultado->ID_TIPO == TIPO_USR_COORDINADOR) {
 
          // Se lipia la caché para realizar una nueva consulta
          $this->db->stop_cache();
@@ -219,7 +219,7 @@ class model_usuario extends CI_Model{
       }
       // Es un usuario del tipo profesor.
       // Luego se buscan sus datos en la tabla PROFESOR
-      else if ($filaResultado->ID_TIPO == '1') {
+      else if ($filaResultado->ID_TIPO == TIPO_USR_PROFESOR) {
 
          // Se lipia la caché para realizar una nueva consulta
          $this->db->stop_cache();
@@ -227,7 +227,7 @@ class model_usuario extends CI_Model{
          $this->db->stop_cache();
 
          $this->db->select('RUT_USUARIO AS rut');
-         $this->db->select('ID_TIPO');
+         $this->db->select('usuario.ID_TIPO');
          $this->db->select('PASSWORD_PRIMARIA');
          $this->db->select('PASSWORD_TEMPORAL');
          $this->db->select('VALIDEZ');
@@ -243,7 +243,6 @@ class model_usuario extends CI_Model{
          $this->db->join('tipo_user', 'usuario.ID_TIPO = tipo_user.ID_TIPO');
          $query = $this->db->where('RUT_USUARIO',$rut);
          $query = $this->db->get('usuario');
-
          // Devolver las filas coincidentes, es decir, los datos del usuario
          return $query->row();
       }

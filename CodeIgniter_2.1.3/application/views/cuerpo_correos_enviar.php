@@ -836,40 +836,47 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	</div>
 </fieldset>
 
-<fieldset id="cuadroEnvio" style="display:none;margin-top:-260px;">
+<fieldset id="cuadroEnvio" style="display:none;">
 	<legend>&nbsp;Enviar correo&nbsp;</legend>
-	<div class="final" title="Paso 3: Escribir correo">
-	<div class="texto3">
-	Paso 3: Escriba el correo
-	</div>
 	<?php 
-	$attributes = array('onSubmit'=>'return validacionSeleccion();', 'id'=>'formEnviar');
-	echo form_open('Correo/enviarPost',$attributes);?>
-	<div class="span4 x" style="margin-left: 1%; margin-top=2%; clear:both;"> 
-	Para: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
-	Asunto: &nbsp;<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">
-	<input id="ed" name="ed" type="hidden" value="<?php set_value('editor'); ?>">
-	</div>
-	<div class="span14" width="90%" style="margin-left:1%;margin-top:2%;">
-	<?php 
-	$data = array(
-		'name'=>'editor',
-		'id'=>'editor',
-		'value'=>set_value('editor'),
-		'class'=>'ckeditor',
-	);
+		$attributes = array('onSubmit'=>'return validacionSeleccion();', 'id'=>'formEnviar');
+		echo form_open('Correo/enviarPost',$attributes);
 	?>
-	<div id="ck">
-	<?php
-	echo form_textarea($data);
-	?>
+	<div title="Paso 3: Escribir correo">
+		<div class="span12">
+			Paso 3: Escriba el correo
+		</div>
+		<div class="row-fluid">
+			<div class="span4" > 
+				Para: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
+				Asunto: &nbsp;<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">
+				<input id="ed" name="ed" type="hidden" value="<?php set_value('editor'); ?>">
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12 control-group">
+				<?php 
+				$data = array(
+					'name'=>'editor',
+					'id'=>'editor',
+					'value'=>set_value('editor'),
+					'class'=>'ckeditor',
+				);
+				?>
+				<div id="ck">
+					<?php
+					echo form_textarea($data);
+					?>
+				</div>
+				<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span2 pull-right control-group">
+				<button class="btn" title="Volver a paso 2" onclick="pasoTresDos()" >Anterior</button>
+				<button type="submit" title="Enviar correo" class="btn btn-primary" >Enviar</button>
+			</div>
+		</div>
 	</div>
-	<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
-	</div>
-	<div class="menu2">
-	<button type="submit" title="Enviar correo" class="btn btn-primary" style="margin-left: 1%; margin-top: 2%">Enviar</button>
-	<button class="btn" style="margin-top:2%" title="Volver a paso 2" onclick="pasoTresDos()" >Anterior</button>
-	</div>
-	<?php echo form_close("");?>
-	</div>
+	<?php echo form_close(""); ?>
 </fieldset>

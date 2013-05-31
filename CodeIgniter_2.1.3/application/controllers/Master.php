@@ -185,8 +185,8 @@ class MasterManteka extends CI_Controller {
 	*	@param 
 	*
 	*/
-	protected function cargarVerInfo($titulo, $cuerpo_a_cargar, $barra_lateral, $tipos_usuarios_permitidos, 
-		$subMenuLateralAbierto = '' , $mostrarBarraProgreso = FALSE)
+	protected function cargarVerInfo($titulo, $barra_lateral, $tipos_usuarios_permitidos, 
+		$subMenuLateralAbierto = '')
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 		$rut = $this->session->userdata('rut');
@@ -243,8 +243,8 @@ class MasterManteka extends CI_Controller {
 /* CAMBIAR ESTO
 		//Se carga el cuerpo central indicado por los parámetros y con los datos que se entregan
 		$datos_plantilla["cuerpo_central"] = $this->load->view($cuerpo_a_cargar, $datos_cuerpo, TRUE);
-*/
-		//Se setea que botón de la barra lateral se encuentra presionado
+*
+/		//Se setea que botón de la barra lateral se encuentra presionado
 		$datos_plantilla["subVistaLateralAbierta"] = $subMenuLateralAbierto;
 
 		//Se carga la barra lateral
@@ -257,6 +257,6 @@ class MasterManteka extends CI_Controller {
 		
 		//	Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
+		*/
 	}
-
 }
