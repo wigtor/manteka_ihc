@@ -56,27 +56,31 @@ class Model_filtro extends CI_Model {
 		return $resulta;
 	}
 
-	public function getAlumnosByCodigoCarrera($carrera)
-	{
+	public function getAllCarreras(){
+		$this->db->select('NOMBRE_CARRERA as carrera');
+		$this->db->select('COD_CARRERA as codigo');
+		$this->db->order_by('carrera');
+		$query = $this->db->get('carrera');
+		return $query->result();
+	}
+
+	public function getAlumnosByCarrera($codigo){
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
 		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
 		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
-		$this->db->select('CORREO_ESTUDIANTE as correo');
-		$this->db->select('CODIGO_CARRERA as carrera');
-		$this->db->where('carrera',$carrera);
+		$this->db->select('CORREO_ESTUDIANTE AS correo');
+		$this->db->select('estudiante.COD_CARRERA AS codigo');
+		$this->db->from('estudiante');
+		$this->db->join('carrera','estudiante.COD_CARRERA = carrera.COD_CARRERA');
+		$this->db->where('estudiante.COD_CARRERA',$codigo);
 		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
-		$query = $this->db->get('estudiante');
+		$query = $this->db->get();
 		return $query->result();
 	}
 
-	public function getAllCarreras(){
-		$this->db->select('NOMBRE_CARRERA as carrera');
-		$this->db->order_by('carrera');
-		$query = $this->db->get('carrera');
-		return $query->result();
-	}
+	/**/
 }
 
 ?>

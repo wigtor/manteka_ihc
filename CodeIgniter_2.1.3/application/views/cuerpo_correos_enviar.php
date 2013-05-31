@@ -305,8 +305,11 @@ function showDestinatarios(value){
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
 					if(destinatario==1){
-						document.getElementById('filtroPorCarrera').disabled=false;
 						showCarreras();
+						document.getElementById('filtroPorCarrera').disabled=false;
+					}else{
+						document.getElementById('filtroPorCarrera').selectedIndex=0;
+						document.getElementById('filtroPorCarrera').disabled=true;
 					}
 					}
 			});
@@ -324,12 +327,80 @@ function showCarreras(){
 		data:{},
 		success: function(respuesta){
 			var filtroCarrera = document.getElementById("filtroPorCarrera");
+			var largo = filtroCarrera.length;
 			arrayCarreras = JSON.parse(respuesta);
+			filtroCarrera.selectedIndex=0;
+			$('#filtroPorCarrera').empty();
+			filtroCarrera.add(new Option("Todos",""));
 			for(var i=0;i<arrayCarreras.length;i++){
-				filtroCarrera.add(new Option(arrayCarreras[i].carrera,arrayCarreras[i].carrera));
+				filtroCarrera.add(new Option(arrayCarreras[i].carrera,arrayCarreras[i].codigo));
 			}
+			var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
 		}
 	});
+	/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+}
+
+function showAlumnosByCarrera(value){
+	var codigo = value;
+	if(codigo==""){
+		showDestinatarios(1);
+	}else{
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postAlumnosByCarrera") ?>",
+		data:{ codigo: codigo},
+		success: function(respuesta){
+			var tablaResultados = document.getElementById('tabla');
+					var nodoTexto;
+					$(tablaResultados).empty();		
+					arrayRespuesta = JSON.parse(respuesta);
+					var thead = document.createElement('thead');
+					thead.setAttribute("style","width:100%");
+					var tbody = document.createElement('tbody');
+					var tr = document.createElement('tr');
+					var th = document.createElement('th');
+					var check = document.createElement('input');
+					check.type='checkbox';
+					check.checked=false;
+					th.appendChild(check);
+					thead.appendChild(th);
+					th = document.createElement('th');
+					nodoTexto =document.createTextNode('Nombre Completo');
+					th.appendChild(nodoTexto);
+					thead.appendChild(th);
+					tablaResultados.appendChild(thead);
+					tbody.setAttribute("style","width:100%");
+					for (var i = 0; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						check = document.createElement('input');
+						check.type='checkbox';
+						check.checked=false;
+						td.appendChild(check);
+						tr.appendChild(td);
+						td = document.createElement('td');
+						tr.setAttribute("id", i);
+						tr.setAttribute("style","width:100%");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						tr.setAttribute('rut',arrayRespuesta[i].rut);
+						tr.setAttribute('correo',arrayRespuesta[i].correo);
+						td.appendChild(nodoTexto);
+						td.setAttribute("style","width:100%");
+						tr.appendChild(td);
+						tbody.appendChild(tr);
+					}
+					tablaResultados.appendChild(tbody);
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+		}
+	})
+}
 }
 
 $(document).ready(showDestinatarios(0));
@@ -454,7 +525,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" class="input-large" onChange="showDestinatarios(this.value)">
 						<option  value="0">Todos</option>
 						<option  value="1">Alumnos</option>
-						<option  value="2">Profesore</option>
+						<option  value="2">Profesores</option>
 						<option value="3">Ayudantes</option>
 						<option value="4">Coordinadores</option>
 					</select>
@@ -477,11 +548,11 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 			</div>
 
 			<div class="control-group span4">
-				<label class="control-label" for="filtroPorCarrera">Filtrar por carrera</label>
+				<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorCarrera" title="Tipo de destinatario" class="input-large">
-						<option  value="0">Todos</option>
+					<select id="filtroPorCarrera" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByCarrera(this.value)">
+						<option  value="">Todos</option>
 						<!--<option  value="1">Ing civil informática</option>
 						<option  value="2">Ing civil en minas</option>
 						<option value="3">Ing civil elétrica</option>
