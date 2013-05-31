@@ -204,12 +204,15 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-		$this->db->order_by('APELLIDO_PATERNO', 'asc');
+		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
 		$this->db->like($attr_filtro, $texto);
 		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->result();
 	}
 
@@ -218,14 +221,17 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->select('CORREO_ESTUDIANTE AS correo');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
 		$this->db->select('COD_SECCION AS seccion');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->where('RUT_ESTUDIANTE', $rut);
 		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->row();
 	}
 

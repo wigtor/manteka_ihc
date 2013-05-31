@@ -257,6 +257,6 @@ class MasterManteka extends CI_Controller {
 		
 		//	Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
+		*/
 	}
-
 }
