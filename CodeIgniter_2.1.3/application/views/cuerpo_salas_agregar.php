@@ -1,15 +1,20 @@
-
 <script type="text/javascript">
 	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
 				alert("Sala agregada correctamente");
-				
-				}
-				else{
-					alert("Error al agregar");
 			
+		}
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al agregar la sala");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("Una sala con el mismo nombre ya se ha ingresado");
 				}
+			}
+		}
 	}
 </script>
 

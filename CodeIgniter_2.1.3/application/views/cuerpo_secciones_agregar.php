@@ -11,7 +11,7 @@
 			}		
 			else{
 				if("<?php echo $mensaje_confirmacion;?>"=="3"){
-				alert("Una sección con el mismo ya se ha ingresado");
+				alert("Una sección con el mismo nombre ya se ha ingresado");
 				}
 			}
 		}
@@ -32,11 +32,14 @@
 							agregar.submit();
 						}
 						else {
+							
 							alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
+							return false;
 						}
 					}
 					else {
 						alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
+						return false;
 					}
 					
 					

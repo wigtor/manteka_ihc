@@ -1,12 +1,20 @@
 <script type="text/javascript">
 	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha actualizado la sala");
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
+				alert("Sala editada correctamente");
+			
+		}
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al editarla sala");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("Una sala con el mismo nombre ya se ha ingresado");
 				}
-				else{
-					alert("Error al actualizar");
-				}
+			}
+		}
 	}
 </script>
 
@@ -24,7 +32,6 @@
 					else{
 					var editar = document.getElementById("FormEditar");
 					editar.action = "<?php echo site_url("Salas/editarSalas/") ?>/";
-				
 					editar.submit();
 					}
 		}
