@@ -1,7 +1,7 @@
 <?php
 class Model_secciones extends CI_Model{
 	public $cod_seccion = 0;
-
+	var $nombre_seccion= '';
 
 	
 		/**
@@ -15,7 +15,7 @@ class Model_secciones extends CI_Model{
 	public function VerTodosLosEstudiantes($cod_seccion)
 	{
 		
-		$sql="SELECT * FROM ESTUDIANTE WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
+		$sql="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista=array();
@@ -24,8 +24,8 @@ class Model_secciones extends CI_Model{
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
-			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
+			$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
 			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$lista[$contador][6] = $row['COD_SECCION'];
 			$lista[$contador][7] = $row['COD_CARRERA'];
@@ -47,7 +47,7 @@ class Model_secciones extends CI_Model{
 	public function VerTodasSecciones()
 	{
 		
-		$sql="SELECT * FROM SECCION ORDER BY COD_SECCION"; 
+		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista=array();
@@ -72,31 +72,27 @@ class Model_secciones extends CI_Model{
 	{
 	//sala horario, horario, dia
 	
-		$lista=array();
-	
-		
-		$sql3="SELECT * FROM SECCION WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
+		$lista=array();	
+		$sql3="SELECT * FROM seccion WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
 		$datos3=mysql_query($sql3); 
 		$contador3 = 0;
 		while ($row3=mysql_fetch_array($datos3)) { 
 			$lista[0][0] = $row3['NOMBRE_SECCION'];
 			$contador3 = $contador3 + 1;
 		}
-		
-		
-		$sql="SELECT * FROM SALA_HORARIO WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
+		$sql="SELECT * FROM sala_horario WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;	
 		if (false != $datos) {
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			
 			$hora=$row['COD_HORARIO'];
-			$sql1="SELECT * FROM HORARIO WHERE COD_HORARIO='$hora' ORDER BY COD_HORARIO"; 
+			$sql1="SELECT * FROM horario WHERE COD_HORARIO='$hora' ORDER BY COD_HORARIO"; 
 			$datos1=mysql_query($sql1); 
 			while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
 				
 				$dia=$row1['COD_DIA'];
-				$sql2="SELECT * FROM DIA WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
+				$sql2="SELECT * FROM dia WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
 				$datos2=mysql_query($sql2); 
 				while ($row2=mysql_fetch_array($datos2)) { 
 					$lista[$contador][1] = $row1['NOMBRE_HORARIO'];
@@ -133,7 +129,7 @@ class Model_secciones extends CI_Model{
     {
 		if($cod_seccion==""){ return 2;}
 		else{
-		$sql1="SELECT * FROM ESTUDIANTE WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
+		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
 		$datos1=mysql_query($sql1); 
 		$contador = 0;
 		if (false != $datos1) {
@@ -175,10 +171,9 @@ class Model_secciones extends CI_Model{
 		
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 		$data = array(	
-					'COD_SECCION' => $nombre,
 					'NOMBRE_SECCION' => $nombre	
 		);
-		$this->db->insert('SECCION',$data); 
+		$this->db->insert('seccion',$data); 
 		
          
 		if($data == true){
@@ -209,7 +204,7 @@ class Model_secciones extends CI_Model{
 					'NOMBRE_SECCION' => $nombre	
 		);
 		$this->db->where('COD_SECCION', $cod_seccion);
-		$this->db->update('SECCION',$data); 
+		$this->db->update('seccion',$data); 
 		
          
 		if($data == true){

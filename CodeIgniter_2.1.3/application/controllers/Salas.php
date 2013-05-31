@@ -49,12 +49,11 @@ class Salas extends MasterManteka {
 		
 
 		$this->load->model('Model_sala');
-		$cod_sala = $this->input->get("cod_sala");
         $num_sala = $this->input->get("num_sala");
         $ubicacion = $this->input->get("ubicacion");
         $capacidad = $this->input->get("capacidad");
 		$implementos = $this->input->get("cod_implemento");
-        $confirmacion = $this->Model_sala->InsertarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos);
+        $confirmacion = $this->Model_sala->InsertarSala($num_sala,$ubicacion,$capacidad,$implementos);
 	    
 	  
 		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);

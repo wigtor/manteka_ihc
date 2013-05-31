@@ -41,7 +41,7 @@
 					
 		}
 		else{
-				alert("Selecione una seccion");
+				alert("Selecione una sección");
 		}
 		
 	}

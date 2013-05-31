@@ -13,7 +13,6 @@
 <script type="text/javascript">
 	function EditarSala(){
 
-		var cod_sala = document.getElementById("cod_sala").value;
 		var num_sala = document.getElementById("num_sala").value;
 		var ubicacion =	document.getElementById("ubicacion").value;
 		var capacidad =	document.getElementById("capacidad").value;
@@ -154,11 +153,7 @@ function ordenarFiltro(){
 
 					<form id="FormEditar" type="post" method="post" onsubmit="EditarSala()">
 						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Código sala: </label>
-		  						</div>
-		  					</div>
+							
 		  					<div class="span5">	
 		  							<div class="controls">
 									<?php
@@ -166,12 +161,12 @@ function ordenarFiltro(){
 									if(count($sala)==1){
 									
 		    							echo '<tr>';
-										echo '<td><input id="cod_sala" name="cod_sala" value="'.$sala[0][0].'" maxlength="3" min="1" type="number" readonly>'.'</td>';
+										echo '<td><input id="cod_sala" name="cod_sala" value="'.$sala[0][0].'" maxlength="3" min="1" type="hidden" readonly>'.'</td>';
 										echo '</tr>';						
 										}
 									else{
 									    echo '<tr>';
-										echo '<td><input id="cod_sala" name="cod_sala" value=" " maxlength="0" min="0" type="number" readonly>'.'</td>';
+										echo '<td><input id="cod_sala" name="cod_sala" value=" " maxlength="0" min="0" type="hidden" readonly>'.'</td>';
 										echo '</tr>';	
 									}
 		  							?>
