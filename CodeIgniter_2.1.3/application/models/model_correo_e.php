@@ -14,7 +14,8 @@ class model_correo_e extends CI_Model {
       $datos = array();
       $datos['COD_CORREO'] = $date;
       $datos['RUT_ESTUDIANTE'] = $rutRecept;
-      $this->db->insert('carta_estudiante', $datos);
+      $this->db->insert('cartar_estudiante', $datos);
+      return  $this->db->_error_message();  
     }
 }
 ?>

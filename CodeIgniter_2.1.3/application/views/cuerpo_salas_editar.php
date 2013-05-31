@@ -13,19 +13,17 @@
 <script type="text/javascript">
 	function EditarSala(){
 
-		var cod_sala=document.getElementById("cod_sala").value;
-		var num_sala = document.getElementById("num_salaEditar").value;
-		var ubicacion =	document.getElementById("ubicacionEditar").value;
-		var capacidad=	document.getElementById("capacidadEditar").value;
-		
-		if(cod_sala!="" && num_sala!=""  && capacidad!="" && ubicacion!="" ){
+		var num_sala = document.getElementById("num_sala").value;
+		var ubicacion =	document.getElementById("ubicacion").value;
+		var capacidad =	document.getElementById("capacidad").value;
+		if( num_sala!=""  && capacidad!="" && ubicacion!="" ){
 					var answer = confirm("¿Está seguro de realizar cambios?")
 					if (!answer){
-						var dijoNO = datosEditarSala("","","","","","");
+						var dijoNO = datosEditarSala("","","","");
 					}
 					else{
 					var editar = document.getElementById("FormEditar");
-					editar.action = "<?php echo site_url("Salas/EditarSala/") ?>";
+					editar.action = "<?php echo site_url("Salas/editarSalas/") ?>/";
 				
 					editar.submit();
 					}
@@ -73,33 +71,12 @@ function ordenarFiltro(){
 
 <script type="text/javascript">
 	function datosEditarSala(cod_sala,num_sala,ubicacion,capacidad){
-			
-			
-			document.getElementById("cod_salaEditar").value = cod_sala;
-			document.getElementById("num_salaEditar").value = num_sala;
-			document.getElementById("ubicacionEditar").value = ubicacion;
-			document.getElementById("capacidadEditar").value = capacidad;
-			var imp= new Array();	
-			<?php
-				$contadorE = 0;
-				while($contadorE<count($salaImplemento)){
-					echo 'imp['.$contadorE.']=new Array();';
-					echo 'imp['.$contadorE.'][0]= "'.$salaImplemento[$contadorE][0].'";';//sala
-					echo 'imp['.$contadorE.'][1]= "'.$salaImplemento[$contadorE][2].'";';//nombre
-					echo 'imp['.$contadorE.'][2]= "'.$salaImplemento[$contadorE][3].'";';//descripcion	
-					$contadorE = $contadorE + 1;
-				}
-			?>
-			var cont;
-			var algo='\n';
-			for(cont=0;cont < imp.length;cont++){
-				if(imp[cont][0]==cod_sala ){
-					algo= algo+"		"+imp[cont][1]+'\n';				
-				}
-			}
-			
-			document.getElementById("impDetalle").innerHTML=algo; 	
-			
+			document.getElementById("cod_sala").value = '';
+			document.getElementById("codEditar").value = cod_sala;
+			var editar = document.getElementById("formDetalle");
+			editar.action = "<?php echo site_url("Salas/editarSalas/") ?>/";
+			editar.submit();
+
 	}
 </script>
 
@@ -107,7 +84,9 @@ function ordenarFiltro(){
 <div class="row_fluid">
 	<div class="span10">
 		<fieldset>
-			<legend>Editar Sala</legend>
+		<legend>Editar Sala</legend>
+		 <form id="formDetalle" type="post" method="post">
+			
 			<div>
 				<div class="row-fluid">
 					<div class="span6">
@@ -118,7 +97,7 @@ function ordenarFiltro(){
 					<div class="span6"><!--    INICIO LISTA SALA -->
 						<div class="row-fluid">
 							<div class="span6">
-								Seleccione la sala a modificar
+							1.-Seleccione la sala a modificar
 							</div>
 						</div>
 					
@@ -138,20 +117,15 @@ function ordenarFiltro(){
 						
 						
 						<!--AQUÍ VA LA LISTA-->
-						<thead>
-							<tr>
-								<th style="text-align:left;"><br><b>Salas</b></th>
-								
-							</tr>
-						</thead>
+						
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 						<table class="table table-hover">
 						<tbody>
-						
+						<input id="codEditar" type="text" name="codEditar" style="display:none">
 							<?php
 							$contador=0;
 							$comilla= "'";
-							echo '<form id="formDetalle" type="post">';
+					
 							while ($contador<count($rs_sala)){
 								
 								echo '<tr>';
@@ -162,7 +136,7 @@ function ordenarFiltro(){
 															
 								$contador = $contador + 1;
 							}
-							echo '</form>';
+							
 							?>
 													
 						</tbody>
@@ -173,46 +147,79 @@ function ordenarFiltro(){
 					</div> <!--    FIN DE LISTA SALAS -->
 					<div class="span6">
 						<div style="margin-bottom:2%">
-							Complete los datos del formulario para modificar la sala
+							2.- Complete los datos del formulario para modificar la sala
+							
 						</div>
 
-					<form id="FormEditar" type="post" onsubmit="EditarSala()">
+					<form id="FormEditar" type="post" method="post" onsubmit="EditarSala()">
 						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">Codigo sala: </label>
-		  						</div>
-		  					</div>
+							
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="cod_salaEditar" name="cod_sala" readonly>
-		  							</div>
+									<?php
+									
+									if(count($sala)==1){
+									
+		    							echo '<tr>';
+										echo '<td><input id="cod_sala" name="cod_sala" value="'.$sala[0][0].'" maxlength="3" min="1" type="hidden" readonly>'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="cod_sala" name="cod_sala" value=" " maxlength="0" min="0" type="hidden" readonly>'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
 							</div>
 						</div>
-
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Numero sala: </label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Número sala: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="num_salaEditar" name="num_sala" maxlength="19" required>
-		  							</div>
+									<?php
+									
+									if(count($sala)==1){
+									
+		    							echo '<tr>';
+										echo '<td><input id="num_sala" name="num_sala" value="'.$sala[0][1].'" maxlength="3" min="1" type="number">'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="num_sala" name="num_sala" value=" " maxlength="0" min="0" type="number">'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
 							</div>
 						</div>
 						
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font>Capacidad: </label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Capacidad: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" id="capacidadEditar" name="capacidad" maxlength="19" required>
-		  							</div>
+		  						<div class="controls">
+									<?php
+									if(count($sala)==1){
+		    							echo '<tr>';
+										echo '<td><input id="capacidad" name="capacidad" value="'.$sala[0][3].'" maxlength="3" min="1" type="number">'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="capacidad" name="capacidad" value=" " maxlength="0" min="0" type="number">'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
 							</div>
 						</div>
 
@@ -222,27 +229,35 @@ function ordenarFiltro(){
 							<div class="span4">
 								<div class="control-group">
 
-		  							<label class="control-label" for="inputInfo">3-.*Ubicacion:</label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Ubicación:</label>
 		  						</div>
 		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<textarea id="ubicacionEditar" name="ubicacion" rows="5" cols="30" required>
-										</textarea>
-		  							</div>
+							
+							<div class="span5">	
+		  						<div class="controls">
+									<?php
+									if(count($sala)==1){
+		    							echo '<tr>';
+										echo '<td><textarea id="ubicacion" name="ubicacion"  maxlength="100" required>'.$sala[0][2].'</textarea>'.'</td>';
+										echo '</tr>';							
+										}
+									else{
+									    echo '<tr>';
+										echo '<textarea id="ubicacion" name="ubicacion"  maxlength="0" required> </textarea>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
 							</div>
+							
 
 						</div>
 						
 
 					<div class="row-fluid" style="width: 386px;">		
-
-
-					
-					Implementos actuales:<center><p id="impDetalle"></p></center>
-					<br><br>
-					Si desea modificar los implementos de la sala, elija entre los siguientes:
-					
+					<br>
+					<h5>Si desea modificar los implementos de la sala, elija entre los siguientes:</h5>
+					(los implementos marcados son los que tiene actualmente la sala)
 					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:105px; -webkit-border-radius: 4px" >
 					
 					
@@ -257,7 +272,15 @@ function ordenarFiltro(){
 										
 										while ($contador<count($implemento)){
 											echo '<tr>';
-											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
+											echo '<td title="'.$implemento[$contador][3]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][1].'" value="'.$implemento[$contador][1].'" name="cod_implemento[]" type="checkbox" checked>'.' '.$implemento[$contador][2].'</td>';
+											echo '</tr>';
+											$contador = $contador + 1;
+										}
+										$contador=0;
+										
+										while ($contador<count($implementoA)){
+											echo '<tr>';
+											echo '<td title="'.$implementoA[$contador][3]. '" id="implementoATd_'.$contador.'" ><input id="'.$implementoA[$contador][1].'" value="'.$implementoA[$contador][1].'" name="cod_implementoA[]" type="checkbox">'.' '.$implementoA[$contador][2].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}
@@ -278,7 +301,7 @@ function ordenarFiltro(){
 							<div class="span10">
 								<div class="row-fluid">
 									<div class="span3 offset6">
-										<button class ="btn" type="submit" >Guardar</button>
+										<button class ="btn" type="submit" onclick="EditarSala()" >Guardar</button>
 										</div>
 									<div class="span3">
 										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>
@@ -293,6 +316,7 @@ function ordenarFiltro(){
 					</div>
 				</div>
 			</div>
+			</form>
 		</fieldset>
 	</div>
 </div>

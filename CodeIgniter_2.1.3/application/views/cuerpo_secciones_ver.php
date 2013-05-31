@@ -45,14 +45,15 @@ function ordenarFiltro(){
 <div class="row-fluid">
     <div class= "span11">
         <fieldset>
+			<legend>Ver Sección</legend>
             	<form id="formDetalle" type="post" method="post">
-            <legend>Ver Sección</legend>
+            
             
             <div class="row-fluid">
                 <div class="span5">
                     <div class="row-fluid">
                         <div class="span7">
-                            1.-*Seleccionar sección
+                            1.-Seleccionar sección
                         </div>
 					</div>
 <div class="row-fluid">
@@ -86,7 +87,7 @@ function ordenarFiltro(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][0].' </td>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -106,7 +107,7 @@ function ordenarFiltro(){
                 <div class="span7">
                     <div class="row-fluid">
                         <div class="span5">
-                            3.-Información de la sección
+                            2.-Información de la sección
                         </div>
                     </div>
                     <div class="row-fluid">
@@ -121,9 +122,9 @@ echo '<tr>';
 echo '<td id="rs_seccion_'.$contador.'" > 
 Sección: '.$secc[$contador][0].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
-Día: '.$secc[$contador][2].' </td>';
+Día:     '.$secc[$contador][2].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
-Módulo: '.$secc[$contador][1].' </td>';
+Módulo:  '.$secc[$contador][1].' </td>';
 echo '</tr>'; 
 	$contador =$contador+1 ;
 }
@@ -135,7 +136,7 @@ echo '</tr>';
 
                     <div class="row-fluid">
                         <div class="span5">
-                            4.-Lista de Alumnos
+                            3.-Lista de Alumnos
                         </div>
                     </div>
                     
@@ -144,7 +145,7 @@ echo '</tr>';
                         <div class="span13">
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
                             <table class="table table-bordered">
-                                <thead  bgcolor="#e6e6e6">
+                                <thead  bgcolor="#e6e6e6"  style="position:block">
                                     <tr>
                                         <th class="span2">Carrera</th>
                                         <th class="span2">RUT</th>
@@ -175,7 +176,7 @@ echo '</tr>';
 						</div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
          </form>

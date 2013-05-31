@@ -53,36 +53,7 @@ class Coordinadores extends MasterManteka {
       */
 	public function verCoordinadores()
 	{
-		$this->load->model('model_coordinadores');
-		$ListaObjetosCoordinadores = $this->model_coordinadores->ObtenerTodosCoordinadores();
-		
-		$resultados = array();
-		foreach ($ListaObjetosCoordinadores as $coordinador ) {
-			$array_modulos = $this->model_coordinadores->GetModulos($coordinador['id']);
-			$coordinador['modulos'] = "";
-			$coordinador['secciones'] = "";
-			
-			foreach ($array_modulos as $mod) {
-				$array_secciones = $this->model_coordinadores->GetSeccion($mod['COD_MODULO_TEM']);
-				foreach ($array_secciones as $sec) {
-					if($coordinador['secciones']=="")
-						$coordinador['secciones']= $sec['COD_SECCION'];
-					else
-						$coordinador['secciones']= $coordinador['secciones']. " , ".$sec['COD_SECCION'];
-				}
-
-				if($coordinador['modulos']=="")
-					$coordinador['modulos'] = $mod['COD_MODULO_TEM'];
-				else
-					$coordinador['modulos'] = $coordinador['modulos'] ." , ". $mod['COD_MODULO_TEM'];
-			}
-			
-			array_push($resultados, $coordinador);
-		}
-		$datos_plantilla['listado_coordinadores'] = $resultados;
-		
-		
-
+		$datos_plantilla = array();
 		$subMenuLateralAbierto = 'verCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -262,6 +233,10 @@ class Coordinadores extends MasterManteka {
 		$this->load->model('model_coordinadores');
 
 		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($tipoFiltro, $textoFiltro);
+		if ($resultado == "") {
+			echo "[]";
+			return;
+		}
 		echo json_encode($resultado);
 	}
 

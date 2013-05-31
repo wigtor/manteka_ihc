@@ -139,8 +139,8 @@
 		  					<div  class="span6">
 									<div  class="span6">
 									<select id="tipoDeFiltro" title="Tipo de contrato" name="tipo_profesor">
-										<option value="Planta">Planta</option>
-										<option value="Por hora">Por hora</option>
+										<option value="1">Planta</option>
+										<option value="2">Por hora</option>
 								</select>
 								</div>
 								</div>

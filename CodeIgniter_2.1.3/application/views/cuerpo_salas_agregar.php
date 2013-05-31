@@ -3,7 +3,7 @@
 	
 	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
 		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha agregado exitosamente la sala");
+				alert("Sala agregada correctamente");
 				
 				}
 				else{
@@ -37,7 +37,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" > 1-.*Numero de la sala:</label>
+		  							<label class="control-label" for="inputInfo" > 1-.*Número de la sala:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -54,7 +54,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="3" type="number" min="1" name="capacidad" placeholder="Numero de personas. Ej:80" required>
+		    							<input id="inputInfo" maxlength="3" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
 		  							</div>
 							</div>
 						</div>
@@ -62,7 +62,7 @@
 							<div class="span4">
 								<div class="control-group">
 
-		  							<label class="control-label" for="inputInfo">3-.*Ubicacion:</label>
+		  							<label class="control-label" for="inputInfo">3-.*Ubicación:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -93,7 +93,7 @@
 										$contador=0;
 										while ($contador<count($implemento)){
 											echo '<tr>';
-											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
+											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}

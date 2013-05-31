@@ -10,41 +10,6 @@ class Model_estudiante extends CI_Model {
     var $cod_seccion='';
     var $cod_carrera='';
 
-	
-	public function getAllRut(){
-	   	$lista = array();
-   		$contador = 0;
-		
-		//lista usuarios
-		$this->db->select('RUT_USUARIO');
-		$this->db->from('usuario');
-		$query = $this->db->get();
-		$datos = $query->result();
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->RUT_USUARIO;
-            $contador++;
-   		}
-		//lista ayudantes
-		$this->db->select('RUT_AYUDANTE');
-		$this->db->from('ayudante');
-		$query = $this->db->get();
-		$datos = $query->result();
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->RUT_AYUDANTE;
-            $contador++;
-   		}
-		//lista alumnos
-		$this->db->select('RUT_ESTUDIANTE');
-		$this->db->from('estudiante');
-		$query = $this->db->get();
-		$datos = $query->result();
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->RUT_ESTUDIANTE;
-            $contador++;
-   		}
-   		return $lista;  	
-	}
-	
 	/**
 	* Inserta un estudiante en la base de datos
 	*
@@ -129,8 +94,8 @@ class Model_estudiante extends CI_Model {
 	*/
     public function EliminarEstudiante($rut_estudiante)
     {
-		//$sql="DELETE FROM ESTUDIANTE WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
-		$datos = $this->db->delete('ESTUDIANTE', array('rut_estudiante' => $rut_estudiante)); 
+		$sql="DELETE FROM estudiante WHERE rut_estudiante = '$rut_estudiante' "; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
 		if($datos == true){
 			return 1;
 		}
@@ -156,16 +121,17 @@ class Model_estudiante extends CI_Model {
 		$filaResultado = $query->row();
 		return $filaResultado;
 		*/
-		$sql="SELECT * FROM estudiante ORDER BY APELLIDO_PATERNO"; 
+		$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
 		$datos=mysql_query($sql); 
+		echo mysql_error();
 		$contador = 0;
 		$lista = array();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
-			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
+			$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
 			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
 			$lista[$contador][6] = $row['COD_SECCION'];
 			$lista[$contador][7] = $row['COD_CARRERA'];
@@ -190,12 +156,15 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
-		$this->db->order_by("APELLIDO_PATERNO", "asc");
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		$this->db->select('CORREO_ESTUDIANTE as correo');
+		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
 		$query = $this->db->get('estudiante');
 		return $query->result();
 	}
+
+
 
 	public function getAlumnosByFilter($tipoFiltro, $texto)
 	{
@@ -235,12 +204,15 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-		$this->db->order_by('APELLIDO_PATERNO', 'asc');
+		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
 		$this->db->like($attr_filtro, $texto);
 		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->result();
 	}
 
@@ -249,14 +221,17 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO_PATERNO AS apellido1');
-		$this->db->select('APELLIDO_MATERNO AS apellido2');
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->select('CORREO_ESTUDIANTE AS correo');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
 		$this->db->select('COD_SECCION AS seccion');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->where('RUT_ESTUDIANTE', $rut);
 		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->row();
 	}
 
