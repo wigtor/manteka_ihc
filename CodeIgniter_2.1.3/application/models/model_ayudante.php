@@ -27,8 +27,8 @@ class Model_ayudante extends CI_Model {
 					'RUT_AYUDANTE' => $rut_ayudante ,
 					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
 					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
-					'APELLIDO_PATERNO' => $apellido1_ayudante ,
-					'APELLIDO_MATERNO' => $apellido2_ayudante,
+					'APELLIDO1_AYUDANTE' => $apellido1_ayudante ,
+					'APELLIDO2_AYUDANTE' => $apellido2_ayudante,
 					'CORREO_AYUDANTE' => $correo_ayudante 
 		);
         $datos1 = $this->db->insert('ayudante',$data1);
@@ -184,8 +184,8 @@ class Model_ayudante extends CI_Model {
 		$data = array(					
 					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
 					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
-					'APELLIDO_PATERNO' => $apellido_paterno ,
-					'APELLIDO_MATERNO' => $apellido_materno ,
+					'APELLIDO1_AYUDANTE' => $apellido_paterno ,
+					'APELLIDO2_AYUDANTE' => $apellido_materno ,
 					'CORREO_AYUDANTE' => $correo_ayudante
 		);
 		$this->db->where('RUT_AYUDANTE', $rut_ayudante);
@@ -197,6 +197,82 @@ class Model_ayudante extends CI_Model {
 			return -1;
 		}		
     }
+
+
+    /**
+	* Recibe un texto para filtrar y un número que indica el tipo de filtro,
+	* Devuelve un arreglo con los ayudantes que cumplen con el filtro de búsqueda
+	* @param int $tipoFiltro valor entre 1 y 4 que indica el tipo de filtro usado.
+	* @param string $texto palabras introducidas por el usuario para buscar
+	*/
+    public function getAyudantesByFilter($tipoFiltro, $texto)
+   	{
+
+      //Sólo para acordarse
+      define("BUSCAR_POR_NOMBRE", 1);
+      define("BUSCAR_POR_APELLIDO1", 2);
+      define("BUSCAR_POR_APELLIDO2", 3);
+      define("BUSCAR_POR_CORREO", 4);
+
+      $attr_filtro = "";
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $attr_filtro = "NOMBRE1_AYUDANTE";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+         $attr_filtro = "APELLIDO1_AYUDANTE";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+         $attr_filtro = "APELLIDO2_AYUDANTE";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_CORREO) {
+         $attr_filtro = "CORREO_AYUDANTE";
+      }
+      else {
+         return array(); //No es válido, devuelvo vacio
+      }
+
+      $this->db->select('RUT_AYUDANTE AS rut');
+      $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+      $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+      $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+      $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+      $this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
+      $this->db->like($attr_filtro, $texto);
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $this->db->or_like("NOMBRE2_AYUDANTE", $texto);
+      }
+      $query = $this->db->get('ayudante');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->result();
+   }
+
+   /**
+   * Recibe el rut del ayudante y devuelve toda su información.
+   * @param int $rut El rut del ayudante que se está buscando
+   * @return Un objeto con los datos del ayudante, FALSE si no se encontró
+   */
+   public function getDetallesAyudante($rut) {
+      $this->db->select('ayudante.RUT_AYUDANTE AS rut');
+      $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+      $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+      $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+      $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+      $this->db->select('CORREO_AYUDANTE AS correo');
+      $this->db->select('NOMBRE1_PROFESOR AS nombre1_profe');
+      $this->db->select('NOMBRE2_PROFESOR AS nombre2_profe');
+      $this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
+      $this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
+      $this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
+      $this->db->join('profesor', 'profesor.RUT_USUARIO2 = ayu_profe.RUT_USUARIO2', 'LEFT OUTER');
+      $this->db->where('ayudante.RUT_AYUDANTE', $rut);
+      $query = $this->db->get('ayudante');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->row();
+   }
 }
 
 ?>
