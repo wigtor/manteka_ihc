@@ -35,7 +35,7 @@ class Modulos extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Modulos", 'cuerpo_modulos_ver', "barra_lateral_modulos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
 	}
     
     public function agregarModulos()
@@ -49,7 +49,7 @@ class Modulos extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Modulos", 'cuerpo_modulos_agregar', "barra_lateral_modulos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
 	
@@ -73,7 +73,7 @@ class Modulos extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Modulos", 'cuerpo_modulos_agregar', "barra_lateral_modulos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
 	
@@ -104,7 +104,7 @@ class Modulos extends MasterManteka {
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_editar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
 		$datos_plantilla["subVistaLateralAbierta"] = "editarModulos"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_modulos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_planificacion', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
     }
 
@@ -134,7 +134,7 @@ class Modulos extends MasterManteka {
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_borrar', $datos_vista, true);
 
 		$datos_plantilla["subVistaLateralAbierta"] = "borrarModulos"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_modulos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_planificacion', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 
     }
