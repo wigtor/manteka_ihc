@@ -124,8 +124,9 @@ class model_correo extends CI_Model
 				del profesor o coordinador. */
 				foreach($rutDestinoUsuarios as $rutUsuario)
 				{
-					$sqlProfesor="SELECT * FROM profesor WHERE RUT_PROFESOR='$rutUsuario'";
+					$sqlProfesor="SELECT * FROM profesor WHERE RUT_USUARIO2='$rutUsuario'";
 					$datosProfesor=mysql_query($sqlProfesor);
+
 					while($rowDatosProfesor=mysql_fetch_array($datosProfesor))
 					{
 						$profesor=array();
@@ -138,7 +139,7 @@ class model_correo extends CI_Model
 						$profesor['tipo_profesor']=$rowDatosProfesor['TIPO_PROFESOR'];
 						array_push($profesores,$profesor);
 					}
-					$sqlCoordinador="SELECT * FROM coordinador WHERE RUT_COORDINADOR='$rutUsuario'";
+					$sqlCoordinador="SELECT * FROM coordinador WHERE RUT_USUARIO3='$rutUsuario'";
 					$datosCoordinador=mysql_query($sqlCoordinador);
 					while($rowDatosCoordinador=mysql_fetch_array($datosCoordinador))
 					{

@@ -189,29 +189,30 @@ if(isset($msj))
 				$destino='';
 				$para='';
 				$total=0;
-				if(count($estudiantesEnviados[0])!=0)
+				
+				if(isset($estudiantesEnviados[$contador][0])!=0)
 				{
 					$total+=count($estudiantesEnviados);
-					$destino=$estudiantesEnviados[0][0]['nombre1_estudiante'].' '.$estudiantesEnviados[0][0]['apellido_paterno'].' '.$estudiantesEnviados[0][0]['apellido_materno'].' &lt'.$estudiantesEnviados[0][0]['correo_estudiante'].'&gt';
-					$para=$estudiantesEnviados[0][0]['nombre1_estudiante'].' '.$estudiantesEnviados[0][0]['apellido_paterno'].' '.$estudiantesEnviados[0][0]['apellido_materno'];
+					$destino=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'].' &#60'.$estudiantesEnviados[$contador][0]['correo_estudiante'].'&#62';					
+					$para=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'];
 				}	
-				if(count($ayudantesEnviados[0])!=0)
+				if(isset($ayudantesEnviados[$contador][0])!=0)
 				{
 					$total+=count($ayudantesEnviados);
-					$destino=$ayudantesEnviados[0][0]['nombre1_ayudante'].' '.$ayudantesEnviados[0][0]['apellido_paterno'].' '.$ayudantesEnviados[0][0]['apellido_materno'].' &lt'.$ayudantesEnviados[0][0]['correo_ayudante'].'&gt';
-					$para=$ayudantesEnviados[0][0]['nombre1_ayudante'].' '.$ayudantesEnviados[0][0]['apellido_paterno'].' '.$ayudantesEnviados[0][0]['apellido_materno'];
+					$destino=$ayudantesEnviados[$contador][0]['nombre1_ayudante'].' '.$ayudantesEnviados[$contador][0]['apellido_paterno'].' '.$ayudantesEnviados[$contador][0]['apellido_materno'].' &lt'.$ayudantesEnviados[$contador][0]['correo_ayudante'].'&gt';
+					$para=$ayudantesEnviados[$contador][0]['nombre1_ayudante'].' '.$ayudantesEnviados[$contador][0]['apellido_paterno'].' '.$ayudantesEnviados[$contador][0]['apellido_materno'];
 				}
-				if(count($profesoresEnviados[0])!=0)
+				if(isset($profesoresEnviados[$contador][0])!=0)
 				{
 					$total+=count($profesoresEnviados);
-					$destino=$profesoresEnviados[0][0]['nombre1_profesor'].' '.$profesoresEnviados[0][0]['apellido1_profesor'].' '.$profesoresEnviados[0][0]['apellido2_profesor'];
-					$para=$profesoresEnviados[0][0]['nombre1_profesor'].' '.$profesoresEnviados[0][0]['apellido1_profesor'].' '.$profesoresEnviados[0][0]['apellido2_profesor'];
+					$destino=$profesoresEnviados[$contador][0]['nombre1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido2_profesor'];
+					$para=$profesoresEnviados[$contador][0]['nombre1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido2_profesor'];
 				}
-				if(count($coordinadoresEnviados[0])!=0)
+				if(isset($coordinadoresEnviados[$contador][0])!=0)
 				{
 					$total+=count($coordinadoresEnviados);
-					$destino=$coordinadoresEnviados[0][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido2_coordinador'];
-					$para=$coordinadoresEnviados[0][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[0][0]['apellido2_coordinador'];
+					$destino=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
+					$para=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
 				}
 				if($destino!='')
 				{
