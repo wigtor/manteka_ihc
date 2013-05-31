@@ -24,12 +24,13 @@ class Model_profesor extends CI_Model {
 	* @param string $nombre2_profesor Segundo nombre del profesor a insertar
 	* @param string $apellido1_profesor Primer apellido del profesor a insertar
 	* @param string $apellido2_profesor Segundo apellido del profesor a insertar
-	* @param string $correo_profesor Correo del ayudante a insertar
+	* @param string $correo_profesor Correo del profesor a insertar
+	* @param string $correo_profesor1 Correo Alternativo del profesor a insertar
 	* @param string $telefono_profesor Telefono del profesor a insertar
 	* @param string $tipo_profesor Tipo del profesor a insertar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor) 
+	public function InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$correo_profesor1,$telefono_profesor, $tipo_profesor) 
   {
   	$id_tipo = TIPO_USR_PROFESOR;
     $pass = $rut_profesor;
@@ -38,6 +39,7 @@ class Model_profesor extends CI_Model {
           'ID_TIPO' => $id_tipo,
           'PASSWORD_PRIMARIA' => md5($pass),
           'CORREO1_USER' => $correo_profesor,
+		  'CORREO2_USER' => $correo_profesor1,
     );
     
     $datos2 = $this->db->insert('usuario',$data2);

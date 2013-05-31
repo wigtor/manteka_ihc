@@ -111,7 +111,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor" maxlength="30" placeholder="ejemplo@usach.cl" required>
+		    							<input type="email" name="correo_profesor" maxlength="30" placeholder="ejemplo1@usach.cl" required>
 		  							</div>
 							</div>
 
@@ -119,7 +119,19 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Telefono:</label>
+		  							<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Correo Alternativo:</label>
+		  						</div>
+		  					</div>
+		  					<div class="span5">	
+		  							<div class="controls">
+		    							<input type="email" name="correo_profesor1" maxlength="30" placeholder="ejemplo2@usach.cl" required>
+		  							</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span4">
+								<div class="control-group">
+		  							<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Telefono:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -133,7 +145,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Tipo:</label>
+		  							<label class="control-label" for="inputInfo">9-.<font color="red">*</font>Tipo:</label>
 		  						</div>
 		  					</div>
 		  					<div  class="span6">
