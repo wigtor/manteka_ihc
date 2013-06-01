@@ -418,8 +418,9 @@ class Correo extends MasterManteka {
 		$codigo = $this->input->post('codigo');
 		$seccion = $this->input->post('seccion');
 		$modulo_tematico = $this->input->post('modulo_tematico');
+		$bloque = $this->input->post('bloque');
 		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico);
+		$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico,$bloque);
 		echo json_encode($resultado);
 	}
 
@@ -429,8 +430,9 @@ class Correo extends MasterManteka {
 		}
 		$seccion = $this->input->post('seccion');
 		$modulo_tematico = $this->input->post('modulo_tematico');
+		$bloque = $this->input->post('bloque');
 		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion,$modulo_tematico);
+		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion,$modulo_tematico,$bloque);
 		echo json_encode($resultado);
 	}
 
