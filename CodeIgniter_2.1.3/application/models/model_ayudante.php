@@ -27,8 +27,8 @@ class Model_ayudante extends CI_Model {
 					'RUT_AYUDANTE' => $rut_ayudante ,
 					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
 					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
-					'APELLIDO_PATERNO' => $apellido1_ayudante ,
-					'APELLIDO_MATERNO' => $apellido2_ayudante,
+					'APELLIDO1_AYUDANTE' => $apellido1_ayudante ,
+					'APELLIDO2_AYUDANTE' => $apellido2_ayudante,
 					'CORREO_AYUDANTE' => $correo_ayudante 
 		);
         $datos1 = $this->db->insert('ayudante',$data1);
@@ -82,22 +82,40 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerTodosLosAyudantes()
 	{
-		$sql="SELECT * FROM ayudante ORDER BY APELLIDO_PATERNO"; //código MySQL
+		$sql="SELECT * FROM ayudante ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
+		echo mysql_error();
 		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_AYUDANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_AYUDANTE'];
-			$lista[$contador][3] = $row['APELLIDO_PATERNO'];
-			$lista[$contador][4] = $row['APELLIDO_MATERNO'];
+			$lista[$contador][3] = $row['APELLIDO1_AYUDANTE'];
+			$lista[$contador][4] = $row['APELLIDO2_AYUDANTE'];
 			$lista[$contador][5] = $row['CORREO_AYUDANTE'];
 			$contador = $contador + 1;
 		}
 		
 		return $lista;
 		}
+
+		public function getAllAyudantes()
+	{
+		$this->db->select('RUT_AYUDANTE AS rut');
+		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+		$this->db->select('CORREO_AYUDANTE as correo');
+		$this->db->order_by("NOMBRE1_AYUDANTE", "asc");
+		$query = $this->db->get('ayudante');
+		if ($query == FALSE) {
+			$query = array();
+			return $query;
+		}
+		return $query->result();
+	}
 		
 	/**
 	* Obtiene los datos de todos los profesores de la base de datos
@@ -167,8 +185,8 @@ class Model_ayudante extends CI_Model {
 		$data = array(					
 					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
 					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
-					'APELLIDO_PATERNO' => $apellido_paterno ,
-					'APELLIDO_MATERNO' => $apellido_materno ,
+					'APELLIDO1_AYUDANTE' => $apellido_paterno ,
+					'APELLIDO2_AYUDANTE' => $apellido_materno ,
 					'CORREO_AYUDANTE' => $correo_ayudante
 		);
 		$this->db->where('RUT_AYUDANTE', $rut_ayudante);
@@ -182,7 +200,12 @@ class Model_ayudante extends CI_Model {
     }
 
 
-
+    /**
+	* Recibe un texto para filtrar y un número que indica el tipo de filtro,
+	* Devuelve un arreglo con los ayudantes que cumplen con el filtro de búsqueda
+	* @param int $tipoFiltro valor entre 1 y 4 que indica el tipo de filtro usado.
+	* @param string $texto palabras introducidas por el usuario para buscar
+	*/
     public function getAyudantesByFilter($tipoFiltro, $texto)
    	{
 
@@ -226,7 +249,11 @@ class Model_ayudante extends CI_Model {
       return $query->result();
    }
 
-
+   /**
+   * Recibe el rut del ayudante y devuelve toda su información.
+   * @param int $rut El rut del ayudante que se está buscando
+   * @return Un objeto con los datos del ayudante, FALSE si no se encontró
+   */
    public function getDetallesAyudante($rut) {
       $this->db->select('ayudante.RUT_AYUDANTE AS rut');
       $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
@@ -247,7 +274,6 @@ class Model_ayudante extends CI_Model {
       }
       return $query->row();
    }
-
 }
 
 ?>

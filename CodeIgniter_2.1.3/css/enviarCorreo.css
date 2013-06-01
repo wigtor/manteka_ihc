@@ -78,7 +78,6 @@ fieldset #lista
 	margin-right:1%;
 	float:right;
 }
-
 .seleccion
 {
 	clear:both;
@@ -181,30 +180,4 @@ fieldset #lista
 	font-size:9pt;
 	font-weight:bold;
 	width:250px;
-}
-
-#msjEnvio1
-{
-	width:30%;
-	font-size:9pt;
-	color:green;
-	height:20px;
-	padding:10px;
-	border:1.5px solid green; 
-	background-color:#CCFFCC;
-	margin-bottom:20px;
-	border-radius:8px;
-}
-
-#msjEnvio2
-{
-	width:45%;
-	font-size:9pt;
-	color:red;
-	height:20px;
-	padding:10px;
-	border:1.5px solid green; 
-	background-color:#ffcccc;
-	margin-bottom:20px;
-	border-radius:8px;
 }

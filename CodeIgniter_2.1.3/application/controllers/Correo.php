@@ -249,6 +249,8 @@ class Correo extends MasterManteka {
 	*/
 	public function enviarPost()
 	{
+
+
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 		$rut = $this->session->userdata('rut');
 		if ($rut == false)
@@ -259,13 +261,14 @@ class Correo extends MasterManteka {
 		modelos necesarios para guardar el correo una vez que es enviado. */
 		$this->load->model('model_correo');
 		$this->load->model('model_correo_e');
+		$this->load->model('model_correo_u');
+		$this->load->model('model_correo_a');
 
 		$to = $this->input->post('to');
 		$asunto ="[ManteKA] ".$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
-		$tipo = $this->input->post('tipo');
 		$rutRecept = $this->input->post('rutRecept');
-		$date = date("mdHis");
+		$date = date("YmdHis");
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
@@ -283,14 +286,14 @@ class Correo extends MasterManteka {
 			$this->email->message($mensaje);
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
-			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$tipo,$date);
-			if($tipo=='CARTA_ESTUDIANTE')
-				$this->model_correo_e->InsertarCorreoE($rutRecept,$date);
-			else if($tipo=='CARTA_USER')
-				$this->model_correoU->InsertarCorreoU($rutRecept,$date);
-			else if($tipo=='CARTA_AYUDANTE')
-				$this->model_correoU->InsertarCorreoA($rutRecept,$date);
-			;
+
+			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept);
+			$cod=$this->model_correo->getCodigo($date);
+			
+				$this->model_correo_e->InsertarCorreoE($rutRecept,$cod);
+				$this->model_correo_u->InsertarCorreoU($rutRecept,$cod);
+				$this->model_correo_a->InsertarCorreoA($rutRecept,$cod);
+			
 		}
 		catch (Exception $e) {
 			if($e->getMessage()=="error en el envio")
@@ -300,7 +303,7 @@ class Correo extends MasterManteka {
 		}
 		
 		$estado="2";
-			redirect('/Correo/correosRecibidos/'.$estado);
+		redirect('/Correo/correosRecibidos/'.$estado);
 
 
 	}
@@ -332,5 +335,122 @@ class Correo extends MasterManteka {
 	public function indexProfesor()
 	{
 		$this->correosRecibidos();
+	}
+
+	public function postBusquedaAlumnosTipo() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$destinatario = $this->input->post('destinatario');
+		$this->load->model('Model_filtro');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_profesor');
+		$this->load->model('Model_ayudante');
+		$this->load->model('Model_coordinadores');
+
+		switch ($destinatario) {
+			case 0:
+				$resultado = $this->Model_filtro->getAll();
+				break;
+			case 1:
+				$resultado = $this->Model_estudiante->getAllAlumnos();
+				break;
+			case 2:
+				$resultado = $this->Model_profesor->getAllProfesores();
+				break;
+			case 3:
+				$resultado = $this->Model_ayudante->getAllAyudantes();
+				break;
+			case 4:
+				$resultado = $this->Model_coordinadores->getAllCoordinadores();
+			default:
+				# code...
+				break;
+		}
+		echo json_encode($resultado);
+	}
+
+	public function postCarreras(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllCarreras();
+		echo json_encode($resultado);
+	}
+
+	public function postSecciones(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllSecciones();
+		echo json_encode($resultado);
+	}
+
+	public function postAlumnosByCarrera(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$codigo = $this->input->post('codigo');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAlumnosByCarrera($codigo);
+		echo json_encode($resultado);
+	}
+
+	public function postAlumnosByProfesor(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$profesor = $this->input->post('profesor');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAlumnosByProfesor($profesor);
+		echo json_encode($resultado);
+
+	}
+
+	public function postAlumnosByFiltro(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$profesor = $this->input->post('profesor');
+		$codigo = $this->input->post('codigo');
+		$seccion = $this->input->post('seccion');
+		$modulo_tematico = $this->input->post('modulo_tematico');
+		$bloque = $this->input->post('bloque');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico,$bloque);
+		echo json_encode($resultado);
+	}
+
+	public function postProfesoresByFiltro(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$seccion = $this->input->post('seccion');
+		$modulo_tematico = $this->input->post('modulo_tematico');
+		$bloque = $this->input->post('bloque');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion,$modulo_tematico,$bloque);
+		echo json_encode($resultado);
+	}
+
+	public function postHorarios(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllHorarios();
+		echo json_encode($resultado);
+	}
+
+	public function postModulosTematicos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllModulosTematicos();
+		echo json_encode($resultado);
 	}
 }

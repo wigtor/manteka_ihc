@@ -98,6 +98,26 @@ class Model_profesor extends CI_Model {
 		return $lista;
 		}
 
+
+		public function getAllProfesores()
+	{
+		$this->db->select('RUT_USUARIO2 AS rut');
+		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
+		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
+		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+		$this->db->select('CORREO1_USER AS correo');
+		$this->db->from('profesor');
+		$this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+		$this->db->order_by("NOMBRE1_PROFESOR", "asc");
+		$query = $this->db->get();
+		if ($query == FALSE) {
+			$query = array();
+			return $query;
+		}
+		return $query->result();
+	}
+
 	/**
 	* Edita la información de un profesor en la base de datos
 	*
@@ -189,6 +209,8 @@ class Model_profesor extends CI_Model {
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
 		$this->db->select('TELEFONO_PROFESOR AS telefono');
 		$this->db->select('TIPO_PROFESOR AS tipo');
+		$this->db->select('CORREO1_USER AS correo');
+		 $this->db->join('usuario', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
 		$this->db->where('RUT_USUARIO2', $rut);
 		$query = $this->db->get('profesor');
 		if ($query == FALSE) {
