@@ -501,7 +501,6 @@ function showAlumnosByFiltro(){
 			url: "<?php echo site_url("Correo/postAlumnosByFiltro") ?>",
 			data:{ codigo: codigo, profesor: profesor, seccion: seccion, modulo_tematico: modulo_tematico, bloque: bloque},
 			success: function(respuesta){
-				alert(respuesta);
 				muestraTabla(respuesta);
 			}
 		});
@@ -515,7 +514,6 @@ function showAlumnosByFiltro(){
 			url: "<?php echo site_url("Correo/postProfesoresByFiltro") ?>",
 			data:{ seccion: seccion, modulo_tematico:modulo_tematico, bloque: bloque},
 			success: function(respuesta){
-				alert(respuesta);
 				muestraTabla(respuesta);
 			}
 		});
