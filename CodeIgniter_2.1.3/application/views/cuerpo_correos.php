@@ -56,17 +56,136 @@ function selectall(form)
 
 <script type="text/javascript">
 /** 
-* Esta función se llama al hacer click en los botones para < y > para cambiar los correos mostrados
+* Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
 */
 
-function showCorreos()
+function cambiarCorreos(direccion,offset)
 {
-	var formulario=eval(form);  
-	for (var i=0,len=formulario.elements.length; i<len;i++)  
-	{  
-		if (formulario.elements[i].type=="checkbox")
-			formulario.elements[i].checked=formulario.elements[0].checked; 
+	
+	if (direccion=="ant") {
+		offset=offset-5;
+
+		
+	}else{
+		offset=offset+5;
+		
+
 	}
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postRecibidos") ?>",
+		data: { offset: offset},
+		success: function(respuesta){
+			var tablaResultados = document.getElementById('tabla');
+			var nodoTexto;
+			$(tablaResultados).empty();		
+			listaRecibidos = JSON.parse(respuesta);
+				listaRecibidos.shift();
+			
+
+			for (var i = 0; i < listaRecibidos.length; i++) {
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				td.setAttribute("width", "5%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","padding-top:4px;padding-bottom:8px;");
+				td.setAttribute("align","center");				
+				check = document.createElement('input');
+				check.type='checkbox';
+				check.setAttribute("name",listaRecibidos[i][0].cod_correo);
+				check.checked=false;
+				td.appendChild(check);
+				//td.setAttribute(onclick,);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "23%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				nodoTexto=document.createTextNode("ManteKA");
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("id", "m"+i);
+				td.setAttribute("width", "27%");
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				bold =document.createElement('b');
+				nodoTexto = document.createTextNode(listaRecibidos[i][0].asunto);
+				bold.appendChild(nodoTexto);
+				td.appendChild(bold);
+
+				nodoTexto = document.createTextNode(" "+listaRecibidos[i][0].cuerpo_email);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "8%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				nodoTexto=document.createTextNode(listaRecibidos[i][0].fecha);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "8%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				
+				nodoTexto=document.createTextNode(listaRecibidos[i][0].hora);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				tablaResultados.appendChild(tr);
+				var cuerpo=listaRecibidos[i][0].cuerpo_email;
+				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
+				document.getElementById("c"+i).value=cuerpo;
+				
+				
+			}
+			var limite;
+			if(<?php echo $cantidadCorreos;?><offset+5)
+				limite=<?php echo $cantidadCorreos;?>;
+			else
+				limite=offset+5;
+
+			
+			
+			document.getElementById("sig").setAttribute("onClick", "cambiarCorreos('sig',"+offset+")");
+			document.getElementById("ant").setAttribute("onClick", "cambiarCorreos('ant',"+offset+")");
+			if (direccion=="ant") {
+					
+					if(offset==0){
+						document.getElementById("ant").className="disabled";
+						document.getElementById("ant").removeAttribute('onClick');
+					}
+					document.getElementById("sig").removeAttribute('class');
+			}else{
+				
+				if(offset+5>=<?php echo $cantidadCorreos;?>){
+					document.getElementById("sig").className="disabled";
+					document.getElementById("sig").removeAttribute('onClick');
+				}
+				document.getElementById("ant").removeAttribute('class');
+
+			}
+			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
+
+			
+			
+			var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+		}
+	});
+	/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+	
+}
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
 }
 </script>
 
@@ -144,6 +263,13 @@ if(isset($msj))
 	<legend>&nbsp;Correos Recibidos&nbsp;</legend>
 	<?php
 	$contador=0;
+	$offset=0;
+
+	if($cantidadCorreos<$offset+5)
+		$limite=$cantidadCorreos;
+	else
+		$limite=$offset+5;
+
 	$comilla= "'";
 	$estado=$listaRecibidos[0];
 	array_shift($listaRecibidos);
@@ -157,7 +283,7 @@ if(isset($msj))
 		if(count($correos)!==0)
 		{
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo() " style=" margin-right:1%; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
+			<button  class ="btn"  onclick="eliminarCorreo() " style=" margin-right:4px; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
 			<?php
 		}
 
@@ -173,13 +299,26 @@ if(isset($msj))
 		else
 		{
 			?>
-		    <ul class="pager" style="text-align:right;margin:0px">
-	    		<li><a href="#">Previous</a></li>
-	   	 		<li><a href="#">Next</a></li>
+		    <ul id="pager" class="pager" style="text-align:right;margin:0px" >
+		    	<span id="mostrando">  mostrando <?php echo ($offset+1)."-".$limite. " de: ".$cantidadCorreos; ?></span>
+	    		<li id="ant" class="disabled" ><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
+	    		<?php 
+	    		if($limite<$cantidadCorreos){
+	    			?>
+	    			<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+	    			<?php
+	    		}else{
+	    			?>
+	    			<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)" class="disabled"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+	    			<?php
+	    		}
+	    		?>
+
+	   	 		
 			</ul>
 			<form name="formulario" id="formu" method="post">
 
-			<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:1%; margin-bottom:0px">
+			<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
 				
 			<tr class="info">
 			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
@@ -192,7 +331,7 @@ if(isset($msj))
 			
 
 			
-			<tbody>
+			<tbody id="tabla">
 			<?php		
 			while($contador<count($correos))
 			{	
@@ -242,7 +381,7 @@ if(isset($msj))
 <fieldset id="cuadroDetalleCorreo" style="display:none; " >
 	<legend>&nbsp;Correos recibidos <font color="black">:::</font> detalles&nbsp;</legend>
 	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
-	<button class="btn"  onclick="volverCorreosRecibidos()" style="margin-bottom:20px; margin-right:1%; float:right;" ><div class="btn_with_icon_solo"><</div> Volver</button>
+	<button class="btn"  onclick="volverCorreosRecibidos()" style="margin-bottom:20px; margin-right:14px; float:right;" ><div class="btn_with_icon_solo"><</div> Volver</button>
 	</div>
 	</br>
 	<pre class="detallesEmail">

@@ -66,7 +66,20 @@ function selectall(form)
 	}
 }
 </script>
+<script type="text/javascript">
+/** 
+* Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
+*/
 
+function cambiarCorreos(direccion)
+{
+	if (direccion=="ant") {
+		;
+	}else{
+;
+	}
+}
+</script>
 <script type="text/javascript">
 /** 
 * Esta función permite eliminar el correo que se encuentre marcado con su checkbox, también es posible la eliminación en 
@@ -131,6 +144,13 @@ if(isset($msj))
 	<legend>&nbsp;Correos enviados&nbsp;</legend>
 	<?php
 	$contador=0;
+		$offset=0;
+	
+	if($cantidadCorreos<$offset+5)
+		$limite=$cantidadCorreos;
+	else
+		$limite=$offset+5;
+
 	$comilla= "'";
 	$estado=$listaEnviados[0];
 	array_shift($listaEnviados);
@@ -154,7 +174,7 @@ if(isset($msj))
 	
 	
 			?>
-			<button  class ="btn"  onclick="eliminarCorreo()" style="margin-bottom:20px; margin-right:1%; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button>
+			<button  class ="btn"  onclick="eliminarCorreo()" style=" margin-right:4px; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
 			<?php
 		}
 
@@ -168,10 +188,25 @@ if(isset($msj))
 			<?php
 		}
 		else
-		{
+		{?>
+
+		    <ul class="pager" style="text-align:right;margin:0px" >
+		    	<?php echo "mostrando ".$offset. "-".$limite. " de: ".$cantidadCorreos; ?>
+	    		<li class="disabled"><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
+	    		<?php 
+	    		if($limite<$cantidadCorreos){
+	    			?>
+	    			<li onClick="cambiarCorreos('sig')"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+	    			<?php
+	    		}else{
+	    			?>
+	    			<li onClick="cambiarCorreos('sig')" class="disabled"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+	    			<?php
+	    		}
+	    		
 			?>
 			<form name="formulario" id="formu" method="post">
-			<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:5%; margin-bottom:0px">
+			<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:20px; margin-bottom:0px">
 			<tr class="info">
 			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
 			<td width="23%" ><b>Para</b></td>
@@ -209,7 +244,7 @@ if(isset($msj))
 					$para=$profesoresEnviados[$contador][0]['nombre1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido2_profesor'];
 				}
 				if(isset($coordinadoresEnviados[$contador][0])!=0)
-				{
+				{echo $coordinadoresEnviados[$contador][0]['rut_usuario3'];
 					$total+=count($coordinadoresEnviados);
 					$destino=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
 					$para=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
@@ -261,13 +296,13 @@ if(isset($msj))
 <fieldset id="cuadroDetalleCorreo" style="display:none;">
 	<legend>&nbsp;Correos enviados <font color="black">:::</font> detalles&nbsp;</legend>
 	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
-	<button class="btn" style="margin-bottom:20px; margin-right:1%; float:right;" onclick="volverCorreosEnviados()"><div class="btn_with_icon_solo"><</div> Volver</button>
+	<button class="btn" style="margin-bottom:20px; margin-right:14px; float:right;" onclick="volverCorreosEnviados()"><div class="btn_with_icon_solo"><</div> Volver</button>
 	</div>
 	</br>
 
 	<pre class="detallesEmail">
-<div style="text-align:right; margin-bottom:0%;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0%; border-top:0px;">
-<td style="text-align:left; margin:0%;  border-top:0px" > Para: <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div></td>
+<div style="text-align:right; margin-bottom:0px;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0px; border-top:0px;">
+<td style="text-align:left; margin:px;  border-top:0px" > Para: <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div></td>
 </table>  Asunto:  <b  id="asuntoDetalle"></b>
   <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
 	</pre>
@@ -297,7 +332,7 @@ function get_popover_content() {
 	fecha=document.getElementById("fecha").innerHTML;
 	hora=document.getElementById("hora").innerHTML;
 	asunto=document.getElementById("asuntoDetalle").innerHTML;
-	content='<table class="pop" style=" background-color: #0040FF; color:white; width:100%;"><tr ><td >Para:</td><td><strong>'+destinoaux+'</strong></td></tr><tr><td>Asunto: </td><td><strong>'+asunto+'</strong></td></tr><tr><td>Fecha:  </td><td><strong>'+fecha  +'</strong></td><tr><td>Hora:   </td><td><strong>'+    hora+'</strong></td></tr></table>';
+	content='<table class="pop" style="  width:100%;"><tr ><td >Para:</td><td><strong>'+destinoaux+'</strong></td></tr><tr><td>Asunto: </td><td><strong>'+asunto+'</strong></td></tr><tr><td>Fecha:  </td><td><strong>'+fecha  +'</strong></td><tr><td>Hora:   </td><td><strong>'+    hora+'</strong></td></tr></table>';
         return content;
 }
   

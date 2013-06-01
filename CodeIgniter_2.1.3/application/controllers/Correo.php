@@ -32,7 +32,7 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('listaRecibidos'=>$this->model_correo->VerCorreosUser($rut), 'msj'=>$msj);
+		$datos_cuerpo = array('listaRecibidos'=>$this->model_correo->VerCorreosUser($rut,0), 'msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -67,7 +67,7 @@ class Correo extends MasterManteka {
 		respectivos destinatarios. */
 		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('listaEnviados'=>$this->model_correo->VerCorreosUser($rut), 'msj'=>$msj); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
+		$datos_cuerpo = array('listaEnviados'=>$this->model_correo->VerCorreosUser($rut,0), 'msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
 		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
@@ -307,7 +307,25 @@ class Correo extends MasterManteka {
 
 
 	}
-	
+
+	/**
+	* Recarga la tabla de correos recibidos segun los botones de < y > 
+	* según sean clickeados
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postRecibidos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$offset = $this->input->post('offset');
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
+		echo json_encode($resultado);
+	}
 	/**
 	* Establece como función principal a la función que renderiza la vista
 	* de correos recibidos. 
