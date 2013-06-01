@@ -326,6 +326,27 @@ class Correo extends MasterManteka {
 		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
 		echo json_encode($resultado);
 	}
+
+/**
+	* Recarga la tabla de correos Enviados segun los botones de < y > 
+	* según sean clickeados
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postEnviados(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$offset = $this->input->post('offset');
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
+		echo json_encode($resultado);
+	}
+	
+
 	/**
 	* Establece como función principal a la función que renderiza la vista
 	* de correos recibidos. 

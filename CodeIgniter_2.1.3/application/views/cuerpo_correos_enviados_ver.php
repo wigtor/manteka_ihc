@@ -71,13 +71,164 @@ function selectall(form)
 * Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
 */
 
-function cambiarCorreos(direccion)
+function cambiarCorreos(direccion,offset)
 {
+	
 	if (direccion=="ant") {
-		;
+		offset=offset-5;
+
+		
 	}else{
-;
+		offset=offset+5;
+		
+
 	}
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postEnviados") ?>",
+		data: { offset: offset},
+		success: function(respuesta){
+			var tablaResultados = document.getElementById('tabla');
+			var nodoTexto;
+			$(tablaResultados).empty();		
+			listaEnviados = JSON.parse(respuesta);
+			listaEnviados.shift();
+
+
+			for (var i = 0; i < listaEnviados.length; i++) {
+				
+				if(typeof listaEnviados[i][1][0] != 'undefined')
+				{
+					destino=listaEnviados[i][1][0].nombre1_estudiante+' '+listaEnviados[i][1][0].apellido_paterno+' '+listaEnviados[i][1][0].apellido_materno+' &#60'+listaEnviados[i][1][0].correo_estudiante+'&#62';					
+					para=listaEnviados[i][1][0].nombre1_estudiante+' '+listaEnviados[i][1][0].apellido_paterno+' '+listaEnviados[i][1][0].apellido_materno;
+					
+				}
+				if(typeof listaEnviados[i][2][0] != 'undefined')
+				{
+					destino=listaEnviados[i][2][0].nombre1_ayudante+' '+listaEnviados[i][2][0].apellido_paterno+' '+listaEnviados[i][2][0].apellido_materno+' &#60'+listaEnviados[i][2][0].correo_ayudante+'&#62';					
+					para=listaEnviados[i][2][0].nombre1_ayudante+' '+listaEnviados[i][2][0].apellido_paterno+' '+listaEnviados[i][2][0].apellido_materno;
+					
+				}
+				if(typeof listaEnviados[i][3][0] != 'undefined')
+				{
+					destino=listaEnviados[i][3][0].nombre1_profesor+' '+listaEnviados[i][3][0].apellido1_profesor+' '+listaEnviados[i][3][0].apellido2_profesor;					
+					para=listaEnviados[i][3][0].nombre1_profesor+' '+listaEnviados[i][3][0].apellido1_profesor+' '+listaEnviados[i][3][0].apellido2_profesor;
+					
+				}
+				if(typeof listaEnviados[i][4][0] != 'undefined')
+				{
+					destino=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;					
+					para=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;
+					
+				}
+				var destino="";
+				var destino="";
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				td.setAttribute("width", "5%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","padding-top:4px;padding-bottom:8px;");
+				td.setAttribute("align","center");				
+				check = document.createElement('input');
+				check.type='checkbox';
+				check.setAttribute("name",listaEnviados[i][0].cod_correo);
+				check.checked=false;
+				td.appendChild(check);
+				//td.setAttribute(onclick,);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "23%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
+				nodoTexto=document.createTextNode(para);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("id", "m"+i);
+				td.setAttribute("width", "27%");
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+")");
+				bold =document.createElement('b');
+				nodoTexto = document.createTextNode(listaEnviados[i][0].asunto);
+				bold.appendChild(nodoTexto);
+				td.appendChild(bold);
+
+				nodoTexto = document.createTextNode(" "+listaEnviados[i][0].cuerpo_email);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "8%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+")");
+				nodoTexto=document.createTextNode(listaEnviados[i][0].fecha);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "8%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+")");
+				
+				nodoTexto=document.createTextNode(listaEnviados[i][0].hora);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				tablaResultados.appendChild(tr);
+				var cuerpo=listaEnviados[i][0].cuerpo_email;
+				document.getElementById("m"+i).innerHTML="<b>"+listaEnviados[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaEnviados[i][0].asunto.length)+"......";
+				document.getElementById("c"+i).value=cuerpo;
+				
+				
+			}
+			var limite;
+			if(<?php echo $cantidadCorreos;?><offset+5)
+				limite=<?php echo $cantidadCorreos;?>;
+			else
+				limite=offset+5;
+
+			
+			
+			document.getElementById("sig").setAttribute("onClick", "cambiarCorreos('sig',"+offset+")");
+			document.getElementById("ant").setAttribute("onClick", "cambiarCorreos('ant',"+offset+")");
+			if (direccion=="ant") {
+					
+					if(offset==0){
+						document.getElementById("ant").className="disabled";
+						document.getElementById("ant").removeAttribute('onClick');
+					}
+					document.getElementById("sig").removeAttribute('class');
+			}else{
+				
+				if(offset+5>=<?php echo $cantidadCorreos;?>){
+					document.getElementById("sig").className="disabled";
+					document.getElementById("sig").removeAttribute('onClick');
+				}
+				document.getElementById("ant").removeAttribute('class');
+
+			}
+			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
+
+			
+			
+			var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+		}
+	});
+	/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+	
+}
+
+/** 
+* Esta función elimina los tags HTML
+*/
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
 }
 </script>
 <script type="text/javascript">
@@ -144,8 +295,8 @@ if(isset($msj))
 	<legend>&nbsp;Correos enviados&nbsp;</legend>
 	<?php
 	$contador=0;
-		$offset=0;
-	
+	$offset=0;
+
 	if($cantidadCorreos<$offset+5)
 		$limite=$cantidadCorreos;
 	else
@@ -189,22 +340,23 @@ if(isset($msj))
 		}
 		else
 		{?>
-
-		    <ul class="pager" style="text-align:right;margin:0px" >
-		    	<?php echo "mostrando ".$offset. "-".$limite. " de: ".$cantidadCorreos; ?>
-	    		<li class="disabled"><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
+		    <ul id="pager" class="pager" style="text-align:right;margin:0px" >
+		    	<span id="mostrando">  mostrando <?php echo ($offset+1)."-".$limite. " de: ".$cantidadCorreos; ?></span>
+	    		<li id="ant" class="disabled" ><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
 	    		<?php 
 	    		if($limite<$cantidadCorreos){
 	    			?>
-	    			<li onClick="cambiarCorreos('sig')"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+	    			<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
 	    			<?php
 	    		}else{
 	    			?>
-	    			<li onClick="cambiarCorreos('sig')" class="disabled"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+	    			<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)" class="disabled"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
 	    			<?php
 	    		}
-	    		
-			?>
+	    		?>
+
+	   	 		
+			</ul>
 			<form name="formulario" id="formu" method="post">
 			<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:20px; margin-bottom:0px">
 			<tr class="info">
@@ -216,7 +368,7 @@ if(isset($msj))
 			</tr>
 			
 			
-			<tbody>
+			<tbody id="tabla">
 			<?php		
 			while($contador<count($correos))
 			{			

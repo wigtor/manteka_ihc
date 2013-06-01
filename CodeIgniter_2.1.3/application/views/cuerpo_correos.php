@@ -181,6 +181,10 @@ function cambiarCorreos(direccion,offset)
 			$(icono_cargando).show();
 	
 }
+
+/** 
+* Esta función elimina los tags HTML
+*/
 function strip(html)
 {
    var tmp = document.createElement("DIV");
