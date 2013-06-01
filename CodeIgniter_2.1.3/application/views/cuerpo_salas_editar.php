@@ -303,18 +303,24 @@ function ordenarFiltro(){
 		
 
 
-						<br>
-						<div class="row-fluid">
-							<div class="span10">
-								<div class="row-fluid">
-									<div class="span3 offset6">
-										<button class ="btn" type="submit" onclick="EditarSala()" >Guardar</button>
+						
+						<div class="row-fluid" style="margin-top:2%">
+							
+								
+									<div class="span4" style="margin-left: 36%; width:28%">
+										<button class ="btn" type="submit" onclick="EditarSala()" style="width: 111px" >
+											<div class="btn_with_icon_solo">Ã</div>
+											&nbsp Modificar
+										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >Cancelar</button>
+										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" style="width:105px"  >
+											<div class="btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
-								</div>
-							</div>
+								
+							
 						</div>
 
 					</form>	

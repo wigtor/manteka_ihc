@@ -247,4 +247,7 @@ class Model_secciones extends CI_Model{
     }
  
 }
+
+
+
 ?>

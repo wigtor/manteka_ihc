@@ -1,3 +1,7 @@
+
+
+
+
 <div class="row-fluid">
 	<div class="span10">
 		<fieldset>
@@ -14,16 +18,26 @@
 
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table id="listadoResultados" class="table table-hover">
-								<thead>
-									<tr>
-										
-									</tr>
-								</thead>
-								<tbody>
-
-								</tbody>
-							</table>
+							<table class="table table-hover">
+							<tbody>
+								<input id="seccion" type="text" name="cod_seccion" style="display:none">
+								<?php
+								$contador=0;
+								$comilla= "'";
+								
+								while ($contador<count($seccion)){
+									
+									echo '<tr>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								
+								?>
+														
+							</tbody>
+						</table>
 						</div>
 					</div>
 				</div>
@@ -39,12 +53,12 @@
 
 
 						<pre style=" padding: 2%">
-Sección:          
-Módulo Actual:              
+Sección:           <b id="nombreSeccion"></b>         
+Módulo Actual:               
 Profesor Lider:          
 Profesor Asignado: 
-Sala Asignada: 
-Horario Asignado:        
+Sala Asignada:     
+Horario Asignado:  
 						</pre>
 					</div>
 
