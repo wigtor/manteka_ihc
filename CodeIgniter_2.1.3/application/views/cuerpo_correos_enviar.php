@@ -490,27 +490,29 @@ function showAlumnosByFiltro(){
 	var codigo = document.getElementById('filtroPorCarrera').value;
 	var profesor = document.getElementById('filtroPorProfesorEncargado').value;
 	var seccion = document.getElementById('filtroPorSeccion').value;
+	var modulo_tematico = document.getElementById('filtroPorModuloTematico').value;
 	if(destinatario==1){
-	if(codigo=="" && profesor=="" && seccion==""){
+	if(codigo=="" && profesor=="" && seccion=="" && modulo_tematico==""){
 		showDestinatarios(1);
 	}else{
 		$.ajax({
 			type: "POST",
 			url: "<?php echo site_url("Correo/postAlumnosByFiltro") ?>",
-			data:{ codigo: codigo, profesor: profesor, seccion: seccion},
+			data:{ codigo: codigo, profesor: profesor, seccion: seccion, modulo_tematico: modulo_tematico},
 			success: function(respuesta){
+				alert(respuesta);
 				muestraTabla(respuesta);
 			}
 		});
 	}
 	}else{
-		if(seccion==""){
+		if(seccion=="" && modulo_tematico==""){
 			showDestinatarios(2);
 		}else{
 			$.ajax({
 			type: "POST",
 			url: "<?php echo site_url("Correo/postProfesoresByFiltro") ?>",
-			data:{ seccion: seccion},
+			data:{ seccion: seccion, modulo_tematico:modulo_tematico},
 			success: function(respuesta){
 				alert(respuesta);
 				muestraTabla(respuesta);
@@ -700,7 +702,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="input-large">
+					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>
