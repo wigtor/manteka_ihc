@@ -380,6 +380,15 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	public function postSecciones(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllSecciones();
+		echo json_encode($resultado);
+	}
+
 	public function postAlumnosByCarrera(){
 		if(!$this->isLogged()){
 			return;
@@ -387,6 +396,61 @@ class Correo extends MasterManteka {
 		$codigo = $this->input->post('codigo');
 		$this->load->model('Model_filtro');
 		$resultado = $this->Model_filtro->getAlumnosByCarrera($codigo);
+		echo json_encode($resultado);
+	}
+
+	public function postAlumnosByProfesor(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$profesor = $this->input->post('profesor');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAlumnosByProfesor($profesor);
+		echo json_encode($resultado);
+
+	}
+
+	public function postAlumnosByFiltro(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$profesor = $this->input->post('profesor');
+		$codigo = $this->input->post('codigo');
+		$seccion = $this->input->post('seccion');
+		$modulo_tematico = $this->input->post('modulo_tematico');
+		$bloque = $this->input->post('bloque');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico,$bloque);
+		echo json_encode($resultado);
+	}
+
+	public function postProfesoresByFiltro(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$seccion = $this->input->post('seccion');
+		$modulo_tematico = $this->input->post('modulo_tematico');
+		$bloque = $this->input->post('bloque');
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion,$modulo_tematico,$bloque);
+		echo json_encode($resultado);
+	}
+
+	public function postHorarios(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllHorarios();
+		echo json_encode($resultado);
+	}
+
+	public function postModulosTematicos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$this->load->model('Model_filtro');
+		$resultado = $this->Model_filtro->getAllModulosTematicos();
 		echo json_encode($resultado);
 	}
 }
