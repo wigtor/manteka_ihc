@@ -103,10 +103,16 @@
 					<br>
                                 <div class="row-fluid">
 									<div class="span3 offset6">
-										<button class ="btn" type="submit" >Agregar</button>
+										<button class ="btn" type="submit" style="width:102px ">
+											<div class="btn_with_icon_solo">Ã</div>
+											&nbsp Agregar
+										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" >Cancelar</button>
+										<button  class ="btn" type="reset" style="width: 105px">
+											<div class="btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
 								</div> 
 					

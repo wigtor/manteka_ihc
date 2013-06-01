@@ -43,7 +43,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="10" type="number" min="1" name="rut_profesor" placeholder="Ingrese RUN sin dig. verificador" required>
+		    							<input id="inputInfo" maxlength="10" type="number" min="1" name="rut_profesor" placeholder="Ej:17785874" required>
 		  							</div>
 							</div>
 						</div>
@@ -111,7 +111,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor" maxlength="30" placeholder="ejemplo1@usach.cl" required>
+		    							<input type="email" name="correo_profesor" maxlength="30" placeholder="nombre1_usuario@miemail.com" required>
 		  							</div>
 							</div>
 
@@ -124,7 +124,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor1" maxlength="30" placeholder="ejemplo2@usach.cl" required>
+		    							<input type="email" name="correo_profesor1" maxlength="30" placeholder="nombre2_usuario@miemail.com" required>
 		  							</div>
 							</div>
 						</div>

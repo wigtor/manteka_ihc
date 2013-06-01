@@ -215,11 +215,17 @@ $contador =count($secc) ;
                     </div>
 					<br>
                                 <div class="row-fluid">
-									<div class="span3 offset6">
-										<button class ="btn">Eliminar</button>
+									<div class="span2" style="margin-left:58%; width:20%">
+										<button class ="btn" style="width:108px">
+											<div class="btn_with_icon_solo">Ë</div>
+											&nbsp Eliminar
+										</button>
 										</div>
-									<div class="span3">
-										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" >Cancelar</button>
+									<div class="span3" style="width:19%">
+										<button  class ="btn" type="reset" onclick="DetalleSeccion('')"  style="width:105px">
+											<div class="btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
 								</div> 
                 </div>

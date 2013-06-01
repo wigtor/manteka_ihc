@@ -220,10 +220,16 @@ function ordenarFiltro(){
 					<br>
                                 <div class="row-fluid">
 									<div class="span3 offset6">
-										<button class ="btn" type="submit" >Guardar</button>
+										<button class ="btn" type="submit"style="width:111px " >
+											<div class="btn_with_icon_solo">Ã</div>
+											&nbsp Modificar
+										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" >Cancelar</button>
+										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" style="width:105px " >
+											<div class="btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
 								</div> 
 					
