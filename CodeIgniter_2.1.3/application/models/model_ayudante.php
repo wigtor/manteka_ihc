@@ -107,7 +107,8 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
 		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
 		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
-		$this->db->order_by("APELLIDO1_AYUDANTE", "asc");
+		$this->db->select('CORREO_AYUDANTE as correo');
+		$this->db->order_by("NOMBRE1_AYUDANTE", "asc");
 		$query = $this->db->get('ayudante');
 		if ($query == FALSE) {
 			$query = array();

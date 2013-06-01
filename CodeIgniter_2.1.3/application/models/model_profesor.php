@@ -107,7 +107,7 @@ class Model_profesor extends CI_Model {
 		$this->db->select('CORREO1_USER AS correo');
 		$this->db->from('profesor');
 		$this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
-		$this->db->order_by("APELLIDO1_PROFESOR", "asc");
+		$this->db->order_by("NOMBRE1_PROFESOR", "asc");
 		$query = $this->db->get();
 		if ($query == FALSE) {
 			$query = array();
