@@ -185,7 +185,11 @@ class MasterManteka extends CI_Controller {
 	*	@param 
 	*
 	*/
-	protected function cargarVerInfo($titulo, $barra_lateral, $tipos_usuarios_permitidos, 
+	protected function cargarVerInfo($titulo, $barra_lateral, $tipos_usuarios_permitidos,
+		$nombreVista,
+		$jsFile, $nombreFuncionFiltro, 
+		$idInputFiltro, $idSelectFiltro,
+		$listaOpciones, $listaInfo,
 		$subMenuLateralAbierto = '')
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
@@ -231,7 +235,7 @@ class MasterManteka extends CI_Controller {
 		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', TRUE);
 
 		//Se setea si se quiere o no mostrar la barra de progreso, hay vistas que no lo necesitan
-		$datos_plantilla["mostrarBarraProgreso"] = $mostrarBarraProgreso;
+		$datos_plantilla["mostrarBarraProgreso"] = FALSE;
 
 		//Se carga la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, TRUE);
@@ -239,12 +243,32 @@ class MasterManteka extends CI_Controller {
 		//Se carga el footer
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', TRUE);
 
+		//Nombre del archivo JavaScript que utiliza
+		$datos_cuerpo["nombreJS"] = $jsFile;
 
-/* CAMBIAR ESTO
+		//Nombre de lo que se está viendo. Ej: "Alumno", "Ayudante"
+		$datos_cuerpo["nombreView"] = $nombreVista;
+
+		//ID del objeto input html
+		$datos_cuerpo["idInputFiltro"] = $idInputFiltro;
+
+		//Nombre de la función Javascript que se utiliza cuando se cambia el filtro
+		$datos_cuerpo["nombreFncCambiarTipoFiltro"] = $nombreFuncionFiltro;
+
+		//ID del objeto select html
+		$datos_cuerpo["idSelectFiltro"] = $idSelectFiltro;
+
+		//Opciones del Filtro, posee su ID y el nombre que lo representa
+		$datos_cuerpo["OpcionesFiltro"] = $listaOpciones;
+
+		//Información que muestra la vista
+		$datos_cuerpo["ListaInformacion"] = $listaInfo;
+
+
 		//Se carga el cuerpo central indicado por los parámetros y con los datos que se entregan
 		$datos_plantilla["cuerpo_central"] = $this->load->view($cuerpo_a_cargar, $datos_cuerpo, TRUE);
-*
-/		//Se setea que botón de la barra lateral se encuentra presionado
+
+		//Se setea que botón de la barra lateral se encuentra presionado
 		$datos_plantilla["subVistaLateralAbierta"] = $subMenuLateralAbierto;
 
 		//Se carga la barra lateral

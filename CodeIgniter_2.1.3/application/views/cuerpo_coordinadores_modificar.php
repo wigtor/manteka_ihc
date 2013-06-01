@@ -20,7 +20,18 @@
 				<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" id="select-filtro">
-				<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
+				<li onclick="seleccionar_filtro(this)" class="active" value="1">
+					<a href>Nombre</a>
+				</li>
+				<li onclick="seleccionar_filtro(this)" class="passive" value="2" >
+					<a href>Apellido Paterno</a>
+				</li>
+				<li onclick="seleccionar_filtro(this)" class="passive" value="3">
+					<a href>Apellido Materno</a>
+				</li>
+				<li onclick="seleccionar_filtro(this)" class="passive" value="4">
+					<a href>Correo Electrónico</a>
+				</li>
 				<!--<li onclick="seleccionar_filtro(this)"><a href >Rut</a></li>
 				<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li>  //no implementado aun-->
 			</ul>
@@ -82,14 +93,21 @@
         }*/
     }
     function seleccionar_filtro(option){
+    	var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+
     	$(option).prevent
     	$('.active').removeClass("active");
     	$(option).addClass("active");
     	$("#show-filtro").empty().append($('.active a').text());
     }
+    
     $("ul#select-filtro li a").click(function(event) {
 	    event.preventDefault();
 	});
+
 	function validar(form){
 		if($('input[name="contrasena"]').val() != "" || $('input[name="contrasena2"]').val()!= ""){
 			if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
@@ -132,7 +150,7 @@ jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
 };
 
 $(function() {
-    $('#select-coordinadores').filterByText($('#appendedDropdownButton'), true);
+    $('#select-coordinadores').filterByText($('#appendedDropdownButton'), false);
 });
 
        	
