@@ -29,4 +29,7 @@
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/build-config.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/styles.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/faq.js"></script>
+
+
+
 </head>
