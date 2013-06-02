@@ -16,6 +16,7 @@
 		$editarSecciones = "";
 		$borrarSecciones = "";
 		$asignarAseccion = "";
+		$borrarAsignar = "";
 
 		$inAsignaciones = "";
 		$inSecciones = "";
@@ -41,6 +42,10 @@
 		}
 		else if ($subVistaLateralAbierta == "asignarAseccion"){
 			$asignarAseccion = 'class="active"';
+			$inAsignaciones="in";
+		}
+		else if ($subVistaLateralAbierta == "borrarAsignar"){
+			$borrarAsignar = 'class="active"';
 			$inAsignaciones="in";
 		}
 	?>
@@ -70,6 +75,7 @@
 		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inAsignaciones; ?>">
 		    	<div class="accordion-inner nav nav-list">
 					<li <?php echo $asignarAseccion; ?> ><a href="<?php echo site_url("Secciones/asignarAsecciones")?>">Agregar asignación</a></li>
+					<li <?php echo $borrarAsignar; ?> ><a href="<?php echo site_url("Secciones/borrarAsignacion")?>">Eliminar asignación</a></li>
 		     	</div>
 		    </div>
 	  	</div>

@@ -1,15 +1,20 @@
-
 <script type="text/javascript">
 	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
 				alert("Sala agregada correctamente");
-				
-				}
-				else{
-					alert("Error al agregar");
 			
+		}
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al agregar la sala");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("Una sala con el mismo nombre ya se ha ingresado");
 				}
+			}
+		}
 	}
 </script>
 
@@ -105,11 +110,17 @@
 					</div>
 					<div class="row-fluid" style="margin-top: 2%">
 		
-						<div class= "span4" style="margin-left:4%">
-							<button class ="btn" type="submit" >Agregar</button>
+						<div class= "span4" style="margin-left:35%; width:102px">
+							<button class ="btn" type="submit" >
+								<div class="btn_with_icon_solo">Ã</div>
+								&nbsp Agregar
+							</button>
 						</div>
-						<div class= "span3" style="margin-left:0%">
-							<button class ="btn" type="reset" >Cancelar</button>
+						<div class= "span3" style="margin-left:2%; width: 105px">
+							<button class ="btn" type="reset" >
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancelar
+							</button>
 						</div>
 					</div>
 					</div> 
