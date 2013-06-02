@@ -130,7 +130,7 @@ class Modulos extends MasterManteka {
 		$cod_modulo_eliminar = $this->input->post('cod_modulo_eliminar');
 		$confirmacion = $this->Model_modulo->EliminarModulo($cod_modulo_eliminar);
 	
-		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo(),'mensaje_confirmacion'=>$confirmacion));
+		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo(),'mensaje_confirmacion'=>$confirmacion);
      
 		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
