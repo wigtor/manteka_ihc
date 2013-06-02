@@ -65,18 +65,6 @@
 	}
 	?>
 	
-	if(tipo_lista == "lista1_"){
-		var checkboxlistaS1 = document.getElementsByName("seleccionadosS1[]");
-		for(cont=0;cont < checkboxlistaS1.length;cont++){
-			checkboxlistaS1[cont].checked = false;
-		}
-	}
-	else{
-		var checkboxlistaS2 = document.getElementsByName("seleccionadosS2[]");
-		for(cont=0;cont < checkboxlistaS2.length;cont++){
-			checkboxlistaS2[cont].checked = false;
-		}
-	}
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultar=document.getElementById(tipo_lista+cont);
@@ -112,11 +100,13 @@ function ordenarFiltroSeccion(tipo_seccion){
 		ocultarInput=document.getElementById(tipo_seccion+arreglo[cont]);
 		ocultarTd=document.getElementById(tipo_seccion+cont);
 		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+			ocultarInput.style.display='none';
 			ocultarTd.style.display='none';
-			//ocultarInput.checked = false;
+			ocultarInput.checked = false;
 		}
 		else
 		{
+			ocultarInput.style.display='';
 			ocultarTd.style.display='';
 		}
     }
@@ -127,7 +117,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 <script type="text/javascript">
 function ordenarFiltro(tipo_lista){
 	var filtroLista = document.getElementById(tipo_lista+"filtro").value;
-	var tipoDeFiltro = document.getElementById(tipo_lista+"tipoDeFiltro").value;
+	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
 
 	var arreglo = new Array();
 	var ocultar;
@@ -149,10 +139,8 @@ function ordenarFiltro(tipo_lista){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultar=document.getElementById(tipo_lista+cont);
-		ocultarCb=document.getElementById("c_"+tipo_lista+cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
-			ocultarCb.checked = false;
 		}
 		else
 		{
@@ -228,7 +216,7 @@ function ordenarFiltro(tipo_lista){
 								<div class="span6">
 										
 										
-										<select id="lista1_tipoDeFiltro" title="Tipo de filtro">
+										<select id="tipoDeFiltro" title="Tipo de filtro">
 										<option value="1">Filtrar por Nombre</option>
 										<option value="3">Filtrar por Apellido paterno</option>
 										<option value="4">Filtrar por Apellido materno</option>
@@ -259,8 +247,9 @@ function ordenarFiltro(tipo_lista){
 										while ($contador<count($rs_estudiantes)){
 											
 											echo '<tr>';
-											echo	'<td  id="lista1_'.$contador.'"  style="text-align:left;display:none;">
-													<input id="c_lista1_'.$contador.'" type="checkbox" name="seleccionadosS1[]" value="'.$rs_estudiantes[$contador][0].'">  '.$rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
+											echo	'<td  id="lista1_'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
+														  style="text-align:left;display:none;">
+														  <input type="checkbox" name="seleccionadosS1[]" value="'.$rs_estudiantes[$contador][0].'">  '.$rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -325,7 +314,7 @@ function ordenarFiltro(tipo_lista){
 								<input id="lista2_filtro"  onkeyup="ordenarFiltro('lista2_')" type="text" placeholder="Filtro búsqueda" style="width:90%">
 							</div>
 							<div class="span6">
-									<select id="lista2_tipoDeFiltro" title="Tipo de filtro" >
+									<select id="tipoDeFiltro" title="Tipo de filtro" >
 									<option value="1">Filtrar por Nombre</option>
 									<option value="3">Filtrar por Apellido paterno</option>
 									<option value="4">Filtrar por Apellido materno</option>
@@ -353,8 +342,9 @@ function ordenarFiltro(tipo_lista){
 										while ($contador<count($rs_estudiantes)){
 											
 											echo '<tr>';
-											echo	'<td  id="lista2_'.$contador.'" style="text-align:left;display:none;" >
-														  <input id="c_lista2_'.$contador.'" type="checkbox" name="seleccionadosS2[]" value="'.$rs_estudiantes[$contador][0].'">  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
+											echo	'<td  id="lista2_'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
+														  style="text-align:left;display:none;" >
+														  <input  type="checkbox" name="seleccionadosS2[]" value="'.$rs_estudiantes[$contador][0].'">  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;

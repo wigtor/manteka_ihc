@@ -1,14 +1,14 @@
 <script type="text/javascript">
 function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
-	document.getElementById(nombre_modulo).innerHTML = nombre_modulo;
-	document.getElementById(descripcion_modulo).innerHTML = descripcion;
+	document.getElementById(nombre_modulo).value = nombre_modulo;
+	document.getElementById(descripcion_modulo).value = descripcion;
 	
 	profesor_lider = document.getElementById(profesor_lider);
 	var profesores_lideres = new Array();
 	var cont;
 	<?php
 	$contadorE = 0;
-	while($contadorE<count($profesor_lider)){
+	while($contadorE<count($profesores)){
 		echo 'profesores_lideres['.$contadorE.']=new Array();';
 		echo 'profesores_lideres['.$contadorE.'][0] = "'.$profesor_lider[$contadorE][0].'";';
 		echo 'profesores_lideres['.$contadorE.'][1] = "'.$profesor_lider[$contadorE][1].'";';
@@ -21,7 +21,7 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 	?>
 	for(cont=0;cont < profesores_lideres.length;cont++){
 		if(cod_equipo == profesores_lideres[cont][0]){
-			profesor_lider.innerHTML = profesores_lideres[cont][2]+" "+profesores_lideres[cont][3]+" "+profesores_lideres[cont][4]+" "+profesores_lideres[cont][5];
+			profesor_lider.value = profesores_lideres[cont][2]+" "+profesores_lideres[cont][3]+" "+profesores_lideres[cont][4]+" "+profesores_lideres[cont][5];
 			cont = profesores_lideres.length;
 		}
     }
@@ -30,7 +30,7 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 	
 	<?php
 	$contadorE = 0;
-	while($contadorE<count($modulos)){
+	while($contadorE<count($profesores)){
 		echo 'arreglo['.$contadorE.']=new Array();';
 		echo 'arreglo['.$contadorE.'][0] = "'.$modulos[$contadorE][0].'";';//cod modulo tem
 		echo 'arreglo['.$contadorE.'][1] = "'.$modulos[$contadorE][2].'";';//cod equipo
@@ -99,9 +99,9 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 			2. Detalle Módulo Temático
 			<div class ="row-fluid">
 				<pre style="margin-top: 2%; padding: 2%; height:6%">
-Nombre del módulo:	<b id="nombre_modulo"></b>
-Profesor lider: 	<b id="profesor_lider"></b>
-Descripción módulo: <b id="descripcion_modulo"></b>
+Nombre del módulo:	<input type="text" id="nombre_modulo"></input>
+Profesor lider: 	<input type="text" id="profesor_lider"></input>
+Descripción módulo: <input type="text" id="descripcion_modulo"></input>
 
 			</pre>
 				
