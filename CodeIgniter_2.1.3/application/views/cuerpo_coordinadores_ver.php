@@ -16,6 +16,9 @@
 		rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
 		//var rut_clickeado = elemTabla;
 
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
@@ -51,9 +54,7 @@
 			}
 		});
 		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		
 	}
 
 
@@ -62,6 +63,11 @@
 		var inputTextoFiltro = document.getElementById('filtroLista');
 		var valorSelector = selectorFiltro.value;
 		var texto = inputTextoFiltro.value;
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>", /* Se setea la url del controlador que responderá */
@@ -96,9 +102,7 @@
 				}
 		});
 
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		
 	}
 
 	//Se cargan por ajax
