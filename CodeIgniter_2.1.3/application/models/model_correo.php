@@ -37,12 +37,12 @@ class model_correo extends CI_Model
 	*
 	* @author: Claudio Rojas (CR) y Diego Garc?a (DGM). 
 	*/
-	public function VerCorreosUser($variable)
+	public function VerCorreosUser($variable,$offset)
 	{
 		try
 		{
 			/* Se obtienen todos los correos enviados por un usuario. */
-			$sql="SELECT * FROM carta WHERE rut_usuario='$variable'";
+			$sql="SELECT * FROM carta  WHERE rut_usuario='$variable' ORDER BY COD_CORREO DESC LIMIT $offset,5";
 			$datos=mysql_query($sql);
 			$listaCompleta=array();
 			while($row=mysql_fetch_array($datos))
@@ -50,7 +50,7 @@ class model_correo extends CI_Model
 				$lista = array();
 				$correo = array();
 				$correo['cod_correo']=$row['COD_CORREO'];
-				$correo['rut_usuario3']=$row['RUT_USUARIO'];
+				$correo['rut_usuario']=$row['RUT_USUARIO'];
 				$correo['id_plantilla']=$row['ID_PLANTILLA'];
 				$correo['hora']=$row['HORA']; 
 				$correo['fecha']=$row['FECHA'];
@@ -272,6 +272,22 @@ class model_correo extends CI_Model
 			{
 			    return $row->COD_CORREO;
 			}
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
+    public function cantidadCorreos($rut)
+	{
+		try
+		{
+			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->from('carta');
+			return $this->db->count_all_results();
+			
 
 
 		}

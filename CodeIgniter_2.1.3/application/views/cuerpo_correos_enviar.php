@@ -631,7 +631,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	La selección de plantillas será implementada en las próximas entregas.
 	</div>
 	</pre>
-	<button class ="btn"  title="Avanzar a paso 2" onclick="pasoUnoDos()" >Siguiente</button>
+	<button class ="btn" type="button"  title="Avanzar a paso 2" onclick="pasoUnoDos()" >Siguiente</button>
 	</div>
 </fieldset>
 	
@@ -780,7 +780,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 </script>
 		<!-- Este es el botón que está entremedio de los dos listados -->
 		<div class="span2 text-center">
-			<div class="btn">Agregar</div>
+			<div class="btn" type="button">Agregar</div>
 		</div>
 
 		<!-- Este es el listado de destinatarios seleccionados para el envío -->
@@ -809,10 +809,10 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	<div class="row-fluid">
 		<ul class="pager pull-right">
 			<li>
-				<div class ="btn" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</div>
+				<div class ="btn" type="button" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</div>
 			</li>
 			<li>
-				<div class ="btn" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</div>
+				<div class ="btn" type="button" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</div>
 			</li>
 		</ul>
 	</div>
@@ -1007,7 +1007,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 		</div>
 		<div class="row-fluid">
 			<div class="span2 pull-right control-group">
-				<button class="btn" title="Volver a paso 2" onclick="pasoTresDos()" >Anterior</button>
+				<button class="btn" type="button" title="Volver a paso 2" onclick="pasoTresDos()" >Anterior</button>
 				<button type="submit" title="Enviar correo" class="btn btn-primary" >Enviar</button>
 			</div>
 		</div>
