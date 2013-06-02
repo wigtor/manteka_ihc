@@ -19,6 +19,20 @@ class Model_sala extends CI_Model {
 	*/
 	public function InsertarSala($num_sala, $ubicacion, $capacidad, $implementos) {
 		if($num_sala=="") return 2;
+		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if( $row['NUM_SALA']==$num_sala){
+			$var=1;
+			}
+			$contador = $contador + 1;
+		}}
+		
+		if($var!=1){
 		$data1 = array(	
 					'NUM_SALA' => $num_sala ,
 					'UBICACION' => $ubicacion ,
@@ -46,7 +60,8 @@ class Model_sala extends CI_Model {
 		else{
 			return -1;
 		}
-		
+		}
+		else{return 3;}
     }
 
 	/**
@@ -271,7 +286,22 @@ class Model_sala extends CI_Model {
 	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA)
 	{
 		if($cod_sala=="" || $num_sala=="" || $ubicacion=="" || $capacidad=="") return 2;
+		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if($row['COD_SALA']!=$cod_sala){
+				if( $row['NUM_SALA']==$num_sala){
+				$var=1;
+				}
+			}
+			$contador = $contador + 1;
+		}}
 		
+		if($var!=1){
 		
 		$data = array(	
 					'COD_SALA' => $cod_sala,
@@ -310,7 +340,9 @@ class Model_sala extends CI_Model {
 		}
 		else{
 			return -1;
-		}		
+		}
+		}	
+		else {return 3;}
     }
 	
 }

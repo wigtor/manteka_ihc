@@ -110,32 +110,33 @@ class Modulos extends MasterManteka {
 
     public function borrarModulos()
     {
-    	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Planificacion";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-
-
+		
 		$this->load->model("Model_modulo");
-		$datos_vista = array('rs_modulos' => $this->Model_modulo->VerModulos());
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_borrar', $datos_vista, true);
 
-		$datos_plantilla["subVistaLateralAbierta"] = "borrarModulos"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_planificacion', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
+		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo(),'mensaje_confirmacion'=>2);
+     
+		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
+
+    }
+	
+	public function hacerBorrarModulos()
+    {
+		
+		$this->load->model("Model_modulo");
+		$cod_modulo_eliminar = $this->input->post('cod_modulo_eliminar');
+		$confirmacion = $this->Model_modulo->EliminarModulo($cod_modulo_eliminar);
+	
+		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo(),'mensaje_confirmacion'=>$confirmacion);
+     
+		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
 
     }
 
