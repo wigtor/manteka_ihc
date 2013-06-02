@@ -271,7 +271,13 @@ class Model_secciones extends CI_Model{
 			$query=array();
 			return $query;
 		}
-		return $query->row();
+		return $query->result();
+		$datos = $query->result();
+		$lista = array();
+		$lista[0] = $datos->$row->NOMBRE_SECCION;
+		$lista[1] = $datos->$row->NOMBRE_MODULO;
+		$lista[2] = $datos->$row->NUM_SALA;
+		return $lista;
 
 	
 }*/
