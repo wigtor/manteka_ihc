@@ -24,7 +24,7 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 	this.id=id;
 
 		destinoaux=destino;
-		document.getElementById("destinos").innerHTML=destino.substring(0,5 );
+		document.getElementById("destinos").innerHTML=destino.substring(0,10 );
 
 	
 
@@ -121,8 +121,6 @@ function cambiarCorreos(direccion,offset)
 					para=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;
 					
 				}
-				var destino="";
-				var destino="";
 				tr = document.createElement('tr');
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
@@ -148,7 +146,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("id", "m"+i);
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
 				bold =document.createElement('b');
 				nodoTexto = document.createTextNode(listaEnviados[i][0].asunto);
 				bold.appendChild(nodoTexto);
@@ -161,7 +159,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
 				nodoTexto=document.createTextNode(listaEnviados[i][0].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
@@ -169,7 +167,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
 				
 				nodoTexto=document.createTextNode(listaEnviados[i][0].hora);
 				td.appendChild(nodoTexto);
@@ -380,7 +378,7 @@ if(isset($msj))
 				if(isset($estudiantesEnviados[$contador][0])!=0)
 				{
 					$total+=count($estudiantesEnviados);
-					$destino=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'].' &#60'.$estudiantesEnviados[$contador][0]['correo_estudiante'].'&#62';					
+					$destino=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'].' &lt'.$estudiantesEnviados[$contador][0]['correo_estudiante'].'&gt';					
 					$para=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'];
 				}	
 				if(isset($ayudantesEnviados[$contador][0])!=0)
@@ -453,7 +451,7 @@ if(isset($msj))
 	</br>
 
 	<pre class="detallesEmail">
-<div style="text-align:right; margin-bottom:0px;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0px; border-top:0px;">
+<div style="text-align:right; margin-bottom:0px;">Fecha: <b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0px; border-top:0px;">
 <td style="text-align:left; margin:px;  border-top:0px" > Para: <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div></td>
 </table>  Asunto:  <b  id="asuntoDetalle"></b>
   <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
