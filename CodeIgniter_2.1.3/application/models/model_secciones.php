@@ -249,5 +249,33 @@ class Model_secciones extends CI_Model{
 }
 
 
+/*public function VerAsignacion($seccion) 
+{
+
+		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('NOMBRE_MODULO AS modulo');
+		$this->db->select('NUM_SALA AS sala');
+		$this->db->from('seccion');
+		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION');
+		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MOD_TEM=seccion_mod_tem.COD_MOD_TEM');
+		$this->db->join('sala_horario', 'seccion_mod_tem.ID_HORARIO_SALA=sala_horario.ID_HORARIO_SALA');
+		$this->db->join('sala','sala_horario.COD_SALA=sala.COD_SALA');
+		$this->db->join('horario','sala_horario.COD_HORARIO=horario.COD_HORARIO');
+		$this->db->join('equipo_profesor', 'modulo_tematico.COD_EQUIPO=equipo_profesor.COD_EQUIPO');
+		$this->db->join('profe_seccion','profe_seccion.COD_SECCION= seccion.COD_SECCION');
+		$this->db->join('profesor','profe_seccion.RUT_USUARIO2=profesor.RUT_USUARIO2');
+		$this->db->where('NOMBRE_SECCION', $seccion);
+		$query = $this->db->get('seccion');
+	
+		if ($query == FALSE) {
+			$query=array();
+			return $query;
+		}
+		return $query->row();
+
+	
+}*/
+
+
 
 ?>

@@ -1,3 +1,13 @@
+<script type="text/javascript">
+	function DetalleSeccion(cod_seccion){
+			document.getElementById("seccion").value = cod_seccion;
+			var editar = document.getElementById("formDetalle");
+			editar.action = "<?php echo site_url("Secciones/borrarAsignacion/") ?>/";
+			editar.submit();
+			
+	}
+</script>
+
 
 
 
@@ -6,6 +16,7 @@
 	<div class="span10">
 		<fieldset>
 			<legend>Borrar Asignación</legend>
+			<form id="formDetalle" type="post" method="post">
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="row-fluid">
@@ -53,12 +64,21 @@
 
 
 						<pre style=" padding: 2%">
-Sección:           <b id="nombreSeccion"></b>         
-Módulo Actual:               
-Profesor Lider:          
-Profesor Asignado: 
-Sala Asignada:     
-Horario Asignado:  
+<?php
+	$contador=0;
+	$comilla= "'";
+					
+while ($contador<count($secc)){
+echo '<tr><td id="rs_seccion_'.$contador.'" >Sección: '.$secc[$contador][0].'</td>';
+echo '</tr>'; 
+	$contador =$contador+1 ;
+}								
+?>
+
+Módulo:
+Profesor Asignado:
+Sala asignada:
+Horario:
 						</pre>
 					</div>
 
@@ -79,7 +99,7 @@ Horario Asignado:
 					</div>
 				</div>
 			</div>
-			
+			</form>
 		</fieldset>
 	</div>
 </div>
