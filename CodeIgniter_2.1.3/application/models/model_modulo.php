@@ -1,22 +1,15 @@
 <?php
  
 class Model_modulo extends CI_Model {
-    public $cod_modulo_tem = 0;
-    var $rut_usuario2 = '';
-    var $cod_equipo  = '';
-    var $nombre_modulo = '';
-    var $descripcion_modulo = '';
-
-    /**
+ 
+	/**
 	* Obtiene los datos de todos los módulos de la base de datos
 	*
 	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada módulo y se va guardando en un arreglo de dos dimensiones
 	* Finalmente se retorna la lista con los datos. 
 	*
 	* @return array $lista Contiene la información de todos los módulos del sistema
-	*/
-
-	
+	*/	
 	public function VerModulos(){
 		$query = $this->db->get('MODULO_TEMATICO');
 		$datos = $query->result();
@@ -95,11 +88,9 @@ class Model_modulo extends CI_Model {
 		}
 		return $lista;
 	}
-	
-	
-	
-	public function listaNombreModulos(){
-   		$query = $this->db->get('modulo_tematico');
+		
+	public function listaNombreModulos(){	
+  		$query = $this->db->get('modulo_tematico');
    		$datos = $query->result();
    		$lista = array();
    		$contador = 0;
@@ -109,6 +100,7 @@ class Model_modulo extends CI_Model {
    		}
    		return $lista;  	
 	}
+	
 	public function listaSesionesParaAddModulo(){
 		$query = $this->db->get('sesion');	
 		$datos = $query->result(); 
@@ -123,6 +115,7 @@ class Model_modulo extends CI_Model {
 		}
 		return $lista;
 	}
+
 	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores){
 			//0 insertar modulo
 			$data = array(					
@@ -180,10 +173,7 @@ class Model_modulo extends CI_Model {
 			return 1;
 	}
 	
-	
-
-	public function ModificarModulo($cod_modulo_tem,$rut_usuario2,$cod_equipo,$nombre_modulo,$descripcion_modulo)
-	{
+	public function ModificarModulo($cod_modulo_tem,$rut_usuario2,$cod_equipo,$nombre_modulo,$descripcion_modulo){
 		$data = array(					
 					'COD_MODULO_TEM' => $cod_modulo_tem ,
 					'RUT_USUARIO2' => $rut_usuario2 ,
@@ -201,6 +191,17 @@ class Model_modulo extends CI_Model {
 		}		
     }
 
+	public function EliminarModulo($cod_modulo)
+    {
+		$this->db->where('cod_modulo_tem', $cod_modulo);
+		$datos = $this->db->delete('modulo_tematico'); 		
+		if($datos == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}
+    }
 }
 
 ?>
