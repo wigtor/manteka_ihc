@@ -234,9 +234,12 @@ class Coordinadores extends MasterManteka {
 		$this->load->model('model_coordinadores');
 
 		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($tipoFiltro, $textoFiltro);
-		if ($resultado == "") {
-			echo "[]";
-			return;
+
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'coordinadores', $this->session->userdata('rut'));
 		}
 		echo json_encode($resultado);
 	}
