@@ -80,39 +80,48 @@ class Model_secciones extends CI_Model{
 			$lista[0][0] = $row3['NOMBRE_SECCION'];
 			$contador3 = $contador3 + 1;
 		}
-		$sql="SELECT * FROM sala_horario WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
-		$datos=mysql_query($sql); 
+		
+		$sql3="SELECT * FROM seccion_mod_tem WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
+		$datos3=mysql_query($sql3); 
 		$contador = 0;	
-		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			
-			$hora=$row['COD_HORARIO'];
-			$sql1="SELECT * FROM horario WHERE COD_HORARIO='$hora' ORDER BY COD_HORARIO"; 
-			$datos1=mysql_query($sql1); 
-			while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
-				
-				$dia=$row1['COD_DIA'];
-				$sql2="SELECT * FROM dia WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
-				$datos2=mysql_query($sql2); 
-				while ($row2=mysql_fetch_array($datos2)) { 
-					$lista[$contador][1] = $row1['NOMBRE_HORARIO'];
-					$lista[$contador][2] = $row2['NOMBRE_DIA'];
+		if (false != $datos3) {
+		while ($row3=mysql_fetch_array($datos3)) {
+			$horario=$row3['ID_HORARIO_SALA'];
+			$sql="SELECT * FROM sala_horario WHERE ID_HORARIO_SALA='$horario' ORDER BY ID_HORARIO_SALA"; 
+			$datos=mysql_query($sql); 
+			if (false != $datos) {
+			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros		
+				$hora=$row['COD_HORARIO'];
+				$sql1="SELECT * FROM horario WHERE COD_HORARIO='$hora' ORDER BY COD_HORARIO"; 
+				$datos1=mysql_query($sql1); 
+				while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros				
+					$dia=$row1['COD_DIA'];
+					$sql2="SELECT * FROM dia WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
+					$datos2=mysql_query($sql2); 
+					while ($row2=mysql_fetch_array($datos2)) { 
+						$lista[$contador][1] = $row1['COD_MODULO'];
+						$lista[$contador][2] = $row2['NOMBRE_DIA'];
+						$lista[$contador][3] = $cod_seccion;
+						$contador = $contador + 1;
 				}
-			}
-			$contador = $contador + 1;
-		}
+			}		
+		   }
+		  }
+		 }
 		}
 		if($contador==0 && $cod_seccion!=''){
 			$lista[$contador][1] = '';
 			$lista[$contador][2] = '';
+			$lista[$contador][3] = $cod_seccion;
 		}
 		if($cod_seccion==''){
 			$lista[$contador][0] = '';
 			$lista[$contador][1] = '';
 			$lista[$contador][2] = '';
+			$lista[$contador][3] = '';
 			
 		}
-		$lista[$contador][3] = $cod_seccion;
+		
 		return $lista;
 	}
 

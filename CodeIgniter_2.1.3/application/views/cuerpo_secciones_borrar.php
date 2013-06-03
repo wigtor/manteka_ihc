@@ -164,17 +164,15 @@ while ($contador<count($secc)){
 echo '<tr>';
 echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][3].'" maxlength="3" min="1" type="hidden">
 Sección: '.$secc[0][0].'</td>';
-echo '<td id="rs_dia" > 
-Día:     '.$secc[0][2].' </td>';
-echo '<td id="rs_modulo" > 
-Módulo:  '.$secc[0][1].' </td>';
+echo '<td id="rs_dia"> 
+Día:     '.$secc[0][2].'</td>';
+echo '<td id="rs_modulo"> 
+Módulo:  '.$secc[0][1].'</td>';
 echo '</tr>'; 
 $contador =count($secc) ;
-}
-								
+}								
 ?>
-       
-						</pre>
+</pre>
                     
 
                     <div class="row-fluid">

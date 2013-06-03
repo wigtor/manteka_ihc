@@ -126,7 +126,7 @@ Día:     '.$secc[$contador][2].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
 Módulo:  '.$secc[$contador][1].' </td>';
 echo '</tr>'; 
-	$contador =$contador+1 ;
+$contador =count($secc);
 }							
 ?>
 
