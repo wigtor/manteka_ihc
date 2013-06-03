@@ -137,7 +137,7 @@ class Coordinadores extends MasterManteka {
 			$this->model_coordinadores->modificarCoordinador($_POST['id'],$_POST['nombre'],$_POST['correo1'],$_POST['correo2'],$_POST['fono']);
 			$datos_plantilla["titulo_msj"] = "Coordinador editado.";
 			$datos_plantilla["cuerpo_msj"] = "El coordinador fue editado correctamente.";
-			$datos_plantilla["tipo_msj"] = "success-error";
+			$datos_plantilla["tipo_msj"] = "alert-success";
 			$datos_plantilla["redirecTo"] = 'Coordinadores/editarCoordinadores';
 			$datos_plantilla["nombre_redirecTo"] = "Editar Coordinador";
 			$datos_plantilla["redirectAuto"] = TRUE;
