@@ -66,7 +66,6 @@
 					echo "<tr><td><h6><span class='text-error'></span>Correo 1:</h6></td><td><input id='correo1' name='correo1' required class ='input-xlarge' type='email' placeholder='ej:edmundo.leiva@usach.cl'></td></tr>";
 					echo "<tr><td><h6>Correo 2 :</h6></td><td><input id='correo2' name='correo2' class ='input-xlarge' type='email' placeholder='ej:edmundo@gmail.com' ></td></tr>";
 					echo "<tr><td><h6><span class='text-error'></span>Tel?fono:</h6></td><td><input id='fono' name='fono' required class ='input-xlarge' type='text' placeholder='ej:9-87654321' ></td></tr>";
-					echo "<tr><td></td><td>Los campos con <span class='text-error'></span> son obligatorios</td></tr>";
 					echo "</table>";
 					echo "<br/><div class='span7 offset5' id='botones-guardar-cancelar'><button type='submit' class='btn' type='button'>Guardar</button><a class='btn offset1' href='/manteka/index.php/Coordinadores/modificarCoordinador/'>Cancelar</a></div>";
 					echo form_close(""); echo "<!-- span9-->";

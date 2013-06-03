@@ -2,9 +2,10 @@
 class model_busquedas extends CI_Model {
    
 
-	function getBusquedasAnteriores($letras, $rut) {
+	function getBusquedasAnteriores($letras, $rut, $tipo_busqueda) {
 		$this->db->select('PALABRA');
-		$this->db->where('RUT_USUARIO', $rut);
+		//$this->db->where('RUT_USUARIO', $rut);
+		$this->db->where('TIPO_BUSQUEDA', $tipo_busqueda);
 		$this->db->order_by('TIMESTAMP_BUSQUEDA', 'asc');
 		$this->db->like('PALABRA', $letras);
 		$query = $this->db->get('historiales_busqueda');
