@@ -276,17 +276,17 @@ class Model_estudiante extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todas las secciones del sistema
 	*/	
-	public function VerSecciones()
-	{
-		$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+	public function VerSecciones(){
+		$query = $this->db->get('seccion');	
+		$datos = $query->result(); 
 		$contador = 0;
 		$lista = array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador] = $row['COD_SECCION'];
+		foreach ($datos as $row) { 
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_SECCION;
+			$lista[$contador][1] = $row->NOMBRE_SECCION;
 			$contador = $contador + 1;
 		}
-		
 		return $lista;
 	}
 	
@@ -308,6 +308,40 @@ class Model_estudiante extends CI_Model {
 			return $confirmacion;
 	}
 	
+	public function getAllRut(){
+		$lista = array();
+		$contador = 0;
+		
+		//lista usuarios
+		$this->db->select('RUT_USUARIO');
+		$this->db->from('usuario');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->RUT_USUARIO;
+			$contador++;
+		}
+		//lista ayudantes
+		$this->db->select('RUT_AYUDANTE');
+		$this->db->from('ayudante');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->RUT_AYUDANTE;
+			$contador++;
+		}
+		//lista alumnos
+		$this->db->select('RUT_ESTUDIANTE');
+		$this->db->from('estudiante');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->RUT_ESTUDIANTE;
+			$contador++;
+		}
+		return $lista;  	
+	}
+
 }
  
 ?>
