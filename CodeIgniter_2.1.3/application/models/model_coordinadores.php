@@ -195,9 +195,9 @@ class model_coordinadores extends CI_Model{
       * @return none
       */	
       function borrarCoordinadores($array){
-         $this->db->where_in('RUT_USUARIO3',$array);
+         $this->db->where('RUT_USUARIO3',$array);
          $this->db->delete('coordinador');
-         $this->db->where_in('RUT_USUARIO',$array);
+         $this->db->where('RUT_USUARIO',$array);
          $this->db->delete('usuario');
       }
 

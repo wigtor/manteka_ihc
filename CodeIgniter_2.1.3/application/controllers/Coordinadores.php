@@ -176,34 +176,35 @@ class Coordinadores extends MasterManteka {
       */
     public function borrarCoordinadores()
     {
-
-		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-			$this->load->model('model_coordinadores');
-			$this->model_coordinadores->borrarCoordinadores(explode(',', str_replace('id','',$_POST['lista_eliminar'])));
-			
-			$datos_plantilla["titulo_msj"] = "Coordinador(es) eliminados(s)";
-			$datos_plantilla["cuerpo_msj"] = "El(Los) coordinador(es) fueron eliminados correctamente.";
-			$datos_plantilla["tipo_msj"] = "alert-success";
-			$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
-			$datos_plantilla["nombre_redirecTo"] = "Eliminar Coordinador";
-			$datos_plantilla["redirectAuto"] = TRUE;
-			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-			
-		}else{
-			$this->load->model('model_coordinadores');
-			$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadores();
-
-			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
-			*/
-			$subMenuLateralAbierto = 'borrarCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$this->cargarTodo("Docentes", "cuerpo_coordinadores_eliminar", "barra_lateral_profesores", $datos_cuerpo_central, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-	
-		}
+		$this->load->model('model_coordinadores');
+		$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadores();
+		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
+		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+		*/
+		$subMenuLateralAbierto = 'borrarCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", "cuerpo_coordinadores_eliminar", "barra_lateral_profesores", $datos_cuerpo_central, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		return ;
 		
+    }
+    public function ResultadoSatisfactorio(){
+    	$datos_plantilla["titulo_msj"] = "Coordinador(es) eliminados(s)";
+		$datos_plantilla["cuerpo_msj"] = "El(Los) coordinador(es) fueron eliminados correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
+		$datos_plantilla["nombre_redirecTo"] = "Eliminar Coordinador";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos); 	
+    }
+
+    public function PostEliminarCoordinador(){
+    	$rutEliminar = $this->input->post('rutDelete');
+		$respuesta = '';
+		$this->load->model('model_coordinadores');
+		$this->model_coordinadores->borrarCoordinadores($rutEliminar);
+		echo true;
     }
 
     /**
