@@ -22,7 +22,7 @@
 	<div class= "span10">	
 		<fieldset>
 			<legend>Agregar Sesion</legend>
-		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Sesiones/agregarSesiones/")?>">
+		<form id="formAgregar" type="post" method="post">
 			
 			
 				<div>

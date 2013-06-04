@@ -27,6 +27,7 @@ class Sesiones extends MasterManteka {
 		$this->verSesiones();
 	}
 
+
 	public function verSesiones()
 	{
 		$datos_vista = 0;		
@@ -36,8 +37,8 @@ class Sesiones extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 
 
-		/*$this->load->model('Model_sala');
-		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());*/
+		$this->load->model('Model_sesiones');
+		$datos_vista = array('sesiones' => $this->Model_sesiones->VerTodasLasSesiones());
 
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
@@ -53,9 +54,10 @@ class Sesiones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+
 		$this->load->model('Model_sesiones');
-		$nombre_sesion = $this->input->post("nombre_sesion");
-		$descripcion_sesion = $this->input->post("descripcion_sesion");
+		$nombre_sesion = $this->input->get("nombre_sesion");
+		$descripcion_sesion = $this->input->get("descripcion_sesion");
 		$confirmacion = $this->Model_sesiones->AgregarSesion($nombre_sesion,$descripcion_sesion);
         $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
@@ -72,7 +74,7 @@ class Sesiones extends MasterManteka {
 
 		$rut = $this->input->post('cod');
 		$this->load->model('Model_sesiones');
-		$resultado = $this->Model_estudiante->getDetallesEstudiante($sesion);
+		$resultado = $this->Model_estudiante->getDetallesSesiones($sesion);
 		echo json_encode($resultado);
 	}
 
@@ -85,7 +87,7 @@ class Sesiones extends MasterManteka {
 		$tipoFiltro = $this->input->post('tipoFiltro');
 		$this->load->model('Model_sesiones');
 
-		$resultado = $this->Model_estudiante->getByFilter($tipoFiltro, $textoFiltro);
+		$resultado = $this->Model_estudiante->getSesionesByFilter($tipoFiltro, $textoFiltro);
 		echo json_encode($resultado);
 	}
     
