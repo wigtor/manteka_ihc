@@ -95,7 +95,7 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($seccion)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][1].'";';
 		$contadorE = $contadorE + 1;
 	}
 	?>
