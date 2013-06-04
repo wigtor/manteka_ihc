@@ -1,12 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once APPPATH.'controllers/Master.php'; 
+require_once APPPATH.'controllers/Master.php';
 
+/**
+* Clase que responde a las solicitudes de los ajax de historiales de búsqueda
+* @author Grupo 1
+*/
 class HistorialBusqueda extends MasterManteka {
 
 	/**
-	* Método que responde a una solicitud de post para pedir los datos de un estudiante
-	* Recibe como parámetro el rut del estudiante
+	* Método que recibe un string con una búsqueda y retorna las búsquedas pasadas que coincidan
+	* 
+	* @param string $tipo_busqueda indica si la búsqueda es de coordinadores, profesores, ayudantes, o estudiantes
 	*/
 	public function buscar($tipo_busqueda) {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
@@ -23,5 +28,5 @@ class HistorialBusqueda extends MasterManteka {
 	}
 }
 
-/* End of file Alumnos.php */
-/* Location: ./application/controllers/Alumnos.php */
+/* End of file HistorialBusqueda.php */
+/* Location: ./application/controllers/HistorialBusqueda.php */

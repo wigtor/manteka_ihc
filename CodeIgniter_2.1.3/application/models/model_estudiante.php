@@ -1,5 +1,9 @@
 <?php
- 
+
+/**
+* Clase utilizada para hacer consultas a la base de datos acerca de los estudiantes
+* @author Grupo 4
+*/
 class Model_estudiante extends CI_Model {
     public $rut_estudiante = 0;
     var $nombre1_estudiante = '';
@@ -166,7 +170,18 @@ class Model_estudiante extends CI_Model {
 	}
 
 
-
+	/**
+	* Función que obtiene los alumnos que coinciden con cierta búsqueda
+	*
+	* Esta función recibe un texto para realizar una búsqueda y un tipo de atributo por el cual filtrar.
+	* Se realiza una consulta a la base de datos y se obtiene la lista de alumnos que coinciden con la búsqueda
+	* Esta búsqueda se realiza mediante la sentencia like de SQL.
+	*
+	* @param int $tipoFiltro Un valor entre 1 a 6 que indica el tipo de filtro a usar.
+	* @param string $texto Es el texto que se desea hacer coincidir en la búsqueda
+	* @return Se devuelve un array de objetos alumnos con sólo su nombre y rut
+	* @author Víctor Flores
+	*/
 	public function getAlumnosByFilter($tipoFiltro, $texto)
 	{
 
@@ -218,6 +233,17 @@ class Model_estudiante extends CI_Model {
 	}
 
 
+	/**
+   * Obtiene los detalles de un estudiante
+   * 
+   * Se recibe un rut y se hace la consulta para obtener todos los demás atributos del estudiante
+   * con ese rut. Los atributos del objeto obtenido son:
+   * rut, nombre1, nombre2, apellido1, apellido2, correo, carrera, seccion
+   * 
+   * @author Víctor Flores
+   * @param int $rut El rut del estudiante que se busca
+   * @return Se retorna un objeto cuyos atributos son los atributos del estudiante, FALSE si no se encontró
+   */
 	public function getDetallesEstudiante($rut) {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
