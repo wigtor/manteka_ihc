@@ -14,7 +14,7 @@
 			<h4>Seleccione un coordinador a modificar:</h4><br/>
 			
 			<div class="input-append span9">
-			<input class="span11" id="filtroLista" type="text" placeholder="Filtro">
+			<input class="span11" id="filtroLista" type="text" placeholder="Filtro" onkeypress="getDataSource(this)" onChange="seleccionar_filtro(document.getElementById('select-filtro').getElementsByClassName('active')[0])" >
 				<div class="btn-group">
 					<button class="btn dropdown-toggle" data-toggle="dropdown">
 						<span id="show-filtro">Filtrar por</span>
@@ -79,6 +79,24 @@
 </fieldset>
 
 <script type="text/javascript">
+
+	function getDataSource(inputUsado) {
+			$(inputUsado).typeahead({
+	        minLength: 1,
+	        source: function(query, process) {
+	        	$.ajax({
+		        	type: "POST", /* Indico que es una petición POST al servidor */
+					url: "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>", /* Se setea la url del controlador que responderá */
+					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+		            	//alert(respuesta)
+		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	process(arrayRespuesta);
+		            }
+	        	});
+	        }
+	    });
+	}
     
     $(document).ready(function(){
     	//$("form.span9, #visualizar-coordinador").hide();
@@ -133,7 +151,6 @@
 		var inputTextoFiltro = document.getElementById('filtroLista');
 		var valorSelector = selectorFiltro.value;
 		var texto = inputTextoFiltro.value;
-
 
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");

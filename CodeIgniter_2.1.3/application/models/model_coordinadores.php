@@ -309,6 +309,18 @@ class model_coordinadores extends CI_Model{
       }
 
 
+      /**
+      * Función que obtiene los coordinadores que coinciden con cierta búsqueda
+      *
+      * Esta función recibe un texto para realizar una búsqueda y un tipo de atributo por el cual filtrar.
+      * Se realiza una consulta a la base de datos y se obtiene la lista de coordinadores que coinciden con la búsqueda
+      * Esta búsqueda se realiza mediante la sentencia like de SQL.
+      *
+      * @param int $tipoFiltro Un valor entre 1 a 6 que indica el tipo de filtro a usar.
+      * @param string $texto Es el texto que se desea hacer coincidir en la búsqueda
+      * @return Se devuelve un array de objetos alumnos con sólo su nombre y rut
+      * @author Víctor Flores
+      */
       public function getCoordinadoresByFilter($tipoFiltro, $texto)
       {
 
@@ -356,7 +368,16 @@ class model_coordinadores extends CI_Model{
       return $query->result();
    }
 
-
+   /**
+   * Obtiene los detalles de un coordinador
+   * 
+   * Se recibe un rut y se hace la consulta para obtener todos los demás atributos del coordinador
+   * con ese rut. Los atributos del objeto obtenido son:
+   * rut, nombre1, nombre2, apellido1, apellido2, fono, correo y correo2
+   * 
+   * @param int $rut El rut del coordinador que se busca
+   * @return Se retorna un objeto cuyos atributos son los atributos del coordinador, FALSE si no se encontró
+   */
    public function getDetallesCoordinador($rut) {
       $this->db->select('RUT_USUARIO3 AS rut');
       $this->db->select('NOMBRE1_COORDINADOR AS nombre1');

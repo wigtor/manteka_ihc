@@ -385,9 +385,12 @@ class Ayudantes extends MasterManteka {
 		$this->load->model('Model_ayudante');
 
 		$resultado = $this->Model_ayudante->getAyudantesByFilter($tipoFiltro, $textoFiltro);
-		if ($resultado == "") {
-			echo "[]";
-			return;
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'ayudantes', $this->session->userdata('rut'));
 		}
 		echo json_encode($resultado);
 	}
