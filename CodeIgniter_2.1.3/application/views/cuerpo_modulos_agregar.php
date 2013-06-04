@@ -130,13 +130,14 @@ function nombreEnUso(){
 			<legend>Agregar Módulos</legend>
 
 			<form id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
+			<div class="row-fluid">
+				<div class="span6">
+					<font color="red">*Campos Obligatorios</font>
+				</div>
+			</div>	
 	  		<div class="row-fluid">
 				<div class="span6">
-					<div class="row-fluid">
-						<div class="span6">
-							<font color="red">*Campos Obligatorios</font>
-						</div>
-					</div>
+					
 					
 					<div class="row-fluid"> <!-- nombre modulo-->
 						<div class="span12">
@@ -154,7 +155,7 @@ function nombreEnUso(){
 					</div>
 
 					
-					<div class="row-fluid" style="margin-top:9%">
+					<div class="row-fluid" style="margin-top:7%">
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
@@ -164,7 +165,7 @@ function nombreEnUso(){
 						</div>
 						<div class= "row-fluid">
 							<div class="span11">
-										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 										<!--sesiones-->					
 										<table class="table table-hover">
 										<thead>
@@ -196,9 +197,9 @@ function nombreEnUso(){
 					<br>
 					<div class="row-fluid"> <!-- descripción modulo-->
 						<div class="span12">
-								<div class="span4">
+								<div class="span7">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">3-.<font color="red">*</font>Ingrese una descripción del modulo</label>
+										<label  class="control-label" for="inputInfo">3-.<font color="red">*</font>Ingrese una descripción del módulo</label>
 									</div>
 								</div>
 								
@@ -206,14 +207,14 @@ function nombreEnUso(){
 						</div>
 						<div class="span12">		
 								<div class="controls">
-										<textarea required name="descripcion_modulo" maxlength="99" rows="5" cols="100"></textarea>
+										<textarea required name="descripcion_modulo"  style ="margin-left:0%; width: 86%; "maxlength="99" rows="5" cols="100"></textarea>
 								</div>
 						</div>
 						
 					</div>
 					
 										
-					<div class="row-fluid" style="margin-top:9%">
+					<div class="row-fluid" >
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
@@ -223,7 +224,7 @@ function nombreEnUso(){
 						</div>
 						<div class= "row-fluid">
 							<div class="span11">
-										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 														
 										<table class="table table-hover">
 										<thead>
@@ -281,7 +282,7 @@ function nombreEnUso(){
 
 			<div class="row-fluid" style="margin-top:2%">
 				<div class="span7 offset5">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 					
 					
 						<table class="table table-hover">
@@ -314,7 +315,7 @@ function nombreEnUso(){
 						<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Asignar equipo profesores</label>
 					</div>
 				</div>
-				<div  class="span6" >	
+				<div  class="span6" style="margin-top:6%" >	
 					<fieldset>
 						<div class="span12">					
 							<input id="2filtroLista"  onkeyup="ordenarFiltro('2')" type="text" placeholder="Filtro búsqueda">
@@ -331,8 +332,7 @@ function nombreEnUso(){
 
 			<div class="row-fluid" style="margin-top:2%">
 				<div class="span7 offset5">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
-					
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 					
 						<table class="table table-hover">
 							<thead>
@@ -355,13 +355,19 @@ function nombreEnUso(){
 				</div>
 			</div>
 			<!---->
-			<div class="row-fluid" style="margin-top: 2%">
+			<div class="row-fluid" style="margin-top: 5%">
 	
-				<div class= "span4" style="margin-left:4%">
-					<button class ="btn" type="submit" >Crear Módulo</button>
+				<div class= "span4" style="margin-left:43%">
+					<button class ="btn" type="submit" style="width: 102px" >
+						<div class="btn_with_icon_solo">Ã</div>
+						&nbsp Agregar
+					</button>
 				</div>
 				<div class= "span3" style="margin-left:0%">
-					<button class ="btn" type="reset" >Cancelar</button>
+					<button class ="btn" type="reset" style="width:105px">
+						<div class="btn_with_icon_solo">Â</div>
+						&nbsp Cancelar
+					</button>
 				</div>
 			</div>
 			
