@@ -254,6 +254,10 @@ public function getDetalleSeccion($cod_seccion)
 		$this->db->select('seccion.NOMBRE_SECCION as nombre_seccion');
 		$this->db->select('NOMBRE_MODULO AS modulo');
 		$this->db->select('NUM_SALA AS sala');
+		$this->db->select('NOMBRE1_PROFESOR as nombre1');
+		$this->db->select('APELLIDO1_PROFESOR as apellido1');
+		$this->db->select('APELLIDO2_PROFESOR as apellido2');
+		$this->db->select('NOMBRE_HORARIO as horario');
 		$this->db->from('seccion');
 		$this->db->where('seccion.COD_SECCION', $cod_seccion);
 		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION', 'LEFT OUTER');
@@ -278,9 +282,11 @@ public function getDetalleSeccion($cod_seccion)
 
 		$lista[0] = $datos->nombre_seccion;
 		$lista[1] = $datos->modulo;
-		$lista[2] = /*$datos->profesor*/"";
-		$lista[3] = $datos->sala;
-		$lista[4] = /*$datos->horario*/"";
+		$lista[2] = $datos->nombre1;
+		$lista[3] = $datos->apellido1;
+		$lista[4] = $datos->apellido2;
+		$lista[5] = $datos->sala;
+		$lista[6] = $datos->horario;
 
 		}
 		
@@ -305,9 +311,15 @@ public function EliminarAsignacion($cod_seccion)
 
 		$lista[0] = $datos1->id_sala;
 
-		$this->db->where('cod_seccion', $cod_seccion);
+		$this->db->where('COD_SECCION', $cod_seccion);
 		$datos2 = $this->db->delete('seccion_mod_tem');
+
+		$this->db->where('COD_SECCION', $cod_seccion);
 		$datos3 = $this->db->delete('profe_seccion');
+
+
+		$this->db->where('ID_HORARIO_SALA', $lista[0]);
+		$datos4 = $this->db->delete('sala_horario');
 		
 		}
 
@@ -315,10 +327,11 @@ public function EliminarAsignacion($cod_seccion)
 		$lista[0]="";
 		$datos2=false;
 		$datos3=false;
+		$datos4=false;
 
 	}	
 
-	if($datos2 == true && $datos3 == true ){
+	if($datos2 == true && $datos3 == true && $datos4 == true ){
 			return 1;
 		}
 		else{

@@ -9,11 +9,13 @@
 
 
 				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					console.log (respuesta);
+					///console.log (respuesta);
 					/* Obtengo los objetos HTML donde serán escritos los resultados */
 					var seccion = document.getElementById("nombre_seccion");
 					var modulo = document.getElementById("modulo");
-					var profesor = document.getElementById("profesor_asig");
+					var profesorNombre = document.getElementById("profesor_nombre1");
+					var profesorApellido1 = document.getElementById("profesor_apellido1");
+					var profesorApellido2 = document.getElementById("profesor_apellido2");
 					var sala = document.getElementById("sala_asig");
 					var horario = document.getElementById("horario_asig");
 					document.getElementById("codSeccion").value = cod_seccion;
@@ -24,9 +26,11 @@
 					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 					seccion.innerHTML = datos[0];//.nombre_seccion;
 					modulo.innerHTML = datos[1];//.nombre_modulo;
-					profesor.innerHTML = datos[2];//.nombre_profesor;
-					sala.innerHTML = datos[3];//.numero_sala;
-					horario.innerHTML = datos[4];//.horario;
+					profesorNombre.innerHTML = datos[2];//.nombre_profesor;
+					profesorApellido1.innerHTML = datos[3];
+					profesorApellido2.innerHTML = datos[4];
+					sala.innerHTML = datos[5];//.numero_sala;
+					horario.innerHTML = datos[6];//.horario;
 
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
@@ -132,7 +136,7 @@
 						<pre style=" padding: 2%">
 Sección:           <b id="nombre_seccion"></b>
 Módulo:            <b id="modulo"></b>
-Profesor Asignado: <b id="profesor_asig"></b>
+Profesor Asignado: <b id="profesor_nombre1"></b><b id="profesor_apellido1"></b> <b id="profesor_apellido2"></b> 
 Sala asignada:     <b id="sala_asig"></b>
 Horario:           <b id="horario_asig"></b></pre>
 <input name="cod_seccion" type="hidden" id="codSeccion" value="">

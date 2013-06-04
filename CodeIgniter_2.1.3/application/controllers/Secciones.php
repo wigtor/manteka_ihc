@@ -183,6 +183,7 @@ class Secciones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 
 	}

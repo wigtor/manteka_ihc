@@ -114,12 +114,12 @@ function ordenarFiltro(){
 	<pre style="margin-top: 0%; margin-left: 0%;">
 	<?php
 	$contador=0;
-	$comilla= "'";
-					
-while ($contador<count($secc)){
-	
+	$comilla= "'";	
+
+while ($contador<count($secc)){	
+
 echo '<tr>';
-echo '<td id="rs_seccion_'.$contador.'" > 
+echo '<td id="rs_seccion_'.$contador.'" >
 Sección: '.$secc[$contador][0].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
 Día:     '.$secc[$contador][2].' </td>';
@@ -127,11 +127,10 @@ echo '<td id="rs_seccion_'.$contador.'" >
 Módulo:  '.$secc[$contador][1].' </td>';
 echo '</tr>'; 
 	$contador =$contador+1 ;
-}
-								
+}							
 ?>
 
-                        </pre>
+					</pre>
                     </div>
 
                     <div class="row-fluid">
