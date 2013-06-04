@@ -181,6 +181,7 @@ function nombreEnUso(){
 													echo '<tr>';
 													echo '<td id="sesion_'.$sesiones[$contador][0].'" title="'.$sesiones[$contador][2].'"><input value="'.$sesiones[$contador][0].'" name="cod_sesion[]" type="checkbox" ></input> '.$sesiones[$contador][3].'</td>';
 													echo '</tr>';
+												
 												$contador = $contador + 1;
 											}
 											?>

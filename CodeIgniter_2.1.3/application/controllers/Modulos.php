@@ -40,9 +40,8 @@ class Modulos extends MasterManteka {
     public function agregarModulos()
     {
 		$this->load->model("Model_modulo");
-		$this->load->model('Model_ayudante');
 
-		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>2,'requisitos' => $this->Model_modulo->listaRequisitosParaAddModulo());
+		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_modulo->VerTodosLosProfesoresAddModulo(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>2,'requisitos' => $this->Model_modulo->listaRequisitosParaAddModulo());
      
 		$subMenuLateralAbierto = "agregarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -55,8 +54,7 @@ class Modulos extends MasterManteka {
 	    public function HacerAgregarModulo()
     {
 		$this->load->model("Model_modulo");
-		$this->load->model("Model_secciones");
-		$this->load->model('Model_ayudante');
+
 		
 		$nombre_modulo = $this->input->post('nombre_modulo');
 		$sesiones = $this->input->post('cod_sesion');
@@ -67,7 +65,7 @@ class Modulos extends MasterManteka {
 		
 		$confirmacion = $this->Model_modulo->InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos);
 		
-		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>$confirmacion);
+		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_modulo->VerTodosLosProfesoresAddModulo(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>$confirmacion,'requisitos' => $this->Model_modulo->listaRequisitosParaAddModulo());
      
 		$subMenuLateralAbierto = "agregarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -134,8 +132,8 @@ class Modulos extends MasterManteka {
 
 		$resultado = $this->Model_modulo->getAllModulos();
 		echo json_encode($resultado);
-	}
-	public function obtenerSesiones() {
+	}         
+	public function obtenerSesionesEditar() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -143,7 +141,7 @@ class Modulos extends MasterManteka {
 
 		$this->load->model('Model_modulo');
 
-		$resultado = $this->Model_modulo->listaSesionesParaAddModulo();
+		$resultado = $this->Model_modulo->listaSesionesParaEditarModulo();
 		echo json_encode($resultado);
 	}
 	
@@ -218,7 +216,7 @@ class Modulos extends MasterManteka {
 		$requisitos = $this->input->post('requisitos');
 		$cod_equipo = $this->input->post('cod_equipo2');
 		$cod_mod = $this->input->post('cod_modulo');
-		
+
 		$confirmacion = $this->Model_modulo->EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod);
 
 		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'mensaje_confirmacion'=>$confirmacion);
