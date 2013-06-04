@@ -47,7 +47,38 @@ public function getAlumnosByFilter($tipoFiltro, $texto)
 	}
 
 
-
+	public function AgregarSesion($nombre_sesion,$descripcion_sesion)
+	{
+		$sql="SELECT * FROM sesion ORDER BY COD_SECCION"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+				if( $row['NOMBRE_SESION']==$nombre_sesion){
+					$var=1;
+				}
+				$contador = $contador + 1;
+			}
+		}	
+		
+		if($var!=1){
+		$data = array(	
+					'NOMBRE_SECCION' => $nombre
+					'DESCRIPCION_SESION' => $descripcion_sesion
+		);
+		$this->db->insert('sesion',$data); 
+		
+         
+		if($data == true){
+			return 1;
+		}
+		else{
+			return -1;
+		}}
+		else return 3;
+    }
 
 }
 

@@ -41,31 +41,28 @@ class Sesiones extends MasterManteka {
 
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
-
 	public function agregarSesiones()
-    {
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		
 		$datos_vista = 0;		
-		$subMenuLateralAbierto = "agregarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$subMenuLateralAbierto = "agregarSesiones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		
-
-		/*$this->load->model('Model_sala');
-		$cod_sala = $this->input->get("cod_sala");
-        $num_sala = $this->input->get("num_sala");
-        $ubicacion = $this->input->get("ubicacion");
-        $capacidad = $this->input->get("capacidad");
-		$implementos = $this->input->get("cod_implemento");
-        $confirmacion = $this->Model_sala->InsertarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos);
-	    
-	  
-		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);*/
+		$this->load->model('Model_sesiones');
+		$nombre_sesion = $this->input->post("nombre_sesion");
+		$descripcion_sesion = $this->input->post("descripcion_sesion");
+		$confirmacion = $this->Model_sesiones->AgregarSesion($nombre_sesion,$descripcion_sesion);
+        $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
-	
-    }
+	}
 
+	
     public function postDetallesSesiones() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
