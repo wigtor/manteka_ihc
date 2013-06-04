@@ -29,13 +29,12 @@ class Modulos extends MasterManteka {
 	{
 		$this->load->model("Model_modulo");
 
-		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo());
-     
+  
 		$subMenuLateralAbierto = "verModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Modulos", 'cuerpo_modulos_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_ver', "barra_lateral_planificacion", "", $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
 	}
     
     public function agregarModulos()
@@ -82,31 +81,15 @@ class Modulos extends MasterManteka {
 
     public function editarModulos()
     {
-    	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Planificacion";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-
+	
 		$this->load->model("Model_modulo");
-		$datos_vista = array('rs_modulos' => $this->Model_modulo->VerModulos());
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_modulos_editar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "editarModulos"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_planificacion', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
+		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'mensaje_confirmacion'=>2);
+		$subMenuLateralAbierto = "editarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
     }
 
     public function borrarModulos()
@@ -114,7 +97,7 @@ class Modulos extends MasterManteka {
 		
 		$this->load->model("Model_modulo");
 
-		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo(),'mensaje_confirmacion'=>2);
+		$datos_vista = array('mensaje_confirmacion'=>2);
      
 		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -131,7 +114,7 @@ class Modulos extends MasterManteka {
 		$cod_modulo_eliminar = $this->input->post('cod_modulo_eliminar');
 		$confirmacion = $this->Model_modulo->EliminarModulo($cod_modulo_eliminar);
 	
-		$datos_vista = array('modulos' => $this->Model_modulo->verModulos(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'requisitos' => $this->Model_modulo->VerRequisitoModulo(),'equipos' => $this->Model_modulo->VerEquipoModulo(),'profesor_lider' => $this->Model_modulo->VerProfeLiderModulo(),'mensaje_confirmacion'=>$confirmacion);
+		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);
      
 		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -141,7 +124,7 @@ class Modulos extends MasterManteka {
 
     }
 
-	public function verModulosEditar() {
+	public function verModulosEditar(){
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -152,7 +135,102 @@ class Modulos extends MasterManteka {
 		$resultado = $this->Model_modulo->getAllModulos();
 		echo json_encode($resultado);
 	}
+	public function obtenerSesiones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 
+		$this->load->model('Model_modulo');
+
+		$resultado = $this->Model_modulo->listaSesionesParaAddModulo();
+		echo json_encode($resultado);
+	}
+	
+	public function obtenerSesionesVer() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_modulo');
+		$cod_mod = $this->input->post('cod_mod_post');
+		$resultado = $this->Model_modulo->listaSesionesParaVerModulo($cod_mod);
+		echo json_encode($resultado);
+	}
+	
+	public function obtenerProfes() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;$this->db->where('name', $name); 
+		}
+		$cod_equipo = $this->input->post('cod_equipo_post');
+		$this->load->model('Model_modulo');
+		$resultado = $this->Model_modulo->profesEditarModulo($cod_equipo);
+		echo json_encode($resultado);
+	}
+	public function obtenerProfesVer() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$cod_equipo = $this->input->post('cod_equipo_post');
+		$this->load->model('Model_modulo');
+		$resultado = $this->Model_modulo->listaProfesoresVerModulo($cod_equipo);
+		echo json_encode($resultado);
+	}
+	
+	
+	public function obtenerRequisitos() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_modulo');
+		$cod_mod = $this->input->post('cod_mod_post');
+	
+		$resultado = $this->Model_modulo->listaRequisitosParaEditarModulo($cod_mod);
+		echo json_encode($resultado);
+	}
+	
+	public function obtenerRequisitosVer() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_modulo');
+		$cod_mod = $this->input->post('cod_mod_post');
+	
+		$resultado = $this->Model_modulo->listaRequisitosVerModulo($cod_mod);
+		echo json_encode($resultado);
+	}
+	
+	public function HacerEditarModulo()
+    {
+		$this->load->model("Model_modulo");
+
+		
+		$nombre_modulo = $this->input->post('nombre_modulo');
+		$sesiones = $this->input->post('sesion');
+		$descripcion_modulo = $this->input->post('descripcion_modulo');
+		$profesor_lider = $this->input->post('cod_profesor_lider');
+		$equipo_profesores = $this->input->post('profesores');
+		$requisitos = $this->input->post('requisitos');
+		$cod_equipo = $this->input->post('cod_equipo2');
+		$cod_mod = $this->input->post('cod_modulo');
+		
+		$confirmacion = $this->Model_modulo->EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod);
+
+		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'mensaje_confirmacion'=>$confirmacion);
+
+	 
+		$subMenuLateralAbierto = "editarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+    }
 }
 
 /* End of file Modulos.php */

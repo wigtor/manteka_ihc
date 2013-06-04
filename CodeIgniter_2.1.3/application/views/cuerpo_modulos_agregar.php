@@ -148,7 +148,7 @@ function nombreEnUso(){
 								</div>
 								<div class="span7">	
 										<div class="controls">
-											<input id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="19"  placeholder="Ejemplo Modulo Historia" onblur="nombreEnUso()">
+											<input id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="49"  placeholder="Comunicación no verbal" onblur="nombreEnUso()">
 										</div>
 								</div>
 						</div>
