@@ -96,7 +96,7 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 				<div class="row-fluid" style="margin-left: 0%; width:90%">
 					<thead>
 						<tr>
-							<th style="text-align:left;"><br><b>Nombre del módulo</b></th>
+							<th style="text-align:left;"><b>Nombre del módulo</b></th>
 							
 						</tr>
 					</thead>
@@ -126,15 +126,13 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 			
 		</div>
 		
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+		<div class="span6" style="margin-left: 2%; padding: 0%;  ">
 			2. Detalle Módulo Temático
-			<div class ="row-fluid">
+			<div class ="row-fluid" style="margin-top:5%">
 				<pre style="margin-top: 2%; padding: 2%; height:6%">
 Nombre del módulo:	<b id="nombre_modulo"></b>
 Profesor lider: 	<b id="profesor_lider"></b>
-Descripción módulo: <b id="descripcion_modulo"></b>
-
-			</pre>
+Descripción módulo: <b id="descripcion_modulo"></b></pre>
 				
 			</div>
 			<div class="row-fluid">
@@ -145,7 +143,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >																		
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >																		
 					<?php
 					$contador=0;
 					while ($contador<count($sesiones)){
@@ -175,7 +173,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
 									
 						<?php
 						$contador=0;
@@ -210,7 +208,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
 									
 					<?php	
 					$contador=0;

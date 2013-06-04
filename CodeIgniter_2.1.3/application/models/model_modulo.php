@@ -111,15 +111,31 @@ class Model_modulo extends CI_Model {
 			$lista[$contador][0] = $row->COD_SESION;
 			$lista[$contador][1] = $row->COD_MODULO_TEM;
 			$lista[$contador][2] = $row->DESCRIPCION_SESION;
+			$lista[$contador][3] = $row->NOMBRE_SESION;
 			$contador = $contador + 1;
 		}
 		return $lista;
 	}
+	
+	public function listaRequisitosParaAddModulo(){
+		$query = $this->db->get('requisito');	
+		$datos = $query->result(); 
+		$contador = 0;
+		$lista = array();
+		foreach ($datos as $row) { 
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_REQUISITO;
+			$lista[$contador][1] = $row->NOMBRE_REQUISITO;
+			$lista[$contador][2] = $row->DESCRIPCION_REQUISITO;
+			$contador = $contador + 1;
+		}
+		return $lista;
+	}
+	
 
-	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores){
+	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos){
 			//0 insertar modulo
 			$data = array(					
-					'RUT_USUARIO2' => $profesor_lider ,
 					'NOMBRE_MODULO' => $nombre_modulo ,
 					'DESCRIPCION_MODULO' => $descripcion_modulo 
 					);
@@ -134,6 +150,14 @@ class Model_modulo extends CI_Model {
 			$confirmacion1 = $this->db->insert('equipo_profesor',$data);
 			//
 			$cod_equipo = $this->db->insert_id();	
+			
+			//actualizar mod_tem 4
+			$data = array(					
+					'COD_EQUIPO'=>$cod_equipo
+			);
+			$this->db->where('COD_MODULO_TEM', $cod_modulo);
+			$confirmacion4 = $this->db->update('modulo_tematico',$data);
+			//
 			
 			//2 insertar equipo profesores			
 			$contador = 0;
@@ -167,7 +191,23 @@ class Model_modulo extends CI_Model {
 	
 				$contador = $contador + 1;
 			}
-			if($confirmacion0 == false || $confirmacion1 == false || $confirmacion2 == false || $confirmacion3 == false){
+			//5 insertar requisito modulo		
+			$contador = 0;
+			$confirmacion5 = true;
+			while ($contador<count($requisitos)){
+			$data = array(					
+					'COD_REQUISITO' => $requisitos[$contador],
+					'COD_MODULO_TEM' => $cod_modulo
+					);
+			$datos = $this->db->insert('requisito_modulo',$data);
+				if($datos != true){
+					$confirmacion5 = false;
+				}
+	
+			$contador = $contador + 1;
+			}
+			//fin inserciones
+			if($confirmacion0 == false || $confirmacion1 == false || $confirmacion2 == false || $confirmacion3 == false || $confirmacion4 == false || $confirmacion5 == false){
 				return -1;
 				}
 			return 1;
@@ -202,6 +242,18 @@ class Model_modulo extends CI_Model {
 			return -1;
 		}
     }
+	public function gettAllModulos()
+	{
+		$this->db->select('COD_MODULO_TEM AS cod_mod');
+		$this->db->select('COD_EQUIPO AS cod_equipo');
+		$this->db->select('NOMBRE_MODULO AS nombre_mod');
+		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+		$this->db->order_by("NOMBRE_MODULO", "asc");
+		$query = $this->db->get('modulo_tematico');
+		return $query->result();
+	}
+
+	
 }
 
 ?>
