@@ -27,6 +27,7 @@ class model_busquedas extends CI_Model {
 		$this->db->select('ID');
 		$this->db->where('RUT_USUARIO', $rutUsuario);
 		$this->db->where('PALABRA', $texto);
+		$this->db->where('TIPO_BUSQUEDA', $tipo_busqueda);
 		$query = $this->db->get('historiales_busqueda');
 		if ($query->num_rows() > 0)
 			{
