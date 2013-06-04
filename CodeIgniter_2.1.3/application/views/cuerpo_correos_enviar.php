@@ -5,6 +5,8 @@
 <script type='text/javascript'>
 var arrayRespuesta;
 var arrayCarreras;
+
+
 /** 
 * Esta función se llama al hacer click en el botón enviar, 
 * por convención las funciones que utilizan document.getElementById()
@@ -130,6 +132,22 @@ function pasoTresDos()
 * Esta función se llama al escribir en el filtro de busqueda, 
 * Esta función elimina los resultados que no coincidan con el filtro de busqueda
 */
+
+function selectAll(value){
+	var tabla = document.getElementById('tabla');
+	var tbody = tabla.childNodes[1];
+	var flag;
+	if(value.checked){
+		flag=true;
+	}else{
+		flag=false;
+	}
+	for(var i = 0;i<tbody.childNodes.length;i++){
+		if(document.getElementById(i).style.display!='none'){
+			document.getElementById('check'+i).checked=flag;
+		}
+	}
+}
 
 function ordenarFiltro(filtroLista){
 	var arreglo = new Array();
@@ -263,13 +281,19 @@ function muestraTabla(respuesta){
 					var tr = document.createElement('tr');
 					var th = document.createElement('th');
 					var check = document.createElement('input');
+					var label = document.createElement('label');
+					check.id='normal';
 					check.type='checkbox';
 					check.checked=false;
+					check.setAttribute('onClick','selectAll(this)');
 					th.appendChild(check);
 					thead.appendChild(th);
 					th = document.createElement('th');
 					nodoTexto =document.createTextNode('Nombre Completo');
-					th.appendChild(nodoTexto);
+					label.setAttribute('for','normal');
+					label.setAttribute('style','font-weight:bold');
+					label.appendChild(nodoTexto);
+					th.appendChild(label);
 					thead.appendChild(th);
 					tablaResultados.appendChild(thead);
 					tbody.setAttribute("style","width:100%");
@@ -277,6 +301,8 @@ function muestraTabla(respuesta){
 						tr = document.createElement('tr');
 						td = document.createElement('td');
 						check = document.createElement('input');
+						label = document.createElement('label');
+						check.id='check'+i;
 						check.type='checkbox';
 						check.checked=false;
 						td.appendChild(check);
@@ -287,7 +313,9 @@ function muestraTabla(respuesta){
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
 						tr.setAttribute('rut',arrayRespuesta[i].rut);
 						tr.setAttribute('correo',arrayRespuesta[i].correo);
-						td.appendChild(nodoTexto);
+						label.setAttribute('for','check'+i);
+						label.appendChild(nodoTexto);
+						td.appendChild(label);
 						td.setAttribute("style","width:100%");
 						tr.appendChild(td);
 						tbody.appendChild(tr);
@@ -538,6 +566,7 @@ function showAlumnosByProfesor(value){
 }
 
 $(document).ready(showDestinatarios(0));
+
 function highlightTableRow()
 {
 	var tableObj = this.parentNode;
@@ -631,7 +660,11 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	La selección de plantillas será implementada en las próximas entregas.
 	</div>
 	</pre>
-	<button class ="btn" type="button"  title="Avanzar a paso 2" onclick="pasoUnoDos()" >Siguiente</button>
+	<div class="row-fluid">
+		<ul class="page pull-right">
+		<button class ="btn" type="button"  title="Avanzar a paso 2" onclick="pasoUnoDos()" >Siguiente</button>
+	</ul>
+	</div>
 	</div>
 </fieldset>
 	
@@ -656,7 +689,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 			<div class="control-group span4">
 				<label class="control-label" for="filtroPorTipoDeDestinatario">Filtrar por tipo destinatario</label>
 				<div class="controls">
-					<select id="filtroPorTipoDeDestinatario" title="Tipo de destinatario" class="input-large" onChange="showDestinatarios(this.value)">
+					<select class="filtro-primario" id="filtroPorTipoDeDestinatario" title="Tipo de destinatario"  onChange="showDestinatarios(this.value)">
 						<option  value="0">Todos</option>
 						<option  value="1">Alumnos</option>
 						<option  value="2">Profesores</option>
@@ -671,7 +704,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="filtro-primario" onChange="showAlumnosByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">profe1</option>
 						<option  value="2">profe2</option>
@@ -685,7 +718,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorCarrera" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorCarrera" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
 						<option  value="">Todos</option>
 						<!--<option  value="1">Ing civil informática</option>
 						<option  value="2">Ing civil en minas</option>
@@ -701,7 +734,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>
@@ -716,7 +749,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorSeccion" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorSeccion" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
 						<option  value="0">Todas</option>
 						<option  value="a1">A-01</option>
 						<option  value="b2">B-02</option>
@@ -731,7 +764,7 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 				<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque horario</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="input-large" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>

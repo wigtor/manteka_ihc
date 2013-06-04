@@ -394,7 +394,7 @@ if(isset($msj))
 					$para=$profesoresEnviados[$contador][0]['nombre1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido2_profesor'];
 				}
 				if(isset($coordinadoresEnviados[$contador][0])!=0)
-				{echo $coordinadoresEnviados[$contador][0]['rut_usuario3'];
+				{
 					$total+=count($coordinadoresEnviados);
 					$destino=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
 					$para=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
