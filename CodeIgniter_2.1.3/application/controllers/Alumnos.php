@@ -101,7 +101,7 @@ class Alumnos extends MasterManteka {
 	public function eliminarAlumno()// alimina un alumno y de ahí carga la vista para seguir eliminando 
 	{
 
-		$this->load->model('Model_estudiante');
+		//$this->load->model('Model_estudiante');
 		$this->load->model('Model_estudiante');
 		$rut_estudiante = $this->input->post('rut_estudiante');
 
