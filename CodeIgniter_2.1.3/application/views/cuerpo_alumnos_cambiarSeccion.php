@@ -198,7 +198,7 @@ function ordenarFiltro(tipo_lista){
 												$comilla= "'";
 												while ($contador<count($secciones)){
 												echo '<tr>';
-												echo '<td id="filtro1_'.$contador.'" ><input required onclick="mostrarS('.$comilla.$secciones[$contador].$comilla.','.$comilla.'lista1_'.$comilla.')" required id="filtro1_'.$secciones[$contador].'" value="'.$secciones[$contador].'" name="cod_seccion1" type="radio" >'.$secciones[$contador].'</td>';
+												echo '<td id="filtro1_'.$contador.'" ><input required onclick="mostrarS('.$comilla.$secciones[$contador][0].$comilla.','.$comilla.'lista1_'.$comilla.')" required id="filtro1_'.$secciones[$contador][0].'" value="'.$secciones[$contador][0].'" name="cod_seccion1" type="radio" ></input> '.$secciones[$contador][1].'</td>';
 												echo '</tr>';
 												$contador = $contador + 1;
 												}
@@ -303,7 +303,7 @@ function ordenarFiltro(tipo_lista){
 												$comilla= "'";
 												while ($contador<count($secciones)){
 												echo '<tr>';
-												echo '<td id="filtro2_'.$contador.'" ><input required onclick="mostrarS('.$comilla.$secciones[$contador].$comilla.','.$comilla.'lista2_'.$comilla.')" required id="filtro2_'.$secciones[$contador].'" value="'.$secciones[$contador].'" name="cod_seccion2" type="radio" >'.$secciones[$contador].'</td>';
+												echo '<td id="filtro2_'.$contador.'" ><input required onclick="mostrarS('.$comilla.$secciones[$contador][0].$comilla.','.$comilla.'lista2_'.$comilla.')" required id="filtro2_'.$secciones[$contador][0].'" value="'.$secciones[$contador][0].'" name="cod_seccion2" type="radio" >'.$secciones[$contador][1].'</td>';
 												echo '</tr>';
 												$contador = $contador + 1;
 												}

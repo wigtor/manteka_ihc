@@ -43,7 +43,7 @@ class Modulos extends MasterManteka {
 		$this->load->model("Model_modulo");
 		$this->load->model('Model_ayudante');
 
-		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>2);
+		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>2,'requisitos' => $this->Model_modulo->listaRequisitosParaAddModulo());
      
 		$subMenuLateralAbierto = "agregarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -59,13 +59,14 @@ class Modulos extends MasterManteka {
 		$this->load->model("Model_secciones");
 		$this->load->model('Model_ayudante');
 		
-		$nombre_modulo = $this->input->get('nombre_modulo');
-		$sesiones = $this->input->get('cod_sesion[]');
-		$descripcion_modulo = $this->input->get('descripcion_modulo');
-		$profesor_lider = $this->input->get('cod_profesor_lider');
-		$equipo_profesores = $this->input->get('cod_profesor_equipo[]');
-
-		$confirmacion = $this->Model_modulo->InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores);
+		$nombre_modulo = $this->input->post('nombre_modulo');
+		$sesiones = $this->input->post('cod_sesion');
+		$descripcion_modulo = $this->input->post('descripcion_modulo');
+		$profesor_lider = $this->input->post('cod_profesor_lider');
+		$equipo_profesores = $this->input->post('cod_profesor_equipo');
+		$requisitos = $this->input->post('cod_requisito');
+		
+		$confirmacion = $this->Model_modulo->InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos);
 		
 		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'sesiones' => $this->Model_modulo->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>$confirmacion);
      
@@ -140,6 +141,17 @@ class Modulos extends MasterManteka {
 
     }
 
+	public function verModulosEditar() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_modulo');
+
+		$resultado = $this->Model_modulo->getAllModulos();
+		echo json_encode($resultado);
+	}
 
 }
 
