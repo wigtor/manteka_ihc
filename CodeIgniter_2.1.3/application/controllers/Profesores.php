@@ -93,6 +93,13 @@ class Profesores extends MasterManteka {
 		$this->load->model('Model_profesor');
 
 		$resultado = $this->Model_profesor->getProfesoresByFilter($tipoFiltro, $textoFiltro);
+
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'profesores', $this->session->userdata('rut'));
+		}
 		echo json_encode($resultado);
 		
 	}
@@ -177,9 +184,10 @@ class Profesores extends MasterManteka {
         $apellido1_profesor = $this->input->get("apellido1_profesor");
         $apellido2_profesor = $this->input->get("apellido2_profesor");
         $correo_profesor = $this->input->get("correo_profesor");
+		$correo_profesor1 = $this->input->get("correo_profesor1");
         $telefono_profesor = $this->input->get("telefono_profesor");
         $tipo_profesor = $this->input->get("tipo_profesor");
-        $confirmacion = $this->Model_profesor->InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$telefono_profesor, $tipo_profesor);
+        $confirmacion = $this->Model_profesor->InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$correo_profesor1,$telefono_profesor, $tipo_profesor);
 	    
 		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);
         $datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador

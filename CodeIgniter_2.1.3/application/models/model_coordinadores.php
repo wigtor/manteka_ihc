@@ -195,9 +195,9 @@ class model_coordinadores extends CI_Model{
       * @return none
       */	
       function borrarCoordinadores($array){
-         $this->db->where_in('RUT_USUARIO3',$array);
+         $this->db->where('RUT_USUARIO3',$array);
          $this->db->delete('coordinador');
-         $this->db->where_in('RUT_USUARIO',$array);
+         $this->db->where('RUT_USUARIO',$array);
          $this->db->delete('usuario');
       }
 
@@ -365,6 +365,7 @@ class model_coordinadores extends CI_Model{
       $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
       $this->db->select('TELEFONO_COORDINADOR AS fono');
       $this->db->select('CORREO1_USER AS correo');
+      $this->db->select('CORREO2_USER AS correo2');
       $this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
       $this->db->where('RUT_USUARIO3', $rut);
       $query = $this->db->get('coordinador');

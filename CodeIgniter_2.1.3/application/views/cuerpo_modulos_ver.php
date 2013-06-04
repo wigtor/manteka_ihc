@@ -1,14 +1,14 @@
 <script type="text/javascript">
 function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
-	document.getElementById(nombre_modulo).value = nombre_modulo;
-	document.getElementById(descripcion_modulo).value = descripcion;
+	document.getElementById(nombre_modulo).innerHTML = nombre_modulo;
+	document.getElementById(descripcion_modulo).innerHTML = descripcion;
 	
 	profesor_lider = document.getElementById(profesor_lider);
 	var profesores_lideres = new Array();
 	var cont;
 	<?php
 	$contadorE = 0;
-	while($contadorE<count($profesores)){
+	while($contadorE<count($profesor_lider)){
 		echo 'profesores_lideres['.$contadorE.']=new Array();';
 		echo 'profesores_lideres['.$contadorE.'][0] = "'.$profesor_lider[$contadorE][0].'";';
 		echo 'profesores_lideres['.$contadorE.'][1] = "'.$profesor_lider[$contadorE][1].'";';
@@ -21,7 +21,7 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 	?>
 	for(cont=0;cont < profesores_lideres.length;cont++){
 		if(cod_equipo == profesores_lideres[cont][0]){
-			profesor_lider.value = profesores_lideres[cont][2]+" "+profesores_lideres[cont][3]+" "+profesores_lideres[cont][4]+" "+profesores_lideres[cont][5];
+			profesor_lider.innerHTML = profesores_lideres[cont][2]+" "+profesores_lideres[cont][3]+" "+profesores_lideres[cont][4]+" "+profesores_lideres[cont][5];
 			cont = profesores_lideres.length;
 		}
     }
@@ -30,7 +30,7 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 	
 	<?php
 	$contadorE = 0;
-	while($contadorE<count($profesores)){
+	while($contadorE<count($modulos)){
 		echo 'arreglo['.$contadorE.']=new Array();';
 		echo 'arreglo['.$contadorE.'][0] = "'.$modulos[$contadorE][0].'";';//cod modulo tem
 		echo 'arreglo['.$contadorE.'][1] = "'.$modulos[$contadorE][2].'";';//cod equipo
@@ -62,59 +62,57 @@ function detalleModulo(codigo_modulo,nombre_modulo,cod_equipo,descripcion){
 					</div>
 
 
-				<div class="row-fluid" style="margin-left: 0%; width:90%">
-					<thead>
-						<tr>
-							<th style="text-align:left;"><br><b>Nombre del módulo</b></th>
-							
-						</tr>
-					</thead>
+					<div class="row-fluid" style="margin-left: 0%; width:90%">
+						<thead>
+							<tr>
+								<th style="text-align:left;"><b>Nombre del módulo</b></th>
+								
+							</tr>
+						</thead>
 
 
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
-						<table class="table table-hover">
-							<tbody>		
-								<?php
-								$contador=0;
-								$comilla= "'";
-								while ($contador<count($modulos)){
-									
-									echo '<tr>';
-									echo	'<td  id="td_modulo_'.$modulos[$contador][0].'" onclick="DetalleModulo('.$comilla.$modulos[$contador][0].$comilla.','.$comilla. $modulos[$contador][3].$comilla.','.$comilla. $modulos[$contador][2].$comilla.','.$comilla. $modulos[$contador][4].$comilla.')" 
-												  style="text-align:left;">
-												  '. $modulos[$contador][3].'</td>';
-									echo '</tr>';
-																
-									$contador = $contador + 1;
-								}
-								?>														
-							</tbody>
-						</table>
-					</div>
-				</div>	
+						<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+							<table class="table table-hover">
+								<tbody>		
+									<?php
+									$contador=0;
+									$comilla= "'";
+									while ($contador<count($modulos)){
+										
+										echo '<tr>';
+										echo	'<td  id="td_modulo_'.$modulos[$contador][0].'" onclick="DetalleModulo('.$comilla.$modulos[$contador][0].$comilla.','.$comilla. $modulos[$contador][3].$comilla.','.$comilla. $modulos[$contador][2].$comilla.','.$comilla. $modulos[$contador][4].$comilla.')" 
+													  style="text-align:left;">
+													  '. $modulos[$contador][3].'</td>';
+										echo '</tr>';
+																	
+										$contador = $contador + 1;
+									}
+									?>														
+								</tbody>
+							</table>
+						</div>
+					</div>	
 			
 		</div>
 		
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 			2. Detalle Módulo Temático
-			<div class ="row-fluid">
+			<div class ="row-fluid" style="margin-top:5%">
 				<pre style="margin-top: 2%; padding: 2%; height:6%">
-Nombre del módulo:	<input type="text" id="nombre_modulo"></input>
-Profesor lider: 	<input type="text" id="profesor_lider"></input>
-Descripción módulo: <input type="text" id="descripcion_modulo"></input>
-
-			</pre>
+Nombre del módulo:	<b id="nombre_modulo"></b>
+Profesor lider: 	<b id="profesor_lider"></b>
+Descripción módulo: <b id="descripcion_modulo"></b></pre>
 				
 			</div>
 			<div class="row-fluid">
-				<div class="row-fluid">
-						<div class="span6">
-							3. Sesiones del Módulo Temático
-						</div>
+			
+				<div class="span6">
+					3. Sesiones del Módulo Temático
 				</div>
+				
 			</div>
 			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >																		
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >																		
 					<?php
 					$contador=0;
 					while ($contador<count($sesiones)){
@@ -144,7 +142,7 @@ Descripción módulo: <input type="text" id="descripcion_modulo"></input>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
 									
 						<?php
 						$contador=0;
@@ -179,7 +177,7 @@ Descripción módulo: <input type="text" id="descripcion_modulo"></input>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
 									
 					<?php	
 					$contador=0;

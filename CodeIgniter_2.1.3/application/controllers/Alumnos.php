@@ -251,9 +251,10 @@ class Alumnos extends MasterManteka {
 	{
 
 		$this->load->model('Model_estudiante');
-		
+		$seccion1 = 0;
+		$seccion2 = 0;
 
-		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
+		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2,'seccion1'=>$seccion1,'seccion2'=>$seccion2);
 		
 
 		$subMenuLateralAbierto = "cambiarSeccionAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
@@ -330,6 +331,13 @@ class Alumnos extends MasterManteka {
 		$this->load->model('Model_estudiante');
 
 		$resultado = $this->Model_estudiante->getAlumnosByFilter($tipoFiltro, $textoFiltro);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'alumnos', $this->session->userdata('rut'));
+		}
 		echo json_encode($resultado);
 	}
 

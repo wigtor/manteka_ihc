@@ -1,5 +1,5 @@
 <script>
-	function detalleAlumno(elemTabla) {
+	function detalleSesion(elemTabla) {
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
