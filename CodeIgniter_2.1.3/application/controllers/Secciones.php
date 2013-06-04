@@ -29,7 +29,13 @@ class Secciones extends MasterManteka {
 		$this->verSecciones();
 	}
 
-	// se usa para la vista ver una determinada seccion
+	/**
+	* Ver una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_ver'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones,finalmente se carga la vista nuevamente con todos los datos para permitir ver otra seccion.
+	*
+	*/
 	public function verSecciones()
 	{
 		//Se comprueba que quien hace esta petición este logueado
@@ -49,7 +55,16 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
-	// se usa para la vista de agregar una determinada seccion
+	/**
+	* Agregar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_agregar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones, se llama a la función AgregarSeccion para insertar la seccion
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra seccion.
+	*/
 	public function agregarSecciones()
 	{	
 		//Se comprueba que quien hace esta petición este logueado
@@ -73,7 +88,18 @@ class Secciones extends MasterManteka {
 	}
 
 	
-    // se usa para la vista de editar una determinada seccion
+ 
+ 	/**
+	* Editar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_editar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones, se llama a la función AtualizarSeccion para editar la seccion
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la edición de otra seccion.
+	*
+	*/
     public function editarSecciones()
     {
 	//Se comprueba que quien hace esta petición este logueado
@@ -96,7 +122,17 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
     }
 
-	// se usa para la vista de borrar una determinada seccion
+		/**
+	* Borrar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_borrar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones, se llama a la función EliminarSeccion para borrar la seccion
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la eliminación de otra seccion.
+	*
+	*/
     public function borrarSecciones()
     {
 		//Se comprueba que quien hace esta petición este logueado

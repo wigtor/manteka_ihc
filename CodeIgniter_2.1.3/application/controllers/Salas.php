@@ -27,7 +27,7 @@ class Salas extends MasterManteka {
 		$this->verSalas();
 	}
 
-		/**
+	/**
 	* Ver una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_ver'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
 	* Siguiente a esto se cargan los datos para las plantillas de la página.
@@ -53,7 +53,7 @@ class Salas extends MasterManteka {
 	}
 
 	/**
-	* Agregar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_editar'
+	* Agregar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_agregar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
 	* Siguiente a esto se cargan los datos para las plantillas de la página.
 	* Se carga el modelo de salas, se llama a la función InsertarSala para insertar la sala
