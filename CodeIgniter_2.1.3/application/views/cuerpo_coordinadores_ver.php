@@ -16,6 +16,9 @@
 		rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
 		//var rut_clickeado = elemTabla;
 
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
@@ -51,9 +54,7 @@
 			}
 		});
 		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		
 	}
 
 
@@ -62,6 +63,11 @@
 		var inputTextoFiltro = document.getElementById('filtroLista');
 		var valorSelector = selectorFiltro.value;
 		var texto = inputTextoFiltro.value;
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>", /* Se setea la url del controlador que responderá */
@@ -96,9 +102,26 @@
 				}
 		});
 
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		
+	}
+
+	function getDataSource(inputUsado) {
+		
+	    $(inputUsado).typeahead({
+	        minLength: 1,
+	        source: function(query, process) {
+	        	$.ajax({
+		        	type: "POST", /* Indico que es una petición POST al servidor */
+					url: "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>", /* Se setea la url del controlador que responderá */
+					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+		            	//alert(respuesta)
+		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	process(arrayRespuesta);
+		            }
+	        	});
+	        }
+	    });
 	}
 
 	//Se cargan por ajax
@@ -112,7 +135,7 @@
 		<div class="span6">
 			1.-Listado coordinadores
 			<div class="controls controls-row">
-				<input class="span6" id="filtroLista" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+				<input class="span6" id="filtroLista" onkeypress="getDataSource(this)" type="text" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
 				
 				<select class="span6" id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 					<option value="1">Filtrar por nombre</option>

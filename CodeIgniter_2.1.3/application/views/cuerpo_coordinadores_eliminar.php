@@ -8,139 +8,231 @@
 * @author     Grupo 2 IHC 1-2013 Usach
 */
 ?>
-<fieldset>
-	<legend>Eliminar Coordinadores</legend>
-	    <div class="row" style="margin-left:30px;"><!--fila-->
-	        <div class="span4">
-	            <h4>Seleccione los coordinadores a eliminar</h4>
-	            <div class="input-append span9">
-					<input class="span11" id="appendedDropdownButton" type="text" placeholder="Filtro">
-					<div class="btn-group">
-						<button class="btn dropdown-toggle" data-toggle="dropdown">
-							<span id="show-filtro">Filtrar por</span>
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" id="select-filtro">
-							<li onclick="seleccionar_filtro(this)" class="active"><a href>Nombre</a></li>
-							<!--<li onclick="seleccionar_filtro(this)"><a href >Modulos</a></li>
-							<li onclick="seleccionar_filtro(this)"><a href >Secciones</a></li>
-							<li onclick="seleccionar_filtro(this)"><a href >Correo </a></li> por implementar aun.-->
-						</ul>
-					</div>
-				</div>
-	            <select id="select-coordinadores" multiple class="span12" size=20 onchange="mostrarDatos(this)">
-	            <?php
-	                foreach ($listado_coordinadores as $coordinador) {
-	                    echo "<option value='id".$coordinador["id"]."'>".$coordinador['nombre']."</option>";
-	                }
-	            ?>
-	            </select>
-	        </div>
-	        <div class="span8">
-	        	<div class="span12" style="height:70px"></div>
-		        <h4>Seleccionados a eliminar</h4>
-		        <div class="span11" style="overflow-y:scroll;height:300px">
-		            <table class="table table-bordered">            
-		                <tr>
-		                    <th>Rut</th>
-		                    <th>Paterno</th>
-		                    <th>Materno</th>
-		                    <th>Nombre</th>
-		                </tr>
-		                <?php 
-		                	foreach ($listado_coordinadores as $coordinador) {
-		                		echo "<tr class ='fila_tabla' style='display:none;' id='id".$coordinador['id']."'>";
-			                	echo "<td>".$coordinador['rut']."</td>";
-			                	echo "<td>".$coordinador['nombre']."</td>";
-			                	echo "<td>".$coordinador['nombre']."</td>";
-			                	echo "<td>".$coordinador['nombre']."</td>";
-			                	echo "</tr>";
-		                	}
-		                ?>
-		            </table>
-		        
-		        </div>
-		        
-		        <div class="offset9 span1">
-		        	<br/>
-			        	<?php
-							$attributes = array('onSubmit' => 'return confirmar()');
-							echo form_open('Coordinadores/borrarCoordinadores', $attributes);
-						?>
-		        		<input type="hidden" name="lista_eliminar" id="input-eliminar">
-	  					<button class="btn btn-danger" type="sumbit">Eliminar</button>
-	  				<?php echo form_close(""); ?>
-				</div>
-		        <div class="span1"></div>
-		    </div>
-	    </div>
-	</br>
-</fieldset>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-    	
+<script>
+	function detalleCoordinador(elemTabla) {
 
-    });
-	function mostrarDatos(seleccion){
-        var id_coordinador = seleccion.options[seleccion.selectedIndex].value;
-        $('#select-coordinadores').val();
-        $(".fila_tabla").hide();
-        var seleccion = $('#select-coordinadores').val();
-        for(var row in seleccion){
-        	
-			$("#"+seleccion[row]).show();
-        }
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
+		//var rut_clickeado = elemTabla;
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Coordinadores/postDetallesCoordinador") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rutDetalle = document.getElementById("rutDetalle");
+				var nombre1Detalle = document.getElementById("nombre1Detalle");
+				var nombre2Detalle = document.getElementById("nombre2Detalle");
+				var apellido1Detalle = document.getElementById("apellido1Detalle");
+				var apellido2Detalle = document.getElementById("apellido2Detalle");
+				var fonoDetalle = document.getElementById("fonoDetalle");
+				var correoDetalle = document.getElementById("correoDetalle");
+				
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rutDetalle).html(datos.rut);
+				$(rutEliminar).html(datos.rut);
+				$(nombre1Detalle).html(datos.nombre1);
+				$(nombre2Detalle).html(datos.nombre2);
+				$(apellido1Detalle).html(datos.apellido1);
+				$(apellido2Detalle).html(datos.apellido2);
+				$(fonoDetalle).html(datos.fono);
+				$(correoDetalle).html(datos.correo);
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
+		
+		
+	}
+	function EliminarCoordinador(){
+    	var respuesta = confirm("Esta seguro de que desea eliminar este coordinador");
+    	rutAEliminar = $("#rutDetalle").html();
+    	if(rutAEliminar != ""){
+	    	var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+	    	if(respuesta){
+	    		$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Coordinadores/PostEliminarCoordinador") ?>", /* Se setea la url del controlador que responderá */
+				data: { rutDelete: rutAEliminar }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+				}
+			});
+	    	}else{
+	    		var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+	    	}
+	    	if(respuesta){
+	    		window.location = "<?php echo site_url("Coordinadores/ResultadoSatisfactorio") ?>";
+	    	}
+	    }else{
+	    	alert('Por favor seleccione un coordinador');
+	    }
+
     }
-    function confirmar(){
-    	var respuesta = confirm("Esta seguro de que decea eliminar estos Coordinadores?");
-    	if(respuesta)
-    		$('#input-eliminar').val($('#select-coordinadores').val());
-    	return respuesta;
+    function Vaciar(){
+    	$(rutDetalle).html("");
+		$(nombre1Detalle).html("");
+		$(nombre2Detalle).html("");
+		$(apellido1Detalle).html("");
+		$(apellido2Detalle).html("");
+		$(fonoDetalle).html("");
+		$(correoDetalle).html("");
     }
-    function seleccionar_filtro(option){
-    	$(option).prevent
-    	$('.active').removeClass("active");
-    	$(option).addClass("active");
-    	$("#show-filtro").empty().append($('.active a').text());
-    }
-    $("ul#select-filtro li a").click(function(event) {
-	    event.preventDefault();
-	});
-       	
 
-jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
-    return this.each(function() {
-        var select = this;
-        var options = [];
-        $(select).find('option').each(function() {
-            options.push({value: $(this).val(), text: $(this).text()});
-        });
-        $(select).data('options', options);
-        $(textbox).bind('change keyup', function() {
-        	$('option').attr("selected",false);
-            var options = $(select).empty().data('options');
-            var search = $(this).val().trim();
-            var regex = new RegExp(search,"gi");
-          
-            $.each(options, function(i) {
-                var option = options[i];
-                if(option.text.match(regex) !== null) {
-                    $(select).append(
-                       $('<option>').text(option.text).val(option.value)
-                    );
-                }
-            });
-            if (selectSingleMatch === true && $(select).children().length === 1) {
-                $(select).children().get(0).selected = true;
-            }
-        });            
-    });
-};
 
-$(function() {
-    $('#select-coordinadores').filterByText($('#appendedDropdownButton'), true);
-});    	
 
+
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>", /* Se setea la url del controlador que responderá */
+			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultados");
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, th, thead, nodoTexto;
+				thead = document.createElement('thead');
+				tr = document.createElement('tr');
+				th = document.createElement('th');
+				nodoTexto = document.createTextNode("Nombre Completo");
+				th.appendChild(nodoTexto);
+				tr.appendChild(th);
+				thead.appendChild(tr);
+				tablaResultados.appendChild(thead);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					tr.setAttribute("id", "coordinador_"+arrayRespuesta[i].rut);
+					tr.setAttribute("onClick", "detalleCoordinador(this)");
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		
+	}
+
+	function getDataSource(inputUsado) {
+		
+	    $(inputUsado).typeahead({
+	        minLength: 1,
+	        source: function(query, process) {
+	        	$.ajax({
+		        	type: "POST", /* Indico que es una petición POST al servidor */
+					url: "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>", /* Se setea la url del controlador que responderá */
+					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+		            	//alert(respuesta)
+		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	process(arrayRespuesta);
+		            }
+	        	});
+	        }
+	    });
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
 
 </script>
+
+		<fieldset>
+			<legend>Borrar Coordinador</legend>
+			<div class= "row-fluid">
+				<div class="span6">
+					1.-Listado coordinadores
+					<div class="controls controls-row">
+						<input class="span6" id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+						
+						<select class="span6" id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+							<option value="1">Filtrar por nombre</option>
+							<option value="2">Filtrar por apellido paterno</option>
+							<option value="3">Filtrar por apellido materno</option>
+							<option value="4">Filtrar por carrera</option>
+							<option value="5">Filtrar por seccion</option>
+							<option value="6">Filtrar por bloque horario</option>
+						</select>
+					</div>
+					
+					<div class="row-fluid" style="margin-left: 0%;">
+						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+							<table id="listadoResultados" class="table table-hover">
+								<thead>
+									<tr>
+										<th>Nombre Completo</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="span6" style="margin-left: 2%; padding: 0%; ">
+				2.-Detalle del Coordinador:
+				<pre style="margin-top: 2%; padding: 2%">
+Rut:              <b id="rutDetalle" name="rutDetalle" ></b>
+Nombres:          <b id="nombre1Detalle"></b><b id="nombre2Detalle" ></b>
+Apellido paterno: <b id="apellido1Detalle" ></b>
+Apellido materno: <b id="apellido2Detalle"></b>
+Fono:             <b id="fonoDetalle"></b>
+Correo:           <b id="correoDetalle"></b>
+				</pre>
+				  <input type="hidden" id="rutEliminar" value=""> </input>
+					<div class= "row-fluid" >
+						<div class="row-fluid" style=" margin-top:10px; margin-left:50%">		
+							<div class="span3 ">
+								<button class="btn" style="width: 93px" onClick="EliminarCoordinador()" >
+									<div class= "btn_with_icon_solo">b</div>
+									&nbsp Borrar
+								</button>
+							</div>
+
+							<div class = "span3 ">
+								<button  class ="btn" style="width: 105px" type="reset" onclick="Vaciar()" >
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
+							</div>
+						</div>
+					</div>
+				 
+				</div>	
+			</div>
+		</fieldset>
