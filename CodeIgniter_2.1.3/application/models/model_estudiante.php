@@ -183,13 +183,13 @@ class Model_estudiante extends CI_Model {
 			$attr_filtro = "NOMBRE1_ESTUDIANTE";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-			$attr_filtro = "APELLIDO_PATERNO";
+			$attr_filtro = "APELLIDO1_ESTUDIANTE";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-			$attr_filtro = "APELLIDO_MATERNO";
+			$attr_filtro = "APELLIDO2_ESTUDIANTE";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
-			$attr_filtro = "NOMBRE_CARRERA";
+			$attr_filtro = "COD_CARRERA";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_SECCION) {
 			$attr_filtro = "COD_SECCION";
