@@ -16,8 +16,8 @@
 
 <script type="text/javascript">
 	function DetalleSeccion(cod_seccion){
+			document.getElementById("rs_seccion").value = '';
 			document.getElementById("cod_seccion").value = cod_seccion;
-			document.getElementById("rs_seccion").value = "";
 			var borrar = document.getElementById("formDetalle");
 			borrar.action = "<?php echo site_url("Secciones/borrarSecciones/") ?>/";
 			borrar.submit();
@@ -27,8 +27,8 @@
 
 <script type="text/javascript">
 	function eliminarSeccion(){
-		var cod=ocument.getElementById("rs_seccion").value;
-		alert (cod+"holi");
+		var cod=document.getElementById("rs_seccion").value;
+		
 		if(cod!=""){ 
 					var answer = confirm("¿Está seguro de eliminar esta sección?")
 					if (!answer){
@@ -55,7 +55,7 @@ function ordenarFiltro(){
 
 	
 	var arreglo = new Array();
-	var sala;
+	var seccion;
 	var ocultar;
 	var cont;
 	
@@ -63,7 +63,7 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($seccion)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][1].'";';
 		$contadorE = $contadorE + 1;
 	}
 	?>
@@ -91,18 +91,16 @@ function ordenarFiltro(){
            
             
             <div class="row-fluid">
-                <div class="span5">
+                <div class="span6">
                     <div class="row-fluid">
-                        <div class="span7">
+                        <div class="span6">
                             1.-Seleccionar sección
                         </div>
 					</div>
-			<div class="row-fluid">
-				<div class="span11">
-					<div class="row-fluid">	
+						<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
 									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
@@ -111,9 +109,6 @@ function ordenarFiltro(){
 								</div> 
 							</div>
 						</div>
-						
-				</div>
-			</div>
 			<div class="row-fluid" style="margin-left: 0%;">
 				<!--<div class="span9">-->
 
@@ -220,27 +215,22 @@ $contador =count($secc) ;
 					<br>
 					</div>
                                 <div class="row-fluid">
-<<<<<<< HEAD
-									<div class="span2" style="margin-left:58%; width:20%">
-										<button class ="btn" style="width:108px">
+									<div class="span4" style="margin-left: 45%; width:28%">
+										<button class ="btn" type="submit" onclick="eliminarSeccion()" style="width:108px">
 											<div class="btn_with_icon_solo">Ë</div>
 											&nbsp Eliminar
 										</button>
-=======
-									<div class="span3 offset6">
-										<button class ="btn" type="submit" onclick="eliminarSeccion()">Eliminar</button>
->>>>>>> borrar
-										</div>
-									<div class="span3" style="width:19%">
+									</div>
+									<div class="span3"> 
 										<button  class ="btn" type="reset" onclick="DetalleSeccion('')"  style="width:105px">
 											<div class="btn_with_icon_solo">Â</div>
 											&nbsp Cancelar
 										</button>
 									</div>
 								</div> 
-                
+                </div>
 				</form>
-			</div>
+			
 				
             </div>
          </form>
