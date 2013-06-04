@@ -14,25 +14,25 @@ class Model_secciones extends CI_Model{
 	*/
 	public function VerTodosLosEstudiantes($cod_seccion)
 	{
-		
-		$sql="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
-		$datos=mysql_query($sql); 
-		$contador = 0;
 		$lista=array();
+		if($cod_seccion!=''){
+		$sql="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;	
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
-			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
-			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
-			$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
-			$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
-			$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
-			$lista[$contador][6] = $row['COD_SECCION'];
-			$lista[$contador][7] = $row['COD_CARRERA'];
+			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+				$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
+				$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
+				$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
+				$lista[$contador][3] = $row['APELLIDO1_ESTUDIANTE'];
+				$lista[$contador][4] = $row['APELLIDO2_ESTUDIANTE'];
+				$lista[$contador][5] = $row['CORREO_ESTUDIANTE'];
+				$lista[$contador][6] = $row['COD_SECCION'];
+				$lista[$contador][7] = $row['COD_CARRERA'];
 
-			$contador = $contador + 1;
-		}
-		}
+				$contador = $contador + 1;
+			}
+		}}
 		return $lista;
 	}
 	
@@ -112,7 +112,7 @@ class Model_secciones extends CI_Model{
 			$lista[$contador][2] = '';
 			
 		}
-		
+		$lista[$contador][3] = $cod_seccion;
 		return $lista;
 	}
 
@@ -170,6 +170,20 @@ class Model_secciones extends CI_Model{
 		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
 		
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if( $row['NOMBRE_SECCION']==$nombre){
+			$var=1;
+			}
+			$contador = $contador + 1;
+		}}
+		
+		if($var!=1){
 		$data = array(	
 					'NOMBRE_SECCION' => $nombre	
 		);
@@ -181,7 +195,8 @@ class Model_secciones extends CI_Model{
 		}
 		else{
 			return -1;
-		}		
+		}}
+		else return 3;
     }
 
 	/**
@@ -197,8 +212,23 @@ class Model_secciones extends CI_Model{
 	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
 	{
 		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
-		
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$var=0;
+		$lista=array();
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if($row['COD_SECCION']!=$cod_seccion){
+				if( $row['NOMBRE_SECCION']==$nombre){
+				$var=1;
+				}
+			}
+			$contador = $contador + 1;
+		}}
+		
+		if($var!=1){
 		$data = array(	
 					'COD_SECCION' => $cod_seccion,
 					'NOMBRE_SECCION' => $nombre	
@@ -212,8 +242,92 @@ class Model_secciones extends CI_Model{
 		}
 		else{
 			return -1;
-		}		
+		}}
+		else{return 3;}
     }
  
+
+
+
+public function getDetalleSeccion($cod_seccion)
+{
+		$this->db->select('seccion.NOMBRE_SECCION as nombre_seccion');
+		$this->db->select('NOMBRE_MODULO AS modulo');
+		$this->db->select('NUM_SALA AS sala');
+		$this->db->from('seccion');
+		$this->db->where('seccion.COD_SECCION', $cod_seccion);
+		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM=seccion_mod_tem.COD_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('sala_horario', 'seccion_mod_tem.ID_HORARIO_SALA=sala_horario.ID_HORARIO_SALA', 'LEFT OUTER');
+		$this->db->join('sala','sala_horario.COD_SALA=sala.COD_SALA', 'LEFT OUTER');
+		$this->db->join('horario','sala_horario.COD_HORARIO=horario.COD_HORARIO', 'LEFT OUTER');
+		$this->db->join('equipo_profesor', 'modulo_tematico.COD_EQUIPO=equipo_profesor.COD_EQUIPO', 'LEFT OUTER');
+		$this->db->join('profe_seccion','profe_seccion.COD_SECCION= seccion.COD_SECCION', 'LEFT OUTER');
+		$this->db->join('profesor','profe_seccion.RUT_USUARIO2=profesor.RUT_USUARIO2', 'LEFT OUTER');
+		
+		$query = $this->db->get();
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		
+		$lista = array();
+
+		if ($datos = $query->row()){
+
+
+		$lista[0] = $datos->nombre_seccion;
+		$lista[1] = $datos->modulo;
+		$lista[2] = /*$datos->profesor*/"";
+		$lista[3] = $datos->sala;
+		$lista[4] = /*$datos->horario*/"";
+
+		}
+		
+		
+	
+		return $lista;
+
+	
 }
+
+public function EliminarAsignacion($cod_seccion)
+{
+	$this->db->select('sala_horario.ID_HORARIO_SALA as id_sala');
+	$this->db->from('seccion_mod_tem');
+	$this->db->join('sala_horario', 'seccion_mod_tem.ID_HORARIO_SALA=sala_horario.ID_HORARIO_SALA');
+
+	$query =$this->db->get();
+
+	$lista=array();
+
+	if ($datos1 = $query->row()){
+
+		$lista[0] = $datos1->id_sala;
+
+		$this->db->where('cod_seccion', $cod_seccion);
+		$datos2 = $this->db->delete('seccion_mod_tem');
+		$datos3 = $this->db->delete('profe_seccion');
+		
+		}
+
+	else{
+		$lista[0]="";
+		$datos2=false;
+		$datos3=false;
+
+	}	
+
+	if($datos2 == true && $datos3 == true ){
+			return 1;
+		}
+		else{
+			return -1;
+		}
+
+}
+
+}
+
+
 ?>

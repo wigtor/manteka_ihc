@@ -41,9 +41,10 @@
 					}
 					else{
 		
-					var borrar = document.getElementById("FormBorrar");
-					borrar.action ="<?php echo site_url("Alumnos/eliminarAlumno/");?>"
-					borrar.submit();
+					//var borrar = document.getElementById("FormBorrar");
+					//borrar.action ="<?php echo site_url("Alumnos/eliminarAlumno/");?>"
+					//borrar.submit();
+					return true;
 					}
 		}
 		else{
@@ -95,7 +96,11 @@ function ordenarFiltro(){
 
 <div class= "row-fluid">
 	<div class= "span10">
-		<form id="FormBorrar" type="post" onsubmit="eliminarAlumno();return false" method="post">
+		<?php
+		$atributos= array('onsubmit' => 'return eliminarAlumno()', 'id' => 'FormBorrar');
+		 echo form_open('Alumnos/eliminarAlumno/', $atributos);
+		?>
+		<!--<form id="FormBorrar" type="post" onsubmit="eliminarAlumno();return false" method="post">-->
 		<fieldset>
 			<legend>Borrar Alumno</legend>
 			<div class= "row-fluid">
@@ -207,6 +212,7 @@ Correo:           <b id="correoDetalle"></b></pre>
 
 			
 		</fieldset>
-		</form>
+		<!--</form>-->
+		<?php echo form_close(''); ?>
 	</div>
 </div>

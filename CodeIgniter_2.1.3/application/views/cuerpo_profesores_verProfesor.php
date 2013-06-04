@@ -138,9 +138,9 @@ Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
-Telefono: 		  <b id="telefonoDetalle" ></b>
-Correo: 		  <b id="correoDetalle" ></b>
-Tipo: 			  <b id="tipoDetalle"></b>
+Telefono:         <b id="telefonoDetalle" ></b>
+Correo:           <b id="correoDetalle" ></b>
+Tipo:             <b id="tipoDetalle"></b>
 		</pre>
 		</div>
 	</div>

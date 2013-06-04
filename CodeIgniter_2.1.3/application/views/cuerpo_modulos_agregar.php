@@ -92,6 +92,36 @@ function nombreEnUso(){
     }
 
 }
+	function validarMod(){
+		var sesion = document.getElementsByName("cod_sesion[]");
+		var equipo = document.getElementsByName("cod_profesor_equipo[]");
+		var cont;
+		var numS = 0;
+		var numE = 0;
+		for(cont=0;cont < sesion.length;cont++){
+			if(sesion[cont].checked == true){
+				numS = numS + 1;
+			}
+		}
+		if(numS == 0){
+			alert("Debe escoger por lo menos una sesión");
+			return false;
+		}
+		for(cont=0;cont < equipo.length;cont++){
+			if(equipo[cont].checked == true){
+				numE = numE + 1;
+			}
+		}
+		if(numE == 0){
+			alert("Debe escoger por lo menos un equipo");
+			return false;
+		}
+		
+		var agregar = document.getElementById("formAgregar");
+		agregar.action ="<?php echo site_url("Modulos/HacerAgregarModulo/")?>";
+		agregar.submit();
+}
+
 </script>
 
 <div class="row-fluid">
@@ -99,14 +129,15 @@ function nombreEnUso(){
 		<fieldset>
 			<legend>Agregar Módulos</legend>
 
-			<form id="formAgregar" type="post" action="<?php echo site_url("Ayudantes/HacerAgregarModulo/")?>">
+			<form id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
+			<div class="row-fluid">
+				<div class="span6">
+					<font color="red">*Campos Obligatorios</font>
+				</div>
+			</div>	
 	  		<div class="row-fluid">
 				<div class="span6">
-					<div class="row-fluid">
-						<div class="span6">
-							<font color="red">*Campos Obligatorios</font>
-						</div>
-					</div>
+					
 					
 					<div class="row-fluid"> <!-- nombre modulo-->
 						<div class="span12">
@@ -124,7 +155,7 @@ function nombreEnUso(){
 					</div>
 
 					
-					<div class="row-fluid" style="margin-top:9%">
+					<div class="row-fluid" style="margin-top:7%">
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
@@ -134,20 +165,21 @@ function nombreEnUso(){
 						</div>
 						<div class= "row-fluid">
 							<div class="span11">
-										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 										<!--sesiones-->					
 										<table class="table table-hover">
 										<thead>
 
 										</thead>
 											<tbody>									
+							
 					
 											<?php
 											$contador=0;
 											while ($contador<count($sesiones)){
 												
 													echo '<tr>';
-													echo '<td id="sesion_'.$sesiones[$contador][0].'" title="'.$sesiones[$contador][2].'"><input required  value="'.$sesiones[$contador][0].'" name="cod_sesion[]" type="checkbox" > '.$sesiones[$contador][0].'</td>';
+													echo '<td id="sesion_'.$sesiones[$contador][0].'" title="'.$sesiones[$contador][2].'"><input value="'.$sesiones[$contador][0].'" name="cod_sesion[]" type="checkbox" ></input> '.$sesiones[$contador][3].'</td>';
 													echo '</tr>';
 												$contador = $contador + 1;
 											}
@@ -165,9 +197,9 @@ function nombreEnUso(){
 					<br>
 					<div class="row-fluid"> <!-- descripción modulo-->
 						<div class="span12">
-								<div class="span4">
+								<div class="span7">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Ingrese una descripción del modulo</label>
+										<label  class="control-label" for="inputInfo">3-.<font color="red">*</font>Ingrese una descripción del módulo</label>
 									</div>
 								</div>
 								
@@ -175,12 +207,49 @@ function nombreEnUso(){
 						</div>
 						<div class="span12">		
 								<div class="controls">
-										<textarea required name="descripcion_modulo" maxlength="99" rows="5" cols="100"></textarea>
+										<textarea required name="descripcion_modulo"  style ="margin-left:0%; width: 86%; "maxlength="99" rows="5" cols="100"></textarea>
 								</div>
 						</div>
 						
 					</div>
+					
+										
+					<div class="row-fluid" >
+						<div class= "row-fluid">
+							<div class="span10" style="margin-top:2%">
+								<div class="control-group">
+									<label  class="control-label" for="inputInfo">4-.Agregar Requisitos Existentes</label>
+								</div>
+							</div>
+						</div>
+						<div class= "row-fluid">
+							<div class="span11">
+										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
+														
+										<table class="table table-hover">
+										<thead>
 
+										</thead>
+											<tbody>									
+							
+					
+											<?php
+											$contador=0;
+											while ($contador<count($requisitos)){
+												
+													echo '<tr>';
+													echo '<td id="requisito_'.$requisitos[$contador][0].'" title="'.$requisitos[$contador][2].'"><input value="'.$requisitos[$contador][0].'" name="cod_requisito[]" type="checkbox" ></input> '.$requisitos[$contador][1].'</td>';
+													echo '</tr>';
+												$contador = $contador + 1;
+											}
+											?>
+											</tbody>
+										</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
 
 				
 			
@@ -191,7 +260,7 @@ function nombreEnUso(){
 			<div class="row-fluid"> 
 				<div class="span5">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Asignar profesor lider</label>
+						<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Asignar profesor lider</label>
 					</div>
 				</div>
 				<div  class="span6" >	
@@ -213,7 +282,7 @@ function nombreEnUso(){
 
 			<div class="row-fluid" style="margin-top:2%">
 				<div class="span7 offset5">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 					
 					
 						<table class="table table-hover">
@@ -227,7 +296,7 @@ function nombreEnUso(){
 							$comilla= "'";
 							while ($contador<count($profesores)){
 								echo '<tr>';
-								echo '<td id="1profesores_'.$contador.'" ><input required  onclick="sacarDelEquipo('.$comilla.$contador.$comilla.')" value="'.$profesores[$contador][0].'" name="cod_profesor_lider" type="radio" > '.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
+								echo '<td id="1profesores_'.$contador.'" ><input required  onclick="sacarDelEquipo('.$comilla.$contador.$comilla.')" value="'.$profesores[$contador][0].'" name="cod_profesor_lider" type="radio" ></input> '.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
 								echo '</tr>';
 								$contador = $contador + 1;
 							}
@@ -243,10 +312,10 @@ function nombreEnUso(){
 			<div class="row-fluid"> 
 				<div class="span5">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Asignar equipo profesores</label>
+						<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Asignar equipo profesores</label>
 					</div>
 				</div>
-				<div  class="span6" >	
+				<div  class="span6" style="margin-top:6%" >	
 					<fieldset>
 						<div class="span12">					
 							<input id="2filtroLista"  onkeyup="ordenarFiltro('2')" type="text" placeholder="Filtro búsqueda">
@@ -263,8 +332,7 @@ function nombreEnUso(){
 
 			<div class="row-fluid" style="margin-top:2%">
 				<div class="span7 offset5">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
-					
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 					
 						<table class="table table-hover">
 							<thead>
@@ -276,7 +344,7 @@ function nombreEnUso(){
 							$contador=0;
 							while ($contador<count($profesores)){
 								echo '<tr>';
-								echo '<td id="2profesores_'.$contador.'" ><input required  id="cb_2profesores_'.$contador.'"  value="'.$profesores[$contador][0].'" name="cod_profesor_equipo[]" type="checkbox" > '.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
+								echo '<td id="2profesores_'.$contador.'" ><input  id="cb_2profesores_'.$contador.'"  value="'.$profesores[$contador][0].'" name="cod_profesor_equipo[]" type="checkbox" ></input> '.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
 								echo '</tr>';
 								$contador = $contador + 1;
 							}
@@ -287,13 +355,19 @@ function nombreEnUso(){
 				</div>
 			</div>
 			<!---->
-			<div class="row-fluid" style="margin-top: 2%">
+			<div class="row-fluid" style="margin-top: 5%">
 	
-				<div class= "span4" style="margin-left:4%">
-					<button class ="btn" type="submit" >Crear Módulo</button>
+				<div class= "span4" style="margin-left:43%">
+					<button class ="btn" type="submit" style="width: 102px" >
+						<div class="btn_with_icon_solo">Ã</div>
+						&nbsp Agregar
+					</button>
 				</div>
 				<div class= "span3" style="margin-left:0%">
-					<button class ="btn" type="reset" >Cancelar</button>
+					<button class ="btn" type="reset" style="width:105px">
+						<div class="btn_with_icon_solo">Â</div>
+						&nbsp Cancelar
+					</button>
 				</div>
 			</div>
 			

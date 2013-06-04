@@ -283,4 +283,5 @@ class MasterManteka extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
+
 }
