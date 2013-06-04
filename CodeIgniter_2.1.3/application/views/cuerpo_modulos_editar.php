@@ -346,13 +346,13 @@ function editarMod(){
 
 
 
-					<div class="row-fluid" style="margin-top:8%">
+					<div class="row-fluid" style="margin-top:2%">
 							<div class="span6">
 								2. Sesiones del Módulo Temático
 							</div>
 					</div>
 
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 										
 										
 						<table id="sesiones" class="table table-hover">
@@ -375,7 +375,7 @@ function editarMod(){
 					</div>
 
 					<div class="row-fluid">
-						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 											
 											
 							<table id="equipo" class="table table-hover">
@@ -402,7 +402,7 @@ function editarMod(){
 						</div>
 					</div>
 
-					<div class="row-fluid">
+					<div class="row-fluid" style="margin-top:2%">
 						<div class="span6">
 								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
 								<input id="cod_modulo" type="hidden" name="cod_modulo">
@@ -418,7 +418,7 @@ function editarMod(){
 
 					</div>
 
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px; margin-top:2%" >
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px; margin-top:2%" >
 										
 										
 						<table id="prof_lider" class="table table-hover">
@@ -433,15 +433,15 @@ function editarMod(){
 					</div>
 
 
-					<div class="row-fluid" style="margin-top:19%">
+					<div class="row-fluid" style="margin-top:3%">
 							<div class="span8">
 								6. Descripción del Módulo 
 							</div>					
 					</div>
-					<div class="row-fluid" style="margin-top:1%">
+					<div class="row-fluid" >
 						<div class="span8">		
 								<div class="controls">
-										<textarea id="descripcion" required name="descripcion_modulo" maxlength="99" rows="5" cols="100"></textarea>
+										<textarea id="descripcion" required name="descripcion_modulo" maxlength="99" rows="5" cols="100" style="width:414px; height: 142px"></textarea>
 								</div>
 							</div>
 						
@@ -453,7 +453,7 @@ function editarMod(){
 							</div>
 					</div>
 
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" >
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 										
 										
 						<table id="requisitos" class="table table-hover">
@@ -467,11 +467,17 @@ function editarMod(){
 						</table>
 					</div>
 					<div class="row-fluid" style="margin-top: 2%">
-						<div class= "span4" style="margin-left:4%">
-							<button class ="btn" type="submit" >Actualizar Módulo</button>
+						<div class= "span4" style="margin-left:43%">
+							<button class ="btn" type="submit" style="width: 111px">
+								<div class="btn_with_icon_solo">Ã</div>
+								&nbsp Modificar
+							</button>
 						</div>
 						<div class= "span3" style="margin-left:0%">
-							<button class ="btn" type="reset" >Cancelar</button>
+							<button class ="btn" type="reset" style="width:105px">
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancelar
+							</button>
 						</div>
 					</div>
 				</div>

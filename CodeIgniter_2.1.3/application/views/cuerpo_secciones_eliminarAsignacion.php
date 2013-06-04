@@ -136,7 +136,7 @@
 						<pre style=" padding: 2%">
 Sección:           <b id="nombre_seccion"></b>
 Módulo:            <b id="modulo"></b>
-Profesor Asignado: <b id="profesor_nombre1"></b><b id="profesor_apellido1"></b> <b id="profesor_apellido2"></b> 
+Profesor Asignado: <b id="profesor_nombre1"></b> <b id="profesor_apellido1"></b> <b id="profesor_apellido2"></b> 
 Sala asignada:     <b id="sala_asig"></b>
 Horario:           <b id="horario_asig"></b></pre>
 <input name="cod_seccion" type="hidden" id="codSeccion" value="">
