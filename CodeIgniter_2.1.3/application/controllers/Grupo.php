@@ -22,6 +22,7 @@ class Grupo extends CI_Controller {
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
+
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["title"] = "ManteKA";
@@ -35,7 +36,9 @@ class Grupo extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
-
+		$this->load->model('model_grupos_contacto');
+		$datos_plantilla["grupos_contacto"] = $this->model_grupos_contacto->obtenerTodosGruposContacto($this->session->userdata('rut'));
+		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_grupos_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
@@ -107,11 +110,13 @@ class Grupo extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
+		$this->load->model('model_grupos_contacto');
+		$this->model_grupos_contacto->obtenerTodosGruposContacto($this->input->post('rutDelete'));
 
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_grupos_eliminar', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
 }
-/* End of file Correo.php */
+/* End of file Grupo.php */
 /* Location: ./application/controllers/Grupo.php */
