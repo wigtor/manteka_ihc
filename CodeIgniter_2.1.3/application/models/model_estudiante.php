@@ -1,5 +1,9 @@
 <?php
- 
+
+/**
+* Clase utilizada para hacer consultas a la base de datos acerca de los estudiantes
+* @author Grupo 4
+*/
 class Model_estudiante extends CI_Model {
     public $rut_estudiante = 0;
     var $nombre1_estudiante = '';
@@ -68,13 +72,14 @@ class Model_estudiante extends CI_Model {
 		$data = array(					
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO_PATERNO' => $apellido_paterno ,
-					'APELLIDO_MATERNO' => $apellido_materno ,
+					'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
+					'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
 					'CORREO_ESTUDIANTE' => $correo_estudiante,
 					'COD_SECCION'=>$seccion
 		);
 		$this->db->where('RUT_ESTUDIANTE', $rut_estudiante);
         $datos = $this->db->update('estudiante',$data);
+        //echo $this->db->last_query();
 		if($datos == true){
 			return 1;
 		}
@@ -166,7 +171,18 @@ class Model_estudiante extends CI_Model {
 	}
 
 
-
+	/**
+	* Función que obtiene los alumnos que coinciden con cierta búsqueda
+	*
+	* Esta función recibe un texto para realizar una búsqueda y un tipo de atributo por el cual filtrar.
+	* Se realiza una consulta a la base de datos y se obtiene la lista de alumnos que coinciden con la búsqueda
+	* Esta búsqueda se realiza mediante la sentencia like de SQL.
+	*
+	* @param int $tipoFiltro Un valor entre 1 a 6 que indica el tipo de filtro a usar.
+	* @param string $texto Es el texto que se desea hacer coincidir en la búsqueda
+	* @return Se devuelve un array de objetos alumnos con sólo su nombre y rut
+	* @author Víctor Flores
+	*/
 	public function getAlumnosByFilter($tipoFiltro, $texto)
 	{
 
@@ -189,10 +205,10 @@ class Model_estudiante extends CI_Model {
 			$attr_filtro = "APELLIDO2_ESTUDIANTE";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
-			$attr_filtro = "COD_CARRERA";
+			$attr_filtro = "carrera.COD_CARRERA";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_SECCION) {
-			$attr_filtro = "COD_SECCION";
+			$attr_filtro = "seccion.COD_SECCION";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
 			return array(); //No implementado aún
@@ -208,16 +224,29 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
 		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
 		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
 		$this->db->like($attr_filtro, $texto);
-		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			return array();
+		if ($tipoFiltro == BUSCAR_POR_CARRERA) {
+			$this->db->or_like("NOMBRE_CARRERA", $texto);
 		}
+		$query = $this->db->get('estudiante');
+		//echo $this->db->last_query();
 		return $query->result();
 	}
 
 
+	/**
+   * Obtiene los detalles de un estudiante
+   * 
+   * Se recibe un rut y se hace la consulta para obtener todos los demás atributos del estudiante
+   * con ese rut. Los atributos del objeto obtenido son:
+   * rut, nombre1, nombre2, apellido1, apellido2, correo, carrera, seccion
+   * 
+   * @author Víctor Flores
+   * @param int $rut El rut del estudiante que se busca
+   * @return Se retorna un objeto cuyos atributos son los atributos del estudiante, FALSE si no se encontró
+   */
 	public function getDetallesEstudiante($rut) {
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
@@ -234,6 +263,14 @@ class Model_estudiante extends CI_Model {
 			return array();
 		}
 		return $query->row();
+	}
+
+
+	public function getSecciones() {
+		$this->db->select('COD_SECCION AS cod');
+		$this->db->select('NOMBRE_SECCION AS nombre');
+		$query = $this->db->get('seccion');
+		return $query->result();
 	}
 
 	

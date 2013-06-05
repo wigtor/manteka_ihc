@@ -1,7 +1,19 @@
 <?php
+
+/**
+* Clase que realiza las consultas a la base de datos relacionadas con los historiales de búsqueda
+* @author Grupo 1
+*/
 class model_busquedas extends CI_Model {
    
-
+ 	/**
+ 	* Función que retorna las palabras de las búsquedas realizadas anteriormente
+ 	* 
+ 	* @param string $letras Es la palabra que se ha introducido para buscar
+ 	* @param int $rut Es el rut del usuario que está realizando la búsqueda
+ 	* @param string $tipo_busqueda Es el tipo de búsqueda en que se está realizando (coordinadores, profesores, ayudantes, correos, etc)
+ 	* @author Víctor Flores
+ 	*/
 	function getBusquedasAnteriores($letras, $rut, $tipo_busqueda) {
 		$this->db->select('PALABRA');
 		$this->db->where('RUT_USUARIO', $rut);
@@ -20,11 +32,24 @@ class model_busquedas extends CI_Model {
 			$contador = $contador +1;
 		}
 		return $datos;
-		//return array('caca', 'hola', '123', '222', 'chupalo', 'hola mundo');
 	}
 
+	/**
+	* Función que agrega al historial de búsqueda una nueva entrada o actualiza el timestamp de alguna ya existente
+	* 
+	* Primero se comprueba que el texto introducido no es vacio, de esta forma nunca se almacenan estas búsquedas sin texto
+	* Se Comprueba si el texto buscado ya está en alguna busqueda anterior, si ya existe entonces se hace update cambiando el 
+	* timestamp de la búsqueda a la fecha y hora actual, en caso de que no exista se realiza un insert a la tabla usando el timestamp actual
+	* 
+	* @param string $texto Es el texto que se ha introducido en la búsqueda
+	* @param string $tipo_busqueda Es el tipo de búsqueda que se está realizando, sobre que datos (coordinadores, profesores, ayudantes, correos, etc)
+	* @param int $rutUsuario Es el rut del usuario que está realizando la búsqueda
+	*/
 	function insertarNuevaBusqueda($texto, $tipo_busqueda, $rutUsuario) {
-		$this->db->select('ID');
+		if (trim($texto) == '') {
+			return ; //Se descartan las búsquedas vacias
+		}
+ 		$this->db->select('ID');
 		$this->db->where('RUT_USUARIO', $rutUsuario);
 		$this->db->where('PALABRA', $texto);
 		$this->db->where('TIPO_BUSQUEDA', $tipo_busqueda);

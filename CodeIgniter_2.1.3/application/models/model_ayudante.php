@@ -1,4 +1,9 @@
 <?php
+
+/**
+* Clase que realiza las consultas a la base de datos relacionadas con los ayudantes
+* @author Grupo 4
+*/
 class Model_ayudante extends CI_Model {
    public $rut_ayudante = 0;
     var $nombre1_ayudante = '';
@@ -200,11 +205,17 @@ class Model_ayudante extends CI_Model {
     }
 
 
-    /**
-	* Recibe un texto para filtrar y un número que indica el tipo de filtro,
-	* Devuelve un arreglo con los ayudantes que cumplen con el filtro de búsqueda
-	* @param int $tipoFiltro valor entre 1 y 4 que indica el tipo de filtro usado.
-	* @param string $texto palabras introducidas por el usuario para buscar
+	/**
+	* Función que obtiene los ayudantes que coinciden con cierta búsqueda
+	*
+	* Esta función recibe un texto para realizar una búsqueda y un tipo de atributo por el cual filtrar.
+	* Se realiza una consulta a la base de datos y se obtiene la lista de ayudantes que coinciden con la búsqueda
+	* Esta búsqueda se realiza mediante la sentencia like de SQL.
+	*
+	* @param int $tipoFiltro Un valor entre 1 a 4 que indica el tipo de filtro a usar.
+	* @param string $texto Es el texto que se desea hacer coincidir en la búsqueda
+	* @return Se devuelve un array de objetos ayudante con sólo su nombre y rut
+	* @author Alex Ahumada
 	*/
     public function getAyudantesByFilter($tipoFiltro, $texto)
    	{
@@ -250,9 +261,15 @@ class Model_ayudante extends CI_Model {
    }
 
    /**
-   * Recibe el rut del ayudante y devuelve toda su información.
-   * @param int $rut El rut del ayudante que se está buscando
-   * @return Un objeto con los datos del ayudante, FALSE si no se encontró
+   * Obtiene los detalles de un ayudante
+   * 
+   * Se recibe un rut y se hace la consulta para obtener todos los demás atributos del ayudante
+   * con ese rut. Los atributos del objeto obtenido son:
+   * rut, nombre1, nombre2, apellido1, apellido2, fono, correo, nombre1_profe, nombre2_profe, apellido1_profe, apellido2_profe
+   * 
+   * @author Alex Ahumada
+   * @param int $rut El rut del ayudante que se busca
+   * @return Se retorna un objeto cuyos atributos son los atributos del ayudante, FALSE si no se encontró
    */
    public function getDetallesAyudante($rut) {
       $this->db->select('ayudante.RUT_AYUDANTE AS rut');
