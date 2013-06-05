@@ -170,7 +170,7 @@ class Alumnos extends MasterManteka {
         $apellido_paterno = $this->input->post("apellido_paterno");
         $apellido_materno = $this->input->post("apellido_materno");
         $correo_estudiante = $this->input->post("correo_estudiante");
-        $cod_seccion = $this->input->post("cod_seccion");
+        $cod_seccion = $this->input->post("seccion_seleccionada");
         $cod_carrera = $this->input->post("cod_carrera");
 		
         $confirmacion = $this->Model_estudiante->InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera);
@@ -204,47 +204,33 @@ class Alumnos extends MasterManteka {
 	*/
 	public function EditarEstudiante()//edita estudiante
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-		redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Alumnos";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		$datos_vista = array();
+		$subMenuLateralAbierto = "editarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	}
+
+
+	public function postEditarEstudiante() {
+		$rut_estudiante = $this->input->post("rutEditar");
+		$nombre1_estudiante = $this->input->post("nombreunoEditar");
+		$nombre2_estudiante = $this->input->post("nombredosEditar");
+		$apellido_paterno = $this->input->post("apellidopaternoEditar");
+		$apellido_materno = $this->input->post("apellidomaternoEditar");
+		$correo_estudiante = $this->input->post("correoEditar");
+		$cod_seccion = $this->input->post("seccion_seleccionada");
 
 		$this->load->model('Model_estudiante');
-
-		$rut_estudiante = $this->input->get("rut_estudiante");
-	        $nombre1_estudiante = $this->input->get("nombre1_estudiante");
-	        $nombre2_estudiante = $this->input->get("nombre2_estudiante");
-	        $apellido_paterno = $this->input->get("apellido_paterno");
-	        $apellido_materno = $this->input->get("apellido_materno");
-	        $correo_estudiante = $this->input->get("correo_estudiante");
-			$cod_seccion = $this->input->get("cod_seccion");
-
-
-	        $confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
-
-	        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion,'secciones' => $this->Model_estudiante->VerSecciones());
-	      
-
-
-
-
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_alumnos_editar', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["subVistaLateralAbierta"] = "editarAlumnos"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_alumnos', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);	
+		$confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
+		$datos_vista = array();
+		$subMenuLateralAbierto = "editarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	
 	}
 	
 	public function cambiarSeccionAlumnos()
@@ -353,6 +339,17 @@ class Alumnos extends MasterManteka {
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'alumnos', $this->session->userdata('rut'));
 		}
+		echo json_encode($resultado);
+	}
+
+	public function postGetSecciones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_estudiante');
+
+		$resultado = $this->Model_estudiante->getSecciones();
 		echo json_encode($resultado);
 	}
 

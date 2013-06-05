@@ -36,8 +36,8 @@ class Model_estudiante extends CI_Model {
 					'RUT_ESTUDIANTE' => $rut_estudiante ,
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO_PATERNO' => $apellido_paterno ,
-					'APELLIDO_MATERNO' => $apellido_materno ,
+					'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
+					'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
 					'CORREO_ESTUDIANTE' => $correo_estudiante ,
 					'COD_SECCION' =>  $cod_seccion ,
 					'COD_CARRERA' => $cod_carrera 
@@ -72,13 +72,14 @@ class Model_estudiante extends CI_Model {
 		$data = array(					
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO_PATERNO' => $apellido_paterno ,
-					'APELLIDO_MATERNO' => $apellido_materno ,
+					'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
+					'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
 					'CORREO_ESTUDIANTE' => $correo_estudiante,
 					'COD_SECCION'=>$seccion
 		);
 		$this->db->where('RUT_ESTUDIANTE', $rut_estudiante);
         $datos = $this->db->update('estudiante',$data);
+        //echo $this->db->last_query();
 		if($datos == true){
 			return 1;
 		}
@@ -204,10 +205,10 @@ class Model_estudiante extends CI_Model {
 			$attr_filtro = "APELLIDO2_ESTUDIANTE";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
-			$attr_filtro = "COD_CARRERA";
+			$attr_filtro = "carrera.COD_CARRERA";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_SECCION) {
-			$attr_filtro = "COD_SECCION";
+			$attr_filtro = "seccion.COD_SECCION";
 		}
 		else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
 			return array(); //No implementado aún
@@ -223,12 +224,14 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
 		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
 		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
 		$this->db->like($attr_filtro, $texto);
-		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			return array();
+		if ($tipoFiltro == BUSCAR_POR_CARRERA) {
+			$this->db->or_like("NOMBRE_CARRERA", $texto);
 		}
+		$query = $this->db->get('estudiante');
+		//echo $this->db->last_query();
 		return $query->result();
 	}
 
@@ -252,14 +255,22 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->select('CORREO_ESTUDIANTE AS correo');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
-		$this->db->select('COD_SECCION AS seccion');
+		$this->db->select('estudiante.COD_SECCION AS seccion');
+		$this->db->select('NOMBRE_SECCION AS nombre_seccion');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION', 'LEFT OUTER');
 		$this->db->where('RUT_ESTUDIANTE', $rut);
 		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			return array();
-		}
+		//echo $this->db->last_query();
 		return $query->row();
+	}
+
+
+	public function getSecciones() {
+		$this->db->select('COD_SECCION AS cod');
+		$this->db->select('NOMBRE_SECCION AS nombre');
+		$query = $this->db->get('seccion');
+		return $query->result();
 	}
 
 	

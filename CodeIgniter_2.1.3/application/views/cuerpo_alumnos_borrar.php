@@ -11,19 +11,127 @@
 </script>
 
 <script type="text/javascript">
-	function DetalleAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera){
-			
-			document.getElementById("rutEliminar").value = rut;
-			document.getElementById("rutDetalle").innerHTML = rut;
-			document.getElementById("nombreunoDetalle").innerHTML = nombre1;
-			document.getElementById("nombredosDetalle").innerHTML = nombre2;
-			document.getElementById("apellidopaternoDetalle").innerHTML = apePaterno;
-			document.getElementById("apellidomaternoDetalle").innerHTML = apeMaterno;
-			document.getElementById("carreraDetalle").innerHTML = carrera;
-		    document.getElementById("seccionDetalle").innerHTML = seccion;
-			document.getElementById("correoDetalle").innerHTML = correo;
+	function detalleAlumno(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		rut_clickeado = idElem.substring("estudiante_".length, idElem.length);
+		//var rut_clickeado = elemTabla;
+
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/postDetallesAlumnos") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rutDetalle = document.getElementById("rutDetalle");
+				var nombre1Detalle = document.getElementById("nombreunoDetalle");
+				var nombre2Detalle = document.getElementById("nombredosDetalle");
+				var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
+				var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
+				var carreraDetalle = document.getElementById("carreraDetalle");
+				var seccionDetalle = document.getElementById("seccionDetalle");
+				var correoDetalle = document.getElementById("correoDetalle");
+				
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rutDetalle).html(datos.rut);
+				$(nombre1Detalle).html(datos.nombre1);
+				$(nombre2Detalle).html(datos.nombre2);
+				$(apellido1Detalle).html(datos.apellido1);
+				$(apellido2Detalle).html(datos.apellido2);
+				$(carreraDetalle).html(datos.carrera);
+				$(seccionDetalle).html(datos.nombre_seccion);
+				$(correoDetalle).html(datos.correo);
+
+				//ESTO ES DE QUIENES HICIERON EL BORRADO
+				var rutInputHidden = document.getElementById("rutEliminar");
+				$(rutInputHidden).val(datos.rut);
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
 		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 	}
+
+
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>", /* Se setea la url del controlador que responderá */
+			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultados");
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, th, thead, nodoTexto;
+				thead = document.createElement('thead');
+				tr = document.createElement('tr');
+				th = document.createElement('th');
+				nodoTexto = document.createTextNode("Nombre Completo");
+				th.appendChild(nodoTexto);
+				tr.appendChild(th);
+				thead.appendChild(tr);
+				tablaResultados.appendChild(thead);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					tr.setAttribute("id", "estudiante_"+arrayRespuesta[i].rut);
+					tr.setAttribute("onClick", "detalleAlumno(this)");
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
+	function getDataSource(inputUsado) {
+		
+	    $(inputUsado).typeahead({
+	        minLength: 1,
+	        source: function(query, process) {
+	        	$.ajax({
+		        	type: "POST", /* Indico que es una petición POST al servidor */
+					url: "<?php echo site_url("HistorialBusqueda/buscar/alumnos") ?>", /* Se setea la url del controlador que responderá */
+					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+		            	//alert(respuesta)
+		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	process(arrayRespuesta);
+		            }
+	        	});
+	        }
+	    });
+
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
+
 </script>
 
 <script type="text/javascript">
@@ -36,21 +144,23 @@
 		if(rut!=""){
 					var answer = confirm("¿Está seguro de eliminar este estudiante?")
 					if (!answer){
-						var dijoNO = DetalleAlumno("","","","","","","","");
+						var dijoNO = resetear();
 						return false;
 					}
 					else{
-		
-					//var borrar = document.getElementById("FormBorrar");
-					//borrar.action ="<?php echo site_url("Alumnos/eliminarAlumno/");?>"
-					//borrar.submit();
-					return true;
+						return true;
 					}
 		}
 		else{
 				alert("Selecione un estudiante");
 				return false;
 		}
+	}
+
+	function resetear() {
+		//ESTO ES DE QUIENES HICIERON EL BORRADO
+		var rutInputHidden = document.getElementById("rutEliminar");
+		$(rutInputHidden).val("");
 	}
 </script>
 
@@ -94,90 +204,49 @@ function ordenarFiltro(){
 </script>
 
 
-<div class= "row-fluid">
-	<div class= "span10">
-		<?php
-		$atributos= array('onsubmit' => 'return eliminarAlumno()', 'id' => 'FormBorrar');
-		 echo form_open('Alumnos/eliminarAlumno/', $atributos);
-		?>
+		
 		<!--<form id="FormBorrar" type="post" onsubmit="eliminarAlumno();return false" method="post">-->
 		<fieldset>
 			<legend>Borrar Alumno</legend>
 			<div class= "row-fluid">
 				<div class="span6">
-					<div class="row-fluid">
-						<div class="span6">
-							1.-Listado Alumnos
-						</div>
+					1.-Listado alumnos
+					<div class="controls controls-row">
+						<input autocomplete="off" class="span6" id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+						
+						<select class="span6" id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+							<option value="1">Filtrar por nombre</option>
+							<option value="2">Filtrar por apellido paterno</option>
+							<option value="3">Filtrar por apellido materno</option>
+							<option value="4">Filtrar por carrera</option>
+							<option value="5">Filtrar por seccion</option>
+							<option value="6">Filtrar por bloque horario</option>
+						</select>
 					</div>
-				<div class="row-fluid">
-					<div class="span11">
 					
-						<div class="row-fluid">
-							<div class="span6">
-								<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
-							</div>
-						
+					<div class="row-fluid" style="margin-left: 0%;">
+						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+							<table id="listadoResultados" class="table table-hover">
+								<thead>
+									<tr>
+										<th>Nombre Completo</th>
+									</tr>
+								</thead>
+								<tbody>
 
-							<div class="span6">
-									
-									<select id="tipoDeFiltro" title="Tipo de filtro" >
-									<option value="1">Filtrar por Nombre</option>
-									<option value="3">Filtrar por Apellido paterno</option>
-									<option value="4">Filtrar por Apellido materno</option>
-									<option value="7">Filtrar por Código Carrera</option>
-									<option value="6">Filtrar por Seccion</option>
-									</select>
-							</div> 
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-				
 			
-					<div class="row-fluid" style="margin-left: 0%;">
-						
-							<thead>
-								<tr>
-									<th style="text-align:left;"><br><b>Nombre Completo</b></th>
-									
-								</tr>
-							</thead>
-							<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-								<table class="table table-hover">
-									<tbody>
-									
-										<?php
-										$contador=0;
-										$comilla= "'";
-										
-										while ($contador<count($rs_estudiantes)){
-											
-											echo '<tr>';
-											echo	'<td  id="'.$contador.'" onclick="DetalleAlumno('.$comilla.$rs_estudiantes[$contador][0].$comilla.','.$comilla. $rs_estudiantes[$contador][1].$comilla.','.$comilla. $rs_estudiantes[$contador][2].$comilla.','.$comilla. $rs_estudiantes[$contador][3].$comilla.','.$comilla. $rs_estudiantes[$contador][4].$comilla.','.$comilla. $rs_estudiantes[$contador][5].$comilla.','. $comilla.$rs_estudiantes[$contador][6].$comilla.','.$comilla. $rs_estudiantes[$contador][7].$comilla.')" 
-														  style="text-align:left;">
-														  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
-											echo '</tr>';
-																		
-											$contador = $contador + 1;
-										}
-										
-										?>
-																
-									</tbody>
-								</table>
-							</div>
-
-					</div>
-				</div>
-			
-
-				<div class="span6">
-					<div style="margin-bottom:0%">
-							2.-Detalle del Alumno:
-					</div>
-					<div class="row-fluid">
-						<div >
-						<pre style="margin-top: 2%; padding: 2%">
+				<?php
+					$atributos= array('onsubmit' => 'return eliminarAlumno()', 'id' => 'FormBorrar');
+					echo form_open('Alumnos/eliminarAlumno/', $atributos);
+				?>
+				<div class="span6" style="margin-left: 2%; padding: 0%; ">
+					2.-Detalle alumno:
+					<pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
 Apellido paterno: <b id="apellidopaternoDetalle" ></b>
@@ -186,9 +255,8 @@ Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
 Correo:           <b id="correoDetalle"></b></pre>
 <input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
-								
-						</div>
-					</div>
+					</pre>
+				
 					<div class="row" style="margin-top: 2%">
 	
 							<div class="span3 offset6">
@@ -199,20 +267,14 @@ Correo:           <b id="correoDetalle"></b></pre>
 							</div>
 
 							<div class = "span3 ">
-								<button  class ="btn" type="reset" onclick="DetalleAlumno('','','','','','','','')" style="width: 105px">
+								<button  class ="btn" type="reset" onclick="resetear()" style="width: 105px">
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
 							</div>
 
 					</div>
-					
-				</div>	
+				</div>
+				<?php echo form_close(''); ?>
 			</div>
-
-			
 		</fieldset>
-		<!--</form>-->
-		<?php echo form_close(''); ?>
-	</div>
-</div>
