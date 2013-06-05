@@ -139,8 +139,6 @@ function cambioTipoFiltro() {
 </script>
 
 
-<div class= "row-fluid">
-	<div class= "span10">
 		<fieldset>
 			<legend>Borrar Ayudante</legend>
 			<div class= "row-fluid">
@@ -187,46 +185,33 @@ function cambioTipoFiltro() {
 					<!--AQUÍ VA LA LISTA-->
 				</div>
 			
-
+				<form id="formBorrar" type="post">
 				<div class="span6">
-					<div style="margin-bottom:0%">
-							2.-Detalle del Ayudante:
-					</div>
-					<form id="formBorrar" type="post">
-					<div class="row-fluid">
-						<div >
-						<pre style="margin-top: 2%; padding: 2%">
+					2.-Detalle del Ayudante:
+					<pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
 Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
+Correo:           <b id="correoDetalle"></b>
+					</pre>
 				  <input type="hidden" id="rutEliminar" value="">
-								
-						</div>
-					</div>
-					<div class= "row-fluid" >
-						<div class="row-fluid" style=" margin-top:10px; margin-left:50%">		
-							<div class="span3 ">
-								<button class="btn" style="width: 93px" onclick="eliminarAyudante()" >
+						<div class= "row-fluid" >	
+							<div class="span3 offset5">
+								<button class="btn" onclick="eliminarAyudante()" >
 									<div class= "btn_with_icon_solo">b</div>
 									&nbsp Borrar
 								</button>
 							</div>
 
-							<div class = "span3 ">
-								<button  class ="btn" style="width: 105px" type="reset" onclick="DetalleAlumno('','','','','','')" >
-									<div class= "btn_with_icon_solo">Â</div>
+							<div class = "span3">
+								<button  class="btn" type="reset" onclick="DetalleAlumno('','','','','','')" >
+									<div class="btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
 							</div>
 						</div>
-					</div>
-					</form>
-				</div>	
+				</div>
+				</form>
 			</div>
-
-			
 		</fieldset>
-	</div>
-</div>
