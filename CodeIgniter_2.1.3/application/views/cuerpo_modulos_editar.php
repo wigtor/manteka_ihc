@@ -310,16 +310,12 @@ function editarMod(){
 		editar.submit();
 }
 
-	function Cancelar(){
-		var borrar = document.getElementById("Cancelar");
-		borrar.action ="<?php echo site_url("Modulos/editarModulos/");?>"
-		borrar.submit()	
-	}
+
 
 </script>
 
 <div class="row-floid">
-	<form id="Cancelar" method="post">
+
 	<div class="span10">
 	<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
 		<fieldset>
@@ -481,7 +477,7 @@ function editarMod(){
 							</button>
 						</div>
 						<div class= "span3" style="margin-left:0%">
-							<button class ="btn" onClick="Cancelar()" style="width:105px">
+							<button class ="btn" type="reset" style="width:105px">
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>
@@ -490,7 +486,6 @@ function editarMod(){
 				</div>
 			</div>	
 		</fieldset>
-	</form>
-	</div>
-	</form>
+		</form>
+	</div>	
 </div>
