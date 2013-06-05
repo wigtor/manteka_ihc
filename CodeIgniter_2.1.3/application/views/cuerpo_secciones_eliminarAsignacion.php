@@ -87,15 +87,19 @@
 
 
 <div class="row-fluid">
-	<!--<form id="Cancelar" method="post">-->
 	<div class="span10">
 		<fieldset>
-			<legend>Borrar Asignación</legend>
+			<legend>Eliminar Asignación</legend>
 			<?php
 				$atributos= array('onsubmit' => 'return eliminarAsignacion()', 'id' => 'FormDetalle');
 		 		echo form_open('Secciones/eliminarAsignacion/', $atributos);
 			?>
-			<!--<form id="formDetalle"  type="post" method="post">-->
+			<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+			</div>
+			
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="row-fluid">
@@ -171,5 +175,4 @@ Horario:           <b id="horario_asig"></b></pre>
 			<!--</form>-->
 		</fieldset>
 	</div>
-	<!--</form>-->
 </div>

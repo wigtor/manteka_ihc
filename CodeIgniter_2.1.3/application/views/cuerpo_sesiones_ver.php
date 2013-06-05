@@ -82,7 +82,7 @@
 	$(document).ready(cambioTipoFiltro);
 </script>
 <fieldset>
-	<legend>Sesiones</legend>
+	<legend>Ver Sesiones</legend>
 
 	<div class="row-fluid">
 		<div class="span6">
@@ -100,7 +100,7 @@
 						<div class="span6">
 							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 								<option value="1">Filtrar por nombre</option>
-								<option value="2">Filtrar por codigo de sesión</option>
+								<option value="2">Filtrar por código de sesión</option>
 
 							</select>
 						</div>
@@ -127,9 +127,9 @@
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 			2.-Detalle sesión:
 			<pre style="margin-top: 2%; padding: 2%">
-Codigo sesión:              <b id="codigoDetalle"></b>
-Nombre del modulo temático: <b id="mod_temDetalle"></b>
-Nombre de la sesion: 	<b id="nombreDetalle"></b>
+Código sesión:              <b id="codigoDetalle"></b>
+Nombre del módulo temático: <b id="mod_temDetalle"></b>
+Nombre de la sesión: 	<b id="nombreDetalle"></b>
 Descripción: 	<b id="descripcionDetalle"></b>
 			</pre>
 		</div>

@@ -60,7 +60,7 @@
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
 					</div>
-				</div>
+			</div>
             
             <div class="row-fluid">
 			
@@ -68,7 +68,7 @@
                 <div class="span6">
                     <div class="row-fluid">
                         <div class="span6">
-                            Ingrese la informacion de la sección
+                            Ingrese la información de la sección
                         </div>
                     </div>
 					

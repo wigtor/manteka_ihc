@@ -61,7 +61,7 @@ function ordenarFiltro(){
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
 									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
