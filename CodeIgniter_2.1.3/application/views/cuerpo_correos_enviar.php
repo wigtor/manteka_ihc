@@ -902,7 +902,7 @@ function revisarRut(rut){
 					echo form_open('Grupo/agregarGrupo',$attributes);
 				?>
 				<input type="text" name="NOMBRE_FILTRO_CONTACTO" placeholder="Nombre Grupo Contactos" style="margin-top:10px;">
-				<input type="hidden" name="RUT_USUARIO" value="<?php $rut_usuario ?>">
+				<input type="hidden" name="RUT_USUARIO" value="<?php echo $rut?>">
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
 				<button class ="btn" type="submit" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" >Guardar Grupo</button>
 				<?php echo form_close(""); ?>
@@ -1114,40 +1114,54 @@ function revisarRut(rut){
 	<?php echo form_close(""); ?>
 </fieldset>
 <script type="text/javascript">
-/*
-$('#form_contactos').submit(function() {
-  // Enviamos el formulario usando AJAX
-	$.ajax({
-		type: 'POST',
-		url: $(this).attr('action'),
-		data: $(this).serialize(),
-		// Mostramos un mensaje con la respuesta de PHP
-		success: function(data){
-			alert(data);
-		}
-	})
-	return false;
-});*/
+
 
 function validar(form){
-	var string = "";
-	var total = t;
-	var total=tbody.getElementsByTagName('tr').length;
-	for (var x=0; x < total; x++) {		
-		if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
-			string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+	event.preventDefault();
+	var answer = confirm("¿Está seguro que desea agregar este Grupo de Contactos?");
+	if (answer){
+		var string = "";
+		var total=tbody2.getElementsByTagName('tr').length;
+		var help = 0;
+		for (var x=0; x < total; x++) {		
+			if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+				if(help== 0){
+				string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+				help = 1;
+				}
+				else{
+				string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+				}			
+			}
+		}	
+		if(!string.length){
+			alert('Debe seleccionar un contacto de la tabla Destinatario')
 		}
-	}
-	if(string = ""){
-	alert('Debe seleccionar un contacto de la tabla Destinatario')
+		else{
+			if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
+				alert("Debe seleccionar un nombre para el grupo de contactos");
+			}
+			else{
+				$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
+		// Enviamos el formulario usando AJAX
+				$.ajax({
+				type: 'POST',
+				url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
+				data: $('#form_contactos').serialize(),	
+				// Mostramos un mensaje con la respuesta de PHP
+				success: function(data){				
+				}
+				})	
+			
+			}
+		}	
+		alert('¡Grupo de Contactos exitosamente agregado!')
+		return false;		
 	}
 	else{
-		if($('input[name=NOMBRE_FILTRO_CONTACTO]')=="")
-			alert("Debe seleccionar un nombre para el grupo de contactos");
-		else
-			$('input[name=QUERY_FILTRO_CONTACTO]').val(string);		
+			
 	}
-	return false;
+	
 }
 
 </script>
