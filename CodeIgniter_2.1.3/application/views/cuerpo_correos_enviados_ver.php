@@ -104,29 +104,63 @@ function cambiarCorreos(direccion,offset)
 
 
 			for (var i = 0; i < listaEnviados.length; i++) {
-				
+				destino="";
+				para="";
 				if(typeof listaEnviados[i][1][0] != 'undefined')
-				{
-					destino=listaEnviados[i][1][0].nombre1_estudiante+' '+listaEnviados[i][1][0].apellido_paterno+' '+listaEnviados[i][1][0].apellido_materno+' &#60'+listaEnviados[i][1][0].correo_estudiante+'&#62';					
-					para=listaEnviados[i][1][0].nombre1_estudiante+' '+listaEnviados[i][1][0].apellido_paterno+' '+listaEnviados[i][1][0].apellido_materno;
+				{  j=0;
+					while(typeof listaEnviados[i][1][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';					
+							para=listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno;
+						}else{
+							destino=destino+', '+listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';
+							para=para+".....";
+						}
+						j++;	
+					}
+					
 					
 				}
 				if(typeof listaEnviados[i][2][0] != 'undefined')
-				{
-					destino=listaEnviados[i][2][0].nombre1_ayudante+' '+listaEnviados[i][2][0].apellido_paterno+' '+listaEnviados[i][2][0].apellido_materno+' &#60'+listaEnviados[i][2][0].correo_ayudante+'&#62';					
-					para=listaEnviados[i][2][0].nombre1_ayudante+' '+listaEnviados[i][2][0].apellido_paterno+' '+listaEnviados[i][2][0].apellido_materno;
+				{j=0;
+					while(typeof listaEnviados[i][2][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
+							para=listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno;
+						}else{
+							destino=destino+', '+listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
+							para=para+".....";
+						}
+						j++;	
+					}
 					
 				}
 				if(typeof listaEnviados[i][3][0] != 'undefined')
-				{
-					destino=listaEnviados[i][3][0].nombre1_profesor+' '+listaEnviados[i][3][0].apellido1_profesor+' '+listaEnviados[i][3][0].apellido2_profesor;					
-					para=listaEnviados[i][3][0].nombre1_profesor+' '+listaEnviados[i][3][0].apellido1_profesor+' '+listaEnviados[i][3][0].apellido2_profesor;
+				{j=0;
+					while(typeof listaEnviados[i][3][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							para=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;
+						}else{
+							destino=destino+', '+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							para=para+".....";
+						}
+						j++;	
+					}
 					
 				}
-				if(typeof listaEnviados[i][4][0] != 'undefined')
-				{
-					destino=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;					
-					para=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;
+				if(typeof listaEnviados[i][4][j] != 'undefined')
+				{j=0;
+					while(typeof listaEnviados[i][4][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							para=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;
+						}else{
+							destino=destino+', '+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							para=para+".....";
+						}
+						j++;	
+					}
 					
 				}
 				tr = document.createElement('tr');

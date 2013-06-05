@@ -321,6 +321,10 @@ class Correo extends MasterManteka {
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
 		en las tablas correspondientes.
 		Si el envío fracasa, se muestra un mensaje de error. */
+
+		
+		
+		
 		
 		try 
 		{
@@ -336,15 +340,20 @@ class Correo extends MasterManteka {
 
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept);
 			$cod=$this->model_correo->getCodigo($date);
-			$estudiante=$this->model_correo->getRutEst($rutRecept);
+
+			$receptores = explode(",",$rutRecept);
+			foreach ($receptores as $receptor) {
+				$estudiante=$this->model_correo->getRutEst($receptor);
 			if($estudiante!=0)
-				$this->model_correo_e->InsertarCorreoE($rutRecept,$cod);
-			$user=$this->model_correo->getRutUser($rutRecept);
+				$this->model_correo_e->InsertarCorreoE($receptor,$cod);
+			$user=$this->model_correo->getRutUser($receptor);
 			if($user!=0)
-				$this->model_correo_u->InsertarCorreoU($rutRecept,$cod);
-			$ayudante=$this->model_correo->getRutAyu($rutRecept);
+				$this->model_correo_u->InsertarCorreoU($receptor,$cod);
+			$ayudante=$this->model_correo->getRutAyu($receptor);
 			if($ayudante!=0)
-				$this->model_correo_a->InsertarCorreoA($rutRecept,$cod);
+				$this->model_correo_a->InsertarCorreoA($receptor,$cod);
+			}
+			
 			
 		}
 		catch (Exception $e) {
