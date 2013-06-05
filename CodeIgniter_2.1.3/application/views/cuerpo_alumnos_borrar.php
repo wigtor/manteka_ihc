@@ -46,7 +46,7 @@
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
 				$(carreraDetalle).html(datos.carrera);
-				$(seccionDetalle).html(datos.seccion);
+				$(seccionDetalle).html(datos.nombre_seccion);
 				$(correoDetalle).html(datos.correo);
 
 				//ESTO ES DE QUIENES HICIERON EL BORRADO

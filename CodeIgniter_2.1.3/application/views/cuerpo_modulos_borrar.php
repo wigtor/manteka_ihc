@@ -194,9 +194,15 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 		}
 
 	}
+	function Cancelar(){
+		var borrar = document.getElementById("Cancelar");
+		borrar.action ="<?php echo site_url("Modulos/borrarModulos/");?>"
+		borrar.submit()	
+	}
 </script>
 
 <div>
+	<form id="Cancelar" method="post">
 	<div class="span10">
 		<fieldset>
 		<legend>Borrar Módulo</legend>
@@ -320,7 +326,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 					</div>
 
 					<div class = "span3 ">
-						<button  class ="btn" type="reset" style="width: 105px">
+						<button  class ="btn" onClick="Cancelar()" style="width: 105px">
 							<div class= "btn_with_icon_solo">Â</div>
 							&nbsp Cancelar
 						</button>
@@ -334,4 +340,5 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 		</form>
 		</fieldset>
 	</div>
+	</form>
 </div>

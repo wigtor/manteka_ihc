@@ -97,7 +97,9 @@ function ordenarFiltro(){
                             1.-Seleccionar sección
                         </div>
 					</div>
-						<div class="row-fluid">	
+			<div class="row-fluid">
+				<div class="span11">
+					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
 									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
@@ -109,7 +111,9 @@ function ordenarFiltro(){
 								</div> 
 							</div>
 						</div>
-			<div class="row-fluid" style="margin-left: 0%;">
+						
+				</div>
+			</div>
 				<!--<div class="span9">-->
 
 					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
@@ -137,7 +141,6 @@ function ordenarFiltro(){
 				
 			
 				<!--</div>-->
-			</div>
 
                 </div>
 				

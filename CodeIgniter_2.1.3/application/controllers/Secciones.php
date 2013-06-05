@@ -29,14 +29,21 @@ class Secciones extends MasterManteka {
 		$this->verSecciones();
 	}
 
+	/**
+	* Ver una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_ver'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones,finalmente se carga la vista nuevamente con todos los datos para permitir ver otra seccion.
+	*
+	*/
 	public function verSecciones()
 	{
-
+		//Se comprueba que quien hace esta petición este logueado
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
-		
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "verSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -48,14 +55,24 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
-	
+	/**
+	* Agregar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_agregar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones, se llama a la función AgregarSeccion para insertar la seccion
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra seccion.
+	*/
 	public function agregarSecciones()
-	{
+	{	
+		//Se comprueba que quien hace esta petición este logueado
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
-		
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "agregarSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -71,14 +88,26 @@ class Secciones extends MasterManteka {
 	}
 
 	
-    
+ 
+ 	/**
+	* Editar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_editar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones, se llama a la función AtualizarSeccion para editar la seccion
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la edición de otra seccion.
+	*
+	*/
     public function editarSecciones()
     {
+	//Se comprueba que quien hace esta petición este logueado
     	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
-		
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "editarSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -93,13 +122,25 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
     }
 
+		/**
+	* Borrar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_borrar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de secciones, se llama a la función EliminarSeccion para borrar la seccion
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la eliminación de otra seccion.
+	*
+	*/
     public function borrarSecciones()
     {
+		//Se comprueba que quien hace esta petición este logueado
     	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
-		
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "borrarSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -113,6 +154,16 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_borrar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+
+/**
+* Se realiza la asiganción de una sección a los datos que corrresponde a la seccionn seleccionada
+* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
+* luego se defienen como vacios los datos de la vista 
+* se indiaca el valor del meni lateral que debe permanecer abierto
+* Se limita el acceso solo a los coordinadores
+* Se carga el modelo de secciones 
+* Se realiza la operación de asiganción a la seccion correspondiente llamando al modelo
+**/	
 	public function asignarAsecciones()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -136,6 +187,16 @@ class Secciones extends MasterManteka {
 
 	}
 
+	/**
+	* Se eliminnan la asignaciones de una sección determinada 
+	* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
+	* luego se defienen como vacios los datos de la vista 
+	* se indiaca el valor del meni lateral que debe permanecer abierto
+	* Se limita el acceso solo a los coordinadores
+	* Se carga el modelo de secciones 
+	* Se realiza la operación de  elimnar asignacionae invocando la función en el modelo	
+	**/
+
 	public function borrarAsignacion()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -157,6 +218,14 @@ class Secciones extends MasterManteka {
 
 	}
 
+
+	/**
+	* Funciaón que realiza un pos de los detalle de la fincion desde el
+	* modelo a la vista utilizando json para la comunicación asincrona
+	*
+	*
+	**/
+
 	public function postDetalleSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -169,6 +238,16 @@ class Secciones extends MasterManteka {
 		$resultado = $this->Model_secciones->getDetalleSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
+
+	/**
+	* Se eliminnan la asignaciones de una sección determinada 
+	* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
+	* luego se defienen como vacios los datos de la vista 
+	* se indiaca el valor del meni lateral que debe permanecer abierto
+	* Se limita el acceso solo a los coordinadores
+	* Se carga el modelo de secciones 
+	* Se realiza la operación de  elimnar asignacionae invocando la función en el modelo	
+	**/
 
 	public function eliminarAsignacion()
 	{
@@ -207,5 +286,3 @@ class Secciones extends MasterManteka {
 	
 	
 }
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */
