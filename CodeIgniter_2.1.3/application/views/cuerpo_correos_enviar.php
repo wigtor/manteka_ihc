@@ -690,6 +690,7 @@ function revisarRut(rut){
 	}
 	return true;	
 }
+
 </script>
 
 
@@ -894,8 +895,17 @@ function revisarRut(rut){
 	<!-- Botones atrás y siguiente -->
 	<div class="row-fluid">
 		<ul class="pager pull-right">
+			
 			<li>
-				<div class ="btn" type="button" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" onclick="" >Guardar Grupo de Contactos</div>
+			<?php
+					$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos','style'=>'margin-left:-300px;');
+					echo form_open('Grupo/agregarGrupo',$attributes);
+				?>
+				<input type="text" name="NOMBRE_FILTRO_CONTACTO" placeholder="Nombre Grupo Contactos" style="margin-top:10px;">
+				<input type="hidden" name="RUT_USUARIO" value="<?php $rut_usuario ?>">
+				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
+				<button class ="btn" type="submit" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" >Guardar Grupo</button>
+				<?php echo form_close(""); ?>
 			</li>
 			<li>
 				<div class ="btn" type="button" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</div>
@@ -1103,3 +1113,41 @@ function revisarRut(rut){
 	</div>
 	<?php echo form_close(""); ?>
 </fieldset>
+<script type="text/javascript">
+/*
+$('#form_contactos').submit(function() {
+  // Enviamos el formulario usando AJAX
+	$.ajax({
+		type: 'POST',
+		url: $(this).attr('action'),
+		data: $(this).serialize(),
+		// Mostramos un mensaje con la respuesta de PHP
+		success: function(data){
+			alert(data);
+		}
+	})
+	return false;
+});*/
+
+function validar(form){
+	var string = "";
+	var total = t;
+	var total=tbody.getElementsByTagName('tr').length;
+	for (var x=0; x < total; x++) {		
+		if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+		}
+	}
+	if(string = ""){
+	alert('Debe seleccionar un contacto de la tabla Destinatario')
+	}
+	else{
+		if($('input[name=NOMBRE_FILTRO_CONTACTO]')=="")
+			alert("Debe seleccionar un nombre para el grupo de contactos");
+		else
+			$('input[name=QUERY_FILTRO_CONTACTO]').val(string);		
+	}
+	return false;
+}
+
+</script>

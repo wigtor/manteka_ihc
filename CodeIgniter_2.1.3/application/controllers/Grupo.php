@@ -7,7 +7,15 @@ class Grupo extends CI_Controller {
 	{
 		$this->verGrupoContactos();
 	}
-
+	
+	public function agregarGrupo(){
+		$str = $_POST[''].$_POST[''].$_POST[''];
+		return "asd";
+	
+	
+	
+	}
+	
 	public function verGrupoContactos()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
