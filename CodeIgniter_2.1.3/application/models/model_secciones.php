@@ -396,6 +396,19 @@ public function verProfeSegunModulo($modulo){
 	return $array;
 }
 
+public function verSalasPorAsignar(){
+
+	$columnas = 'sala.NUM_SALA';
+	$desde = '`sala`';
+	$query = $this->db->select($columnas);
+	$query = $this->db->get($desde);
+	
+	$array = $query->result_array();
+						
+	return $array;
+
+}
+
 }
 
 
