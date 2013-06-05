@@ -111,13 +111,18 @@ function EditarSesion(){
 	$(document).ready(cambioTipoFiltro);
 </script>
 <fieldset>
-	<legend>Sesiones</legend>
+	<legend>Editar Sesión</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			<font color="red">*Campos Obligatorios</font>
+		</div>
+	</div>
 
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="row-fluid">
 				<div class="span6">
-					1.-Seleccione una sesion para editar
+					1.-Seleccione una sesión para editar
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -129,7 +134,7 @@ function EditarSesion(){
 						<div class="span6">
 							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 								<option value="1">Filtrar por nombre</option>
-								<option value="2">Filtrar por codigo de sesión</option>
+								<option value="2">Filtrar por código de sesión</option>
 
 							</select>
 						</div>
@@ -160,14 +165,14 @@ function EditarSesion(){
 					<div class="row"> <!-- descipción -->
 						<div class="row-fluid">
 				<div class="span6" style ="width: 400px">
-					Complete el formulario para poder modificar una sesion
+					Complete el formulario para poder modificar una sesión
 				</div>
 			</div>
 					</div>	
 					<div class="row"> <!-- descipción -->
 						<div class="span4">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Codigo de sesion</label>
+								<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Código de sesión</label>
 							</div>
 						</div>
 						<div class="span5">	

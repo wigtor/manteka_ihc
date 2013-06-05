@@ -21,8 +21,13 @@
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
-			<legend>Agregar Sesion</legend>
+			<legend>Agregar Sesión</legend>
 		<form id="formAgregar" type="post" method="post">
+				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+				</div>
 			
 			
 				<div>

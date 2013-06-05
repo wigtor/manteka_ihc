@@ -125,7 +125,7 @@
 <div class="row-fluid">
 <div class="span10">
 <fieldset>
-	<legend>Eliminar Sesion</legend>
+	<legend>Eliminar Sesión</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="row-fluid">
@@ -143,7 +143,7 @@
 								<div class="span6">
 							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 								<option value="1">Filtrar por nombre</option>
-								<option value="2">Filtrar por codigo de sesión</option>
+								<option value="2">Filtrar por código de sesión</option>
 
 							</select>
 						</div>
@@ -182,7 +182,7 @@
 			<pre style="margin-top: 2%; padding: 2%">
 Codigo sesión:              	<b id="codigoDetalle"></b>
 Nombre del modulo temático:     <b id="mod_temDetalle"></b>
-Nombre de la sesion: 	<b id="nombreDetalle"></b>
+Nombre de la sesión: 	<b id="nombreDetalle"></b>
 Descripción: 	<b id="descripcionDetalle"></b>
 			</pre>
 <input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
