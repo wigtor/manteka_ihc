@@ -255,13 +255,13 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
 		$this->db->select('CORREO_ESTUDIANTE AS correo');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
-		$this->db->select('COD_SECCION AS seccion');
+		$this->db->select('estudiante.COD_SECCION AS seccion');
+		$this->db->select('NOMBRE_SECCION AS nombre_seccion');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION', 'LEFT OUTER');
 		$this->db->where('RUT_ESTUDIANTE', $rut);
 		$query = $this->db->get('estudiante');
-		if ($query == FALSE) {
-			return array();
-		}
+		//echo $this->db->last_query();
 		return $query->row();
 	}
 
