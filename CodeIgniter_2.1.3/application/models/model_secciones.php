@@ -381,13 +381,19 @@ public function verModulosPorAsignar(){
 }
 
 
-public function verProfeSegunModulo(){
+public function verProfeSegunModulo($modulo){
 
-	$columnas = '';
-	$condiciones  = '';
-	$desde = '';
+	$columnas = 'profesor.NOMBRE1_PROFESOR, profesor.APELLIDO1_PROFESOR';
+	$condiciones  = '(modulo_tematico.COD_MODULO_TEM = equipo_profesor.COD_MODULO_TEM) AND (modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO)AND(profe_equi_lider.COD_EQUIPO = equipo_profesor.COD_EQUIPO) AND (profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2) AND (modulo_tematico.NOMBRE_MODULO = '.$modulo.')';
+	$desde = '`profesor`, `equipo_profesor`, `modulo_tematico`, `profe_equi_lider`';
 
-
+	$query = $this->db->select($columnas);
+	$query = $thia->db->where($condiciones);
+	$query = $this->db->get($desde);
+	
+	$array = $query->result_array();
+						
+	return $array;
 }
 
 }
