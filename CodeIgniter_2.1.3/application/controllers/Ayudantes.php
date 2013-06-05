@@ -189,9 +189,7 @@ class Ayudantes extends MasterManteka {
 		$this->load->model('Model_ayudante');
 
         $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>2);
-      
 
-		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
@@ -249,9 +247,6 @@ class Ayudantes extends MasterManteka {
         $confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
 
         $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>$confirmacion);	  
-	  
-	  
-		
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
