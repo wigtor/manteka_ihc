@@ -803,7 +803,7 @@ function revisarRut(rut){
 				<thead>
 					<tr>
 						<th>
-							<input type="checkbox" id="seleccionarTodosDelFiltro" onClick="seleccionar_segundo_check(this)" checked="true">
+							<input type="checkbox" id="seleccionarTodosDelFiltro" onClick="seleccionar_segundo_check(this)" >
 
 						</th>
 						<th >
@@ -829,7 +829,7 @@ function revisarRut(rut){
 				<tbody id="tbody2">
 					<?php for ($i = 0; $i <count($rs_estudiantes); $i++) {  ?>
 						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_estudiantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_estudiantes['0'] ?>" >
+						<tr rut="<?php echo $rs_estudiantes[$i]['0'] ?>" >
 							<td>
 								<input type="checkbox">
 							</td>
@@ -841,7 +841,7 @@ function revisarRut(rut){
 					<?php } } ?>
 					<?php for ($i = 0; $i <count($rs_profesores); $i++) {  ?>
 						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_profesores[$i][0])){ ?>
-						<tr rut="<?php echo $rs_profesores['0'] ?>" >
+						<tr rut="<?php echo $rs_profesores[$i]['0'] ?>" >
 							<td>
 								<input type="checkbox">
 							</td>
@@ -853,7 +853,7 @@ function revisarRut(rut){
 					<?php } } ?>
 					<?php for ($i = 0; $i <count($rs_ayudantes); $i++) { ?>
 						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_ayudantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_ayudantes['0'] ?>" >
+						<tr rut="<?php echo $rs_ayudantes[$i]['0'] ?>" >
 							<td>
 								<input type="checkbox">
 							</td>
@@ -927,7 +927,7 @@ function validar(form){
 				success: function(data){				
 				}
 				})	
-				alert('¡Grupo de Contactos exitosamente agregado!');
+				alert('¡Grupo de Contactos exitosamente modificado!');
 			
 			
 		}	
