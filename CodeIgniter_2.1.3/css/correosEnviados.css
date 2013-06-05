@@ -23,10 +23,10 @@ fieldset legend
 {
 	padding-left:5px;
 	padding-right:5px;
-	margin-right:1%;
-	margin-left:1%;
-	margin-top:2.8%;
-	margin-bottom:1%;
+	margin-right:4px;
+	margin-left:4px;
+	margin-top:8px;
+	margin-bottom:4px;
 	width:97%;
 }
 
@@ -34,10 +34,10 @@ fieldset legend
 {
 	padding-left:5px;
 	padding-right:5px;
-	margin-right:1%;
-	margin-left:1%;
-	margin-top:2.8%;
-	margin-bottom:1%;
+	margin-right:4px;
+	margin-left:4px;
+	margin-top:16px;
+	margin-bottom:4px;
 	width:97%;
 }
 
@@ -51,7 +51,7 @@ fieldset legend
 	font-size:10pt;
 	color:#666666;
 	float:left;
-	margin-left:1%;
+	margin-left:4px;
 	line-height:35px;
 	font-weight:bold;
 }
@@ -61,8 +61,8 @@ fieldset legend
 	font-size:10pt;
 	color:#666666;
 	float:left;
-	margin-top:2%;
-	margin-left:1%;
+	margin-top:9px;
+	margin-left:4px;
 	line-height:35px;
 	font-weight:bold;
 }
@@ -86,25 +86,17 @@ fieldset legend
 	background-color: blue; color: #fff;
 }
 
-
-.pop tbody tr:hover > td, .table-hover tbody tr:hover > th {
-background-color: #0040FF;
-border:0px;
-
-}
-
 .pop tbody tr > td, .pop tbody tr:hover > th {
-background-color: #0040FF;
+
 border:0px;
 
 }
 
  .popover {
  	min-width: 600px;
-    background: #0040FF;
+    
     border-color: transparent;
-    color: white;
-    content:white;
+
     width: 90%;
 }
 
@@ -123,13 +115,12 @@ border:0px;
 .popover.bottom .arrow {
   left: 50%;
   border-top-width: 0;
-  border-bottom-color: #999;
-  border-bottom-color: #0040FF;
+
 }
 .popover.bottom .arrow:after {
   top: 1px;
   border-top-width: 0;
-  border-bottom-color: #0040FF;
+
 }
 
 

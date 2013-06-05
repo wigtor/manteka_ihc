@@ -174,13 +174,6 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 
 
 					<div class="row-fluid" style="margin-left: 0%; width:90%">
-						<thead>
-							<tr>
-								<th style="text-align:left;"><b>Nombre del módulo</b></th>
-								
-							</tr>
-						</thead>
-
 
 						<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 							<table id="modulos" class="table table-hover">

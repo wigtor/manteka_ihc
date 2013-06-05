@@ -18,13 +18,12 @@
 				var codigoDetalle = document.getElementById("codigoDetalle");
 				var nombreDetalle = document.getElementById("nombreDetalle");
 				var mod_temDetalle = document.getElementById("mod_temDetalle");
-				var descripcionDetalle = document.getElementById("descripcionDetalle");		
-				
+				var descripcionDetalle = document.getElementById("descripcionDetalle");
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(coddigoDetalle).html(datos.cod_sesion);
+				$(codigoDetalle).html(datos.cod_sesion);
 				$(nombreDetalle).html(datos.nombre);
 				$(mod_temDetalle).html(datos.cod_mod_tem);
 				$(descripcionDetalle).html(datos.descripcion);
@@ -59,7 +58,7 @@
 					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
 						tr = document.createElement('tr');
 						td = document.createElement('td');
-						tr.setAttribute("id", "sesion_"+arrayRespuesta[i].codigo);
+						tr.setAttribute("id", "sesion_"+arrayRespuesta[i].cod_sesion);
 						tr.setAttribute("onClick", "detalleSesion(this)");
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
 						td.appendChild(nodoTexto);
@@ -114,7 +113,9 @@
 				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 					<table id="listadoResultados" class="table table-hover">
 						<thead>
-							<b>Codigo sesión</b>
+							<tr>
+								<th>Nombre</th>
+							</tr>
 						</thead>
 						<tbody>
 
@@ -126,10 +127,10 @@
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 			2.-Detalle sesión:
 			<pre style="margin-top: 2%; padding: 2%">
-Codigo sesión:              <b id="codigoDetalle"></b>
-Nombre del modulo temático:          <b id="nombreDetalle"></b>
-Fecha: <b id="fechaDetalle" ></b>
-Descripción: <b id="descripcionDetalle"></b>
+Codigo sesión:              	<b id="codigoDetalle"></b>
+Nombre del modulo temático:     <b id="mod_temDetalle"></b>
+Nombre de la sesion: 		<b id="nombreDetalle"></b>
+Descripción: 					<b id="descripcionDetalle"></b>
 			</pre>
 		</div>
 	</div>

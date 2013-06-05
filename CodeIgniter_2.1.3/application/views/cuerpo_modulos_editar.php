@@ -8,7 +8,7 @@
 		
 		$.ajax({//AJAX PARA SESIONES
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Modulos/obtenerSesiones") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Modulos/obtenerSesionesEditar") ?>", /* Se setea la url del controlador que responderá */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				var tablaResultados = document.getElementById("sesiones");
 				$(tablaResultados).empty();
@@ -23,7 +23,7 @@
 				thead.appendChild(tr);
 				tablaResultados.appendChild(thead);
 				for (var i = 0; i < arrayRespuesta.length; i++) {
-					
+					if(arrayRespuesta[i][1]==cod_mod || arrayRespuesta[i][1] == null){
 						tr = document.createElement('tr');
 						td = document.createElement('td');
 						input = document.createElement('input');
@@ -39,6 +39,7 @@
 						td.appendChild(nodoTexto);
 						tr.appendChild(td);
 						tablaResultados.appendChild(tr);
+						}
 				}
 
 				/* Quito el div que indica que se está cargando */
@@ -129,7 +130,6 @@
 				var tablaResultados = document.getElementById("requisitos");
 				$(tablaResultados).empty();
 				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				alert("nanai");
 				var tr, td, th, thead, input,nodoTexto;
 				thead = document.createElement('thead');
 				tr = document.createElement('tr');

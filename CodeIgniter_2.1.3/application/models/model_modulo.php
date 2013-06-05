@@ -83,7 +83,7 @@ class Model_modulo extends CI_Model {
 	public function VerEquipoModulo(){
 		$this->db->select('*');
 		$this->db->from('profesor');
-		$this->db->join('profe_equi_lider', 'profe_equi_lider.rut_usuario2 = profesor.rut_usuario2');
+		$this->db->join('profe_equi_lider', 'profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2');
 		$query = $this->db->get();
 		if ($query == FALSE) {
 			return array();
@@ -103,12 +103,11 @@ class Model_modulo extends CI_Model {
 		}
 		return $lista;
 	}
-	
-	
+		
 	public function VerRequisitoModulo(){
 		$this->db->select('*');
 		$this->db->from('requisito_modulo');
-		$this->db->join('requisito', 'requisito.cod_requisito = requisito_modulo.cod_requisito');
+		$this->db->join('requisito', 'requisito.COD_REQUISITO = requisito_modulo.COD_REQUISITO');
 		$query = $this->db->get();	
 		if ($query == FALSE) {
 			return array();
@@ -142,7 +141,7 @@ class Model_modulo extends CI_Model {
    		return $lista;  	
 	}
 	
-	public function listaSesionesParaAddModulo(){
+	public function listaSesionesParaEditarModulo(){
 		$query = $this->db->get('sesion');	
 		if ($query == FALSE) {
 			return array();
@@ -154,6 +153,28 @@ class Model_modulo extends CI_Model {
 			$lista[$contador] = array();
 			$lista[$contador][0] = $row->COD_SESION;
 			$lista[$contador][1] = $row->COD_MODULO_TEM;
+			$lista[$contador][2] = $row->DESCRIPCION_SESION;
+			$lista[$contador][3] = $row->NOMBRE_SESION;
+			$contador = $contador + 1;
+		}
+		return $lista;
+	}
+	
+	public function listaSesionesParaAddModulo(){
+		$this->db->select('*');
+		$this->db->from('sesion');
+		$this->db->where('COD_MODULO_TEM',null); 
+		$query = $this->db->get();
+		if ($query == FALSE) {
+			return array();
+		}
+		$datos = $query->result(); 
+		$contador = 0;
+		$lista = array();
+		foreach ($datos as $row) { 
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_SESION;
+			$lista[$contador][1] = "";
 			$lista[$contador][2] = $row->DESCRIPCION_SESION;
 			$lista[$contador][3] = $row->NOMBRE_SESION;
 			$contador = $contador + 1;
@@ -176,9 +197,13 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 
-	public function listaRequisitosParaEditarModulo($cod_mod){
-		
-		$query = $this->db->get('requisito');	
+	public function listaRequisitosParaEditarModulo($cod_mod){		
+		$this->db->select('*');
+		$this->db->from('requisito');
+		$query = $this->db->get();
+		if ($query == FALSE) {
+			return array();
+		}
 		$datos = $query->result(); 
 		$contador = 0;
 		$lista_r = array();
@@ -191,13 +216,17 @@ class Model_modulo extends CI_Model {
 			$contador = $contador + 1;
 		}
 		
-		$this->db->select('COD_REQUISITO');
-		$this->db->select('COD_MODULO_TEM');
+		$this->db->select('*');
 		$this->db->from('requisito_modulo');
+		$this->db->where('COD_MODULO_TEM', $cod_mod); 
 		$query = $this->db->get();	
+		if ($query == FALSE) {
+			return array();
+		}
 	    $datos = $query->result();
 		$contador = 0;
 		$lista = array();
+		
 		if($query->num_rows() > 0){
 			foreach ($datos as $row) {  
 				$lista[$contador] = array();
@@ -211,8 +240,8 @@ class Model_modulo extends CI_Model {
 		$contador2 = 0;
 		while($contador < count($lista_r)){
 			while($contador2 < count($lista)){
-				if($listar[$contador][0] == $lista[$contador2][1] && $cod_mod == $lista[$contador2][0]){
-					$listar[$contador][3] = 1;
+				if($lista_r[$contador][0] == $lista[$contador2][1]){
+					$lista_r[$contador][3] = 1;
 				}
 				$contador2++;
 			}
@@ -222,7 +251,6 @@ class Model_modulo extends CI_Model {
 		return $lista_r;
 	}
 	
-
 	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos){
 			//0 insertar modulo
 			$data = array(					
@@ -311,10 +339,9 @@ class Model_modulo extends CI_Model {
 	}
 	
 
-
 	public function EliminarModulo($cod_modulo)
     {
-		$this->db->where('cod_modulo_tem', $cod_modulo);
+		$this->db->where('COD_MODULO_TEM', $cod_modulo);
 		$datos = $this->db->delete('modulo_tematico'); 		
 		if($datos == true){
 			return 1;
@@ -343,12 +370,11 @@ class Model_modulo extends CI_Model {
 				'NOMBRE_MODULO' => $nombre_modulo ,
 				'DESCRIPCION_MODULO' => $descripcion_modulo 
 				);
-		$this->db->where('cod_modulo_tem', $cod_mod);
+		$this->db->where('COD_MODULO_TEM', $cod_mod);
 		$confirmacion0 = $this->db->update('modulo_tematico',$data);
 
 		//2 actualizar equipo profesores
-		$this->db->delete('profe_equi_lider', array('cod_equipo' => $cod_equipo)); 
-		
+		$this->db->delete('profe_equi_lider', array('COD_EQUIPO' => $cod_equipo)); 
 		
 		$contador = 0;
 		$confirmacion2 = true;
@@ -373,10 +399,13 @@ class Model_modulo extends CI_Model {
 		$datos = $this->db->insert('profe_equi_lider',$data);
 		
 		//3 asignar modulo a sesiones
-		$this->db->select('COD_SESION');
+		$this->db->select('COD_SESION');//desde acá para sacar mod tem =  cod_mod de sesiones
 		$this->db->select('COD_MODULO_TEM');
 		$this->db->from('sesion');
-		$query = $this->db->get();	
+		$query = $this->db->get();
+		if ($query == FALSE) {
+			return array();
+		}
 		$datos = $query->result(); 
 		$contador = 0;
 		$lista = array();
@@ -390,15 +419,16 @@ class Model_modulo extends CI_Model {
 		while($contador < count($lista)){
 			if($lista[$contador][1] == $cod_mod){
 				$data = array(		
-					'COD_MODULO_TEM' => "NULL"
+					'COD_MODULO_TEM' => null
 				);
-				$this->db->where('COD_SESION', $lista[$contador]);
+				$this->db->where('COD_SESION', $lista[$contador][0]);
 				$this->db->update('sesion',$data);		
 			}
 			$contador++;
 		}
-		//
+		//hasta aca
 		$contador = 0;
+		
 		$confirmacion3 = true;
 		while ($contador<count($sesiones)){
 		$data = array(					
@@ -413,27 +443,26 @@ class Model_modulo extends CI_Model {
 
 			$contador = $contador + 1;
 		}
-
-		//5 insertar requisito modulo
-		//$sup_req = true;
-		//while($sup_req){
-			$sup_req = $this->db->delete('requisito_modulo', array('cod_modulo_tem' => $cod_mod)); 
-	//	}
+		
+		//requisitos
+		$this->db->delete('requisito_modulo', array('COD_MODULO_TEM' => $cod_mod)); 
+				
 		$contador = 0;
 		$confirmacion5 = true;
-		while ($contador<count($requisitos)){
-		$data = array(					
-				'COD_REQUISITO' => $requisitos[$contador],
-				'COD_MODULO_TEM' => $cod_mod
-				);
-		$datos = $this->db->insert('requisito_modulo',$data);
-			if($datos != true){
-				$confirmacion5 = false;
-			}
+		if($requisitos != null){
+			while ($contador<count($requisitos)){
+				$data = array(					
+						'COD_REQUISITO' => $requisitos[$contador],
+						'COD_MODULO_TEM' => $cod_mod
+						);
+				$datos = $this->db->insert('requisito_modulo',$data);
+					if($datos != true){
+						$confirmacion5 = false;
+					}
 
-		$contador = $contador + 1;
+				$contador = $contador + 1;
 		}
-
+		}
 		//fin inserciones
 		if( $confirmacion0 == false  || $confirmacion2 == false || $confirmacion3 == false || $confirmacion5 == false){
 			return -1;
@@ -442,7 +471,7 @@ class Model_modulo extends CI_Model {
 	}
 
 	public function listaSesionesParaVerModulo($cod_mod){
-		$query = $this->db->get_where('sesion', array('cod_modulo_tem' => $cod_mod));
+		$query = $this->db->get_where('sesion', array('COD_MODULO_TEM' => $cod_mod));
 		if ($query == FALSE) {
 			return array();
 		}
@@ -451,8 +480,8 @@ class Model_modulo extends CI_Model {
 	public function listaProfesoresVerModulo($cod_equipo){
 		$this->db->select('*');
 		$this->db->from('profesor');
-		$this->db->join('profe_equi_lider', 'profe_equi_lider.rut_usuario2 = profesor.rut_usuario2');
-		$this->db->where('profe_equi_lider.cod_equipo', $cod_equipo); 
+		$this->db->join('profe_equi_lider', 'profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2');
+		$this->db->where('profe_equi_lider.COD_EQUIPO', $cod_equipo); 
 		$query = $this->db->get();
 		if ($query == FALSE) {
 			return array();
@@ -462,13 +491,63 @@ class Model_modulo extends CI_Model {
 	public function listaRequisitosVerModulo($cod_mod){
 		$this->db->select('*');
 		$this->db->from('requisito');
-		$this->db->join('requisito_modulo', 'requisito_modulo.cod_requisito = requisito.cod_requisito');
-		$this->db->where('requisito_modulo.cod_modulo_tem', $cod_mod); 
+		$this->db->join('requisito_modulo', 'requisito_modulo.COD_REQUISITO = requisito.COD_REQUISITO');
+		$this->db->where('requisito_modulo.COD_MODULO_TEM', $cod_mod); 
 		$query = $this->db->get();
 		if ($query == FALSE) {
 			return array();
 		}
 		return $query->result();
+	}
+
+	public function VerTodosLosProfesoresAddModulo(){
+		$this->db->select('*');
+		$this->db->from('profesor');
+		$query = $this->db->get();	
+		$datos = $query->result();
+		$contador = 0;
+		$profes = array();
+		foreach ($datos as $row){  
+			$profes[$contador] = array();
+			$profes[$contador][0] = $row['RUT_USUARIO2'];
+			$profes[$contador][1] = $row['NOMBRE1_PROFESOR'];
+			$profes[$contador][2] = $row['APELLIDO1_PROFESOR'];
+			$contador = $contador + 1;
+		}
+		
+		$this->db->select('RUT_USUARIO2');
+		$this->db->from('profe_equi_lider');
+		$query = $this->db->get();
+		$datos = $query->result();
+		
+		$contador = 0;
+		$lista = array();
+		foreach ($datos as $row) {  
+			$lista[$contador] = array();
+			$lista[$contador][1] = $row->RUT_USUARIO2;
+			$contador = $contador + 1;
+		}
+		$contador = 0;
+		$contador2 = 0;
+		$contador3 = 0;
+		$profes2 = array();
+		while($contador < count($profes)){
+			while($contador2 < count($lista)){
+				if($profes[$contador][1] == $lista[$contador2][1]){
+					$profes2[$contador] = array();
+					$profes2[$contador][0] = $profes[$contador][0];
+					$profes2[$contador][1] = $profes[$contador][1];
+					$profes2[$contador][2] = $profes[$contador][2];
+					$contador3++;
+
+				}
+				$contador2++;
+			}
+			$contador2 = 0;
+			$contador++;
+		}
+		return $profes2;
+
 	}
 }
 ?>
