@@ -56,7 +56,9 @@ class Model_filtro extends CI_Model {
 		$this->db->join('usuario','coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
 		$query = $this->db->get();
 		$array4 = $query->result();
-
+		if ($query == FALSE) {
+			return array();
+		}
 		$resulta=array_merge($array1,$array2,$array3,$array4);
 		//usort($resulta, "cmp");
 		return $resulta;
@@ -67,44 +69,13 @@ class Model_filtro extends CI_Model {
 		$this->db->select('COD_CARRERA as codigo');
 		$this->db->order_by('carrera');
 		$query = $this->db->get('carrera');
-		return $query->result();
-	}
-
-	public function getAlumnosByCarrera($codigo){
-		$this->db->select('RUT_ESTUDIANTE AS rut');
-		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
-		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
-		$this->db->select('CORREO_ESTUDIANTE AS correo');
-		$this->db->select('estudiante.COD_CARRERA AS codigo');
-		$this->db->from('estudiante');
-		$this->db->join('carrera','estudiante.COD_CARRERA = carrera.COD_CARRERA');
-		$this->db->where('estudiante.COD_CARRERA',$codigo);
-		$this->db->order_by("NOMBRE1_ESTUDIANTE", "asc");
-		$query = $this->db->get();
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->result();
 	}
 
 
-
-	public function getAlumnosByProfesor($profesor){
-		$this->db->select('RUT_ESTUDIANTE AS rut');
-		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
-		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
-		$this->db->select('CORREO_ESTUDIANTE AS correo');
-		$this->db->select('profesor.RUT_USUARIO2 AS rut_profe');
-		$this->db->select('estudiante.COD_SECCION AS cod_seccion');
-		$this->db->from('estudiante');
-		$this->db->join('profe_seccion','estudiante.COD_SECCION = profe_seccion.COD_SECCION');
-		$this->db->join('profesor','profe_seccion.RUT_USUARIO2 = profesor.RUT_USUARIO2');
-		$this->db->where('profesor.RUT_USUARIO2',$profesor);
-		$this->db->order_by("NOMBRE1_ESTUDIANTE","asc");
-		$query = $this->db->get();
-		return $query->result();
-	}
 
 	public function getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico,$bloque){
 		$this->db->select('RUT_ESTUDIANTE AS rut');
@@ -115,33 +86,47 @@ class Model_filtro extends CI_Model {
 		$this->db->select('CORREO_ESTUDIANTE AS correo');
 		$this->db->select('estudiante.COD_CARRERA AS codigo');
 		$this->db->from('estudiante');
-		$this->db->join('carrera','estudiante.COD_CARRERA = carrera.COD_CARRERA');
-		$this->db->join('profe_seccion','estudiante.COD_SECCION = profe_seccion.COD_SECCION');
-		$this->db->join('profesor','profe_seccion.RUT_USUARIO2 = profesor.RUT_USUARIO2');
-		$this->db->join('seccion','estudiante.COD_SECCION = seccion.COD_SECCION');
-		$this->db->join('sesion','seccion.COD_SESION = sesion.COD_SESION');
-		$this->db->join('modulo_tematico','sesion.COD_MODULO_TEM = modulo_tematico.COD_MODULO_TEM');
+		
 		//
-		$this->db->join('sala_horario','sala_horario.COD_SECCION = seccion.COD_SECCION');
-		$this->db->join('horario','horario.COD_HORARIO = sala_horario.COD_HORARIO');
+		
 		//
 		if($profesor!=""){
-		$this->db->where('profesor.RUT_USUARIO2',$profesor);
+			$this->db->join('profe_seccion','estudiante.COD_SECCION = profe_seccion.COD_SECCION');
+			$this->db->join('profesor','profe_seccion.RUT_USUARIO2 = profesor.RUT_USUARIO2');
+			$this->db->where('profesor.RUT_USUARIO2',$profesor);
 		}
 		if($codigo!=""){
-		$this->db->where('estudiante.COD_CARRERA',$codigo);
+			$this->db->join('carrera','estudiante.COD_CARRERA = carrera.COD_CARRERA');
+			$this->db->where('estudiante.COD_CARRERA',$codigo);
 		}
 		if($seccion!=""){
+			$this->db->join('seccion','estudiante.COD_SECCION = seccion.COD_SECCION');
 			$this->db->where('estudiante.COD_SECCION',$seccion);
 		}
 		if($modulo_tematico!=""){
+			if($seccion==""){
+				$this->db->join('seccion','estudiante.COD_SECCION = seccion.COD_SECCION');
+			}
+			$this->db->join('seccion_mod_tem','seccion.COD_SECCION = seccion_mod_tem.COD_SECCION');
+			$this->db->join('modulo_tematico','seccion_mod_tem.COD_MODULO_TEM = modulo_tematico.COD_MODULO_TEM');
 			$this->db->where('modulo_tematico.COD_MODULO_TEM',$modulo_tematico);
 		}
 		if($bloque!=""){
+			if($modulo_tematico=="" && $seccion==""){
+				$this->db->join('seccion','estudiante.COD_SECCION = seccion.COD_SECCION');
+			}
+			if($modulo_tematico==""){
+				$this->db->join('seccion_mod_tem','seccion_mod_tem.COD_SECCION = seccion.COD_SECCION');
+			}
+			$this->db->join('sala_horario','sala_horario.ID_HORARIO_SALA = seccion_mod_tem.ID_HORARIO_SALA');
+			$this->db->join('horario','horario.COD_HORARIO = sala_horario.COD_HORARIO');
 			$this->db->where('horario.COD_HORARIO',$bloque);
 		}
 		$this->db->order_by("NOMBRE1_ESTUDIANTE","asc");
 		$query = $this->db->get();
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->result();
 	}
 
@@ -152,27 +137,39 @@ class Model_filtro extends CI_Model {
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
 		$this->db->select('CORREO1_USER as correo');
-		$this->db->from('profe_seccion');
-		$this->db->join('usuario','profe_seccion.RUT_USUARIO2 = usuario.RUT_USUARIO');
-		$this->db->join('profesor','profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2');
-		$this->db->join('seccion','profe_seccion.COD_SECCION = seccion.COD_SECCION');
-		$this->db->join('sesion','seccion.COD_SESION = sesion.COD_SESION');
-		$this->db->join('modulo_tematico','sesion.COD_MODULO_TEM = modulo_tematico.COD_MODULO_TEM');
-		//
-		$this->db->join('sala_horario','sala_horario.COD_SECCION = seccion.COD_SECCION');
-		$this->db->join('horario','horario.COD_HORARIO = sala_horario.COD_HORARIO');
-		//
-		if($seccion!=""){
+		$this->db->distinct();
+		$this->db->from('profesor');
+		$this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+
+		if($seccion!=""){		
+			$this->db->join('profe_seccion','profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2');
 			$this->db->where('profe_seccion.COD_SECCION',$seccion);
 		}
 		if($modulo_tematico!=""){
+			if($seccion==""){
+				$this->db->join('profe_seccion','profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2');
+			}
+			$this->db->join('seccion','seccion.COD_SECCION = profe_seccion.COD_SECCION');
+			$this->db->join('seccion_mod_tem','seccion.COD_SECCION = seccion_mod_tem.COD_SECCION');
+			$this->db->join('modulo_tematico','seccion_mod_tem.COD_MODULO_TEM = modulo_tematico.COD_MODULO_TEM');
 			$this->db->where('modulo_tematico.COD_MODULO_TEM',$modulo_tematico);
 		}
 		if($bloque!=""){
+			if($modulo_tematico=="" && $seccion==""){
+				$this->db->join('profe_seccion','profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2');
+			}
+			if($modulo_tematico==""){
+				$this->db->join('seccion_mod_tem','seccion_mod_tem.COD_SECCION = profe_seccion.COD_SECCION');
+			}
+			$this->db->join('sala_horario','sala_horario.ID_HORARIO_SALA = seccion_mod_tem.ID_HORARIO_SALA');
+			$this->db->join('horario','horario.COD_HORARIO = sala_horario.COD_HORARIO');
 			$this->db->where('horario.COD_HORARIO',$bloque);
 		}
 		$this->db->order_by("NOMBRE1_PROFESOR","asc");
 		$query = $this->db->get();
+		if($query == FALSE){
+			return array();
+		}
 		return $query->result();
 	}
 
