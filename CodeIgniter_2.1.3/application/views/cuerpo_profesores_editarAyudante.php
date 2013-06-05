@@ -142,8 +142,6 @@
 </script>
 
 
-<div class="row_fluid">
-	<div class="span10">
 		<fieldset>
 			<legend>Editar Ayudante</legend>
 			<div>
@@ -282,15 +280,15 @@
 							</div>
 						</div>
 						<div class="row-fluid">
-							<div class= "span11" style="margin-top:2%">
-									<div class="span4 " style="margin-left:37%; width: 27%">
-										<button class ="btn" style="width: 108px" type="submit" >
+							<div class= "span11">
+									<div class="span4 ">
+										<button class ="btn" type="submit" >
 											<div class= "btn_with_icon_solo">Ã</div>
 											&nbsp Modificar
 										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" style="width: 105px" type="reset" onclick="datosEditarAlumno('','','','','','')" >
+										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >
 											<div class= "btn_with_icon_solo">Â</div>
 											&nbsp Cancelar
 										</button>
@@ -305,5 +303,3 @@
 				</div>
 			</div>
 		</fieldset>
-	</div>
-</div>
