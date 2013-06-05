@@ -26,7 +26,7 @@
 				$(codigoDetalle).html(datos.cod_sesion);
 				$(nombreDetalle).html(datos.nombre);
 				$(mod_temDetalle).html(datos.cod_mod_tem);
-				$(descripcionDetalle).html(datos.descripcion);
+				$(descripcionDetalle).html(datos.descipcion);
 			
 
 				/* Quito el div que indica que se está cargando */
