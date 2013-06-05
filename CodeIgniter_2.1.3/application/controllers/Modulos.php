@@ -25,11 +25,16 @@ class Modulos extends MasterManteka {
 		$this->verModulos();
 	}
 
+	
+	/**
+	* Carga las barras y menus especificos para la vista verModulos
+	*
+	* Se carga el sub menu lateral abierto al que corresponda, se carga el tipo de usuario y finalmente se llama a la función cargar todo
+	* que es la que carga la vista con el resto de los parametros de menu y barras laterales
+	*
+	*/
 	public function verModulos()
-	{
-		$this->load->model("Model_modulo");
-
-  
+	{  
 		$subMenuLateralAbierto = "verModulos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -37,6 +42,16 @@ class Modulos extends MasterManteka {
 		$this->cargarTodo("Modulos", 'cuerpo_modulos_ver', "barra_lateral_planificacion", "", $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
 	}
     
+	/**
+	* Carga las barras y menus especificos para la vista agregarModulo como también envia un conjunto de listasPhp para el funcionamiento de la vista
+	*
+	* Carga el modelo de modulos y luego carga los datos de vista con la listas de profesores,sesiones y requisitos que son para asignar a un nuevo módulo
+	* también se envía un mensaje de confirmación que especifica que la vista se carga por primera vez y la lista de nombre de modulo para en la vista confirmar que no 
+	* se agrega un modulo con un nombre que ya esté en uso.
+	* Se carga el sub menu lateral abierto al que corresponda, se carga el tipo de usuario y finalmente se llama a la función cargar todo
+	* que es la que carga la vista con el resto de los parametros de menu y barras laterales. Como también los datos de la vista.
+	*
+	*/
     public function agregarModulos()
     {
 		$this->load->model("Model_modulo");
@@ -50,7 +65,16 @@ class Modulos extends MasterManteka {
 		$this->cargarTodo("Modulos", 'cuerpo_modulos_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
-	
+	/**
+	* Recibe los datos de la vista para agregar un nuevo modulo
+	*
+	* Se carga el modelo de modulos donde se encuentra la función para hacer la inserción
+	* Se capturan las variables enviadas por post desde la vista  
+	* Se le dan los valores a la función y lo que retorna se guarda en confirmación
+	* esto se le envía a la vista para dar feedback al usuario
+	* finalmente se carga toda la vista nuevamente como en agregarModulos
+	*
+	*/
 	    public function HacerAgregarModulo()
     {
 		$this->load->model("Model_modulo");
@@ -76,7 +100,13 @@ class Modulos extends MasterManteka {
     }
 	
 	
-
+	/**
+	* Carga las barras y menus especificos para la vista edittar modulos como también envía  cierta información para el funcionamiento de ésta
+	*
+	* Carga el modelo de modulos para solicitar los nombres de modulos para que no se edite a uno ya en uso y se envía un mensaje de que la vista
+	* recién se está cargando por primera vez. Luego se cargan los menus y barras lateras para cargar la vista.
+	*
+	*/
     public function editarModulos()
     {
 	
@@ -89,120 +119,16 @@ class Modulos extends MasterManteka {
 		$this->cargarTodo("Modulos", 'cuerpo_modulos_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
-
-    public function borrarModulos()
-    {
-		
-		$this->load->model("Model_modulo");
-
-		$datos_vista = array('mensaje_confirmacion'=>2);
-     
-		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Modulos", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
-
-    }
-	
-	public function hacerBorrarModulos()
-    {
-		
-		$this->load->model("Model_modulo");
-		$cod_modulo_eliminar = $this->input->post('cod_modulo_eliminar');
-		$confirmacion = $this->Model_modulo->EliminarModulo($cod_modulo_eliminar);
-	
-		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);
-     
-		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Modulos", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
-
-    }
-
-	public function verModulosEditar(){
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$this->load->model('Model_modulo');
-
-		$resultado = $this->Model_modulo->getAllModulos();
-		echo json_encode($resultado);
-	}         
-	public function obtenerSesionesEditar() {
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$this->load->model('Model_modulo');
-
-		$resultado = $this->Model_modulo->listaSesionesParaEditarModulo();
-		echo json_encode($resultado);
-	}
-	
-	public function obtenerSesionesVer() {
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$this->load->model('Model_modulo');
-		$cod_mod = $this->input->post('cod_mod_post');
-		$resultado = $this->Model_modulo->listaSesionesParaVerModulo($cod_mod);
-		echo json_encode($resultado);
-	}
-	
-	public function obtenerProfes() {
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;$this->db->where('name', $name); 
-		}
-		$cod_equipo = $this->input->post('cod_equipo_post');
-		$this->load->model('Model_modulo');
-		$resultado = $this->Model_modulo->profesEditarModulo($cod_equipo);
-		echo json_encode($resultado);
-	}
-	public function obtenerProfesVer() {
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-		$cod_equipo = $this->input->post('cod_equipo_post');
-		$this->load->model('Model_modulo');
-		$resultado = $this->Model_modulo->listaProfesoresVerModulo($cod_equipo);
-		echo json_encode($resultado);
-	}
-	
-	
-	public function obtenerRequisitos() {
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-		$this->load->model('Model_modulo');
-		$cod_mod = $this->input->post('cod_mod_post');
-	
-		$resultado = $this->Model_modulo->listaRequisitosParaEditarModulo($cod_mod);
-		echo json_encode($resultado);
-	}
-	
-	public function obtenerRequisitosVer() {
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-		$this->load->model('Model_modulo');
-		$cod_mod = $this->input->post('cod_mod_post');
-	
-		$resultado = $this->Model_modulo->listaRequisitosVerModulo($cod_mod);
-		echo json_encode($resultado);
-	}
-	
+	/**
+	* Recibe los datos de la vista para editar el modulo
+	*
+	* Se carga el modelo de modulos donde se encuentra la función para hacer la edición
+	* Se capturan las variables enviadas por post desde la vista  
+	* Se le dan los valores a la función y lo que retorna se guarda en confirmación
+	* esto se le envía a la vista para dar feedback al usuario
+	* finalmente se carga toda la vista nuevamente como en editarModulos
+	*
+	*/
 	public function HacerEditarModulo()
     {
 		$this->load->model("Model_modulo");
@@ -229,6 +155,169 @@ class Modulos extends MasterManteka {
 		$this->cargarTodo("Modulos", 'cuerpo_modulos_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
+
+	/**
+	* Carga las barras y menus especificos para la vista borrar modulos como también envía  cierta información para el funcionamiento de ésta
+	*
+	* envía a la vista un mensaje que indica que se carga por primera vez, luego carga los menus y barras necesarias para su funcionamiento.
+	*
+	*/
+    public function borrarModulos()
+    {
+		
+		$datos_vista = array('mensaje_confirmacion'=>2);
+     
+		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
+
+    }
+	/**
+	* Recibe el código del modulo desde la vista para eliminarlo
+	*
+	* Se carga el modelo de modulos donde se encuentra la función para eliminar
+	* Se capturan el código enviado por post desde la vista  
+	* Se le da el valor a la función y lo que retorna se guarda en confirmación
+	* esto se le envía a la vista para dar feedback al usuario
+	* finalmente se carga toda la vista nuevamente como en borrarModulos
+	*
+	*/
+	public function hacerBorrarModulos()
+    {
+		
+		$this->load->model("Model_modulo");
+		$cod_modulo_eliminar = $this->input->post('cod_modulo_eliminar');
+		$confirmacion = $this->Model_modulo->EliminarModulo($cod_modulo_eliminar);
+	
+		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);
+     
+		$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Modulos", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
+
+    }
+
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todos los múdulos
+	*
+	*/
+	public function verModulosEditar(){
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_modulo');
+
+		$resultado = $this->Model_modulo->getAllModulos();
+		echo json_encode($resultado);
+	} 
+
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todos las sesiones 
+	*
+	*/
+	public function obtenerSesionesEditar() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_modulo');
+
+		$resultado = $this->Model_modulo->listaSesionesParaEditarModulo();
+		echo json_encode($resultado);
+	}
+	
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todas las sesiones que corresponden a un cierto módulo
+	*
+	*/
+	public function obtenerSesionesVer() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_modulo');
+		$cod_mod = $this->input->post('cod_mod_post');
+		$resultado = $this->Model_modulo->listaSesionesParaVerModulo($cod_mod);
+		echo json_encode($resultado);
+	}
+	
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todos los profesores que no tienen equipo o que pertenecen a un equipo en particular (cod_equipo)
+	*
+	*/
+	public function obtenerProfes() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;$this->db->where('name', $name); 
+		}
+		$cod_equipo = $this->input->post('cod_equipo_post');
+		$this->load->model('Model_modulo');
+		$resultado = $this->Model_modulo->profesEditarModulo($cod_equipo);
+		echo json_encode($resultado);
+	}
+	
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todos los profesores que pertenecen a un equipo en particular
+	*
+	*/
+	public function obtenerProfesVer() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$cod_equipo = $this->input->post('cod_equipo_post');
+		$this->load->model('Model_modulo');
+		$resultado = $this->Model_modulo->listaProfesoresVerModulo($cod_equipo);
+		echo json_encode($resultado);
+	}
+	
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todos los requisitos e diferenciando si estos están asociados a un módulo en particular
+	*
+	*/
+	public function obtenerRequisitos() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_modulo');
+		$cod_mod = $this->input->post('cod_mod_post');
+	
+		$resultado = $this->Model_modulo->listaRequisitosParaEditarModulo($cod_mod);
+		echo json_encode($resultado);
+	}
+	/**
+	*
+	* Método que responde a una solicitud de post enviando la información de todos los requisitos asociados a un módulo en particular
+	*
+	*/
+	public function obtenerRequisitosVer() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_modulo');
+		$cod_mod = $this->input->post('cod_mod_post');
+	
+		$resultado = $this->Model_modulo->listaRequisitosVerModulo($cod_mod);
+		echo json_encode($resultado);
+	}
+	
+
 }
 
 /* End of file Modulos.php */
