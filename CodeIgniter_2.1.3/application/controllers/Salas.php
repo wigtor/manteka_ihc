@@ -27,7 +27,13 @@ class Salas extends MasterManteka {
 		$this->verSalas();
 	}
 
-	// se usa para la vista ver una determinada sala
+	/**
+	* Ver una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_ver'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas,finalmente se carga la vista nuevamente con todos los datos para permitir ver otra sala.
+	*
+	*/
 	public function verSalas()
 	{
 		//Se comprueba que quien hace esta petición este logueado
@@ -46,7 +52,17 @@ class Salas extends MasterManteka {
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
-	// se usa para la vista agregar una determinada sala
+	/**
+	* Agregar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_agregar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas, se llama a la función InsertarSala para insertar la sala
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra sala.
+	*
+	*/
 	public function agregarSalas()
     {
 		//Se comprueba que quien hace esta petición este logueado
@@ -72,7 +88,17 @@ class Salas extends MasterManteka {
 	
     }
     
-	// se usa para la vista editar una determinada sala
+	/**
+	* Editar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_editar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas, se llama a la función AtualizarSala para editar la sala
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la edición de otra sala.
+	*
+	*/
     public function editarSalas()
     {
 		//Se comprueba que quien hace esta petición este logueado
@@ -100,7 +126,17 @@ class Salas extends MasterManteka {
 
     }
 
-	// se usa para la vista borrar una determinada sala
+	/**
+	* Borrar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_eliminar'
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas, se llama a la función EliminarSala para borrar la sala
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la eliminación de otra sala.
+	*
+	*/
 	 public function borrarSalas()
     {
 		//Se comprueba que quien hace esta petición este logueado

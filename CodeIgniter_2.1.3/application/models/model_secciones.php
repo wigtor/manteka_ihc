@@ -256,7 +256,14 @@ class Model_secciones extends CI_Model{
     }
  
 
-
+/**
+	* Obtener detalles de las secciones
+	*
+	* Obtiene detalles de la sección que se le pida a travez de del dato seleccionado en la vista
+	*
+	* @param $cod_seccion codigo seccion de la que se obtendrán los detalles
+	* @return $lista arreglo que coniene el detalle de la sección solicitada
+	*/
 
 public function getDetalleSeccion($cod_seccion)
 {
@@ -305,6 +312,15 @@ public function getDetalleSeccion($cod_seccion)
 
 	
 }
+
+/**
+	* ELlimina la asignación de una seccion a las tablas asociadas
+	*
+	* se obtienen la datos que se quieres desasociarn de la seccion para luego desasociarlas
+	*
+	* @param $cod_seccion codigo seccion de la se eliminaran las asignaciones
+	* @return 1 si se realizó la operación con éxito y - 1 si la operación falló
+	*/
 
 public function EliminarAsignacion($cod_seccion)
 {
