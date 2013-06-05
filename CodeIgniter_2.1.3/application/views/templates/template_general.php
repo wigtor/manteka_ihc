@@ -35,7 +35,7 @@
 					</div>
 					
 					<!-- Barra de navegación con botones undo-redo -->
-					<div style="min-height: 310px">
+					<div style="min-height: 310px" class="undoable">
 						<?php
 							//	Se asume por defecto que la barra de undo-redo se carga
 							//	Si la variable no ha sido seteada, se muestra la barra de navegación
