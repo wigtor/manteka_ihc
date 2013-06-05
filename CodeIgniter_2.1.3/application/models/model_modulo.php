@@ -3,12 +3,9 @@
 class Model_modulo extends CI_Model {
  
 	/**
-	* Obtiene los datos de todos los módulos de la base de datos
+	* 
+	*obtiene la lista de profesores indicando a que equipo pertenecen
 	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada módulo y se va guardando en un arreglo de dos dimensiones
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return array $lista Contiene la información de todos los módulos del sistema
 	*/	
 	public function profesEditarModulo($cod_equipo){
 		$this->db->select('*');
@@ -62,6 +59,11 @@ class Model_modulo extends CI_Model {
 		return $profes;
 	}
 	
+	/**
+	*
+	* Obtiene la lista de los modulos con su información
+	*
+	*/
 	public function VerModulos(){
 		$query = $this->db->get('modulo_tematico');
 		if ($query == FALSE) {
@@ -81,6 +83,11 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 	
+	/**
+	*
+	* Obtiene la lista de los profesores que pertenecen a algún equipo
+	*
+	*/
 	public function VerEquipoModulo(){
 		$this->db->select('*');
 		$this->db->from('profesor');
@@ -104,7 +111,12 @@ class Model_modulo extends CI_Model {
 		}
 		return $lista;
 	}
-		
+	
+	/**
+	*
+	* Obtiene la lista de los requisitos que estén asociados a algún módulo
+	*
+	*/
 	public function VerRequisitoModulo(){
 		$this->db->select('*');
 		$this->db->from('requisito_modulo');
@@ -126,7 +138,12 @@ class Model_modulo extends CI_Model {
 		}
 		return $lista;
 	}
-		
+
+	/**
+	*
+	* Obtiene la lista de los nombres de todos los módulos
+	*
+	*/
 	public function listaNombreModulos(){	
   		$query = $this->db->get('modulo_tematico');	
 		if ($query == FALSE) {
@@ -142,6 +159,11 @@ class Model_modulo extends CI_Model {
    		return $lista;  	
 	}
 	
+	/**
+	*
+	* Obtiene la lista de todas las sesiones de la bd
+	*
+	*/
 	public function listaSesionesParaEditarModulo(){
 		$query = $this->db->get('sesion');	
 		if ($query == FALSE) {
@@ -161,6 +183,11 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 	
+	/**
+	*
+	* Obtiene de todas las sesiones que no tengan un módulo asignado
+	*
+	*/
 	public function listaSesionesParaAddModulo(){
 		$this->db->select('*');
 		$this->db->from('sesion');
@@ -183,6 +210,11 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 	
+	/**
+	*
+	* Obtiene la lista de todos los requisitos de la bd
+	*
+	*/
 	public function listaRequisitosParaAddModulo(){
 		$query = $this->db->get('requisito');	
 		$datos = $query->result(); 
@@ -198,6 +230,11 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 
+	/**
+	*
+	* obtiene la lista de todos los requisitos con su información e indicando si están asociados a un cierto código de módulo
+	*
+	*/
 	public function listaRequisitosParaEditarModulo($cod_mod){		
 		$this->db->select('*');
 		$this->db->from('requisito');
@@ -252,6 +289,11 @@ class Model_modulo extends CI_Model {
 		return $lista_r;
 	}
 	
+	/**
+	*
+	* Inserta un nuevo módulo en la BD
+	*
+	*/
 	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos){
 			//0 insertar modulo
 			$data = array(					
@@ -339,7 +381,11 @@ class Model_modulo extends CI_Model {
 			return 1;
 	}
 	
-
+	/**
+	*
+	* Elimina un módulo de la BD
+	*
+	*/
 	public function EliminarModulo($cod_modulo)
     {
 		$this->db->where('COD_MODULO_TEM', $cod_modulo);
@@ -351,6 +397,11 @@ class Model_modulo extends CI_Model {
 			return -1;
 		}
     }
+	/**
+	*
+	* Obtiene la lista de los modulos con su información
+	*
+	*/
 	public function getAllModulos()
 	{
 		$this->db->select('COD_MODULO_TEM AS cod_mod');
@@ -364,7 +415,12 @@ class Model_modulo extends CI_Model {
 		}
 		return $query->result();
 	}
-
+	
+	/**
+	*
+	* Edita la información de un módulo en especifico
+	*
+	*/
 	public function EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod){
 		//0 insertar modulo
 		$data = array(					
@@ -471,6 +527,11 @@ class Model_modulo extends CI_Model {
 		return 1;
 	}
 
+	/**
+	*
+	* Obtiene la lista de las sesiones asociadas a un cierto módulo
+	*
+	*/
 	public function listaSesionesParaVerModulo($cod_mod){
 		$query = $this->db->get_where('sesion', array('COD_MODULO_TEM' => $cod_mod));
 		if ($query == FALSE) {
@@ -478,6 +539,12 @@ class Model_modulo extends CI_Model {
 		}
 		return $query->result();	
 	}
+
+	/**
+	*
+	* Obtiene la lista de los profesores que son parte de un equipo en especifico
+	*
+	*/
 	public function listaProfesoresVerModulo($cod_equipo){
 		$this->db->select('*');
 		$this->db->from('profesor');
@@ -489,6 +556,12 @@ class Model_modulo extends CI_Model {
 		}
 		return $query->result();
 	}
+
+	/**
+	*
+	* Obtiene la  lista de los requisitos de un cierto módulo
+	*
+	*/
 	public function listaRequisitosVerModulo($cod_mod){
 		$this->db->select('*');
 		$this->db->from('requisito');
@@ -501,6 +574,11 @@ class Model_modulo extends CI_Model {
 		return $query->result();
 	}
 
+	/**
+	*
+	* Obtiene la lista de los profesores que no tienen equipo
+	*
+	*/
 	public function VerTodosLosProfesoresAddModulo(){
 		$this->db->select('*');
 		$this->db->from('profesor');

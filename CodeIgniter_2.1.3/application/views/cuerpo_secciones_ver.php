@@ -23,14 +23,14 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($seccion)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][1].'";';
 		$contadorE = $contadorE + 1;
 	}
 	?>
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(cont);
+		ocultar=document.getElementById("rs_seccionTd_"+cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
