@@ -31,6 +31,7 @@ class Model_modulo extends CI_Model {
 		
 		$this->db->select('*');
 		$this->db->from('profe_equi_lider');
+		//$this->db->where('COD_EQUIPO', $cod_equipo); 
 		$query = $this->db->get();	
 		$datos = $query->result();
 		
@@ -503,15 +504,15 @@ class Model_modulo extends CI_Model {
 	public function VerTodosLosProfesoresAddModulo(){
 		$this->db->select('*');
 		$this->db->from('profesor');
-		$query = $this->db->get();	
+		$query = $this->db->get();
 		$datos = $query->result();
 		$contador = 0;
 		$profes = array();
 		foreach ($datos as $row){  
 			$profes[$contador] = array();
-			$profes[$contador][0] = $row['RUT_USUARIO2'];
-			$profes[$contador][1] = $row['NOMBRE1_PROFESOR'];
-			$profes[$contador][2] = $row['APELLIDO1_PROFESOR'];
+			$profes[$contador][0] = $row->RUT_USUARIO2;
+			$profes[$contador][1] = $row->NOMBRE1_PROFESOR;
+			$profes[$contador][2] = $row->APELLIDO1_PROFESOR;
 			$contador = $contador + 1;
 		}
 		
@@ -530,19 +531,24 @@ class Model_modulo extends CI_Model {
 		$contador = 0;
 		$contador2 = 0;
 		$contador3 = 0;
+
 		$profes2 = array();
+		$esta =false;
 		while($contador < count($profes)){
 			while($contador2 < count($lista)){
-				if($profes[$contador][1] == $lista[$contador2][1]){
-					$profes2[$contador] = array();
-					$profes2[$contador][0] = $profes[$contador][0];
-					$profes2[$contador][1] = $profes[$contador][1];
-					$profes2[$contador][2] = $profes[$contador][2];
-					$contador3++;
-
+				if($profes[$contador][0] == $lista[$contador2][1]){
+					$esta=true;
 				}
 				$contador2++;
 			}
+			if(!$esta){
+				$profes2[$contador3] = array();
+				$profes2[$contador3][0] = $profes[$contador][0];
+				$profes2[$contador3][1] = $profes[$contador][1];
+				$profes2[$contador3][2] = $profes[$contador][2];
+				$contador3++;		
+			}
+			$esta =false;
 			$contador2 = 0;
 			$contador++;
 		}
