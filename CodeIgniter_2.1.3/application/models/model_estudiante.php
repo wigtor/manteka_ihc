@@ -36,8 +36,8 @@ class Model_estudiante extends CI_Model {
 					'RUT_ESTUDIANTE' => $rut_estudiante ,
 					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
 					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO_PATERNO' => $apellido_paterno ,
-					'APELLIDO_MATERNO' => $apellido_materno ,
+					'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
+					'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
 					'CORREO_ESTUDIANTE' => $correo_estudiante ,
 					'COD_SECCION' =>  $cod_seccion ,
 					'COD_CARRERA' => $cod_carrera 

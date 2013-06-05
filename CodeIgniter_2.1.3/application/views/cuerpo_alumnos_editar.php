@@ -254,14 +254,10 @@ function ordenarFiltro(){ //No funcional
 
 
 	function cargarSecciones() {
-		var selectorFiltro = document.getElementById('tipoDeFiltro');
-		var inputTextoFiltro = document.getElementById('filtroLista');
-		var valorSelector = selectorFiltro.value;
-		var texto = inputTextoFiltro.value;
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Alumnos/postGetSecciones") ?>", /* Se setea la url del controlador que responderá */
-			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			data: { }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				var tablaResultados = document.getElementById("listadoSecciones");
 				$(tablaResultados).empty();

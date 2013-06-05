@@ -170,7 +170,7 @@ class Alumnos extends MasterManteka {
         $apellido_paterno = $this->input->post("apellido_paterno");
         $apellido_materno = $this->input->post("apellido_materno");
         $correo_estudiante = $this->input->post("correo_estudiante");
-        $cod_seccion = $this->input->post("cod_seccion");
+        $cod_seccion = $this->input->post("seccion_seleccionada");
         $cod_carrera = $this->input->post("cod_carrera");
 		
         $confirmacion = $this->Model_estudiante->InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera);
