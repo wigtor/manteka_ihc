@@ -65,7 +65,7 @@
 				$(codigoDetalle).html(datos.cod_sesion);
 				$(nombreDetalle).html(datos.nombre);
 				$(mod_temDetalle).html(datos.cod_mod_tem);
-				$(descripcionDetalle).html(datos.descripcion);
+				$(descripcionDetalle).html(datos.descipcion);
 			
 
 				/* Quito el div que indica que se está cargando */
@@ -182,8 +182,8 @@
 			<pre style="margin-top: 2%; padding: 2%">
 Codigo sesión:              	<b id="codigoDetalle"></b>
 Nombre del modulo temático:     <b id="mod_temDetalle"></b>
-Nombre de la sesion: 		<b id="nombreDetalle"></b>
-Descripción: 					<b id="descripcionDetalle"></b>
+Nombre de la sesion: 	<b id="nombreDetalle"></b>
+Descripción: 	<b id="descripcionDetalle"></b>
 			</pre>
 <input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
 				</div>		
