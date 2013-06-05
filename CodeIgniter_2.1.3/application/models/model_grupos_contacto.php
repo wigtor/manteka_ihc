@@ -81,7 +81,7 @@ class model_grupos_contacto extends CI_Model{
          $this->db->where('ID_FILTRO_CONTACTO',$id);
          //$data = array('PASSWORD_PRIMARIA'=>$pass,);
          $data = array('QUERY_FILTRO_CONTACTO'=>$nuevo_filtro,);
-         $this->db->update('usuario', $data);
+         $this->db->update('filtro_contacto', $data);
       }
    
 }

@@ -829,7 +829,7 @@ function revisarRut(rut){
 				<tbody id="tbody2">
 					<?php for ($i = 0; $i <count($rs_estudiantes); $i++) {  ?>
 						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_estudiantes[$i][0])){ ?>
-						<tr>
+						<tr rut="<?php echo $rs_estudiantes['0'] ?>" >
 							<td>
 								<input type="checkbox">
 							</td>
@@ -837,11 +837,11 @@ function revisarRut(rut){
 								<?php echo $rs_estudiantes[$i][1]." ".$rs_estudiantes[$i][2]." ".$rs_estudiantes[$i][3]." ".$rs_estudiantes[$i][4]; ?>
 							</td>
 						</tr>
-					<!--//rs_profesores rs_estudiates rs_ayudantes rutes-->
+					
 					<?php } } ?>
 					<?php for ($i = 0; $i <count($rs_profesores); $i++) {  ?>
 						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_profesores[$i][0])){ ?>
-						<tr>
+						<tr rut="<?php echo $rs_profesores['0'] ?>" >
 							<td>
 								<input type="checkbox">
 							</td>
@@ -849,11 +849,11 @@ function revisarRut(rut){
 								<?php echo $rs_profesores[$i][1]." ".$rs_profesores[$i][2]." ".$rs_profesores[$i][3]." ".$rs_profesores[$i][4]; ?>
 							</td>
 						</tr>
-					<!--//rs_profesores rs_estudiates rs_ayudantes rutes-->
+					
 					<?php } } ?>
 					<?php for ($i = 0; $i <count($rs_ayudantes); $i++) { ?>
 						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_ayudantes[$i][0])){ ?>
-						<tr>
+						<tr rut="<?php echo $rs_ayudantes['0'] ?>" >
 							<td>
 								<input type="checkbox">
 							</td>
@@ -875,7 +875,7 @@ function revisarRut(rut){
 			<li>
 			<?php
 					$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos','style'=>'margin-left:-300px;');
-					echo form_open('GrupoContactos/eidtarGrupoContacto',$attributes);
+					echo form_open('GrupoContactos/editarGrupoContacto',$attributes);
 				?>
 				
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
@@ -921,7 +921,7 @@ function validar(form){
 		// Enviamos el formulario usando AJAX
 				$.ajax({
 				type: 'POST',
-				url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
+				url: "<?php echo site_url("GruposContactos/editarGrupoContacto") ?>",
 				data: $('#form_contactos').serialize(),	
 				// Mostramos un mensaje con la respuesta de PHP
 				success: function(data){				

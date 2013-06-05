@@ -46,12 +46,12 @@ class GruposContactos extends MasterManteka {
 		$this->verGrupoContactos();
 	}
 	
-	public function agregarGrupo(){
+	public function editarGrupoContacto(){
 		$this->load->model('model_grupos_contacto');
 		//Este sirve para el modificar
 		$this->model_grupos_contacto->modificarGrupo($_POST['ID_GRUPO'], $_POST['QUERY_FILTRO_CONTACTO']);
 	}
-	public function eidtarGrupoContacto(){
+	public function agregarGrupo(){
 		$this->load->model('model_grupos_contacto');
 		$rut = $this->session->userdata('rut');
 		$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'];
@@ -120,6 +120,7 @@ class GruposContactos extends MasterManteka {
 		}
 
 
+}
 }
 /* End of file Grupo.php */
 /* Location: ./application/controllers/Grupo.php */
