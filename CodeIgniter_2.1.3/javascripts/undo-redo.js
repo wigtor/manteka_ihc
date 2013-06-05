@@ -6,7 +6,7 @@ function bool(str) {
  
 var num_states = 0;
 var current_state = 0;
-var text_elements = 'input[type="text"], input[type="password"], textarea, select';
+var text_elements = 'input[type="text"],input[type="number"],input[type="email"],input[type="color"],input[type="date"],input[type="datetime"], input[type="password"], textarea, select ' ;
 var state_elements = 'input[type="radio"], input[type="checkbox"]';
 
  
