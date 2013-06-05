@@ -326,7 +326,9 @@ public function EliminarAsignacion($cod_seccion)
 {
 	$this->db->select('sala_horario.ID_HORARIO_SALA as id_sala');
 	$this->db->from('seccion_mod_tem');
+	$this->db->where('seccion_mod_tem.COD_SECCION',$cod_seccion);
 	$this->db->join('sala_horario', 'seccion_mod_tem.ID_HORARIO_SALA=sala_horario.ID_HORARIO_SALA');
+
 
 	$query =$this->db->get();
 

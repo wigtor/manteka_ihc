@@ -53,6 +53,7 @@
 		
 		var seccion = document.getElementById("codSeccion").value;
 		
+		
 		if(seccion!=""){
 					var answer = confirm("¿Está seguro de eliminar la asignación de la sección?")
 					if (!answer){
@@ -86,7 +87,7 @@
 
 
 <div class="row-fluid">
-	<form id="Cancelar" method="post">
+	<!--<form id="Cancelar" method="post">-->
 	<div class="span10">
 		<fieldset>
 			<legend>Borrar Asignación</legend>
@@ -170,5 +171,5 @@ Horario:           <b id="horario_asig"></b></pre>
 			<!--</form>-->
 		</fieldset>
 	</div>
-	</form>
+	<!--</form>-->
 </div>
