@@ -17,7 +17,7 @@ class model_grupos_contacto extends CI_Model{
    *  @param string $rut RUT del usuario del cual se solicitan los grupos de contacto.
    *  @return array Conjunto de grupos de contacto pertenecientes al usuario.
    */
-      function obtenerTodosGruposContacto($rut,$password){
+      function obtenerTodosGruposContacto($rut){
       // La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas SQL.
       $query = $this->db->where('RUT_USUARIO',$rut);
       $query = $this->db->get('filtro_contacto'); //Acá va el nombre de la tabla
@@ -49,10 +49,9 @@ class model_grupos_contacto extends CI_Model{
    *  @param string $nombre_grupo_contacto nombre del grupo de contacto a eliminar.
    *  @return none
    */
-      // La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas SQL.
       $query = $this->db->where('RUT_USUARIO',$rut);
       $query = $this->db->where('NOMBRE_FILTRO_CONTACTO',$nombre_grupo_contacto);
-      $query = $this->db->delete('filtro_contacto'); //Acá va el nombre de la tabla
+      $query = $this->db->delete('filtro_contacto');
    }
    
    public function insertarGrupo($rut,$rut_contactos,$nombre_filtro){
