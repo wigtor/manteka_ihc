@@ -11,7 +11,7 @@ class Grupo extends CI_Controller {
 	public function agregarGrupo(){
 		$this->load->model('model_grupos_contacto');
 		$rut = $this->session->userdata('rut');
-		$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'].$_POST['RUT_USUARIO'];
+		$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'].$_POST['RUT_USUARIO'];//para qué?
 		$nombre_filtro = $_POST['NOMBRE_FILTRO_CONTACTO'];
 		$rut_filtro = $_POST['QUERY_FILTRO_CONTACTO'];
 		$rut_usuario = $_POST['RUT_USUARIO'];
@@ -46,13 +46,24 @@ class Grupo extends CI_Controller {
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		
-		$this->load->model('model_grupos_contacto');
-		$datos_plantilla["grupos_contacto"] = $this->model_grupos_contacto->obtenerTodosGruposContacto($this->session->userdata('rut'));
+		//$this->load->model('model_grupos_contacto');
+		//$datos_plantilla["grupos_contacto"] = $this->model_grupos_contacto->obtenerTodosGruposContacto($this->session->userdata('rut'));
 		
 		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_grupos_ver', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
 		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea también cambia según la vista como la anterior
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
+
+	public function postGetGrupoContactos() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('model_grupos_contacto');
+		$resultado = $this->model_grupos_contacto->obtenerTodosGruposContacto($this->session->userdata('rut'));
+		echo json_encode($resultado);
+	}
+
 	public function agregarGrupoContactos()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
