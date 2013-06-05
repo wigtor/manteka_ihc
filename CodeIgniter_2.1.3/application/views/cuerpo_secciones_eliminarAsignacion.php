@@ -73,6 +73,12 @@
 				return false;
 		}
 	}
+
+	function Cancelar(){
+		var borrar = document.getElementById("Cancelar");
+		borrar.action ="<?php echo site_url("Secciones/borrarAsignacion/");?>"
+		borrar.submit()	
+	}
 </script>
 
 
@@ -80,6 +86,7 @@
 
 
 <div class="row-fluid">
+	<form id="Cancelar" method="post">
 	<div class="span10">
 		<fieldset>
 			<legend>Borrar Asignación</legend>
@@ -151,7 +158,7 @@ Horario:           <b id="horario_asig"></b></pre>
 						</div>
 
 						<div class = "span3 ">
-							<button  class ="btn" type="reset"  style="width: 105px">
+							<button  class ="btn" onClick="Cancelar()" type="reset"  style="width: 105px">
 								<div class= "btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>
@@ -163,4 +170,5 @@ Horario:           <b id="horario_asig"></b></pre>
 			<!--</form>-->
 		</fieldset>
 	</div>
+	</form>
 </div>
