@@ -124,7 +124,7 @@
 		<div class="span6">
 			1.-Listado alumnos
 			<div class="controls controls-row">
-				<input class="span6" id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+				<input autocomplete="off" class="span6" id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
 				
 				<select class="span6" id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 					<option value="1">Filtrar por nombre</option>
@@ -152,8 +152,8 @@
 			</div>
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-		2.-Detalle alumno:
-	    <pre style="margin-top: 2%; padding: 2%">
+			2.-Detalle alumno:
+		<pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
