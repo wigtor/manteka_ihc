@@ -66,7 +66,7 @@ function cambiarCorreos(direccion,offset)
 		offset=offset-5;
 
 		
-	}else{
+	}else if(direccion=="sig"){
 		offset=offset+5;
 		
 
@@ -137,6 +137,10 @@ function cambiarCorreos(direccion,offset)
 				tr.appendChild(td);
 				tablaResultados.appendChild(tr);
 				var cuerpo=listaRecibidos[i][0].cuerpo_email;
+				textarea=document.createElement('textarea');
+				textarea.setAttribute("id","c"+i);
+				textarea.setAttribute("style","display:none");
+				tablaResultados.appendChild(textarea);
 				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
@@ -159,7 +163,7 @@ function cambiarCorreos(direccion,offset)
 						document.getElementById("ant").removeAttribute('onClick');
 					}
 					document.getElementById("sig").removeAttribute('class');
-			}else{
+			}else if(direccion=="sig"){
 				
 				if(offset+5>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
@@ -336,29 +340,9 @@ if(isset($msj))
 
 			
 			<tbody id="tabla">
+				<script type="text/javascript">cambiarCorreos("inicio",0);</script>
 			<?php		
-			while($contador<count($correos))
-			{	
-
-				$total=0;
-
-				echo '<tr >';
-				echo '<td width="5%" id="'.$contador.'"
-				style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" name="'.$correos[$contador]['cod_correo'].'" onClick="disableOthers(this)"/></td>';
-		
-				echo '<td width="23%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">ManteKA</td>';		
-
-				echo '<textarea id="c'.$contador.'" style="display:none;">'.$correos[$contador]['cuerpo_email'].'</textarea>';
-				
-				echo '<td width="27%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">'.substr('<b>' .$correos[$contador]['asunto']. '</b> - '.strip_tags( $correos[$contador]['cuerpo_email']),0,50).'......</td>';
-		
-				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">'. $correos[$contador]['fecha'].'</td>';
-		
-				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.')">'. $correos[$contador]['hora'].'</td>';
-				echo '</tr>';
-				
-				$contador = $contador + 1;
-			}
+			
 		}
 		?>
 		</tbody>

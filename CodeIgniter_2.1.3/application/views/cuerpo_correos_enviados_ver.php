@@ -45,7 +45,15 @@ function volverCorreosEnviados()
 }
 
 
-
+/** 
+* Esta función elimina los tags HTML
+*/
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
+}
 </script>
 
 <script type="text/javascript">
@@ -78,7 +86,7 @@ function cambiarCorreos(direccion,offset)
 		offset=offset-5;
 
 		
-	}else{
+	}else if (direccion=="sig"){
 		offset=offset+5;
 		
 
@@ -96,29 +104,63 @@ function cambiarCorreos(direccion,offset)
 
 
 			for (var i = 0; i < listaEnviados.length; i++) {
-				
+				destino="";
+				para="";
 				if(typeof listaEnviados[i][1][0] != 'undefined')
-				{
-					destino=listaEnviados[i][1][0].nombre1_estudiante+' '+listaEnviados[i][1][0].apellido_paterno+' '+listaEnviados[i][1][0].apellido_materno+' &#60'+listaEnviados[i][1][0].correo_estudiante+'&#62';					
-					para=listaEnviados[i][1][0].nombre1_estudiante+' '+listaEnviados[i][1][0].apellido_paterno+' '+listaEnviados[i][1][0].apellido_materno;
+				{  j=0;
+					while(typeof listaEnviados[i][1][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';					
+							para=listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno;
+						}else{
+							destino=destino+', '+listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';
+							para=para+".....";
+						}
+						j++;	
+					}
+					
 					
 				}
 				if(typeof listaEnviados[i][2][0] != 'undefined')
-				{
-					destino=listaEnviados[i][2][0].nombre1_ayudante+' '+listaEnviados[i][2][0].apellido_paterno+' '+listaEnviados[i][2][0].apellido_materno+' &#60'+listaEnviados[i][2][0].correo_ayudante+'&#62';					
-					para=listaEnviados[i][2][0].nombre1_ayudante+' '+listaEnviados[i][2][0].apellido_paterno+' '+listaEnviados[i][2][0].apellido_materno;
+				{j=0;
+					while(typeof listaEnviados[i][2][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
+							para=listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno;
+						}else{
+							destino=destino+', '+listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
+							para=para+".....";
+						}
+						j++;	
+					}
 					
 				}
 				if(typeof listaEnviados[i][3][0] != 'undefined')
-				{
-					destino=listaEnviados[i][3][0].nombre1_profesor+' '+listaEnviados[i][3][0].apellido1_profesor+' '+listaEnviados[i][3][0].apellido2_profesor;					
-					para=listaEnviados[i][3][0].nombre1_profesor+' '+listaEnviados[i][3][0].apellido1_profesor+' '+listaEnviados[i][3][0].apellido2_profesor;
+				{j=0;
+					while(typeof listaEnviados[i][3][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							para=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;
+						}else{
+							destino=destino+', '+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							para=para+".....";
+						}
+						j++;	
+					}
 					
 				}
-				if(typeof listaEnviados[i][4][0] != 'undefined')
-				{
-					destino=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;					
-					para=listaEnviados[i][4][0].nombre1_coordinador+' '+listaEnviados[i][4][0].apellido1_coordinador+' '+listaEnviados[i][4][0].apellido2_coordinador;
+				if(typeof listaEnviados[i][4][j] != 'undefined')
+				{j=0;
+					while(typeof listaEnviados[i][4][j] != 'undefined'){
+						if(destino==""){
+							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							para=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;
+						}else{
+							destino=destino+', '+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							para=para+".....";
+						}
+						j++;	
+					}
 					
 				}
 				tr = document.createElement('tr');
@@ -173,6 +215,10 @@ function cambiarCorreos(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				tablaResultados.appendChild(tr);
+				textarea=document.createElement('textarea');
+				textarea.setAttribute("id","c"+i);
+				textarea.setAttribute("style","display:none");
+				tablaResultados.appendChild(textarea);
 				var cuerpo=listaEnviados[i][0].cuerpo_email;
 				document.getElementById("m"+i).innerHTML="<b>"+listaEnviados[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaEnviados[i][0].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
@@ -196,7 +242,7 @@ function cambiarCorreos(direccion,offset)
 						document.getElementById("ant").removeAttribute('onClick');
 					}
 					document.getElementById("sig").removeAttribute('class');
-			}else{
+			}else if(direccion=="sig"){
 				
 				if(offset+5>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
@@ -219,15 +265,7 @@ function cambiarCorreos(direccion,offset)
 	
 }
 
-/** 
-* Esta función elimina los tags HTML
-*/
-function strip(html)
-{
-   var tmp = document.createElement("DIV");
-   tmp.innerHTML = html;
-   return tmp.textContent||tmp.innerText;
-}
+
 </script>
 <script type="text/javascript">
 /** 
@@ -367,59 +405,9 @@ if(isset($msj))
 			
 			
 			<tbody id="tabla">
+				<script type="text/javascript">cambiarCorreos("inicio",0)</script>
 			<?php		
-			while($contador<count($correos))
-			{			
-
-				$destino='';
-				$para='';
-				$total=0;
-				
-				if(isset($estudiantesEnviados[$contador][0])!=0)
-				{
-					$total+=count($estudiantesEnviados);
-					$destino=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'].' &lt'.$estudiantesEnviados[$contador][0]['correo_estudiante'].'&gt';					
-					$para=$estudiantesEnviados[$contador][0]['nombre1_estudiante'].' '.$estudiantesEnviados[$contador][0]['apellido_paterno'].' '.$estudiantesEnviados[$contador][0]['apellido_materno'];
-				}	
-				if(isset($ayudantesEnviados[$contador][0])!=0)
-				{
-					$total+=count($ayudantesEnviados);
-					$destino=$ayudantesEnviados[$contador][0]['nombre1_ayudante'].' '.$ayudantesEnviados[$contador][0]['apellido_paterno'].' '.$ayudantesEnviados[$contador][0]['apellido_materno'].' &lt'.$ayudantesEnviados[$contador][0]['correo_ayudante'].'&gt';
-					$para=$ayudantesEnviados[$contador][0]['nombre1_ayudante'].' '.$ayudantesEnviados[$contador][0]['apellido_paterno'].' '.$ayudantesEnviados[$contador][0]['apellido_materno'];
-				}
-				if(isset($profesoresEnviados[$contador][0])!=0)
-				{
-					$total+=count($profesoresEnviados);
-					$destino=$profesoresEnviados[$contador][0]['nombre1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido2_profesor'];
-					$para=$profesoresEnviados[$contador][0]['nombre1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido1_profesor'].' '.$profesoresEnviados[$contador][0]['apellido2_profesor'];
-				}
-				if(isset($coordinadoresEnviados[$contador][0])!=0)
-				{
-					$total+=count($coordinadoresEnviados);
-					$destino=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
-					$para=$coordinadoresEnviados[$contador][0]['nombre1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido1_coordinador'].' '.$coordinadoresEnviados[$contador][0]['apellido2_coordinador'];
-				}
-				if($destino!='')
-				{
-					echo '<tr >';
-				echo '<td width="5%" id="'.$contador.'"
-				style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" name="'.$correos[$contador]['cod_correo'].'" onClick="disableOthers(this)"/></td>';
-		
-				echo '<td width="23%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">Para: '.$para.'</td>';		
-
-				echo '<textarea id="c'.$contador.'" style="display:none;">'.$correos[$contador]['cuerpo_email'].'</textarea>';
-				
-				echo '<td width="27%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">'.substr('<b>' .$correos[$contador]['asunto']. '</b> - '.strip_tags( $correos[$contador]['cuerpo_email']),0,50).'......</td>';
-		
-				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">'. $correos[$contador]['fecha'].'</td>';
-		
-				echo '<td width="8%" id="'.$contador.'" style="text-align:left;padding-left:7px;" onclick="DetalleCorreo('.$comilla.$correos[$contador]['hora'].$comilla.','.$comilla.$correos[$contador]['fecha'].$comilla.','.$comilla.$correos[$contador]['asunto'].$comilla.','.$contador.','.$comilla.$destino.$comilla.')">'. $correos[$contador]['hora'].'</td>';
-				echo '</tr>';
-				
-				
-				}
-				$contador = $contador + 1;
-			}
+			
 		}
 		?>
 		</tbody>
