@@ -106,8 +106,10 @@ class Login extends MasterManteka {
 			$this->email->to($destino);									// Destinatario del correo
 			$this->email->subject($subject);							// Asunto del correo
 			$this->email->message($mensaje);							// Mensaje del correo
-			$this->email->send();										// Envío del correo
-			//echo $this->email->print_debugger();
+			if (!$this->email->send()) {										// Envío del correo
+				//echo $this->email->print_debugger();
+				return FALSE;
+			}
 			return TRUE;												// Retorna verdadero en caso de que se haya enviado satisfactoriamente
 		}
 		catch (Exception $e) {
@@ -381,24 +383,8 @@ class Login extends MasterManteka {
 		$mail2 = $this->input->post("correo2");
 		$telefono = $this->input->post("telefono");
 		$resultado = $this->model_usuario->cambiarDatosUsuario($rut, $tipo, $telefono, $mail1, $mail2);
-		
 
-		/* Cargo la vista que muestra el mensaje de que la operación se realizó correctamente */
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarra_navegacion"] = FALSE;
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		$datos_plantilla["barra_lateral"] = "";
+
 		$datos_plantilla["titulo_msj"] = "Listo";
 		$datos_plantilla["cuerpo_msj"] = "Se ha actualizado el perfil del usuario";
 		$datos_plantilla["tipo_msj"] = "alert-success";
@@ -406,9 +392,9 @@ class Login extends MasterManteka {
 		$datos_plantilla["redirecTo"] = "Correo/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "vista principal"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$datos_plantilla["cuerpo_central"] = $this->load->view('templates/big_msj_logueado', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	
 
@@ -650,6 +636,19 @@ class Login extends MasterManteka {
               $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 
+              /*
+				$datos_plantilla["titulo_msj"] = "Error";
+				$datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA";
+				$datos_plantilla["tipo_msj"] = "alert-error";
+				$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+				$datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+				$datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+				$datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+				$datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+				$tipos_usuarios_permitidos = array();
+				$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+				$this->cargarMsjDesLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+			*/
 
             }
         // En caso de que haya habido un error en la operación
