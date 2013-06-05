@@ -902,7 +902,6 @@ function revisarRut(rut){
 					echo form_open('Grupo/agregarGrupo',$attributes);
 				?>
 				<input type="text" name="NOMBRE_FILTRO_CONTACTO" placeholder="Nombre Grupo Contactos" style="margin-top:10px;">
-				<input type="hidden" name="RUT_USUARIO" value="<?php echo $rut?>">
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
 				<button class ="btn" type="submit" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" >Guardar Grupo</button>
 				<?php echo form_close(""); ?>
@@ -1152,10 +1151,10 @@ function validar(form){
 				success: function(data){				
 				}
 				})	
+				alert('¡Grupo de Contactos exitosamente agregado!');
 			
 			}
 		}	
-		alert('¡Grupo de Contactos exitosamente agregado!')
 		return false;		
 	}
 	else{
