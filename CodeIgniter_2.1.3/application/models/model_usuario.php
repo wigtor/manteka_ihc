@@ -5,6 +5,7 @@
  * del sistema ManteKA.
  * Posee métodos para obtener información de la base de datos
  * y para setear nueva información
+ * @author Grupo 1
  */
 class model_usuario extends CI_Model{
 
