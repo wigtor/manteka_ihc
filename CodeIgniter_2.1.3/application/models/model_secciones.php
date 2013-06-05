@@ -367,15 +367,25 @@ public function EliminarAsignacion($cod_seccion)
 
 
 public function verModulosPorAsignar(){
-	
+
 	$columnas = 'modulo_tematico.NOMBRE_MODULO';
 	$desde = '`modulo_tematico`';
-	$this->db->select($columnas);
-	$this->db->get($desde);
+	$query = $this->db->select($columnas);
+	$query = $this->db->get($desde);
 	
 	$array = $query->result_array();
 						
 	return $array;
+}
+
+
+public function verProfeSegunModulo(){
+
+	$columnas = '';
+	$condiciones  = '';
+	$desde = '';
+
+
 }
 
 }
