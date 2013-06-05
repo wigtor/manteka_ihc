@@ -116,9 +116,8 @@ public function getSesionesByFilter($tipoFiltro, $textoFiltro)
 	public function EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion)
     {
 		$data = array(					
-					'CODIGO_SESION' => $codigo_sesion ,
 					'NOMBRE_SESION' => $nombre_sesion ,
-					'DESCRIPCION_SESION' => $descripcion_sesion,
+					'DESCRIPCION_SESION' => $descripcion_sesion
 		);
 		$this->db->where('COD_SESION', $codigo_sesion);
         $datos = $this->db->update('sesion',$data);

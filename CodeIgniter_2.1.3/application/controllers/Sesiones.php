@@ -121,9 +121,10 @@ class Sesiones extends MasterManteka {
 	public function editarSesiones()//carga la vista para borrar alumnos
 	{
 		$this->load->model('Model_sesiones');
-		$nombre_sesion = $this->input->post("nombre_sesion");
-		$descripcion_sesion = $this->input->post("descripcion_sesion");
-		$codigo_sesion= $this->input->post("codigo_sesion");
+		$nombre_sesion = $this->input->post('nombre_sesion');
+		$descripcion_sesion = $this->input->post('descripcion_sesion');
+		$codigo_sesion = $this->input->post('codigo_sesion');
+		
 		$confirmacion = $this->Model_sesiones->EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion);
         $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
 

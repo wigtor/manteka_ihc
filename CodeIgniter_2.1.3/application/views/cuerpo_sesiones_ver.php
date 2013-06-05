@@ -127,10 +127,10 @@
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 			2.-Detalle sesión:
 			<pre style="margin-top: 2%; padding: 2%">
-Codigo sesión:              	<b id="codigoDetalle"></b>
-Nombre del modulo temático:     <b id="mod_temDetalle"></b>
-Nombre de la sesion: 		<b id="nombreDetalle"></b>
-Descripción: 					<b id="descripcionDetalle"></b>
+Codigo sesión:              <b id="codigoDetalle"></b>
+Nombre del modulo temático: <b id="mod_temDetalle"></b>
+Nombre de la sesion: 	<b id="nombreDetalle"></b>
+Descripción: 	<b id="descripcionDetalle"></b>
 			</pre>
 		</div>
 	</div>

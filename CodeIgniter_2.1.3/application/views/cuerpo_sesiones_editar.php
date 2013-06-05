@@ -1,9 +1,10 @@
 <script>
 function EditarSesion(){
 							
-		var rut = document.getElementById("nombre_sesion").value;
+		var rut = document.getElementById("nombresesion").value;
 		var nombre1 =document.getElementById("descripcionSesion").value;
 		var cod =document.getElementById("codigoSesion").value;
+		alert(cod);
 	//var apellidoPaterno =document.getElementById("apellidoPaternoProfeEdit").value;
 	//	var apellidoMaterno =document.getElementById("apellidoMaternoProfeEdit").value;
 		//var correo = document.getElementById("mailProfeEdit").value;
@@ -14,17 +15,17 @@ function EditarSesion(){
 		if(rut!="" && nombre1!="" && cod!=""){
 					var answer = confirm("¿Está seguro de realizar cambios?");
 					if (!answer){
-						var dijoNO = datosEditarProfesor("","","","","","");
+						return false;
 					}
 					else{
 						var editar = document.getElementById("FormEditar");
-						editar.action = "<?php echo site_url("Sesiones/EditarSesion/") ?>";
+						editar.action = "<?php echo site_url("Sesiones/editarSesiones/") ?>";
 						editar.submit();
 					}
 		}
 		else{
 				alert("Inserte todos los datos");
-				var mantenerDatos = datosEditarProfesor(rut,nombre1,nombre2,apellidoPaterno,apellidoMaterno,telefono);
+				return false;
 		}
 	}
 	function detalleSesion(elemTabla) {
@@ -155,7 +156,7 @@ function EditarSesion(){
 		<div  class= "row-fluid" style="margin-left:2%">
 
 			<div class= "span6" style = "margin-left: 43px">
-				<form id="FormEditar" type="post" onsubmit="EditarSesion()">
+				<form id="FormEditar" type="post" method="post" onsubmit="EditarSesion();return false">
 					<div class="row"> <!-- descipción -->
 						<div class="row-fluid">
 				<div class="span6" style ="width: 400px">
@@ -171,7 +172,7 @@ function EditarSesion(){
 						</div>
 						<div class="span5">	
 								<div class="controls">
-									<input type="text" disabled id="codigoSesion" name="codigo_sesion" maxlength="99" required >
+									<input type="text" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
 								</div>
 						</div>
 
@@ -206,7 +207,7 @@ function EditarSesion(){
 								<div class="span11" style="margin-top:2%">
 									<div class="row-fluid">
 										<div class="span4 " style="margin-left:37%; width: 27%">
-											<button class="btn" style="width: 108px"type="submit">
+											<button class="btn" style="width: 108px" type="submit">
 												<div class= "btn_with_icon_solo">Ã</div>
 												&nbsp Modificar
 											</button>
