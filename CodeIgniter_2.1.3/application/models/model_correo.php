@@ -42,7 +42,7 @@ class model_correo extends CI_Model
 		try
 		{
 			/* Se obtienen todos los correos enviados por un usuario. */
-			$sql="SELECT * FROM carta  WHERE rut_usuario='$variable' ORDER BY COD_CORREO DESC LIMIT $offset,5";
+			$sql="SELECT * FROM carta  WHERE rut_usuario='$variable' AND COD_BORRADOR IS NULL ORDER BY COD_CORREO DESC LIMIT $offset,5";
 			$datos=mysql_query($sql);
 			$listaCompleta=array();
 			while($row=mysql_fetch_array($datos))
@@ -71,10 +71,10 @@ class model_correo extends CI_Model
 					array_push($rutDestinoEstudiantes,$row1['RUT_ESTUDIANTE']);
 				$datos2=mysql_query($sql2); 
 				while($row2=mysql_fetch_array($datos2))
-					array_push($rutDestinoAyudantes,$row['RUT_AYUDANTE']);
+					array_push($rutDestinoAyudantes,$row2['RUT_AYUDANTE']);
 				$datos3=mysql_query($sql3); 
 				while($row3=mysql_fetch_array($datos3))
-					array_push($rutDestinoUsuarios,$row['RUT_USUARIO']);
+					array_push($rutDestinoUsuarios,$row3['RUT_USUARIO']);
 				$estudiantes=array();
 				
 				/* Para cada destinatario estudiante del correo actual se obtienen los datos de
@@ -218,6 +218,44 @@ class model_correo extends CI_Model
 	}
 	
 	/**
+	* Elimina 1 o varios borradores de la base de datos de la aplicación.
+	*
+	* Para cada borrador se elimina los datos de dicho borrador en la
+	* tabla carta.
+	* En el array de entrada se especifican los identificadores de todos
+	* los correos a eliminar.
+	* En el array de salida se especifica el resultado de la consulta de
+	* de la eliminaci?n para cada correo. 
+	*
+	* @param array $correos
+	* @return array $resultados
+	* @author Byron Lanas (BL)
+	*
+	*/
+	public function EliminarBorradores($correos)
+	{
+		$resultados1=array();
+		$resultados4=array();
+		$resultadosFinales=array();
+		foreach($correos as $correo)
+		{	
+			$this->db->select('COD_CORREO');
+			$this->db->where('COD_BORRADOR', $correo); 
+			$query = $this->db->get('borrador');
+			$row = $query->result();
+			$cod_correo=$row->COD_CORREO;
+			$sqlEliminarCorreoEstudiante="DELETE FROM borrador WHERE COD_BORRADOR='$correo'";
+			$resultados1[$correo][$resultado]=mysql_query($sqlEliminarCorreoEstudiante);
+			$sqlEliminarCorreo="DELETE FROM carta WHERE COD_CORREO='$cod_correo'";
+			$resultados4[$correo][$resultado]=mysql_query($sqlEliminarCorreo);
+		}
+		array_push($resultadosFinales,$resultados1);
+		array_push($resultadosFinales,$resultados4);
+		return $resultadosFinales;
+	}
+
+
+	/**
 	* Inserta un correo enviado a la base de datos.
 	*
 	* Permite insertar correos a la tabla "carta"
@@ -250,20 +288,99 @@ class model_correo extends CI_Model
 			$this->CUERPO_EMAIL = $mensaje;
 			$this->ASUNTO=$asunto;
 			$this->db->insert('carta', $this);
-			 $e = $this->db->_error_message();  
-			return $e;
+			$this->db->_error_message();  
+			return 1;
 		}
 		catch(Exception $e)
 		{
 			return -1;
 		}
     }
+
+	/**
+	* Inserta un borrador a la base de datos.
+	*
+	* @param int $codigoBorrador
+	* @param int $rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+	public function insertarBorrador($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador)
+	{
+
+		try
+		{
+			if ($codigoBorrador==-1) {
+
+			$this->COD2_CORREO=$codCorreo;
+			$this->COD_BORRADOR=null;
+			$this->ID_PLANTILLA=null;
+			
+			$this->RUT_USUARIO=$rut;
+			
+			date_default_timezone_set("Chile/Continental");
+			$this->HORA = date("H:i:s");
+			$this->FECHA = date("Y-m-d");
+			$this->CUERPO_EMAIL = $mensaje;
+			$this->ASUNTO=$asunto;
+			$this->db->insert('carta', $this);
+			$cod=getCodigo($codCorreo);
+			$data = array(
+				   
+				   'COD_CORREO' => $cod ,
+				   'FECHA' => date("Y-m-d") ,
+				   'HORA' => date("H:i:s"),
+				);
+
+			$this->db->insert('borrador', $data);
+			}else
+			{
+				 $data2 = array(
+				   
+				   
+				   'FECHA' => date("Y-m-d") ,
+				   'HORA' => date("H:i:s"),
+				);
+				$this->db->where('COD_BORRADOR',$codigoBorrador);
+				$this->db->update('borrador', $data2);
+
+			}
+			$this->db->select('COD_BORRADOR');
+			$this->db->where('COD2_CORREO', $codCorreo); 
+			
+			$this->db->limit(1);
+			$query = $this->db->get('carta');
+
+			foreach ($query->result() as $row)
+			{
+			    return $row->COD_BORRADOR;
+			}
+			
+			
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
+
+    /**
+	* Obtiene el codigo del correo para poder inserar
+	* en las tabalas asociadas al receptor.
+	*
+	* @param date $codCorreo
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
     	public function getCodigo($codCorreo)
 	{
 		try
 		{
 			$this->db->select('COD_CORREO');
 			$this->db->where('COD2_CORREO', $codCorreo); 
+			//$this->db->order_by("COD2_CORREO", "desc"); 
 			$this->db->limit(1);
 			$query = $this->db->get('carta');
 			 $e = $this->db->_error_message(); 
@@ -280,11 +397,118 @@ class model_correo extends CI_Model
 			return -1;
 		}
     }
+    /**
+	* verifica si el receptor es un estudiante
+	* 
+	*
+	* @param int rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+    	public function getRutEst($rut)
+	{
+		try
+		{
+			$this->db->where('RUT_ESTUDIANTE', $rut);
+			$this->db->from('estudiante');
+			return $this->db->count_all_results();
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}}
+     /**
+	* verifica si el receptor es un ayudante
+	* 
+	*
+	* @param int rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+    	public function getRutAyu($rut)
+	{
+		try
+		{
+			$this->db->where('RUT_AYUDANTE', $rut);
+			$this->db->from('ayudante');
+			return $this->db->count_all_results();
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}}
+
+
+     /**
+	* verifica si el receptor es un usuario
+	* 
+	*
+	* @param int rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+    	public function getRutUser($rut)
+	{
+		try
+		{
+			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->from('usuario');
+			return $this->db->count_all_results();
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}}		
+    /**
+	* Obtiene la cantidad de correos enviados por el usuario
+	*
+	* @param int $rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
     public function cantidadCorreos($rut)
 	{
 		try
 		{
 			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->from('carta');
+			return $this->db->count_all_results();
+			
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
+
+
+    /**
+	* Obtiene la cantidad de borradores correspondientes al usuario
+	*
+	* @param int $rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+    public function cantidadBorradores($rut)
+	{
+		try
+		{
+			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->where('COD_BORRADOR IS NOT NULL');
+
 			$this->db->from('carta');
 			return $this->db->count_all_results();
 			

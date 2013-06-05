@@ -5,7 +5,8 @@
 <script type='text/javascript'>
 var arrayRespuesta;
 var arrayCarreras;
-
+var myVar;
+var codigoBorrador=-1;
 
 /** 
 * Esta función se llama al hacer click en el botón enviar, 
@@ -27,11 +28,15 @@ function validacionSeleccion()
 
 		 if (asunto=="")
 		{
-			if (confirm("¿Desea enviar este correo sin indicar asunto?"))
+			if (confirm("¿Desea enviar este correo sin indicar asunto?")){
+				clearInterval(myVar);
 				return true;
+			}
+				
 			else 
 				return false;
 		}
+		clearInterval(myVar);
 		return true;
 	}
 	else
@@ -43,6 +48,38 @@ function validacionSeleccion()
 </script>
 
 <script type='text/javascript'>
+
+/** 
+* Esta función guarda un borrador cada 10 seg.
+*/
+
+function timerBorradores(to,rutRecept)
+{
+	var d=new Date();
+	var t=d.toLocaleTimeString();
+
+	editor="sd";
+	asunto=document.getElementById("asunto").value;
+
+	/*$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Correo/postGuardarBorrador") ?>",
+			
+			data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
+			success: function(respuesta){alert(respuesta);
+				codigoBorrador = JSON.parse(respuesta);
+				
+				
+				document.getElementById("guardado").innerHTML="se ha guardado un borrador a las: "+t;
+				var iconoCargado = document.getElementById("icono_cargando");
+						$(icono_cargando).hide();
+			}
+		});
+		/* Muestro el div que indica que se está cargando... */
+//				var iconoCargado = document.getElementById("icono_cargando");
+//				$(icono_cargando).show();
+
+}
 
 
 /** 
@@ -107,7 +144,14 @@ function pasoDosTres()
 		$('#cuadroDestinatario').css({display:'none'});
 		$('#cuadroEnviar').css({display:'none'});
 		$('#cuadroEnvio').css({display:'block'});
+		myVar=setInterval(function(){timerBorradores(to,rutRecept)},10*1000);
 	}
+
+					
+
+
+
+
 }
 </script>
 
@@ -123,6 +167,7 @@ function pasoTresDos()
 	$('#cuadroEnvio').css({display:'none'});
 	$('#cuadroEnviar').css({display:'none'});
 	$('#cuadroDestinatario').css({display:'block'});
+	clearInterval(myVar);
 }
 </script>
 
@@ -1071,6 +1116,7 @@ function revisarRut(rut){
 
 <fieldset id="cuadroEnvio" style="display:none;">
 	<legend>&nbsp;Enviar correo&nbsp;</legend>
+
 	<?php 
 		$attributes = array('onSubmit'=>'return validacionSeleccion();', 'id'=>'formEnviar');
 		echo form_open('Correo/enviarPost',$attributes);
@@ -1081,8 +1127,10 @@ function revisarRut(rut){
 		</div>
 		<div class="row-fluid">
 			<div class="span4" > 
+				<p id="guardado"></p>
 				Para: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
 				Asunto: &nbsp;<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">
+
 				<input id="ed" name="ed" type="hidden" value="<?php set_value('editor'); ?>">
 			</div>
 		</div>
@@ -1113,6 +1161,7 @@ function revisarRut(rut){
 	</div>
 	<?php echo form_close(""); ?>
 </fieldset>
+	
 <script type="text/javascript">
 /*
 $('#form_contactos').submit(function() {

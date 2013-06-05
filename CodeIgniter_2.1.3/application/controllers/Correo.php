@@ -122,7 +122,7 @@ class Correo extends MasterManteka {
 			redirect('/Correo/correosEnviados/'.$estado);
 		}	
 	}
-		/**
+	/**
 	* Permite eliminar uno o varios correos de la bandeja de correos recibidos.
 	*
 	* A través del método post se obtienen los identificadores de los correos
@@ -162,6 +162,47 @@ class Correo extends MasterManteka {
 			redirect('/Correo/correosRecibidos/'.$estado);
 		}	
 	}
+/**
+	* Permite eliminar uno o varios correos de la bandeja de correos recibidos.
+	*
+	* A través del método post se obtienen los identificadores de los correos
+	* que se desean eliminar, luego se procede a la eliminación a través del
+	* de la función "EliminarCorreoRecibido" del modelo de correos, y finalmente se
+	* redirecciona a la vista de correos enviados, adjuntando la variable
+	* "estado" para señalar si la eliminación se realizó correctamente o no
+	* y mostrar así un mensaje al usuario con el resultado de la operación.
+	* El resultado de esta función es la eliminación de los correos señalados
+	* y un redireccionamiento a la bandeja de correos enviados, indicando el
+	* resultado de la operación.
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function eliminarBorrador()
+	{
+		$rut = $this->session->userdata('rut');
+
+		/* Sólo se eliminan correos si la variable post que contiene los correos a eliminar está definida*/
+		if(isset($_POST['seleccion']))
+		{
+			$temp=$_POST['seleccion'];
+			$correos = explode(";",$temp);
+			$this->load->model('model_correo');
+			$this->model_correo->EliminarBorradores($correos);
+			if(isset($estado))
+				unset($estado);
+			$estado="1";
+			redirect('/Correo/verBorradores/'.$estado);
+		}
+		else
+		{
+			if(isset($estado))
+				unset($estado);
+			$estado="0";
+			redirect('/Correo/verBorradores/'.$estado);
+		}	
+	}
+
 
 	/**
 	* Permite visualizar la vista para el envío de nuevos correos.
@@ -180,14 +221,15 @@ class Correo extends MasterManteka {
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 
-			
+		
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_profesor');
 		$this->load->model('Model_ayudante');
 		$this->load->model('Model_usuario');
 		$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
 							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
- 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
+ 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
+ 							 'rut'=>  $this->session->userdata('rut'));
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/
@@ -214,11 +256,14 @@ class Correo extends MasterManteka {
 	* @author: Byron Lanas (BL)
 	*
 	*/
-	public function verBorradores()
+	public function verBorradores($msj=null)
 	{
 
 
-		$datos_cuerpo = array();
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$datos_cuerpo = array('listaRecibidos'=>$this->model_correo->VerCorreosUser($rut,0), 'msj'=>$msj,'cantidadBorradores'=>$this->model_correo->cantidadBorradores($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -260,6 +305,8 @@ class Correo extends MasterManteka {
 		el tipo de destinatario al cual va dirijido. Además se cargan los
 		modelos necesarios para guardar el correo una vez que es enviado. */
 		$this->load->model('model_correo');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_ayudante');
 		$this->load->model('model_correo_e');
 		$this->load->model('model_correo_u');
 		$this->load->model('model_correo_a');
@@ -289,9 +336,14 @@ class Correo extends MasterManteka {
 
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept);
 			$cod=$this->model_correo->getCodigo($date);
-			
+			$estudiante=$this->model_correo->getRutEst($rutRecept);
+			if($estudiante!=0)
 				$this->model_correo_e->InsertarCorreoE($rutRecept,$cod);
+			$user=$this->model_correo->getRutUser($rutRecept);
+			if($user!=0)
 				$this->model_correo_u->InsertarCorreoU($rutRecept,$cod);
+			$ayudante=$this->model_correo->getRutAyu($rutRecept);
+			if($ayudante!=0)
 				$this->model_correo_a->InsertarCorreoA($rutRecept,$cod);
 			
 		}
@@ -327,6 +379,48 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+	* Recarga la tabla de borradores segun los botones de < y > 
+	* según sean clickeados
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postBorradores(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$offset = $this->input->post('offset');
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
+		echo json_encode($resultado);
+	}
+/**
+	* Guarda borradores automaticamente
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postGuardarBorradores(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$codigoBorrador = $this->input->post('codigoBorrador');
+		$rut = $this->session->userdata('rut');
+
+		$to = $this->input->post('to');
+		$asunto =$this->input->post('asunto');
+		$mensaje =$this->input->post('editor');
+		$rutRecept = $this->input->post('rutRecept');
+		$date = date("YmdHis");
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
+
+		echo json_encode($resultado);
+	}
 /**
 	* Recarga la tabla de correos Enviados segun los botones de < y > 
 	* según sean clickeados
