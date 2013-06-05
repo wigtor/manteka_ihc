@@ -252,6 +252,16 @@ class Alumnos extends MasterManteka {
 	
 	}
 	
+
+	/**
+	* Esta función cambia de foema masiva a los estudiantes selecionandos a una nueva secciion selecionada
+	* Primero se carga el modelo de estudiantes 
+	* Se determina desde que seccion y a cual seccion se cambiaran los alumnos
+	* Se obtiene la lista de selecionados que seránm cambiaados de sección
+	* Se cargan los datos a la vista
+	*
+	**/
+
 		public function HacerCambiarSeccionAlumnos()
 	{
 		//@ViewBag.Test = data[0]; // Data will be set to P1
@@ -306,6 +316,11 @@ class Alumnos extends MasterManteka {
 		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
 		echo json_encode($resultado);
 	}
+
+	/**
+	* Se buscan alumnos de forma asincrona para mostrarlos en la vista
+	*
+	**/
 
 	public function postBusquedaAlumnos() {
 		if (!$this->isLogged()) {

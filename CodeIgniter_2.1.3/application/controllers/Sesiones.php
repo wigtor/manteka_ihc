@@ -38,7 +38,6 @@ class Sesiones extends MasterManteka {
 
 
 		$this->load->model('Model_sesiones');
-		$datos_vista = array('sesiones' => $this->Model_sesiones->VerTodasLasSesiones());
 
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
@@ -119,7 +118,23 @@ class Sesiones extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 	}
-	
+	public function editarSesiones()//carga la vista para borrar alumnos
+	{
+		$this->load->model('Model_sesiones');
+		$nombre_sesion = $this->input->post('nombre_sesion');
+		$descripcion_sesion = $this->input->post('descripcion_sesion');
+		$codigo_sesion = $this->input->post('codigo_sesion');
+		
+		$confirmacion = $this->Model_sesiones->EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion);
+        $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
+
+		$subMenuLateralAbierto = "editarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	}
+		
 	
 }
 

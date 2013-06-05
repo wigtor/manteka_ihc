@@ -56,7 +56,7 @@ function ordenarFiltro(){
                             1.-Seleccionar sección
                         </div>
 					</div>
-<div class="row-fluid">
+			<div class="row-fluid">
 				<div class="span11">
 					<div class="row-fluid">	
 							<div class="span11">
