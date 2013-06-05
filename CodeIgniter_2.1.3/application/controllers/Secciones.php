@@ -154,6 +154,16 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_borrar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+
+/**
+* Se realiza la asiganción de una sección a los datos que corrresponde a la seccionn seleccionada
+* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
+* luego se defienen como vacios los datos de la vista 
+* se indiaca el valor del meni lateral que debe permanecer abierto
+* Se limita el acceso solo a los coordinadores
+* Se carga el modelo de secciones 
+* Se realiza la operación de asiganción a la seccion correspondiente llamando al modelo
+**/	
 	public function asignarAsecciones()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -177,6 +187,16 @@ class Secciones extends MasterManteka {
 
 	}
 
+	/**
+	* Se eliminnan la asignaciones de una sección determinada 
+	* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
+	* luego se defienen como vacios los datos de la vista 
+	* se indiaca el valor del meni lateral que debe permanecer abierto
+	* Se limita el acceso solo a los coordinadores
+	* Se carga el modelo de secciones 
+	* Se realiza la operación de  elimnar asignacionae invocando la función en el modelo	
+	**/
+
 	public function borrarAsignacion()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -198,6 +218,14 @@ class Secciones extends MasterManteka {
 
 	}
 
+
+	/**
+	* Funciaón que realiza un pos de los detalle de la fincion desde el
+	* modelo a la vista utilizando json para la comunicación asincrona
+	*
+	*
+	**/
+
 	public function postDetalleSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -210,6 +238,16 @@ class Secciones extends MasterManteka {
 		$resultado = $this->Model_secciones->getDetalleSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
+
+	/**
+	* Se eliminnan la asignaciones de una sección determinada 
+	* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
+	* luego se defienen como vacios los datos de la vista 
+	* se indiaca el valor del meni lateral que debe permanecer abierto
+	* Se limita el acceso solo a los coordinadores
+	* Se carga el modelo de secciones 
+	* Se realiza la operación de  elimnar asignacionae invocando la función en el modelo	
+	**/
 
 	public function eliminarAsignacion()
 	{
@@ -248,5 +286,3 @@ class Secciones extends MasterManteka {
 	
 	
 }
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */
