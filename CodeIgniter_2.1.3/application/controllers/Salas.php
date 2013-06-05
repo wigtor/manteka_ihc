@@ -27,8 +27,15 @@ class Salas extends MasterManteka {
 		$this->verSalas();
 	}
 
+	// se usa para la vista ver una determinada sala
 	public function verSalas()
 	{
+		//Se comprueba que quien hace esta petición este logueado
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "verSalas"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -39,31 +46,41 @@ class Salas extends MasterManteka {
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+	// se usa para la vista agregar una determinada sala
 	public function agregarSalas()
     {
+		//Se comprueba que quien hace esta petición este logueado
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "agregarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		
-
 		$this->load->model('Model_sala');
         $num_sala = $this->input->get("num_sala");
         $ubicacion = $this->input->get("ubicacion");
         $capacidad = $this->input->get("capacidad");
 		$implementos = $this->input->get("cod_implemento");
         $confirmacion = $this->Model_sala->InsertarSala($num_sala,$ubicacion,$capacidad,$implementos);
-	    
-	  
 		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	
     }
     
+	// se usa para la vista editar una determinada sala
     public function editarSalas()
     {
+		//Se comprueba que quien hace esta petición este logueado
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
     	$datos_vista = 0;		
 		$subMenuLateralAbierto = "editarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -77,17 +94,21 @@ class Salas extends MasterManteka {
 		$capacidad = $this->input->post("capacidad");
 		$implementos = $this->input->post("cod_implemento");
 		$implementosA= $this->input->post("cod_implementoA");
-
-        $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA);
-	  
-	  
+        $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA);  
 		$datos_vista = array('implementoA'=>$this->Model_sala->ImplementosAusentes($cod_sala),'mensaje_confirmacion'=>2,'rs_sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>2,'implemento' => $this->Model_sala->ImplementosParticulares($cod_sala),'mensaje_confirmacion'=>2,'sala' => $this->Model_sala->VerSala($cod_sala),'mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
 
+	// se usa para la vista borrar una determinada sala
 	 public function borrarSalas()
     {
+		//Se comprueba que quien hace esta petición este logueado
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
     	$datos_vista = 0;		
 		$subMenuLateralAbierto = "borrarSalas"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
