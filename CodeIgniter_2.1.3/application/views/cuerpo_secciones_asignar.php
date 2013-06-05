@@ -1,3 +1,4 @@
+
 <div class="row-fluid">
 	<div class="span10">
 
@@ -14,13 +15,28 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table id="listadoResultados" class="table table-hover">
+							<table id="" class="table table-hover">
 								<thead>
 									<tr>
 										
 									</tr>
 								</thead>
 								<tbody>
+
+								<?php
+								$contador=0;
+								$comilla= "'";
+								
+								while ($contador<count($seccion)){
+									
+									echo '<tr>';
+									echo '<td   onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								
+								?>
 
 								</tbody>
 							</table>
@@ -35,13 +51,14 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:7%">
-							<table id="listadoResultados" class="table table-hover">
+							<table id="" class="table table-hover">
 								<thead>
 									<tr>
 										
 									</tr>
 								</thead>
 								<tbody>
+
 
 								</tbody>
 							</table>
@@ -67,6 +84,8 @@
 									</tr>
 								</thead>
 								<tbody>
+									
+
 
 								</tbody>
 							</table>
