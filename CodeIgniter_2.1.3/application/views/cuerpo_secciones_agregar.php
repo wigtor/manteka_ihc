@@ -67,8 +67,8 @@
                 
                 <div class="span6">
                     <div class="row-fluid">
-                        <div class="span5">
-                            1.-Información de la sección
+                        <div class="span6">
+                            Ingrese la informacion de la sección
                         </div>
                     </div>
 					
@@ -77,7 +77,7 @@
 							<div class="span4">
 								<div class="control-group">
 									
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> 1.- Sección:</label>
 									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 		  						</div>	
 							</div>

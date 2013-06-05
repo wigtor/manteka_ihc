@@ -80,39 +80,48 @@ class Model_secciones extends CI_Model{
 			$lista[0][0] = $row3['NOMBRE_SECCION'];
 			$contador3 = $contador3 + 1;
 		}
-		$sql="SELECT * FROM sala_horario WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
-		$datos=mysql_query($sql); 
+		
+		$sql3="SELECT * FROM seccion_mod_tem WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
+		$datos3=mysql_query($sql3); 
 		$contador = 0;	
-		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			
-			$hora=$row['COD_HORARIO'];
-			$sql1="SELECT * FROM horario WHERE COD_HORARIO='$hora' ORDER BY COD_HORARIO"; 
-			$datos1=mysql_query($sql1); 
-			while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
-				
-				$dia=$row1['COD_DIA'];
-				$sql2="SELECT * FROM dia WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
-				$datos2=mysql_query($sql2); 
-				while ($row2=mysql_fetch_array($datos2)) { 
-					$lista[$contador][1] = $row1['NOMBRE_HORARIO'];
-					$lista[$contador][2] = $row2['NOMBRE_DIA'];
+		if (false != $datos3) {
+		while ($row3=mysql_fetch_array($datos3)) {
+			$horario=$row3['ID_HORARIO_SALA'];
+			$sql="SELECT * FROM sala_horario WHERE ID_HORARIO_SALA='$horario' ORDER BY ID_HORARIO_SALA"; 
+			$datos=mysql_query($sql); 
+			if (false != $datos) {
+			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros		
+				$hora=$row['COD_HORARIO'];
+				$sql1="SELECT * FROM horario WHERE COD_HORARIO='$hora' ORDER BY COD_HORARIO"; 
+				$datos1=mysql_query($sql1); 
+				while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros				
+					$dia=$row1['COD_DIA'];
+					$sql2="SELECT * FROM dia WHERE COD_DIA='$dia' ORDER BY COD_DIA"; 
+					$datos2=mysql_query($sql2); 
+					while ($row2=mysql_fetch_array($datos2)) { 
+						$lista[$contador][1] = $row1['COD_MODULO'];
+						$lista[$contador][2] = $row2['NOMBRE_DIA'];
+						$lista[$contador][3] = $cod_seccion;
+						$contador = $contador + 1;
 				}
-			}
-			$contador = $contador + 1;
-		}
+			}		
+		   }
+		  }
+		 }
 		}
 		if($contador==0 && $cod_seccion!=''){
 			$lista[$contador][1] = '';
 			$lista[$contador][2] = '';
+			$lista[$contador][3] = $cod_seccion;
 		}
 		if($cod_seccion==''){
 			$lista[$contador][0] = '';
 			$lista[$contador][1] = '';
 			$lista[$contador][2] = '';
+			$lista[$contador][3] = '';
 			
 		}
-		$lista[$contador][3] = $cod_seccion;
+		
 		return $lista;
 	}
 
@@ -254,6 +263,10 @@ public function getDetalleSeccion($cod_seccion)
 		$this->db->select('seccion.NOMBRE_SECCION as nombre_seccion');
 		$this->db->select('NOMBRE_MODULO AS modulo');
 		$this->db->select('NUM_SALA AS sala');
+		$this->db->select('NOMBRE1_PROFESOR as nombre1');
+		$this->db->select('APELLIDO1_PROFESOR as apellido1');
+		$this->db->select('APELLIDO2_PROFESOR as apellido2');
+		$this->db->select('NOMBRE_HORARIO as horario');
 		$this->db->from('seccion');
 		$this->db->where('seccion.COD_SECCION', $cod_seccion);
 		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION', 'LEFT OUTER');
@@ -278,9 +291,11 @@ public function getDetalleSeccion($cod_seccion)
 
 		$lista[0] = $datos->nombre_seccion;
 		$lista[1] = $datos->modulo;
-		$lista[2] = /*$datos->profesor*/"";
-		$lista[3] = $datos->sala;
-		$lista[4] = /*$datos->horario*/"";
+		$lista[2] = $datos->nombre1;
+		$lista[3] = $datos->apellido1;
+		$lista[4] = $datos->apellido2;
+		$lista[5] = $datos->sala;
+		$lista[6] = $datos->horario;
 
 		}
 		
@@ -305,9 +320,15 @@ public function EliminarAsignacion($cod_seccion)
 
 		$lista[0] = $datos1->id_sala;
 
-		$this->db->where('cod_seccion', $cod_seccion);
+		$this->db->where('COD_SECCION', $cod_seccion);
 		$datos2 = $this->db->delete('seccion_mod_tem');
+
+		$this->db->where('COD_SECCION', $cod_seccion);
 		$datos3 = $this->db->delete('profe_seccion');
+
+
+		$this->db->where('ID_HORARIO_SALA', $lista[0]);
+		$datos4 = $this->db->delete('sala_horario');
 		
 		}
 
@@ -315,10 +336,11 @@ public function EliminarAsignacion($cod_seccion)
 		$lista[0]="";
 		$datos2=false;
 		$datos3=false;
+		$datos4=false;
 
 	}	
 
-	if($datos2 == true && $datos3 == true ){
+	if($datos2 == true && $datos3 == true && $datos4 == true ){
 			return 1;
 		}
 		else{
@@ -326,6 +348,7 @@ public function EliminarAsignacion($cod_seccion)
 		}
 
 }
+
 
 }
 

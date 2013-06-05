@@ -148,7 +148,7 @@ function nombreEnUso(){
 								</div>
 								<div class="span7">	
 										<div class="controls">
-											<input id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="19"  placeholder="Ejemplo Modulo Historia" onblur="nombreEnUso()">
+											<input id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="49"  placeholder="Comunicación no verbal" onblur="nombreEnUso()">
 										</div>
 								</div>
 						</div>
@@ -181,6 +181,7 @@ function nombreEnUso(){
 													echo '<tr>';
 													echo '<td id="sesion_'.$sesiones[$contador][0].'" title="'.$sesiones[$contador][2].'"><input value="'.$sesiones[$contador][0].'" name="cod_sesion[]" type="checkbox" ></input> '.$sesiones[$contador][3].'</td>';
 													echo '</tr>';
+												
 												$contador = $contador + 1;
 											}
 											?>
