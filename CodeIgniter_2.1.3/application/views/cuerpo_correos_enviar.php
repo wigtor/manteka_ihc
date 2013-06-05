@@ -83,15 +83,15 @@ function pasoDosTres()
 	var rutRecept = [];
 	var to = "";
 	//var rutRecept = document.getElementById("rutRecept").value;
-	for(var i =0;i < arrayRespuesta.length;i++){
-		var tr = document.getElementById(i);
-		var check = tr.childNodes[0].childNodes[0].checked;
-		if(check){
-			rutRecept.push(tr.getAttribute("rut"));
+	for(var i =0;i < tbody2.getElementsByTagName('tr').length;i++){
+		
+		
+		if(tbody2.getElementsByTagName('tr')[i].getElementsByTagName('input')[0].checked){
+			rutRecept.push(tbody2.getElementsByTagName('tr')[i].getAttribute("rut"));
 			if(to==""){
-				to = tr.getAttribute("correo");
+				to = tbody2.getElementsByTagName('tr')[i].getAttribute("correo");
 			}else{
-				to = to + ", " + tr.getAttribute("correo");
+				to = to + ", " + tbody2.getElementsByTagName('tr')[i].getAttribute("correo");
 			}
 		}
 	}
@@ -269,7 +269,34 @@ var arrayOfRolloverClasses = new Array();
 var arrayOfClickClasses = new Array();
 var activeRow = false;
 var activeRowClickArray = new Array();
+
+function seleccionar_todo(){ 	
+	
+    var checkboxes=document.getElementById('tbody1').getElementsByTagName('input'); //obtenemos todos los controles del tipo Input
+        for(var i=0;i<checkboxes.length;i++) //recoremos todos los controles
+        {
+            if(checkboxes[i].type == "checkbox") //solo si es un checkbox entramos
+            {
+                checkboxes[i].checked=this.checked; //si es un checkbox le damos el valor del checkbox que lo llamó (Marcar/Desmarcar Todos)
+            }
+        }
+	   
+} 
+
+function seleccionar_segundo_check(source){ 	
+	
+    var checkboxes=document.getElementById('tbody2').getElementsByTagName('input'); //obtenemos todos los controles del tipo Input
+        for(var i=0;i<checkboxes.length;i++) //recoremos todos los controles
+        {
+            if(checkboxes[i].type == "checkbox") //solo si es un checkbox entramos
+            {
+                checkboxes[i].checked=source.checked; //si es un checkbox le damos el valor del checkbox que lo llamó (Marcar/Desmarcar Todos)
+            }
+        }
+	   
+} 
     
+
 function muestraTabla(respuesta){
 	var tablaResultados = document.getElementById('tabla');
 					var nodoTexto;
@@ -278,22 +305,18 @@ function muestraTabla(respuesta){
 					var thead = document.createElement('thead');
 					thead.setAttribute("style","width:100%");
 					var tbody = document.createElement('tbody');
+					tbody.id="tbody1";
 					var tr = document.createElement('tr');
 					var th = document.createElement('th');
 					var check = document.createElement('input');
-					var label = document.createElement('label');
-					check.id='normal';
+					check.id='todos';
 					check.type='checkbox';
-					check.checked=false;
-					check.setAttribute('onClick','selectAll(this)');
+					check.checked=false;					
 					th.appendChild(check);
 					thead.appendChild(th);
 					th = document.createElement('th');
 					nodoTexto =document.createTextNode('Nombre Completo');
-					label.setAttribute('for','normal');
-					label.setAttribute('style','font-weight:bold');
-					label.appendChild(nodoTexto);
-					th.appendChild(label);
+					th.appendChild(nodoTexto);
 					thead.appendChild(th);
 					tablaResultados.appendChild(thead);
 					tbody.setAttribute("style","width:100%");
@@ -301,10 +324,10 @@ function muestraTabla(respuesta){
 						tr = document.createElement('tr');
 						td = document.createElement('td');
 						check = document.createElement('input');
-						label = document.createElement('label');
-						check.id='check'+i;
 						check.type='checkbox';
 						check.checked=false;
+						check.id='todos';
+						$('#todos').click(seleccionar_todo);
 						td.appendChild(check);
 						tr.appendChild(td);
 						td = document.createElement('td');
@@ -313,9 +336,7 @@ function muestraTabla(respuesta){
 						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
 						tr.setAttribute('rut',arrayRespuesta[i].rut);
 						tr.setAttribute('correo',arrayRespuesta[i].correo);
-						label.setAttribute('for','check'+i);
-						label.appendChild(nodoTexto);
-						td.appendChild(label);
+						td.appendChild(nodoTexto);
 						td.setAttribute("style","width:100%");
 						tr.appendChild(td);
 						tbody.appendChild(tr);
@@ -326,6 +347,7 @@ function muestraTabla(respuesta){
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
 }
+
 function showDestinatarios(value){
 	var destinatario = value;
 		//if (texto.trim() != "") {
@@ -639,6 +661,36 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 		}
 	}
 }
+function pasarContactos(){
+
+ var tbody = document.getElementById('tbody1');
+ var tbody2 = document.getElementById('tbody2');
+ var cont = 0;
+ var total=tbody.getElementsByTagName('tr').length;
+
+	for (var x=0; x < total; x++) {		
+		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(revisarRut(tbody.getElementsByTagName('tr')[x].getAttribute("rut"))){	
+				tbody2.appendChild(tbody.getElementsByTagName('tr')[x]);
+				total--;
+				x--;
+			}
+			else
+				tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked=false;				
+		}
+	}
+}
+
+function revisarRut(rut){
+	var tbody2 = document.getElementById('tbody2');
+	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
+		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
+			return false;	
+		}
+	}
+	return true;	
+}
+
 </script>
 
 
@@ -813,23 +865,25 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 </script>
 		<!-- Este es el botón que está entremedio de los dos listados -->
 		<div class="span2 text-center">
-			<div class="btn" type="button">Agregar</div>
+			<div class="btn" type="button" onclick="pasarContactos()">Agregar</div>
 		</div>
 
 		<!-- Este es el listado de destinatarios seleccionados para el envío -->
 		<div id="listaDestinatarios" class="span5">
-			<table id="tabla" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+			<table id="tabla2" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
 				<thead>
 					<tr>
 						<th>
-							Destinatarios seleccionados
+							<input type="checkbox" id="seleccionarTodosDelFiltro" onClick="seleccionar_segundo_check(this)" checked="true">
+
 						</th>
 						<th >
-							<input type="checkbox" id="seleccionarTodosDelFiltro">
+							Destinatarios seleccionados
+
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="tbody2">
 					
 
 
@@ -841,6 +895,18 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	<!-- Botones atrás y siguiente -->
 	<div class="row-fluid">
 		<ul class="pager pull-right">
+			
+			<li>
+			<?php
+					$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos','style'=>'margin-left:-300px;');
+					echo form_open('Grupo/agregarGrupo',$attributes);
+				?>
+				<input type="text" name="NOMBRE_FILTRO_CONTACTO" placeholder="Nombre Grupo Contactos" style="margin-top:10px;">
+				<input type="hidden" name="RUT_USUARIO" value="<?php $rut_usuario ?>">
+				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
+				<button class ="btn" type="submit" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" >Guardar Grupo</button>
+				<?php echo form_close(""); ?>
+			</li>
 			<li>
 				<div class ="btn" type="button" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</div>
 			</li>
@@ -1047,3 +1113,41 @@ function addTableRolloverEffect(tableId,whichClass,whichClassOnClick)
 	</div>
 	<?php echo form_close(""); ?>
 </fieldset>
+<script type="text/javascript">
+/*
+$('#form_contactos').submit(function() {
+  // Enviamos el formulario usando AJAX
+	$.ajax({
+		type: 'POST',
+		url: $(this).attr('action'),
+		data: $(this).serialize(),
+		// Mostramos un mensaje con la respuesta de PHP
+		success: function(data){
+			alert(data);
+		}
+	})
+	return false;
+});*/
+
+function validar(form){
+	var string = "";
+	var total = t;
+	var total=tbody.getElementsByTagName('tr').length;
+	for (var x=0; x < total; x++) {		
+		if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+		}
+	}
+	if(string = ""){
+	alert('Debe seleccionar un contacto de la tabla Destinatario')
+	}
+	else{
+		if($('input[name=NOMBRE_FILTRO_CONTACTO]')=="")
+			alert("Debe seleccionar un nombre para el grupo de contactos");
+		else
+			$('input[name=QUERY_FILTRO_CONTACTO]').val(string);		
+	}
+	return false;
+}
+
+</script>
