@@ -70,7 +70,7 @@ function ordenarFiltro(){
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(cont);
+		ocultar=document.getElementById("rs_seccionTd_"+cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
