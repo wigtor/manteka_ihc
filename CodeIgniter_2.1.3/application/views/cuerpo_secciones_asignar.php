@@ -4,6 +4,45 @@
 		borrar.action ="<?php echo site_url("Secciones/asignarAsecciones/");?>"
 		borrar.submit()	
 	}
+
+	function profesDelModulo(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var nombre_clickeado = elemTabla;
+		//var rut_clickeado = elemTabla;
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Secciones/postDetalleModulos") ?>", /* Se setea la url del controlador que responderá */
+			data: { nombre_modulo: nombre_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var profes = document.getElementById("profes");
+
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				for (var i = 0; i < datos.length; i++) {
+					var profesores = profesores+"<tr><td>"+datos[i].NOMBRE1_PROFESOR+" "+datos[i].APELLIDO1_PROFESOR+"</td></tr>";
+				};
+				
+				$(profes).html(profesores);
+				
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
 </script>
 
 <div class="row-fluid">
@@ -37,7 +76,7 @@
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td   onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '<td> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -58,15 +97,14 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:7%">
-							<table id="" class="table table-hover">
+							<table id="profesores" class="table table-hover">
 								<thead>
 									<tr>
 										
 									</tr>
 								</thead>
-								<tbody>
-
-
+								<tbody id="profes">
+									
 								</tbody>
 							</table>
 						</div>
@@ -91,9 +129,20 @@
 									</tr>
 								</thead>
 								<tbody>
+									<?php
+										$contador=0;
+										$comilla= "'";
+										
+										while ($contador<count($modulos)){
+											
+											echo '<tr>';
+											echo '<td   onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')"> '.$modulos[$contador]['NOMBRE_MODULO'].' </td>';
+											echo '</tr>';
+																		
+											$contador = $contador + 1;
+										}
 									
-
-
+									?>
 								</tbody>
 							</table>
 						</div>
@@ -124,7 +173,20 @@
 									</tr>
 								</thead>
 								<tbody>
+									<?php
+										$contador=0;
+										$comilla= "'";
 
+										
+										while ($contador<count($salas)){
+											
+											echo '<tr>';
+											echo '<td> '.$salas[$contador]['NUM_SALA'].' </td>';
+											echo '</tr>';
+																		
+											$contador = $contador + 1;
+										}
+									?>
 								</tbody>
 							</table>
 						</div>
