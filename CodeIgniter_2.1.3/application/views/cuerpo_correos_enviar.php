@@ -58,15 +58,19 @@ function timerBorradores(to,rutRecept)
 	var d=new Date();
 	var t=d.toLocaleTimeString();
 
-	editor="sd";
+//
+///////////////////////////////////////////////////////////////////////REVISAR EDITOR
+	editor="";
 	asunto=document.getElementById("asunto").value;
-
-	/*$.ajax({
+	to=document.getElementById("to").value;
+	rutRecept= document.getElementById("rutRecept").value;
+	
+	$.ajax({
 			type: "POST",
-			url: "<?php echo site_url("Correo/postGuardarBorrador") ?>",
+			url: "<?php echo site_url("Correo/postGuardarBorradores") ?>",
 			
 			data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
-			success: function(respuesta){alert(respuesta);
+			success: function(respuesta){
 				codigoBorrador = JSON.parse(respuesta);
 				
 				
@@ -76,8 +80,8 @@ function timerBorradores(to,rutRecept)
 			}
 		});
 		/* Muestro el div que indica que se está cargando... */
-//				var iconoCargado = document.getElementById("icono_cargando");
-//				$(icono_cargando).show();
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).show();
 
 }
 

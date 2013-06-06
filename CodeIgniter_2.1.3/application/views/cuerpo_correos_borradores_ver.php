@@ -65,9 +65,7 @@ function cambiarCorreos(direccion,offset)
 			var nodoTexto;
 			$(tablaResultados).empty();		
 			listaRecibidos = JSON.parse(respuesta);
-				listaRecibidos.shift();
 			
-
 			for (var i = 0; i < listaRecibidos.length; i++) {
 				tr = document.createElement('tr');
 				td = document.createElement('td');
@@ -77,7 +75,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("align","center");				
 				check = document.createElement('input');
 				check.type='checkbox';
-				check.setAttribute("name",listaRecibidos[i][0].cod_correo);
+				check.setAttribute("name",listaRecibidos[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
 				//td.setAttribute(onclick,);
@@ -99,11 +97,11 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
 				bold =document.createElement('b');
-				nodoTexto = document.createTextNode(listaRecibidos[i][0].asunto);
+				nodoTexto = document.createTextNode(listaRecibidos[i].asunto);
 				bold.appendChild(nodoTexto);
 				td.appendChild(bold);
 
-				nodoTexto = document.createTextNode(" "+listaRecibidos[i][0].cuerpo_email);
+				nodoTexto = document.createTextNode(" "+listaRecibidos[i].cuerpo_email);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -111,7 +109,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
-				nodoTexto=document.createTextNode(listaRecibidos[i][0].fecha);
+				nodoTexto=document.createTextNode(listaRecibidos[i].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -120,7 +118,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
 				
-				nodoTexto=document.createTextNode(listaRecibidos[i][0].hora);
+				nodoTexto=document.createTextNode(listaRecibidos[i].hora);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				tablaResultados.appendChild(tr);
@@ -128,8 +126,8 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("id","c"+i);
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
-				var cuerpo=listaRecibidos[i][0].cuerpo_email;
-				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
+				var cuerpo=listaRecibidos[i].cuerpo_email;
+				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				
@@ -263,19 +261,15 @@ if(isset($msj))
 	array_shift($listaRecibidos);
 	if($estado==1)
 	{
-		$correos=array();
-		/*foreach($listaRecibidos as $lista)
-		{
-			array_push($correos, $lista[0]);
-		}*/
-		if(count($correos)!==0)
+
+		if($cantidadBorradores!=0)
 		{
 			?>
 			<button  class ="btn"  onclick="eliminarBorrador() " style=" margin-right:4px; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
 			<?php
 		}
 
-		if(count($correos)===0)
+		if($cantidadBorradores==0)
 		{
 			?>
 			<div id="sinCorreos">

@@ -178,7 +178,7 @@ class Correo extends MasterManteka {
 	* @author: Byron Lanas (BL)
 	*
 	*/
-	public function eliminarBorrador()
+	public function eliminarBorradores()
 	{
 		$rut = $this->session->userdata('rut');
 
@@ -188,7 +188,7 @@ class Correo extends MasterManteka {
 			$temp=$_POST['seleccion'];
 			$correos = explode(";",$temp);
 			$this->load->model('model_correo');
-			$this->model_correo->EliminarBorradores($correos);
+			echo $this->model_correo->EliminarBorradores($correos);
 			if(isset($estado))
 				unset($estado);
 			$estado="1";
@@ -316,6 +316,7 @@ class Correo extends MasterManteka {
 		$mensaje =$this->input->post('editor');
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("YmdHis");
+		$codigoBorrador = $this->input->post('codigoBorrador');
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
@@ -338,7 +339,7 @@ class Correo extends MasterManteka {
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
 
-			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept);
+			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
 			$cod=$this->model_correo->getCodigo($date);
 
 			$receptores = explode(",",$rutRecept);
@@ -403,7 +404,7 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		$this->load->model('model_correo');
 
-		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
+		$resultado =$this->model_correo->VerBorradores($rut,$offset);
 		echo json_encode($resultado);
 	}
 /**

@@ -339,24 +339,12 @@ if(isset($msj))
 		$limite=$offset+5;
 
 	$comilla= "'";
-	$estado=$listaEnviados[0];
-	array_shift($listaEnviados);
+	$estado=1;
+	
 	if($estado==1)
 	{
-		$correos=array();
-		$estudiantesEnviados=array();
-		$ayudantesEnviados=array();
-		$profesoresEnviados=array();
-		$coordinadoresEnviados=array();
-		foreach($listaEnviados as $lista)
-		{
-			array_push($correos, $lista[0]);
-			array_push($estudiantesEnviados, $lista[1]);
-			array_push($ayudantesEnviados, $lista[2]);
-			array_push($profesoresEnviados, $lista[3]);
-			array_push($coordinadoresEnviados, $lista[4]);
-		}
-		if(count($correos)!==0)
+
+		if($cantidadCorreos!==0)
 		{
 	
 	
@@ -365,7 +353,7 @@ if(isset($msj))
 			<?php
 		}
 
-		if(count($correos)===0)
+		if($cantidadCorreos==0)
 		{
 			?>
 			<div id="sinCorreos">

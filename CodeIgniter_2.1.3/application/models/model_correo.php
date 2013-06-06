@@ -234,24 +234,30 @@ class model_correo extends CI_Model
 	*/
 	public function EliminarBorradores($correos)
 	{
-		$resultados1=array();
-		$resultados4=array();
-		$resultadosFinales=array();
+
 		foreach($correos as $correo)
 		{	
+
 			$this->db->select('COD_CORREO');
 			$this->db->where('COD_BORRADOR', $correo); 
-			$query = $this->db->get('borrador');
-			$row = $query->result();
-			$cod_correo=$row->COD_CORREO;
-			$sqlEliminarCorreoEstudiante="DELETE FROM borrador WHERE COD_BORRADOR='$correo'";
-			$resultados1[$correo][$resultado]=mysql_query($sqlEliminarCorreoEstudiante);
-			$sqlEliminarCorreo="DELETE FROM carta WHERE COD_CORREO='$cod_correo'";
-			$resultados4[$correo][$resultado]=mysql_query($sqlEliminarCorreo);
+			//$this->db->order_by("COD2_CORREO", "desc"); 
+			$this->db->limit(1);
+			$query = $this->db->get('carta');
+			
+			
+			foreach ($query->result() as $row)
+			{
+			   $cod= $row->COD_CORREO;
+			}
+			$this->db->where('COD_BORRADOR',$correo);
+			$this->db->update('carta',array('COD_BORRADOR' => NULL));
+			$this->db->delete('borrador', array('COD_BORRADOR' => $correo));
+
+
+			$this->db->delete('carta', array('COD_CORREO' => $cod)); 
 		}
-		array_push($resultadosFinales,$resultados1);
-		array_push($resultadosFinales,$resultados4);
-		return $resultadosFinales;
+
+		return 1;
 	}
 
 
@@ -272,24 +278,33 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-	public function InsertarCorreo($asunto,$mensaje,$rut,$codCorreo,$rutRecept)
+	public function InsertarCorreo($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador)
 	{
 		try
-		{
-			$this->COD2_CORREO=$codCorreo;
-			$this->COD_BORRADOR=null;
-			$this->ID_PLANTILLA=null;
-			
-			$this->RUT_USUARIO=$rut;
-			
+		{  
 			date_default_timezone_set("Chile/Continental");
-			$this->HORA = date("H:i:s");
-			$this->FECHA = date("Y-m-d");
-			$this->CUERPO_EMAIL = $mensaje;
-			$this->ASUNTO=$asunto;
-			$this->db->insert('carta', $this);
-			$this->db->_error_message();  
-			return 1;
+			if($codigoBorrador==-1){
+				$this->COD2_CORREO=$codCorreo;
+				$this->COD_BORRADOR=null;
+				$this->ID_PLANTILLA=null;
+				
+				$this->RUT_USUARIO=$rut;
+				
+				
+				$this->HORA = date("H:i:s");
+				$this->FECHA = date("Y-m-d");
+				$this->CUERPO_EMAIL = $mensaje;
+				$this->ASUNTO=$asunto;
+				$this->db->insert('carta', $this);
+				$this->db->_error_message();  
+				return 1;
+			}else
+			{
+				$this->db->where('COD_BORRADOR',$codigoBorrador);
+				$this->db->update('carta',array('COD_BORRADOR' => NULL,'FECHA'=> date("Y-m-d"),'HORA'=>date("H:i:s")));
+				$this->db->delete('borrador', array('COD_BORRADOR' => $codigoBorrador)); 
+			}
+			
 		}
 		catch(Exception $e)
 		{
@@ -311,6 +326,7 @@ class model_correo extends CI_Model
 
 		try
 		{
+			date_default_timezone_set("Chile/Continental");
 			if ($codigoBorrador==-1) {
 
 			$this->COD2_CORREO=$codCorreo;
@@ -319,43 +335,67 @@ class model_correo extends CI_Model
 			
 			$this->RUT_USUARIO=$rut;
 			
-			date_default_timezone_set("Chile/Continental");
+			
 			$this->HORA = date("H:i:s");
 			$this->FECHA = date("Y-m-d");
 			$this->CUERPO_EMAIL = $mensaje;
 			$this->ASUNTO=$asunto;
 			$this->db->insert('carta', $this);
-			$cod=getCodigo($codCorreo);
+			$this->db->select('COD_CORREO');
+			$this->db->where('COD2_CORREO', $codCorreo); 
+			//$this->db->order_by("COD2_CORREO", "desc"); 
+			$this->db->limit(1);
+			$query = $this->db->get('carta');
+			
+			
+			foreach ($query->result() as $row)
+			{
+			   $cod= $row->COD_CORREO;
+			}
 			$data = array(
 				   
 				   'COD_CORREO' => $cod ,
-				   'FECHA' => date("Y-m-d") ,
-				   'HORA' => date("H:i:s"),
+				   'FECHA_BORRADOR' => date("Y-m-d") ,
+				   'HORA_BORRADOR' => date("H:i:s"),
 				);
 
 			$this->db->insert('borrador', $data);
+
+			$this->db->select('COD_BORRADOR');
+			$this->db->where('COD_CORREO', $cod);
+			$query2 = $this->db->get('borrador'); 
+			foreach ($query2->result() as $row)
+			{
+				
+				$this->db->set('COD_BORRADOR',$row->COD_BORRADOR);
+				$this->db->where('COD_CORREO', $cod);
+				$this->db->update('carta');
+				return $row->COD_BORRADOR;
+			    
+			}
+			
 			}else
 			{
 				 $data2 = array(
 				   
 				   
-				   'FECHA' => date("Y-m-d") ,
-				   'HORA' => date("H:i:s"),
+				   'FECHA_BORRADOR' => date("Y-m-d") ,
+				   'HORA_BORRADOR' => date("H:i:s"),
 				);
 				$this->db->where('COD_BORRADOR',$codigoBorrador);
 				$this->db->update('borrador', $data2);
 
-			}
-			$this->db->select('COD_BORRADOR');
-			$this->db->where('COD2_CORREO', $codCorreo); 
-			
-			$this->db->limit(1);
-			$query = $this->db->get('carta');
+				$this->db->set('CUERPO_EMAIL', $mensaje);
+				$this->db->set('ASUNTO', $asunto);
+				$this->db->where('COD_BORRADOR',$codigoBorrador);
+				$this->db->update('carta');
 
-			foreach ($query->result() as $row)
-			{
-			    return $row->COD_BORRADOR;
+
 			}
+
+			
+		    return $codigoBorrador;
+			
 			
 			
 		}
@@ -511,6 +551,46 @@ class model_correo extends CI_Model
 
 			$this->db->from('carta');
 			return $this->db->count_all_results();
+			
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
+
+        /**
+	* Muestra los borradores
+	*
+	* @param int $rut
+	* @param int $offset
+	* @return array
+	* @author Byron Lanas (BL)
+	*
+	*/
+    public function verBorradores($rut,$offset)
+	{
+		try
+		{
+			$this->db->select('borrador.COD_BORRADOR AS codigo');
+			$this->db->select('ASUNTO AS asunto');
+			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
+			$this->db->select('FECHA_BORRADOR AS fecha');
+			$this->db->select('HORA_BORRADOR AS hora');
+			
+			$this->db->from('carta');
+			$this->db->join('borrador','carta.COD_BORRADOR = borrador.COD_BORRADOR');
+			$this->db->where('RUT_USUARIO',$rut);
+			$this->db->order_by("borrador.COD_BORRADOR", "desc"); 
+			$this->db->limit( 5,$offset);
+			$query = $this->db->get();
+			
+			if ($query == FALSE) {
+				return array();
+			}
+			return $query->result();
 			
 
 
