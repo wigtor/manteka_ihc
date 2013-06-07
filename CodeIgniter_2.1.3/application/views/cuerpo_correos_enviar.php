@@ -430,6 +430,15 @@ function showDestinatarios(value){
 						document.getElementById('filtroPorCarrera').selectedIndex=0;
 						document.getElementById('filtroPorCarrera').disabled=true;
 						document.getElementById('filtroPorSeccion').disabled=false;
+					}else if(destinatario==3){
+						showProfesores();
+						showSecciones();
+						showHorarios();
+						showModulosTematicos();
+						document.getElementById('filtroPorBloqueHorario').disabled=false;
+						document.getElementById('filtroPorModuloTematico').disabled=false;
+						document.getElementById('filtroPorProfesorEncargado').disabled=false;
+						document.getElementById('filtroPorSeccion').disabled=false;
 					}
 					else{
 						document.getElementById('filtroPorModuloTematico').selectedIndex=0;
@@ -592,26 +601,39 @@ function showAlumnosByFiltro(){
 	var modulo_tematico = document.getElementById('filtroPorModuloTematico').value;
 	var bloque = document.getElementById('filtroPorBloqueHorario').value;
 	if(destinatario==1){
-	if(codigo=="" && profesor=="" && seccion=="" && modulo_tematico=="" && bloque==""){
-		showDestinatarios(1);
-	}else{
-		$.ajax({
-			type: "POST",
-			url: "<?php echo site_url("Correo/postAlumnosByFiltro") ?>",
-			data:{ codigo: codigo, profesor: profesor, seccion: seccion, modulo_tematico: modulo_tematico, bloque: bloque},
-			success: function(respuesta){
-				muestraTabla(respuesta);
+		if(codigo=="" && profesor=="" && seccion=="" && modulo_tematico=="" && bloque==""){
+			showDestinatarios(1);
+		}else{
+			$.ajax({
+				type: "POST",
+				url: "<?php echo site_url("Correo/postAlumnosByFiltro") ?>",
+				data:{ codigo: codigo, profesor: profesor, seccion: seccion, modulo_tematico: modulo_tematico, bloque: bloque},
+				success: function(respuesta){
+					muestraTabla(respuesta);
+				}
+				});
 			}
-		});
-	}
-	}else{
+	}else if(destinatario==2){
 		if(seccion=="" && modulo_tematico=="" && bloque == ""){
 			showDestinatarios(2);
 		}else{
 			$.ajax({
+	 			type: "POST",
+				url: "<?php echo site_url("Correo/postProfesoresByFiltro") ?>",
+				data:{ seccion: seccion, modulo_tematico:modulo_tematico, bloque: bloque},
+				success: function(respuesta){
+					muestraTabla(respuesta);
+				}
+			});
+		}
+	}else{
+		if(seccion=="" && modulo_tematico=="" && bloque == "" && profesor == ""){
+			showDestinatarios(3);
+		}else{
+			$.ajax({
 			type: "POST",
-			url: "<?php echo site_url("Correo/postProfesoresByFiltro") ?>",
-			data:{ seccion: seccion, modulo_tematico:modulo_tematico, bloque: bloque},
+			url: "<?php echo site_url("Correo/postAyudantesByFiltro") ?>",
+			data:{ profesor: profesor, seccion: seccion, modulo_tematico: modulo_tematico, bloque: bloque},
 			success: function(respuesta){
 				muestraTabla(respuesta);
 			}
@@ -620,21 +642,6 @@ function showAlumnosByFiltro(){
 	}
 }
 
-function showAlumnosByProfesor(value){
-	var profesor = value;
-	if(profesor==""){
-		showDestinatarios(1);
-	}else{
-	$.ajax({
-		type: "POST",
-		url: "<?php echo site_url("Correo/postAlumnosByProfesor") ?>",
-		data:{ profesor: profesor},
-		success: function(respuesta){
-					
-		}
-	});
-}
-}
 
 $(document).ready(showDestinatarios(0));
 
