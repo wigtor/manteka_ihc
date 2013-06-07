@@ -480,7 +480,7 @@ class Correo extends MasterManteka {
 		$this->correosRecibidos();
 	}
 
-	public function postBusquedaAlumnosTipo() {
+	public function postBusquedaTipoDestinatario() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -532,25 +532,22 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-	public function postAlumnosByCarrera(){
+	public function postHorarios(){
 		if(!$this->isLogged()){
 			return;
 		}
-		$codigo = $this->input->post('codigo');
 		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAlumnosByCarrera($codigo);
+		$resultado = $this->Model_filtro->getAllHorarios();
 		echo json_encode($resultado);
 	}
 
-	public function postAlumnosByProfesor(){
+	public function postModulosTematicos(){
 		if(!$this->isLogged()){
 			return;
 		}
-		$profesor = $this->input->post('profesor');
 		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAlumnosByProfesor($profesor);
+		$resultado = $this->Model_filtro->getAllModulosTematicos();
 		echo json_encode($resultado);
-
 	}
 
 	public function postAlumnosByFiltro(){
@@ -592,21 +589,5 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-	public function postHorarios(){
-		if(!$this->isLogged()){
-			return;
-		}
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAllHorarios();
-		echo json_encode($resultado);
-	}
-
-	public function postModulosTematicos(){
-		if(!$this->isLogged()){
-			return;
-		}
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAllModulosTematicos();
-		echo json_encode($resultado);
-	}
+	
 }

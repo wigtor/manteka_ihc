@@ -228,75 +228,6 @@ function ordenarFiltro(filtroLista){
 }
 </script>
 
-<script type='text/javascript'>
-
-
-/**
-* Esta función se llama al hacer click en el botón enviar, 
-* Esta función muestra los detalles de la persona seleccinada y guarda su rut y correo para el envio
-*/ 
-//,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera
-function detalleAlumno(elemtable)
-{	
-	//document.getElementById("rutDetalleEstudiante").innerHTML = rut;
-	var idElem = elemtable.id;
-	rut = document.getElementById(idElem).getAttribute("rut");
-	correo = document.getElementById(idElem).getAttribute("correo");
-	document.getElementById("to").value=correo;
-	document.getElementById("rutRecept").value=rut;
-	/*document.getElementById("nombreunoDetalleEstudiante").innerHTML = nombre1;
-	document.getElementById("nombredosDetalleEstudiante").innerHTML = nombre2;
-	document.getElementById("apellidopaternoDetalleEstudiante").innerHTML = apePaterno;
-	document.getElementById("apellidomaternoDetalleEstudiante").innerHTML = apeMaterno;
-	document.getElementById("carreraDetalleEstudiante").innerHTML = carrera;
-	document.getElementById("seccionDetalleEstudiante").innerHTML = seccion;
-	document.getElementById("correoDetalleEstudiante").innerHTML = correo;*/
-	  
-}
-</script>
-<script type='text/javascript'>
-
-
-/**
-* Esta función se llama al hacer click en el botón enviar, 
-* Esta función muestra los detalles de la persona seleccinada y guarda su rut y correo para el envio
-*/ 
-
-function DetalleProfesor(rut,nombre1,nombre2,apePaterno,apeMaterno,correo,seccion,carrera)
-{
-	document.getElementById("rutDetalleProfesor").innerHTML = rut;
-	document.getElementById("to").value=correo;
-	document.getElementById("rutRecept").value=rut;
-	document.getElementById("nombreunoDetalleProfesor").innerHTML = nombre1;
-	document.getElementById("nombredosDetalleProfesor").innerHTML = nombre2;
-	document.getElementById("apellidopaternoDetalleProfesor").innerHTML = apePaterno;
-	document.getElementById("apellidomaternoDetalleProfesor").innerHTML = apeMaterno;
-	document.getElementById("correoDetalleProfesor").innerHTML = correo;
-	  
-}
-</script>
-<script type='text/javascript'>
-
-
-/**
-* Esta función se llama al hacer click en el botón enviar, 
-* Esta función muestra los detalles de la persona seleccinada y guarda su rut y correo para el envio
-*/ 
-
-function DetalleAyudante(rut,nombre1,nombre2,apePaterno,apeMaterno,correo)
-{
-	document.getElementById("rutDetalleAyudante").innerHTML = rut;
-	document.getElementById("to").value=correo;
-	document.getElementById("rutRecept").value=rut;
-	document.getElementById("nombreunoDetalleAyudante").innerHTML = nombre1;
-	document.getElementById("nombredosDetalleAyudante").innerHTML = nombre2;
-	document.getElementById("apellidopaternoDetalleAyudante").innerHTML = apePaterno;
-	document.getElementById("apellidomaternoDetalleAyudante").innerHTML = apeMaterno;
-	document.getElementById("correoDetalleAyudante").innerHTML = correo;
-	  
-}
-</script>
-
 <script type="text/javascript">
 /************************************************************************************************************
 
@@ -402,7 +333,7 @@ function showDestinatarios(value){
 		//if (texto.trim() != "") {
 			$.ajax({
 				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>", /* Se setea la url del controlador que responderá */
+				url: "<?php echo site_url("Correo/postBusquedaTipoDestinatario") ?>", /* Se setea la url del controlador que responderá */
 				data: { destinatario: destinatario}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 					muestraTabla(respuesta);
@@ -488,7 +419,7 @@ function showProfesores(){
 	var destinatario = 2;
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>",
+		url: "<?php echo site_url("Correo/postBusquedaTipoDestinatario") ?>",
 		data:{destinatario: destinatario},
 		success: function(respuesta){
 			var filtroProfesor = document.getElementById("filtroPorProfesorEncargado");
@@ -520,7 +451,7 @@ function showSecciones(){
 			$('#filtroPorSeccion').empty();
 			filtroSeccion.add(new Option("Todos",""));
 			for (var i = 0; i < arraySecciones.length; i++) {
-				filtroSeccion.add(new Option(arraySecciones[i].codigo,arraySecciones[i].codigo));
+				filtroSeccion.add(new Option(arraySecciones[i].nombre,arraySecciones[i].codigo));
 			}
 			var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
@@ -577,23 +508,8 @@ function showModulosTematicos(){
 			$(icono_cargando).show();
 }
 
-function showAlumnosByCarrera(value){
-	var codigo = value;
-	if(codigo==""){
-		showDestinatarios(1);
-	}else{
-	$.ajax({
-		type: "POST",
-		url: "<?php echo site_url("Correo/postAlumnosByCarrera") ?>",
-		data:{ codigo: codigo},
-		success: function(respuesta){
-			muestraTabla(respuesta);
-		}
-	});
-}
-}
 
-function showAlumnosByFiltro(){
+function showDestinatarioByFiltro(){
 	var destinatario = document.getElementById('filtroPorTipoDeDestinatario').value;
 	var codigo = document.getElementById('filtroPorCarrera').value;
 	var profesor = document.getElementById('filtroPorProfesorEncargado').value;
@@ -812,7 +728,7 @@ function revisarRut(rut){
 				<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="filtro-primario" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="filtro-primario" onChange="showDestinatarioByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">profe1</option>
 						<option  value="2">profe2</option>
@@ -826,7 +742,7 @@ function revisarRut(rut){
 				<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorCarrera" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorCarrera" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 						<option  value="">Todos</option>
 						<!--<option  value="1">Ing civil informática</option>
 						<option  value="2">Ing civil en minas</option>
@@ -842,7 +758,7 @@ function revisarRut(rut){
 				<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>
@@ -857,7 +773,7 @@ function revisarRut(rut){
 				<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorSeccion" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorSeccion" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 						<option  value="0">Todas</option>
 						<option  value="a1">A-01</option>
 						<option  value="b2">B-02</option>
@@ -872,7 +788,7 @@ function revisarRut(rut){
 				<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque horario</label>
 				<div class="controls">
 					<!-- Este debe ser cargado dinámicamente por php -->
-					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 						<option  value="0">Todos</option>
 						<option  value="1">Unidad 1</option>
 						<option  value="2">Unidad 2</option>
