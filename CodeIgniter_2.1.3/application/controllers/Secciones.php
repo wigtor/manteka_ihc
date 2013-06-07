@@ -294,6 +294,8 @@ class Secciones extends MasterManteka {
 		$resultado = $this->Model_secciones->verProfeSegunModulo($nombre_modulo);
 		echo json_encode($resultado);
 	}
+
+	
 	
 	
 }

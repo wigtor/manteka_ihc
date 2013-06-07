@@ -26,7 +26,7 @@
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				for (var i = 0; i < datos.length; i++) {
-					var profesores = profesores+"<tr><td>"+datos[i].NOMBRE1_PROFESOR+" "+datos[i].APELLIDO1_PROFESOR+"</td></tr>";
+					var profesores = profesores+'<tr><td style="width:26px;"><input type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+i+'"></td><td>'+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
 				};
 				
 				$(profes).html(profesores);
@@ -43,6 +43,7 @@
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 	}
+
 </script>
 
 <div class="row-fluid">
@@ -61,7 +62,7 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table id="" class="table table-hover">
+							<table id="listadoSecciones" class="table table-hover">
 								<thead>
 									<tr>
 										
@@ -70,18 +71,17 @@
 								<tbody>
 
 								<?php
-								$contador=0;
-								$comilla= "'";
-								
-								while ($contador<count($seccion)){
-									
-									echo '<tr>';
-									echo '<td> '.$seccion[$contador][1].' </td>';
-									echo '</tr>';
-																
-									$contador = $contador + 1;
-								}
-								
+									$contador=0;
+										$comilla= "'";
+										
+										while ($contador<count($seccion)){
+											
+											echo '<tr>';
+											echo '<td style="width:26px;"><input type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$contador.'"></td><td> '.$seccion[$contador][1].' </td>';
+											echo '</tr>';
+																		
+											$contador = $contador + 1;
+										}
 								?>
 
 								</tbody>
@@ -136,7 +136,7 @@
 										while ($contador<count($modulos)){
 											
 											echo '<tr>';
-											echo '<td   onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')"> '.$modulos[$contador]['NOMBRE_MODULO'].' </td>';
+											echo '<td><input onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$contador.'"></td><td> '.$modulos[$contador]['NOMBRE_MODULO'].' </td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
