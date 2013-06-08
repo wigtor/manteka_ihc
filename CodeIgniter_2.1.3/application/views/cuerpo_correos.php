@@ -141,7 +141,7 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("id","c"+i);
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
-				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
+				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				

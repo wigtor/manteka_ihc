@@ -24,7 +24,7 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 	this.id=id;
 
 		destinoaux=destino;
-		document.getElementById("destinos").innerHTML=destino.substring(0,10 );
+		document.getElementById("destinos").innerHTML=destino.split(",",1 );
 
 	
 
@@ -113,7 +113,7 @@ function cambiarCorreos(direccion,offset)
 							destino=listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';					
 							para=listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno;
 						}else{
-							destino=destino+', '+listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';
+							destino=destino+',<br>'+listaEnviados[i][1][j].nombre1_estudiante+' '+listaEnviados[i][1][j].apellido_paterno+' '+listaEnviados[i][1][j].apellido_materno+' &#60'+listaEnviados[i][1][j].correo_estudiante+'&#62';
 							para=para+".....";
 						}
 						j++;	
@@ -128,7 +128,7 @@ function cambiarCorreos(direccion,offset)
 							destino=listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
 							para=listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno;
 						}else{
-							destino=destino+', '+listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
+							destino=destino+',<br>'+listaEnviados[i][2][j].nombre1_ayudante+' '+listaEnviados[i][2][j].apellido_paterno+' '+listaEnviados[i][2][j].apellido_materno+' &#60'+listaEnviados[i][2][j].correo_ayudante+'&#62';					
 							para=para+".....";
 						}
 						j++;	
@@ -142,21 +142,21 @@ function cambiarCorreos(direccion,offset)
 							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
 							para=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;
 						}else{
-							destino=destino+', '+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							destino=destino+',<br>'+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
 							para=para+".....";
 						}
 						j++;	
 					}
 					
 				}
-				if(typeof listaEnviados[i][4][j] != 'undefined')
+				if(typeof listaEnviados[i][4][0] != 'undefined')
 				{j=0;
 					while(typeof listaEnviados[i][4][j] != 'undefined'){
 						if(destino==""){
 							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
 							para=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;
 						}else{
-							destino=destino+', '+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							destino=destino+',<br>'+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
 							para=para+".....";
 						}
 						j++;	
@@ -220,7 +220,7 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
 				var cuerpo=listaEnviados[i][0].cuerpo_email;
-				document.getElementById("m"+i).innerHTML="<b>"+listaEnviados[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaEnviados[i][0].asunto.length)+"......";
+				document.getElementById("m"+i).innerHTML="<b>"+listaEnviados[i][0].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaEnviados[i][0].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				

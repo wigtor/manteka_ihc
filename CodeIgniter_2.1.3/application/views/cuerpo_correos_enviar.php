@@ -49,18 +49,66 @@ function validacionSeleccion()
 
 <script type='text/javascript'>
 
-/** 
-* Esta función guarda un borrador cada 10 seg.
+
+/**
+*Esta función carga la informacion del borrador seleccionado para ser enviado
 */
 
-function timerBorradores(to,rutRecept)
+function cargarBorrador(codigo){
+
+	codigoBorrador=codigo;
+		
+		$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Correo/postCargarBorrador") ?>",
+			
+			data: {codigo:codigo},
+			success: function(respuesta){
+				borrador = JSON.parse(respuesta);
+				$('#cuadroDestinatario').css({display:'none'});
+				$('#cuadroEnviar').css({display:'none'});
+				$('#cuadroEnvio').css({display:'block'}); 
+				document.getElementById("asunto").value=borrador[0][0].asunto;
+				CKEDITOR.instances.editor.setData(""+borrador[0][0].cuerpo_email);
+				var rutRecept=[];
+
+				for(var i=0;i<borrador[1].length;i++){
+					rutRecept.push(borrador[1][i].rutRecept);
+				}
+				
+				document.getElementById("rutRecept").value=rutRecept;
+
+				var correoRecept=[];
+
+				for(var i=0;i<borrador[2].length;i++){
+					correoRecept.push(borrador[2][i].correo);
+				}
+				var to="";
+				to=correoRecept.join(", ");
+				document.getElementById("to").value=to;
+
+				myVar=setInterval(function(){timerBorradores()},20*1000);
+				timerBorradores();
+				var iconoCargado = document.getElementById("icono_cargando");
+						$(icono_cargando).hide();
+			}
+		});
+		/* Muestro el div que indica que se está cargando... */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).show();
+}
+
+/** 
+* Esta función guarda un borrador cada 20 seg.
+*/
+
+function timerBorradores()
 {
 	var d=new Date();
 	var t=d.toLocaleTimeString();
 
-//
-///////////////////////////////////////////////////////////////////////REVISAR EDITOR
-	editor="";
+	
+	editor=CKEDITOR.instances.editor.getData();
 	asunto=document.getElementById("asunto").value;
 	to=document.getElementById("to").value;
 	rutRecept= document.getElementById("rutRecept").value;
@@ -72,8 +120,7 @@ function timerBorradores(to,rutRecept)
 			data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
 			success: function(respuesta){
 				codigoBorrador = JSON.parse(respuesta);
-				
-				
+								
 				document.getElementById("guardado").innerHTML="se ha guardado un borrador a las: "+t;
 				var iconoCargado = document.getElementById("icono_cargando");
 						$(icono_cargando).hide();
@@ -84,7 +131,6 @@ function timerBorradores(to,rutRecept)
 				$(icono_cargando).show();
 
 }
-
 
 /** 
 * Esta función muestra el segundo paso para mandar un correo
@@ -148,7 +194,8 @@ function pasoDosTres()
 		$('#cuadroDestinatario').css({display:'none'});
 		$('#cuadroEnviar').css({display:'none'});
 		$('#cuadroEnvio').css({display:'block'});
-		myVar=setInterval(function(){timerBorradores(to,rutRecept)},10*1000);
+		myVar=setInterval(function(){timerBorradores()},20*1000);
+		timerBorradores();
 	}
 
 					
@@ -665,7 +712,16 @@ function revisarRut(rut){
 
 </script>
 
+<?php
+if(isset($codigo))
+{
+	?>
+	<script type="text/javascript">cargarBorrador(<?php echo $codigo; ?>)</script>
+	<?php
+	unset($codigo);
+}
 
+?>
 <fieldset id="cuadroEnviar">
     <legend>&nbsp;Enviar correo&nbsp;</legend>
 	<div class="inicio" title="Paso 1: Selección de plantilla">
@@ -686,7 +742,7 @@ function revisarRut(rut){
 	</pre>
 	<div class="row-fluid">
 		<ul class="page pull-right">
-		<button class ="btn" type="button"  title="Avanzar a paso 2" onclick="pasoUnoDos()" >Siguiente</button>
+		<button class ="btn" type="button"  title="Avanzar a paso 2" onclick="pasoUnoDos()" >Siguiente <div class="btn_with_icon_solo">=</div></button>
 	</ul>
 	</div>
 	</div>
@@ -880,10 +936,10 @@ function revisarRut(rut){
 				<?php echo form_close(""); ?>
 			</li>
 			<li>
-				<div class ="btn" type="button" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</div>
+				<div class ="btn" type="button" title="Volver a paso 1" onclick="pasoDosUno()" ><div class="btn_with_icon_solo"><</div> Anterior</div>
 			</li>
 			<li>
-				<div class ="btn" type="button" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</div>
+				<div class ="btn" type="button" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente <div class="btn_with_icon_solo">=</div></div>
 			</li>
 		</ul>
 	</div>
@@ -892,154 +948,7 @@ function revisarRut(rut){
 
 
 
-<!-- PARTE ANTIGUA DE LA PARTE DE LA SELECCIÓN DE DESTINATARIOS -->
-<fieldset id="cuadroDestinatario_old" style="display:none;">
-	<legend>&nbsp;Enviar correo&nbsp;</legend>
-	<div class="bloque" title="Paso 2: Seleccionar destinatario(s)">
-		<div class="texto2">
-			Paso 2: Seleccione destinatario.
-		</div>
-	
-		<div id="contenedorFilter">
-			<div id="contenedorFiltro1">
-				<div id="pcs" class="seleccion">
-					<input id="filtroLista" name="filtroLista" style="font-size:9pt;font-weight:bold;" onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Filtro búsqueda">
-					<select id="tipoDeDestinatario" title="Tipo de destinatario" >
-						<option  value="1">Estudiantes</option>
-						<option  value="2">Profesores</option>
-						<option value="3">Ayudantes</option>
-					</select>
-				</div>
-			</div>
-			
 
-			<div id="contenedorFiltro2">
-				<fieldset id="lista">
-				<table id="tabla" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
-				<thead>
-				<tr>
-				<th style="text-align:left;width:600px;">Nombre Completo</th>
-				</tr>
-				</thead>
-				<tbody id="test">
-			                                
-				<?php
-				//TD DEL ESTUDIANTE
-				$rs_receptor=$rs_estudiantes;
-				$contador=0;
-				$comilla= "'";
-				echo '<form id="formDetalleEstudiante" type="post">';    
-				while ($contador<count($rs_receptor))
-				{
-					echo '<tr>';
-					echo '<td id="'.$contador.'" class="td_estudiante" onclick="DetalleAlumno('.$comilla.$rs_receptor[$contador][0].
-					$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
-					','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
-					$rs_receptor[$contador][3].$comilla.','.$comilla. 
-					$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
-					','. $comilla.$rs_receptor[$contador][6].$comilla.','.$comilla. $rs_receptor[$contador][7].$comilla.
-					')"style="text-align:left;">'. $rs_receptor[$contador][3].
-					' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
-					'</td>';
-					echo '</tr>';
-					$contador = $contador + 1;
-				}
-				
-				echo '</form>';
-				//TD DEL PROFESOR                                
-				$rs_receptor=$rs_profesores;
-				$contador=0;
-				$comilla= "'";
-				echo '<form id="formDetalleProfesor" type="post">';
-			                                    
-				while ($contador<count($rs_receptor))
-				{
-					echo '<tr>';
-					echo '<td id="'.$contador.'" class="td_profesor" style="display:none" onclick="DetalleProfesor('.$comilla.$rs_receptor[$contador][0].
-					$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
-					','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
-					$rs_receptor[$contador][3].$comilla.','.$comilla. 
-					$rs_receptor[$contador][4].$comilla.')"style="text-align:left;">'. $rs_receptor[$contador][3].
-					' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
-					'</td>';
-					echo '</tr>';
-					$contador = $contador + 1;
-				}
-				
-				echo '</form>';
-
-				//TD DEL AYUDANTE
-
-				$rs_receptor=$rs_ayudantes;
-				$contador=0;
-				$comilla= "'";
-				echo '<form id="formDetalleAyudante" type="post">';
-			                                    
-				while ($contador<count($rs_receptor))
-				{
-					echo '<tr>';
-					echo '<td id="'.$contador.'" class="td_ayudante" style="display:none" onclick="DetalleAyudante('.$comilla.$rs_receptor[$contador][0].
-					$comilla.','.$comilla. $rs_receptor[$contador][1].$comilla.
-					','.$comilla. $rs_receptor[$contador][2].$comilla.','.$comilla. 
-					$rs_receptor[$contador][3].$comilla.','.$comilla. 
-					$rs_receptor[$contador][4].$comilla.','.$comilla. $rs_receptor[$contador][5].$comilla.
-					')"style="text-align:left;">'. $rs_receptor[$contador][3].
-					' '.$rs_receptor[$contador][4].' ' . $rs_receptor[$contador][1].' '.$rs_receptor[$contador][2].
-					'</td>';
-					echo '</tr>';
-					$contador = $contador + 1;
-				}
-				
-				echo '</form>';
-				?>
-				</tbody>
-				</table>
-				<script type="text/javascript">
-						//addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
-				</script>
-
-
-
-		</div>
-	</div>
-	
-	<div class="span5" style="margin-left: 2%; padding: 0%;">
-	<div class="texto22">
-	Destinatario:
-	</div>
-	</br>
-	<pre id="preest" style="margin-top:2%; padding-top:10%;padding-bottom:6%; display:block">
-	Rut: <b id="rutDetalleEstudiante" class="detalle"></b>
-	Primer nombre: <b id="nombreunoDetalleEstudiante" class="detalle"></b>
-	Segundo nombre: <b id="nombredosDetalleEstudiante" class="detalle"></b>
-	Apellido paterno: <b id="apellidopaternoDetalleEstudiante" class="detalle"></b>
-	Apellido materno: <b id="apellidomaternoDetalleEstudiante" class="detalle"></b>
-	Carrera: <b id="carreraDetalleEstudiante" class="detalle"></b>
-	Sección: <b id="seccionDetalleEstudiante" class="detalle"></b>
-	Correo: <b id="correoDetalleEstudiante" class="detalle"></b>
-	</pre>
-	<pre id="preprof" style="margin-top:2%; padding-top:10%;padding-bottom:6%; display:none">
-	Rut: <b id="rutDetalleProfesor" class="detalle"></b>
-	Primer nombre: <b id="nombreunoDetalleProfesor" class="detalle"></b>
-	Segundo nombre: <b id="nombredosDetalleProfesor" class="detalle"></b>
-	Apellido paterno: <b id="apellidopaternoDetalleProfesor" class="detalle"></b>
-	Apellido materno: <b id="apellidomaternoDetalleProfesor" class="detalle"></b>
-	Correo prof: <b id="correoDetalleProfesor" class="detalle"></b>
-	</pre>
-	<pre id="preayud" style="margin-top:2%; padding-top:10%;padding-bottom:6%; display:none">
-	Rut: <b id="rutDetalleAyudante" class="detalle"></b>
-	Primer nombre: <b id="nombreunoDetalleAyudante" class="detalle"></b>
-	Segundo nombre: <b id="nombredosDetalleAyudante" class="detalle"></b>
-	Apellido paterno: <b id="apellidopaternoDetalleAyudante" class="detalle"></b>
-	Apellido materno: <b id="apellidomaternoDetalleAyudante" class="detalle"></b>
-	Correo: <b id="correoDetalleAyudante" class="detalle"></b>
-	</pre>
-	</div>
-	<div class="menu">
-		<button class ="btn" title="Avanzar a paso 2" onclick="pasoDosTres()" >Siguiente</button>
-		<button class ="btn" title="Volver a paso 1" onclick="pasoDosUno()" >Anterior</button>
-	</div>
-</fieldset>
 
 <fieldset id="cuadroEnvio" style="display:none;">
 	<legend>&nbsp;Enviar correo&nbsp;</legend>
@@ -1053,12 +962,12 @@ function revisarRut(rut){
 			Paso 3: Escriba el correo
 		</div>
 		<div class="row-fluid">
-			<div class="span4" > 
+			<div class="span12" > 
 				<p id="guardado"></p>
 				Para: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
 				Asunto: &nbsp;<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">
-
-				<input id="ed" name="ed" type="hidden" value="<?php set_value('editor'); ?>">
+				<button type="button" class ="btn"  onclick="timerBorradores()" style="  float:right; " >Guardar Borrador</button>
+				
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -1076,13 +985,17 @@ function revisarRut(rut){
 					echo form_textarea($data);
 					?>
 				</div>
+
 				<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
+				<input type="hidden" name="codigoBorrador" id="codigoBorrador" value="<?php set_value('codigoBorrador');?>"/>
+
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span2 pull-right control-group">
-				<button class="btn" type="button" title="Volver a paso 2" onclick="pasoTresDos()" >Anterior</button>
-				<button type="submit" title="Enviar correo" class="btn btn-primary" >Enviar</button>
+			<div class="pager pull-right control-group">
+				<button type="submit" title="Enviar correo" class="btn btn-primary" style="float:right" >Enviar  <div class="btn_with_icon_solo">M</div></button>
+				<button class="btn" type="button" title="Volver a paso 2" onclick="pasoTresDos()" style="float:right; margin-right:3px" ><div class="btn_with_icon_solo"><</div> Anterior</button>
+				
 			</div>
 		</div>
 	</div>

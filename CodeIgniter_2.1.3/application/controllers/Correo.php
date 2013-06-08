@@ -32,7 +32,7 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('listaRecibidos'=>$this->model_correo->VerCorreosUser($rut,0), 'msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut));
+		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -67,7 +67,7 @@ class Correo extends MasterManteka {
 		respectivos destinatarios. */
 		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('listaEnviados'=>$this->model_correo->VerCorreosUser($rut,0), 'msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
+		$datos_cuerpo = array( 'msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
 		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
@@ -217,7 +217,7 @@ class Correo extends MasterManteka {
 	*
 	* @author: Byron Lanas (BL)
 	*/
-	public function enviarCorreo()
+	public function enviarCorreo($codigo=null)
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 
@@ -229,7 +229,8 @@ class Correo extends MasterManteka {
 		$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
 							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
  							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
- 							 'rut'=>  $this->session->userdata('rut'));
+ 							 'rut'=>  $this->session->userdata('rut'),
+ 							 'codigo'=>$codigo);
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/
@@ -263,7 +264,7 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('listaRecibidos'=>$this->model_correo->VerCorreosUser($rut,0), 'msj'=>$msj,'cantidadBorradores'=>$this->model_correo->cantidadBorradores($rut));
+		$datos_cuerpo = array( 'msj'=>$msj,'cantidadBorradores'=>$this->model_correo->cantidadBorradores($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -305,8 +306,6 @@ class Correo extends MasterManteka {
 		el tipo de destinatario al cual va dirijido. Además se cargan los
 		modelos necesarios para guardar el correo una vez que es enviado. */
 		$this->load->model('model_correo');
-		$this->load->model('Model_estudiante');
-		$this->load->model('Model_ayudante');
 		$this->load->model('model_correo_e');
 		$this->load->model('model_correo_u');
 		$this->load->model('model_correo_a');
@@ -338,9 +337,9 @@ class Correo extends MasterManteka {
 			$this->email->message($mensaje);
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
-
+			$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
-			$cod=$this->model_correo->getCodigo($date);
+			
 
 			$receptores = explode(",",$rutRecept);
 			foreach ($receptores as $receptor) {
@@ -426,9 +425,26 @@ class Correo extends MasterManteka {
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("YmdHis");
 		$this->load->model('model_correo');
+		$this->load->model('model_correo_e');
+		$this->load->model('model_correo_u');
+		$this->load->model('model_correo_a');
 
 		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
 
+		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
+
+			$receptores = explode(",",$rutRecept);
+			foreach ($receptores as $receptor) {
+				$estudiante=$this->model_correo->getRutEst($receptor);
+			if($estudiante!=0)
+				$this->model_correo_e->InsertarCorreoE($receptor,$cod);
+			$user=$this->model_correo->getRutUser($receptor);
+			if($user!=0)
+				$this->model_correo_u->InsertarCorreoU($receptor,$cod);
+			$ayudante=$this->model_correo->getRutAyu($receptor);
+			if($ayudante!=0)
+				$this->model_correo_a->InsertarCorreoA($receptor,$cod);
+			}
 		echo json_encode($resultado);
 	}
 /**
@@ -450,6 +466,34 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	
+/**
+	* Envia a la vista de enviar correo con los datos del borrador seleccionado 
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function enviarBorrador($codigo)
+	{
+		redirect('/Correo/enviarCorreo/'.$codigo);	
+	}
+
+/**
+	* carga los datos del borrador seleccionado para continuar con el envio
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postCargarBorrador()
+	{
+		if(!$this->isLogged()){
+			return;
+		}
+
+		$rut = $this->session->userdata('rut');
+		$codigo = $this->input->post('codigo');
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->cargarBorrador($codigo,$rut);
+		echo json_encode($resultado);
+	}	
 
 	/**
 	* Establece como función principal a la función que renderiza la vista
@@ -589,5 +633,4 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-	
 }
