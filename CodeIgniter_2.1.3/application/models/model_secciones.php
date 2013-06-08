@@ -383,7 +383,6 @@ public function verModulosPorAsignar(){
 
 public function verProfeSegunModulo($modulo){
 
-	$modulo = str_ireplace("ó", "o", $modulo);
 	$columnas = 'profesor.NOMBRE1_PROFESOR, profesor.APELLIDO1_PROFESOR';
 	$condiciones  = '(modulo_tematico.COD_MODULO_TEM = equipo_profesor.COD_MODULO_TEM) AND (modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO)AND(profe_equi_lider.COD_EQUIPO = equipo_profesor.COD_EQUIPO) AND (profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2) AND (modulo_tematico.NOMBRE_MODULO = \''.$modulo.'\')';
 	$desde = 'profesor, equipo_profesor, modulo_tematico, profe_equi_lider';
@@ -401,6 +400,21 @@ public function verSalasPorAsignar(){
 	$columnas = '`sala.NUM_SALA`';
 	$desde = '`sala`';
 	$query = $this->db->select($columnas);
+	$query = $this->db->get($desde);
+	
+	$array = $query->result_array();
+						
+	return $array;
+
+}
+
+public function verHorarioSegunSala($sala){
+
+	$columnas = 'dia.NOMBRE_DIA, modulo.NUMERO_MODULO';
+	$condiciones = '(sala.NUM_SALA = \''.$sala.'\') AND (sala.COD_SALA = sala_horario.COD_SALA) AND (sala_horario.COD_HORARIO = horario.COD_HORARIO) AND (horario.COD_DIA = dia.COD_DIA) AND (horario.COD_MODULO = modulo.COD_MODULO)';
+	$desde = 'dia, modulo, horario, sala_horario, sala';
+	$query = $this->db->select($columnas);
+	$query = $this->db->where($condiciones);
 	$query = $this->db->get($desde);
 	
 	$array = $query->result_array();

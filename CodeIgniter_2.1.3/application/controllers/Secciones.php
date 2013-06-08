@@ -295,6 +295,19 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	public function postDetalleSala() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$sala = $this->input->post('sala');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->verHorarioSegunSala($sala);
+		echo json_encode($resultado);
+	}
+
 	
 	
 	

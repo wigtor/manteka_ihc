@@ -44,6 +44,57 @@
 		$(icono_cargando).show();
 	}
 
+	function horariosDeLaSala(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var sala_clickeada = elemTabla;
+		
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Secciones/postDetalleSala") ?>", /* Se setea la url del controlador que responderá */
+			data: { sala: sala_clickeada }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var dia = document.getElementById("dia");
+				var bloque = document.getElementById("bloque");
+
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				var dias = '<option value="dia" disabled selected>Día</option>';
+				var bloques = '<option value="bloque" disabled selected>Bloque</option>';
+
+
+				if(datos.length!=0){
+					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+					for (var i = 0; i < datos.length; i++) {
+						dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
+						bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
+					};
+				}else{
+					dias = dias+'<option disabled>La sala no tiene dias disponibles</option>';
+					bloques = bloques+'<option disabled>La sala no tiene bloques disponibles</option>';
+				}
+
+				$(dia).html(dias);
+				$(bloque).html(bloques);
+				
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
+
 </script>
 
 <div class="row-fluid">
@@ -181,7 +232,7 @@
 										while ($contador<count($salas)){
 											
 											echo '<tr>';
-											echo '<td> '.$salas[$contador]['NUM_SALA'].' </td>';
+											echo '<td style="width:26px;"><input onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$contador.'"></td><td> '.$salas[$contador]['NUM_SALA'].' </td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -192,30 +243,16 @@
 						</div>
 
 						<div class="row-fluid">
-								<select class= "span4" style="margin-left: 2%">
+								<select id="dia" class= "span4" style="margin-left: 2%">
 									<option value="" disabled selected>Día</option>
-	  								<option>Lunes</option>
-									<option>Martes</option>
-									<option>Miercoles</option>
-									<option>Jueves</option>
-									<option>Viernes</option>
-									<option>Viernes</option>
+									<option disabled>Elija una sala para ver sus dias disponibles</option>
 								</select>
 							
 
 						
-								<select class= "span4" style="margin-left: 2%; margin-top:5%" >
+								<select id="bloque" class= "span4" style="margin-left: 2%; margin-top:5%" >
 									<option value="" disabled selected>Bloque</option>
-	  								<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-									<option>6</option>
-									<option>7</option>
-									<option>8</option>
-									<option>9</option>
-									<option>10</option>
+									<option disabled>Elija una sala para ver sus bloques disponibles</option>
 								</select>
 							
 						</div>
