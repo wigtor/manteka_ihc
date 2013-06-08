@@ -263,7 +263,7 @@ class model_correo extends CI_Model
 
 
 	/**
-	* Inserta un correo enviado a la base de datos.
+	* Inserta un correo enviado a la base de datos o elimina el borrador si el correo ya existe.
 	*
 	* Permite insertar correos a la tabla "carta"
 	* para su posterior consulta.
@@ -275,6 +275,8 @@ class model_correo extends CI_Model
 	* @param int $rut
 	* @param int $tipo
 	* @param date $codCorreo
+	* @param int $rutRecept
+	* @param int $codigoBorrador
 	* @return int
 	* @author Byron Lanas (BL)
 	*
@@ -330,10 +332,14 @@ class model_correo extends CI_Model
     }
 
 	/**
-	* Inserta un borrador a la base de datos.
+	* Inserta un borrador a la base de datos, para esto crea una instancia en la tabla carta y en sus destinatarios correspondientes.
 	*
-	* @param int $codigoBorrador
+	* @param string asunto
+	* @param string mensaje
 	* @param int $rut
+	* @param date $codCorreo
+	* @param int $rutRecept
+	* @param int $codigoBorrador
 	* @return int
 	* @author Byron Lanas (BL)
 	*
@@ -443,6 +449,7 @@ class model_correo extends CI_Model
 	* en las tabalas asociadas al receptor.
 	*
 	* @param date $codCorreo
+	* @param int $codBorrador
 	* @return int
 	* @author Byron Lanas (BL)
 	*
@@ -651,9 +658,10 @@ class model_correo extends CI_Model
     }
 
     /**
-	* devuelve los datos del borrador seleccionado
+	* devuelve el asunto, cuerpo y correos y rut de los destinatarios del borrador seleccionado
 	*
 	* @param int $codigo
+	* @param int $rut
 	* @return array
 	* @author Byron Lanas (BL)
 	*
