@@ -273,7 +273,7 @@ if(isset($msj))
 			?>
 			<div id="sinCorreos">
 			Estimado usuario</br>
-			La bandeja de correos recibidos se encuentra vacía.
+			La bandeja de borradores se encuentra vacía.
 			</div>
 			<?php
 		}
