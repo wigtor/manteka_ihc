@@ -304,7 +304,8 @@ class Model_sala extends CI_Model {
 		}}
 		
 		if($var!=1){
-		
+		// se convierte todo el texto de la ubicación en minúscula
+		$ubicacion = strtolower($ubicacion);
 		$data = array(	
 					'COD_SALA' => $cod_sala,
 					'NUM_SALA' => $num_sala,					
