@@ -16,10 +16,15 @@
 				}
 			?>
 			var cont;
-			var algo='\n';
+			var algo='';
 			for(cont=0;cont < imp.length;cont++){
 				if(imp[cont][0]==cod_sala){
-					algo= algo+"		"+imp[cont][1]+'\n';				
+					if(algo!=''){
+						algo= algo+"\n"+"		"+imp[cont][1];
+					}
+					else {
+						algo=imp[cont][1];
+					}
 				}
 			}
 			
