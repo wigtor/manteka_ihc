@@ -31,97 +31,156 @@
 </script>
 <script type="text/javascript">
 // rut,nom1,nom2,ap1,ap2,tele,tipo
-	function datosEditarProfesor(rut,nombre1,nombre2,apellido1,apellido2,telefono){
-			
-			
-			document.getElementById("runProfeEdit").value = rut;
-			document.getElementById("nombreProfeEdit1").value = nombre1;
-			document.getElementById("nombreProfeEdit2").value = nombre2;
-			document.getElementById("apellidoPaternoProfeEdit").value = apellido1;
-			document.getElementById("apellidoMaternoProfeEdit").value = apellido2;
-		//	document.getElementById("moduloProfeEdit").value = modulo;
-			document.getElementById("telefonoProfeEdit").value = telefono;
-		//	document.getElementById("moduloProfeEdit").value = modulo;
-		//	document.getElementById("seccionProfeEdit").value = seccion;
-			document.getElementById("tipoProfeEdit").value = tipo;		
-	}
+	function datosEditarProfesor(elemTabla){
+			/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+			var idElem = elemTabla.id;
+			rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
+			//var rut_clickeado = elemTabla;
+
+			/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+
+			/* Defino el ajax que hará la petición al servidor */
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Profesores/postDetallesProfesor") ?>", /* Se setea la url del controlador que responderá */
+				data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rut = document.getElementById("runProfeEdit");
+				var nombre1 = document.getElementById("nombreProfeEdit1");
+				var nombre2 = document.getElementById("nombreProfeEdit2");
+				var apellido1 = document.getElementById("apellidoPaternoProfeEdit");
+				var apellido2 = document.getElementById("apellidoMaternoProfeEdit");
+			//	var rut = document.getElementById("moduloProfeEdit").value = modulo;
+				var telefono = document.getElementById("telefonoProfeEdit");
+			//	document.getElementById("moduloProfeEdit").value = modulo;
+			//	document.getElementById("seccionProfeEdit").value = seccion;
+				//var tipo = document.getElementById("tipoProfeEdit").value;	
+
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rut).val(datos.rut);
+				$(nombre1).val(datos.nombre1);
+				$(nombre2).val((datos.nombre2 == "" ? '' : datos.nombre2));
+				$(apellido1).val(datos.apellido1);
+				$(apellido2).val(datos.apellido2);
+				$(telefono).val(datos.telefono);
+				//$(tipo).val(datos.fono);
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});	
+		}
 </script>
 
-<script type="text/javascript">
-function ordenarFiltro(){
-	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
+<script>
+	function seleccionar_filtro(option){
+    	var selectorFiltro = option;
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
 
-	
-	var arreglo = new Array();
-	var profesor;
-	var ocultar;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($rs_profesores)){
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$rs_profesores[$contadorE][1].'";';
-		echo 'arreglo['.$contadorE.'][3] = "'.$rs_profesores[$contadorE][3].'";';
-		echo 'arreglo['.$contadorE.'][4] = "'.$rs_profesores[$contadorE][4].'";';
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Profesores/postBusquedaProfesores") ?>", /* Se setea la url del controlador que responderá */
+			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultados");
+				$(tablaResultados).empty();
+
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, th, thead, nodoTexto;
+				thead = document.createElement('thead');
+				tr = document.createElement('tr');
+				th = document.createElement('th');
+				nodoTexto = document.createTextNode("Nombre Completo");
+				th.appendChild(nodoTexto);
+				tr.appendChild(th);
+				thead.appendChild(tr);
+				tablaResultados.appendChild(thead);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					tr.setAttribute("id", "coordinador_"+arrayRespuesta[i].rut);
+					tr.setAttribute("onClick", "datosEditarProfesor(this)");
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
+
+				$(option).prevent;
+				$('#select-filtro li').removeClass("active");
+				$(option).addClass("active");
+				$("#show-filtro").empty().append($('#select-filtro li.active').text());
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+
+		});
+
 		
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-	
-		ocultar =document.getElementById(cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
-		}
-		else
-		{
-			ocultar.style.display='';
-		}
     }
-}
-</script>
-<script type="text/javascript">
-function ordenarFiltro2(){
-	var filtroLista = document.getElementById("filtroSeccion").value;
-	var arreglo = new Array();
-	var ocultarInput;
-	var ocultarTd;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($secciones)){
-		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultarInput=document.getElementById(arreglo[cont]);
-		ocultarTd=document.getElementById("seccionTd_"+cont);
-		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultarInput.style.display='none';
-			ocultarTd.style.display='none';
-		}
-		else
-		{
-			ocultarInput.style.display='';
-			ocultarTd.style.display='';
-		}
-    }
-}
-</script>
+    $("ul#select-filtro li a").click(function(event) {
+	    event.preventDefault();
+	});
 
-<div class="row_fluid">
-	<div class="span10">
+	function validar(form){
+		if($('input[name="contrasena"]').val() != "" || $('input[name="contrasena2"]').val()!= ""){
+			if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
+				alert("Las contrase?as no coinciden.");
+				return false;
+			}else{
+				return true;
+			};
+		}
+		return true;
+}
+
+	function getDataSource(inputUsado) {
+		
+	    $(inputUsado).typeahead({
+	        minLength: 1,
+	        source: function(query, process) {
+	        	$.ajax({
+		        	type: "POST", /* Indico que es una petición POST al servidor */
+					url: "<?php echo site_url("HistorialBusqueda/buscar/profesores") ?>", /* Se setea la url del controlador que responderá */
+					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+		            	//alert(respuesta)
+		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	process(arrayRespuesta);
+		            }
+	        	});
+	        }
+	    });
+	}
+
+	//Se cargan por ajax
+	//$(document).ready(cambioTipoFiltro);
+
+	$(document).ready(function(){
+    	//$("form.span9, #visualizar-coordinador").hide();
+    	$("#select-filtro li.active").click();
+
+    });
+
+</script>
 		<fieldset>
 			<legend>Editar Profesor</legend>
-			<div>
 				<div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -135,43 +194,43 @@ function ordenarFiltro2(){
 							</div>
 						</div>
 						<div class="row-fluid">
-							<div class="span11">
+							<div class="span12">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
-								</div>
-								<div class="span6 " >
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-										<option value="1">Filtrar por Nombre</option>
-										<option value="3">Filtrar por Apellido paterno</option>
-										<option value="4">Filtrar por Apellido materno</option>
-									</select> 
+									<input class="span11" id="filtroLista" type="text" placeholder="Filtro" onkeypress="getDataSource(this)" onChange="seleccionar_filtro(document.getElementById('select-filtro').getElementsByClassName('active')[0])" >
+									<div class="btn-group">
+										<button class="btn dropdown-toggle" data-toggle="dropdown">
+											<span id="show-filtro">Filtrar por</span>
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" id="select-filtro">
+											<li onclick="seleccionar_filtro(this)" id="filtro1" class="active" value="1">
+												<a href>Nombre</a>
+											</li>
+											<li onclick="seleccionar_filtro(this)" id="filtro2" class="passive" value="2" >
+												<a href>Apellido Paterno</a>
+											</li>
+											<li onclick="seleccionar_filtro(this)" id="filtro3" class="passive" value="3">
+												<a href>Apellido Materno</a>
+											</li>
+											<li onclick="seleccionar_filtro(this)" id="filtro4" class="passive" value="4">
+												<a href>Correo Electrónico</a>
+											</li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="row-fluid" style="margin-left: 0%;">
-							<thead>
-								<tr>
-									<th style="text-align:left;"><br><b>Nombre Completo</b></th>
-								</tr>
-							</thead>
-							<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-								<table class="table table-hover">
+						 <div class="row-fluid" style="margin-left: 0%;">
+							<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+								<table id="listadoResultados" class="table table-hover">
+									<thead>
+										<tr>
+											<th>Nombre Completo</th>
+										</tr>
+									</thead>
 									<tbody>
-										<?php
-										$contador=0;
-										$comilla= "'";
-										echo '<form id="formDetalle" type="post">';
-										while ($contador<count($rs_profesores)){
-										echo '<tr>';
-										echo	'<td  id="'.$contador.'" onclick="datosEditarProfesor('.$comilla.$rs_profesores[$contador][0].$comilla.','.$comilla. $rs_profesores[$contador][1].$comilla.','.$comilla. $rs_profesores[$contador][2].$comilla.','.$comilla. $rs_profesores[$contador][3].$comilla.','.$comilla. $rs_profesores[$contador][4].$comilla.','.$comilla. $rs_profesores[$contador][5].$comilla.')" 
-										style="text-align:center;">
-										'. $rs_profesores[$contador][3].' '.$rs_profesores[$contador][4].' ' . $rs_profesores[$contador][1].' '.$rs_profesores[$contador][2].'</td>';
-										echo '</tr>';
-										$contador = $contador + 1;
-										}
-										echo '</form>';
-										?>
-									</tbody> 
+
+									</tbody>
 								</table>
 							</div>
 						</div>
@@ -256,14 +315,14 @@ function ordenarFiltro2(){
 							<div class="row-fluid">
 								<div class="span11" style="margin-top:2%">
 									<div class="row-fluid">
-										<div class="span4 " style="margin-left:37%; width: 27%">
-											<button class="btn" style="width: 108px"type="submit">
+										<div class="span4 offset4" >
+											<button class="btn" type="submit">
 												<div class= "btn_with_icon_solo">Ã</div>
 												&nbsp Modificar
 											</button>
 										</div>
 										<div class="span4">
-											<button  class ="btn" style="width:106px" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarProfesor('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.')"';?> >
+											<button  class ="btn" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarProfesor('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.')"';?> >
 												<div class= "btn_with_icon_solo">Â</div>
 												&nbsp Cancelar
 											</button>
@@ -274,7 +333,4 @@ function ordenarFiltro2(){
 						</form>
 					</div>
 				</div>
-			</div>
 		</fieldset>
-	</div>
-</div>

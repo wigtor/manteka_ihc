@@ -24,7 +24,8 @@
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-collapse.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-carousel.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-typeahead.js"></script>
-    <script src="/<?php echo config_item('dir_alias') ?>/javascripts/ant-sig.js"></script>    
+    <script src="/<?php echo config_item('dir_alias') ?>/javascripts/ant-sig.js"></script>
+    <script src="/<?php echo config_item('dir_alias') ?>/javascripts/undo-redo.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/ckeditor.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/config.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/ckeditor/build-config.js"></script>

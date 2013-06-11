@@ -1,0 +1,4 @@
+name: proxy
+version: 1.0.7
+compatibility: 2.0.2
+tags: ["http scripting", "proxy", "socket"]

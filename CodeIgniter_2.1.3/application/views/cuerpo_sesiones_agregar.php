@@ -1,8 +1,33 @@
+<script type="text/javascript">
+	
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
+				alert("Sesión agregada correctamente");
+			
+		}
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al agregar la sesión");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("Una sesión con el mismo nombre ya se ha ingresado");
+				}
+			}
+		}
+	}
+</script>
+
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
-			<legend>Agregar Sesion</legend>
-		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Sesiones/AgregarSesion/")?>">
+			<legend>Agregar Sesión</legend>
+		<form id="formAgregar" type="post" method="post">
+				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+				</div>
 			
 			
 				<div>
@@ -17,36 +42,24 @@
 							<div class="row"> <!-- codigo -->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Codigo  de sesión</label>
+										<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Nombre de sesión</label>
 									</div>
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" name="cod_sesion" maxlength="19" required >
+											<input type="text" name="nombre_sesion" maxlength="99" required >
 										</div>
 								</div>
 							</div>
-							<div class="row"> <!-- cod seccion-->
-								<div class="span4">
-									<div class="control-group">
-										<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Fecha</label>
-									</div>
-								</div>
-								<div class="span5">	
-										<div class="controls">
-											<input type="text" name="fecha_sesion" maxlength="19" required >
-										</div>
-								</div>
-							</div>							
 							<div class="row"> <!-- descipción -->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Descripción</label>
+										<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Descripción</label>
 									</div>
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<textarea type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" required></textarea>
+											<textarea type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
 										</div>
 								</div>
 
@@ -54,9 +67,10 @@
 						
 
 						</div> 
+					</div>
 
-						<div class="span6" >
-							
+				</div>
+				<div class="span6" style = "margin-left: 380px" >
 							
 							<div class="row" style="margin-top:2%">
 								<div class="span3 offset5">
@@ -76,10 +90,6 @@
 							</div>
 							
 						</div>
-					</div>
-
-				</div>
-					
 				</div> 
 			</div>
 		</form>

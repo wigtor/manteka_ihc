@@ -15,9 +15,6 @@
 
 
 
-<div class= "row-fluid">
-	<div class= "span10">
-
 		<fieldset>
 			<legend>Agregar Profesor</legend>	
 			<form id="formAgregar" type="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
@@ -177,20 +174,18 @@
 				</div>
 			</div> 
 			<div class="row-fluid" style="">		
-							<div class="span2 offset8" style="width:11%" >
-								<button class="btn" type="submit" style="width:102px">
+							<div class="span2 offset8" >
+								<button class="btn" type="submit">
 									<div class= "btn_with_icon_solo">Ã</div>
 									&nbsp Agregar
 								</button>
 							</div>
 							<div class="span2" >
-								<button class="btn" type="reset" style="width: 105px">
+								<button class="btn" type="reset" >
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
 							</div>
 						</div>
 			</form>
-		</fieldset>
-	</div>
-</div>					
+		</fieldset>			

@@ -2,21 +2,15 @@
 
 class Planificacion extends CI_Controller {
 	
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
+/**
+* Transporta los datos de la capa de modelo a la vista
+* Carga el modelo y transforma los datos en un arreglo que puede ser utilizado en la vista
+* 
+* @param null
+* @return null
+* 
+*/
+ 
 	public function verPlanificacion()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -61,5 +55,3 @@ class Planificacion extends CI_Controller {
 	}
 }
 
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */

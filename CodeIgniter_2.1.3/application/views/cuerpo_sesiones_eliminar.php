@@ -11,79 +11,121 @@
 </script>
 
 <script type="text/javascript">
-	function DetalleSesion(cod_sesion,cod_modulo_tem,fecha_sesion,descripcion_sesion){
-	
-			document.getElementById("codEliminar").value = cod_sesion;
-			document.getElementById("cod_sesion").innerHTML = cod_sesion;
-			document.getElementById("cod_modulo_tem").innerHTML = cod_modulo_tem;
-			document.getElementById("fecha_sesion").innerHTML = fecha_sesion;
-			document.getElementById("descripcion_sesion").innerHTML = descripcion_sesion;			
-				
-			
-	}
-</script>
-<script type="text/javascript">
-	function eliminarSala(){
+	function eliminarSesion(){
 		
 		var cod = document.getElementById("codEliminar").value;
-		
+		;
 		if(cod!=""){
 					var answer = confirm("¿Está seguro de eliminar esta sesion?")
 					if (!answer){
-						var dijoNO = DetalleSala("","","","","","","");
+						return false;
 					}
 					else{
 					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Sesion/elimin/") ?>/";
+					borrar.action = "<?php echo site_url("Sesiones/eliminarSesion/") ?>/";
 					borrar.submit();
 					}
 					
 		}
 		else{
-				alert("Selecione una sala");
+				alert("Selecione una sesion");
+				return false;
 		}
 		
 	}
 </script>
 						
-<script type="text/javascript">
-function ordenarFiltro(){
-	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
+<script>
+	function detalleSesion(elemTabla,cod_ses) {
 
-	
-	var arreglo = new Array();
-	var sesion;
-	var ocultar;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($sesion)){
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$sesion[$contadorE][1].'";';
-		$contadorE = $contadorE + 1;
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		cod_clickeado = idElem.substring("sesion_".length, idElem.length);
+		document.getElementById("codEliminar").value = cod_ses;
+		//var rut_clickeado = elemTabla;
+
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Sesiones/postDetallesSesiones") ?>", /* Se setea la url del controlador que responderá */
+			data: { codigo: cod_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				
+				var codigoDetalle = document.getElementById("codigoDetalle");
+				var nombreDetalle = document.getElementById("nombreDetalle");
+				var mod_temDetalle = document.getElementById("mod_temDetalle");
+				var descripcionDetalle = document.getElementById("descripcionDetalle");
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(codigoDetalle).html(datos.cod_sesion);
+				$(nombreDetalle).html(datos.nombre);
+				$(mod_temDetalle).html(datos.cod_mod_tem);
+				$(descripcionDetalle).html(datos.descipcion);
+			
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
-		}
-		else
-		{
-			ocultar.style.display='';
-		}
-    }
-}
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+		//if (texto.trim() != "") {
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Sesiones/postBusquedaSesiones") ?>", /* Se setea la url del controlador que responderá */
+				data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var tablaResultados = document.getElementById("listadoResultados");
+					var nodoTexto;
+					$(tablaResultados).empty();
+					var arrayRespuesta = jQuery.parseJSON(respuesta);
+					for (var i = 0, tr, td; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						tr.setAttribute("id", "sesion_"+arrayRespuesta[i].cod_sesion);
+
+						tr.setAttribute("onClick", "detalleSesion(this,'"+arrayRespuesta[i].cod_sesion+"')");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+						tablaResultados.appendChild(tr);
+					}
+					
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+					}
+			});
+
+			/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+		//}
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
 </script>
 
 <div class="row-fluid">
 <div class="span10">
 <fieldset>
-	<legend>Eliminar Sesion</legend>
+	<legend>Eliminar Sesión</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="row-fluid">
@@ -99,10 +141,12 @@ function ordenarFiltro(){
 									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Codigo</option>
-									</select>
-								</div> 
+							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
+								<option value="1">Filtrar por nombre</option>
+								<option value="2">Filtrar por código de sesión</option>
+
+							</select>
+						</div>
 							</div>
 						</div>
 						
@@ -112,28 +156,16 @@ function ordenarFiltro(){
 				<!--<div class="span9">-->
 
 					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
-						<table class="table table-hover">
-							<tbody>
-							
-								<?php
-								$contador=0;
-								$com= "'";
-								echo '<form id="formDetalle" type="post">';
-								while ($contador<count($sesion)){
-									
-									echo '<tr>';
-									echo	'<td  id="'.$contador.'" onclick="DetalleSesion('.$com.$sesion[$contador][0].$com.','.$com. $sesion[$contador][1].$com.','.$com. $sala[$contador][2].$com.','.$com. $sesion[$contador][3].$com.')" 
-												  style="text-align:left;">
-												  '. $sesion[$contador][1].'</td>';
-									echo '</tr>';
-																
-									$contador = $contador + 1;
-								}
-								echo '</form>';
-								?>
-														
-							</tbody>
-						</table>
+						<table id="listadoResultados" class="table table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
 					</div>
 				
 			
@@ -144,23 +176,30 @@ function ordenarFiltro(){
 			<div style="margin-bottom:2%">
 		2.-Detalle de la Sesión:
 		</div>
-	   <form id="formBorrar" type="post" method="post" >
+	   <form id="formBorrar" type="post" method="post" onsubmit="eliminarSesion();return false">
 			<div class="row-fluid">
 				<div>
-			<pre style="margin-top: 0%; margin-left: 0%;">
-Código sesión:    <b id="cod_sesion"></b>
-Código del modulo tematico:    <b id="num_modulo_tem"></b> 
-Fecha de la sesión: 	<b id="fecha_sesion"></b>
-Descripcion de la sesión:	<b id="descripcion_sesion"></b>
+			<pre style="margin-top: 2%; padding: 2%">
+Codigo sesión:              	<b id="codigoDetalle"></b>
+Nombre del modulo temático:     <b id="mod_temDetalle"></b>
+Nombre de la sesión: 	<b id="nombreDetalle"></b>
+Descripción: 	<b id="descripcionDetalle"></b>
+			</pre>
 <input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
 				</div>		
 			</div>
 								<div class="row-fluid">
-									<div class="span3 offset6">
-										<button class ="btn" onclick="eliminarSesion()" >Eliminar</button>
+									<div class="span4 " style="width:27%; margin-left:46%">
+										<button class ="btn" type="submit" style="width:108px" >
+											<div class="btn_with_icon_solo">Ë</div>
+											&nbsp Eliminar
+										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" type="reset" onclick="DetalleSesion('','','','','','')" >Cancelar</button>
+										<button  class ="btn" type="reset" style="width:105px">
+											<div class="btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
 								</div>
 		</form>

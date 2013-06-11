@@ -49,8 +49,7 @@ function ordenarFiltro(){
 }
 </script>
 
-<div class= "row-fluid">
-	<div class= "span10">
+
 		<fieldset>
 			<legend>Agregar Ayudante</legend>
 		<form id="formAgregar" type="post" action="<?php echo site_url("Ayudantes/insertarAyudante/")?>">
@@ -154,7 +153,7 @@ function ordenarFiltro(){
 
 				<div class="span6">
 					
-						<div class="row-fluid"> <!-- seccion-->
+						<div class="row-fluid">
 							<div class="span5">
 								<div class="control-group">
 									<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar profesor</label>
@@ -206,14 +205,14 @@ function ordenarFiltro(){
 								
 						<div class="row-fluid" style="margin-top:2%">
 									
-							<div class="span3 " style="margin-left:45%; width:27%">
-								<button type="submit" style="width: 102px"class="btn">
+							<div class="span3 offset4" >
+								<button type="submit" class="btn">
 									<div class= "btn_with_icon_solo">Ã</div>
 									&nbsp Agregar
 								</button>
 							</div>
 							<div class="span3" >
-								<button class="btn" style="width:105px"type="reset">
+								<button class="btn" type="reset">
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
@@ -226,5 +225,3 @@ function ordenarFiltro(){
 			</div>
 		</form>				
 		</fieldset>
-	</div>
-</div>

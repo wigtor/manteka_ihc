@@ -1,6 +1,14 @@
+<script type="text/javascript">
+	function Cancelar(){
+		var borrar = document.getElementById("Cancelar");
+		borrar.action ="<?php echo site_url("Secciones/asignarAsecciones/");?>"
+		borrar.submit()	
+	}
+</script>
+
 <div class="row-fluid">
 	<div class="span10">
-
+		<form id="Cancelar" method="post">
 		<fieldset>
 			<legend>Asignaciones de Sección</legend>
 			<div class="row-fluid">
@@ -14,13 +22,28 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table id="listadoResultados" class="table table-hover">
+							<table id="" class="table table-hover">
 								<thead>
 									<tr>
 										
 									</tr>
 								</thead>
 								<tbody>
+
+								<?php
+								$contador=0;
+								$comilla= "'";
+								
+								while ($contador<count($seccion)){
+									
+									echo '<tr>';
+									echo '<td   onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '</tr>';
+																
+									$contador = $contador + 1;
+								}
+								
+								?>
 
 								</tbody>
 							</table>
@@ -35,13 +58,14 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:7%">
-							<table id="listadoResultados" class="table table-hover">
+							<table id="" class="table table-hover">
 								<thead>
 									<tr>
 										
 									</tr>
 								</thead>
 								<tbody>
+
 
 								</tbody>
 							</table>
@@ -67,6 +91,8 @@
 									</tr>
 								</thead>
 								<tbody>
+									
+
 
 								</tbody>
 							</table>
@@ -134,14 +160,14 @@
 
 						<div class="row-fluid" style="margin-top:5%; margin-left: 35%">
 							<div class="span3">
-									<button class="btn" type="submit" style="width:102px">
+									<button class="btn"  style="width:102px">
 										<div class= "btn_with_icon_solo">Ã</div>
 										&nbsp Asignar
 
 									</button>
 								</div>
 								<div class="span3">
-									<button class="btn" type="reset" style="width:105px">
+									<button class="btn" onClick="Cancelar()" type="reset" style="width:105px">
 										<div class= "btn_with_icon_solo">Â</div>
 										&nbsp Cancelar
 
@@ -157,5 +183,5 @@
 
 		</fieldset>
 	</div>
-
+	</form>
 </div>

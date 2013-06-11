@@ -27,6 +27,7 @@ class Sesiones extends MasterManteka {
 		$this->verSesiones();
 	}
 
+
 	public function verSesiones()
 	{
 		$datos_vista = 0;		
@@ -36,36 +37,33 @@ class Sesiones extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 
 
-		/*$this->load->model('Model_sala');
-		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());*/
+		$this->load->model('Model_sesiones');
 
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
-
 	public function agregarSesiones()
-    {
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+		
 		$datos_vista = 0;		
-		$subMenuLateralAbierto = "agregarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$subMenuLateralAbierto = "agregarSesiones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		
 
-		/*$this->load->model('Model_sala');
-		$cod_sala = $this->input->get("cod_sala");
-        $num_sala = $this->input->get("num_sala");
-        $ubicacion = $this->input->get("ubicacion");
-        $capacidad = $this->input->get("capacidad");
-		$implementos = $this->input->get("cod_implemento");
-        $confirmacion = $this->Model_sala->InsertarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos);
-	    
-	  
-		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);*/
+		$this->load->model('Model_sesiones');
+		$nombre_sesion = $this->input->post("nombre_sesion");
+		$descripcion_sesion = $this->input->post("descripcion_sesion");
+		$confirmacion = $this->Model_sesiones->AgregarSesion($nombre_sesion,$descripcion_sesion);
+        $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
-	
-    }
+	}
 
+	
     public function postDetallesSesiones() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -73,9 +71,9 @@ class Sesiones extends MasterManteka {
 			return;
 		}
 
-		$rut = $this->input->post('cod');
+		$codigo = $this->input->post('codigo');
 		$this->load->model('Model_sesiones');
-		$resultado = $this->Model_estudiante->getDetallesEstudiante($sesion);
+		$resultado = $this->Model_sesiones->getDetallesSesiones($codigo);
 		echo json_encode($resultado);
 	}
 
@@ -88,12 +86,55 @@ class Sesiones extends MasterManteka {
 		$tipoFiltro = $this->input->post('tipoFiltro');
 		$this->load->model('Model_sesiones');
 
-		$resultado = $this->Model_estudiante->getByFilter($tipoFiltro, $textoFiltro);
+		$resultado = $this->Model_sesiones->getSesionesByFilter($tipoFiltro, $textoFiltro);
 		echo json_encode($resultado);
 	}
     
+    public function eliminarSesion()// alimina un alumno y de ahí carga la vista para seguir eliminando 
+	{
+
+		$this->load->model('Model_sesiones');
+		$codEliminar = $this->input->post('codEliminar');
+
+		$confirmacion = $this->Model_sesiones->EliminarSesion($codEliminar);
+		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);//
+
+
+		$subMenuLateralAbierto = "borrarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	}
     
-	
+    public function borrarSesiones()//carga la vista para borrar alumnos
+	{
+		$this->load->model('Model_sesiones');
+		$datos_vista = array('mensaje_confirmacion'=>2);//$datos_vista = array('mensaje_confirmacion'=>2);
+
+		$subMenuLateralAbierto = "borrarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	}
+	public function editarSesiones()//carga la vista para borrar alumnos
+	{
+		$this->load->model('Model_sesiones');
+		$nombre_sesion = $this->input->post('nombre_sesion');
+		$descripcion_sesion = $this->input->post('descripcion_sesion');
+		$codigo_sesion = $this->input->post('codigo_sesion');
+		
+		$confirmacion = $this->Model_sesiones->EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion);
+        $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
+
+		$subMenuLateralAbierto = "editarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Sesiones", 'cuerpo_sesiones_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	}
+		
 	
 }
 

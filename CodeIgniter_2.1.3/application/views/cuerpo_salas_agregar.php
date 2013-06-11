@@ -42,7 +42,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" > 1-.*Número de la sala:</label>
+		  							<label class="control-label" for="inputInfo" > 1-.<font color="red">*</font>Número de la sala:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -54,7 +54,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" > 2-.*Capacidad:</label>
+		  							<label class="control-label" for="inputInfo" > 2-.<font color="red">*</font>Capacidad:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -67,7 +67,7 @@
 							<div class="span4">
 								<div class="control-group">
 
-		  							<label class="control-label" for="inputInfo">3-.*Ubicación:</label>
+		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Ubicación:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	

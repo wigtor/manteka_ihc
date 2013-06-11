@@ -23,14 +23,14 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($seccion)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][1].'";';
 		$contadorE = $contadorE + 1;
 	}
 	?>
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(cont);
+		ocultar=document.getElementById("rs_seccionTd_"+cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
@@ -56,12 +56,12 @@ function ordenarFiltro(){
                             1.-Seleccionar sección
                         </div>
 					</div>
-<div class="row-fluid">
+			<div class="row-fluid">
 				<div class="span11">
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
 									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
@@ -114,24 +114,23 @@ function ordenarFiltro(){
 	<pre style="margin-top: 0%; margin-left: 0%;">
 	<?php
 	$contador=0;
-	$comilla= "'";
-					
-while ($contador<count($secc)){
-	
+	$comilla= "'";	
+
+while ($contador<count($secc)){	
+
 echo '<tr>';
-echo '<td id="rs_seccion_'.$contador.'" > 
+echo '<td id="rs_seccion_'.$contador.'" >
 Sección: '.$secc[$contador][0].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
 Día:     '.$secc[$contador][2].' </td>';
 echo '<td id="rs_seccion_'.$contador.'" > 
 Módulo:  '.$secc[$contador][1].' </td>';
 echo '</tr>'; 
-	$contador =$contador+1 ;
-}
-								
+$contador =count($secc);
+}							
 ?>
 
-                        </pre>
+					</pre>
                     </div>
 
                     <div class="row-fluid">

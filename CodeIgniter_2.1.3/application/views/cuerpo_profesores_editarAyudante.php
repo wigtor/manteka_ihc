@@ -1,17 +1,5 @@
 
 <script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha actualizado el ayudante");
-				}
-				else{
-					alert("Error al actualizar");
-				}
-	}
-</script>
-
-<script type="text/javascript">
 	function EditarEstudiante(){
 
 		var rut = document.getElementById("rutEditar").value;
@@ -40,61 +28,120 @@
 	}
 </script>
 
-<script type="text/javascript">
-function ordenarFiltro(){
-	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
-
-	
-	var arreglo = new Array();
-	var alumno;
-	var ocultar;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($rs_ayudantes)){
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$rs_ayudantes[$contadorE][1].'";';
-		echo 'arreglo['.$contadorE.'][3] = "'.$rs_ayudantes[$contadorE][3].'";';
-		echo 'arreglo['.$contadorE.'][4] = "'.$rs_ayudantes[$contadorE][4].'";';
-		echo 'arreglo['.$contadorE.'][7] = "'.$rs_ayudantes[$contadorE][0].'";';
-
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
-		}
-		else
-		{
-			ocultar.style.display='';
-		}
-    }
-}
-</script>
 
 <script type="text/javascript">
-	function datosEditarAlumno(rut,nombre1,nombre2,apePaterno,apeMaterno,correo){
-			
-			
-			document.getElementById("rutEditar").value = rut;
-			document.getElementById("nombreunoEditar").value = nombre1;
-			document.getElementById("nombredosEditar").value = nombre2;
-			document.getElementById("apellidopaternoEditar").value = apePaterno;
-			document.getElementById("apellidomaternoEditar").value = apeMaterno;
-			document.getElementById("correoEditar").value = correo;
+	
+	function detalleAyudante(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		rut_clickeado = idElem.substring("ayudante_".length, idElem.length);
 		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Ayudantes/postDetallesAyudante") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rutDetalle = document.getElementById("rutEditar");
+				var nombre1Detalle = document.getElementById("nombreunoEditar");
+				var nombre2Detalle = document.getElementById("nombredosEditar");
+				var apellido1Detalle = document.getElementById("apellidopaternoEditar");
+				var apellido2Detalle = document.getElementById("apellidomaternoEditar");
+				var correoDetalle = document.getElementById("correoEditar");
+				
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rutDetalle).val(datos.rut);
+				$(nombre1Detalle).val(datos.nombre1);
+				$(nombre2Detalle).val(datos.nombre2);
+				$(apellido1Detalle).val(datos.apellido1);
+				$(apellido2Detalle).val(datos.apellido2);
+				$(correoDetalle).val(datos.correo);
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+
+			}
+		});
 	}
+
+	function cambioTipoFiltro() {
+		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		var inputTextoFiltro = document.getElementById('filtroLista');
+		var valorSelector = selectorFiltro.value;
+		var texto = inputTextoFiltro.value;
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>", /* Se setea la url del controlador que responderá */
+			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultados");
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, th, thead, nodoTexto;
+				thead = document.createElement('thead');
+				tr = document.createElement('tr');
+				th = document.createElement('th');
+				nodoTexto = document.createTextNode("Nombre Completo");
+				th.appendChild(nodoTexto);
+				tr.appendChild(th);
+				thead.appendChild(tr);
+				tablaResultados.appendChild(thead);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					tr.setAttribute("id", "ayudante_"+arrayRespuesta[i].rut);
+					tr.setAttribute("onClick", "detalleAyudante(this)");
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+	}
+
+	function getDataSource(inputUsado) {
+			$(inputUsado).typeahead({
+	        minLength: 1,
+	        source: function(query, process) {
+	        	$.ajax({
+		        	type: "POST", /* Indico que es una petición POST al servidor */
+					url: "<?php echo site_url("HistorialBusqueda/buscar/ayudantes") ?>", /* Se setea la url del controlador que responderá */
+					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+		            	//alert(respuesta)
+		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	process(arrayRespuesta);
+		            }
+	        	});
+	        }
+	    });
+	}
+
+	//Se cargan por ajax
+	$(document).ready(cambioTipoFiltro);
 </script>
 
 
-<div class="row_fluid">
-	<div class="span10">
 		<fieldset>
 			<legend>Editar Ayudante</legend>
 			<div>
@@ -115,14 +162,14 @@ function ordenarFiltro(){
 						<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+									<input id="filtroLista"  onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<select id="tipoDeFiltro" onchange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 									<option value="1">Filtrar por Nombre</option>
-									<option value="3">Filtrar por Apellido paterno</option>
-									<option value="4">Filtrar por Apellido materno</option>
-									<option value="0">Filtrar por RUT</option>
+									<option value="2">Filtrar por Apellido paterno</option>
+									<option value="3">Filtrar por Apellido materno</option>
+									<option value="4">Filtrar por Correo electrónico</option>
 									</select>
 								</div> 
 							</div>
@@ -130,35 +177,19 @@ function ordenarFiltro(){
 						
 						
 						<!--AQUÍ VA LA LISTA-->
-						<thead>
-							<tr>
-								<th style="text-align:left;"><br><b>Nombre Completo</b></th>
-								
-							</tr>
-						</thead>
-						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
-						<table class="table table-hover">
-						<tbody>
-						
-							<?php
-							$contador=0;
-							$comilla= "'";
-							echo '<form id="formDetalle" type="post">';
-							while ($contador<count($rs_ayudantes)){
-								
-								echo '<tr>';
-								echo	'<td  id="'.$contador.'" onclick="datosEditarAlumno('.$comilla.$rs_ayudantes[$contador][0].$comilla.','.$comilla. $rs_ayudantes[$contador][1].$comilla.','.$comilla. $rs_ayudantes[$contador][2].$comilla.','.$comilla. $rs_ayudantes[$contador][3].$comilla.','.$comilla. $rs_ayudantes[$contador][4].$comilla.','.$comilla. $rs_ayudantes[$contador][5].$comilla.')" 
-											  style="text-align:left;">
-											  '. $rs_ayudantes[$contador][3].' '.$rs_ayudantes[$contador][4].' ' . $rs_ayudantes[$contador][1].' '.$rs_ayudantes[$contador][2].'</td>';
-								echo '</tr>';
-															
-								$contador = $contador + 1;
-							}
-							echo '</form>';
-							?>
-													
-						</tbody>
-						</table>
+						<div class="row-fluid" style="margin-left: 0%;">
+							<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+								<table id="listadoResultados" class="table table-hover">
+									<thead>
+										<tr>
+											<th>Nombre Completo</th>
+										</tr>
+									</thead>
+									<tbody>
+
+									</tbody>
+								</table>
+							</div>
 						</div>
 						<!--AQUÍ VA LA LISTA-->
 
@@ -249,15 +280,15 @@ function ordenarFiltro(){
 							</div>
 						</div>
 						<div class="row-fluid">
-							<div class= "span11" style="margin-top:2%">
-									<div class="span4 " style="margin-left:37%; width: 27%">
-										<button class ="btn" style="width: 108px" type="submit" >
+							<div class= "span11">
+									<div class="span4 ">
+										<button class ="btn" type="submit" >
 											<div class= "btn_with_icon_solo">Ã</div>
 											&nbsp Modificar
 										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" style="width: 105px" type="reset" onclick="datosEditarAlumno('','','','','','')" >
+										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" >
 											<div class= "btn_with_icon_solo">Â</div>
 											&nbsp Cancelar
 										</button>
@@ -272,5 +303,3 @@ function ordenarFiltro(){
 				</div>
 			</div>
 		</fieldset>
-	</div>
-</div>

@@ -32,9 +32,27 @@ function comprobarUsoRut(){
 			return;
 		}
     }
-
-
 }
+
+	function agregarEstudiante(){
+
+		var rut = document.getElementById("rut_estudiante").value;
+		var nombreUno =	document.getElementById("nombre1_estudiante").value;
+		var nombreDos =	document.getElementById("nombre2_estudiante").value;
+		var apellidoPaterno = document.getElementById("apellido_paterno").value;
+		var apellidoMaterno = document.getElementById("apellido_materno").value;
+		var correo = document.getElementById("correo_estudiante").value;
+		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
+	
+		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
+					return true;
+		}
+		else {
+				alert("Ingrese todos los datos");
+				return false;
+		}
+	}
+
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroSeccion").value;
 	var arreglo = new Array();
@@ -43,11 +61,13 @@ function ordenarFiltro(){
 	var cont;
 	
 	<?php
+	/*
 	$contadorE = 0;
 	while($contadorE<count($secciones)){
 		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
 		$contadorE = $contadorE + 1;
 	}
+	*/
 	?>
 	
 	
@@ -65,26 +85,64 @@ function ordenarFiltro(){
 		}
     }
 }
+
+
+	function cargarSecciones() {
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/postGetSecciones") ?>", /* Se setea la url del controlador que responderá */
+			data: { }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoSecciones");
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, td2, th, radioInput, nodoTexto;
+				var name = "seccion_seleccionada";
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
+					td.appendChild(nodoTexto);
+					
+
+					td2 = document.createElement('td');
+					radioInput = document.createElement('input');
+					radioInput.setAttribute('type', 'radio');
+					radioInput.setAttribute('name', name);
+					radioInput.setAttribute("id", "seccion_"+arrayRespuesta[i].cod);
+					radioInput.setAttribute("value", arrayRespuesta[i].cod);
+					td2.appendChild(radioInput);
+
+					tr.appendChild(td2);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+				}
+			}
+		});
+	}
+
+	//Se carga luego de cargar la página
+	$(document).ready(cargarSecciones);
 </script>
 
 
-<div class= "row-fluid">
-	<div class= "span10">	
 		<fieldset>
 			<legend>Agregar Alumno</legend>
-		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Alumnos/insertarAlumno/")?>">
-			
-			
-				<div>
+				<?php
+					$atributos= array('onsubmit' => 'return agregarEstudiante()', 'id' => 'formAgregar', 'name' => 'formAgregar');
+					echo form_open('Alumnos/insertarAlumno/', $atributos);
+				?>
+				<font color="red">*Campos Obligatorios</font><br>
 					<div class= "row-fluid">
-						<div class= "span6" style="margin-bottom:2%">
+						
+						<div class= "span5" style="margin-bottom:2%">
 							Ingrese datos del Alumno:
 						</div>
 					</div>
 					
-					<div  class= "row-fluid" style="margin-left:2%">
-						<div class= "span6">
-							<div class="row"> <!-- rut-->
+					<div  class= "row-fluid" >
+						<div class= "span5">
+							<div class="row-fluid"> <!-- rut-->
 								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">1-.<font color="red">*</font> RUT</label>
@@ -92,11 +150,11 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input id="rut_tentativo" onblur="comprobarUsoRut()" max="999999999" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
+											<input id="rut_estudiante" onblur="comprobarUsoRut()" max="999999999" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
 										</div>
 								</div>
 							</div>
-							<div class="row"> <!-- nombre uno-->
+							<div class="row-fluid"> <!-- nombre uno-->
 								<div class="span4">
 									<div class="control-group">
 										<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre</label>
@@ -104,11 +162,11 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" name="nombre1_estudiante" maxlength="19" required >
+											<input type="text" id="nombre1_estudiante" name="nombre1_estudiante" maxlength="19" required >
 										</div>
 								</div>
 							</div>							
-							<div class="row"> <!-- nombre dos-->
+							<div class="row-fluid"> <!-- nombre dos-->
 								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">3-.Segundo nombre</label>
@@ -116,13 +174,13 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" name="nombre2_estudiante" maxlength="19">
+											<input type="text" id="nombre2_estudiante" name="nombre2_estudiante" maxlength="19">
 										</div>
 								</div>
 
 							</div>
 							
-							<div class="row"> <!-- ape paterno-->
+							<div class="row-fluid"> <!-- ape paterno-->
 								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Paterno</label>
@@ -130,12 +188,12 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" name="apellido_paterno" maxlength="19" required>
+											<input type="text" id="apellido_paterno" name="apellido_paterno" maxlength="19" required>
 										</div>
 								</div>
 
 							</div>
-							<div class="row"> <!-- ape materno-->
+							<div class="row-fluid"> <!-- ape materno-->
 								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Apellido Materno</label>
@@ -143,12 +201,12 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" name="apellido_materno" maxlength="19" required>
+											<input type="text" id="apellido_materno" name="apellido_materno" maxlength="19" required>
 										</div>
 								</div>
 
 							</div>
-							<div class="row"> <!-- correo-->
+							<div class="row-fluid"> <!-- correo-->
 								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo</label>
@@ -156,7 +214,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="email" name="correo_estudiante" maxlength="199" placeholder="ejemplo@usach.cl" required>
+											<input type="email" id="correo_estudiante" name="correo_estudiante" maxlength="199" placeholder="ejemplo@usach.cl" required>
 										</div>
 								</div>
 
@@ -164,16 +222,18 @@ function ordenarFiltro(){
 
 						</div> 
 
+
+						<!-- Segunda columna -->
 						<div class="span6" >
 							
-							<div class="row"> <!-- carrera-->
-								<div class="span5">
+							<div class="row-fluid"> <!-- carrera-->
+								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar Carrera</label>
 									</div>
 								</div>
 								<div  class="span6">
-									<select required id="carreraAsignada" name="cod_carrera" title="asigne carrera" >
+									<select required id="cod_carrera" name="cod_carrera" title="asigne carrera" >
 									<?php
 									$contador=0;
 									$comilla= "'";
@@ -187,51 +247,47 @@ function ordenarFiltro(){
 								</div>
 							</div>
 							
-							<div class="row"> <!-- seccion-->
-								<div class="span5">
+
+							<div class="row-fluid"> <!-- seccion-->
+								<div class="span4">
 									<div class="control-group">
 										<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Asignar sección</label>
 									</div>
 								</div>
 								<div  class="span6" >
-								
 									<div class="controls">
 										<input type="text" onkeyup="ordenarFiltro()" id="filtroSeccion" placeholder="Filtro de Sección">
 									</div>
-									<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+								</div>
+							</div>
+						
+							<div class="row-fluid">
+								<div class="span5 offset4">
+									<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px; width: 127%" >
 									
 									
-										<table class="table table-hover">
+										<table class="table table-hover" id="listadoSecciones">
 											<thead>
 
 											</thead>
-											<tbody>									
-									
-											<?php
-											$contador=0;
-											while ($contador<count($secciones)){
-												echo '<tr>';
-												echo '<td id="seccionTd_'.$contador.'" ><input required id="'.$secciones[$contador].'" value="'.$secciones[$contador].'" name="cod_seccion" type="radio" >'.$secciones[$contador].'</td>';
-												echo '</tr>';
-												$contador = $contador + 1;
-											}
-											?>
+											<tbody>
 											</tbody>
 										</table>
 									</div>
 								</div>
-
 							</div>
-							<div class="row" style="margin-top:2%">
+
+
+							<div class="row-fluid" style="margin-top:2%">
 								<div class="span3 offset5">
-									<button class="btn" type="submit" style="width:102px">
+									<button class="btn" type="submit" >
 										<div class= "btn_with_icon_solo">Ã</div>
 										&nbsp Agregar
 
 									</button>
 								</div>
 								<div class="span3">
-									<button class="btn" type="reset" style="width:105px">
+									<button class="btn" type="reset" >
 										<div class= "btn_with_icon_solo">Â</div>
 										&nbsp Cancelar
 
@@ -242,12 +298,5 @@ function ordenarFiltro(){
 							
 						</div>
 					</div>
-
-				</div>
-					
-				</div> 
-			</div>
-		</form>
+			</form>
 		</fieldset>
-	</div>	
-</div>
