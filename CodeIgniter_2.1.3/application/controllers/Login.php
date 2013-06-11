@@ -551,16 +551,18 @@ class Login extends MasterManteka {
     if($provider == 'google')
     {
         $provider = $this -> oauth2 -> provider($provider, array(
-        'id' => '412900046548.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
-        'secret' => 'RN_R-d6BDT2XYwQdVHB5S9tO', ));						// Clave secreta del cliente
+        'id' => '412900046548-5g232a3t4898bdntsrbkn6f2tk1t1962.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
+        'secret' => 'SCyRUzLfrPe5_kAlF8dgS3B3', ));						// Clave secreta del cliente
     }
 
     if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
-       $url = $provider -> authorize();
+		
+		$url = $provider -> authorize();
+		$url = $this->str_lreplace("approval_prompt=force", "approval_prompt=auto", $url);
+        redirect($url);													// Redirección a este mismo método
+		/*
 
-        //redirect($url);													// Redirección a este mismo método
-
-        $this -> load -> spark('curl/1.2.1');
+        //$this -> load -> spark('curl/1.2.1');
 		//$var = $this->proxy->site('http://facebook.com');
 
 		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
@@ -569,15 +571,16 @@ class Login extends MasterManteka {
 		
 		$this -> curl -> create($url);
 		$this->curl->option(CURLINFO_HEADER_OUT, FALSE);
+		$this->curl->option(CURLOPT_COOKIESESSION, FALSE);
 		$this->curl->option(CURLOPT_SSL_VERIFYPEER, FALSE);
 		$return = $this -> curl -> execute();
 		
 		if ($return== false) echo $this->curl->error_string;
-		
-		$datos_plantilla["body_google"] = $return;
+		$datos_plantilla["url_google"] = $url;
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
 
 		$this->load->view('templates/template_google',$datos_plantilla);
+		*/
 
     } else {
         try {
@@ -656,19 +659,6 @@ class Login extends MasterManteka {
               $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 
-              /*
-				$datos_plantilla["titulo_msj"] = "Error";
-				$datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA";
-				$datos_plantilla["tipo_msj"] = "alert-error";
-				$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-				$datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-				$datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-				$datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-				$datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-				$tipos_usuarios_permitidos = array();
-				$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-				$this->cargarMsjDesLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-			*/
 
             }
         // En caso de que haya habido un error en la operación
@@ -678,6 +668,7 @@ class Login extends MasterManteka {
     }
 
    }
+   
    public function postLoguearse() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 
@@ -685,6 +676,18 @@ class Login extends MasterManteka {
 		$this->load->model('Model_estudiante');
 		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
 		echo json_encode($resultado);
+	}
+
+	private function str_lreplace($search, $replace, $subject)
+	{
+	    $pos = strrpos($subject, $search);
+
+	    if($pos !== false)
+	    {
+	        $subject = substr_replace($subject, $replace, $pos, strlen($search));
+	    }
+
+	    return $subject;
 	}
 
 }
