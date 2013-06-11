@@ -42,9 +42,11 @@
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verSalas; ?> ><a href="<?php echo site_url("Salas/verSalas")?>">Ver salas</a></li>
-					<li <?php echo $agregarSalas; ?> ><a href="<?php echo site_url("Salas/agregarSalas")?>">Agregar salas</a></li>
-					<li <?php echo $editarSalas; ?> ><a href="<?php echo site_url("Salas/editarSalas")?>">Editar salas</a></li>
-					<li <?php echo $borrarSalas; ?> ><a href="<?php echo site_url("Salas/borrarSalas")?>">Borrar salas</a></li>
+		        	<?php if ($tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarSalas; ?> ><a href="<?php echo site_url("Salas/agregarSalas")?>">Agregar salas</a></li>
+						<li <?php echo $editarSalas; ?> ><a href="<?php echo site_url("Salas/editarSalas")?>">Editar salas</a></li>
+						<li <?php echo $borrarSalas; ?> ><a href="<?php echo site_url("Salas/borrarSalas")?>">Borrar salas</a></li>
+					<?php } ?>
 		     	</div>
 		    </div>
 	  	</div>

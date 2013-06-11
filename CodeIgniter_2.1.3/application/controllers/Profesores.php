@@ -83,6 +83,10 @@ class Profesores extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	* Se buscan profesores de forma asincrona para mostrarlos en la vista
+	*
+	**/
 	public function postBusquedaProfesores() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';

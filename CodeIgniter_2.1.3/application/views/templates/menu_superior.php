@@ -67,9 +67,11 @@
 				<li <?php echo $Alumnos;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>
 				</li>
+				<?php if ($tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 				<li <?php echo $Informes;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Informes/index") ?>">E Informes</a>
 				</li>
+				<?php } ?>
 			</ul>
 		</div>
 	</div>

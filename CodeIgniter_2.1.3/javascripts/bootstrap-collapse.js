@@ -67,7 +67,9 @@
 
       this.$element[dimension](0)
       this.transition('addClass', $.Event('show'), 'shown')
+      $(actives).parent().css('border', '1px solid rgb(229, 229, 229)'); //AGREGADO A MANO
       $.support.transition && this.$element[dimension](this.$element[0][scroll])
+      //$(this).parent().css('border', '1px solid rgb(66, 30, 40)');
     }
 
   , hide: function () {
