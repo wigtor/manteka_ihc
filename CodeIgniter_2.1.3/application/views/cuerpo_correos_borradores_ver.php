@@ -9,9 +9,9 @@
 * deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
 * Para ver como se configura esto se debe ver en el evento onclick() en donde están contenidos los correos (bandeja) .
 */
-function DetalleCorreo(hora,fecha,asunto,id)
+function irAEnviar(codigo)
 {		
-
+document.location = "enviarBorrador/"+codigo;
 	
 }
 </script>
@@ -64,11 +64,9 @@ function cambiarCorreos(direccion,offset)
 			var tablaResultados = document.getElementById('tabla');
 			var nodoTexto;
 			$(tablaResultados).empty();		
-			listaRecibidos = JSON.parse(respuesta);
-				listaRecibidos.shift();
+			listaBorradores = JSON.parse(respuesta);
 			
-
-			for (var i = 0; i < listaRecibidos.length; i++) {
+			for (var i = 0; i < listaBorradores.length; i++) {
 				tr = document.createElement('tr');
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
@@ -77,7 +75,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("align","center");				
 				check = document.createElement('input');
 				check.type='checkbox';
-				check.setAttribute("name",listaRecibidos[i][0].cod_correo);
+				check.setAttribute("name",listaBorradores[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
 				//td.setAttribute(onclick,);
@@ -86,7 +84,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "23%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				span=document.createElement('span');
 				span.setAttribute('style','color:#DF0101');
 				nodoTexto=document.createTextNode('Borrador');
@@ -97,30 +95,30 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("id", "m"+i);
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				bold =document.createElement('b');
-				nodoTexto = document.createTextNode(listaRecibidos[i][0].asunto);
+				nodoTexto = document.createTextNode(listaBorradores[i].asunto);
 				bold.appendChild(nodoTexto);
 				td.appendChild(bold);
 
-				nodoTexto = document.createTextNode(" "+listaRecibidos[i][0].cuerpo_email);
+				nodoTexto = document.createTextNode(" "+listaBorradores[i].cuerpo_email);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
-				nodoTexto=document.createTextNode(listaRecibidos[i][0].fecha);
+				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
+				nodoTexto=document.createTextNode(listaBorradores[i].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				//td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				
-				nodoTexto=document.createTextNode(listaRecibidos[i][0].hora);
+				nodoTexto=document.createTextNode(listaBorradores[i].hora);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				tablaResultados.appendChild(tr);
@@ -128,8 +126,8 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("id","c"+i);
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
-				var cuerpo=listaRecibidos[i][0].cuerpo_email;
-				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
+				var cuerpo=listaBorradores[i].cuerpo_email;
+				document.getElementById("m"+i).innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaBorradores[i].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				
@@ -259,28 +257,23 @@ if(isset($msj))
 		$limite=$offset+5;
 
 	$comilla= "'";
-	$estado=$listaRecibidos[0];
-	array_shift($listaRecibidos);
+	$estado=1;
 	if($estado==1)
 	{
-		$correos=array();
-		/*foreach($listaRecibidos as $lista)
-		{
-			array_push($correos, $lista[0]);
-		}*/
-		if(count($correos)!==0)
+
+		if($cantidadBorradores!=0)
 		{
 			?>
 			<button  class ="btn"  onclick="eliminarBorrador() " style=" margin-right:4px; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
 			<?php
 		}
 
-		if(count($correos)===0)
+		if($cantidadBorradores==0)
 		{
 			?>
 			<div id="sinCorreos">
 			Estimado usuario</br>
-			La bandeja de correos recibidos se encuentra vacía.
+			La bandeja de borradores se encuentra vacía.
 			</div>
 			<?php
 		}
