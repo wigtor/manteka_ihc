@@ -25,5 +25,33 @@
 		<div>
 			<p>Es de suma importancia, ya que al conocer los elementos o implementos que una sala presenta, el profesor podrá tener conocimiento y la certeza de lo que necesita para impartir su clase, ya sea un proyector, un computador, una pizarra, etc.. Algunos profesores impartirán sus clases haciendo uso de diapositivas o presentaciones en MS Power Point, por lo que es necesario tener una sala con los implementos adecuados para la realización de la clase.</p>
 		</div>
+	<h4>7. ¿Qué es un filtro?</h4>
+		<div>
+			<p>Un filtro es una forma de seleccionar ciertas características de personas registradas en MANTEKA que el usuario puede seleccionar de tal forma de poder buscar cierta(s) persona(s) que cumplan con las características determinadas en el filtro.</p>
+		</div>
+	<h4>8. ¿Qué es una plantilla?</h4>
+		<div>
+			<p>Una plantilla es el texto modelo de un correo electrónico prediseñado y cuya finalidad es reutilizarlo para enviar correos a futuro sin tener que reescribir éste desde el principio. El usuario puede crear tantas plantillas como desee, de esta manera agilizará su trabajo</p>
+		</div>
+	<h4>9. ¿Qué es un grupo de contactos?</h4>
+		<div>
+			<p>Un grupo de contactos es un filtro que ha sido almacenado de tal forma de poder utilizarlo a futuro, la aplicación de este filtro genera un listado de contactos que cumplen con las características especificadas por el usuario en el pasado. Para mayor información puede descargar el manual de usuario de MANTEKA en la sección de Correos.</p>
+		</div>
+	<h4>10. ¿Qué es una sección?</h4>
+		<div>
+			<p>Una sección es el conjunto de estudiantes que conforman un curso de la asignatura Comunicación Efectiva, cada curso tiene asignado un moódulo temático a cargo de un profesor el cual impartirá los contenidos correspondientes.</p>
+		</div>
+	<h4>11. ¿Qué es un módulo?</h4>
+		<div>
+			<p>Un módulo corresponde a la unidad temática que el profesor impartirá durante las clases de la sección a la cual esta asignado.</p>
+		</div>
+	<h4>12. ¿En qué consisten las sesiones?</h4>
+		<div>
+			<p>Las sesiones son los distintos conceptos y contenidos que el profesor abordará en la realización del módulo temático, por ejemplo, el modulo temático Comunicación no verbal presentará sesiones como: ¿Qué es la comunicación?.</p>
+		</div>
+	<h4>13. ¿Qué es una asignación?</h4>
+		<div>
+			<p>Es la tarea de relacionar una sección con el modulo temático que será impartido, el profesor a cargo de la sección, la sala y horario de realización, en otras palabras es la construcción de la planificación de la asignatura.</p>
+		</div>
 	</div>
 </fieldset>

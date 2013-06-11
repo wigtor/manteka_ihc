@@ -32,9 +32,19 @@
 				$(nombre2Detalle).html(datos.nombre2);
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
-				if (datos.nombre1_profe == undefined) {
-					datos.nombre1_profe = ""; datos.nombre2_profe = "";datos.apellido1_profe = "";datos.apellido2_profe = "";
+				if (datos.nombre1_profe == null) {
+					datos.nombre1_profe = '';
 				}
+				if (datos.nombre2_profe == null) {
+					datos.nombre2_profe = '';
+				}
+				if (datos.apellido1_profe == null) {
+					datos.apellido1_profe = '';
+				}
+				if (datos.apellido2_profe == null) {
+					datos.apellido2_profe = '';
+				}
+				
 				var nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe; 
 				$(profesorDetalle).html(nombre_completo_profe);
 				var secciones = "";

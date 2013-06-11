@@ -24,6 +24,7 @@ function detalleAyudante(elemTabla) {
 				var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
 				var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
 				var correoDetalle = document.getElementById("correoDetalle");
+				var profesorDetalle = document.getElementById("profesorDetalle");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
@@ -36,6 +37,26 @@ function detalleAyudante(elemTabla) {
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
 				$(correoDetalle).html(datos.correo);
+				if (datos.nombre1_profe == null) {
+					datos.nombre1_profe = '';
+				}
+				if (datos.nombre2_profe == null) {
+					datos.nombre2_profe = '';
+				}
+				if (datos.apellido1_profe == null) {
+					datos.apellido1_profe = '';
+				}
+				if (datos.apellido2_profe == null) {
+					datos.apellido2_profe = '';
+				}
+				var nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe; 
+				$(profesorDetalle).html(nombre_completo_profe);
+				var secciones = "";
+				/* Esto no se implementa puesto no hay forma de relacionar un ayudante con una sección aún
+				for (var i = 0; i < datos.secciones.length; i++) {
+					secciones = secciones + ", " + datos.secciones[i];
+				}
+				*/
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -139,8 +160,6 @@ function cambioTipoFiltro() {
 </script>
 
 
-<div class= "row-fluid">
-	<div class= "span10">
 		<fieldset>
 			<legend>Borrar Ayudante</legend>
 			<div class= "row-fluid">
@@ -151,25 +170,25 @@ function cambioTipoFiltro() {
 							1.-Listado Ayudantes
 						</div>
 					</div>
-				<div class="row-fluid">
-					<div class="span11">
-					
-						<div class="row-fluid">
-							<div class="span6">
-								<input id="filtroLista" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+					<div class="row-fluid">
+						<div class="span11">
+						
+							<div class="row-fluid">
+								<div class="span6">
+									<input id="filtroLista" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+								</div>
+								<div class="span6">
+										<select id="tipoDeFiltro" title="Tipo de filtro" onChange="cambioTipoFiltro()" name="Filtro a usar">
+										<option value="1">Filtrar por Nombre</option>
+										<option value="2">Filtrar por Apellido paterno</option>
+										<option value="3">Filtrar por Apellido materno</option>
+										<option value="4">Filtrar por Correo Electrónico</option>
+										</select>
+								</div> 
 							</div>
-							<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" onChange="cambioTipoFiltro()" name="Filtro a usar">
-									<option value="1">Filtrar por Nombre</option>
-									<option value="2">Filtrar por Apellido paterno</option>
-									<option value="3">Filtrar por Apellido materno</option>
-									<option value="4">Filtrar por Correo Electrónico</option>
-									</select>
-							</div> 
 						</div>
 					</div>
-				</div>
-				<!--AQUÍ VA LA LISTA-->
+					<!--AQUÍ VA LA LISTA-->
 					<div class="row-fluid" style="margin-left: 0%;">
 						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 							<table id="listadoResultados" class="table table-hover">
@@ -187,46 +206,36 @@ function cambioTipoFiltro() {
 					<!--AQUÍ VA LA LISTA-->
 				</div>
 			
-
+				
 				<div class="span6">
-					<div style="margin-bottom:0%">
-							2.-Detalle del Ayudante:
-					</div>
 					<form id="formBorrar" type="post">
-					<div class="row-fluid">
-						<div >
-						<pre style="margin-top: 2%; padding: 2%">
+					2.-Detalle del Ayudante:
+					<pre style="margin-top: 2%; padding: 2%">
 Rut:              <b id="rutDetalle"></b>
-Nombres:          <b id="nombreunoDetalle"></b> <b id="nombredosDetalle" ></b>
+Nombres:          <b id="nombreunoDetalle" ></b> <b id="nombredosDetalle" ></b>
 Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-Apellido materno: <b id="apellidomaternoDetalle"></b>
-Correo:           <b id="correoDetalle"></b></pre>
+Apellido materno: <b id="apellidomaternoDetalle" ></b>
+Correo:           <b id="correoDetalle" ></b>
+Profesor guía:    <b id="profesorDetalle" ></b>
+Secciones:        <b id="seccionesDetalle" ></b>
+					</pre>
 				  <input type="hidden" id="rutEliminar" value="">
-								
-						</div>
-					</div>
-					<div class= "row-fluid" >
-						<div class="row-fluid" style=" margin-top:10px; margin-left:50%">		
-							<div class="span3 ">
-								<button class="btn" style="width: 93px" onclick="eliminarAyudante()" >
+						<div class= "row-fluid" >	
+							<div class="span3 offset5">
+								<button class="btn" onclick="eliminarAyudante()" >
 									<div class= "btn_with_icon_solo">b</div>
 									&nbsp Borrar
 								</button>
 							</div>
 
-							<div class = "span3 ">
-								<button  class ="btn" style="width: 105px" type="reset" onclick="DetalleAlumno('','','','','','')" >
-									<div class= "btn_with_icon_solo">Â</div>
+							<div class = "span3">
+								<button  class="btn" type="reset" onclick="DetalleAlumno('','','','','','')" >
+									<div class="btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
 							</div>
 						</div>
-					</div>
 					</form>
-				</div>	
+				</div>
 			</div>
-
-			
 		</fieldset>
-	</div>
-</div>

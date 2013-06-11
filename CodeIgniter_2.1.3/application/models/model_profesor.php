@@ -270,14 +270,13 @@ class Model_profesor extends CI_Model {
 	*/
 	public function EliminarProfesor($rut_profesor)
     {
-    $sql="DELETE FROM profesor WHERE RUT_USUARIO2 = '$rut_profesor' "; //código MySQL
-    $datos=mysql_query($sql); //enviar código MySQL
-    if($datos == true){
-      return 1;
-    }
-    else{
-      return -1;
-    }
+		$this->db->where('RUT_USUARIO2', $rut_profesor);
+		if($this->db->delete('profesor')) {
+			return 1;
+		}
+		else{
+			return -1;
+		}
     }
 
 

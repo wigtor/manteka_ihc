@@ -556,9 +556,29 @@ class Login extends MasterManteka {
     }
 
     if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
-        $url = $provider -> authorize();
+       $url = $provider -> authorize();
 
-        redirect($url);													// Redirección a este mismo método
+        //redirect($url);													// Redirección a este mismo método
+
+        $this -> load -> spark('curl/1.2.1');
+		//$var = $this->proxy->site('http://facebook.com');
+
+		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
+		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);			// Cabecera a cargar
+		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada','',true);			// Cabecera a cargar
+		
+		$this -> curl -> create($url);
+		$this->curl->option(CURLINFO_HEADER_OUT, FALSE);
+		$this->curl->option(CURLOPT_SSL_VERIFYPEER, FALSE);
+		$return = $this -> curl -> execute();
+		
+		if ($return== false) echo $this->curl->error_string;
+		
+		$datos_plantilla["body_google"] = $return;
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
+
+		$this->load->view('templates/template_google',$datos_plantilla);
+
     } else {
         try {
             // Se posee de un Token exitoso enviado por google
@@ -666,7 +686,6 @@ class Login extends MasterManteka {
 		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
 		echo json_encode($resultado);
 	}
-
 
 }
 

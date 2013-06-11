@@ -249,8 +249,10 @@ class Profesores extends MasterManteka {
 	*
 	* @param string $rut_profesor
 	*/
-	public function eliminarProfesores($rut_profesor)
+	public function eliminarProfesores()
 	{
+		$rut_profesor = $this->input->post("rutEliminar");
+
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
@@ -298,7 +300,7 @@ class Profesores extends MasterManteka {
 	*/
 	public function editarProfesores() // Carga la vista de modificar profesores
 	{
-			$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}

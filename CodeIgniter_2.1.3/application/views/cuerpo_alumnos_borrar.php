@@ -161,6 +161,25 @@
 		//ESTO ES DE QUIENES HICIERON EL BORRADO
 		var rutInputHidden = document.getElementById("rutEliminar");
 		$(rutInputHidden).val("");
+		/* Obtengo los objetos HTML donde serán escritos los resultados */
+		var rutDetalle = document.getElementById("rutDetalle");
+		var nombre1Detalle = document.getElementById("nombreunoDetalle");
+		var nombre2Detalle = document.getElementById("nombredosDetalle");
+		var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
+		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
+		var carreraDetalle = document.getElementById("carreraDetalle");
+		var correoDetalle = document.getElementById("correoDetalle");
+		var seccionDetalle = document.getElementById("seccionDetalle");
+		
+		/* Seteo los valores a string vacio */
+		$(rutDetalle).html("");
+		$(nombre1Detalle).html("");
+		$(nombre2Detalle).html("");
+		$(apellido1Detalle).html("");
+		$(apellido2Detalle).html("");
+		$(carreraDetalle).html("");
+		$(correoDetalle).html("");
+		$(seccionDetalle).html("");
 	}
 </script>
 

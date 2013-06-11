@@ -125,7 +125,7 @@
 <div class="row-fluid">
 <div class="span10">
 <fieldset>
-	<legend>Eliminar Sesion</legend>
+	<legend>Eliminar Sesión</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="row-fluid">
@@ -143,7 +143,7 @@
 								<div class="span6">
 							<select id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 								<option value="1">Filtrar por nombre</option>
-								<option value="2">Filtrar por codigo de sesión</option>
+								<option value="2">Filtrar por código de sesión</option>
 
 							</select>
 						</div>
@@ -182,18 +182,24 @@
 			<pre style="margin-top: 2%; padding: 2%">
 Codigo sesión:              	<b id="codigoDetalle"></b>
 Nombre del modulo temático:     <b id="mod_temDetalle"></b>
-Nombre de la sesion: 	<b id="nombreDetalle"></b>
+Nombre de la sesión: 	<b id="nombreDetalle"></b>
 Descripción: 	<b id="descripcionDetalle"></b>
 			</pre>
 <input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
 				</div>		
 			</div>
 								<div class="row-fluid">
-									<div class="span3 offset6">
-										<button class ="btn" type="submit" >Eliminar</button>
+									<div class="span4 " style="width:27%; margin-left:46%">
+										<button class ="btn" type="submit" style="width:108px" >
+											<div class="btn_with_icon_solo">Ë</div>
+											&nbsp Eliminar
+										</button>
 										</div>
 									<div class="span3">
-										<button  class ="btn" type="reset"  >Cancelar</button>
+										<button  class ="btn" type="reset" style="width:105px">
+											<div class="btn_with_icon_solo">Â</div>
+											&nbsp Cancelar
+										</button>
 									</div>
 								</div>
 		</form>

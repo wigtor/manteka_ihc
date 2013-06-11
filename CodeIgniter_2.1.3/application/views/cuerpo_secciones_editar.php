@@ -95,14 +95,14 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($seccion)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][0].'";';
+		echo 'arreglo['.$contadorE.'][1] = "'.$seccion[$contadorE][1].'";';
 		$contadorE = $contadorE + 1;
 	}
 	?>
 	
 	
 	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(cont);
+		ocultar=document.getElementById("rs_seccionTd_"+cont);
 		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
@@ -138,7 +138,7 @@ function ordenarFiltro(){
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro busqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 								<div class="span6">
 									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
