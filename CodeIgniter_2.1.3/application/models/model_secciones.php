@@ -138,7 +138,7 @@ class Model_secciones extends CI_Model{
     {
 		if($cod_seccion==""){ return 2;}
 		else{
-		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
+		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
 		$datos1=mysql_query($sql1); 
 		$contador = 0;
 		if (false != $datos1) {
@@ -153,13 +153,11 @@ class Model_secciones extends CI_Model{
 		
 
 
-		if($datos == true && $contador==0){
+		if($datos == true){
 			return 1;
 		}
 		else{
-			if($datos==false){
-				return -1;
-			}
+			return -1;
 		}
 		}
     }

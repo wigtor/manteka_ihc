@@ -74,6 +74,7 @@
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
+	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
 
 	
 	var arreglo = new Array();
@@ -93,7 +94,7 @@ function ordenarFiltro(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultar=document.getElementById(cont);
-		if(0 > arreglo[cont][1].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
 		else
@@ -120,8 +121,13 @@ function ordenarFiltro(){
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por número" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
+								<div class="span6">
+									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
+									<option value="1">Filtrar por Número</option>
+									</select>
+								</div> 
 							</div>
 						</div>
 						
