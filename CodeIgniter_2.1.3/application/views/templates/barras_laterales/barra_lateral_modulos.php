@@ -43,7 +43,7 @@
 			<div id="collapseOne" class="accordion-body collapse in">
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verModulos;  ?> ><a href="<?php echo site_url("Modulos/verModulos")?>">Ver módulos</a></li>
-					<?php if ($tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 						<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
 						<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
 						<li <?php echo $borrarModulos; ?> ><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>

@@ -46,7 +46,7 @@
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verAlumnos; ?> ><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
-		        	<?php if ($tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 						<li <?php echo $agregarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
 						<li <?php echo $editarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
 						<li <?php echo $borrarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
