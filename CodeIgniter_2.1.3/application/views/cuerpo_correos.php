@@ -171,7 +171,10 @@ function cambiarCorreos(direccion,offset)
 				}
 				document.getElementById("ant").removeAttribute('class');
 
-			}
+			}else if(offset+5>=<?php echo $cantidadCorreos;?>){
+					document.getElementById("sig").className="disabled";
+					document.getElementById("sig").removeAttribute('onClick');
+				}
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
 
 			
