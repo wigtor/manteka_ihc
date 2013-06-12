@@ -551,8 +551,8 @@ class Login extends MasterManteka {
     if($provider == 'google')
     {
         $provider = $this -> oauth2 -> provider($provider, array(
-        'id' => '412900046548-5g232a3t4898bdntsrbkn6f2tk1t1962.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
-        'secret' => 'SCyRUzLfrPe5_kAlF8dgS3B3', ));						// Clave secreta del cliente
+        'id' => '412900046548.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
+        'secret' => 'RN_R-d6BDT2XYwQdVHB5S9tO', ));						// Clave secreta del cliente
     }
 
     if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
@@ -654,8 +654,8 @@ class Login extends MasterManteka {
               
               $datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
               $datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-              $datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-              $datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+              //$datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+              //$datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 
