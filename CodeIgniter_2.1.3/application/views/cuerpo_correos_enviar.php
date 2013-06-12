@@ -57,6 +57,7 @@ function validacionSeleccion()
 function cargarBorrador(codigo){
 
 	codigoBorrador=codigo;
+
 		
 		$.ajax({
 			type: "POST",
@@ -77,7 +78,7 @@ function cargarBorrador(codigo){
 				}
 				
 				document.getElementById("rutRecept").value=rutRecept;
-
+				document.getElementById("codigoBorrador").value=codigoBorrador;
 				var correoRecept=[];
 
 				for(var i=0;i<borrador[2].length;i++){
