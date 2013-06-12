@@ -48,7 +48,7 @@ class Secciones extends MasterManteka {
 		$subMenuLateralAbierto = "verSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
 		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
         $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(),'rs_estudiantes'=>$this->Model_secciones->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_secciones->VerSeccion($cod_seccion));
@@ -180,7 +180,7 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
@@ -282,7 +282,33 @@ class Secciones extends MasterManteka {
 	}
 
 	
+	public function postDetalleModulos() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 
+		$nombre_modulo = $this->input->post('nombre_modulo');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->verProfeSegunModulo($nombre_modulo);
+		echo json_encode($resultado);
+	}
+
+	public function postDetalleSala() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$sala = $this->input->post('sala');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->verHorarioSegunSala($sala);
+		echo json_encode($resultado);
+	}
+
+	
 	
 	
 }

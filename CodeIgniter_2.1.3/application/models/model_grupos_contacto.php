@@ -61,5 +61,28 @@ class model_grupos_contacto extends CI_Model{
          $this->db->insert('filtro_contacto',$grupo_de_contacto);  
    }
    
+   public function VerGrupos($rut){
+		$this->db->select('*');
+		$this->db->from('filtro_contacto');
+		$this->db->where('RUT_USUARIO',$rut);
+		$query=$this->db->get();
+		$ObjetoListaResultados = $query->result_array();
+		return $ObjetoListaResultados;		
+   }
+   public function getGrupo($id){
+		$this->db->select('*');
+		$this->db->from('filtro_contacto');
+		$this->db->where('ID_FILTRO_CONTACTO', $id);
+		$query = $this->db->get();
+		$ObjetoListaResultados = $query->result_array();	
+		return $ObjetoListaResultados;	
+	}
+    function modificarGrupo($id, $nuevo_filtro){
+         $this->db->where('ID_FILTRO_CONTACTO',$id);
+         //$data = array('PASSWORD_PRIMARIA'=>$pass,);
+         $data = array('QUERY_FILTRO_CONTACTO'=>$nuevo_filtro,);
+         $this->db->update('filtro_contacto', $data);
+      }
+   
 }
 ?>

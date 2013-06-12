@@ -1,210 +1,6 @@
-<?php
-/**
-* Este Archivo corresponde al cuerpo central de la vista agregar grupos de contacto en el proyecto Manteka.
-*
-* @package    Manteka
-* @subpackage Views
-* @author     Grupo 2 IHC 1-2013 Usach
-*/
-?>
 <!--
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
 -->
-<fieldset id="cuadroDestinatario">
-
-		<legend>&nbsp;Crear Grupo de Contactos&nbsp;</legend>
-
-		<div class="primero">
-			<?php
-			$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos');
-			echo form_open('GruposContactos/agregarGrupo',$attributes);
-		?>
-		<label>Nombre Grupo: </label>
-		<input type="text" name="NOMBRE_FILTRO_CONTACTO" placeholder="Nombre Grupo Contactos" style="margin-top:10px;">
-		<input type="hidden" name="QUERY_FILTRO_CONTACTO">
-		<hr>
-			<div id="filtrosSelect">
-				<div class="row-fluid">
-					 <div class="control-group span9">
-						<label class="control-label" for="filtroLista">Ingrese el nombre de quien busca o parte de su nombre</label>
-						<div class="controls">
-							<input id="filtroLista" name="filtroLista" style="font-size:9pt;font-weight:bold;" onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Filtro búsqueda">
-						</div>
-					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="control-group span4">
-						<label class="control-label" for="filtroPorTipoDeDestinatario">Filtrar por tipo destinatario</label>
-						<div class="controls">
-							<select class="filtro-primario" id="filtroPorTipoDeDestinatario" title="Tipo de destinatario"  onChange="showDestinatarios(this.value)">
-								<option  value="0">Todos</option>
-								<option  value="1">Alumnos</option>
-								<option  value="2">Profesores</option>
-								<option value="3">Ayudantes</option>
-								<option value="4">Coordinadores</option>
-							</select>
-						</div>
-					</div>
-
-
-					<div class="control-group span4">
-						<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
-						<div class="controls">
-							<!-- Este debe ser cargado dinámicamente por php -->
-							<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="filtro-primario" onChange="showAlumnosByFiltro()">
-								<option  value="0">Todos</option>
-								<option  value="1">profe1</option>
-								<option  value="2">profe2</option>
-								<option value="3">profe3</option>
-								<option value="4">profe4</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="control-group span4">
-						<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
-						<div class="controls">
-							<!-- Este debe ser cargado dinámicamente por php -->
-							<select id="filtroPorCarrera" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
-								<option  value="">Todos</option>
-								<!--<option  value="1">Ing civil informática</option>
-								<option  value="2">Ing civil en minas</option>
-								<option value="3">Ing civil elétrica</option>
-								<option value="4">Ing  industrial</option> -->
-							</select>
-						</div>
-					</div>
-				</div>
-
-				<div class="row-fluid">
-					<div class="control-group span4">
-						<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
-						<div class="controls">
-							<!-- Este debe ser cargado dinámicamente por php -->
-							<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
-								<option  value="0">Todos</option>
-								<option  value="1">Unidad 1</option>
-								<option  value="2">Unidad 2</option>
-								<option value="3">Unidad 3</option>
-								<option value="4">Unidad 4</option>
-								<option value="5">Unidad 5</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="control-group span4">
-						<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
-						<div class="controls">
-							<!-- Este debe ser cargado dinámicamente por php -->
-							<select id="filtroPorSeccion" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
-								<option  value="0">Todas</option>
-								<option  value="a1">A-01</option>
-								<option  value="b2">B-02</option>
-								<option value="c3">C-03</option>
-								<option value="d4">D-04</option>
-								<option value="e5">E-05</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="control-group span4">
-						<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque horario</label>
-						<div class="controls">
-							<!-- Este debe ser cargado dinámicamente por php -->
-							<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
-								<option  value="0">Todos</option>
-								<option  value="1">Unidad 1</option>
-								<option  value="2">Unidad 2</option>
-								<option value="3">Unidad 3</option>
-								<option value="4">Unidad 4</option>
-								<option value="5">Unidad 5</option>
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Este es el listado de resultados del filtro -->
-			<div id="listasDeDestinatarios" class="row-fluid">
-				<div id="listaResultadosFiltro" class="span5">
-					<table id="tabla" name="tabla" class="table table-hover table-bordered" style="width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
-						<thead>
-							<tr>
-								<th >
-									<input type="checkbox" id="seleccionarTodosDelFiltro">
-								</th>
-								<th>
-									Resultados del filtro
-								</th>
-							</tr>
-						</thead>
-
-
-						<tbody>
-							<form id="formDetalle" type="post">
-							<tr>
-								<td >
-									<input type="checkbox" id="seleccionarTodosDelFiltro">
-								</td>
-								<td>
-									Juan Perez Torres
-								</td>
-							</tr>
-							</form>
-						</tbody>
-					</table>
-				</div>
-		<script>
-		//addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
-		</script>
-				<!-- Este es el botón que está entremedio de los dos listados -->
-				<div class="span2 text-center">
-					<div class="btn" type="button" onclick="pasarContactos()">Agregar</div>
-				</div>
-
-				<!-- Este es el listado de destinatarios seleccionados para el envío -->
-				<div id="listaDestinatarios" class="span5">
-					<table id="tabla2" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
-						<thead>
-							<tr>
-								<th>
-									<input type="checkbox" id="seleccionarTodosDelFiltro" onClick="seleccionar_segundo_check(this)" checked="true">
-
-								</th>
-								<th >
-									Destinatarios seleccionados
-
-								</th>
-							</tr>
-						</thead>
-						<tbody id="tbody2">
-							
-
-
-						</tbody>
-					</table>
-				</div>
-			</div>
-
-			<!-- Botones atrás y siguiente -->
-			<div class="row-fluid">
-				<ul class="pager pull-right">
-					<li>
-						<button class ="btn" type="submit" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" >Guardar Grupo</button>
-					</li>
-				</ul>
-			</div>
-		
-
-		<?php echo form_close(""); ?>
-	</div><!--primero-->
-
-</fieldset>
-
-
-
-
 
 <script type='text/javascript'>
 var arrayRespuesta;
@@ -246,35 +42,7 @@ function validacionSeleccion()
 }
 </script>
 
-<script type='text/javascript'>
 
-
-/** 
-* Esta función muestra el segundo paso para mandar un correo
-*/
-
-function pasoUnoDos()
-{
-	$('#cuadroEnviar').css({display:'none'});
-	$('#cuadroEnvio').css({display:'none'});
-	$('#cuadroDestinatario').css({display:'block'});
-	document.getElementById('filtroPorCarrera').disabled=true;
-}
-
-/** 
-* Esta función devuelve al primer paso para mandar un correo
-*/
-
-</script>
-
-<script type='text/javascript'>
-function pasoDosUno()
-{
-	$('#cuadroDestinatario').css({display:'none'});
-	$('#cuadroEnvio').css({display:'none'});
-	$('#cuadroEnviar').css({display:'block'});
-}
-</script>
 
 <script type='text/javascript'>
 
@@ -315,20 +83,7 @@ function pasoDosTres()
 }
 </script>
 
-<script type='text/javascript'>
 
-
-/** 
-* Esta función devuelve al segundo paso para mandar un correo
-*/
-
-function pasoTresDos()
-{
-	$('#cuadroEnvio').css({display:'none'});
-	$('#cuadroEnviar').css({display:'none'});
-	$('#cuadroDestinatario').css({display:'block'});
-}
-</script>
 
 <script type='text/javascript'>
 
@@ -451,9 +206,6 @@ function DetalleAyudante(rut,nombre1,nombre2,apePaterno,apeMaterno,correo)
 	  
 }
 </script>
-
-
-
 
 <script type="text/javascript">
 /************************************************************************************************************
@@ -900,18 +652,256 @@ function revisarRut(rut){
 
 </script>
 
+<fieldset id="cuadroDestinatario" style="display;">
+	<legend>&nbsp;Modificar Grupo de Contactos : <?php echo $rutes['NOMBRE_FILTRO_CONTACTO']; ?>&nbsp;</legend>
+	<div  title="Paso 2: Seleccionar destinatario(s)">
+		
+	</div>
+	<div id="filtrosSelect">
+		<div class="row-fluid">
+			 <div class="control-group span9">
+				<label class="control-label" for="filtroLista">Ingrese el nombre de quien busca o parte de su nombre</label>
+				<div class="controls">
+					<input id="filtroLista" name="filtroLista" style="font-size:9pt;font-weight:bold;" onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Filtro búsqueda">
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorTipoDeDestinatario">Filtrar por tipo destinatario</label>
+				<div class="controls">
+					<select class="filtro-primario" id="filtroPorTipoDeDestinatario" title="Tipo de destinatario"  onChange="showDestinatarios(this.value)">
+						<option  value="0">Todos</option>
+						<option  value="1">Alumnos</option>
+						<option  value="2">Profesores</option>
+						<option value="3">Ayudantes</option>
+						<option value="4">Coordinadores</option>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="filtro-primario" onChange="showAlumnosByFiltro()">
+						<option  value="0">Todos</option>
+						<option  value="1">profe1</option>
+						<option  value="2">profe2</option>
+						<option value="3">profe3</option>
+						<option value="4">profe4</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorCarrera" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+						<option  value="">Todos</option>
+						<!--<option  value="1">Ing civil informática</option>
+						<option  value="2">Ing civil en minas</option>
+						<option value="3">Ing civil elétrica</option>
+						<option value="4">Ing  industrial</option> -->
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+						<option  value="0">Todos</option>
+						<option  value="1">Unidad 1</option>
+						<option  value="2">Unidad 2</option>
+						<option value="3">Unidad 3</option>
+						<option value="4">Unidad 4</option>
+						<option value="5">Unidad 5</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorSeccion" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+						<option  value="0">Todas</option>
+						<option  value="a1">A-01</option>
+						<option  value="b2">B-02</option>
+						<option value="c3">C-03</option>
+						<option value="d4">D-04</option>
+						<option value="e5">E-05</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group span4">
+				<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque horario</label>
+				<div class="controls">
+					<!-- Este debe ser cargado dinámicamente por php -->
+					<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="filtro-secundario" onChange="showAlumnosByFiltro()">
+						<option  value="0">Todos</option>
+						<option  value="1">Unidad 1</option>
+						<option  value="2">Unidad 2</option>
+						<option value="3">Unidad 3</option>
+						<option value="4">Unidad 4</option>
+						<option value="5">Unidad 5</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Este es el listado de resultados del filtro -->
+	<div id="listasDeDestinatarios" class="row-fluid">
+		<div id="listaResultadosFiltro" class="span5">
+			<table id="tabla" name="tabla" class="table table-hover table-bordered" style="width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+				<thead>
+					<tr>
+						<th >
+							<input type="checkbox" id="seleccionarTodosDelFiltro">
+						</th>
+						<th>
+							Resultados del filtro
+						</th>
+					</tr>
+				</thead>
+
+
+				<tbody>
+					<form id="formDetalle" type="post">
+					<tr>
+						<td >
+							<input type="checkbox" id="seleccionarTodosDelFiltro">
+						</td>
+						<td>
+							Juan Perez Torres
+						</td>
+					</tr>
+					</form>
+				</tbody>
+			</table>
+		</div>
+<script>
+//addTableRolloverEffect('tabla','tableRollOverEffect1','tableRowClickEffect1');
+</script>
+		<!-- Este es el botón que está entremedio de los dos listados -->
+		<div class="span2 text-center">
+			<div class="btn" type="button" onclick="pasarContactos()">Agregar</div>
+		</div>
+
+		<!-- Este es el listado de destinatarios seleccionados para el envío -->
+		<div id="listaDestinatarios" class="span5">
+			<table id="tabla2" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
+				<thead>
+					<tr>
+						<th>
+							<input type="checkbox" id="seleccionarTodosDelFiltro" onClick="seleccionar_segundo_check(this)" >
+
+						</th>
+						<th >
+							Grupo 
+
+						</th>
+					</tr>
+				</thead>
+				
+				<?php
+					//var_dump($rs_ayudantes);
+					function existe_palabra($texto,$palabra){  
+						if(substr_count($texto, $palabra) !== 0 ){  
+							return true;  
+						}else{  
+							return false;  
+						}  
+					} 
+
+				?>
+				
+				
+				<tbody id="tbody2">
+					<?php for ($i = 0; $i <count($rs_estudiantes); $i++) {  ?>
+						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_estudiantes[$i][0])){ ?>
+						<tr rut="<?php echo $rs_estudiantes[$i]['0'] ?>" >
+							<td>
+								<input type="checkbox">
+							</td>
+							<td>
+								<?php echo $rs_estudiantes[$i][1]." ".$rs_estudiantes[$i][2]." ".$rs_estudiantes[$i][3]." ".$rs_estudiantes[$i][4]; ?>
+							</td>
+						</tr>
+					
+					<?php } } ?>
+					<?php for ($i = 0; $i <count($rs_profesores); $i++) {  ?>
+						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_profesores[$i][0])){ ?>
+						<tr rut="<?php echo $rs_profesores[$i]['0'] ?>" >
+							<td>
+								<input type="checkbox">
+							</td>
+							<td>
+								<?php echo $rs_profesores[$i][1]." ".$rs_profesores[$i][2]." ".$rs_profesores[$i][3]." ".$rs_profesores[$i][4]; ?>
+							</td>
+						</tr>
+					
+					<?php } } ?>
+					<?php for ($i = 0; $i <count($rs_ayudantes); $i++) { ?>
+						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_ayudantes[$i][0])){ ?>
+						<tr rut="<?php echo $rs_ayudantes[$i]['0'] ?>" >
+							<td>
+								<input type="checkbox">
+							</td>
+							<td>
+								<?php echo $rs_ayudantes[$i][1]." ".$rs_ayudantes[$i][2]." ".$rs_ayudantes[$i][3]." ".$rs_ayudantes[$i][4]; ?>
+							</td>
+						</tr>
+					<!--//rs_profesores rs_estudiates rs_ayudantes rutes-->
+					<?php } } ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Botones atrás y siguiente -->
+	<div class="row-fluid">
+		<ul class="pager pull-right">
+			
+			<li>
+			<?php
+					$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos','style'=>'margin-left:-300px;');
+					echo form_open('GrupoContactos/editarGrupoContacto',$attributes);
+				?>
+				
+				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
+				<input type="hidden" name="ID_GRUPO" value="<?php echo $rutes['ID_FILTRO_CONTACTO']; ?>">
+				<button class ="btn" type="submit" title="Modificar" style="margin-right:-150px">Guardar Grupo</button>
+				<?php echo form_close(""); ?>
+			</li>
+		</ul>
+	</div>
+</fieldset>
+
+
+
+
 
 <script type="text/javascript">
 
 
 function validar(form){
 	event.preventDefault();
-	var answer = confirm("¿Está seguro que desea agregar este Grupo de Contactos?");
+	var answer = confirm("¿Está seguro que desea guardar los cambios en este Grupo de Contactos?");
 	if (answer){
 		var string = "";
 		var total=tbody2.getElementsByTagName('tr').length;
 		var help = 0;
-		for (var x=0; x < total; x++) {
+		for (var x=0; x < total; x++) {		
 			if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
 				if(help== 0){
 				string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
@@ -926,24 +916,21 @@ function validar(form){
 			alert('Debe seleccionar un contacto de la tabla Destinatario')
 		}
 		else{
-			if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
-				alert("Debe seleccionar un nombre para el grupo de contactos");
-			}
-			else{
+			
 				$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
 		// Enviamos el formulario usando AJAX
 				$.ajax({
 				type: 'POST',
-				url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
+				url: "<?php echo site_url("GruposContactos/editarGrupoContacto") ?>",
 				data: $('#form_contactos').serialize(),	
 				// Mostramos un mensaje con la respuesta de PHP
 				success: function(data){				
 				}
 				})	
+				alert('¡Grupo de Contactos exitosamente modificado!');
 			
-			}
+			
 		}	
-		alert('¡Grupo de Contactos exitosamente agregado!')
 		return false;		
 	}
 	else{

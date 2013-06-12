@@ -1,4 +1,3 @@
-
 <fieldset>
 	<legend>Página no encontrada</legend>
 	<div class="row-fluid" style="text-align:center;">
