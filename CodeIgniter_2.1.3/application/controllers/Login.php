@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
-
+require_once 'index.php';
 /**
  *	Clase controlador Login.
  *	Controlador encargado de presentar las vistas de autentificación (Login)
@@ -546,13 +546,40 @@ class Login extends MasterManteka {
     *	Protocolo para la utilización de APIs de otros sistemas registrados
     */
     $this -> load -> spark('oauth2/0.4.0');
+
     
     // Si el proveedor pasado es Google
     if($provider == 'google')
     {
-        $provider = $this -> oauth2 -> provider($provider, array(
-        'id' => '412900046548.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
-        'secret' => 'RN_R-d6BDT2XYwQdVHB5S9tO', ));						// Clave secreta del cliente
+    	require_once APPPATH.'config/keys.php';
+    	
+    	$keys_array;
+    	
+    	if(defined('ENVIRONMENT')){
+    		switch(ENVIRONMENT)
+    		{
+    			case 'development':
+    				$keys_array = array(
+    					'id' => constant('DEVELOPMENT-ID'),							// ID del cliente OAuth registrado con Google
+    					'secret' => constant('DEVELOPMENT-PASS')					// Clave secreta del client
+					);
+					break;
+				case 'production':
+					$keys_array = array(
+						'id' => constant('PRODUCTION-ID'),							// ID del cliente OAuth registrado con Google
+						'secret' => constant('PRODUCTION-CLASS')					// Clave secreta del client
+					);
+					break;
+				default:
+					exit('The application environment is not set correctly.');
+			}
+    	}
+    	else{
+    		redirect('Otros');
+    		return;
+
+    	}
+        $provider = $this -> oauth2 -> provider($provider, $keys_array);
     }
 
     if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
@@ -678,6 +705,15 @@ class Login extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	*	Función privada para apoyar la labor de otras funciones.
+	*	Reemplaza la última ocurrencia del string $search por
+	*	el string $replace, dentro del string $search
+	*	
+	*	@param string $search Última ocurrencia a encontrar
+	*	@param string $replace Por lo que se debe reemplazar la ocurrencia encontrada
+	*	@param string $subject String en el cual se busca la ocurrencia
+	*/
 	private function str_lreplace($search, $replace, $subject)
 	{
 	    $pos = strrpos($subject, $search);
