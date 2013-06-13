@@ -1,4 +1,8 @@
 <script>
+	var tiposFiltro = ["Rut", "Nombres", "Apellidos", "Correo"]; //Debe ser escrito con PHP
+	var prefijo_tipoDato = "ayudante_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+
 	function detalleAyudante(elemTabla) {
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
@@ -70,37 +74,91 @@
 
 
 	function cambioTipoFiltro() {
-		var selectorFiltro = document.getElementById('tipoDeFiltro');
+		//var selectorFiltro = document.getElementById('tipoDeFiltro');
 		var inputTextoFiltro = document.getElementById('filtroLista');
-		var valorSelector = selectorFiltro.value;
+		//var valorSelector = selectorFiltro.value;
 		var texto = inputTextoFiltro.value;
+		var valorFiltrosJson = "{"; var valorTemp;
+		for (var i = 0; i < tiposFiltro.length; i++) {
+			valorTemp = document.getElementById(prefijo_tipoFiltro + i);
+			if (valorTemp == null)
+				continue;
+			valorFiltrosJson += valorTemp;
+			if (i != (tiposFiltro.length -1)) {
+				valorFiltrosJson += ", ";
+			}
+		}
+		valorFiltrosJson += "}";
+
+
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>", /* Se setea la url del controlador que responderá */
-			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			data: { textoFiltro: texto, filtrosAvanzados: valorFiltrosJson}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				var tablaResultados = document.getElementById("listadoResultados");
 				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, nodoTexto;
+				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
+				var arrayRespuesta = new Array();
+				for (var i = 0; i < arrayObjectRespuesta.length; i++) {
+					arrayRespuesta[i] = $.map( arrayObjectRespuesta[i], function( value, key ) {
+						return value;
+					});
+				}
+
+				var tr, td, th, thead, nodoTexto, nodoBtnFiltroAvanzado;
 				thead = document.createElement('thead');
 				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre Completo");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
+
+				//SE CREA LA CABECERA DE LA TABLA
+				for (var i = 0; i < tiposFiltro.length; i++) {
+						th = document.createElement('th');
+							nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
+							
+
+							nodoBtnFiltroAvanzado = document.createElement('a');
+							nodoBtnFiltroAvanzado.setAttribute('class', "dropdown-toggle");
+							nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
+							nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer; height:50px;");
+								span = document.createElement('span');
+								span.setAttribute('class', "caret");
+								span.setAttribute('style', "vertical-align:middle;");
+							nodoBtnFiltroAvanzado.appendChild(span);
+							nodoBtnFiltroAvanzado.setAttribute('delay', { show: 500, hide: 100 });
+						th.appendChild(nodoTexto);
+						th.appendChild(nodoBtnFiltroAvanzado);
+
+
+						var divs = '<div class="input-append"><input class="span9" id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda"><button class="btn_with_icon btn" onClick="cambioTipoFiltro()" type="button">z</button></div>';
+						
+						$(nodoBtnFiltroAvanzado).popover({html:true, content: divs, placement:'bottom', title:"Búsqueda sólo por " + tiposFiltro[i], rel:"popover"});
+
+						
+					tr.appendChild(th);
+				}
 				thead.appendChild(tr);
+				
 				tablaResultados.appendChild(thead);
+
+
+				//CARGO EL CUERPO DE LA TABLA
+				tbody = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) {
 					tr = document.createElement('tr');
-					td = document.createElement('td');
-					tr.setAttribute("id", "ayudante_"+arrayRespuesta[i].rut);
-					tr.setAttribute("onClick", "detalleAyudante(this)");
-					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
-					tablaResultados.appendChild(tr);
+					tr.setAttribute('style', "cursor:pointer");
+
+					for (var j = 0; j < tiposFiltro.length; j++) {
+						td = document.createElement('td');
+						tr.setAttribute("id", prefijo_tipoDato+arrayObjectRespuesta[i].rut); //Da lo mismo en este caso los id repetidos en los div
+						tr.setAttribute("onClick", "verDetalle(this)");
+						nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+					}
+
+					tbody.appendChild(tr);
 				}
+				tablaResultados.appendChild(tbody);
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -143,23 +201,26 @@
 		<div class="span6">
 			1.-Listado ayudantes
 			<div class="controls controls-row">
-				<input class="span6" id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+			    <div class="input-append span6">
+					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
+					<button class="btn_with_icon btn" onClick="cambioTipoFiltro()" type="button">z</button>
+				</div>
 				
+				<!--
 				<select class="span6" id="tipoDeFiltro" onChange="cambioTipoFiltro()" title="Tipo de filtro" name="Filtro a usar">
 					<option value="1">Filtrar por nombre</option>
 					<option value="2">Filtrar por apellido paterno</option>
 					<option value="3">Filtrar por apellido materno</option>
 					<option value="4">Filtrar por correo electrónico</option>
 				</select>
+				-->
 			</div>
 
 			<div class="row-fluid" style="margin-left: 0%;">
 				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 					<table id="listadoResultados" class="table table-hover">
 						<thead>
-							<tr>
-								<th>Nombre Completo</th>
-							</tr>
+							
 						</thead>
 						<tbody>
 
@@ -176,7 +237,7 @@ Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Correo:           <b id="correoDetalle"></b>
-Profesor guía: <b id="profesorDetalle" ></b>
+Profesor guía:    <b id="profesorDetalle" ></b>
 Secciones:        <b id="seccionesDetalle" ></b>
 		</pre>
 		</div>

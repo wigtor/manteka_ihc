@@ -377,6 +377,7 @@ class Ayudantes extends MasterManteka {
 		}
 		$textoFiltro = $this->input->post('textoFiltro');
 		$tipoFiltro = $this->input->post('tipoFiltro');
+		$tipoFiltro = 1; //SÓLO PRO AHORA
 		$this->load->model('Model_ayudante');
 
 		$resultado = $this->Model_ayudante->getAyudantesByFilter($tipoFiltro, $textoFiltro);

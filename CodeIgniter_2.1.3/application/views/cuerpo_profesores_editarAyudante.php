@@ -91,7 +91,11 @@
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				var tablaResultados = document.getElementById("listadoResultados");
 				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
+				var arrayRespuesta = $.map( arrayObjectRespuesta, function( value, key ) {
+					return key;
+				}
+
 				var tr, td, th, thead, nodoTexto;
 				thead = document.createElement('thead');
 				tr = document.createElement('tr');
@@ -104,9 +108,9 @@
 				for (var i = 0; i < arrayRespuesta.length; i++) {
 					tr = document.createElement('tr');
 					td = document.createElement('td');
-					tr.setAttribute("id", "ayudante_"+arrayRespuesta[i].rut);
+					tr.setAttribute("id", "ayudante_"+arrayObjectRespuesta[i].rut);
 					tr.setAttribute("onClick", "detalleAyudante(this)");
-					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+					nodoTexto = document.createTextNode(arrayRespuesta[i]);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
 					tablaResultados.appendChild(tr);
