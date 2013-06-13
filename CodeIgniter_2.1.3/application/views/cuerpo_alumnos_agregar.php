@@ -13,26 +13,38 @@
 	}
 </script>
 
-<script type="text/javascript">
-function comprobarUsoRut(){
-	var rut_tentativo = document.getElementById("rut_tentativo");
-	var arreglo = new Array();
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($lista_rut)){
-		echo 'arreglo['.$contadorE.'] = "'.$lista_rut[$contadorE].'";';
-		$contadorE = $contadorE + 1;
+<script>
+
+	function comprobarRut() {
+		var rut = document.getElementById("rut_estudiante").value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut_post: rut},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == -1){
+					alert("Rut en uso");
+					document.getElementById("rut_estudiante").value = "";
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 	}
-	?>
-	var cont;
-	for(cont=0;cont < arreglo.length;cont++){
-		if(arreglo[cont] == rut_tentativo.value){
-			alert("Rut ya está en uso en el sistema");
-			rut_tentativo.value = "";
-			return;
-		}
-    }
-}
+
+</script>
+
+<script type="text/javascript">
+
 
 	function agregarEstudiante(){
 
@@ -150,7 +162,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input id="rut_estudiante" onblur="comprobarUsoRut()" max="999999999" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
+											<input id="rut_estudiante" onblur="comprobarRut()" max="999999999" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
 										</div>
 								</div>
 							</div>
