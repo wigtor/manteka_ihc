@@ -217,47 +217,41 @@ class Model_ayudante extends CI_Model {
 	* @return Se devuelve un array de objetos ayudante con sólo su nombre y rut
 	* @author Alex Ahumada
 	*/
-    public function getAyudantesByFilter($tipoFiltro, $texto)
+    public function getAyudantesByFilter($texto, $textoFiltrosAvanzados)
    	{
+		$this->db->select('RUT_AYUDANTE AS rut');
+		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
 
-      //Sólo para acordarse
-      define("BUSCAR_POR_NOMBRE", 1);
-      define("BUSCAR_POR_APELLIDO1", 2);
-      define("BUSCAR_POR_APELLIDO2", 3);
-      define("BUSCAR_POR_CORREO", 4);
-
-      $attr_filtro = "";
-      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-         $attr_filtro = "NOMBRE1_AYUDANTE";
-      }
-      else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-         $attr_filtro = "APELLIDO1_AYUDANTE";
-      }
-      else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-         $attr_filtro = "APELLIDO2_AYUDANTE";
-      }
-      else if ($tipoFiltro == BUSCAR_POR_CORREO) {
-         $attr_filtro = "CORREO_AYUDANTE";
-      }
-      else {
-         return array(); //No es válido, devuelvo vacio
-      }
-
-      $this->db->select('RUT_AYUDANTE AS rut');
-      $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
-      $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
-      $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
-      $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
-      $this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
-      $this->db->like($attr_filtro, $texto);
-      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-         $this->db->or_like("NOMBRE2_AYUDANTE", $texto);
-      }
-      $query = $this->db->get('ayudante');
-      if ($query == FALSE) {
-         return array();
-      }
-      return $query->result();
+		if ($texto != "") {
+			$this->db->like("RUT_AYUDANTE", $texto);
+			$this->db->or_like("NOMBRE1_AYUDANTE", $texto);
+			$this->db->or_like("NOMBRE2_AYUDANTE", $texto);
+			$this->db->or_like("APELLIDO1_AYUDANTE", $texto);
+			$this->db->or_like("APELLIDO2_AYUDANTE", $texto);
+		}
+		else {
+			//Sólo para acordarse
+			define("BUSCAR_POR_RUT", 0);
+			define("BUSCAR_POR_NOMBRE", 1);
+			define("BUSCAR_POR_APELLIDO", 2);
+			$this->db->like("RUT_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
+				$this->db->like("NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+				$this->db->or_like("NOMBRE2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
+				$this->db->like("APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+				$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+			}
+		}
+		$query = $this->db->get('ayudante');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
    }
 
    /**

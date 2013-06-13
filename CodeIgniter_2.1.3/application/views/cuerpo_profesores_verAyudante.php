@@ -1,13 +1,14 @@
+
 <script>
-	var tiposFiltro = ["Rut", "Nombres", "Apellidos", "Correo"]; //Debe ser escrito con PHP
+	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 
-	function detalleAyudante(elemTabla) {
+	function verDetalle(elemTabla) {
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		rut_clickeado = idElem.substring("ayudante_".length, idElem.length);
+		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		//var rut_clickeado = elemTabla;
 
 
@@ -58,7 +59,7 @@
 				}
 				*/
 				$(seccionesDetalle).html(secciones);
-				$(correoDetalle).html(datos.correo);
+				$(correoDetalle).html($.trim(datos.correo));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -78,26 +79,43 @@
 		var inputTextoFiltro = document.getElementById('filtroLista');
 		//var valorSelector = selectorFiltro.value;
 		var texto = inputTextoFiltro.value;
-		var valorFiltrosJson = "{"; var valorTemp;
+		var valorFiltrosJson = new Array();
 		for (var i = 0; i < tiposFiltro.length; i++) {
-			valorTemp = document.getElementById(prefijo_tipoFiltro + i);
-			if (valorTemp == null)
-				continue;
-			valorFiltrosJson += valorTemp;
+			valorTemp = document.getElementById(prefijo_tipoFiltro + i); //Obtengo el input de cada filtro
+			if (valorTemp == null) {
+				valorTemp = "";
+			}
+			else {
+				valorTemp = $.trim(valorTemp.value);
+			}
+			valorFiltrosJson[i] = valorTemp; //Agrego la palabra del filtro en la posición i-esima
+		}
+
+		/*
+		var valorFiltrosJson = "["; var valorTemp;
+		for (var i = 0; i < tiposFiltro.length; i++) {
+			valorTemp = document.getElementById(prefijo_tipoFiltro + i); //Obtengo el input de cada filtro
+			if (valorTemp == null) {
+				valorTemp = "\"\"";
+			}
+			else {
+				valorTemp = "\""+$.trim(valorTemp.value)+"\"";
+			}
+			valorFiltrosJson += valorTemp; //Agrego la palabra del filtro en la posición i-esima
 			if (i != (tiposFiltro.length -1)) {
 				valorFiltrosJson += ", ";
 			}
 		}
-		valorFiltrosJson += "}";
-
+		valorFiltrosJson += "]";
+		*/
 
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>", /* Se setea la url del controlador que responderá */
-			data: { textoFiltro: texto, filtrosAvanzados: valorFiltrosJson}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			data: { textoFiltroBasico: texto, textoFiltrosAvanzados: valorFiltrosJson}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				var tablaResultados = document.getElementById("listadoResultados");
-				$(tablaResultados).empty();
+				$(tablaResultados).find('tbody').remove();
 				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
 				var arrayRespuesta = new Array();
 				for (var i = 0; i < arrayObjectRespuesta.length; i++) {
@@ -106,41 +124,7 @@
 					});
 				}
 
-				var tr, td, th, thead, nodoTexto, nodoBtnFiltroAvanzado;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-
-				//SE CREA LA CABECERA DE LA TABLA
-				for (var i = 0; i < tiposFiltro.length; i++) {
-						th = document.createElement('th');
-							nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
-							
-
-							nodoBtnFiltroAvanzado = document.createElement('a');
-							nodoBtnFiltroAvanzado.setAttribute('class', "dropdown-toggle");
-							nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
-							nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer; height:50px;");
-								span = document.createElement('span');
-								span.setAttribute('class', "caret");
-								span.setAttribute('style', "vertical-align:middle;");
-							nodoBtnFiltroAvanzado.appendChild(span);
-							nodoBtnFiltroAvanzado.setAttribute('delay', { show: 500, hide: 100 });
-						th.appendChild(nodoTexto);
-						th.appendChild(nodoBtnFiltroAvanzado);
-
-
-						var divs = '<div class="input-append"><input class="span9" id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda"><button class="btn_with_icon btn" onClick="cambioTipoFiltro()" type="button">z</button></div>';
-						
-						$(nodoBtnFiltroAvanzado).popover({html:true, content: divs, placement:'bottom', title:"Búsqueda sólo por " + tiposFiltro[i], rel:"popover"});
-
-						
-					tr.appendChild(th);
-				}
-				thead.appendChild(tr);
 				
-				tablaResultados.appendChild(thead);
-
-
 				//CARGO EL CUERPO DE LA TABLA
 				tbody = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) {
@@ -171,6 +155,8 @@
 		$(icono_cargando).show();
 	}
 
+	
+
 	function getDataSource(inputUsado) {
 		
 	    $(inputUsado).typeahead({
@@ -183,6 +169,7 @@
 					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 		            	//alert(respuesta)
 		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
+		            	arrayRespuesta[arrayRespuesta.length] = query;
 		            	process(arrayRespuesta);
 		            }
 	        	});
@@ -190,8 +177,12 @@
 	    });
 	}
 
+	
 	//Se cargan por ajax
-	$(document).ready(cambioTipoFiltro);
+	$(document).ready(function() {
+		escribirHeadTable();
+		cambioTipoFiltro();
+	});
 
 </script>
 
@@ -203,7 +194,7 @@
 			<div class="controls controls-row">
 			    <div class="input-append span6">
 					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro()" placeholder="Filtro búsqueda">
-					<button class="btn_with_icon btn" onClick="cambioTipoFiltro()" type="button">z</button>
+					<button class="btn" onClick="cambioTipoFiltro()" type="button"><i class="icon-search"></i></button>
 				</div>
 				
 				<!--
@@ -231,14 +222,14 @@
 		</div>
 		<div class="span6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle ayudante:
-	    <pre style="margin-top: 2%; padding: 2%">
-Rut:              <b id="rutDetalle"></b>
-Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
-Apellido paterno: <b id="apellido1Detalle" ></b>
-Apellido materno: <b id="apellido2Detalle"></b>
-Correo:           <b id="correoDetalle"></b>
-Profesor guía:    <b id="profesorDetalle" ></b>
-Secciones:        <b id="seccionesDetalle" ></b>
+	    <pre style="margin-top: 2%; padding: 2%; cursor:default">
+Rut:                <b id="rutDetalle"></b>
+Nombres:            <b id="nombre1Detalle"></b> <b id="nombre2Detalle"></b>
+Apellido paterno:   <b id="apellido1Detalle"></b>
+Apellido materno:   <b id="apellido2Detalle"></b>
+Correo:             <b id="correoDetalle"></b>
+Profesor guía:      <b id="profesorDetalle"></b>
+Secciones:          <b id="seccionesDetalle"></b>
 		</pre>
 		</div>
 	</div>
