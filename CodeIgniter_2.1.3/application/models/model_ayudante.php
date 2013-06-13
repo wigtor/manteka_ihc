@@ -238,12 +238,14 @@ class Model_ayudante extends CI_Model {
 			define("BUSCAR_POR_APELLIDO", 2);
 			$this->db->like("RUT_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
 			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
-				$this->db->like("NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
-				$this->db->or_like("NOMBRE2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+				$this->db->where("(NOMBRE1_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
+				//$this->db->like("(NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+				//$this->db->or_like("NOMBRE2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
 			}
 			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
-				$this->db->like("APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
-				$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+				$this->db->where("(APELLIDO1_AYUDANTE = '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 			}
 		}
 		$query = $this->db->get('ayudante');
