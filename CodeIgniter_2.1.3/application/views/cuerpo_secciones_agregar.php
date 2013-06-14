@@ -77,7 +77,7 @@
 							<div class="span4">
 								<div class="control-group">
 									
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> 1.- Sección:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> 1.- Sección:</label>
 									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 		  						</div>	
 							</div>
