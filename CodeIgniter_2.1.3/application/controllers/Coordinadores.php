@@ -229,17 +229,20 @@ class Coordinadores extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$textoFiltro = $this->input->post('textoFiltro');
-		$tipoFiltro = $this->input->post('tipoFiltro');
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+
 		$this->load->model('model_coordinadores');
-
-		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($tipoFiltro, $textoFiltro);
-
+		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($textoFiltro, $textoFiltrosAvanzados);
+		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
-			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'coordinadores', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'coordinadores', $this->session->userdata('rut'));
+			}
 		}
 		echo json_encode($resultado);
 	}

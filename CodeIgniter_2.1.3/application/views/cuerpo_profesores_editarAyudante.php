@@ -63,17 +63,17 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				if (datos.nombre1_profe == null) {
-					datos.nombre1_profe = '';
+				if (datos.nombre1 == null) {
+					datos.nombre1 = '';
 				}
-				if (datos.nombre2_profe == null) {
-					datos.nombre2_profe = '';
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
 				}
-				if (datos.apellido1_profe == null) {
-					datos.apellido1_profe = '';
+				if (datos.apellido1 == null) {
+					datos.apellido1 = '';
 				}
-				if (datos.apellido2_profe == null) {
-					datos.apellido2_profe = '';
+				if (datos.apellido2 == null) {
+					datos.apellido2 = '';
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
@@ -101,7 +101,7 @@
 
 
 <fieldset>
-	<legend>Editar Ayudante</legend>
+	<legend>Editar ayudante</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">

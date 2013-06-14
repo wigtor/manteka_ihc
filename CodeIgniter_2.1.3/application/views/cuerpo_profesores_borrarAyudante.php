@@ -38,18 +38,26 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				if (datos.nombre1 == null) {
+					datos.nombre1 = '';
+				}
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.apellido1 == null) {
+					datos.apellido1 = '';
+				}
+				if (datos.apellido2 == null) {
+					datos.apellido2 = '';
+				}
+				var nombre_completo_profe;
 				if (datos.nombre1_profe == null) {
-					datos.nombre1_profe = '';
+					nombre_completo_profe = '';
 				}
-				if (datos.nombre2_profe == null) {
-					datos.nombre2_profe = '';
+				else {
+					nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe;
 				}
-				if (datos.apellido1_profe == null) {
-					datos.apellido1_profe = '';
-				}
-				if (datos.apellido2_profe == null) {
-					datos.apellido2_profe = '';
-				}
+
 				$(rutDetalle).html($.trim(datos.rut));
 				$(rut_ayudante).val($.trim(datos.rut));
 				$(nombre1Detalle).html(datos.nombre1);
@@ -58,7 +66,7 @@
 				$(apellido2Detalle).html(datos.apellido2);
 				$(correoDetalle).html($.trim(datos.correo));
 				
-				var nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe; 
+				
 				$(profesorDetalle).html(nombre_completo_profe);
 				var secciones = "";
 				/* Esto no se implementa puesto no hay forma de relacionar un ayudante con una sección aún
