@@ -243,7 +243,7 @@
 							<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">1-.<font color="red">*</font>RUT:</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font>RUT:</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -255,7 +255,7 @@
 							<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre:</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre:</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -267,7 +267,7 @@
 														<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Segundo nombre:</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">2-. Segundo nombre:</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -279,7 +279,7 @@
 							<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Apellido Paterno:</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">3-.<font color="red">*</font>Apellido Paterno:</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -291,7 +291,7 @@
 							<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Materno:</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Materno:</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -303,7 +303,7 @@
 							<div class="row-fluid">
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Telefono</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Telefono</label>
 									</div>
 								</div>
 								<div class="span5">	

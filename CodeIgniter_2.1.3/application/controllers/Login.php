@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
-
+require_once 'index.php';
 /**
  *	Clase controlador Login.
  *	Controlador encargado de presentar las vistas de autentificación (Login)
@@ -151,10 +151,6 @@ class Login extends MasterManteka {
 
 		$datos_plantilla = array();
 		$datos_plantilla["datos"] = $datos;
-		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
-		if (count($mensajes_alert) > 0) {
-			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
-		}
 		$subMenuLateralAbierto = '';
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -546,13 +542,40 @@ class Login extends MasterManteka {
     *	Protocolo para la utilización de APIs de otros sistemas registrados
     */
     $this -> load -> spark('oauth2/0.4.0');
+
     
     // Si el proveedor pasado es Google
     if($provider == 'google')
     {
-        $provider = $this -> oauth2 -> provider($provider, array(
-        'id' => '412900046548-5g232a3t4898bdntsrbkn6f2tk1t1962.apps.googleusercontent.com',				// ID del cliente OAuth registrado con Google
-        'secret' => 'SCyRUzLfrPe5_kAlF8dgS3B3', ));						// Clave secreta del cliente
+    	require_once APPPATH.'config/keys.php';
+    	
+    	$keys_array;
+    	
+    	if(defined('ENVIRONMENT')){
+    		switch(ENVIRONMENT)
+    		{
+    			case 'development':
+    				$keys_array = array(
+    					'id' => constant('DEVELOPMENT-ID'),							// ID del cliente OAuth registrado con Google
+    					'secret' => constant('DEVELOPMENT-PASS')					// Clave secreta del client
+					);
+					break;
+				case 'production':
+					$keys_array = array(
+						'id' => constant('PRODUCTION-ID'),							// ID del cliente OAuth registrado con Google
+						'secret' => constant('PRODUCTION-CLASS')					// Clave secreta del client
+					);
+					break;
+				default:
+					exit('The application environment is not set correctly.');
+			}
+    	}
+    	else{
+    		redirect('Otros');
+    		return;
+
+    	}
+        $provider = $this -> oauth2 -> provider($provider, $keys_array);
     }
 
     if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
@@ -654,8 +677,8 @@ class Login extends MasterManteka {
               
               $datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
               $datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-              $datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-              $datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+              //$datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+              //$datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
 
@@ -678,6 +701,15 @@ class Login extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	*	Función privada para apoyar la labor de otras funciones.
+	*	Reemplaza la última ocurrencia del string $search por
+	*	el string $replace, dentro del string $search
+	*	
+	*	@param string $search Última ocurrencia a encontrar
+	*	@param string $replace Por lo que se debe reemplazar la ocurrencia encontrada
+	*	@param string $subject String en el cual se busca la ocurrencia
+	*/
 	private function str_lreplace($search, $replace, $subject)
 	{
 	    $pos = strrpos($subject, $search);

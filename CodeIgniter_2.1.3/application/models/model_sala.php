@@ -33,6 +33,8 @@ class Model_sala extends CI_Model {
 		}}
 		
 		if($var!=1){
+		// se convierte todo el texto de la ubicación en minúscula
+		$ubicacion = strtolower($ubicacion);
 		$data1 = array(	
 					'NUM_SALA' => $num_sala ,
 					'UBICACION' => $ubicacion ,
@@ -227,7 +229,7 @@ class Model_sala extends CI_Model {
 	*/
 	public function VerTodasLasSalas()
 	{
-		$sql="SELECT * FROM sala ORDER BY COD_SALA"; //código MySQL
+		$sql="SELECT * FROM sala ORDER BY NUM_SALA"; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
@@ -302,7 +304,8 @@ class Model_sala extends CI_Model {
 		}}
 		
 		if($var!=1){
-		
+		// se convierte todo el texto de la ubicación en minúscula
+		$ubicacion = strtolower($ubicacion);
 		$data = array(	
 					'COD_SALA' => $cod_sala,
 					'NUM_SALA' => $num_sala,					

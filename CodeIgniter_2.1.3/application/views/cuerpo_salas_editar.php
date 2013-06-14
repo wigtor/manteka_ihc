@@ -7,7 +7,7 @@
 		}
 		else{
 			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
-				alert("Error al editarla sala");
+				alert("Error al editar la sala");
 			}		
 			else{
 				if("<?php echo $mensaje_confirmacion;?>"=="3"){
@@ -35,17 +35,12 @@
 					editar.submit();
 					}
 		}
-		else{
-				alert("Inserte todos los datos");
-				var mantenerDatos = datosEditarSala(cod_sala,num_sala,ubicacion,capacidad);
-		}
 	}
 </script>
 
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
 
 	
 	var arreglo = new Array();
@@ -65,7 +60,7 @@ function ordenarFiltro(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultar=document.getElementById(cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+		if(0 > arreglo[cont][1].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
 		else
@@ -112,13 +107,8 @@ function ordenarFiltro(){
 						<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por número" style="width:90%">
 								</div>
-								<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Número</option>
-									</select>
-								</div> 
 							</div>
 						</div>
 						
@@ -158,7 +148,7 @@ function ordenarFiltro(){
 							
 						</div>
 
-					<form id="FormEditar" type="post" method="post" onsubmit="EditarSala()">
+					<form id="FormEditar" type="post" method="post" onsubmit="EditarSala();return false">
 						<div class="row-fluid">
 							
 		  					<div class="span5">	
@@ -183,7 +173,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Número sala: </label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Número sala: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -193,12 +183,12 @@ function ordenarFiltro(){
 									if(count($sala)==1){
 									
 		    							echo '<tr>';
-										echo '<td><input id="num_sala" name="num_sala" value="'.$sala[0][1].'" maxlength="3" min="1" type="number">'.'</td>';
+										echo '<td><input title="Ingrese el número de la sala" id="num_sala" name="num_sala" value="'.$sala[0][1].'" max="999" min="1" type="number" required>'.'</td>';
 										echo '</tr>';						
 										}
 									else{
 									    echo '<tr>';
-										echo '<td><input id="num_sala" name="num_sala" value=" " maxlength="0" min="0" type="number">'.'</td>';
+										echo '<td><input id="num_sala" name="num_sala" value=" " max="0" type="number" >'.'</td>';
 										echo '</tr>';	
 									}
 		  							?>
@@ -209,7 +199,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Capacidad: </label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Capacidad: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -217,12 +207,12 @@ function ordenarFiltro(){
 									<?php
 									if(count($sala)==1){
 		    							echo '<tr>';
-										echo '<td><input id="capacidad" name="capacidad" value="'.$sala[0][3].'" maxlength="3" min="1" type="number">'.'</td>';
+										echo '<td><input title="Ingrese la capacidad de la sala" id="capacidad" name="capacidad" value="'.$sala[0][3].'" max="999" min="1" type="number" required>'.'</td>';
 										echo '</tr>';						
 										}
 									else{
 									    echo '<tr>';
-										echo '<td><input id="capacidad" name="capacidad" value=" " maxlength="0" min="0" type="number">'.'</td>';
+										echo '<td><input id="capacidad" name="capacidad" value=" " max="0" type="number">'.'</td>';
 										echo '</tr>';	
 									}
 		  							?>
@@ -236,21 +226,22 @@ function ordenarFiltro(){
 							<div class="span4">
 								<div class="control-group">
 
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Ubicación:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Ubicación:</label>
 		  						</div>
 		  					</div>
 							
 							<div class="span5">	
 		  						<div class="controls">
 									<?php
+															
 									if(count($sala)==1){
 		    							echo '<tr>';
-										echo '<td><textarea id="ubicacion" name="ubicacion"  maxlength="100" required>'.$sala[0][2].'</textarea>'.'</td>';
+										echo '<td><textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" id="ubicacion" name="ubicacion"  maxlength="100" required="required">'.$sala[0][2].'</textarea>'.'</td>';
 										echo '</tr>';							
 										}
 									else{
 									    echo '<tr>';
-										echo '<textarea id="ubicacion" name="ubicacion"  maxlength="0" required> </textarea>';
+										echo '<textarea id="ubicacion" name="ubicacion"  maxlength="0"> </textarea>';
 										echo '</tr>';	
 									}
 		  							?>
@@ -279,7 +270,7 @@ function ordenarFiltro(){
 										
 										while ($contador<count($implemento)){
 											echo '<tr>';
-											echo '<td title="'.$implemento[$contador][3]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][1].'" value="'.$implemento[$contador][1].'" name="cod_implemento[]" type="checkbox" checked>'.' '.$implemento[$contador][2].'</td>';
+											echo '<td title="Descripción: '.$implemento[$contador][3]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][1].'" value="'.$implemento[$contador][1].'" name="cod_implemento[]" type="checkbox" checked>'.' '.$implemento[$contador][2].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}
@@ -287,7 +278,7 @@ function ordenarFiltro(){
 										
 										while ($contador<count($implementoA)){
 											echo '<tr>';
-											echo '<td title="'.$implementoA[$contador][3]. '" id="implementoATd_'.$contador.'" ><input id="'.$implementoA[$contador][1].'" value="'.$implementoA[$contador][1].'" name="cod_implementoA[]" type="checkbox">'.' '.$implementoA[$contador][2].'</td>';
+											echo '<td title="Descripción: '.$implementoA[$contador][3]. '" id="implementoATd_'.$contador.'" ><input id="'.$implementoA[$contador][1].'" value="'.$implementoA[$contador][1].'" name="cod_implementoA[]" type="checkbox">'.' '.$implementoA[$contador][2].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}
@@ -302,26 +293,19 @@ function ordenarFiltro(){
 					</div>
 		
 
-
-						
-						<div class="row-fluid" style="margin-top:2%">
-							
-								
-									<div class="span4" style="margin-left: 36%; width:28%">
-										<button class ="btn" type="submit" onclick="EditarSala()" style="width: 111px" >
-											<div class="btn_with_icon_solo">Ã</div>
-											&nbsp Modificar
-										</button>
-										</div>
-									<div class="span3">
-										<button  class ="btn" type="reset" onclick="datosEditarAlumno('','','','','','')" style="width:105px"  >
-											<div class="btn_with_icon_solo">Â</div>
-											&nbsp Cancelar
-										</button>
-									</div>
-								
-							
+		
+						<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
+		
+							<button class ="btn" type="submit" >
+								<div class="btn_with_icon_solo">Ã</div>
+								&nbsp Modificar
+							</button>
+							<button class ="btn" type="reset" onclick="datosEditarSala('','','','')"  >
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancelar
+							</button>
 						</div>
+
 
 					</form>	
 					<!-- AQUI TERMINA  -->

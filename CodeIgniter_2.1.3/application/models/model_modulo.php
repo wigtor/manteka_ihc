@@ -359,9 +359,10 @@ class Model_modulo extends CI_Model {
 	
 				$contador = $contador + 1;
 			}
-			//5 insertar requisito modulo		
+			//5 insertar requisito modulo
 			$contador = 0;
 			$confirmacion5 = true;
+			if($requisitos != null){
 			while ($contador<count($requisitos)){
 			$data = array(					
 					'COD_REQUISITO' => $requisitos[$contador],
@@ -372,7 +373,8 @@ class Model_modulo extends CI_Model {
 					$confirmacion5 = false;
 				}
 	
-			$contador = $contador + 1;
+				$contador = $contador + 1;
+				}
 			}
 			//fin inserciones
 			if($confirmacion0 == false || $confirmacion1 == false || $confirmacion2 == false || $confirmacion3 == false || $confirmacion4 == false || $confirmacion5 == false){

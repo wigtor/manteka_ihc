@@ -77,7 +77,7 @@
 							<div class="span4">
 								<div class="control-group">
 									
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> 1.- Sección:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> 1.- Sección:</label>
 									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 		  						</div>	
 							</div>
@@ -101,20 +101,17 @@
                     
 
 					<br>
-                                <div class="row-fluid">
-									<div class="span3 offset6">
-										<button class ="btn" type="submit" style="width:102px ">
-											<div class="btn_with_icon_solo">Ã</div>
-											&nbsp Agregar
-										</button>
-										</div>
-									<div class="span3">
-										<button  class ="btn" type="reset" style="width: 105px">
-											<div class="btn_with_icon_solo">Â</div>
-											&nbsp Cancelar
-										</button>
-									</div>
-								</div> 
+						<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
+			
+								<button class ="btn" type="submit" >
+									<div class="btn_with_icon_solo">Ã</div>
+									&nbsp Agregar
+								</button>
+								<button class ="btn" type="reset" >
+									<div class="btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
+								</button>
+						</div>
 					
                 </div>
 				

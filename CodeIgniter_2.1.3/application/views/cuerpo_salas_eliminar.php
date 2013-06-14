@@ -31,10 +31,15 @@
 				}
 			?>
 			var cont;
-			var algo='\n';
+			var algo='';
 			for(cont=0;cont < imp.length;cont++){
-				if(imp[cont][0]==cod_sala ){
-					algo= algo+"		"+imp[cont][1]+'\n';				
+				if(imp[cont][0]==cod_sala){
+					if(algo!=''){
+						algo= algo+"\n"+"		"+imp[cont][1];
+					}
+					else {
+						algo=imp[cont][1];
+					}
 				}
 			}
 			
@@ -69,7 +74,6 @@
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
 
 	
 	var arreglo = new Array();
@@ -89,7 +93,7 @@ function ordenarFiltro(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultar=document.getElementById(cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+		if(0 > arreglo[cont][1].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
 		else
@@ -116,13 +120,8 @@ function ordenarFiltro(){
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por número" style="width:90%">
 								</div>
-								<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Número</option>
-									</select>
-								</div> 
 							</div>
 						</div>
 						
@@ -168,28 +167,27 @@ function ordenarFiltro(){
 			<div class="row-fluid">
 				<div>
 			<pre style="margin-top: 0%; margin-left: 0%;">
+Número sala:    <b id="num_sala"></b>
+Capacidad:      <b id="capacidad" ></b>
+Ubicación:      <b id="ubicacion"></b>
+Implementos:    <b id="impDetalle"></b>
+</pre>
 <input id="cod_sala" type="text" name="cod_sala" value="" style="display:none">
-Número sala:    <b id="num_sala"></b> 
-Capacidad: 	<b id="capacidad"></b>
-Ubicación:	<b id="ubicacion"></b>
-Implementos  <b id="impDetalle"></b></pre>
 <input id="codEliminar" type="text" name="codEliminar" value="" style="display:none">
 				</div>		
 			</div>
-								<div class="row-fluid">
-									<div class="span4 " style="width:27%; margin-left:46%">
-										<button class ="btn" onclick="eliminarSala()" style="width:108px" >
-											<div class="btn_with_icon_solo">Ë</div>
-											&nbsp Eliminar
-										</button>
-										</div>
-									<div class="span3">
-										<button  class ="btn" type="reset" onclick="DetalleSala('','','','','','')"  style="width:105px">
-											<div class="btn_with_icon_solo">Â</div>
-											&nbsp Cancelar
-										</button>
-									</div>
-								</div>
+					<div class="row-fluid" style="margin-top: 4%; margin-left:49%">
+		
+							<button class ="btn" onclick="eliminarSala()" >
+								<div class="btn_with_icon_solo">Ë</div>
+								&nbsp Eliminar
+							</button>
+							<button class ="btn" type="reset" onclick="DetalleSala('','','','','','')"  >
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancelar
+							</button>
+					</div>
+								
 		</form>
 		</div>
 
