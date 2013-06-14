@@ -48,7 +48,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input title="Ingrese el número de la sala" id="inputInfo" max="999" type="number" min="1" name="num_sala" placeholder="Ej:258" required>
+		    							<input pattern="[0-9]+" title="Ingrese el número de la sala" id="inputInfo" max="999" type="number" min="1" name="num_sala" placeholder="Ej:258" required>
 		  							</div>
 							</div>
 						</div>
@@ -60,7 +60,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input title="Ingrese la capacidad de la sala" id="inputInfo" max="999" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
+		    							<input  pattern="[0-9]+" title="Ingrese la capacidad de la sala" id="inputInfo" max="999" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
 		  							</div>
 							</div>
 						</div>
