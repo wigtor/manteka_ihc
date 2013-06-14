@@ -151,10 +151,6 @@ class Login extends MasterManteka {
 
 		$datos_plantilla = array();
 		$datos_plantilla["datos"] = $datos;
-		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
-		if (count($mensajes_alert) > 0) {
-			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
-		}
 		$subMenuLateralAbierto = '';
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();

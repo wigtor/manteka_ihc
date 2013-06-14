@@ -124,8 +124,7 @@ Apellido paterno:   <b id="apellido1Detalle"></b>
 Apellido materno:   <b id="apellido2Detalle"></b>
 Correo:             <b id="correoDetalle"></b>
 Profesor guía:      <b id="profesorDetalle"></b>
-Secciones:          <b id="seccionesDetalle"></b>
-		</pre>
+Secciones:          <b id="seccionesDetalle"></b></pre>
 		</div>
 	</div>
 </fieldset>

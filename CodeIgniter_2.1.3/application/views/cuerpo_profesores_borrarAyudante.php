@@ -26,7 +26,7 @@
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */
 				var rutDetalle = document.getElementById("rutDetalle");
-				var rutEliminar = document.getElementById("rutEliminar");
+				var rut_ayudante = document.getElementById("rut_ayudante");
 				var nombre1Detalle = document.getElementById("nombreunoDetalle");
 				var nombre2Detalle = document.getElementById("nombredosDetalle");
 				var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
@@ -51,7 +51,7 @@
 					datos.apellido2_profe = '';
 				}
 				$(rutDetalle).html($.trim(datos.rut));
-				$(rutEliminar).val($.trim(datos.rut));
+				$(rut_ayudante).val($.trim(datos.rut));
 				$(nombre1Detalle).html(datos.nombre1);
 				$(nombre2Detalle).html(datos.nombre2);
 				$(apellido1Detalle).html(datos.apellido1);
@@ -79,7 +79,7 @@
 <script type="text/javascript">
 	function eliminarAyudante(){
 		
-		var rut = document.getElementById("rutEliminar").value;
+		var rut = document.getElementById("rut_ayudante").value;
 		
 		if(rut!=""){
 			var answer = confirm("¿Está seguro de eliminar este ayudante?")
@@ -97,28 +97,6 @@
 		}
 	}
 
-	function resetear() {
-		var rutDetalle = document.getElementById("rutDetalle");
-		var rutEliminar = document.getElementById("rutEliminar");
-		var nombre1Detalle = document.getElementById("nombreunoDetalle");
-		var nombre2Detalle = document.getElementById("nombredosDetalle");
-		var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
-		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
-		var correoDetalle = document.getElementById("correoDetalle");
-		var profesorDetalle = document.getElementById("profesorDetalle");
-		$(rutDetalle).html("");
-		$(rutEliminar).val("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(correoDetalle).html("");
-		$(profesorDetalle).html("");
-
-		var rutEliminar = document.getElementById("rutEliminar");
-		$(rutEliminar).val("");
-	}
-
 	//Se cargan por ajax
 	$(document).ready(function() {
 		escribirHeadTable();
@@ -131,7 +109,7 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
-			    <div class="input-append span7">
+				<div class="input-append span7">
 					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
@@ -170,22 +148,21 @@ Apellido paterno: <b id="apellidopaternoDetalle" ></b>
 Apellido materno: <b id="apellidomaternoDetalle" ></b>
 Correo:           <b id="correoDetalle" ></b>
 Profesor guía:    <b id="profesorDetalle" ></b>
-Secciones:        <b id="seccionesDetalle" ></b>
-				</pre>
-				<input type="hidden" id="rutEliminar" value="">
+Secciones:        <b id="seccionesDetalle" ></b></pre>
+				<input type="hidden" id="rut_ayudante" name="rut_ayudante" value="">
 				<div class="control-group">
 					<div class="controls pull-right">
-						<button class="btn" type="button" onclick="resetear()" >
+						<button class="btn" type="submit" >
+							<i class= "icon-trash"></i>
+							&nbsp; Eliminar
+						</button>
+						<button class="btn" type="button" onclick="resetearAyudante()" >
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
 						</button>&nbsp;
-						<button class="btn" type="submit" >
-							<i class= "icon-trash">b</i>
-							&nbsp; Eliminar
-						</button>
 					</div>
 				</div>
-			</form>
+			<?php echo form_close(""); ?>
 		</div>
 	</div>
 </fieldset>

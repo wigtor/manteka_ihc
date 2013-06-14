@@ -158,3 +158,27 @@ function getDataSource(inputUsado) {
 		}
 	});
 }
+
+
+
+function resetearAyudante() {
+	var rutDetalle = document.getElementById("rutDetalle");
+	var rutEliminar = document.getElementById("rutEliminar");
+	var nombre1Detalle = document.getElementById("nombreunoDetalle");
+	var nombre2Detalle = document.getElementById("nombredosDetalle");
+	var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
+	var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
+	var correoDetalle = document.getElementById("correoDetalle");
+	var profesorDetalle = document.getElementById("profesorDetalle");
+	$(rutDetalle).html("");
+	$(rutEliminar).val("");
+	$(nombre1Detalle).html("");
+	$(nombre2Detalle).html("");
+	$(apellido1Detalle).html("");
+	$(apellido2Detalle).html("");
+	$(correoDetalle).html("");
+	$(profesorDetalle).html("");
+
+	var rutEliminar = document.getElementById("rutEliminar");
+	$(rutEliminar).val("");
+}
