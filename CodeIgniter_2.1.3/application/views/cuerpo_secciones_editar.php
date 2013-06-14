@@ -83,9 +83,6 @@
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
-
-	
 	var arreglo = new Array();
 	var sala;
 	var ocultar;
@@ -103,7 +100,7 @@ function ordenarFiltro(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultar=document.getElementById("rs_seccionTd_"+cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+		if(0 > arreglo[cont][1].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultar.style.display='none';
 		}
 		else
@@ -138,13 +135,8 @@ function ordenarFiltro(){
 					<div class="row-fluid">	
 							<div class="span11">
 								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
+									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por nombre" style="width:90%">
 								</div>
-								<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Nombre</option>
-									</select>
-								</div> 
 							</div>
 						</div>
 						
@@ -218,20 +210,17 @@ function ordenarFiltro(){
                     
 
 					<br>
-                                <div class="row-fluid">
-									<div class="span3 offset6">
-										<button class ="btn" type="submit"style="width:111px " >
-											<div class="btn_with_icon_solo">Ã</div>
-											&nbsp Modificar
-										</button>
-										</div>
-									<div class="span3">
-										<button  class ="btn" type="reset" onclick="DetalleSeccion('')" style="width:105px " >
-											<div class="btn_with_icon_solo">Â</div>
-											&nbsp Cancelar
-										</button>
-									</div>
-								</div> 
+						<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
+		
+							<button class ="btn" type="submit" >
+								<div class="btn_with_icon_solo">Ã</div>
+								&nbsp Modificar
+							</button>
+							<button class ="btn" type="reset" onclick="DetalleSeccion('')"  >
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancelar
+							</button>
+						</div>
 					
                 </div>
 				

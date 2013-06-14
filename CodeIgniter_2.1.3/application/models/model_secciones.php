@@ -47,7 +47,7 @@ class Model_secciones extends CI_Model{
 	public function VerTodasSecciones()
 	{
 		
-		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
+		$sql="SELECT * FROM seccion ORDER BY NOMBRE_SECCION"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista=array();
@@ -138,7 +138,7 @@ class Model_secciones extends CI_Model{
     {
 		if($cod_seccion==""){ return 2;}
 		else{
-		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
+		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
 		$datos1=mysql_query($sql1); 
 		$contador = 0;
 		if (false != $datos1) {
@@ -153,11 +153,13 @@ class Model_secciones extends CI_Model{
 		
 
 
-		if($datos == true){
+		if($datos == true && $contador==0){
 			return 1;
 		}
 		else{
-			return -1;
+			if($datos==false){
+				return -1;
+			}
 		}
 		}
     }
@@ -177,7 +179,7 @@ class Model_secciones extends CI_Model{
 	public function AgregarSeccion($nombre_seccion1,$nombre_seccion2)
 	{
 		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
-		
+		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
@@ -221,6 +223,7 @@ class Model_secciones extends CI_Model{
 	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
 	{
 		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
+		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 

@@ -378,6 +378,48 @@ class Model_estudiante extends CI_Model {
 		}
 		return $lista;  	
 	}
+	
+	public function rutExisteM($rut){
+	//return $rut;
+		$lista = array();
+		$contador = 0;
+		
+		//lista usuarios
+		$this->db->select('RUT_USUARIO');
+		$this->db->from('usuario');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->RUT_USUARIO;
+			$contador++;
+		}
+		//lista ayudantes
+		$this->db->select('RUT_AYUDANTE');
+		$this->db->from('ayudante');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->RUT_AYUDANTE;
+			$contador++;
+		}
+		//lista alumnos
+		$this->db->select('RUT_ESTUDIANTE');
+		$this->db->from('estudiante');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->RUT_ESTUDIANTE;
+			$contador++;
+		}
+		$contador = 0;
+		while($contador < count($lista)){
+			if(strtolower($lista[$contador]) == strtolower($rut)){
+				return -1;
+			}
+		$contador = $contador + 1;
+		}
+		return 1;
+	}
 
 }
  

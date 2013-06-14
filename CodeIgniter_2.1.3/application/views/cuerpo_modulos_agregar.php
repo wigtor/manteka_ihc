@@ -239,7 +239,7 @@ function nombreEnUso(){
 											while ($contador<count($requisitos)){
 												
 													echo '<tr>';
-													echo '<td id="requisito_'.$requisitos[$contador][0].'" title="'.$requisitos[$contador][2].'"><input value="'.$requisitos[$contador][0].'" name="cod_requisito[]" type="checkbox" ></input> '.$requisitos[$contador][1].'</td>';
+													echo '<td id="requisito_'.$requisitos[$contador][0].'" title="'.$requisitos[$contador][2].'"><input value="'.$requisitos[$contador][0].'" name="cod_requisito[]" type="checkbox" > '.$requisitos[$contador][1].'</td>';
 													echo '</tr>';
 												$contador = $contador + 1;
 											}
