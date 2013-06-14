@@ -35,7 +35,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" > 1-.*RUN:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default" > 1-.*RUN:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -47,7 +47,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -61,7 +61,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-. Segundo nombre:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">3-. Segundo nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -75,7 +75,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido paterno:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido paterno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -89,7 +89,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5.<font color="red">*</font>Apellido materno:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">5.<font color="red">*</font>Apellido materno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -103,7 +103,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -116,7 +116,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Correo Alternativo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo Alternativo:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -128,7 +128,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Telefono:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font>Telefono:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -142,7 +142,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">9-.<font color="red">*</font>Tipo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">9-.<font color="red">*</font>Tipo:</label>
 		  						</div>
 		  					</div>
 		  					<div  class="span6">

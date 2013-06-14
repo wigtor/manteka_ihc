@@ -173,7 +173,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Número sala: </label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Número sala: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -199,7 +199,7 @@ function ordenarFiltro(){
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Capacidad: </label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Capacidad: </label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -226,7 +226,7 @@ function ordenarFiltro(){
 							<div class="span4">
 								<div class="control-group">
 
-		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Ubicación:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Ubicación:</label>
 		  						</div>
 		  					</div>
 							
