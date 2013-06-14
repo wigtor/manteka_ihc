@@ -364,6 +364,8 @@ class Alumnos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	
+
 }
 
 /* End of file Alumnos.php */
