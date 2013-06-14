@@ -105,7 +105,7 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Seleccione la sección </label>
+								<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> Seleccione la sección </label>
 							</div>
 						</div>
 					</div>
@@ -138,7 +138,7 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">2-. Datos de la asignación </label>
+								<label class="control-label" for="inputInfo" style="cursor: default">2-. Datos de la asignación </label>
 							</div>
 						</div>
 					</div>

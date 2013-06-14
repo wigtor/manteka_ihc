@@ -6,7 +6,7 @@
 			<tr>
 				<th>Sección</th>
 				<th>Profesor</th>
-				<th>Módulo Tematico</th>
+				<th>Módulo Temático</th>
 				<th>Sala</th>
 				<th>Bloque</th>
 				<th>Hora</th>
