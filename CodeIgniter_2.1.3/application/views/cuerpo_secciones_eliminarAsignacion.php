@@ -45,7 +45,7 @@
 						sala.innerHTML = "sin asignación";
 					}
 					if(datos[6]==null){
-						horario.innerHTML= "sin asignación";
+						horario.innerHTML= "sin asignación"; //
 					}
 
 					/* Quito el div que indica que se está cargando */
