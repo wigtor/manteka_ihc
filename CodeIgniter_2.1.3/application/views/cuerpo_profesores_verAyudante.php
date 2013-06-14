@@ -120,13 +120,13 @@
 		</div>
 		<div class="span6">
 		<pre style="padding: 2%; cursor:default">
-Rut:              <b id="rutDetalle"></b>
-Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
-Apellido paterno: <b id="apellido1Detalle" ></b>
-Apellido materno: <b id="apellido2Detalle"></b>
-Telefono:         <b id="telefonoDetalle" ></b>
-Correo:           <b id="correoDetalle" ></b>
-Tipo:             <b id="tipoDetalle"></b>
+Rut:                <b id="rutDetalle"></b>
+Nombres:            <b id="nombre1Detalle"></b> <b id="nombre2Detalle"></b>
+Apellido paterno:   <b id="apellido1Detalle"></b>
+Apellido materno:   <b id="apellido2Detalle"></b>
+Correo:             <b id="correoDetalle"></b>
+Profesor guía:      <b id="profesorDetalle"></b>
+Secciones:          <b id="seccionesDetalle"></b></pre>
 		</div>
 	</div>
 </fieldset>
