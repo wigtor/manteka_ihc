@@ -32,6 +32,22 @@
 					sala.innerHTML = datos[5];//.numero_sala;
 					horario.innerHTML = datos[6];//.horario;
 
+					if (datos[1] == null){
+						modulo.innerHTML= "sin asignación";
+					}
+					if(datos[2]==null){
+						profesorNombre.innerHTML = "sin asignación";//.nombre_profesor;
+						profesorApellido1.innerHTML = "";
+						profesorApellido2.innerHTML = "";
+
+					}
+					if (datos[5]==null){
+						sala.innerHTML = "sin asignación";
+					}
+					if(datos[6]==null){
+						horario.innerHTML= "sin asignación";
+					}
+
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
