@@ -223,24 +223,28 @@ class Model_profesor extends CI_Model {
 	{
 
 		//Sólo para acordarse
-		define("BUSCAR_POR_NOMBRE", 1);
-		define("BUSCAR_POR_APELLIDO1", 2);
-		define("BUSCAR_POR_APELLIDO2", 3);
+      define("BUSCAR_POR_NOMBRE", 1);
+      define("BUSCAR_POR_APELLIDO1", 2);
+      define("BUSCAR_POR_APELLIDO2", 3);
+      define("BUSCAR_POR_CORREO", 4);
 		
 
 		$attr_filtro = "";
-		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-			$attr_filtro = "NOMBRE1_PROFESOR";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-			$attr_filtro = "APELLIDO1_PROFESOR";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-			$attr_filtro = "APELLIDO2_PROFESOR";
-		}
-		else {
-			return array(); //No es válido, devuelvo vacio
-		}
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $attr_filtro = "NOMBRE1_PROFESOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
+         $attr_filtro = "APELLIDO1_PROFESOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
+         $attr_filtro = "APELLIDO2_PROFESOR";
+      }
+      else if ($tipoFiltro == BUSCAR_POR_CORREO) {
+         $attr_filtro = "CORREO_PROFESOR";
+      }
+      else {
+         return array(); //No es válido, devuelvo vacio
+      }
 
 		$this->db->select('RUT_USUARIO2 AS rut');
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
@@ -251,11 +255,14 @@ class Model_profesor extends CI_Model {
 		$this->db->select('TIPO_PROFESOR AS tipo');
 		$this->db->order_by('APELLIDO1_PROFESOR', 'asc');
 		$this->db->like($attr_filtro, $texto);
-		$query = $this->db->get('profesor');
-		if ($query == FALSE) {
-			return array();
-		}
-		return $query->result();
+      if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
+         $this->db->or_like("NOMBRE2_PROFESOR", $texto);
+      }
+      $query = $this->db->get('profesor');
+      if ($query == FALSE) {
+         return array();
+      }
+      return $query->result();
 	}
 
 	
