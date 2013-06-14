@@ -89,7 +89,7 @@ function ordenarFiltro(){
 			  				</div>
 			  				<div class="span5">	
 			  					<div class="controls">
-			    					<input type="text" name="nombre1_ayudante" maxlength="19" required >
+			    					<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre1_ayudante" maxlength="19" required >
 			  					</div>
 							</div>
 						</div>
@@ -102,7 +102,7 @@ function ordenarFiltro(){
 			  					</div>
 			  					<div class="span5">	
 			  							<div class="controls">
-			    							<input type="text" name="nombre2_ayudante" maxlength="19" >
+			    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre2_ayudante" maxlength="19" >
 			  							</div>
 								</div>
 						</div>
@@ -115,7 +115,7 @@ function ordenarFiltro(){
 			  				</div>
 			  				<div class="span5">	
 			  					<div class="controls">
-			    					<input type="text" name="apellido_paterno" maxlength="19" required >
+			    					<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellido_paterno" maxlength="19" required >
 			  					</div>
 							</div>
 						</div>
@@ -128,7 +128,7 @@ function ordenarFiltro(){
 			  				</div>
 			  				<div class="span5">	
 			  					<div class="controls">
-			    					<input type="text" name="apellido_materno" maxlength="19" required >
+			    					<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellido_materno" maxlength="19" required >
 			  					</div>
 							</div>
 
@@ -142,7 +142,7 @@ function ordenarFiltro(){
 			  				</div>
 			  				<div class="span5">	
 			  					<div class="controls">
-			    					<input type="email" name="correo_ayudante" maxlength="19" placeholder="nombre_usuario@miemail.com" required >
+			    					<input type="email" name="correo_ayudante" maxlength="199" placeholder="nombre_usuario@miemail.com" required >
 			  					</div>
 							</div>
 						</div>
