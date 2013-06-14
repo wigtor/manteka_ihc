@@ -129,8 +129,8 @@
 			<pre style="margin-top: 2%; padding: 2%">
 Código sesión:              <b id="codigoDetalle"></b>
 Nombre del módulo temático: <b id="mod_temDetalle"></b>
-Nombre de la sesión: 	<b id="nombreDetalle"></b>
-Descripción: 	<b id="descripcionDetalle"></b>
+Nombre de la sesión: 	    <b id="nombreDetalle"></b>
+Descripción: 		    <b id="descripcionDetalle"></b>
 			</pre>
 		</div>
 	</div>

@@ -364,6 +364,51 @@ class Alumnos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->helper(array('form', 'url'));
+	}	
+
+	function cargaMasivaAlumnos()
+	{
+		$config['upload_path'] = './uploads/';
+		$config['allowed_types'] = 'csv';
+		$config['max_size']	= '100';	
+
+
+		$this->load->library('upload', $config);
+
+
+		$subMenuLateralAbierto = "cargaMasivaAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+
+		
+
+
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+
+		 	$datos_vista = $error;
+
+			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+
+			$datos_vista = $data;
+
+			$upload_data['full_path'];
+
+			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
 }
 
 /* End of file Alumnos.php */

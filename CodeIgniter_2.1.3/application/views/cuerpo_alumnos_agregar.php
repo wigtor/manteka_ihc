@@ -157,7 +157,8 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- rut-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">1-.<font color="red">*</font> RUT</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT</label>
+									
 									</div>
 								</div>
 								<div class="span5">	
@@ -169,7 +170,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- nombre uno-->
 								<div class="span4">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre</label>
+										<label  class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -181,7 +182,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- nombre dos-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">3-.Segundo nombre</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">3-.Segundo nombre</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -195,7 +196,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- ape paterno-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido Paterno</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Paterno</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -208,7 +209,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- ape materno-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Apellido Materno</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido Materno</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -221,7 +222,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- correo-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo</label>
 									</div>
 								</div>
 								<div class="span5">	
@@ -241,7 +242,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- carrera-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Asignar Carrera</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Asignar Carrera</label>
 									</div>
 								</div>
 								<div  class="span6">
@@ -263,7 +264,7 @@ function ordenarFiltro(){
 							<div class="row-fluid"> <!-- seccion-->
 								<div class="span4">
 									<div class="control-group">
-										<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Asignar sección</label>
+										<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font>Asignar sección</label>
 									</div>
 								</div>
 								<div  class="span6" >
