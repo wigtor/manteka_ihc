@@ -16,6 +16,8 @@
 		$editarAlumnos = "";
 		$borrarAlumnos = "";
 		$cambiarSeccionAlumnos = "";
+		$cargaMasivaAlumnos = "";
+
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
@@ -34,6 +36,9 @@
 		else if ($subVistaLateralAbierta == "cambiarSeccionAlumnos") {
 			$cambiarSeccionAlumnos = 'class="active"';
 		}
+		else if ($subVistaLateralAbierta == "cargaMasivaAlumnos") {
+			$cargaMasivaAlumnos = 'class="active"';
+		}
 	?>
 
 	<!--	Barra lateral de alumnos	-->
@@ -46,10 +51,13 @@
 		    <div id="collapseOne" class="accordion-body collapse in">
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verAlumnos; ?> ><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
-					<li <?php echo $agregarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
-					<li <?php echo $editarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
-					<li <?php echo $borrarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
-					<li <?php echo $cambiarSeccionAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
+		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
+						<li <?php echo $editarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
+						<li <?php echo $borrarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
+						<li <?php echo $cambiarSeccionAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
+						<li <?php echo $cargaMasivaAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cargaMasivaAlumnos")?>">Carga masiva</a></li>
+		     		<?php } ?>
 		     	</div>
 		    </div>
 	  	</div>

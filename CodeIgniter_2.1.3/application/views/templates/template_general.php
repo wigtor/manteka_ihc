@@ -3,7 +3,7 @@
 	<?php
 		echo $head						//	Esta variable es pasada como parámetro a esta vista
 	?>
-<body >
+<body>
 	<div id="wrap" style="min-width:820px;">
 		<?php
 			echo $barra_usuario		//	Barra de control de usuario

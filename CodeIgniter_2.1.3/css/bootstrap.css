@@ -1970,7 +1970,7 @@ legend + .control-group {
   float: left;
   width: 160px;
   padding-top: 5px;
-  text-align: right;
+  text-align: left;
 }
 
 .form-horizontal .controls {
@@ -5957,6 +5957,7 @@ a.badge:focus {
   display: block;
   padding: 8px 15px;
 }
+
 
 .accordion-toggle {
   cursor: pointer;

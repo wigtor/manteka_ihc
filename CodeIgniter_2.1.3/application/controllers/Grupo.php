@@ -11,13 +11,11 @@ class Grupo extends CI_Controller {
 	public function agregarGrupo(){
 		$this->load->model('model_grupos_contacto');
 		$rut = $this->session->userdata('rut');
-		$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'].$_POST['RUT_USUARIO'];
+		$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'];
 		$nombre_filtro = $_POST['NOMBRE_FILTRO_CONTACTO'];
 		$rut_filtro = $_POST['QUERY_FILTRO_CONTACTO'];
-		$rut_usuario = $_POST['RUT_USUARIO'];
-		if($rut_usuario.length == 0){
-			$rut_usuario = $rut;
-		}
+		$rut_usuario = $rut;
+		
 		//Este sirve para el modificar
 		//$arreglo_de_ruts=explode(",",$rut_filtro);
 		

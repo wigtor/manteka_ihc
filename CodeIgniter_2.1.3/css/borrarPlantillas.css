@@ -4,21 +4,188 @@ fieldset
 	border-color:lightblue;
 	margin-bottom:15px;
 	margin-top:-10px;
+	padding:30px;
 }
 
-#texto
+.txt
 {
 	font-size:10pt;
-	color:#666666;
-	float:left;
-	margin-left:1%;
-	margin-bottom:15px;
+	color:#0088CC;
 	line-height:35px;
 	font-weight:bold;
+}
+
+.txt2
+{
+	clear:both;
+	font-size:10pt;
+	color:#0088CC;
+	line-height:35px;
+	font-weight:bold;
+	padding-top:30px;
 }
 
 fieldset legend
 {
 	color:#0088CC;
 	font-size:18px;
+}
+
+#contenedorLista
+{
+	margin-left:1%;
+	float:left;
+}
+
+#contenedorBusquedaFiltro
+{
+	margin-left:10%;
+	float:left;
+}
+
+#busquedaPlantilla 
+{
+	color:#666666;
+	font-size:9pt;
+	font-weight:bold;
+	margin-bottom:30px;
+	margin-left:1%;
+	clear:both;
+}
+
+#inputAsunto
+{
+	color:#666666;
+	font-size:9pt;
+	font-weight:bold;
+	clear:both;
+	width:400px;
+}
+
+#tipoBusqueda
+{
+	color:white;
+	font-size:9pt;
+	font-weight:bold;
+	margin-bottom:30px;
+	margin-left:1%;
+	clear:both;
+	background-color:lightblue;
+}
+
+#lista
+{
+	border: #CCCCCC 1px solid;
+	overflow-y:auto;
+	height:185px;
+	width:500px;
+	-webkit-border-radius:4px;
+	float:left;
+	background-color:#FCFCFC;
+}
+
+#lista table
+{
+	background-color:white;
+	margin-bottom:0px;
+}
+
+#lista tr
+{
+	color:#666666;
+	font-size:9pt;
+	font-weight:bold;
+}
+
+#lista td
+{
+	cursor:pointer;
+	padding-left:15px;
+	border-top:0px solid white;
+	border-bottom:1px solid #DDDDDD;
+}
+
+#contenedorEditor
+{
+	margin-left:1%;
+	clear:both;
+}
+
+#msjError
+{
+	margin-left:1%;
+	margin-right:1%;
+	padding-top:30px;
+	padding-left:30px;
+	padding-right:30px;
+	padding-bottom:20px;
+	font-size:10pt;
+	font-weight:bold;
+}
+
+#msjError2
+{
+	margin-left:1%;
+	margin-right:1%;
+	padding-top:25px;
+	padding-left:30px;
+	padding-right:30px;
+	padding-bottom:20px;
+	font-size:10pt;
+	font-weight:bold;
+}
+
+#msjOk
+{
+	margin-left:1%;
+	margin-right:1%;
+	padding-top:25px;
+	padding-left:30px;
+	padding-right:30px;
+	padding-bottom:20px;
+	font-size:10pt;
+	font-weight:bold;
+}
+
+#btnMsjError
+{
+	margin-left:1%;
+	margin-right:1%;
+	padding-right:10px;
+}
+
+#btnMsjOk
+{
+	margin-left:1%;
+	margin-right:1%;
+	padding-right:10px;
+}
+
+#sinPlantillas
+{
+	clear:both;
+	font-size:10pt;
+	color:#666666;
+	font-weight:bold;
+	margin-top:80px;
+	text-align:center;
+}
+
+#txtAsunto
+{
+	width:300px;
+	color:#666666;
+	font-size:9pt;
+	font-weight:bold;
+}
+
+.espacio
+{
+	clear:both;
+	margin-bottom:5px;
+}
+
+#contenedorBotones
+{
+	float:right;
 }

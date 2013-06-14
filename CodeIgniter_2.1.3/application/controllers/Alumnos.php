@@ -24,7 +24,7 @@ class Alumnos extends MasterManteka {
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
 		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_ver', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	}
@@ -321,7 +321,6 @@ class Alumnos extends MasterManteka {
 	* Se buscan alumnos de forma asincrona para mostrarlos en la vista
 	*
 	**/
-
 	public function postBusquedaAlumnos() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';

@@ -1,5 +1,20 @@
 /* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
 
+
+.table-hover tbody tr.highlight td {
+    background-color: rgb(205, 205,205);
+}
+
+.caca-clear-filters {
+	display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  line-height: 14px;
+  vertical-align: text-top;
+	background-image: url("../img/clear-filters.png");
+}
+
 .click_lista{
     border-right-style: solid;
     border-right-width: 1px;
