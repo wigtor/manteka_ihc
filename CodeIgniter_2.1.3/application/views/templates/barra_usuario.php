@@ -14,6 +14,9 @@
 						<a href="/<?php echo config_item('dir_alias') ?>/index.php/Ayuda/preguntasFrecuentes"> Preguntas Frecuentes</a>
 			    	</li>
 			    	<li>
+						<a href="/<?php echo config_item('dir_alias') ?>/index.php/About/acercaNosotros"> Acerca de Nosotros</a>
+			    	</li>
+			    	<li>
 						<a href="/<?php echo config_item('dir_alias') ?>/index.php/Otros/manualUsuario">Manual de Usuario</a>
 			    	</li>
 			    </ul>
