@@ -6,6 +6,7 @@
 	
 	<title><?php echo $title ?></title>
 	<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/bootstrap.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/bootstrap-fileupload.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/personalizados.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/ant-sig.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/faq.css" type="text/css" media="all" />
@@ -23,6 +24,7 @@
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-collapse.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-carousel.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-typeahead.js"></script>
+    <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-fileupload.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrapx-clickover.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/ant-sig.js"></script>
     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/undo-redo.js"></script>
@@ -35,24 +37,18 @@
     <script>
     //Configura la apariencia de colores de los botones de la barra lateral
     $(document).ready(function() {
-        //$('.accordion-group').css("border", "1px solid rgb(229, 229, 229)")
-        //$(".in").parents('.accordion-group').css("border", "1px solid #1E90FF")
         $('.accordion-group').css("box-shadow", "0px 1px 1px rgba(0, 0, 0, 0) inset, 0px 0px 8px rgba(0, 0, 0, 0)")
         $(".in").parents('.accordion-group').css("box-shadow", "0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6)")
 
         $(".in").parents('.accordion-group').css("border-radius", "4px")
         $(".in").parents('.accordion-group').css("-moz-border-radius", "4px")
         $(".in").parents('.accordion-group').css("-webkit-border-radius", "4px")
-        //$('.accordion-group').css("background-color", "rgb(255, 255, 255)")
-        //$(".in").parents('.accordion-group').css("background-color", "rgb(245, 245, 245)")
         $('.accordion-heading').css("border-radius", "5px")
         $('.accordion-heading').css("background-color", "rgb(255, 255, 255)")
         $(".in").parents('.accordion-group').find('.accordion-heading').css("background-color", "rgb(248, 248, 248)")
-
-        
-      $(function() { 
-          $('[rel="clickover"]').clickover(); 
-      });
+        $(function() { 
+            $('[rel="clickover"]').clickover(); 
+        });
     
     });
     </script>
