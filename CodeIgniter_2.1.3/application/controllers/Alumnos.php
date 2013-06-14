@@ -351,6 +351,18 @@ class Alumnos extends MasterManteka {
 		$resultado = $this->Model_estudiante->getSecciones();
 		echo json_encode($resultado);
 	}
+	
+	public function rutExisteC() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_estudiante');
+		$rut = $this->input->post('rut_post');
+
+		$resultado = $this->Model_estudiante->rutExisteM($rut);
+		echo json_encode($resultado);
+	}
 
 }
 
