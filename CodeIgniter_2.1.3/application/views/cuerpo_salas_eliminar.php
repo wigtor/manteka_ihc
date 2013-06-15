@@ -1,30 +1,14 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sala eliminada correctamente
-    		</div>	
-		<?php
+<script type="text/javascript">
+	
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
+				alert("Sala eliminada correctamente");
+				}
+				else{
+					alert("Error al eliminar");
+				}
 	}
-	else if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al eliminar sala
-    		</div>		
-
-		<?php
-	}
-	unset($mensaje_confirmacion);
-}
-?>
+</script>
 
 <script type="text/javascript">
 	function DetalleSala(cod_sala,num_sala,ubicacion,capacidad){

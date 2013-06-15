@@ -1,49 +1,26 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sala editada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al editar sala
-    		</div>		
-
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 
-				 Una sala con el mismo nombre ya se ha ingresado 
-    		</div>		
-
-		<?php
-		}
+<script type="text/javascript">
 	
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
+				alert("Sala editada correctamente");
+			
+		}
+		else{
+			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
+				alert("Error al editar la sala");
+			}		
+			else{
+				if("<?php echo $mensaje_confirmacion;?>"=="3"){
+				alert("Una sala con el mismo nombre ya se ha ingresado");
+				}
+			}
+		}
 	}
-	unset($mensaje_confirmacion);
-}
-?>
-
-
+</script>
 
 <script type="text/javascript">
 	function EditarSala(){
+
 		var num_sala = document.getElementById("num_sala").value;
 		var ubicacion =	document.getElementById("ubicacion").value;
 		var capacidad =	document.getElementById("capacidad").value;
@@ -110,7 +87,7 @@ function ordenarFiltro(){
 	<div class="span10">
 		<fieldset>
 		<legend>Editar Sala</legend>
-		 <form id="formDetalle" type="post" method="post" onsubmit="EditarSala();return false">
+		 <form id="formDetalle" type="post" method="post">
 			
 			<div>
 				<div class="row-fluid">
@@ -171,6 +148,7 @@ function ordenarFiltro(){
 							
 						</div>
 
+					<form id="FormEditar" type="post" method="post" onsubmit="EditarSala();return false">
 						<div class="row-fluid">
 							
 		  					<div class="span5">	
@@ -329,7 +307,7 @@ function ordenarFiltro(){
 						</div>
 
 
-					
+					</form>	
 					<!-- AQUI TERMINA  -->
 
 					</div>

@@ -1,43 +1,19 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sección eliminada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al eliminar sección
-    		</div>		
-
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>	 
-				 No se puede eliminar una sección con alumnos
-    		</div>		
-
-		<?php
+<script type="text/javascript">
+	
+	if("<?php echo $mensaje_confirmacion;?>"!="2"){
+		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
+			if("<?php echo $mensaje_confirmacion;?>"!="3"){
+				alert("Sección eliminada correctamente");
+			}
+			else{alert("Sección con alumnos,no se puede eliminar");}	
+		}
+		else{
+			alert("Error al eliminar");
 		}
 	
 	}
-	unset($mensaje_confirmacion);
-}
-?>
+</script>
+
 <script type="text/javascript">
 	function DetalleSeccion(cod_seccion){
 			document.getElementById("rs_seccion").value = '';
