@@ -1,22 +1,43 @@
-<script type="text/javascript">
-	
-	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
-				alert("Sección editada correctamente");
-			
-		}
-		else{
-			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
-				alert("Error al editar la sección");
-			}		
-			else{
-				if("<?php echo $mensaje_confirmacion;?>"=="3"){
-				alert("No se puede editar,una sección con el mismo ya se ha ingresado");
-				}
-			}
-		}
+<?php
+if(isset($mensaje_confirmacion))
+{
+	if($mensaje_confirmacion==1)
+	{
+		?>
+		    <div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>
+				 Sección editada correctamente
+    		</div>	
+		<?php
 	}
-</script>
+	else{ if($mensaje_confirmacion==-1)
+	{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>
+				 Error al editar sección
+    		</div>		
+
+		<?php
+	}
+		else if($mensaje_confirmacion==3)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>	 
+				 Una sección con el mismo nombre ya se ha ingresado 
+    		</div>		
+
+		<?php
+		}
+	
+	}
+	unset($mensaje_confirmacion);
+}
+?>
 
 
 <script type="text/javascript">

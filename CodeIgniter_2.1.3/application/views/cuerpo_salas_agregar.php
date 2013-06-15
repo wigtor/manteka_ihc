@@ -1,24 +1,44 @@
-<script type="text/javascript">
-	
-	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
-				alert("Sala agregada correctamente");
-			
-		}
-		else{
-			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
-				alert("Error al agregar la sala");
-			}		
-			else{
-				if("<?php echo $mensaje_confirmacion;?>"=="3"){
-				alert("Una sala con el mismo nombre ya se ha ingresado");
-				}
-			}
-		}
+<?php
+if(isset($mensaje_confirmacion))
+{
+	if($mensaje_confirmacion==1)
+	{
+		?>
+		    <div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>
+				 Sala agregada correctamente
+    		</div>	
+		<?php
 	}
-</script>
+	else{ if($mensaje_confirmacion==-1)
+	{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>
+				 Error al agregar sala
+    		</div>		
 
+		<?php
+	}
+		else if($mensaje_confirmacion==3)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>
+				 
+				 Una sala con el mismo nombre ya se ha ingresado 
+    		</div>		
 
+		<?php
+		}
+	
+	}
+	unset($mensaje_confirmacion);
+}
+?>
 
 <div class= "row-fluid">
 	<div class= "span10">	
