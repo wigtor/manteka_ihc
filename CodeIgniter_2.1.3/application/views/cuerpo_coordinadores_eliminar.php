@@ -61,6 +61,9 @@ function verDetalle(elemTabla) {
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				var rutToDelete = document.getElementById('rutToDelete');
+				$(rutToDelete).val(datos.rut);
+
 				$(rutDetalle).html(datos.rut);
 				$(nombre1Detalle).html(datos.nombre1);
 				$(nombre2Detalle).html(datos.nombre2);
@@ -78,36 +81,15 @@ function verDetalle(elemTabla) {
 	}
 
 
-	function EliminarCoordinador(){
-    	var respuesta = confirm("Esta seguro de que desea eliminar este coordinador");
-    	rutAEliminar = $("#rutDetalle").html();
-    	if(rutAEliminar != ""){
-	    	var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).show();
-	    	if(respuesta){
-	    		$.ajax({
-				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Coordinadores/PostEliminarCoordinador") ?>", /* Se setea la url del controlador que responderá */
-				data: { rutDelete: rutAEliminar }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					/* Quito el div que indica que se está cargando */
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
-				}
-			});
-	    	}else{
-	    		var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
-	    	}
-	    	if(respuesta){
-	    		window.location = "<?php echo site_url("Coordinadores/ResultadoSatisfactorio") ?>";
-	    	}
-	    }else{
-	    	alert('Por favor seleccione un coordinador');
-	    }
-
-    }
-    function Vaciar(){
+	function eliminarCoordinador(){
+		rutAEliminar = $("#rutDetalle").html();
+		if(rutAEliminar == ""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
+		}
+		$('#modalConfirmacion').modal();
+	}
+    function resetearCoordinador(){
     	$(rutDetalle).html("");
 		$(nombre1Detalle).html("");
 		$(nombre2Detalle).html("");
@@ -115,6 +97,9 @@ function verDetalle(elemTabla) {
 		$(apellido2Detalle).html("");
 		$(fonoDetalle).html("");
 		$(correoDetalle).html("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
     }
 
     //Se cargan por ajax
@@ -159,8 +144,8 @@ function verDetalle(elemTabla) {
 		</div>
 		<div class="span6">
 			<?php
-				$attributes = array('onSubmit' => 'return EliminarCoordinador()', 'id' => 'formBorrar');
-				echo form_open('Ayudantes/EliminarAyudante', $attributes);
+				$attributes = array('id' => 'formBorrar');
+				echo form_open('Coordinadores/PostEliminarCoordinador', $attributes);
 			?>
 				<pre style="padding: 2%; cursor:default">
 Rut:              <b id="rutDetalle"></b>
@@ -169,16 +154,48 @@ Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Fono:             <b id="fonoDetalle" ></b>
 Correo:           <b id="correoDetalle"></b></pre>
+				<input type="hidden" id="rutToDelete" name="rutToDelete" value="">
 				<div class="control-group">
 					<div class="controls pull-right">
-						<button class="btn" type="submit" >
+						<button type="button" class="btn" onclick="eliminarCoordinador()">
 							<i class= "icon-trash"></i>
 							&nbsp; Eliminar
 						</button>
-						<button class="btn" type="button" onclick="vaciar()" >
+						<button class="btn" type="button" onclick="resetearCoordinador()" >
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
 						</button>&nbsp;
+
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a eliminar el coordinador ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-primary">Aceptar</button>
+							</div>
+						</div>
+
+						<!-- Modal de confirmación -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado un coordinador</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un coordinador y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			<?php echo form_close(""); ?>

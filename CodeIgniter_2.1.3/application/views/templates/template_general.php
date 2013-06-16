@@ -4,16 +4,23 @@
 		echo $head						//	Esta variable es pasada como parámetro a esta vista
 	?>
 <body>
-	<div id="wrap" style="min-width:820px;">
-		<?php
-			echo $barra_usuario		//	Barra de control de usuario
-		?>
+	<div id="wrap" style="min-width:1000px;">
 		<?php
 			echo $banner_portada;	//	Banner del sitio Web
 		?>
-		<?php
-			echo $menu_superior;	//	Barra con los menúes
-		?>
+		<div class="row-fluid">
+			<div class="span2">
+				<?php
+					echo $barra_usuario		//	Barra de control de usuario
+				?>
+			</div>
+			<div class="span9">
+				<?php
+					echo $menu_superior;	//	Barra con los menúes
+				?>
+			</div>
+
+		</div>
 		<!-- Ahora debe ir el código de la barra lateral y el contenido de la operación -->
 		<div class="container-fluid">
 			<div class="row-fluid">

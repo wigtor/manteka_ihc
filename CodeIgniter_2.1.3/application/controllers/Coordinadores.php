@@ -74,7 +74,16 @@ class Coordinadores extends MasterManteka {
     {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 			$this->load->model('model_coordinadores');
-			$this->model_coordinadores->agregarCoordinador($_POST['nombre'],$_POST['rut'],md5($_POST['contrasena']),$_POST['correo1'],$_POST['correo2'],$_POST['fono']);
+			$rut = $this->input->post('rutEditar');
+			$nombre1 = $this->input->post('nombre1');
+			$nombre2 = $this->input->post('nombre2');
+			$apellido1 = $this->input->post('apellido1');
+			$apellido2 = $this->input->post('apellido2');
+			$correo1 = $this->input->post('correo1');
+			$correo2 = $this->input->post('correo2');
+			$fono = $this->input->post('fono');
+
+			$this->model_coordinadores->agregarCoordinador($rut, $nombre1 , $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono);
 
 			$datos_plantilla["titulo_msj"] = "Coordinador agregado";
 			$datos_plantilla["cuerpo_msj"] = "El nuevo coordinador fue agregado correctamente.";
@@ -115,51 +124,44 @@ class Coordinadores extends MasterManteka {
       */
     public function editarCoordinadores()
     {
-    	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		
+    	//SE DEBE COMPROBAR RUT ANTES O HAY UN PROBLEMA DE SEGURIDAD
+
 		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 			$this->load->model('model_coordinadores');
-			
+			$resetearPass = $this->input->post('resetContrasegna');
+			$rutEditar = $this->input->post('rutEditar');
+			$nombre1 = $this->input->post('nombre1');
+			$nombre2 = $this->input->post('nombre2');
+			$apellido1 = $this->input->post('apellido1');
+			$apellido2 = $this->input->post('apellido2');
+			$correo1 = $this->input->post('correo1');
+			$correo2 = $this->input->post('correo2');
+			$fono = $this->input->post('fono');
+
             //$this->model_coordinadores->modificarCoordinador($nombreActual,$rutActual,$nombreNuevo,$rutNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo,$idNuevo,$tipoNuevo);
-			if($_POST['contrasena']){
-				$this->model_coordinadores->modificarPassword($_POST['id'],$_POST['contrasena']);
+			if($resetearPass){
+				$this->model_coordinadores->modificarPassword($rutEditar, $rutEditar);
 			}
-			$this->model_coordinadores->modificarCoordinador($_POST['id'],$_POST['nombre'],$_POST['correo1'],$_POST['correo2'],$_POST['fono']);
-			$datos_plantilla["titulo_msj"] = "Coordinador editado.";
+			$this->model_coordinadores->modificarCoordinador($rutEditar, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono);
+			
+			$datos_plantilla["titulo_msj"] = "Coordinador editado";
 			$datos_plantilla["cuerpo_msj"] = "El coordinador fue editado correctamente.";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 			$datos_plantilla["redirecTo"] = 'Coordinadores/editarCoordinadores';
-			$datos_plantilla["nombre_redirecTo"] = "Editar Coordinador";
+			$datos_plantilla["nombre_redirecTo"] = "Editar coordinadores";
 			$datos_plantilla["redirectAuto"] = TRUE;
-			$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 			
-		}else{
-			$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-			$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-			$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-			$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-			$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-			$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		}
+		else {
+			$datos_plantilla = array();
+			$subMenuLateralAbierto = 'editarCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array();
+			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarTodo("Docentes", "cuerpo_coordinadores_modificar", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
-			$this->load->model('model_coordinadores');
-			$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadores();
-
-			$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_coordinadores_modificar', $datos_cuerpo_central, true); //Esta es la linea que cambia por cada controlador
-			//Ahora se especifica que vista estÃ¡ abierta para mostrar correctamente el menu lateral
-			$datos_plantilla["subVistaLateralAbierta"] = "editarCoordinadores"; //Usen el mismo nombre de la secciÃ³n donde debe estar
-			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-			$this->load->view('templates/template_general', $datos_plantilla);
 		}
 		
     }
@@ -188,23 +190,21 @@ class Coordinadores extends MasterManteka {
 		return ;
 		
     }
-    public function ResultadoSatisfactorio(){
-    	$datos_plantilla["titulo_msj"] = "Coordinador(es) eliminados(s)";
-		$datos_plantilla["cuerpo_msj"] = "El(Los) coordinador(es) fueron eliminados correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
-		$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
-		$datos_plantilla["nombre_redirecTo"] = "Eliminar Coordinador";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos); 	
-    }
 
-    public function PostEliminarCoordinador(){
-    	$rutEliminar = $this->input->post('rutDelete');
+    public function postEliminarCoordinador(){
+    	$rutEliminar = $this->input->post('rutToDelete');
 		$respuesta = '';
 		$this->load->model('model_coordinadores');
 		$this->model_coordinadores->borrarCoordinadores($rutEliminar);
-		echo true;
+
+		$datos_plantilla["titulo_msj"] = "Coordinador eliminados";
+		$datos_plantilla["cuerpo_msj"] = "El coordinador fue eliminado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
+		$datos_plantilla["nombre_redirecTo"] = "Eliminar coordinador";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
     }
 
     /**

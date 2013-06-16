@@ -6,34 +6,14 @@
 	var url_post_busquedas = "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/ayudantes") ?>";
 
-	
-	function EditarEstudiante(){
-
-		var rut = document.getElementById("rutEditar").value;
-		var nombreUno =	document.getElementById("nombreunoEditar").value;
-		var nombreDos =	document.getElementById("nombredosEditar").value;
-		var apellidoPaterno = document.getElementById("apellidopaternoEditar").value;
-		var apellidoMaterno = document.getElementById("apellidomaternoEditar").value;
-		var correo = document.getElementById("correoEditar").value;
-	
-		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
-			var answer = confirm("¿Está seguro de realizar cambios?")
-			if (!answer){
-				return false;
-			}
-			else{
-				return true;
-			}
+	function editarAyudante(){
+		rutAEditar = $("#rutEditar").val();
+		if(rutAEditar == ""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
-		else{
-			alert("Inserte todos los datos");
-			return false;
-		}
+		$('#modalConfirmacion').modal();
 	}
-</script>
-
-
-<script type="text/javascript">
 	
 	function verDetalle(elemTabla) {
 
@@ -92,6 +72,25 @@
 		});
 	}
 
+	function resetearAyudante() {
+
+		var rutDetalle = document.getElementById("rutEditar");
+		var nombre1Detalle = document.getElementById("nombreunoEditar");
+		var nombre2Detalle = document.getElementById("nombredosEditar");
+		var apellido1Detalle = document.getElementById("apellidopaternoEditar");
+		var apellido2Detalle = document.getElementById("apellidomaternoEditar");
+		var correoDetalle = document.getElementById("correoEditar");
+		$(rutDetalle).val("");
+		$(nombre1Detalle).val("");
+		$(nombre2Detalle).val("");
+		$(apellido1Detalle).val("");
+		$(apellido2Detalle).val("");
+		$(correoDetalle).val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
+	}
+
 	//Se cargan por ajax
 	$(document).ready(function() {
 		escribirHeadTable();
@@ -118,7 +117,8 @@
 			1.-Listado ayudantes
 		</div>
 		<div class="span6" >
-			2.-Complete los datos del formulario para modificar el ayudante:
+			<font color="red">* Campos Obligatorios</font>
+			<p>2.-Complete los datos del formulario para modificar el ayudante:</p>
 		</div>
 	</div>
 
@@ -138,13 +138,13 @@
 
 		<div class="span6">
 			<?php
-				$attributes = array('onSubmit' => 'return EditarEstudiante()', 'id' => 'FormEditar', 'class' => 'form-horizontal');
+				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal');
 				echo form_open('Ayudantes/EditarAyudante', $attributes);
 			?>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">1-.RUT</label>
 					<div class="controls">
-						<input type="text" id="rutEditar" name="rut_ayudante" readonly>
+						<input type="text" id="rutEditar" name="rutEditar" readonly>
 					</div>
 				</div>
 				<div class="control-group">
@@ -180,7 +180,7 @@
 
 				<div class="control-group">
 					<div class="controls ">
-						<button class="btn" type="submit" >
+						<button type="button" class="btn" onclick="editarAyudante()">
 							<i class= "icon-pencil"></i>
 							&nbsp; Guardar
 						</button>
@@ -188,6 +188,37 @@
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
 						</button>&nbsp;
+
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se van a guardar los cambios del ayudante ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-primary">Aceptar</button>
+							</div>
+						</div>
+
+						<!-- Modal de confirmación -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado un ayudante</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un ayudante y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			<?php echo form_close(""); ?>

@@ -235,18 +235,21 @@ class model_coordinadores extends CI_Model{
       * @return none
       */		
       //no comtempla la modificacion de tipo de usuario.
-      function modificarCoordinador($rutActual,$nombreNuevo,$correo1Nuevo,$correo2Nuevo,$telefonoNuevo){
+      function modificarCoordinador($rutActual,$nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono){
          //tabla coordinador
          $this->db->where('RUT_USUARIO3',$rutActual);
          $informacion = array(
-                        'NOMBRE1_COORDINADOR' => $nombreNuevo,
-                        'TELEFONO_COORDINADOR' => $telefonoNuevo);
+                        'NOMBRE1_COORDINADOR' => $nombre1,
+                        'NOMBRE2_COORDINADOR' => $nombre2,
+                        'APELLIDO1_COORDINADOR' => $apellido1,
+                        'APELLIDO2_COORDINADOR' => $apellido2,
+                        'TELEFONO_COORDINADOR' => $fono);
          $this->db->update('coordinador',$informacion);
          //tabla usuario
          $this->db->where('RUT_USUARIO',$rutActual);
          $informacion_user = array(
-                        'CORREO1_USER' => $correo1Nuevo,
-                        'CORREO2_USER' => $correo2Nuevo,);
+                        'CORREO1_USER' => $correo1,
+                        'CORREO2_USER' => $correo2,);
          $this->db->update('usuario',$informacion_user);
       
 	  
@@ -293,19 +296,20 @@ class model_coordinadores extends CI_Model{
 	  * @param string $telefono número de teléfono del coordinador ingresado.
       * @return none
       */
-      function agregarCoordinador($nombre,$rut,$contrasena,$correo1,$correo2,$telefono){
+      function agregarCoordinador($rut, $nombre1 , $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono){
          $informacion_user = array('RUT_USUARIO'=> $rut,
                                     'ID_TIPO'=> TIPO_USR_COORDINADOR ,
-                                    'PASSWORD_PRIMARIA'=>$contrasena ,
+                                    'PASSWORD_PRIMARIA'=>md5($rut) ,
                                     'CORREO1_USER'=>$correo1 ,
                                     'CORREO2_USER'=>$correo2 );
          $this->db->insert('usuario',$informacion_user);
          $informacion_coord = array('RUT_USUARIO3'          => $rut, 
-                                    'NOMBRE1_COORDINADOR'   => $nombre,
-                                    'APELLIDO1_COORDINADOR' => "",
-                                    'TELEFONO_COORDINADOR'  => $telefono);
+                                    'NOMBRE1_COORDINADOR'   => $nombre1,
+                                    'NOMBRE2_COORDINADOR'   => $nombre1,
+                                    'APELLIDO1_COORDINADOR'   => $apellido1,
+                                    'APELLIDO2_COORDINADOR'   => $apellido2,
+                                    'TELEFONO_COORDINADOR'  => $fono);
          $this->db->insert('coordinador',$informacion_coord);
-         
       }
 
 
