@@ -183,55 +183,52 @@ class Model_estudiante extends CI_Model {
 	* @return Se devuelve un array de objetos alumnos con sólo su nombre y rut
 	* @author Víctor Flores
 	*/
-	public function getAlumnosByFilter($tipoFiltro, $texto)
+	public function getAlumnosByFilter($texto, $textoFiltrosAvanzados)
 	{
-
-		//Sólo para acordarse
-		define("BUSCAR_POR_NOMBRE", 1);
-		define("BUSCAR_POR_APELLIDO1", 2);
-		define("BUSCAR_POR_APELLIDO2", 3);
-		define("BUSCAR_POR_CARRERA", 4);
-		define("BUSCAR_POR_SECCION", 5);
-		define("BUSCAR_POR_BLOQUEHORARIO", 6);
-
-		$attr_filtro = "";
-		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-			$attr_filtro = "NOMBRE1_ESTUDIANTE";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-			$attr_filtro = "APELLIDO1_ESTUDIANTE";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-			$attr_filtro = "APELLIDO2_ESTUDIANTE";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_CARRERA) {
-			$attr_filtro = "carrera.COD_CARRERA";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_SECCION) {
-			$attr_filtro = "seccion.COD_SECCION";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_BLOQUEHORARIO) {
-			return array(); //No implementado aún
-			//$attr_filtro = "NOMBRE1_ESTUDIANTE";
-		}
-		else {
-			return array(); //No es válido, devuelvo vacio
-		}
-
 		$this->db->select('RUT_ESTUDIANTE AS rut');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
-		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		//$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
 		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
-		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
+		//$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		//$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		//$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
 		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
-		$this->db->like($attr_filtro, $texto);
-		if ($tipoFiltro == BUSCAR_POR_CARRERA) {
-			$this->db->or_like("NOMBRE_CARRERA", $texto);
+
+		if ($texto != "") {
+			$this->db->like('RUT_ESTUDIANTE',$texto);
+			$this->db->or_like('NOMBRE1_ESTUDIANTE',$texto);
+			$this->db->or_like('NOMBRE2_ESTUDIANTE',$texto);
+			$this->db->or_like('APELLIDO1_ESTUDIANTE',$texto);
+			$this->db->or_like('APELLIDO2_ESTUDIANTE',$texto);
+			//$this->db->or_like('carrera',$texto);
+			//$this->db->or_like('seccion',$texto);
+		} 
+		else {
+			
+			//Sólo para acordarse
+			define("BUSCAR_POR_RUT", 0);
+			define("BUSCAR_POR_NOMBRE", 1);
+			define("BUSCAR_POR_APELLIDO", 2);
+			
+			if($textoFiltrosAvanzados[BUSCAR_POR_RUT] != ''){
+				$this->db->like("RUT_ESTUDIANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+			}			
+			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
+				$this->db->where("(NOMBRE1_ESTUDIANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_ESTUDIANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
+				//$this->db->like("(NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+				//$this->db->or_like("NOMBRE2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
+				$this->db->where("(APELLIDO1_ESTUDIANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_ESTUDIANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+			}
 		}
 		$query = $this->db->get('estudiante');
 		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
 		return $query->result();
 	}
 
@@ -261,6 +258,9 @@ class Model_estudiante extends CI_Model {
 		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION', 'LEFT OUTER');
 		$this->db->where('RUT_ESTUDIANTE', $rut);
 		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
 		//echo $this->db->last_query();
 		return $query->row();
 	}
