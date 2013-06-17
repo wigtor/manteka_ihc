@@ -46,7 +46,7 @@ class Salas extends MasterManteka {
 		$subMenuLateralAbierto = "verSalas"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
 		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
@@ -63,7 +63,7 @@ class Salas extends MasterManteka {
 	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra sala.
 	*
 	*/
-	public function agregarSalas()
+	public function agregarSalas($mensajes_alert = array())
     {
 		//Se comprueba que quien hace esta petición este logueado
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -74,7 +74,8 @@ class Salas extends MasterManteka {
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "agregarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
+		
+$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
         $num_sala = $this->input->get("num_sala");
@@ -82,10 +83,10 @@ class Salas extends MasterManteka {
         $capacidad = $this->input->get("capacidad");
 		$implementos = $this->input->get("cod_implemento");
         $confirmacion = $this->Model_sala->InsertarSala($num_sala,$ubicacion,$capacidad,$implementos);
+	
 		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
-	
     }
     
 	/**
@@ -122,8 +123,9 @@ class Salas extends MasterManteka {
 		$implementosA= $this->input->post("cod_implementoA");
         $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA);  
 		$datos_vista = array('implementoA'=>$this->Model_sala->ImplementosAusentes($cod_sala),'mensaje_confirmacion'=>2,'rs_sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>2,'implemento' => $this->Model_sala->ImplementosParticulares($cod_sala),'mensaje_confirmacion'=>2,'sala' => $this->Model_sala->VerSala($cod_sala),'mensaje_confirmacion'=>$confirmacion);
+	
 		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
+	
     }
 
 	/**

@@ -162,7 +162,7 @@
 					</div>
 					<div class="span5">	
 						<div class="controls">
-							<input type="text" id="nombreProfeEdit1" name="nombre_1" required>
+							<input type="text" id="nombreProfeEdit1" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre_1" required>
 						</div>
 					</div>
 				</div>
@@ -174,8 +174,9 @@
 					</div>
 					<div class="span5">	
 						<div class="controls">
-							<input type="text" id="nombreProfeEdit2" name="nombre_2" required>
+							<input type="text" id="nombreProfeEdit2" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre_2" required>
 						</div>
+<<<<<<< HEAD
 					</div>
 				</div>
 				<div class="row-fluid">
@@ -186,7 +187,7 @@
 					</div>
 					<div class="span5">	
 						<div class="controls">
-							<input type="text" id="apellidoPaternoProfeEdit" name="apellidoPaterno_profe" required>
+							<input type="text" id="apellidoPaternoProfeEdit" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellidoPaterno_profe" required>
 						</div>
 					</div>
 				</div>
@@ -198,7 +199,7 @@
 					</div>
 					<div class="span5">	
 						<div class="controls">
-							<input type="text" id="apellidoMaternoProfeEdit" name="apellidoMaterno_profe" required>
+							<input type="text" id="apellidoMaternoProfeEdit" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellidoMaterno_profe" required>
 						</div>
 					</div>
 				</div>

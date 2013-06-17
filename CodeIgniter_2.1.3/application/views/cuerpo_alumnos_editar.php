@@ -320,7 +320,7 @@ function ordenarFiltro(){ //No funcional
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombreunoEditar" name="nombreunoEditar" maxlength="19" required>
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombreunoEditar" name="nombreunoEditar" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -333,7 +333,7 @@ function ordenarFiltro(){ //No funcional
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="nombredosEditar" name="nombredosEditar" maxlength="19" >
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombredosEditar" name="nombredosEditar" maxlength="19" >
 		  							</div>
 							</div>
 						</div>
@@ -348,7 +348,7 @@ function ordenarFiltro(){ //No funcional
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -361,7 +361,7 @@ function ordenarFiltro(){ //No funcional
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
 		  							</div>
 							</div>
 						</div>
@@ -374,7 +374,7 @@ function ordenarFiltro(){ //No funcional
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" placeholder="ejemplo@usach.cl" id="correoEditar" name="correoEditar" maxlength="19" required>
+		    							<input type="email" placeholder="nombre_usuario@miemail.com" id="correoEditar" name="correoEditar" maxlength="199" required>
 		  							</div>
 							</div>
 						</div>

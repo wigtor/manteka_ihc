@@ -1,4 +1,50 @@
+<?php
+	if($mensaje_confirmacion != 2)	{
+		if($mensaje_confirmacion==-1){
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+   			 <h4>Error</h4>
+				 Error al actualizar módulo
+    		</div>		
+
+		<?php
+		}
+		else if($mensaje_confirmacion==1)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>	 
+				 Módulo actualizado correctamente
+    		</div>		
+
+		<?php
+ 		}
+ 
+}
+?>
+
 <script>
+	function Cancelar(){
+		document.getElementById("nombre_modulo").value = "";
+		document.getElementById("descripcion").value = "";
+		document.getElementById("cod_modulo").value = "";
+		document.getElementById("nombre_modulo2").value = "";
+		document.getElementById("cod_equipo2").value = "";
+	
+		var sesiones = document.getElementById("sesiones");
+		$(sesiones).empty();
+		var equipo = document.getElementById("equipo");
+		$(equipo).empty();
+		var profLider = document.getElementById("prof_lider");
+		$(profLider).empty();
+		var requisitos = document.getElementById("requisitos");
+		$(requisitos).empty();
+		
+		return false;
+	}
+
 	function detalleModulo(cod_mod,descripcion,cod_equipo,name_mod) {
 		document.getElementById("nombre_modulo").value = name_mod;
 		document.getElementById("descripcion").value = descripcion;
@@ -213,17 +259,6 @@
 
 <script type="text/javascript">
 	
-	if(Number("<?php echo $mensaje_confirmacion;?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion;?>") != -1){
-				alert("Se ha actualizado el modulo");
-				
-				}
-				else{
-					alert("Error al actualizar");		
-				}
-	}
-
-
 
 function nombreEnUso(){
 	nombre_tentativo = document.getElementById("nombre_modulo");
@@ -477,7 +512,7 @@ function editarMod(){
 							</button>
 						</div>
 						<div class= "span3" style="margin-left:0%">
-							<button class ="btn" type="reset" style="width:105px">
+							<button class ="btn" onclick="Cancelar();return false" style="width:105px">
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>

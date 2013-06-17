@@ -150,31 +150,31 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre</label>
 					<div class="controls">
-						<input type="text" id="nombreunoEditar" name="nombre1_ayudante" maxlength="20" required>
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombreunoEditar" name="nombre1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">3-. Segundo nombre</label>
 					<div class="controls">
-						<input type="text" id="nombredosEditar" name="nombre2_ayudante" maxlength="20" >
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombredosEditar" name="nombre2_ayudante" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Paterno</label>
 					<div class="controls">
-						<input type="text" id="apellidopaternoEditar" name="apellido_paterno" maxlength="20" required>
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellido_paterno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido Materno</label>
 					<div class="controls">
-						<input type="text" id="apellidomaternoEditar" name="apellido_materno" maxlength="20" required>
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellido_materno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" name="correo_ayudante" maxlength="20" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" id="correoEditar" name="correo_ayudante" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 
