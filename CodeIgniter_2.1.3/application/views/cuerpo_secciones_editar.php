@@ -70,32 +70,15 @@ if(isset($mensaje_confirmacion))
 <script type="text/javascript">
 	function EditarSeccion(){
 		var cod=document.getElementById("cod_seccion").value;
+		var cod1=document.getElementById("rs_seccion").value;
+		var cod2=document.getElementById("rs_seccion2").value;
 		if(cod!=""){ 
-					var answer = confirm("¿Está seguro de editar esta sección?")
-					if (!answer){
-						var dijoNO = DetalleSeccion("");
-					}
-					else{
-					var patron = "^[0-9]{2}$"; //dos números enteros positivos en la primera parte del nombre de la sección
-					var patron2 = "^([A-Z]{1}|[a-z]{1})$"; //una letra en la primera parte del nombre de la sección
-					if (document.getElementById("rs_seccion2").value.match(patron)) {    
-						if (document.getElementById("rs_seccion").value.match(patron2)) {  
-							var editar = document.getElementById("FormEditar");
-							editar.action = "<?php echo site_url("Secciones/editarSecciones/") ?>/";
-							editar.submit();
-						}
-						else {
-							alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
-						}
-					}
-					else {
-						alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
-					}
-					}
-					
+		
+			$('#modalConfirmacion').modal();					
 		}
 		else{
-				alert("Selecione una sección");
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
 		
 	}
@@ -136,7 +119,7 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Editar Sección</legend>
-			<form id="FormEditar" type="post" method="post" onsubmit="EditarSeccion();return false">
+			<form id="FormEditar" type="post" method="post" >
             <div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -219,11 +202,11 @@ function ordenarFiltro(){
 								<div class="span5">	
 		  							<div class="controls">
 									<tr>
-									<td><input id="rs_seccion" name="rs_seccion"  maxlength="10" min="2" maxlength="1" type="text" class="span2"></td>
+									<td><input id="rs_seccion" name="rs_seccion" title=" Ingrese sólo una letra" pattern="^([A-Z]{1}|[a-z]{1})$"  maxlength="1"  maxlength="1" type="text" class="span2" required></td>
 									</tr>	
 									<td class="span2">-</td>
 									<tr>
-									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="10" min="2" maxlength="2" type="text" class="span2"></td>
+									<td><input id="rs_seccion2" name="rs_seccion2"  title=" Ingrese sólo dos dígitos" pattern="[0-9]{2}" maxlength="2"  maxlength="2" type="text" class="span2" required></td>
 									</tr>										
 									
 									</div>
@@ -237,7 +220,7 @@ function ordenarFiltro(){
 					<br>
 						<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
 		
-							<button class ="btn" type="submit" >
+							<button class ="btn" type="button" onclick="EditarSeccion()">
 								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Modificar
 							</button>
@@ -245,6 +228,34 @@ function ordenarFiltro(){
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>
+						</div>
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a editar la sección seleccionada ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="submit"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
+						</div>
+
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sección</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
 						</div>
 					
                 </div>
