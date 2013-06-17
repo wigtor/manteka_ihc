@@ -1,16 +1,51 @@
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Modulo eliminado correctamente");
-				}
-				else{
-					alert("Error al eliminar");
-				}
-	}
-</script>
+
+<?php
+	if($mensaje_confirmacion != 2)	{
+		if($mensaje_confirmacion==-1){
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+   			 <h4>Error</h4>
+				 Error al eliminar módulo
+    		</div>		
+
+		<?php
+		}
+		else if($mensaje_confirmacion==1)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>	 
+				 Módulo eliminado correctamente
+    		</div>		
+
+		<?php
+ 		}
+ 
+}
+?>
 
 <script>
+	function Cancelar(){
+		document.getElementById("nombre_modulo").innerHTML  = "";
+		document.getElementById("descripcion_modulo").innerHTML  = "";
+		document.getElementById("profesor_lider").innerHTML  = "";
+		document.getElementById("cod_modulo_eliminar").innerHTML  = "";
+		document.getElementById("cod_modulo_eliminar").value  = "";
+	
+		var sesiones = document.getElementById("sesiones");
+		$(sesiones).empty();
+		var equipo = document.getElementById("equipo");
+		$(equipo).empty();
+		var profLider = document.getElementById("prof_lider");
+		$(profLider).empty();
+		var requisitos = document.getElementById("requisitos");
+		$(requisitos).empty();
+		
+		return false;
+	}
+
 function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 	document.getElementById("nombre_modulo").innerHTML = nombre_modulo;
 	document.getElementById("descripcion_modulo").innerHTML = descripcion;	
@@ -321,7 +356,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 					</div>
 
 					<div class = "span3 ">
-						<button  class ="btn" type="reset" style="width: 105px">
+						<button  class ="btn" onclick="Cancelar();return false" style="width: 105px">
 							<div class= "btn_with_icon_solo">Â</div>
 							&nbsp Cancelar
 						</button>

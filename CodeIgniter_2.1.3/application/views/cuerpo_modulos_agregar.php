@@ -1,17 +1,29 @@
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha agregado el modulo");
-				
-				}
-				else{
-					alert("Error al agregar");
-			
-				}
-	}
-</script>
+<?php
+	if($mensaje_confirmacion != 2)	{
+		if($mensaje_confirmacion==-1){
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+   			 <h4>Error</h4>
+				 Error al agregar el módulo
+    		</div>		
 
+		<?php
+		}
+		else if($mensaje_confirmacion==1)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>	 
+				 Módulo agregado correctamente
+    		</div>		
+
+		<?php
+ 		}
+ 
+}
+?>
 
 
 <script type="text/javascript">
@@ -72,6 +84,11 @@ function sacarDelEquipo(contadorProfe){
 function nombreEnUso(){
 	nombre_tentativo = document.getElementById("nombre_modulo_in");
 	
+	var limpiarControlGroupRut = document.getElementById("groupNombreMod");
+	$(limpiarControlGroupRut).removeClass("error") ;
+	var spanError = document.getElementById("spanInputNombreModError");
+	$(spanError).empty();
+	
 	var arreglo = new Array();
 	var cont = 0;
 	<?php
@@ -84,7 +101,12 @@ function nombreEnUso(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		if(arreglo[cont].toLowerCase () == nombre_tentativo.value.toLowerCase ()){
-				alert("Nombre en uso. Use otro nombre");
+				var controlGroupRut = document.getElementById("groupNombreMod");
+				$(controlGroupRut).addClass("error");
+				var spanError = document.getElementById("spanInputNombreModError");
+				$(spanError).html("El nombre ya está en uso, intente otro.");
+
+				
 				nombre_tentativo.value="";
 				return;
 		}
@@ -147,9 +169,10 @@ function nombreEnUso(){
 									</div>
 								</div>
 								<div class="span7">	
-										<div class="controls">
+									<div class="control-group" id="groupNombreMod">											
 											<input id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="49"  placeholder="Comunicación no verbal" onblur="nombreEnUso()">
-										</div>
+											<span id="spanInputNombreModError" class="help-inline"></span>
+									</div>
 								</div>
 						</div>
 					</div>
