@@ -38,18 +38,29 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				if (datos.nombre1 == null) {
+					datos.nombre1 = '';
+				}
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.apellido1 == null) {
+					datos.apellido1 = '';
+				}
+				if (datos.apellido2 == null) {
+					datos.apellido2 = '';
+				}
+				var nombre_completo_profe;
 				if (datos.nombre1_profe == null) {
-					datos.nombre1_profe = '';
+					nombre_completo_profe = '';
 				}
-				if (datos.nombre2_profe == null) {
-					datos.nombre2_profe = '';
+				else {
+					nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe;
 				}
-				if (datos.apellido1_profe == null) {
-					datos.apellido1_profe = '';
-				}
-				if (datos.apellido2_profe == null) {
-					datos.apellido2_profe = '';
-				}
+
+				var rutToDelete = document.getElementById('rutToDelete');
+				$(rutToDelete).val(datos.rut);
+
 				$(rutDetalle).html($.trim(datos.rut));
 				$(rut_ayudante).val($.trim(datos.rut));
 				$(nombre1Detalle).html(datos.nombre1);
@@ -58,7 +69,7 @@
 				$(apellido2Detalle).html(datos.apellido2);
 				$(correoDetalle).html($.trim(datos.correo));
 				
-				var nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe; 
+				
 				$(profesorDetalle).html(nombre_completo_profe);
 				var secciones = "";
 				/* Esto no se implementa puesto no hay forma de relacionar un ayudante con una sección aún
@@ -74,27 +85,39 @@
 			}
 		});
 }
-</script>
 
-<script type="text/javascript">
+	function resetearAyudante() {
+		var rutDetalle = document.getElementById("rutDetalle");
+		var rutEliminar = document.getElementById("rutEliminar");
+		var nombre1Detalle = document.getElementById("nombreunoDetalle");
+		var nombre2Detalle = document.getElementById("nombredosDetalle");
+		var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
+		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
+		var correoDetalle = document.getElementById("correoDetalle");
+		var profesorDetalle = document.getElementById("profesorDetalle");
+		$(rutDetalle).html("");
+		$(rutEliminar).val("");
+		$(nombre1Detalle).html("");
+		$(nombre2Detalle).html("");
+		$(apellido1Detalle).html("");
+		$(apellido2Detalle).html("");
+		$(correoDetalle).html("");
+		$(profesorDetalle).html("");
+
+		var rutEliminar = document.getElementById("rutToDelete");
+		$(rutEliminar).val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
+}
+
 	function eliminarAyudante(){
-		
-		var rut = document.getElementById("rut_ayudante").value;
-		
-		if(rut!=""){
-			var answer = confirm("¿Está seguro de eliminar este ayudante?")
-			if (!answer){
-				var dijoNO = resetear();
-				return false;
-			}
-			else{
-				return true;
-			}
+		rutAEliminar = $("#rutDetalle").html();
+		if(rutAEliminar == ""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
-		else {
-			alert("Selecione un ayudante");
-			return false;
-		}
+		$('#modalConfirmacion').modal();
 	}
 
 	//Se cargan por ajax
@@ -138,7 +161,7 @@
 		</div>
 		<div class="span6">
 			<?php
-				$attributes = array('onSubmit' => 'return eliminarAyudante()', 'id' => 'formBorrar');
+				$attributes = array('id' => 'formBorrar');
 				echo form_open('Ayudantes/EliminarAyudante', $attributes);
 			?>
 				<pre style="padding: 2%; cursor:default">
@@ -149,10 +172,10 @@ Apellido materno: <b id="apellidomaternoDetalle" ></b>
 Correo:           <b id="correoDetalle" ></b>
 Profesor guía:    <b id="profesorDetalle" ></b>
 Secciones:        <b id="seccionesDetalle" ></b></pre>
-				<input type="hidden" id="rut_ayudante" name="rut_ayudante" value="">
+				<input type="hidden" id="rutToDelete" name="rutToDelete" value="">
 				<div class="control-group">
 					<div class="controls pull-right">
-						<button class="btn" type="submit" >
+						<button type="button" class="btn" onclick="eliminarAyudante()">
 							<i class= "icon-trash"></i>
 							&nbsp; Eliminar
 						</button>
@@ -160,6 +183,37 @@ Secciones:        <b id="seccionesDetalle" ></b></pre>
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
 						</button>&nbsp;
+
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a eliminar el ayudante ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-primary">Aceptar</button>
+							</div>
+						</div>
+
+						<!-- Modal de confirmación -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado un ayudante</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un ayudante y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
 					</div>
 				</div>
 			<?php echo form_close(""); ?>

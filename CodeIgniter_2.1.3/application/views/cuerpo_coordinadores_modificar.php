@@ -8,103 +8,160 @@
 */
 ?>
 <fieldset>
-	<legend>Modificar Coordinador</legend>
+	<legend>Editar coordinador</legend>
 	<div class="row-fluid">
-		<div class="span4">
-			<h4>Seleccione un coordinador a modificar:</h4><br/>
-			
-			<div class="input-append span9">
-			<input class="span11" id="filtroLista" type="text" placeholder="Filtro" onkeypress="getDataSource(this)" onChange="seleccionar_filtro(document.getElementById('select-filtro').getElementsByClassName('active')[0])" >
-				<div class="btn-group">
-					<button class="btn dropdown-toggle" data-toggle="dropdown">
-						<span id="show-filtro">Filtrar por</span>
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" id="select-filtro">
-						<li onclick="seleccionar_filtro(this)" id="filtro1" class="active" value="1">
-							<a href>Nombre</a>
-						</li>
-						<li onclick="seleccionar_filtro(this)" id="filtro2" class="passive" value="2" >
-							<a href>Apellido Paterno</a>
-						</li>
-						<li onclick="seleccionar_filtro(this)" id="filtro3" class="passive" value="3">
-							<a href>Apellido Materno</a>
-						</li>
-						<li onclick="seleccionar_filtro(this)" id="filtro4" class="passive" value="4">
-							<a href>Correo Electrónico</a>
-						</li>
-					</ul>
+		<div class="span6">
+			<div class="controls controls-row">
+				<div class="input-append span7">
+					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
-			</div>
-		    <div class="row-fluid" style="margin-left: 0%;">
-				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-					<table id="listadoResultados" class="table table-hover">
-						<thead>
-							<tr>
-								<th>Nombre Completo</th>
-							</tr>
-						</thead>
-						<tbody>
-
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div class="span6 offset1">
-			<div class="span12" id="visualizar-coordinador">
-				<h4>Complete los siguientes datos para modificar un coordinador:</h4><br/>
-				<?php 
-					$attributes = array('onSubmit' => 'return validar(this)', 'class' => 'span9', 'id' =>"formEditar");
-					echo form_open('Coordinadores/editarCoordinadores', $attributes);
-					//echo "<form class='span9' id='id".$coordinador['id']."' method='POST' action='/manteka/index.php/Coordinadores/editarCoordinadores/' onsubmit='return validar(this)'>";
-					echo "<input name='id' id='rutCoordinador' type='hidden'>";
-					echo "<br/><table>";
-					echo "<tr><td><h6><span class='text-error'></span>Nombre completo:</h6></td><td><input required id='nombre' name='nombre' class ='input-xlarge' type='text' placeholder='ej:SOLAR FUENTES MAURICIO IGNACIO' ></td></tr>";
-					echo "<tr><td><h6><span class='text-error'></span>Contraseña:</h6></td><td><input id='contrasena' name='contrasena' class ='input-xlarge'  type='text' placeholder='*******'  ></td></tr>";
-					echo "<tr><td><h6><span class='text-error'></span>Reingresar contraseña:</h6></td><td><input id='contrasena2' name='contrasena2' class ='input-xlarge' type='text' placeholder='*******'  ></td></tr>";
-					echo "<tr><td><h6><span class='text-error'></span>Correo 1:</h6></td><td><input id='correo1' name='correo1' required class ='input-xlarge' type='email' placeholder='ej:edmundo.leiva@usach.cl'></td></tr>";
-					echo "<tr><td><h6>Correo 2 :</h6></td><td><input id='correo2' name='correo2' class ='input-xlarge' type='email' placeholder='ej:edmundo@gmail.com' ></td></tr>";
-					echo "<tr><td><h6><span class='text-error'></span>Tel?fono:</h6></td><td><input id='fono' name='fono' required class ='input-xlarge' type='text' placeholder='ej:9-87654321' ></td></tr>";
-					echo "</table>";
-					echo "<br/><div class='span7 offset5' id='botones-guardar-cancelar'><button type='submit' class='btn' type='button'>Guardar</button><a class='btn offset1' href='/manteka/index.php/Coordinadores/modificarCoordinador/'>Cancelar</a></div>";
-					echo form_close(""); echo "<!-- span9-->";
-					
-				?>
-
+				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
 			</div>
 		</div>
 	</div>
-</div>
+	<div class="row-fluid">
+		<div class="span6" >
+			1.-Listado coordinadores
+		</div>
+		<div class="span6" >
+			<font color="red">* Campos Obligatorios</font>
+			<p>2.-Complete los datos del formulario para modificar el coordinador:</p>
+		</div>
+	</div>
+
+
+	<div class="row-fluid">
+		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+			<table id="listadoResultados" class="table table-hover">
+				<thead>
+					
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+
+
+		<div class="span6">
+			<?php
+				$attributes = array('id' => 'formEditar', 'class' => 'form-horizontal');
+				echo form_open('Coordinadores/editarCoordinadores', $attributes);
+			?>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">1-.RUT</label>
+					<div class="controls">
+						<input type="text" id="rutEditar" name="rutEditar" readonly>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Primer nombre</label>
+					<div class="controls">
+						<input type="text" id="nombreunoEditar" name="nombre1" maxlength="20" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">3-. Segundo nombre</label>
+					<div class="controls">
+						<input type="text" id="nombredosEditar" name="nombre2" maxlength="20" >
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Apellido Paterno</label>
+					<div class="controls">
+						<input type="text" id="apellidopaternoEditar" name="apellido1" maxlength="20" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">5-.<font color="red">*</font> Apellido Materno</label>
+					<div class="controls">
+						<input type="text" id="apellidomaternoEditar" name="apellido2" maxlength="20" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">6-.<font color="red">*</font> Correo</label>
+					<div class="controls">
+						<input type="email" id="correoEditar" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">7-.<font color="red">*</font> Correo secundario</label>
+					<div class="controls">
+						<input type="email" id="correoEditar2" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">7-.<font color="red">*</font> Teléfono</label>
+					<div class="controls">
+						<input type="text" id="fono" name="fono" maxlength="10" placeholder="44556677" >
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputInfo">8-. Resetear contraseña</label>
+					<div class="controls">
+						<input type="checkbox" id="resetContrasegna" name="resetContrasegna">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<div class="controls ">
+						<button type="button" class="btn" onclick="editarCoordinador()">
+							<i class= "icon-pencil"></i>
+							&nbsp; Guardar
+						</button>
+						<button class="btn" type="button" onclick="resetearCoordinador()" >
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>&nbsp;
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se van a guardar los cambios del coordinador ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-primary">Aceptar</button>
+							</div>
+						</div>
+
+						<!-- Modal de confirmación -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado un coordinador</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un coordinador y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			<?php echo form_close(""); ?>
+		</div>
+	</div>
 </fieldset>
 
+
 <script type="text/javascript">
+    var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", ""];
+	var prefijo_tipoDato = "coordinador_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+	var url_post_busquedas = "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>";
 
-	function getDataSource(inputUsado) {
-			$(inputUsado).typeahead({
-	        minLength: 1,
-	        source: function(query, process) {
-	        	$.ajax({
-		        	type: "POST", /* Indico que es una petición POST al servidor */
-					url: "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>", /* Se setea la url del controlador que responderá */
-					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-		            	//alert(respuesta)
-		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
-		            	process(arrayRespuesta);
-		            }
-	        	});
-	        }
-	    });
-	}
-    
-    $(document).ready(function(){
-    	//$("form.span9, #visualizar-coordinador").hide();
-    	$("#select-filtro li.active").click();
 
-    });
-	
-	function detalleCoordinador(elemTabla) {
+	function verDetalle(elemTabla) {
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
@@ -122,98 +179,96 @@
 			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var rutDetalle = document.getElementById("rutCoordinador");
-				var nombre = document.getElementById("nombre");
+				var rutDetalle = document.getElementById("rutEditar");
+				var nombre1Detalle = document.getElementById("nombreunoEditar");
+				var nombre2Detalle = document.getElementById("nombredosEditar");
+				var apellido1Detalle = document.getElementById("apellidopaternoEditar");
+				var apellido2Detalle = document.getElementById("apellidomaternoEditar");
+				var correoDetalle = document.getElementById("correoEditar");
 				var fonoDetalle = document.getElementById("fono");
-				var correoDetalle = document.getElementById("correo1");
-				var correoDetalle2 = document.getElementById("correo2");
+				var correoDetalle2 = document.getElementById("correoEditar2");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(rutDetalle).val(datos.rut);
-				$(nombre).val(datos.nombre1 + " " + (datos.nombre2 == "" ? '' : datos.nombre2) + " " + datos.apellido1 + " " + (datos.apellido2 == "" ? '' : datos.apellido2) );
-				$(fonoDetalle).val(datos.fono);
-				$(correoDetalle).val(datos.correo);
-				$(correoDetalle2).val(datos.correo2 == "null" ? '' : datos.correo2);
+				if (datos.nombre1 == null) {
+					datos.nombre1 = '';
+				}
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.apellido1 == null) {
+					datos.apellido1 = '';
+				}
+				if (datos.apellido2 == null) {
+					datos.apellido2 = '';
+				}
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$(rutDetalle).val($.trim(datos.rut));
+				$(nombre1Detalle).val(datos.nombre1);
+				$(nombre2Detalle).val(datos.nombre2);
+				$(apellido1Detalle).val(datos.apellido1);
+				$(apellido2Detalle).val(datos.apellido2);
+				$(correoDetalle).val($.trim(datos.correo));
+				$(correoDetalle2).val($.trim(datos.correo2));
+				$(fonoDetalle).val($.trim(datos.fono));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
-
 			}
 		});
 	}
     
-    function seleccionar_filtro(option){
-    	var selectorFiltro = option;
-		var inputTextoFiltro = document.getElementById('filtroLista');
-		var valorSelector = selectorFiltro.value;
-		var texto = inputTextoFiltro.value;
-
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
-
-		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>", /* Se setea la url del controlador que responderá */
-			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var tablaResultados = document.getElementById("listadoResultados");
-				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre Completo");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++) {
-					tr = document.createElement('tr');
-					td = document.createElement('td');
-					tr.setAttribute("id", "coordinador_"+arrayRespuesta[i].rut);
-					tr.setAttribute("onClick", "detalleCoordinador(this)");
-					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
-					tablaResultados.appendChild(tr);
-				}
-
-				$(option).prevent;
-				$('#select-filtro li').removeClass("active");
-				$(option).addClass("active");
-				$("#show-filtro").empty().append($('#select-filtro li.active').text());
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
-
-		});
-
-		
-    }
-    
-    $("ul#select-filtro li a").click(function(event) {
-	    event.preventDefault();
+	//Se cargan por ajax
+	$(document).ready(function() {
+		escribirHeadTable();
+		cambioTipoFiltro(undefined);
 	});
 
-	function validar(form){
-		if($('input[name="contrasena"]').val() != "" || $('input[name="contrasena2"]').val()!= ""){
-			if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
-				alert("Las contrase?as no coinciden.");
-				return false;
-			}else{
-				return true;
-			};
+	function resetearCoordinador() {
+
+		var rutDetalle = document.getElementById("rutEditar");
+		var nombre1Detalle = document.getElementById("nombreunoEditar");
+		var nombre2Detalle = document.getElementById("nombredosEditar");
+		var apellido1Detalle = document.getElementById("apellidopaternoEditar");
+		var apellido2Detalle = document.getElementById("apellidomaternoEditar");
+		var correoDetalle = document.getElementById("correoEditar");
+		var fonoDetalle = document.getElementById("fono");
+		var correoDetalle2 = document.getElementById("correoEditar2");
+		$(rutDetalle).val("");
+		$(nombre1Detalle).val("");
+		$(nombre2Detalle).val("");
+		$(apellido1Detalle).val("");
+		$(apellido2Detalle).val("");
+		$(correoDetalle).val("");
+		$(correoDetalle2).val("");
+		$(fonoDetalle).val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
+	}
+
+	function editarCoordinador(){
+		rutAEliminar = $("#rutEditar").val();
+		if(rutAEliminar == ""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
-		return true;
-}
+		nombre1Detalle = $("#nombreunoEditar").val();
+		nombre2Detalle = $("#nombredosEditar").val();
+		apellido1Detalle = $("#apellidopaternoEditar").val();
+		apellido2Detalle = $("#apellidomaternoEditar").val();
+		correoDetalle = $("#correoEditar").val();
+		correoDetalle2 = $("#correoEditar2").val();
+		fonoDetalle = $("#fono").val();
+		if ((rutAEliminar == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "")) {
+			return; //Faltan campos!!!
+		}
+		$('#modalConfirmacion').modal();
+	}
 
 jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
     return this.each(function() {
@@ -243,9 +298,5 @@ jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
         });            
     });
 };
-
-/*$(function() {
-    $('#select-coordinadores').filterByText($('#appendedDropdownButton'), false);
-});*/
 
 </script>

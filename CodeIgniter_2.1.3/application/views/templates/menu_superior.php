@@ -47,7 +47,7 @@
 ?>
 
 	<div class="navbar">
-		<div class="navbar-inner">
+		<div class="navbar-inner" style="margin-left:0px;">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>

@@ -34,24 +34,26 @@
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
+				if (datos.nombre1 == null) {
+					datos.nombre1 = '';
+				}
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.apellido1 == null) {
+					datos.apellido1 = '';
+				}
+				if (datos.apellido2 == null) {
+					datos.apellido2 = '';
+				}
+
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				$(rutDetalle).html(datos.rut);
 				$(nombre1Detalle).html($.trim(datos.nombre1));
 				$(nombre2Detalle).html($.trim(datos.nombre2));
 				$(apellido1Detalle).html($.trim(datos.apellido1));
 				$(apellido2Detalle).html($.trim(datos.apellido2));
-				if (datos.nombre1_profe == null) {
-					datos.nombre1_profe = '';
-				}
-				if (datos.nombre2_profe == null) {
-					datos.nombre2_profe = '';
-				}
-				if (datos.apellido1_profe == null) {
-					datos.apellido1_profe = '';
-				}
-				if (datos.apellido2_profe == null) {
-					datos.apellido2_profe = '';
-				}
+				
 				
 				var nombre_completo_profe = $.trim(datos.nombre1_profe)+ " " +$.trim(datos.nombre2_profe)+  " " +$.trim(datos.apellido1_profe)+ " " +$.trim(datos.apellido2_profe); 
 				$(profesorDetalle).html(nombre_completo_profe);

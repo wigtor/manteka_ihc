@@ -55,13 +55,13 @@ function ordenarFiltro(){
 		<form id="formAgregar" type="post" action="<?php echo site_url("Ayudantes/insertarAyudante/")?>">
 				<div class="row-fluid">
 					<div class="span6">
-						<font color="red">*Campos Obligatorios</font>
+						<font color="red">* Campos Obligatorios</font>
 					</div>
 				</div>
 				
 				<div class="row-fluid">
 					<div class= "span6" >
-						Complete los datos del formulario para ingresar un ayudante
+						<p>Complete los datos del formulario para ingresar un ayudante</p>
 					</div>
 				</div>
 
@@ -71,7 +71,7 @@ function ordenarFiltro(){
 						<div class="row-fluid" >
 							<div class="span5">
 								<div class="control-group">
-							  		<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font>RUT:</label>
+							  		<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT:</label>
 							  	</div>
 							 </div>
 							 <div class="span5">	

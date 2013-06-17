@@ -41,6 +41,7 @@ class Profesores extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+
 		$this->cargarTodo("Docentes", "cuerpo_profesores_verProfesor", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	
 	}
@@ -70,17 +71,21 @@ class Profesores extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$textoFiltro = $this->input->post('textoFiltro');
-		$tipoFiltro = $this->input->post('tipoFiltro');
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+
 		$this->load->model('Model_profesor');
-
-		$resultado = $this->Model_profesor->getProfesoresByFilter($tipoFiltro, $textoFiltro);
-
+		$resultado = $this->Model_profesor->getProfesoresByFilter($textoFiltro, $textoFiltrosAvanzados);
+		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'profesores', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'profesores', $this->session->userdata('rut'));
+			}
 		}
 		echo json_encode($resultado);
 		
