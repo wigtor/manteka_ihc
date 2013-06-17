@@ -42,6 +42,7 @@
 				var apellido2Detalle = document.getElementById("apellido2Detalle");
 				var fonoDetalle = document.getElementById("fonoDetalle");
 				var correoDetalle = document.getElementById("correoDetalle");
+				var correoDetalle2 = document.getElementById("correoDetalle2");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
@@ -67,6 +68,7 @@
 				$(apellido2Detalle).html(datos.apellido2);
 				$(fonoDetalle).html($.trim(datos.fono));
 				$(correoDetalle).html($.trim(datos.correo));
+				$(correoDetalle2).html($.trim(datos.correo2));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -122,7 +124,8 @@ Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Fono:             <b id="fonoDetalle" ></b>
-Correo:           <b id="correoDetalle"></b></pre>
+Correo:           <b id="correoDetalle"></b>
+Correo secundario:<b id="correoDetalle2" ></b></pre>
 		</div>
 	</div>
 </fieldset>

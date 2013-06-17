@@ -195,8 +195,8 @@ Secciones:        <b id="seccionesDetalle" ></b></pre>
 								<p>Se va a eliminar el ayudante ¿Está seguro?</p>
 							</div>
 							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
-								<button type="submit" class="btn btn-primary">Aceptar</button>
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
 							</div>
 						</div>
 

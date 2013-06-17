@@ -28,6 +28,7 @@
 				var apellido2Detalle = document.getElementById("apellido2Detalle");
 				var telefonoDetalle = document.getElementById("telefonoDetalle");
 				var correoDetalle = document.getElementById("correoDetalle");
+				var correoDetalle2 = document.getElementById("correoDetalle2");
 				var tipoDetalle = document.getElementById("tipoDetalle");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
@@ -45,6 +46,9 @@
 				if (datos.apellido2 == null) {
 					datos.apellido2 = '';
 				}
+				if (datos.correo2 == null) {
+					datos.correo2 = '';
+				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				$(rutDetalle).html(datos.rut);
@@ -54,6 +58,7 @@
 				$(apellido2Detalle).html($.trim(datos.apellido2));
 				$(telefonoDetalle).html($.trim(datos.telefono));
 				$(correoDetalle).html($.trim(datos.correo));
+				$(correoDetalle2).html($.trim(datos.correo2));
 				$(tipoDetalle).html($.trim(datos.tipo));
 				
 
@@ -120,7 +125,8 @@ Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Telefono:         <b id="telefonoDetalle" ></b>
 Correo:           <b id="correoDetalle" ></b>
-Tipo:             <b id="tipoDetalle"></b>
+Correo secundario:<b id="correoDetalle2" ></b>
+Tipo:             <b id="tipoDetalle"></b></pre>
 		</div>
 	</div>
 </fieldset>

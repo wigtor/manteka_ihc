@@ -32,7 +32,7 @@
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
-			<label>* Correo</label>
+			<label><font color="red">*</font> Correo</label>
 			<input type="text" name="correo1" placeholder="<?php echo $datos->email1 ?>"  value="<?php echo $datos->email1 ?>" >
 		</div>
 		&nbsp; &nbsp;
@@ -58,7 +58,7 @@
 		
 
 		<div class="control-group <?php echo $hay_error_contrasegna_actual ?>">  
-            <label class="control-label" for="contrasegna_actual">* Contraseña actual</label>  
+            <label class="control-label" for="contrasegna_actual"><font color="red">*</font> Contraseña actual</label>  
             <div class="controls">
               	<input type="password" id="contrasegna_actual" name="contrasegna_actual" value="<?php echo set_value('contrasegna_actual'); ?>">  
               	<?php echo form_error('contrasegna_actual', '<span class="help-inline">', '</span>'); ?>
@@ -66,7 +66,7 @@
       	</div>
 			
 		<div class="control-group <?php echo $hay_error_nva_contrasegna ?>">  
-            <label class="control-label" for="contrasegna_actual">* Nueva contraseña</label>  
+            <label class="control-label" for="contrasegna_actual"><font color="red">*</font> Nueva contraseña</label>  
             <div class="controls">
               	<input type="password" id="nva_contrasegna" name="nva_contrasegna" value="<?php echo set_value('nva_contrasegna'); ?>">  
               	<?php echo form_error('nva_contrasegna', '<span class="help-inline">', '</span>'); ?>
@@ -74,7 +74,7 @@
       	</div>
 		
 		<div class="control-group <?php echo $hay_error_nva_contrasegna_rep ?>">  
-            <label class="control-label" for="contrasegna_actual">* Confirme su nueva contraseña</label>  
+            <label class="control-label" for="contrasegna_actual"><font color="red">*</font> Confirme su nueva contraseña</label>  
             <div class="controls">
               	<input type="password" id="nva_contrasegna_rep" name="nva_contrasegna_rep" value="<?php echo set_value('nva_contrasegna_rep'); ?>">  
               	<?php echo form_error('nva_contrasegna_rep', '<span class="help-inline">', '</span>'); ?>
@@ -82,11 +82,11 @@
       	</div>
 		
 		<div style ="display:inline-block">
-			<input type="submit" class="btn" value="Guardar">
+			<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
-			<input type="button" class="btn" onclick= "window.location.href='/<?php echo config_item('dir_alias') ?>/index.php/Login/index'" value="Cancelar">
+			<button type="button" class="btn" onclick="window.location.href='<?php echo site_url("Login/index/") ?>'"><div class="btn_with_icon_solo">Ã</div>&nbsp; Cancelar</button>
 		</div>
 	</div>
 	<?php echo form_close(""); ?>

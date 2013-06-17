@@ -381,7 +381,7 @@ class Profesores extends MasterManteka {
     
 }
 
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */
+/* End of file Profesores.php */
+/* Location: ./application/controllers/Profesores.php */
 
 

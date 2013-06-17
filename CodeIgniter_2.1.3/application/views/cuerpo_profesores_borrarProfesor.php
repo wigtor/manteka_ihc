@@ -175,8 +175,8 @@ Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Telefono:         <b id="telefonoDetalle" ></b>
 Correo:           <b id="correoDetalle" ></b>
-Tipo:             <b id="tipoDetalle"></b>
-		</pre>
+Correo secundario:<b id="correoDetalle2" ></b>
+Tipo:             <b id="tipoDetalle"></b></pre>
 		<input name="rutEliminar" type="hidden" id="rutEliminar" value="">
 					<div class="row-fluid">
 						<div class="span3 offset5">
