@@ -36,7 +36,7 @@ class Ayudantes extends MasterManteka {
 		$subMenuLateralAbierto = 'verAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
 		$this->cargarTodo("Docentes", "cuerpo_profesores_verAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	
@@ -57,36 +57,14 @@ class Ayudantes extends MasterManteka {
 	*/
 	public function agregarAyudantes()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
 		$this->load->model('Model_ayudante');
+		$datos_plantilla = array('profesores' => array(),'mensaje_confirmacion'=>2);
 
-	  
-		$datos_vista = array('profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
-      
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "agregarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$subMenuLateralAbierto = 'agregarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", "cuerpo_profesores_agregarAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	
 	
@@ -167,36 +145,14 @@ class Ayudantes extends MasterManteka {
 	*/
 	public function editarAyudantes()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		
 		$this->load->model('Model_ayudante');
+        $datos_plantilla = array('rs_ayudantes' => array(),'mensaje_confirmacion'=>2);
 
-        $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>2);
-
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "editarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$subMenuLateralAbierto = 'editarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", "cuerpo_profesores_editarAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	
 	/**
@@ -214,46 +170,26 @@ class Ayudantes extends MasterManteka {
 	*/
 	public function EditarAyudante()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		
 		$this->load->model('Model_ayudante');
 
+		$rut_ayudante = $this->input->post("rutEditar");
+		$nombre1_ayudante = $this->input->post("nombre1_ayudante");
+		$nombre2_ayudante = $this->input->post("nombre2_ayudante");;
+		$apellido_paterno = $this->input->post("apellido_paterno");
+		$apellido_materno = $this->input->post("apellido_materno");
+		$correo_ayudante = $this->input->post("correo_ayudante");
 
-		$rut_ayudante = $this->input->get("rut_ayudante");
-	    $nombre1_ayudante = $this->input->get("nombre1_ayudante");
-		$nombre2_ayudante = $this->input->get("nombre2_ayudante");;
-		$apellido_paterno = $this->input->get("apellido_paterno");
-		$apellido_materno = $this->input->get("apellido_materno");
-		$correo_ayudante = $this->input->get("correo_ayudante");
 
+		$confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
 
-        $confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
-
-        $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>$confirmacion);	  
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "editarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$datos_plantilla["titulo_msj"] = "Ayudante editado";
+		$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Ayudantes/editarAyudantes';
+		$datos_plantilla["nombre_redirecTo"] = "Editar ayudantes";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	
 	/**
@@ -268,37 +204,14 @@ class Ayudantes extends MasterManteka {
 	*/
 	public function borrarAyudantes()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
 		$this->load->model('Model_ayudante');
+        $datos_vista = array('rs_ayudantes' => array(),'mensaje_confirmacion'=>2);
 
-        $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>2);
-      
-
-		
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "borrarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$subMenuLateralAbierto = 'borrarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", "cuerpo_profesores_borrarAyudante", "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
 	/**
@@ -314,41 +227,24 @@ class Ayudantes extends MasterManteka {
 	*
 	* @param string $rut_estudiante
 	*/
-	public function EliminarAyudante($rut_ayudante)
+	public function EliminarAyudante()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-	
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
 		$this->load->model('Model_ayudante');
+		$rut_ayudante = $this->input->post('rutToDelete');
 		$confirmacion = $this->Model_ayudante->EliminarAyudante($rut_ayudante);
-        $datos_vista = array('rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),'mensaje_confirmacion'=>$confirmacion);
-      
+		
 
-		
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "borrarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		$datos_plantilla["titulo_msj"] = "Ayudante eliminado";
+		$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Ayudantes/borrarAyudantes';
+		$datos_plantilla["nombre_redirecTo"] = "Eliminar ayudantes";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+
+
+
 	}
 
 
@@ -375,17 +271,21 @@ class Ayudantes extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$textoFiltro = $this->input->post('textoFiltro');
-		$tipoFiltro = $this->input->post('tipoFiltro');
-		$this->load->model('Model_ayudante');
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
 
-		$resultado = $this->Model_ayudante->getAyudantesByFilter($tipoFiltro, $textoFiltro);
+		$this->load->model('Model_ayudante');
+		$resultado = $this->Model_ayudante->getAyudantesByFilter($textoFiltro, $textoFiltrosAvanzados);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'ayudantes', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'ayudantes', $this->session->userdata('rut'));
+			}
 		}
 		echo json_encode($resultado);
 	}

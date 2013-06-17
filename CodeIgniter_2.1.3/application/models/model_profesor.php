@@ -210,6 +210,7 @@ class Model_profesor extends CI_Model {
 		$this->db->select('TELEFONO_PROFESOR AS telefono');
 		$this->db->select('TIPO_PROFESOR AS tipo');
 		$this->db->select('CORREO1_USER AS correo');
+		$this->db->select('CORREO2_USER AS correo2');
 		 $this->db->join('usuario', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
 		$this->db->where('RUT_USUARIO2', $rut);
 		$query = $this->db->get('profesor');
@@ -219,39 +220,44 @@ class Model_profesor extends CI_Model {
 		return $query->row();
 	}
 
-	public function getProfesoresByFilter($tipoFiltro, $texto)
+	public function getProfesoresByFilter($texto, $textoFiltrosAvanzados)
 	{
-
-		//Sólo para acordarse
-		define("BUSCAR_POR_NOMBRE", 1);
-		define("BUSCAR_POR_APELLIDO1", 2);
-		define("BUSCAR_POR_APELLIDO2", 3);
-		
-
-		$attr_filtro = "";
-		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-			$attr_filtro = "NOMBRE1_PROFESOR";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_APELLIDO1) {
-			$attr_filtro = "APELLIDO1_PROFESOR";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_APELLIDO2) {
-			$attr_filtro = "APELLIDO2_PROFESOR";
-		}
-		else {
-			return array(); //No es válido, devuelvo vacio
-		}
-
 		$this->db->select('RUT_USUARIO2 AS rut');
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
-		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
-		$this->db->select('APELLIDO2_PROFESOR AS apellido2');
-		$this->db->select('TELEFONO_PROFESOR AS telefono');
-		$this->db->select('TIPO_PROFESOR AS tipo');
 		$this->db->order_by('APELLIDO1_PROFESOR', 'asc');
-		$this->db->like($attr_filtro, $texto);
+
+		if ($texto != "") {
+			$this->db->like("RUT_USUARIO2", $texto);
+			$this->db->or_like("NOMBRE1_PROFESOR", $texto);
+			$this->db->or_like("NOMBRE2_PROFESOR", $texto);
+			$this->db->or_like("APELLIDO1_PROFESOR", $texto);
+			$this->db->or_like("APELLIDO2_PROFESOR", $texto);
+		}
+
+		else {
+			
+			//Sólo para acordarse
+			define("BUSCAR_POR_RUT", 0);
+			define("BUSCAR_POR_NOMBRE", 1);
+			define("BUSCAR_POR_APELLIDO", 2);
+			
+			if($textoFiltrosAvanzados[BUSCAR_POR_RUT] != ''){
+				$this->db->like("RUT_USUARIO2", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+			}			
+			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
+				$this->db->where("(NOMBRE1_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
+				//$this->db->like("(NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+				//$this->db->or_like("NOMBRE2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
+				$this->db->where("(APELLIDO1_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+			}
+		}
 		$query = $this->db->get('profesor');
+		//echo $this->db->last_query();
 		if ($query == FALSE) {
 			return array();
 		}

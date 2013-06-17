@@ -9,7 +9,7 @@
 		if (!isset($subVistaLateralAbierta)) {
 			$subVistaLateralAbierta = "verPlanificacion";
 		}
-
+		$id_tipo_usuario = TIPO_USR_COORDINADOR; //Se debe borrar cuando todo se porte a MasterManteka
 		// Las operaciones por defecto no poseen clases
 		$verPlanificacion = "";
 		$editarPlanificacion = "";
@@ -82,7 +82,9 @@
 			<div id="collapseTwo" class="accordion-body collapse <?php echo $inPlanificacion; ?>">
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verPlanificacion; ?> ><a href="<?php site_url("Planificacion/verPlanificacion")?>">Ver planificación</a></li>
-					<li <?php echo $editarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/editarPlanificacion")?>">Editar planificación</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $editarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/editarPlanificacion")?>">Editar planificación</a></li>
+					<?php } ?>
 				</div>
 			</div>
 		</div>
@@ -94,9 +96,11 @@
 			<div id="collapseThree" class="accordion-body collapse <?php echo $inModulos; ?>">
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verModulos; ?> ><a href="<?php echo site_url("Modulos/verModulos")?>">Ver módulos</a></li>
-					<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
-					<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
-					<li <?php echo $borrarModulos; ?> ><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
+						<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
+						<li <?php echo $borrarModulos; ?> ><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>
+					<?php } ?>
 				</div>
 			</div>
 		</div>
@@ -108,9 +112,11 @@
 			<div id="collapseFour" class="accordion-body collapse <?php echo $inSesiones; ?>">
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verSesiones; ?> ><a href="<?php echo site_url("Sesiones/verSesiones")?>">Ver sesiones</a></li>
-					<li <?php echo $agregarSesiones; ?> ><a href="<?php echo site_url("Sesiones/agregarSesiones")?>">Agregar sesiones</a></li>
-					<li <?php echo $editarSesiones; ?> ><a href="<?php echo site_url("Sesiones/editarSesiones")?>">Editar sesiones</a></li>
-					<li <?php echo $borrarSesiones; ?> ><a href="<?php echo site_url("Sesiones/borrarSesiones")?>">Borrar sesiones</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarSesiones; ?> ><a href="<?php echo site_url("Sesiones/agregarSesiones")?>">Agregar sesiones</a></li>
+						<li <?php echo $editarSesiones; ?> ><a href="<?php echo site_url("Sesiones/editarSesiones")?>">Editar sesiones</a></li>
+						<li <?php echo $borrarSesiones; ?> ><a href="<?php echo site_url("Sesiones/borrarSesiones")?>">Borrar sesiones</a></li>
+					<?php } ?>
 				</div>
 			</div>
 		</div>

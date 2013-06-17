@@ -141,7 +141,7 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("id","c"+i);
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
-				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
+				document.getElementById("m"+i).innerHTML="<b>"+listaRecibidos[i][0].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaRecibidos[i][0].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				
@@ -171,7 +171,10 @@ function cambiarCorreos(direccion,offset)
 				}
 				document.getElementById("ant").removeAttribute('class');
 
-			}
+			}else if(offset+5>=<?php echo $cantidadCorreos;?>){
+					document.getElementById("sig").className="disabled";
+					document.getElementById("sig").removeAttribute('onClick');
+				}
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
 
 			
@@ -279,23 +282,17 @@ if(isset($msj))
 		$limite=$offset+5;
 
 	$comilla= "'";
-	$estado=$listaRecibidos[0];
-	array_shift($listaRecibidos);
+	$estado=1;
 	if($estado==1)
 	{
-		$correos=array();
-		foreach($listaRecibidos as $lista)
-		{
-			array_push($correos, $lista[0]);
-		}
-		if(count($correos)!==0)
+		if($cantidadCorreos!==0)
 		{
 			?>
 			<button  class ="btn"  onclick="eliminarCorreo() " style=" margin-right:4px; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
 			<?php
 		}
 
-		if(count($correos)===0)
+		if($cantidadCorreos===0)
 		{
 			?>
 			<div id="sinCorreos">

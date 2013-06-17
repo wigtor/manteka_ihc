@@ -34,6 +34,7 @@ class MasterManteka extends CI_Controller {
 		$rut = $this->session->userdata('rut');
 		$tipo_usuario = $this->session->userdata('tipo_usuario');
 		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		$datos_plantilla["id_tipo_usuario"] = $id_tipo_usuario;
 		$datos_plantilla["rut_usuario"] = $rut;
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $tipo_usuario;
@@ -89,7 +90,7 @@ class MasterManteka extends CI_Controller {
 
 		//Se carga la barra lateral
 		if($barra_lateral != ''){
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/'.$barra_lateral, $datos_plantilla, TRUE);
+			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/'.$barra_lateral, $datos_plantilla, TRUE);
 		}
 		else{
 			$datos_plantilla["barra_lateral"] = '';
@@ -111,6 +112,7 @@ class MasterManteka extends CI_Controller {
 		$rut = $this->session->userdata('rut');
 		$tipo_usuario = $this->session->userdata('tipo_usuario');
 		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		$datos_plantilla["id_tipo_usuario"] = $id_tipo_usuario;
 		$datos_plantilla["rut_usuario"] = $rut;
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $tipo_usuario;
@@ -196,6 +198,7 @@ class MasterManteka extends CI_Controller {
 		$rut = $this->session->userdata('rut');
 		$tipo_usuario = $this->session->userdata('tipo_usuario');
 		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		$datos_plantilla["id_tipo_usuario"] = $id_tipo_usuario;
 		$datos_plantilla["rut_usuario"] = $rut;
 		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
 		$datos_plantilla["tipo_usuario"] = $tipo_usuario;

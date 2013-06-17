@@ -35,7 +35,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" > 1-.*RUN:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default" > 1-.*RUN:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -47,12 +47,12 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">2-.<font color="red">*</font>Primer nombre:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" name="nombre1_profesor" maxlength="19" required >
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre1_profesor" maxlength="19" required >
 		  							</div>
 							</div>
 
@@ -61,12 +61,12 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">3-. Segundo nombre:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">3-. Segundo nombre:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" name="nombre2_profesor" maxlength="19" >
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre2_profesor" maxlength="19" >
 		  							</div>
 							</div>
 
@@ -75,12 +75,12 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">4-.<font color="red">*</font>Apellido paterno:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido paterno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" name="apellido1_profesor" maxlength="19" required >
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellido1_profesor" maxlength="19" required >
 		  							</div>
 							</div>
 
@@ -89,12 +89,12 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">5.<font color="red">*</font>Apellido materno:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">5.<font color="red">*</font>Apellido materno:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="text" name="apellido2_profesor" maxlength="19" required >
+		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellido2_profesor" maxlength="19" required >
 		  							</div>
 							</div>
 
@@ -103,12 +103,12 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Correo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor" maxlength="30" placeholder="nombre1_usuario@miemail.com" required>
+		    							<input type="email" name="correo_profesor" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
 		  							</div>
 							</div>
 
@@ -116,19 +116,19 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">7-.<font color="red">*</font>Correo Alternativo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo secundario:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor1" maxlength="30" placeholder="nombre2_usuario@miemail.com" required>
+		    							<input type="email" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
 		  							</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">8-.<font color="red">*</font>Telefono:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font>Telefono:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
@@ -142,14 +142,14 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo">9-.<font color="red">*</font>Tipo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">9-.<font color="red">*</font>Tipo:</label>
 		  						</div>
 		  					</div>
 		  					<div  class="span6">
 									<div  class="span6">
 									<select id="tipoDeFiltro" title="Tipo de contrato" name="tipo_profesor">
-										<option value="1">Planta</option>
-										<option value="2">Por hora</option>
+										<option value="1">Profesor Jornada Completa</option>
+										<option value="2">Profesor Por hora</option>
 								</select>
 								</div>
 								</div>

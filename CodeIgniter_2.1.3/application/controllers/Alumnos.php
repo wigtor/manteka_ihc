@@ -24,7 +24,7 @@ class Alumnos extends MasterManteka {
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
 		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_ver', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	}
@@ -321,23 +321,26 @@ class Alumnos extends MasterManteka {
 	* Se buscan alumnos de forma asincrona para mostrarlos en la vista
 	*
 	**/
-
 	public function postBusquedaAlumnos() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$textoFiltro = $this->input->post('textoFiltro');
-		$tipoFiltro = $this->input->post('tipoFiltro');
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		
 		$this->load->model('Model_estudiante');
-
-		$resultado = $this->Model_estudiante->getAlumnosByFilter($tipoFiltro, $textoFiltro);
+		$resultado = $this->Model_estudiante->getAlumnosByFilter($textoFiltro, $textoFiltrosAvanzados);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'alumnos', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'alumnos', $this->session->userdata('rut'));
+			}
 		}
 		echo json_encode($resultado);
 	}
@@ -352,6 +355,63 @@ class Alumnos extends MasterManteka {
 		$resultado = $this->Model_estudiante->getSecciones();
 		echo json_encode($resultado);
 	}
+	
+	public function rutExisteC() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_estudiante');
+		$rut = $this->input->post('rut_post');
+
+		$resultado = $this->Model_estudiante->rutExisteM($rut);
+		echo json_encode($resultado);
+	}
+
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->helper(array('form', 'url'));
+	}	
+
+	function cargaMasivaAlumnos()
+	{
+		$config['upload_path'] = './uploads/';
+		$config['allowed_types'] = 'csv';
+		$config['max_size']	= '100';	
+
+
+		$this->load->library('upload', $config);
+
+
+		$subMenuLateralAbierto = "cargaMasivaAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+
+		
+
+
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+
+		 	$datos_vista = $error;
+
+			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+
+			$datos_vista = $data;
+
+			$upload_data['full_path'];
+
+			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
 
 }
 

@@ -10,7 +10,7 @@ class Model_sesiones extends CI_Model {
 		$this->db->select('NOMBRE_MODULO AS cod_mod_tem');
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('DESCRIPCION_SESION AS descipcion');
-		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM');
+		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT OUTER');
 		$this->db->where('COD_SESION', $codigo);
 		$query = $this->db->get('sesion');
 		return $query->row();
@@ -35,10 +35,10 @@ public function getSesionesByFilter($tipoFiltro, $textoFiltro)
 		}
 
 		$this->db->select('COD_SESION AS cod_sesion');
-		$this->db->select('NOMBRE_MODULO AS cod_mod_tem');
+		//$this->db->select('NOMBRE_MODULO AS cod_mod_tem');
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('DESCRIPCION_SESION AS descripcion');
-		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM');
+		//$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM');
 		$this->db->like($attr_filtro, $textoFiltro);
 		$query = $this->db->get('sesion');
 		if ($query == FALSE) {

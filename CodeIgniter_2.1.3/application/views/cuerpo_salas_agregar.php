@@ -1,29 +1,50 @@
-<script type="text/javascript">
-	
-	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
-				alert("Sala agregada correctamente");
-			
-		}
-		else{
-			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
-				alert("Error al agregar la sala");
-			}		
-			else{
-				if("<?php echo $mensaje_confirmacion;?>"=="3"){
-				alert("Una sala con el mismo nombre ya se ha ingresado");
-				}
-			}
-		}
+<?php
+if(isset($mensaje_confirmacion))
+{
+	if($mensaje_confirmacion==1)
+	{
+		?>
+		    <div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>
+				 Sala agregada correctamente
+    		</div>	
+		<?php
 	}
-</script>
+	else{ if($mensaje_confirmacion==-1)
+	{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>
+				 Error al agregar sala
+    		</div>		
 
+		<?php
+	}
+		else if($mensaje_confirmacion==3)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>
+				 
+				 Una sala con el mismo nombre ya se ha ingresado 
+    		</div>		
 
+		<?php
+		}
+	
+	}
+	unset($mensaje_confirmacion);
+}
+?>
 
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
 			<legend>Agregar Sala</legend>
+			
 			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/agregarSalas/")?>">
 			
 			<div>
@@ -47,7 +68,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="3" type="number" min="1" name="num_sala" placeholder="Ej:258" required>
+		    							<input title="Ingrese el número de la sala" id="inputInfo" max="999" type="number" min="1" name="num_sala" placeholder="Ej:258" required>
 		  							</div>
 							</div>
 						</div>
@@ -59,7 +80,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="3" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
+		    							<input title="Ingrese la capacidad de la sala" id="inputInfo" max="999" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
 		  							</div>
 							</div>
 						</div>
@@ -72,8 +93,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<textarea name="ubicacion" maxlength="100" required>
-										</textarea>
+		    							<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required"></textarea>
 		  							</div>
 							</div>
 
@@ -98,7 +118,7 @@
 										$contador=0;
 										while ($contador<count($implemento)){
 											echo '<tr>';
-											echo '<td title="'.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
+											echo '<td title="Descripción: '.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}
@@ -108,20 +128,16 @@
 									
 					</div>
 					</div>
-					<div class="row-fluid" style="margin-top: 2%">
+					<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
 		
-						<div class= "span4" style="margin-left:35%; width:102px">
 							<button class ="btn" type="submit" >
 								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Agregar
 							</button>
-						</div>
-						<div class= "span3" style="margin-left:2%; width: 105px">
 							<button class ="btn" type="reset" >
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>
-						</div>
 					</div>
 					</div> 
 

@@ -47,7 +47,7 @@ class Model_secciones extends CI_Model{
 	public function VerTodasSecciones()
 	{
 		
-		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
+		$sql="SELECT * FROM seccion ORDER BY NOMBRE_SECCION"; 
 		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista=array();
@@ -138,7 +138,7 @@ class Model_secciones extends CI_Model{
     {
 		if($cod_seccion==""){ return 2;}
 		else{
-		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO_PATERNO"; 
+		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
 		$datos1=mysql_query($sql1); 
 		$contador = 0;
 		if (false != $datos1) {
@@ -153,11 +153,13 @@ class Model_secciones extends CI_Model{
 		
 
 
-		if($datos == true){
+		if($datos == true && $contador==0){
 			return 1;
 		}
 		else{
-			return -1;
+			if($datos==false){
+				return -1;
+			}
 		}
 		}
     }
@@ -177,7 +179,7 @@ class Model_secciones extends CI_Model{
 	public function AgregarSeccion($nombre_seccion1,$nombre_seccion2)
 	{
 		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
-		
+		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
@@ -221,6 +223,7 @@ class Model_secciones extends CI_Model{
 	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
 	{
 		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
+		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
 		$datos=mysql_query($sql); 
@@ -384,13 +387,12 @@ public function verModulosPorAsignar(){
 public function verProfeSegunModulo($modulo){
 
 	$columnas = 'profesor.NOMBRE1_PROFESOR, profesor.APELLIDO1_PROFESOR';
-	$condiciones  = '(modulo_tematico.COD_MODULO_TEM = equipo_profesor.COD_MODULO_TEM) AND (modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO)AND(profe_equi_lider.COD_EQUIPO = equipo_profesor.COD_EQUIPO) AND (profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2) AND (modulo_tematico.NOMBRE_MODULO = '.$modulo.')';
-	$desde = '`profesor`, `equipo_profesor`, `modulo_tematico`, `profe_equi_lider`';
+	$condiciones  = '(modulo_tematico.COD_MODULO_TEM = equipo_profesor.COD_MODULO_TEM) AND (modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO)AND(profe_equi_lider.COD_EQUIPO = equipo_profesor.COD_EQUIPO) AND (profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2) AND (modulo_tematico.NOMBRE_MODULO = \''.$modulo.'\')';
+	$desde = 'profesor, equipo_profesor, modulo_tematico, profe_equi_lider';
 
 	$query = $this->db->select($columnas);
-	$query = $thia->db->where($condiciones);
+	$query = $this->db->where($condiciones);
 	$query = $this->db->get($desde);
-	
 	$array = $query->result_array();
 						
 	return $array;
@@ -398,9 +400,24 @@ public function verProfeSegunModulo($modulo){
 
 public function verSalasPorAsignar(){
 
-	$columnas = 'sala.NUM_SALA';
+	$columnas = '`sala.NUM_SALA`';
 	$desde = '`sala`';
 	$query = $this->db->select($columnas);
+	$query = $this->db->get($desde);
+	
+	$array = $query->result_array();
+						
+	return $array;
+
+}
+
+public function verHorarioSegunSala($sala){
+
+	$columnas = 'dia.NOMBRE_DIA, modulo.NUMERO_MODULO';
+	$condiciones = '(sala.NUM_SALA = \''.$sala.'\') AND (sala.COD_SALA = sala_horario.COD_SALA) AND (sala_horario.COD_HORARIO = horario.COD_HORARIO) AND (horario.COD_DIA = dia.COD_DIA) AND (horario.COD_MODULO = modulo.COD_MODULO)';
+	$desde = 'dia, modulo, horario, sala_horario, sala';
+	$query = $this->db->select($columnas);
+	$query = $this->db->where($condiciones);
 	$query = $this->db->get($desde);
 	
 	$array = $query->result_array();

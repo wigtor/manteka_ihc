@@ -29,7 +29,7 @@
 		
 		<div class="row-fluid">
 			<ul class="page pull-right">
-			<button class ="btn" type="subtmit"  title="Avanzar a selección de contactos">Siguiente</button>
+			<button class ="btn" type="submit"  title="Avanzar a selección de contactos">Siguiente</button>
 		</ul>
 		</div>
 	<?php echo form_close(""); ?>

@@ -312,7 +312,7 @@ function showDestinatarios(value){
 		//if (texto.trim() != "") {
 			$.ajax({
 				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Correo/postBusquedaAlumnosTipo") ?>", /* Se setea la url del controlador que responderá */
+				url: "<?php echo site_url("Correo/postBusquedaTipoDestinatario") ?>", /* Se setea la url del controlador que responderá */
 				data: { destinatario: destinatario}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 					muestraTabla(respuesta);
