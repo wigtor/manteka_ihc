@@ -164,112 +164,117 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 	<div class="span10">
 		<fieldset>
 			<legend>Ver Módulos</legend>
-	  		<div class="row-fluid">
+			<div class="row-fluid">
 				<div class="span6">
-					<div class="row-fluid">
-						<div class="span6">
-							1. Escoja un módulo de la lista
+					<div class="controls controls-row">
+						<div class="input-append span7">
+							<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda" title="no implementado aun, pega de G1" >
+							<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 						</div>
 					</div>
-
-
-					<div class="row-fluid" style="margin-left: 0%; width:90%">
-
-						<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
-							<table id="modulos" class="table table-hover">
-								<thead>
-
-								</thead>
-								<tbody>									
-											
-													
-								</tbody>
-							</table>
-						</div>
-					</div>	
+				</div>
+			</div>
 			
-		</div>
-		
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-			2. Detalle Módulo Temático
-			<div class ="row-fluid" style="margin-top:5%">
-				<pre style="margin-top: 2%; padding: 2%; height:6%">
+	  		<div class="row-fluid">
+				<div class="span6">
+					1. Escoja un módulo de la lista
+				</div>
+				<div class="span6">
+					2. Detalle Módulo Temático
+				</div>
+			</div>
+
+			<div class="row-fluid" >
+				<div class="span6" style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+					<table id="modulos" class="table table-hover">
+						<thead>
+
+						</thead>
+						<tbody>									
+									
+											
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="span6" style="padding: 0%; ">
+					<div class ="row-fluid">
+						<pre style="padding: 2%; height:6%">
 Nombre del módulo:	<b id="nombre_modulo"></b>
 Profesor lider: 	<b id="profesor_lider"></b>
-Descripción módulo: <b id="descripcion_modulo"></b></pre>
-				
-			</div>
-			<div class="row-fluid">
-			
-				<div class="span6">
-					3. Sesiones del Módulo Temático
-				</div>
-				
-			</div>
-			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >																		
-						<table id="sesiones" class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>									
-										
-												
-							</tbody>
-						</table>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="row-fluid" style="margin-top:2%">
-						<div class="span7">
-							4. Profesores del Módulo Temático
+Descripción módulo: <b id="descripcion_modulo"></b>
+</pre>
+						
+					</div>
+					<div class="row-fluid">
+					
+						<div class="span6">
+							3. Sesiones del Módulo Temático
 						</div>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
-									
-						<table id="equipo" class="table table-hover">
-							<thead>
+						
+					</div>
+					<div class="row-fluid">
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >																		
+								<table id="sesiones" class="table table-hover">
+									<thead>
 
-							</thead>
-							<tbody>									
-										
+									</thead>
+									<tbody>									
 												
-							</tbody>
-						</table>
-				</div>
-			</div>
-			
-			
-			<div class="row-fluid">
-				<div class="row-fluid" style="margin-top:2%">
-						<div class="span7">
-							5. Requisitos del Módulo Temático
+														
+									</tbody>
+								</table>
 						</div>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
-									
-						<table id="requisitos" class="table table-hover">
-							<thead>
+					</div>
+					<div class="row-fluid">
+						<div class="row-fluid" style="margin-top:2%">
+								<div class="span7">
+									4. Profesores del Módulo Temático
+								</div>
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
+											
+								<table id="equipo" class="table table-hover">
+									<thead>
 
-							</thead>
-							<tbody>									
-										
+									</thead>
+									<tbody>									
 												
-							</tbody>
-						</table>
+														
+									</tbody>
+								</table>
+						</div>
+					</div>
+					
+					
+					<div class="row-fluid">
+						<div class="row-fluid" style="margin-top:2%">
+								<div class="span7">
+									5. Requisitos del Módulo Temático
+								</div>
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
+											
+								<table id="requisitos" class="table table-hover">
+									<thead>
+
+									</thead>
+									<tbody>									
+												
+														
+									</tbody>
+								</table>
+						</div>
+					</div>
+					
+
+
 				</div>
 			</div>
-			
-
-
-		</div>
-	  </div>
-
-	
 		</fieldset>
 	</div>
 </div>
