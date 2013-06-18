@@ -1,60 +1,38 @@
+<script>
 
-<script type="text/javascript">
-	function EditarProfesor(){
-							
-		var rut = document.getElementById("runProfeEdit").value;
-		var nombre1 =document.getElementById("nombreProfeEdit1").value;
-		var nombre2 =document.getElementById("nombreProfeEdit2").value;
-		var apellidoPaterno =document.getElementById("apellidoPaternoProfeEdit").value;
-		var apellidoMaterno =document.getElementById("apellidoMaternoProfeEdit").value;
-		//var correo = document.getElementById("mailProfeEdit").value;
-		var telefono = document.getElementById("telefonoProfeEdit").value;
-	//	var modulo = document.getElementById("moduloProfeEdit").value;
-		//var seccion = document.getElementById("seccionProfeEdit").value;
-	//	var tipo = document.getElementById("tipoProfeEdit").value;
-		if(rut!="" && nombre1!="" && nombre2!="" && telefono!="" && apellidoPaterno!="" && apellidoMaterno!=""){
-					var answer = confirm("¿Está seguro de realizar cambios?");
-					if (!answer){
-						var dijoNO = datosEditarProfesor("","","","","","");
-					}
-					else{
-						var editar = document.getElementById("FormEditar");
-						editar.action = "<?php echo site_url("Profesores/EditarProfesor/") ?>";
-						editar.submit();
-					}
-		}
-		else{
-				alert("Inserte todos los datos");
-				var mantenerDatos = datosEditarProfesor(rut,nombre1,nombre2,apellidoPaterno,apellidoMaterno,telefono);
-		}
-	}
-</script>
-<script type="text/javascript">
-// rut,nom1,nom2,ap1,ap2,tele,tipo
-	function datosEditarProfesor(elemTabla){
-			/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
-			var idElem = elemTabla.id;
-			rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
-			//var rut_clickeado = elemTabla;
+	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", ""];
+	var prefijo_tipoDato = "ayudante_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+	var url_post_busquedas = "<?php echo site_url("Profesores/postBusquedaProfesores") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/profesores") ?>";
 
-			/* Muestro el div que indica que se está cargando... */
-			var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).show();
+	function verDetalle(elemTabla) {
 
-			/* Defino el ajax que hará la petición al servidor */
-			$.ajax({
-				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Profesores/postDetallesProfesor") ?>", /* Se setea la url del controlador que responderá */
-				data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var rut = document.getElementById("runProfeEdit");
-				var nombre1 = document.getElementById("nombreProfeEdit1");
-				var nombre2 = document.getElementById("nombreProfeEdit2");
-				var apellido1 = document.getElementById("apellidoPaternoProfeEdit");
-				var apellido2 = document.getElementById("apellidoMaternoProfeEdit");
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		rut_clickeado = idElem.substring("ayudante_".length, idElem.length);
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Profesores/postDetallesProfesor") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var rut = document.getElementById("rutEditar");
+				var nombre1 = document.getElementById("nombreunoEditar");
+				var nombre2 = document.getElementById("nombredosEditar");
+				var apellido1 = document.getElementById("apellidopaternoEditar");
+				var apellido2 = document.getElementById("apellidomaternoEditar");
+				var correo = document.getElementById("correoEditar");
+				var correo2 = document.getElementById("correoEditar2");
 			//	var rut = document.getElementById("moduloProfeEdit").value = modulo;
-				var telefono = document.getElementById("telefonoProfeEdit");
+				var telefono = document.getElementById("fono");
 			//	document.getElementById("moduloProfeEdit").value = modulo;
 			//	document.getElementById("seccionProfeEdit").value = seccion;
 				//var tipo = document.getElementById("tipoProfeEdit").value;	
@@ -63,81 +41,81 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(rut).val(datos.rut);
-				$(nombre1).val(datos.nombre1);
-				$(nombre2).val((datos.nombre2 == "" ? '' : datos.nombre2));
-				$(apellido1).val(datos.apellido1);
-				$(apellido2).val(datos.apellido2);
-				$(telefono).val(datos.telefono);
-				//$(tipo).val(datos.fono);
+				$(rut).val($.trim(datos.rut));
+				$(nombre1).val($.trim(datos.nombre1));
+				$(nombre2).val((datos.nombre2 == "" ? '' : $.trim(datos.nombre2)));
+				$(apellido1).val($.trim(datos.apellido1));
+				$(apellido2).val($.trim(datos.apellido2));
+				if (datos.correo2 == null) {
+					datos.correo2 = '';
+				}
+				$(correo).val($.trim(datos.correo));
+				$(correo2).val($.trim(datos.correo2));
+				$(telefono).val(datos.telefono == "" ? '' : $.trim(datos.telefono));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
 
 			}
-		});	
-		}
-</script>
-
-<script>
-	function seleccionar_filtro(option){
-    	var selectorFiltro = option;
-		var inputTextoFiltro = document.getElementById('filtroLista');
-		var valorSelector = selectorFiltro.value;
-		var texto = inputTextoFiltro.value;
-
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
-
-		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Profesores/postBusquedaProfesores") ?>", /* Se setea la url del controlador que responderá */
-			data: { textoFiltro: texto, tipoFiltro: valorSelector}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var tablaResultados = document.getElementById("listadoResultados");
-				$(tablaResultados).empty();
-
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre Completo");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++) {
-					tr = document.createElement('tr');
-					td = document.createElement('td');
-					tr.setAttribute("id", "coordinador_"+arrayRespuesta[i].rut);
-					tr.setAttribute("onClick", "datosEditarProfesor(this)");
-					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
-					tablaResultados.appendChild(tr);
-				}
-
-				$(option).prevent;
-				$('#select-filtro li').removeClass("active");
-				$(option).addClass("active");
-				$("#show-filtro").empty().append($('#select-filtro li.active').text());
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
-
 		});
+	}
 
-		
-    }
-    $("ul#select-filtro li a").click(function(event) {
-	    event.preventDefault();
+	//Se cargan por ajax
+	$(document).ready(function() {
+		escribirHeadTable();
+		cambioTipoFiltro(undefined);
 	});
 
+</script>
+
+<script type="text/javascript">
+	function editarProfesor(){
+		rutAEliminar = $("#rutEditar").val();
+		if(rutAEliminar == ""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
+		}
+		nombre1Detalle = $("#nombreunoEditar").val();
+		nombre2Detalle = $("#nombredosEditar").val();
+		apellido1Detalle = $("#apellidopaternoEditar").val();
+		apellido2Detalle = $("#apellidomaternoEditar").val();
+		correoDetalle = $("#correoEditar").val();
+		correoDetalle2 = $("#correoEditar2").val();
+		fonoDetalle = $("#fono").val();
+		if ((rutAEliminar == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "")) {
+			return; //Faltan campos!!!
+		}
+		$('#modalConfirmacion').modal();
+	}
+
+
+
+	function resetearProfesor() {
+
+		var rutDetalle = document.getElementById("rutEditar");
+		var nombre1Detalle = document.getElementById("nombreunoEditar");
+		var nombre2Detalle = document.getElementById("nombredosEditar");
+		var apellido1Detalle = document.getElementById("apellidopaternoEditar");
+		var apellido2Detalle = document.getElementById("apellidomaternoEditar");
+		var correoDetalle = document.getElementById("correoEditar");
+		var fonoDetalle = document.getElementById("fono");
+		var correoDetalle2 = document.getElementById("correoEditar2");
+		var correoDetalle2 = document.getElementById("resetContrasegna");
+		
+		$(rutDetalle).val("");
+		$(nombre1Detalle).val("");
+		$(nombre2Detalle).val("");
+		$(apellido1Detalle).val("");
+		$(apellido2Detalle).val("");
+		$(correoDetalle).val("");
+		$(correoDetalle2).val("");
+		$(fonoDetalle).val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
+	}
+	
 	function validar(form){
 		if($('input[name="contrasena"]').val() != "" || $('input[name="contrasena2"]').val()!= ""){
 			if ($('input[name="contrasena"]').val() != $('input[name="contrasena2"]').val()) {
@@ -148,189 +126,143 @@
 			};
 		}
 		return true;
-}
-
-	function getDataSource(inputUsado) {
-		
-	    $(inputUsado).typeahead({
-	        minLength: 1,
-	        source: function(query, process) {
-	        	$.ajax({
-		        	type: "POST", /* Indico que es una petición POST al servidor */
-					url: "<?php echo site_url("HistorialBusqueda/buscar/profesores") ?>", /* Se setea la url del controlador que responderá */
-					data: { letras : query }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-					success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-		            	//alert(respuesta)
-		            	var arrayRespuesta = jQuery.parseJSON(respuesta);
-		            	process(arrayRespuesta);
-		            }
-	        	});
-	        }
-	    });
 	}
-
-	//Se cargan por ajax
-	//$(document).ready(cambioTipoFiltro);
-
-	$(document).ready(function(){
-    	//$("form.span9, #visualizar-coordinador").hide();
-    	$("#select-filtro li.active").click();
-
-    });
-
 </script>
-		<fieldset>
-			<legend>Editar Profesor</legend>
-				<div class="row-fluid">
-					<div class="span6">
-						<font color="red">*Campos Obligatorios</font>
-					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="span6">
-						<div class="row-fluid">
-							<div class="span6">
-								1.-Listado Profesores
-							</div>
-						</div>
-						<div class="row-fluid">
-							<div class="span12">
-								<div class="span6">
-									<input class="span11" id="filtroLista" type="text" placeholder="Filtro" onkeypress="getDataSource(this)" onChange="seleccionar_filtro(document.getElementById('select-filtro').getElementsByClassName('active')[0])" >
-									<div class="btn-group">
-										<button class="btn dropdown-toggle" data-toggle="dropdown">
-											<span id="show-filtro">Filtrar por</span>
-											<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu" id="select-filtro">
-											<li onclick="seleccionar_filtro(this)" id="filtro1" class="active" value="1">
-												<a href>Nombre</a>
-											</li>
-											<li onclick="seleccionar_filtro(this)" id="filtro2" class="passive" value="2" >
-												<a href>Apellido Paterno</a>
-											</li>
-											<li onclick="seleccionar_filtro(this)" id="filtro3" class="passive" value="3">
-												<a href>Apellido Materno</a>
-											</li>
-											<li onclick="seleccionar_filtro(this)" id="filtro4" class="passive" value="4">
-												<a href>Correo Electrónico</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						 <div class="row-fluid" style="margin-left: 0%;">
-							<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-								<table id="listadoResultados" class="table table-hover">
-									<thead>
-										<tr>
-											<th>Nombre Completo</th>
-										</tr>
-									</thead>
-									<tbody>
 
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div class="span6">
-						<div style="margin-bottom:2%">
-							Complete los datos del formulario para modificar el profesor
-						</div>
-						<form id="FormEditar" type="post" onsubmit="EditarProfesor()">
-							<div class="row-fluid">
-								<div class="span4">
-									<div class="control-group">
-										<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font>RUT:</label>
-									</div>
-								</div>
-								<div class="span5">	
-									<div class="controls">
-										<input type="text" id="runProfeEdit" name="run_profe" readonly>
-									</div>
-								</div>
-							</div>
-							<div class="row-fluid">
-								<div class="span4">
-									<div class="control-group">
-										<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre:</label>
-									</div>
-								</div>
-								<div class="span5">	
-									<div class="controls">
-										<input type="text" id="nombreProfeEdit1" name="nombre_1" required>
-									</div>
-								</div>
-							</div>
-														<div class="row-fluid">
-								<div class="span4">
-									<div class="control-group">
-										<label class="control-label" for="inputInfo" style="cursor: default">2-. Segundo nombre:</label>
-									</div>
-								</div>
-								<div class="span5">	
-									<div class="controls">
-										<input type="text" id="nombreProfeEdit2" name="nombre_2" required>
-									</div>
-								</div>
-							</div>
-							<div class="row-fluid">
-								<div class="span4">
-									<div class="control-group">
-										<label class="control-label" for="inputInfo" style="cursor: default">3-.<font color="red">*</font>Apellido Paterno:</label>
-									</div>
-								</div>
-								<div class="span5">	
-									<div class="controls">
-										<input type="text" id="apellidoPaternoProfeEdit" name="apellidoPaterno_profe" required>
-									</div>
-								</div>
-							</div>
-							<div class="row-fluid">
-								<div class="span4">
-									<div class="control-group">
-										<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Materno:</label>
-									</div>
-								</div>
-								<div class="span5">	
-									<div class="controls">
-										<input type="text" id="apellidoMaternoProfeEdit" name="apellidoMaterno_profe" required>
-									</div>
-								</div>
-							</div>
-							<div class="row-fluid">
-								<div class="span4">
-									<div class="control-group">
-										<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Telefono</label>
-									</div>
-								</div>
-								<div class="span5">	
-									<div class="controls">
-										<input type="text" id="telefonoProfeEdit" name="telefono_profe">
-									</div>
-								</div>
-							</div>
-							<div class="row-fluid">
-								<div class="span11" style="margin-top:2%">
-									<div class="row-fluid">
-										<div class="span4 offset4" >
-											<button class="btn" type="submit">
-												<div class= "btn_with_icon_solo">Ã</div>
-												&nbsp Modificar
-											</button>
-										</div>
-										<div class="span4">
-											<button  class ="btn" type="reset" <?php $comilla= "'"; echo 'onclick="datosEditarProfesor('.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.','.$comilla.$comilla.')"';?> >
-												<div class= "btn_with_icon_solo">Â</div>
-												&nbsp Cancelar
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</form>
+<fieldset>
+	<legend>Editar Profesor</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="controls controls-row">
+				<div class="input-append span7">
+					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+				</div>
+				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6" >
+			1.-Listado profesores
+		</div>
+		<div class="span6" >
+			2.-Complete los datos del formulario para modificar el profesor:
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+			<table id="listadoResultados" class="table table-hover">
+				<thead>
+					
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+		<div class="span6">
+			<?php
+				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal', 'onsubmit' => 'EditarProfesor()');
+				echo form_open('Coordinadores/editarProfesor', $attributes);
+			?>
+				<div class="control-group">
+					<label class="control-label" for="run_profe">1-.RUT</label>
+					<div class="controls">
+						<input type="text" id="rutEditar" name="run_profe" readonly>
 					</div>
 				</div>
-		</fieldset>
+				<div class="control-group">
+					<label class="control-label" for="nombre_1">2-.<font color="red">*</font> Primer nombre</label>
+					<div class="controls">
+						<input type="text" id="nombreunoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre_1" maxlength="20" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="nombre_2">3-. Segundo nombre</label>
+					<div class="controls">
+						<input type="text" id="nombredosEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre_2" maxlength="20" >
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="apellidoPaterno_profe">4-.<font color="red">*</font> Apellido Paterno</label>
+					<div class="controls">
+						<input type="text" id="apellidopaternoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellidoPaterno_profe" maxlength="20" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="apellidoMaterno_profe">5-.<font color="red">*</font> Apellido Materno</label>
+					<div class="controls">
+						<input type="text" id="apellidomaternoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellidoMaterno_profe" maxlength="20" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="correo1">6-.<font color="red">*</font> Correo</label>
+					<div class="controls">
+						<input type="email" id="correoEditar" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="correo2">7-.<font color="red">*</font> Correo secundario</label>
+					<div class="controls">
+						<input type="email" id="correoEditar2" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="telefono_profe">8-.<font color="red">*</font> Teléfono</label>
+					<div class="controls">
+						<input type="text" id="fono" name="telefono_profe" maxlength="10" placeholder="44556677" >
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="resetContrasegna">9-. Resetear contraseña</label>
+					<div class="controls">
+						<input type="checkbox" id="resetContrasegna" name="resetContrasegna">
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls ">
+						<button type="button" class="btn" onclick="editarProfesor()">
+							<i class= "icon-pencil"></i>
+							&nbsp; Guardar
+						</button>
+						<button class="btn" type="button" onclick="resetearProfesor()" >
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>&nbsp;
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se van a guardar los cambios del profesor ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+							</div>
+						</div>
+
+						<!-- Modal de aviso que no ha seleccionado algo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado un profesor</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un profesor y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			<?php echo form_close(""); ?>
+		</div>
+	</div>
+</fieldset>

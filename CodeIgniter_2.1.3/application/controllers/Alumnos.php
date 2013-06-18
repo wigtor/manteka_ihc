@@ -326,17 +326,21 @@ class Alumnos extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$textoFiltro = $this->input->post('textoFiltro');
-		$tipoFiltro = $this->input->post('tipoFiltro');
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		
 		$this->load->model('Model_estudiante');
-
-		$resultado = $this->Model_estudiante->getAlumnosByFilter($tipoFiltro, $textoFiltro);
+		$resultado = $this->Model_estudiante->getAlumnosByFilter($textoFiltro, $textoFiltrosAvanzados);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'alumnos', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'alumnos', $this->session->userdata('rut'));
+			}
 		}
 		echo json_encode($resultado);
 	}

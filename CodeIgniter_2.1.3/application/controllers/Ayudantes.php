@@ -172,7 +172,7 @@ class Ayudantes extends MasterManteka {
 	{
 		$this->load->model('Model_ayudante');
 
-		$rut_ayudante = $this->input->post("rut_ayudante");
+		$rut_ayudante = $this->input->post("rutEditar");
 		$nombre1_ayudante = $this->input->post("nombre1_ayudante");
 		$nombre2_ayudante = $this->input->post("nombre2_ayudante");;
 		$apellido_paterno = $this->input->post("apellido_paterno");
@@ -182,13 +182,14 @@ class Ayudantes extends MasterManteka {
 
 		$confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
 
-		$datos_vista = array('rs_ayudantes' => array(),'mensaje_confirmacion'=>$confirmacion);	  
-		
-		$subMenuLateralAbierto = 'editarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Docentes", "cuerpo_profesores_editarAyudante", "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$datos_plantilla["titulo_msj"] = "Ayudante editado";
+		$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Ayudantes/editarAyudantes';
+		$datos_plantilla["nombre_redirecTo"] = "Editar ayudantes";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	
 	/**
@@ -229,15 +230,21 @@ class Ayudantes extends MasterManteka {
 	public function EliminarAyudante()
 	{
 		$this->load->model('Model_ayudante');
-		$rut_ayudante = $this->input->post('rut_ayudante');
+		$rut_ayudante = $this->input->post('rutToDelete');
 		$confirmacion = $this->Model_ayudante->EliminarAyudante($rut_ayudante);
-		$datos_vista = array('rs_ayudantes' => array(), 'mensaje_confirmacion'=>$confirmacion);
+		
 
-		$subMenuLateralAbierto = 'borrarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Docentes", "cuerpo_profesores_borrarAyudante", "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$datos_plantilla["titulo_msj"] = "Ayudante eliminado";
+		$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Ayudantes/borrarAyudantes';
+		$datos_plantilla["nombre_redirecTo"] = "Eliminar ayudantes";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+
+
+
 	}
 
 

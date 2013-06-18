@@ -53,5 +53,14 @@
 		<div>
 			<p>Es la tarea de relacionar una sección con el modulo temático que será impartido, el profesor a cargo de la sección, la sala y horario de realización, en otras palabras es la construcción de la planificación de la asignatura.</p>
 		</div>
+	<h4>14. ¿Es posible enviar correos a personas externas a MANTEKA?</h4>
+		<div>
+			<p>No, MANTEKA solamente permite el envío de correos a personas registradas en el sistema, es decir, profesores, alumnos, coordinadores y ayudantes de la asignatura Comunicación Efectiva.</p>
+		</div>
+	<h4>15. ¿Existe la posibilidad de ingresar más de un alumno a la vez al sistema?</h4>
+		<div>
+			<p>Si, para agilizar el ingreso de nuevos estudiantes de manera rápida y segura existe la carga masiva de datos, la cual se realiza en la seccion de alumnos, donde solamente es necesario importar un archivo con los datos a ingresar. Para saber más sobre la carga masiva puede consultar al manual de usuario.</p>
+		</div>	
 	</div>
+
 </fieldset>

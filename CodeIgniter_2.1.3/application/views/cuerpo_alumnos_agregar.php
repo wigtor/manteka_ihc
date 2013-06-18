@@ -175,7 +175,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" id="nombre1_estudiante" name="nombre1_estudiante" maxlength="19" required >
+											<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombre1_estudiante" name="nombre1_estudiante" maxlength="19" required >
 										</div>
 								</div>
 							</div>							
@@ -187,7 +187,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" id="nombre2_estudiante" name="nombre2_estudiante" maxlength="19">
+											<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo"  id="nombre2_estudiante" name="nombre2_estudiante" maxlength="19">
 										</div>
 								</div>
 
@@ -201,7 +201,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" id="apellido_paterno" name="apellido_paterno" maxlength="19" required>
+											<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellido_paterno" name="apellido_paterno" maxlength="19" required>
 										</div>
 								</div>
 
@@ -214,7 +214,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input type="text" id="apellido_materno" name="apellido_materno" maxlength="19" required>
+											<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellido_materno" name="apellido_materno" maxlength="19" required>
 										</div>
 								</div>
 

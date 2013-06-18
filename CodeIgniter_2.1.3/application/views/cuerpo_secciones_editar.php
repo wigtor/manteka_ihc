@@ -1,22 +1,43 @@
-<script type="text/javascript">
-	
-	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1" && "<?php echo $mensaje_confirmacion;?>"!="3"){
-				alert("Sección editada correctamente");
-			
-		}
-		else{
-			if("<?php echo $mensaje_confirmacion;?>"=="-1"){
-				alert("Error al editar la sección");
-			}		
-			else{
-				if("<?php echo $mensaje_confirmacion;?>"=="3"){
-				alert("No se puede editar,una sección con el mismo ya se ha ingresado");
-				}
-			}
-		}
+<?php
+if(isset($mensaje_confirmacion))
+{
+	if($mensaje_confirmacion==1)
+	{
+		?>
+		    <div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Listo</h4>
+				 Sección editada correctamente
+    		</div>	
+		<?php
 	}
-</script>
+	else{ if($mensaje_confirmacion==-1)
+	{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>
+				 Error al editar sección
+    		</div>		
+
+		<?php
+	}
+		else if($mensaje_confirmacion==3)
+		{
+		?>
+		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			 <h4>Error</h4>	 
+				 Una sección con el mismo nombre ya se ha ingresado 
+    		</div>		
+
+		<?php
+		}
+	
+	}
+	unset($mensaje_confirmacion);
+}
+?>
 
 
 <script type="text/javascript">
@@ -134,8 +155,12 @@ function ordenarFiltro(){
 				<div class="span11">
 					<div class="row-fluid">	
 							<div class="span11">
-								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por nombre" style="width:90%">
+								<div class="controls controls-row">
+			    					<div class="input-append span7">
+										<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
+										<button class="btn" onClick="ordenarFiltro()" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+									</div>
+			
 								</div>
 							</div>
 						</div>
@@ -186,7 +211,7 @@ function ordenarFiltro(){
 							<div class="span4">
 								<div class="control-group">
 									
-		  							<label class="control-label" for="inputInfo" style="cursor: default"><font color="red">*</font> Sección:</label>
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
 									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 		  						</div>	
 							</div>
