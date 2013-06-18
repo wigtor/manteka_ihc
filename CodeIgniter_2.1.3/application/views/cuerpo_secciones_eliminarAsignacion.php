@@ -90,16 +90,29 @@
 		
 		
 		var seccion = document.getElementById("codSeccion").value;
+		var modulo = document.getElementById("modulo").value;
+		var profesorNombre = document.getElementById("profesor_nombre1").value;
+		var profesorApellido1 = document.getElementById("profesor_apellido1").value;
+		var profesorApellido2 = document.getElementById("profesor_apellido2").value;
+		var sala = document.getElementById("sala_asig").value;
+		var horario = document.getElementById("horario_asig").value;
 		
 
 		if(seccion==""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
-		else{
+		else if (seccion!=""){
+			if(modulo=="sin asignación"|| profesorNombre=="sin asignación" || profesorApellido1=="sin asignación" || profesorApellido2=="sin asignación" || sala=="sin asignación" || horario=="sin asignación"){
+				$('#modalSinAsignacion').modal();
+			}
+			else{
+				$('#modalConfirmacion').modal();
+			}
 			
-			$('#modalConfirmacion').modal();
+			
 		}
+		
 	}
 
 	
@@ -211,6 +224,20 @@ Horario:           <b id="horario_asig"></b></pre>
 
 						<!-- Modal de seleccionaAlgo -->
 						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sección</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+						<!-- Modal de sinAsignacion -->
+						<div id="modalSinAsignacion" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 								<h3>No ha seleccionado ninguna sección</h3>

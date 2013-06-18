@@ -55,6 +55,19 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+	public function postVerSeccion() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod_seccion = $this->input->post('seccion');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->VerSeccion($cod_seccion);
+		echo json_encode($resultado);
+	}
+
 	/**
 	* Agregar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_agregar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
