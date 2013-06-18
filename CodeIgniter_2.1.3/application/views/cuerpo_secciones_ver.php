@@ -4,15 +4,19 @@
 			var editar = document.getElementById("formDetalle");
 			editar.action = "<?php echo site_url("Secciones/verSecciones/") ?>/";
 			editar.submit();
-			
+
+
+		
 	}
+			
+	
 </script>
 
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
-
+	//var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
+	var tipoDeFiltro=1;
 	
 	var arreglo = new Array();
 	var sala;
@@ -58,18 +62,14 @@ function ordenarFiltro(){
 					</div>
 			<div class="row-fluid">
 				<div class="span11">
-					<div class="row-fluid">	
-							<div class="span11">
-								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda" style="width:90%">
-								</div>
-								<div class="span6">
-									<select id="tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-									<option value="1">Filtrar por Nombre</option>
-									</select>
-								</div> 
-							</div>
+					
+					<div class="controls controls-row">
+			    		<div class="input-append span7">
+							<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
+							<button class="btn" onClick="ordenarFiltro()" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 						</div>
+			
+					</div>	
 						
 				</div>
 			</div>
@@ -125,8 +125,7 @@ Módulo:  '.$secc[$contador][1].' </td>';
 echo '</tr>'; 
 $contador =count($secc);
 }							
-?>
-</pre>
+?></pre>
                     </div>
 
                     <div class="row-fluid">

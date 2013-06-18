@@ -369,8 +369,7 @@ function editarMod(){
 							<table id="listadoResultados" class="table table-hover">
 								<thead>
 									<tr>
-										<th style="text-align:left;"><br><b>Nombre módulo</b></th>
-										
+				
 									</tr>
 								</thead>
 								<tbody>

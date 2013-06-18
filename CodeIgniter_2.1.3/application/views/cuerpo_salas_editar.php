@@ -44,19 +44,15 @@ if(isset($mensaje_confirmacion))
 
 <script type="text/javascript">
 	function EditarSala(){
-		var num_sala = document.getElementById("num_sala").value;
-		var ubicacion =	document.getElementById("ubicacion").value;
-		var capacidad =	document.getElementById("capacidad").value;
-		if( num_sala!=""  && capacidad!="" && ubicacion!="" ){
-					var answer = confirm("¿Está seguro de realizar cambios?")
-					if (!answer){
-						var dijoNO = datosEditarSala("","","","");
-					}
-					else{
-					var editar = document.getElementById("FormEditar");
-					editar.action = "<?php echo site_url("Salas/editarSalas/") ?>/";
-					editar.submit();
-					}
+		var cod = document.getElementById("num_sala").value;
+		
+		if(cod==""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
+		}
+		else{
+			
+			$('#modalConfirmacion').modal();
 		}
 	}
 </script>
@@ -110,7 +106,7 @@ function ordenarFiltro(){
 	<div class="span10">
 		<fieldset>
 		<legend>Editar Sala</legend>
-		 <form id="formDetalle" type="post" method="post" onsubmit="EditarSala();return false">
+		 <form id="formDetalle" type="post" method="post" >
 			
 			<div>
 				<div class="row-fluid">
@@ -129,9 +125,13 @@ function ordenarFiltro(){
 						
 						<div class="row-fluid">	
 							<div class="span11">
-								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por número" style="width:90%">
-								</div>
+								<div class="controls controls-row">
+			    					<div class="input-append span7">
+										<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
+										<button class="btn" onClick="ordenarFiltro()" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+									</div>
+			
+								</div>	
 							</div>
 						</div>
 						
@@ -318,7 +318,7 @@ function ordenarFiltro(){
 		
 						<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
 		
-							<button class ="btn" type="submit" >
+							<button class ="btn" type="button" onclick="EditarSala()"  >
 								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Modificar
 							</button>
@@ -327,7 +327,34 @@ function ordenarFiltro(){
 								&nbsp Cancelar
 							</button>
 						</div>
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a editar la sala seleccionada ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="submit"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
+						</div>
 
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sala</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sala y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
 
 					
 					<!-- AQUI TERMINA  -->
