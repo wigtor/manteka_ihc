@@ -1,4 +1,24 @@
 <script>
+
+	function resetearAsignacion(){
+		var seccion = document.getElementById("nombre_seccion");
+		var modulo = document.getElementById("modulo");
+		var profesorNombre = document.getElementById("profesor_nombre1");
+		var profesorApellido1 = document.getElementById("profesor_apellido1");
+		var profesorApellido2 = document.getElementById("profesor_apellido2");
+		var sala = document.getElementById("sala_asig");
+		var horario = document.getElementById("horario_asig");
+
+		$(seccion).val("");
+		$(modulo).val("");
+		$(profesorNombre).val("");
+		$(profesorApellido1).val("");
+		$(profesorApellido2).val("");
+		$(sala).val("");
+		$(horario).val("");
+			
+	}
+
 	function detalleSeccion(cod_seccion) {
 		
 		/* Defino el ajax que hará la petición al servidor */
@@ -66,36 +86,23 @@
 	function eliminarAsignacion(){
 
 		
+
+		
 		
 		var seccion = document.getElementById("codSeccion").value;
 		
-		
-		if(seccion!=""){
-					var answer = confirm("¿Está seguro de eliminar la asignación de la sección?")
-					if (!answer){
-						return false;
-					}
-					else{
-		
-					//var borrar = document.getElementById("FormBorrar");
-					//borrar.action ="<?php echo site_url("Alumnos/eliminarAlumno/");?>"
-					//borrar.submit();
-						return true;
 
-
-					}
+		if(seccion==""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
 		else{
-				alert("No ha seleccionado seccion. Selecione una seccion para eliminar sus asignaciones");
-				return false;
+			
+			$('#modalConfirmacion').modal();
 		}
 	}
 
-	function Cancelar(){
-		var borrar = document.getElementById("Cancelar");
-		borrar.action ="<?php echo site_url("Secciones/borrarAsignacion/");?>"
-		borrar.submit()	
-	}
+	
 </script>
 
 
@@ -170,20 +177,52 @@ Horario:           <b id="horario_asig"></b></pre>
 <input name="cod_seccion" type="hidden" id="codSeccion" value="">
 					</div>
 
-					<div class="row-fluid">
-						<div class="span3 offset6">
-							<button class="btn" type="submit" style="width: 93px">
+					<div class="control-group">
+						<div class="controls">
+						<!--<div class="span3 offset6">-->
+							<button class="btn" type="button" onclick="eliminarAsignacion()" style="width: 93px">
 								<div class= "btn_with_icon_solo">b</div>
-								&nbsp Borrar
+								&nbsp; Borrar
 							</button>
+						<!--</div>-->
+
+						<!--<div class = "span3 ">-->
+							<button  class ="btn"  type="button" onclick="resetearAsignacion()" style="width: 105px">
+								<div class= "btn_with_icon_solo">Â</div>
+								&nbsp; Cancelar
+							</button>&nbsp;
+						<!--</div>-->
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a eliminar la asignación seleccionada ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
 						</div>
 
-						<div class = "span3 ">
-							<button  class ="btn" onClick="Cancelar()" type="reset"  style="width: 105px">
-								<div class= "btn_with_icon_solo">Â</div>
-								&nbsp Cancelar
-							</button>
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sección</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
 						</div>
+					</div><!---->
 					</div>
 				</div>
 			</div>
