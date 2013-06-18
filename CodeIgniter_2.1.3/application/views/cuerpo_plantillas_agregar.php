@@ -137,6 +137,7 @@
 		* @author Diego García (DGM)
 		**/
 		?>
+		
 		<div class="contenedor-principal">	
 		<div class="contenedor-secundario zoomout">
 		<div class="tituloModal">
@@ -144,19 +145,20 @@
 		</div>
 		<div class="txtModal">
 		Las variables permiten definir segmentos de texto dentro de una plantilla, que tomarán distintos valores según las características del mensaje o la lista de destinatarios a utilizar.
-		El valor de estas variables será solicitado al usuario al momento de realizar el envío del correo electrónico.
+		El valor de estas variables será asignado automáticamente al momento de realizar el envío de un correo electrónico.
 		</div>
 		<div class="txtModal">
 		Para definir una variable anteponga los caracteres  <font color="blue">%%</font>  antes del nombre de dicha variable.
 		</div>
 		<div class="txtModal">
-		El sistema manteka cuenta con variables predefinidas cuyo valor será asignado automáticamente al momento de realizar un envío.
-		</div>
-		<div class="txtModal">
-		<div id="salto">Las variables predefinidas son:</div>
-		<div class="txtLabel">%%nombre:&nbsp;&nbsp;</div><div class="txtDescripcion">Asigna el nombre del receptor del correo electrónico, para cada receptor dentro de la lista de destinatarios.</div>
-		<div class="txtLabel">%%fecha:&nbsp;&nbsp;</div><div class="txtDescripcion">Asigna la fecha actual al momento de realizar el envío.</div>
-		<div class="txtLabel">%%remitente:&nbsp;&nbsp;</div><div class="txtDescripcion">Asigna el nombre del usuario que realiza el envío del correo electrónico.</div>
+		<div id="salto">Las variables predefinidas que puede utilizar son:</div>
+		<div class="txtLabel">%%nombre</div><div class="txtDescripcion">Asigna nombre y apellido del receptor del correo electrónico.</div>
+		<div class="txtLabel">%%rut</div><div class="txtDescripcion">Asigna el rut del receptor del correo electrónico.</div>
+		<div class="txtLabel">%%modulo</div><div class="txtDescripcion">Asigna el módulo al que pertenece el receptor del correo electrónico.</div>
+		<div class="txtLabel">%%carrera</div><div class="txtDescripcion">Asigna la carrera a la que pertenece el receptor del correo electrónico.</div>
+		<div class="txtLabel">%%seccion</div><div class="txtDescripcion">Asigna la sección a la que pertenece el receptor del correo electrónico.</div>
+		<div class="txtLabel">%%hoy</div><div class="txtDescripcion">Asigna la fecha actual al momento de realizar el envío.</div>
+		<div class="txtLabel">%%remitente</div><div class="txtDescripcion">Asigna el nombre del usuario que realiza el envío del correo electrónico.</div>
 		</div>
 		<span id="botonCerrar" class="btn btn-primary">Cerrar</span>
 		</div>
@@ -178,8 +180,8 @@
 		<fieldset>
 		<legend>&nbsp;Agregar plantillas&nbsp;</legend>
 		<div id="txtInformativo" class="txt">
-		<div id="txt1">
-		La creación de plantillas permite definir variables cuyo valor será solicitado al usuario, al momento de realizar el envío del correo electrónico.
+		<div id="txt1" style="text-align:justify;margin-right:2%;">
+		La creación de plantillas permite definir variables cuyos valores serán asignados automáticamente por el sistema, al momento de enviar un correo.
 		</div>
 		<div id="txt2">
 		Para obtener más información sobre el uso de variables haga clic <a href="#" onclick="ocultarScroll()" class="verVariables" data-type="zoomout">acá</a>
