@@ -1378,6 +1378,14 @@ if(isset($codigo))
 					Asunto:
 				</div>
 				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
+				<div class="txt2">
+					Adjunto:
+				</div>
+				<div class="fileupload fileupload-new" data-provides="fileupload">
+					<div class="input-append">
+						<div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Seleccionar archivo</span><span class="fileupload-exists">Cambiar</span><input type="file" name = "userfile"/></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Eliminar</a>
+					</div>
+				</div>
 			</div>
 		</div>
 		
