@@ -26,6 +26,11 @@
 				$(codigoDetalle).html(datos.cod_sesion);
 				$(nombreDetalle).html(datos.nombre);
 				$(mod_temDetalle).html(datos.cod_mod_tem);
+				if(datos.cod_mod_tem != null){
+ 	 				$(mod_temDetalle).html(datos.cod_mod_tem);
+ 	 			}else{
+ 					 $(mod_temDetalle).html("Sin asignación.");
+ 				}
 				$(descripcionDetalle).html(datos.descipcion);
 			
 
