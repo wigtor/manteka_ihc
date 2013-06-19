@@ -9,13 +9,15 @@
 		var sala = document.getElementById("sala_asig");
 		var horario = document.getElementById("horario_asig");
 
-		$(seccion).val("");
-		$(modulo).val("");
-		$(profesorNombre).val("");
-		$(profesorApellido1).val("");
-		$(profesorApellido2).val("");
-		$(sala).val("");
-		$(horario).val("");
+		seccion.innerHTML="";
+		modulo.innerHTML="";
+		profesorNombre.innerHTML="";
+		profesorApellido1.innerHTML="";
+		profesorApellido2.innerHTML="";
+		sala.innerHTML="";
+		horario.innerHTML="";
+		
+					
 			
 	}
 
@@ -80,30 +82,31 @@
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 	}
-</script>
 
-<script type="text/javascript">
-	function eliminarAsignacion(){
+function eliminarAsignacion(){
 
 		
-
-		
-		
-		var seccion = document.getElementById("codSeccion").value;
-		
-
-		if(seccion==""){
+		if(nombre_seccion.innerHTML==""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
 		else{
+			if(modulo.innerHTML=="sin asignación"|| profesor_nombre1.innerHTML=="sin asignación" || profesor_apellido1.innerHTML=="sin asignación" || profesor_apellido2.innerHTML=="sin asignación" || sala_asig.innerHTML=="sin asignación" || horario_asig.innerHTML=="sin asignación"){
+				$('#modalSinAsignacion').modal();
+			}
+			else{
+				$('#modalConfirmacion').modal();
+			}
 			
-			$('#modalConfirmacion').modal();
+			
 		}
+		
 	}
 
-	
+
 </script>
+
+
 
 
 
@@ -144,7 +147,7 @@
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td     onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '<td   style="cursor: pointer"  onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -217,6 +220,20 @@ Horario:           <b id="horario_asig"></b></pre>
 							</div>
 							<div class="modal-body">
 								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+						<!-- Modal de sinAsignacion -->
+						<div id="modalSinAsignacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Sección sin asignaciones</h3>
+							</div>
+							<div class="modal-body">
+								<p>Debe seleccionar una sección con asignaciones para una eliminación.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

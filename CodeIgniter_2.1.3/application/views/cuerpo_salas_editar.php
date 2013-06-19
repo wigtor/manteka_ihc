@@ -44,7 +44,7 @@ if(isset($mensaje_confirmacion))
 
 <script type="text/javascript">
 	function EditarSala(){
-		var cod = document.getElementById("num_sala").value;
+		var cod = document.getElementById("cod_sala").value;
 		
 		if(cod==""){
 			$('#modalSeleccioneAlgo').modal();
@@ -185,7 +185,7 @@ function ordenarFiltro(){
 										}
 									else{
 									    echo '<tr>';
-										echo '<td><input id="cod_sala" name="cod_sala" value=" " maxlength="0" min="0" type="hidden" readonly>'.'</td>';
+										echo '<td><input id="cod_sala" name="cod_sala" value="" maxlength="0" min="0" type="hidden" readonly>'.'</td>';
 										echo '</tr>';	
 									}
 		  							?>
@@ -205,12 +205,12 @@ function ordenarFiltro(){
 									if(count($sala)==1){
 									
 		    							echo '<tr>';
-										echo '<td><input title="Ingrese el número de la sala" id="num_sala" name="num_sala" value="'.$sala[0][1].'" max="999" min="1" type="number" required>'.'</td>';
+										echo '<td><input id="num_sala" name="num_sala" value="'.$sala[0][1].'" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text" required>'.'</td>';
 										echo '</tr>';						
 										}
 									else{
 									    echo '<tr>';
-										echo '<td><input id="num_sala" name="num_sala" value=" " max="0" type="number" >'.'</td>';
+										echo '<td><input id="num_sala" name="num_sala" value=" " maxlength="0" type="text" >'.'</td>';
 										echo '</tr>';	
 									}
 		  							?>

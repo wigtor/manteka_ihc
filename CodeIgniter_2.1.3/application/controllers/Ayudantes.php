@@ -58,7 +58,7 @@ class Ayudantes extends MasterManteka {
 	public function agregarAyudantes()
 	{
 		$this->load->model('Model_ayudante');
-		$datos_plantilla = array('profesores' => array(),'mensaje_confirmacion'=>2);
+		$datos_plantilla = array('profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
 
 		$subMenuLateralAbierto = 'agregarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente

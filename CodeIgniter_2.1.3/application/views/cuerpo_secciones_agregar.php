@@ -40,34 +40,10 @@ if(isset($mensaje_confirmacion))
 ?>
 
 <script type="text/javascript">
-	function AgregarSeccion(){
-		var rs=document.getElementById("rs_seccion").value;
-		var rs2=document.getElementById("rs_seccion2").value;
-		if(rs!="" && rs2!=""){ 
-					var patron = "^[0-9]{2}$"; //dos números enteros positivos en la primera parte del nombre de la sección
-					var patron2 = "^([A-Z]{1}|[a-z]{1})$"; //una letra en la primera parte del nombre de la sección
-					if (document.getElementById("rs_seccion2").value.match(patron)) {    
-						if (document.getElementById("rs_seccion").value.match(patron2)) {  
-							var agregar= document.getElementById("formDetalle");
-							agregar.action = "<?php echo site_url("Secciones/agregarSecciones/") ?>/";
-							agregar.submit();
-						}
-						else {
-							
-							alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
-							return false;
-						}
-					}
-					else {
-						alert("Error:La sección no tiene la estructura Letra-Dígito Dígito");
-						return false;
-					}
-					
-					
-		}
-		else{
-				alert("No se han ingresado todos los datos");
-		}
+	function AgregarSeccion(){ 
+		var agregar= document.getElementById("formDetalle");
+		agregar.action = "<?php echo site_url("Secciones/agregarSecciones/") ?>/";
+		agregar.submit();					
 		
 	}
 </script>
@@ -106,11 +82,11 @@ if(isset($mensaje_confirmacion))
 								<div class="span5">	
 		  							<div class="controls">
 									<tr>
-									<td><input id="rs_seccion" name="rs_seccion"  maxlength="1" min="1" type="text" class="span2"></td>
+									<td><input id="rs_seccion" name="rs_seccion"  maxlength="1" title=" Ingrese sólo una letra" pattern="^([A-Z]{1}|[a-z]{1})$" type="text" class="span2" required></td>
 									</tr>	
 									<td class="span2">-</td>
 									<tr>
-									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="2" min="2" type="text" class="span2"></td>
+									<td><input id="rs_seccion2" name="rs_seccion2"  maxlength="2"  title=" Ingrese sólo dos dígitos" pattern="[0-9]{2}" type="text" class="span2" required></td>
 									</tr>										
 									
 									</div>

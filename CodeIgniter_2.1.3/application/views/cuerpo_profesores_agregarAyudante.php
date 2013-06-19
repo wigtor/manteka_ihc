@@ -108,12 +108,7 @@ function ordenarFiltro(){
 						<input type="email" id="correoEditar" name="correo_ayudante" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
-			
-
 			</div>
-
-
-				
 
 			<div class="span6">
 				<div class="control-group">
