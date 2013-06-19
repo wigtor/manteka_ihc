@@ -1,5 +1,8 @@
 <script type="text/javascript">
-	function DetalleSeccion(cod_seccion){
+
+
+
+function DetalleSeccion(cod_seccion){
 			/*document.getElementById("seccion").value = cod_seccion;
 			var editar = document.getElementById("formDetalle");
 			editar.action = "<?php echo site_url("Secciones/verSecciones/") ?>/";
@@ -45,6 +48,63 @@
 				}
 		}
 		);
+
+		$.ajax({
+		type: "POST", /* Indico que es una petición POST al servidor */
+		url: "<?php echo site_url("Secciones/AlumnosSeccion") ?>", // Se setea la url del controlador que responderá */
+		data: { seccion: cod_seccion}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+			var tablaResultados = document.getElementById("listadoResultados");
+			$(tablaResultados).find('tbody').remove();
+			var arrayRespuesta = jQuery.parseJSON(respuesta);
+
+			
+			//CARGO EL CUERPO DE LA TABLA
+			tbody = document.createElement('tbody');
+			if (arrayRespuesta.length == 0) {
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				$(td).html("No se encontraron resultados");
+				$(td).attr('colspan',tiposFiltro.length);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+			}
+
+			for (var i = 0; i < arrayRespuesta.length; i++) {
+				tr = document.createElement('tr');
+				tr.setAttribute('style', "cursor:pointer");
+				for (var j = 0; j < 5; j++) {
+					td = document.createElement('td');
+					tr.setAttribute("onClick", "verDetalle(this)");
+					if(j==4){
+						nodoTexto = document.createTextNode(arrayRespuesta[i][j]+" "+arrayRespuesta[i][j+1]);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+						j=j+6;
+					}
+					else{
+
+						nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+					}
+				}
+		
+
+				tbody.appendChild(tr);
+			}
+			tablaResultados.appendChild(tbody);
+
+			/* Quito el div que indica que se está cargando */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).hide();
+
+			
+			$('tbody tr').on('click', function(event) {
+				$(this).addClass('highlight').siblings().removeClass('highlight');
+			});
+		}
+		});
 		
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");
@@ -173,7 +233,7 @@ Bloque:  <b id="modulo"></b>
                     <div class="row-fluid">
                         <div class="span13">
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
-                            <table class="table table-bordered">
+                            <table id="listadoResultados" class="table table-bordered">
                                 <thead  bgcolor="#e6e6e6"  style="position:block">
                                     <tr>
                                         <th class="span2">Carrera</th>

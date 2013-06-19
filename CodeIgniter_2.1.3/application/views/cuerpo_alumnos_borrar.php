@@ -1,14 +1,4 @@
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Alumno eliminado correctamente");
-				}
-				else{
-					alert("Error al eliminar");
-				}
-	}
-</script>
+
 
 <script type="text/javascript">
 	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Carrera", "Seccion"]; //Debe ser escrito con PHP

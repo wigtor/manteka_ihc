@@ -1,18 +1,4 @@
 
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha agregado el estudiante");
-				
-				}
-				else{
-					alert("Error al agregar");
-			
-				}
-	}
-</script>
-
 <script>
 
 	function comprobarRut() {
@@ -160,7 +146,7 @@ function ordenarFiltro(){
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT</label>
 						<div class="controls">
-							<input id="rut_estudiante" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador"  name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
+							<input id="rut_estudiante" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador"  name="rut_estudiante" placeholder="Ej:17785874" required>
 						</div>
 					</div>
 					<div class="control-group">
@@ -190,7 +176,7 @@ function ordenarFiltro(){
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font> Correo</label>
 						<div class="controls">
-							<input type="email" id="correo_estudiante" class="span12" name="correo_estudiante" maxlength="199" placeholder="ejemplo@usach.cl" required>
+							<input type="email" id="correo_estudiante" class="span12" name="correo_estudiante" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 						</div>
 					</div>
 				</div> 
