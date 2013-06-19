@@ -9,13 +9,15 @@
 		var sala = document.getElementById("sala_asig");
 		var horario = document.getElementById("horario_asig");
 
-		$(seccion).val("");
-		$(modulo).val("");
-		$(profesorNombre).val("");
-		$(profesorApellido1).val("");
-		$(profesorApellido2).val("");
-		$(sala).val("");
-		$(horario).val("");
+		seccion.innerHTML="";
+		modulo.innerHTML="";
+		profesorNombre.innerHTML="";
+		profesorApellido1.innerHTML="";
+		profesorApellido2.innerHTML="";
+		sala.innerHTML="";
+		horario.innerHTML="";
+		
+					
 			
 	}
 
@@ -80,30 +82,16 @@
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 	}
-</script>
 
-<script type="text/javascript">
-	function eliminarAsignacion(){
+function eliminarAsignacion(){
 
 		
-
-		
-		
-		var seccion = document.getElementById("codSeccion").value;
-		var modulo = document.getElementById("modulo").value;
-		var profesorNombre = document.getElementById("profesor_nombre1").value;
-		var profesorApellido1 = document.getElementById("profesor_apellido1").value;
-		var profesorApellido2 = document.getElementById("profesor_apellido2").value;
-		var sala = document.getElementById("sala_asig").value;
-		var horario = document.getElementById("horario_asig").value;
-		
-
-		if(seccion==""){
+		if(nombre_seccion.innerHTML==""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
-		else if (seccion!=""){
-			if(modulo=="sin asignación"|| profesorNombre=="sin asignación" || profesorApellido1=="sin asignación" || profesorApellido2=="sin asignación" || sala=="sin asignación" || horario=="sin asignación"){
+		else{
+			if(modulo.innerHTML=="sin asignación"|| profesor_nombre1.innerHTML=="sin asignación" || profesor_apellido1.innerHTML=="sin asignación" || profesor_apellido2.innerHTML=="sin asignación" || sala_asig.innerHTML=="sin asignación" || horario_asig.innerHTML=="sin asignación"){
 				$('#modalSinAsignacion').modal();
 			}
 			else{
@@ -115,8 +103,10 @@
 		
 	}
 
-	
+
 </script>
+
+
 
 
 
@@ -240,10 +230,10 @@ Horario:           <b id="horario_asig"></b></pre>
 						<div id="modalSinAsignacion" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado ninguna sección</h3>
+								<h3>Sección sin asignaciones</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+								<p>Debe seleccionar una sección con asignaciones para una eliminación.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
