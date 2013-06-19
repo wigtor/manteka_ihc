@@ -3,7 +3,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	
+	<link rel="icon" type="image/png" href="/<?php echo config_item('dir_alias') ?>/img/icons/icon_manteka.png">
+
 	<title><?php echo $title ?></title>
 	<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/bootstrap.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/bootstrap-fileupload.css" type="text/css" media="all" />

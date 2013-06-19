@@ -138,22 +138,8 @@
 								<p>Se van a guardar los cambios del coordinador ¿Está seguro?</p>
 							</div>
 							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Ã</div>&nbsp; Cancelar</button>
-								<button type="submit" class="btn"><div class="btn_with_icon_solo">Â</div>&nbsp; Aceptar</button>
-							</div>
-						</div>
-
-						<!-- Modal de seleccionaAlgo -->
-						<div id="modalSeleccioneAlgo" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado un coordinador</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor seleccione un coordinador y vuelva a intentarlo</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
 							</div>
 						</div>
 
@@ -161,7 +147,6 @@
 				</div>
 			</div>	
 		<?php echo form_close(""); ?>
-		
 	</div>
 
 

@@ -134,7 +134,7 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo Alternativo:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo secundario:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	

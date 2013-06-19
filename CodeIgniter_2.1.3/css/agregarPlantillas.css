@@ -17,6 +17,21 @@ fieldset
 	font-weight:bold;
 }
 
+.txtLabel
+{
+	width:120px;
+}
+
+.tituloModal
+{
+	text-decoration:underline;
+}
+
+#salto
+{
+	text-decoration:underline;
+}
+
 fieldset legend
 {
 	color:#0088CC;
