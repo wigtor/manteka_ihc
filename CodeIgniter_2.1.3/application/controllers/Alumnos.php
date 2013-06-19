@@ -19,7 +19,7 @@ class Alumnos extends MasterManteka {
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->getAllAlumnos());
+        $datos_vista = array('rs_estudiantes' => array());
 	     
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -45,7 +45,7 @@ class Alumnos extends MasterManteka {
 	{
 
 		$this->load->model('Model_estudiante');
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
+        $datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
 	    
 
 		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
@@ -76,7 +76,7 @@ class Alumnos extends MasterManteka {
 	{
 		$this->load->model('Model_estudiante');
 
-	    $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
+	    $datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion'=>2);
 
 		$subMenuLateralAbierto = "borrarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -106,7 +106,7 @@ class Alumnos extends MasterManteka {
 		$rut_estudiante = $this->input->post('rut_estudiante');
 
 		$confirmacion = $this->Model_estudiante->EliminarEstudiante($rut_estudiante);
-		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);//
+		$datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion'=>$confirmacion);//
 
 
 		$subMenuLateralAbierto = "borrarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral

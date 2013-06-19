@@ -11,8 +11,8 @@
 </script>
 
 <script type="text/javascript">
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Carrera", "Seccion"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>";
@@ -47,14 +47,20 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.nombre_seccion == null) {
+					datos.nombre_seccion = '';
+				}
 				$(rutDetalle).html(datos.rut);
 				$(nombre1Detalle).html($.trim(datos.nombre1));
 				$(nombre2Detalle).html($.trim(datos.nombre2));
 				$(apellido1Detalle).html($.trim(datos.apellido1));
 				$(apellido2Detalle).html($.trim(datos.apellido2));
-				$(carreraDetalle).html(datos.carrera);
-				$(seccionDetalle).html(datos.nombre_seccion);
-				$(correoDetalle).html(datos.correo);
+				$(carreraDetalle).html($.trim(datos.carrera));
+				$(seccionDetalle).html($.trim(datos.nombre_seccion));
+				$(correoDetalle).html($.trim(datos.correo));
 
 				//ESTO ES DE QUIENES HICIERON EL BORRADO
 				var rutInputHidden = document.getElementById("rutEliminar");
@@ -157,14 +163,8 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-					<table id="listadoResultados" class="table table-hover">
-						<thead>
-							
-						</thead>
-						<tbody>
-
-						</tbody>
+				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
+					<table id="listadoResultados" class="table table-hover" style="width:600px !important; max-width:600px;">
 					</table>
 				</div>
 				<div class="span6">
@@ -180,13 +180,12 @@ Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b>
-				</pre>
-				<input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
+Correo:           <b id="correoDetalle"></b></pre>
+					<input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
 					<div class="row-fluid">
 							<div class="span3 offset5">
 								<button class="btn" type="button" onclick="eliminarAlumno()" style="width: 93px">
-									<div class= "btn_with_icon_solo">b</div>
+									<i class= "icon-trash"></i>
 									&nbsp Borrar
 								</button>
 							</div>
