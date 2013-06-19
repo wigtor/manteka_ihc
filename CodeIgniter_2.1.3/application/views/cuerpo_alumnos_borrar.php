@@ -88,17 +88,22 @@
 		var rut = document.getElementById("rutEliminar").value;
 		
 		if(rut!=""){
-					var answer = confirm("¿Está seguro de eliminar este estudiante?")
+					/*var answer = confirm("¿Está seguro de eliminar este estudiante?")
 					if (!answer){
 						var dijoNO = resetear();
 						return false;
 					}
 					else{
 						return true;
-					}
+					}*/
+
+					$('#modalConfirmacion').modal();
+
+					
 		}
 		else{
-				alert("Selecione un estudiante");
+				//alert("Selecione un estudiante");
+				$('#modalSeleccioneAlgo').modal();
 				return false;
 		}
 	}
@@ -180,7 +185,7 @@ Correo:           <b id="correoDetalle"></b>
 				<input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
 					<div class="row-fluid">
 							<div class="span3 offset5">
-								<button class="btn" type="submit" style="width: 93px">
+								<button class="btn" type="button" onclick="eliminarAlumno()" style="width: 93px">
 									<div class= "btn_with_icon_solo">b</div>
 									&nbsp Borrar
 								</button>
@@ -193,6 +198,36 @@ Correo:           <b id="correoDetalle"></b>
 								</button>
 							</div>
 					</div>
+
+						<!-- Modal de Confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a eliminar un estudiante ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
+						</div>
+
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna estudiante</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un estudiante y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
 				</div>
 				<?php echo form_close(''); ?>
 			</div>
