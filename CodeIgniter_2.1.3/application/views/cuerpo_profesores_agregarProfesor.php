@@ -1,23 +1,41 @@
 
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha agregado exitosamente el profesor");
-				
-				}
-				else{
-					alert("Error al agregar");
+<script>
+	function comprobarRut() {
+		var rut = document.getElementById("rut_profesor").value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut_post: rut},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == -1){
+
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
 			
+					$('#modalRutUsado').modal();
+					document.getElementById("rut_profesor").value = "";
 				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 	}
+
 </script>
 
-
-
-		<fieldset>
+		<div id="mensaje"></div>
+		<fieldset>		
 			<legend>Agregar Profesor</legend>	
-			<form id="formAgregar" type="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
+			<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
 			
 			<div class="row-fluid">
 				<div class="row-fluid">
@@ -35,12 +53,12 @@
 						<div class="row">
 							<div class="span4">
 								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default" > 1-.*RUN:</label>
+		  							<label class="control-label" for="inputInfo" style="cursor: default" > 1-.<font color="red">*</font>RUN:</label>
 		  						</div>
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="10" type="number" min="1" name="rut_profesor" placeholder="Ej:17785874" required>
+		    							<input id="rut_profesor" onblur="comprobarRut()" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador" min="1" name="rut_profesor" placeholder="Ej:17785874" required>
 		  							</div>
 							</div>
 						</div>
@@ -133,7 +151,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="7" minlength="7" type="number" name="telefono_profesor" placeholder="Ingrese solo numeros" required>
+		    							<input id="inputInfo" maxlength="10" minlength="7" type="text" pattern="[0-9]+" title="Ingrese sólo números" name="telefono_profesor" placeholder="Ingrese solo numeros" required>
 
 		  							</div>
 							</div>
@@ -188,4 +206,17 @@
 							</div>
 						</div>
 			</form>
-		</fieldset>			
+		</fieldset>		
+						<!-- Modal de modalRutUsado -->
+						<div id="modalRutUsado" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>RUT ingresado está en uso</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>		
