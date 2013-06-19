@@ -63,35 +63,35 @@
 				$attributes = array('id' => 'formAgregar', 'class' => 'form-horizontal');
 				echo form_open('Coordinadores/agregarCoordinadores', $attributes);
 			?>
-		<div class="span6">
+			<div class="span6">
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">1-.<font color="red">*</font> RUT</label>
 					<div class="controls">
-						<input type="text" id="rutEditar" name="rutEditar" maxlength="10" required>
+						<input type="text" id="rutEditar" placeholder="11223344" class="span12" name="rutEditar" maxlength="10" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Primer nombre</label>
 					<div class="controls">
-						<input type="text" id="nombreunoEditar" name="nombre1" maxlength="20" required>
+						<input type="text" id="nombreunoEditar" placeholder="Juan" class="span12" name="nombre1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">3-. Segundo nombre</label>
 					<div class="controls">
-						<input type="text" id="nombredosEditar" name="nombre2" maxlength="20" >
+						<input type="text" id="nombredosEditar" placeholder="Mario" class="span12" name="nombre2" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Apellido Paterno</label>
 					<div class="controls">
-						<input type="text" id="apellidopaternoEditar" name="apellido1" maxlength="20" required>
+						<input type="text" id="apellidopaternoEditar" placeholder="Perez" class="span12" name="apellido1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">5-.<font color="red">*</font> Apellido Materno</label>
 					<div class="controls">
-						<input type="text" id="apellidomaternoEditar" name="apellido2" maxlength="20" required>
+						<input type="text" id="apellidomaternoEditar" placeholder="Perez" class="span12" name="apellido2" maxlength="20" required>
 					</div>
 				</div>
 				
@@ -101,19 +101,19 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">6-.<font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" id="correoEditar" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">7-. Correo secundario</label>
 					<div class="controls">
-						<input type="email" id="correoEditar2" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+						<input type="email" id="correoEditar2" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">7-. Teléfono</label>
 					<div class="controls">
-						<input type="text" id="fono" name="fono" maxlength="10" placeholder="44556677" >
+						<input type="text" id="fono" class="span12" name="fono" maxlength="10" placeholder="44556677" >
 					</div>
 				</div>
 

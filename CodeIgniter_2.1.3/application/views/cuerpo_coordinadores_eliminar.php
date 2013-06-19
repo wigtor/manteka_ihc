@@ -133,12 +133,7 @@ function verDetalle(elemTabla) {
 	<div class="row-fluid">
 		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 			<table id="listadoResultados" class="table table-hover">
-				<thead>
-					
-				</thead>
-				<tbody>
-
-				</tbody>
+			
 			</table>
 		</div>
 		<div class="span6">

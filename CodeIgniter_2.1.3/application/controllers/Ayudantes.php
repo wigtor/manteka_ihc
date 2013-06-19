@@ -83,52 +83,28 @@ class Ayudantes extends MasterManteka {
 	*/
 	public function insertarAyudante()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
-		}
-
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-	
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		
-		
 		$this->load->model('Model_ayudante');
 
-		$rut_ayudante = $this->input->get("rut_ayudante");
-        $nombre1_ayudante = $this->input->get("nombre1_ayudante");
-        $nombre2_ayudante = $this->input->get("nombre2_ayudante");;
-        $apellido_paterno = $this->input->get("apellido_paterno");
-        $apellido_materno = $this->input->get("apellido_materno");
-        $correo_ayudante = $this->input->get("correo_ayudante");
-        $cod_profesores = $this->input->get("cod_profesores");
+		$rut_ayudante = $this->input->post("rut_ayudante");
+		$nombre1_ayudante = $this->input->post("nombre1_ayudante");
+		$nombre2_ayudante = $this->input->post("nombre2_ayudante");;
+		$apellido_paterno = $this->input->post("apellido1_ayudante");
+		$apellido_materno = $this->input->post("apellido2_ayudante");
+		$correo_ayudante = $this->input->post("correo_ayudante");
+		$cod_profesores = $this->input->post("cod_profesores");
 
-		
-        $confirmacion = $this->Model_ayudante->InsertarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante,$cod_profesores);
+		$confirmacion = $this->Model_ayudante->InsertarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante,$cod_profesores);
 	    
-		$datos_vista = array('secciones' => $this->Model_ayudante->VerSecciones(),'mensaje_confirmacion'=>$confirmacion,'profesores' => $this->Model_ayudante->VerTodosLosProfesores());
-      
-		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarAyudante', $datos_vista, true); //Esta es la linea que cambia por cada controlador
 
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "agregarAyudantes"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea también cambia según la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
+		//Debe estar en un if según lo que contenga $confirmacion
+		$datos_plantilla["titulo_msj"] = "Ayudante creado";
+		$datos_plantilla["cuerpo_msj"] = "El ayudante fue creado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'Ayudantes/agregarAyudantes';
+		$datos_plantilla["nombre_redirecTo"] = "Agregar ayudante";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	
 	
