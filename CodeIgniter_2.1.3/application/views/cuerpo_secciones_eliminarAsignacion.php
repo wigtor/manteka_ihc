@@ -147,7 +147,7 @@ function eliminarAsignacion(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td     onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '<td   style="cursor: pointer"  onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;

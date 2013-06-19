@@ -76,7 +76,7 @@ function ordenarFiltro(){
 							 </div>
 							 <div class="span5">	
 							  	<div class="controls">
-							    	<input name="rut_ayudante" maxlength="10" min="1" type="number"  placeholder="Ej:17785874" required>
+							    	<input name="rut_ayudante" maxlength="10"  type="text" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador" min="1"   placeholder="Ej:17785874" required>
 							  	</div>
 							</div>	
 						</div>
