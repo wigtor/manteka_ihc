@@ -47,6 +47,39 @@ function ordenarFiltro(){
 		}
     }
 }
+
+	function resetearAyudante() {
+
+		var rutDetalle = document.getElementById("rutEditar");
+		var nombre1Detalle = document.getElementById("nombreunoEditar");
+		var nombre2Detalle = document.getElementById("nombredosEditar");
+		var apellido1Detalle = document.getElementById("apellidopaternoEditar");
+		var apellido2Detalle = document.getElementById("apellidomaternoEditar");
+		var correoDetalle = document.getElementById("correoEditar");
+		var fonoDetalle = document.getElementById("fono");
+		var correoDetalle2 = document.getElementById("correoEditar2");
+		$(rutDetalle).val("");
+		$(nombre1Detalle).val("");
+		$(nombre2Detalle).val("");
+		$(apellido1Detalle).val("");
+		$(apellido2Detalle).val("");
+		$(correoDetalle).val("");
+		$(correoDetalle2).val("");
+		$(fonoDetalle).val("");
+	}
+
+	function agregarAyudante(){
+		rut = $("#rut_ayudante").val();
+		nombre1Detalle = $("#nombre1_ayudante").val();
+		nombre2Detalle = $("#nombre2_ayudante").val();
+		apellido1Detalle = $("#apellido1_ayudante").val();
+		apellido2Detalle = $("#apellido2_ayudante").val();
+		correoDetalle = $("#correo_ayudante").val();
+		if ((rut == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "")) {
+			return; //Faltan campos!!!
+		}
+		$('#modalConfirmacion').modal();
+	}
 </script>
 
 
@@ -75,37 +108,37 @@ function ordenarFiltro(){
 				<div class="control-group">
 					<label class="control-label" for="rut_ayudante" style="cursor: default">1-.<font color="red">*</font> RUT</label>
 					<div class="controls">
-						<input name="rut_ayudante" maxlength="10" min="1" type="text" pattern="[0-9]+" placeholder="Ej:17785874" required>
+						<input id="rut_ayudante" name="rut_ayudante" maxlength="10" min="1" type="text" pattern="[0-9]+" class="span12" placeholder="Ej:17785874" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="nombre1_ayudante" style="cursor: default">2-.<font color="red">*</font> Primer nombre</label>
 					<div class="controls">
-						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombreunoEditar" name="nombre1_ayudante" maxlength="20" required>
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombre1_ayudante" name="nombre1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="nombre2_ayudante" style="cursor: default">3-. Segundo nombre</label>
 					<div class="controls">
-						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombredosEditar" name="nombre2_ayudante" maxlength="20" >
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombre2_ayudante" name="nombre2_ayudante" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellido_paterno" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+					<label class="control-label" for="apellido1_ayudante" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
 					<div class="controls">
-						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellido_paterno" maxlength="20" required>
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido1_ayudante" name="apellido1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellido_materno" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+					<label class="control-label" for="apellido2_ayudante" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
 					<div class="controls">
-						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellido_materno" maxlength="20" required>
+						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido2_ayudante" name="apellido2_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="correo_ayudante" style="cursor: default">6-.<font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" name="correo_ayudante" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" id="correo_ayudante" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 			</div>
@@ -114,7 +147,7 @@ function ordenarFiltro(){
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Asignar profesor</label>
 					<div class="controls">
-						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtro búsqueda">
+						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" class="span12" placeholder="Filtro búsqueda">
 						<div class="row-fluid" style="margin-top:2%">
 							<div class="span12">
 								<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
@@ -130,7 +163,7 @@ function ordenarFiltro(){
 										$contador=0;
 										while ($contador<count($profesores)){
 											echo '<tr>';
-											echo '<td id="profesoresTd_'.$contador.'" ><input required id="'.$profesores[$contador][0].'" value="'.$profesores[$contador][0].'" name="cod_profesores" type="radio" >'.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
+											echo '<td id="profesoresTd_'.$contador.'" ><input required value="'.$profesores[$contador][0].'" name="cod_profesores" type="radio" >'.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
 											echo '</tr>';
 											$contador = $contador + 1;
 										}
