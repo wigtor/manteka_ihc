@@ -83,22 +83,12 @@
 
 <script>
 	function eliminarProfesor(){
-		var rut = document.getElementById("rutEliminar").value;
-		
-		if(rut!=""){
-					var answer = confirm("¿Está seguro de eliminar este profesor?")
-					if (!answer){
-						var dijoNO = resetear();
-						return false;
-					}
-					else{
-						return true;
-					}
+		rutAEliminar = $("#rutDetalle").html();
+		if(rutAEliminar == ""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
-		else{
-				alert("Selecione un profesor");
-				return false;
-		}
+		$('#modalConfirmacion').modal();
 	}
 
 	function resetear() {
@@ -178,25 +168,51 @@ Correo:           <b id="correoDetalle" ></b>
 Correo secundario:<b id="correoDetalle2" ></b>
 Tipo:             <b id="tipoDetalle"></b></pre>
 		<input name="rutEliminar" type="hidden" id="rutEliminar" value="">
-					<div class="row-fluid">
-						<div class="span3 offset5">
-							<button class="btn" type="submit">
-								<div class="btn_with_icon_solo">b</div>
-								&nbsp Borrar
-							</button>
-						</div>
+			<div class="control-group">
+				<div class="controls pull-right">
+					<button type="button" class="btn" onclick="eliminarProfesor()">
+						<i class= "icon-trash"></i>
+						&nbsp; Eliminar
+					</button>
+					<button class="btn" type="button" onclick="resetear()" >
+						<div class="btn_with_icon_solo">Â</div>
+						&nbsp; Cancelar
+					</button>&nbsp;
 
-						<div class="span3">
-							<button  class="btn" type="reset" onclick="resetear()" >
-								<div class="btn_with_icon_solo">Â</div>
-								&nbsp Cancelar
-							</button>
-						</div>
 
+					<!-- Modal de confirmación -->
+					<div id="modalConfirmacion" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>Confirmación</h3>
+						</div>
+						<div class="modal-body">
+							<p>Se va a eliminar el profesor ¿Está seguro?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+							<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+						</div>
+					</div>
+
+					<!-- Modal de confirmación -->
+					<div id="modalSeleccioneAlgo" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>No ha seleccionado un profesor</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor seleccione un profesor y vuelva a intentarlo</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
 					</div>
 				</div>
-				<?php echo form_close(''); ?>
 			</div>
+		</div>
+		<?php echo form_close(''); ?>
+	</div>
 </fieldset>
 
 

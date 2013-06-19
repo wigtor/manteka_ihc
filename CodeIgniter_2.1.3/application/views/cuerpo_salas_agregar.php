@@ -68,7 +68,7 @@ if(isset($mensaje_confirmacion))
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input title="Ingrese el número de la sala" id="inputInfo" max="999" type="number" min="1" name="num_sala" placeholder="Ej:258" required>
+		    							<input id="inputInfo" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text"  name="num_sala" placeholder="Ej:258" required>
 		  							</div>
 							</div>
 						</div>

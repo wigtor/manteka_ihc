@@ -40,33 +40,65 @@ if(isset($mensaje_confirmacion))
 ?>
 <script type="text/javascript">
 	function DetalleSeccion(cod_seccion){
-			document.getElementById("rs_seccion").value = '';
-			document.getElementById("cod_seccion").value = cod_seccion;
-			var borrar = document.getElementById("formDetalle");
-			borrar.action = "<?php echo site_url("Secciones/borrarSecciones/") ?>/";
-			borrar.submit();
-			
+			/* Defino el ajax que hará la petición al servidor */
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("Secciones/postVerSeccion") ?>", /* Se setea la url del controlador que responderá */
+				data: { seccion: cod_seccion }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+
+
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					//console.log (respuesta);
+					/* Obtengo los objetos HTML donde serán escritos los resultados */
+					var seccion = document.getElementById("nombre_seccion");
+					var modulo = document.getElementById("modulo");
+					var dia = document.getElementById("dia");
+					
+					document.getElementById("codSeccion").value = cod_seccion;
+					
+					/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+					var datos = jQuery.parseJSON(respuesta);
+
+					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+					seccion.innerHTML = datos[0];
+					modulo.innerHTML = datos[1];
+					dia.innerHTML = datos[2];
+					
+
+					if (datos[1] == null){
+						modulo.innerHTML= "sin asignación";
+					}
+					if(datos[2]==null){
+						dia.innerHTML = "sin asignación";
+						
+					}
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+
+				}
+		}
+		);
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
 	}
 </script>
 
 <script type="text/javascript">
 	function eliminarSeccion(){
 		var cod=document.getElementById("rs_seccion").value;
-		
-		if(cod!=""){ 
-					var answer = confirm("¿Está seguro de eliminar esta sección?")
-					if (!answer){
-						var dijoNO = DetalleSeccion("");
-					}
-					else{
-					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Secciones/borrarSecciones/") ?>/";
-					borrar.submit();
-					}
-					
+
+		if(cod==""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
 		else{
-				alert("Selecione una sección");
+			
+			$('#modalConfirmacion').modal();
 		}
 		
 	}
@@ -111,7 +143,7 @@ function ordenarFiltro(){
            
             
             <div class="row-fluid">
-                <div class="span6">
+                <div class="span5">
                     <div class="row-fluid">
                         <div class="span6">
                             1.-Seleccionar sección
@@ -121,9 +153,14 @@ function ordenarFiltro(){
 				<div class="span11">
 					<div class="row-fluid">	
 							<div class="span11">
-								<div class="span6">
-									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por nombre" style="width:90%">
+
+								<div class="controls controls-row">
+			    					<div class="input-append span7">
+										<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
+										<button class="btn" onClick="ordenarFiltro()" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 								</div>
+			
+					</div>
 							</div>
 						</div>
 						
@@ -167,24 +204,13 @@ function ordenarFiltro(){
                         </div>
                     </div>
 				<form id="formBorrar" type="post" method="post" onsubmit="eliminarSeccion()">
-				<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
+				<!--<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">-->
                     <div class="row-fluid">
 	<pre style="margin-top: 0%; margin-left: 0%;">
-<?php
-$contador=0;
-$comilla= "'";					
-while ($contador<count($secc)){
-echo '<tr>';
-echo '<td><input id="rs_seccion" name="rs_seccion" value="'.$secc[0][3].'" maxlength="3" min="1" type="hidden">Sección: '.$secc[0][0].'</td>';
-echo '<td id="rs_dia"> 
-Día:     '.$secc[0][2].'</td>';
-echo '<td id="rs_modulo"> 
-Módulo:  '.$secc[0][1].'</td>';
-echo '</tr>'; 
-$contador =count($secc) ;
-}								
-?>
-</pre>
+Seccion: <b id="nombre_seccion"></b>
+Día:     <b id="dia"></b>
+Bloque:  <b id="modulo"></b></pre>
+<input name="cod_seccion" type="hidden" id="codSeccion" value="">
                     
 
                     <div class="row-fluid">
@@ -233,7 +259,7 @@ $contador =count($secc) ;
 					</div>
 						<div class="row-fluid" style="margin-top: 4%; margin-left:55%">
 			
-								<button class ="btn" onclick="eliminarSeccion()" >
+								<button class ="btn" type="button" onclick="eliminarSeccion()" >
 									<div class="btn_with_icon_solo">Ë</div>
 									&nbsp Eliminar
 								</button>
@@ -241,6 +267,34 @@ $contador =count($secc) ;
 									<div class="btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
+						</div>
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a eliminar la sección seleccionada ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
+						</div>
+
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sección</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
 						</div>
      
                 </div>

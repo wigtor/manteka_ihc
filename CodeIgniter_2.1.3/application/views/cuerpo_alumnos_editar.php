@@ -24,16 +24,19 @@
 		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
 	
 		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
-					var answer = confirm("¿Está seguro que desea aplicar los cambios?")
+					/*var answer = confirm("¿Está seguro que desea aplicar los cambios?")
 					if (!answer){
 						return false;
 					}
 					else{
 						return true;
-					}
+					}*/
+
+					$('#modalConfirmacion').modal();
 		}
 		else {
-				alert("Ingrese todos los datos");
+				//alert("Ingrese todos los datos");
+				$('#modalSeleccioneAlgo').modal();
 				return false;
 		}
 	}
@@ -409,7 +412,7 @@ function ordenarFiltro(){ //No funcional
 						</div>
 						<div class="row" style= "margin-top:2%">
 							<div class="span3" style="margin-left:37%">
-								<button class ="btn" type="submit" >
+								<button class ="btn" type="button" onclick="editarEstudiante()" >
 									<div class= "btn_with_icon_solo">Ã</div>
 									&nbsp Modificar
 								</button>
@@ -419,6 +422,36 @@ function ordenarFiltro(){ //No funcional
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
 								</button>
+							</div>
+						</div>
+
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ningun estudiante</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione un estudiante y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+						<!-- Modal de confirmación -->
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a modificar el estudiante seleccionado. ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
 							</div>
 						</div>
 					<?php echo form_close(''); ?>

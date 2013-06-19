@@ -55,6 +55,19 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+	public function postVerSeccion() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod_seccion = $this->input->post('seccion');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->VerSeccion($cod_seccion);
+		echo json_encode($resultado);
+	}
+
 	/**
 	* Agregar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_agregar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
@@ -256,16 +269,7 @@ class Secciones extends MasterManteka {
 		$cod_seccion = $this->input->post('cod_seccion');
 
 		$confirmacion = $this->Model_secciones->EliminarAsignacion($cod_seccion);
-		//$datos_vista = array('mensaje_confirmacion'=>$confirmacion);//
-
-
-		/*$subMenuLateralAbierto = "borrarAsignar"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	*/
-
+		
 		// mostramos el mensaje de operacion realizada
 		$datos_plantilla["titulo_msj"] = "Accion Realizada";
 		$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la asignacion de la seccion";

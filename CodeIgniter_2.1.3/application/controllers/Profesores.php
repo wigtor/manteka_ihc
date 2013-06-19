@@ -165,23 +165,34 @@ class Profesores extends MasterManteka {
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 		$this->load->model('Model_profesor');
 
-		$rut_profesor = $this->input->get("rut_profesor");
-        $nombre1_profesor = $this->input->get("nombre1_profesor");
-        $nombre2_profesor = $this->input->get("nombre2_profesor");;
-        $apellido1_profesor = $this->input->get("apellido1_profesor");
-        $apellido2_profesor = $this->input->get("apellido2_profesor");
-        $correo_profesor = $this->input->get("correo_profesor");
-		$correo_profesor1 = $this->input->get("correo_profesor1");
-        $telefono_profesor = $this->input->get("telefono_profesor");
-        $tipo_profesor = $this->input->get("tipo_profesor");
+		$rut_profesor = $this->input->post("rut_profesor");
+        $nombre1_profesor = $this->input->post("nombre1_profesor");
+        $nombre2_profesor = $this->input->post("nombre2_profesor");;
+        $apellido1_profesor = $this->input->post("apellido1_profesor");
+        $apellido2_profesor = $this->input->post("apellido2_profesor");
+        $correo_profesor = $this->input->post("correo_profesor");
+		$correo_profesor1 = $this->input->post("correo_profesor1");
+        $telefono_profesor = $this->input->post("telefono_profesor");
+        $tipo_profesor = $this->input->post("tipo_profesor");
         $confirmacion = $this->Model_profesor->InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$correo_profesor1,$telefono_profesor, $tipo_profesor);
 	    
-		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);
-        $datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
+		if($confirmacion != 1){
+			$datos_plantilla["titulo_msj"] = "Error";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar insertar el profesor";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el profesor correctamente";
+	
+		}
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Profesores/agregarProfesores"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Agregar profesores"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
 	}
 
 

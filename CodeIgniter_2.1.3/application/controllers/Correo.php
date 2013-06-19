@@ -226,11 +226,13 @@ class Correo extends MasterManteka {
 		$this->load->model('Model_profesor');
 		$this->load->model('Model_ayudante');
 		$this->load->model('Model_usuario');
+		$this->load->model('model_plantilla');
 		$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
 							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
  							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
  							 'rut'=>  $this->session->userdata('rut'),
- 							 'codigo'=>$codigo);
+ 							 'codigo'=>$codigo,
+							 'plantillas'=>$this->model_plantilla->ObtenerListaPlantillas());
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/

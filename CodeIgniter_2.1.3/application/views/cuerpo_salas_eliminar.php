@@ -68,20 +68,14 @@ if(isset($mensaje_confirmacion))
 		
 		var cod = document.getElementById("codEliminar").value;
 		
-		if(cod!=""){
-					var answer = confirm("¿Está seguro de eliminar esta sala?")
-					if (!answer){
-						var dijoNO = DetalleSala("","","","","","","");
-					}
-					else{
-					var borrar = document.getElementById("formBorrar");
-					borrar.action = "<?php echo site_url("Salas/borrarSalas/") ?>/";
-					borrar.submit();
-					}
-					
+
+		if(cod==""){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
 		else{
-				alert("Selecione una sala");
+			
+			$('#modalConfirmacion').modal();
 		}
 		
 	}
@@ -135,9 +129,17 @@ function ordenarFiltro(){
 				<div class="span11">
 					<div class="row-fluid">	
 							<div class="span11">
-								<div class="span6">
+								<!--<div class="span6">
 									<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" placeholder="Filtrar por número" style="width:90%">
-								</div>
+								</div>-->
+
+								<div class="controls controls-row">
+			    					<div class="input-append span7">
+										<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
+										<button class="btn" onClick="ordenarFiltro()" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+									</div>
+			
+								</div>	
 							</div>
 						</div>
 						
@@ -194,7 +196,7 @@ Implementos:    <b id="impDetalle"></b>
 			</div>
 					<div class="row-fluid" style="margin-top: 4%; margin-left:49%">
 		
-							<button class ="btn" onclick="eliminarSala()" >
+							<button class ="btn" type="button" onclick="eliminarSala()" >
 								<div class="btn_with_icon_solo">Ë</div>
 								&nbsp Eliminar
 							</button>
@@ -203,6 +205,34 @@ Implementos:    <b id="impDetalle"></b>
 								&nbsp Cancelar
 							</button>
 					</div>
+							<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a eliminar la sala seleccionada ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
+						</div>
+
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sala</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sala y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
 								
 		</form>
 		</div>

@@ -163,7 +163,7 @@ function ordenarFiltro(){
 								</div>
 								<div class="span5">	
 										<div class="controls">
-											<input id="rut_estudiante" onblur="comprobarRut()" max="999999999" min="1" type="number" name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
+											<input id="rut_estudiante" onblur="comprobarRut()"   min="1" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador"  name="rut_estudiante" placeholder="Ingrese rut sin dig. verificador" required>
 										</div>
 								</div>
 							</div>
