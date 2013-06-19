@@ -71,8 +71,45 @@ class Model_secciones extends CI_Model{
 	public function VerSeccion($cod_seccion)
 	{
 	//sala horario, horario, dia
-	
-		$lista=array();	
+
+
+		$this->db->select('seccion.NOMBRE_SECCION AS nombre_seccion');
+		$this->db->select('dia.NOMBRE_DIA AS dia');
+		$this->db->select('modulo.COD_MODULO AS modulo');
+		$this->db->from('seccion');
+		$this->db->where('seccion.COD_SECCION', $cod_seccion);
+		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION', 'LEFT OUTER');
+		$this->db->join('sala_horario', 'sala_horario.ID_HORARIO_SALA=seccion_mod_tem.ID_HORARIO_SALA', 'LEFT OUTER');
+		$this->db->join('horario', 'horario.COD_HORARIO=sala_horario.COD_HORARIO', 'LEFT OUTER');
+		$this->db->join('dia', 'dia.COD_DIA=horario.COD_DIA', 'LEFT OUTER');
+		$this->db->join('modulo', 'modulo.COD_MODULO=horario.COD_MODULO', 'LEFT OUTER');
+
+		$query = $this->db->get();
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		
+		$lista = array();
+
+		
+
+		if ($datos = $query->row()){
+
+
+		$lista[0] = $datos->nombre_seccion;
+		$lista[1] = $datos->modulo;
+		$lista[2] = $datos->dia;
+		
+
+		}
+
+		
+
+		//}
+
+
+		/*$lista=array();	
 		$sql3="SELECT * FROM seccion WHERE COD_SECCION='$cod_seccion' ORDER BY COD_SECCION"; 
 		$datos3=mysql_query($sql3); 
 		$contador3 = 0;
@@ -120,7 +157,7 @@ class Model_secciones extends CI_Model{
 			$lista[$contador][2] = '';
 			$lista[$contador][3] = '';
 			
-		}
+		}*/
 		
 		return $lista;
 	}
