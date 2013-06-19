@@ -189,9 +189,10 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		//$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
 		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
-		//$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
-		//$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-		//$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
+		$this->db->select('NOMBRE_CARRERA AS carrera');
+		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
+		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
 		$this->db->order_by('APELLIDO1_ESTUDIANTE', 'asc');
 
 		if ($texto != "") {
@@ -200,8 +201,8 @@ class Model_estudiante extends CI_Model {
 			$this->db->or_like('NOMBRE2_ESTUDIANTE',$texto);
 			$this->db->or_like('APELLIDO1_ESTUDIANTE',$texto);
 			$this->db->or_like('APELLIDO2_ESTUDIANTE',$texto);
-			//$this->db->or_like('carrera',$texto);
-			//$this->db->or_like('seccion',$texto);
+			$this->db->or_like('NOMBRE_CARRERA',$texto);
+			$this->db->or_like('NOMBRE_SECCION',$texto);
 		} 
 		else {
 			
@@ -209,6 +210,8 @@ class Model_estudiante extends CI_Model {
 			define("BUSCAR_POR_RUT", 0);
 			define("BUSCAR_POR_NOMBRE", 1);
 			define("BUSCAR_POR_APELLIDO", 2);
+			define("BUSCAR_POR_CARRERA", 3);
+			define("BUSCAR_POR_SECCION", 4);
 			
 			if($textoFiltrosAvanzados[BUSCAR_POR_RUT] != ''){
 				$this->db->like("RUT_ESTUDIANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
@@ -222,6 +225,12 @@ class Model_estudiante extends CI_Model {
 				$this->db->where("(APELLIDO1_ESTUDIANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_ESTUDIANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_CARRERA] != '') {
+				$this->db->like("NOMBRE_CARRERA", $textoFiltrosAvanzados[BUSCAR_POR_CARRERA]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_SECCION] != '') {
+				$this->db->like("NOMBRE_SECCION", $textoFiltrosAvanzados[BUSCAR_POR_SECCION]);
 			}
 		}
 		$query = $this->db->get('estudiante');
