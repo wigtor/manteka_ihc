@@ -253,13 +253,7 @@ class Alumnos extends MasterManteka {
 
 		$this->load->model('Model_estudiante');
 		$confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
-		//$datos_vista = array();
-		//$subMenuLateralAbierto = "editarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
-		//$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		//$tipos_usuarios_permitidos = array();
-		//$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		//$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
-	
+		
 		if ($confirmacion==1){
 			$datos_plantilla["titulo_msj"] = "Accion Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha actualizado el alumno con éxito";
