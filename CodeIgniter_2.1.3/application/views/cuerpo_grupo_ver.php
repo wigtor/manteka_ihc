@@ -7,124 +7,47 @@
 * @author     Grupo 2 IHC 1-2013 Usach
 */
 ?>
-<!--<fieldset>
-	<legend>&nbsp;Ver Grupos de Contacto&nbsp;</legend>
-	<div class="inicio" title="Paso 1: Selección de plantilla">
-	<form action="<?php  ?>" method='post'>
-	<?php
-		$attributes = array();
-		echo form_open('GruposContactos/editarGrupos',$attributes);
-	?>
-		<div class="texto1">
-			Seleccione un Grupo de Contacto.
-		</div>
-		<div class="seleccion" >
-			<select id="nombreGrupo" title="Grupos de Contacto" name="id_grupo">
-			<?php for ($i = 0; $i < count($rs_nombres_contacto); $i++) { ?>
-					  <option value ="<?php echo $rs_nombres_contacto[$i]['ID_FILTRO_CONTACTO']; ?>"><?php echo $rs_nombres_contacto[$i]['NOMBRE_FILTRO_CONTACTO']; ?></option>
-			<?php } ?>
-			
-			</select>
-			<button class ="btn" style="margin-top:-10px;" type="submit"  title="Avanzar a selección de contactos">Ver Grupo</button>
-		
-		</div>
-		
-		
-	<?php echo form_close(""); ?>
-	</div>
-	<br />
 
-		<div id="listaDestinatarios" class="span5">
-			<table id="tabla2" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
-				<thead>
-					<tr>
-						<th>
-						</th>
-						<th >
-							Grupo 
-
-						</th>
-					</tr>
-				</thead>				
-				
-				<tbody id="tbody2">
-					<?php if(isset($rs_estudiantes)){ ?>
-					<?php for ($i = 0; $i <count($rs_estudiantes); $i++) {  ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_estudiantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_estudiantes[$i]['0'] ?>" >
-							<td>
-							
-							</td>
-							<td>
-								<?php echo $rs_estudiantes[$i][1]." ".$rs_estudiantes[$i][2]." ".$rs_estudiantes[$i][3]." ".$rs_estudiantes[$i][4]; ?>
-							</td>
-						</tr>
-					
-					<?php } } ?>
-					<?php for ($i = 0; $i <count($rs_profesores); $i++) {  ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_profesores[$i][0])){ ?>
-						<tr rut="<?php echo $rs_profesores[$i]['0'] ?>" >
-							<td>
-							
-							</td>
-							<td>
-								<?php echo $rs_profesores[$i][1]." ".$rs_profesores[$i][2]." ".$rs_profesores[$i][3]." ".$rs_profesores[$i][4]; ?>
-							</td>
-						</tr>
-					
-					<?php } } ?>
-					<?php for ($i = 0; $i <count($rs_ayudantes); $i++) { ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_ayudantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_ayudantes[$i]['0'] ?>" >
-							<td>
-							
-							</td>
-							<td>
-								<?php echo $rs_ayudantes[$i][1]." ".$rs_ayudantes[$i][2]." ".$rs_ayudantes[$i][3]." ".$rs_ayudantes[$i][4]; ?>
-							</td>
-						</tr>
-					<?php } } ?>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
-	    
-</fieldset>
-
--->
-<!--  -->
 
 <script type="text/javascript">
 	function DetalleGrupo(id_grupo){
+		//function DetalleSeccion(cod_seccion){
+
+			/* Defino el ajax que hará la petición al servidor */
+			$.ajax({
+				type: "POST", /* Indico que es una petición POST al servidor */
+				url: "<?php echo site_url("GruposContactos/getDatosGrupo") ?>", /* Se setea la url del controlador que responderá */
+				data: { id: id_grupo }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+
+
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					console.log (respuesta);
+					/* Obtengo los objetos HTML donde serán escritos los resultados */
+					var tbody = document.getElementById("tbody2");
+					$('#tbody2').empty();
+
+					/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+					var datos = jQuery.parseJSON(respuesta);
+
+					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+					for (var i = 0; i < datos.length; i++) {
+						$("#tbody2").append("<tr><td>"+datos[i][0]+"</td><td>"+datos[i][1]+"</td><td>"+datos[i][2]+"</td><td>"+datos[i][3]+"</td></tr>");
+					};
+					
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+				}
+		}
+		);
 		
-			document.getElementById("num_sala").innerHTML = num_sala;
-			document.getElementById("capacidad").innerHTML = capacidad;
-			document.getElementById("ubicacion").innerHTML = ubicacion;
-			var imp= new Array();	
-			<?php
-				$contadorE = 0;
-				while($contadorE<count($salaImplemento)){
-					echo 'imp['.$contadorE.']=new Array();';
-					echo 'imp['.$contadorE.'][0]= "'.$salaImplemento[$contadorE][0].'";';//sala
-					echo 'imp['.$contadorE.'][1]= "'.$salaImplemento[$contadorE][2].'";';//nombre
-					echo 'imp['.$contadorE.'][2]= "'.$salaImplemento[$contadorE][3].'";';//descripcion	
-					$contadorE = $contadorE + 1;
-				}
-			?>
-			var cont;
-			var algo='';
-			for(cont=0;cont < imp.length;cont++){
-				if(imp[cont][0]==cod_sala){
-					if(algo!=''){
-						algo= algo+"\n"+"		"+imp[cont][1];
-					}
-					else {
-						algo=imp[cont][1];
-					}
-				}
-			}
-			
-			document.getElementById("impDetalle").innerHTML=algo; 	
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
+	//}
+		
 			
 	}
 </script>
@@ -220,30 +143,12 @@ function ordenarFiltro(){
 				<table id="tabla2" class="table table-hover table-bordered" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-bottom:0px">
 					<thead>
 						<tr>
-							<th >
-								Nombre 
-							</th>
-							<th>
-								Tipo
-							</th>
-							<th>
-								Email
-							</th>
+							<th>Rut</th>
+							<th>Nombre </th>
+							<th>Tipo</th>
+							<th>Email</th>
 						</tr>
 					</thead>
-					
-					<?php
-						function existe_palabra($texto,$palabra){  
-							if(substr_count($texto, $palabra) !== 0 ){  
-								return true;  
-							}else{  
-								return false;  
-							}  
-						} 
-
-					?>
-					
-					
 					<tbody id="tbody2">
 						
 					</tbody>

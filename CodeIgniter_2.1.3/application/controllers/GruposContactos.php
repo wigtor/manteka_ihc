@@ -130,6 +130,19 @@ class GruposContactos extends MasterManteka {
 
 	}
 
+	public function getDatosGrupo(){
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_grupo = $this->input->post('id');
+		$this->load->model('model_grupos_contacto');
+		$resultado = $this->model_grupos_contacto->getDatosGrupo($id_grupo);
+		echo json_encode($resultado);
+	}
+
 	public function verGrupos()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
