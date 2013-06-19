@@ -67,6 +67,18 @@ class Secciones extends MasterManteka {
 		$resultado = $this->Model_secciones->VerSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
+	public function AlumnosSeccion() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod_seccion = $this->input->post('seccion');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->VerTodosLosEstudiantes($cod_seccion);
+		echo json_encode($resultado);
+	}
 
 	/**
 	* Agregar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_agregar'

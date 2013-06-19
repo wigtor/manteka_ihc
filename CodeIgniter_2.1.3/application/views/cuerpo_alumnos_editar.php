@@ -1,15 +1,4 @@
 
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha actualizado el estudiante");
-				}
-				else{
-					alert("Error al actualizar");
-				}
-	}
-</script>
 
 <script type="text/javascript">
 
@@ -362,8 +351,8 @@ function ordenarFiltro(){ //No funcional
 						<div class="row" style= "margin-top:2%">
 							<div class="span3" style="margin-left:37%">
 								<button class ="btn" type="button" onclick="editarEstudiante()" >
-									<div class= "btn_with_icon_solo">Ã</div>
-									&nbsp Modificar
+									<div class= "icon-pencil"></div>
+									&nbsp Guardar
 								</button>
 							</div>
 							<div class="span3">
