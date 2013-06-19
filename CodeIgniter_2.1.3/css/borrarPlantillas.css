@@ -78,7 +78,7 @@ fieldset legend
 	border: #CCCCCC 1px solid;
 	overflow-y:auto;
 	height:185px;
-	width:500px;
+	width:420px;
 	-webkit-border-radius:4px;
 	float:left;
 	background-color:#FCFCFC;
@@ -109,6 +109,7 @@ fieldset legend
 {
 	margin-left:1%;
 	clear:both;
+	margin-right:1%;
 }
 
 #msjError
@@ -188,4 +189,5 @@ fieldset legend
 #contenedorBotones
 {
 	float:right;
+	margin-right:1%;
 }

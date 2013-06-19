@@ -13,7 +13,7 @@
 {
 	font-size:16pt;
 	color:#666666;
-	padding:30px;
+	padding:20px;
 	line-height:25px;
 	font-weight:bold;
 	text-align:center;
@@ -74,7 +74,7 @@
 	background:#FCFCFC;
 	margin:auto;
 	margin-top:4%;
-	width:60%;
+	width:70%;
 	height:80%;
 	padding:10px 20px 20px;
 	text-align:left;
@@ -108,7 +108,7 @@
 		
 #botonCerrar 
 {
-	margin:2em auto;
+	margin:20px auto;
 	display:block;
 	width:60px;
 	text-align:center;
