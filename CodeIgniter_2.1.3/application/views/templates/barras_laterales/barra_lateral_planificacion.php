@@ -12,7 +12,6 @@
 		$id_tipo_usuario = TIPO_USR_COORDINADOR; //Se debe borrar cuando todo se porte a MasterManteka
 		// Las operaciones por defecto no poseen clases
 		$verPlanificacion = "";
-		$editarPlanificacion = "";
 		$verModulos = "";
 		$agregarModulos = "";
 		$editarModulos = "";
@@ -32,10 +31,6 @@
 		//	La operación seleccionada tiene clase "active"
 		if ($subVistaLateralAbierta == "verPlanificacion") {
 			$verPlanificacion = 'class="active"';
-			$inPlanificacion = 'in';
-		}
-		else if ($subVistaLateralAbierta == "editarPlanificacion") {
-			$editarPlanificacion = 'class="active"';
 			$inPlanificacion = 'in';
 		}
 		else if ($subVistaLateralAbierta == "verModulos") {
@@ -82,9 +77,7 @@
 			<div id="collapseTwo" class="accordion-body collapse <?php echo $inPlanificacion; ?>">
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verPlanificacion; ?> ><a href="<?php site_url("Planificacion/verPlanificacion")?>">Ver planificación</a></li>
-					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $editarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/editarPlanificacion")?>">Editar planificación</a></li>
-					<?php } ?>
+					
 				</div>
 			</div>
 		</div>
