@@ -149,60 +149,29 @@ class GruposContactos extends MasterManteka {
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
-		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-			$this->load->model('Model_estudiante');
-			$this->load->model('Model_profesor');
-			$this->load->model('Model_ayudante');
-			$this->load->model('Model_usuario');
-			$this->load->model('model_grupos_contacto');
-			$idGrupo = $this->input->post('id_grupo');;
-			if ($idGrupo) {
-				$grupo = $this->model_grupos_contacto->getGrupo($idGrupo);
-				//var_dump($grupo[0]['ID_FILTRO_CONTACTO']);	
-				
-				$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
-								 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
-	 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
-								 'rutes' => $grupo[0],
-								 'rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut)
-								 );
-				$cuerpo_to_charge = "cuerpo_grupo_ver";
-			}
-			else {
-				$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
-				$cuerpo_to_charge = "cuerpo_grupo_ver";
-			}
-			
-							 
-			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
-			*/
-			//var_dump($datos_cuerpo['rs_profesores']);
-			$subMenuLateralAbierto = 'verGrupos'; 
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-			$this->cargarTodo("Correos", $cuerpo_to_charge, "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$this->load->model('model_grupos_contacto');
+		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
+		$subMenuLateralAbierto = 'verGrupos'; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarTodo("Correos", "cuerpo_grupo_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	}
+	public function borrarGrupos()
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
 		}
-		else{
-	
-			$this->load->model('model_grupos_contacto');
-			$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
-			$subMenuLateralAbierto = 'verGrupos'; 
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-			$this->cargarTodo("Correos", "cuerpo_grupo_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-		
-		
-		
-		
-		}
-
-
+		$this->load->model('model_grupos_contacto');
+		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
+		$subMenuLateralAbierto = 'borrarGrupos'; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarTodo("Correos", "cuerpo_grupos_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
 }

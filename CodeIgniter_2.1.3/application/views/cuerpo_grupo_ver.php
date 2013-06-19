@@ -10,8 +10,13 @@
 
 
 <script type="text/javascript">
-	function DetalleGrupo(id_grupo){
+	function DetalleGrupo(id_grupo, cliqueado){
 		//function DetalleSeccion(cod_seccion){
+			/*  */
+
+			/* se marca el objeto cliqueado */
+			$('tr.success').removeClass("success");
+			$("#"+cliqueado).addClass("success");
 
 			/* Defino el ajax que hará la petición al servidor */
 			$.ajax({
@@ -120,8 +125,8 @@ function ordenarFiltro(){
 								$comilla= "'";
 								echo '<form id="formDetalle" type="post">';
 								while ($contador<count($rs_nombres_contacto)){
-									echo '<tr>';
-									echo	'<td  id="'.$contador.'" onclick="DetalleGrupo('.$comilla.$rs_nombres_contacto[$contador]['ID_FILTRO_CONTACTO'].$comilla.')" style="text-align:left;">'. $rs_nombres_contacto[$contador]['NOMBRE_FILTRO_CONTACTO'].'</td>';
+									echo '<tr id="tr'.$contador.'">';
+									echo	'<td  id="'.$contador.'" onclick="DetalleGrupo('.$comilla.$rs_nombres_contacto[$contador]['ID_FILTRO_CONTACTO'].$comilla.', '.$comilla.'tr'.$contador.$comilla.')" style="text-align:left;">'. $rs_nombres_contacto[$contador]['NOMBRE_FILTRO_CONTACTO'].'</td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
