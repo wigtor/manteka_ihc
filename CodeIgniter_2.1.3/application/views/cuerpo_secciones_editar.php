@@ -1,43 +1,4 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sección editada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al editar sección
-    		</div>		
 
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>	 
-				 Una sección con el mismo nombre ya se ha ingresado 
-    		</div>		
-
-		<?php
-		}
-	
-	}
-	unset($mensaje_confirmacion);
-}
-?>
 
 
 <script type="text/javascript">
@@ -119,7 +80,11 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Editar Sección</legend>
-			<form id="FormEditar" type="post" method="post" >
+			<!--<form id="FormEditar" type="post" method="post" >-->
+				<?php
+				$atributos= array('onsubmit' => 'return EditarSeccion()', 'id' => 'FormDetalle');
+		 		echo form_open('Secciones/modificarSecciones/', $atributos);
+			?>
             <div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
@@ -261,7 +226,8 @@ function ordenarFiltro(){
                 </div>
 				
             </div>
-         </form>
+            <?php echo form_close(''); ?>
+         <!--</form>-->
         </fieldset>
     </div>
 </div>

@@ -40,6 +40,13 @@ function DetalleSeccion(cod_seccion){
 						dia.innerHTML = "sin asignación";
 						
 					}
+					/*Para el caso de que se presione el botón Cancelar*/
+					if (cod_seccion==""){
+						seccion.innerHTML = "";
+						modulo.innerHTML = "";
+						dia.innerHTML = "";
+
+					}
 
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
@@ -61,14 +68,14 @@ function DetalleSeccion(cod_seccion){
 			
 			//CARGO EL CUERPO DE LA TABLA
 			tbody = document.createElement('tbody');
-			if (arrayRespuesta.length == 0) {
+			/*if (arrayRespuesta.length == 0) {
 				tr = document.createElement('tr');
 				td = document.createElement('td');
-				$(td).html("No se encontraron resultados");
-				$(td).attr('colspan',tiposFiltro.length);
+				//$(td).html("No se encontraron resultados");
+				//$(td).attr('colspan',tiposFiltro.length);
 				tr.appendChild(td);
 				tbody.appendChild(tr);
-			}
+			}*/
 
 			for (var i = 0; i < arrayRespuesta.length; i++) {
 				tr = document.createElement('tr');
@@ -130,6 +137,8 @@ function DetalleSeccion(cod_seccion){
 		
 	}
 </script>
+
+
 
 <script type="text/javascript">
 function ordenarFiltro(){
@@ -234,7 +243,7 @@ function ordenarFiltro(){
 				<!--<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">-->
                     <div class="row-fluid">
 	<pre style="margin-top: 0%; margin-left: 0%;">
-Seccion: <b id="nombre_seccion"></b>
+Sección: <b id="nombre_seccion"></b>
 Día:     <b id="dia"></b>
 Bloque:  <b id="modulo"></b></pre>
 <input name="cod_seccion" type="hidden" id="codSeccion" value="">

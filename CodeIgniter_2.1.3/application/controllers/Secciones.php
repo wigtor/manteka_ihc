@@ -139,13 +139,41 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_secciones');
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
+		$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+    
+    }
+
+    public function modificarSecciones()
+    {
+	
+		
+		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
 		$nombre_seccion1 = $this->input->post("rs_seccion");
 		$nombre_seccion2 = $this->input->post("rs_seccion2");
 		$confirmacion = $this->Model_secciones->ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2);
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(),'mensaje_confirmacion'=>$confirmacion);
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+        
+        // se muestra mensaje de operación realizada
+    	if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha modificado la sección con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la edición en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Secciones/editarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Editar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
     }
+
+
 
 		/**
 	* Borrar una seccion del sistema y luego carga los datos para volver a la vista 'cuerpo_secciones_borrar'
