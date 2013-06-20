@@ -104,11 +104,35 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_secciones');
+		$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+	}
+
+	public function ingresarSecciones()
+	{	
+		
+		
+		$this->load->model('Model_secciones');
 		$nombre_seccion1 = $this->input->post("rs_seccion");
 		$nombre_seccion2 = $this->input->post("rs_seccion2");
 		$confirmacion = $this->Model_secciones->AgregarSeccion($nombre_seccion1,$nombre_seccion2);
-        $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+        
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado la sección con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Secciones/agregarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Agregar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 
 	}
 
@@ -200,11 +224,38 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_secciones');
-		$cod_seccion = $this->input->post("cod_seccion");
-		$cod_seccion1 = $this->input->post("rs_seccion");
-		$confirmacion = $this->Model_secciones->EliminarSeccion($cod_seccion1);
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(),'rs_estudiantes'=>$this->Model_secciones->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_secciones->VerSeccion($cod_seccion),'mensaje_confirmacion'=>$confirmacion);
+		//$cod_seccion = $this->input->post("cod_seccion");
+		//$cod_seccion1 = $this->input->post("rs_seccion");
+		//$confirmacion = $this->Model_secciones->EliminarSeccion($cod_seccion1);
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones()/*,'rs_estudiantes'=>$this->Model_secciones->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_secciones->VerSeccion($cod_seccion),'mensaje_confirmacion'=>$confirmacion*/);
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_borrar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	}
+
+
+	public function eliminarSecciones()
+    {
+		
+		$this->load->model('Model_secciones');
+		$cod_seccion = $this->input->post("cod_seccion");
+		$confirmacion = $this->Model_secciones->EliminarSeccion($cod_seccion);
+        
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sección con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Secciones/borrarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Borrar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+
 	}
 
 

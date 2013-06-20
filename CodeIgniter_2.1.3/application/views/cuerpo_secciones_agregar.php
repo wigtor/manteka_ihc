@@ -1,48 +1,8 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sección agregada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al agregar sección
-    		</div>		
-
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>	 
-				 Una sección con el mismo nombre ya se ha ingresado 
-    		</div>		
-
-		<?php
-		}
-	
-	}
-	unset($mensaje_confirmacion);
-}
-?>
 
 <script type="text/javascript">
 	function AgregarSeccion(){ 
-		var agregar= document.getElementById("formDetalle");
-		agregar.action = "<?php echo site_url("Secciones/agregarSecciones/") ?>/";
+		var agregar= document.getElementById("formAgregar");
+		agregar.action = "<?php echo site_url("Secciones/ingresarSecciones/") ?>/";
 		agregar.submit();					
 		
 	}

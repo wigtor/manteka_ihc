@@ -216,7 +216,7 @@ function ordenarFiltro(){
                     </div>
                     <div class="row-fluid">
 <pre style="margin-top: 0%; margin-left: 0%;">
-Seccion: <b id="nombre_seccion"></b>
+Sección: <b id="nombre_seccion"></b>
 Día:     <b id="dia"></b>
 Bloque:  <b id="modulo"></b>
 </pre>

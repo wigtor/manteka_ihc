@@ -65,17 +65,11 @@ function DetalleSeccion(cod_seccion){
 			$(tablaResultados).find('tbody').remove();
 			var arrayRespuesta = jQuery.parseJSON(respuesta);
 
+
 			
 			//CARGO EL CUERPO DE LA TABLA
 			tbody = document.createElement('tbody');
-			/*if (arrayRespuesta.length == 0) {
-				tr = document.createElement('tr');
-				td = document.createElement('td');
-				//$(td).html("No se encontraron resultados");
-				//$(td).attr('colspan',tiposFiltro.length);
-				tr.appendChild(td);
-				tbody.appendChild(tr);
-			}*/
+			
 
 			for (var i = 0; i < arrayRespuesta.length; i++) {
 				tr = document.createElement('tr');
@@ -117,6 +111,8 @@ function DetalleSeccion(cod_seccion){
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 
+
+
 	}
 			
 	
@@ -126,13 +122,18 @@ function DetalleSeccion(cod_seccion){
 	function eliminarSeccion(){
 		var cod=document.getElementById("codSeccion").value;
 
+
 		if(cod==""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
 		else{
-			
-			$('#modalConfirmacion').modal();
+			//if (indicador == "sin alumnos" ){
+				$('#modalConfirmacion').modal();
+			/*}
+			else{
+				$('#modalSeleccioneAlgo').modal();
+			}*/
 		}
 		
 	}
@@ -175,7 +176,7 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Borrar Sección</legend>
-		<form id="formDetalle" type="post" method="post">
+		<!--<form id="formDetalle" type="post" method="post">-->
            
             
             <div class="row-fluid">
@@ -239,8 +240,12 @@ function ordenarFiltro(){
                             2.-Información de la sección
                         </div>
                     </div>
-				<form id="formBorrar" type="post" method="post" onsubmit="eliminarSeccion()">
-				<!--<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">-->
+				<!--<form id="formBorrar" type="post" method="post" onsubmit="eliminarSeccion()">-->
+				<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
+				<?php
+				$atributos= array('onsubmit' => 'return eliminarAsignacion()', 'id' => 'formBorrar');
+		 		echo form_open('Secciones/eliminarSecciones/', $atributos);
+				?>
                     <div class="row-fluid">
 	<pre style="margin-top: 0%; margin-left: 0%;">
 Sección: <b id="nombre_seccion"></b>
@@ -269,7 +274,7 @@ Bloque:  <b id="modulo"></b></pre>
                                         <th class="span9">Nombres</th>
                                     </tr>
                                 </thead>
-                                    <!-- esta fila es solo de ejemplo-->
+                                   
                                 <tbody>
                                     	
 									
@@ -322,11 +327,12 @@ Bloque:  <b id="modulo"></b></pre>
 						</div>
      
                 </div>
-				</form>
+				<!--</form>-->
 			
 				
             </div>
-         </form>
+         <!--</form>-->
+         <?php echo form_close(''); ?>
         </fieldset>
     </div>
 </div>
