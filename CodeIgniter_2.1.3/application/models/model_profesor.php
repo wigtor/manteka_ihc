@@ -133,7 +133,7 @@ class Model_profesor extends CI_Model {
 	* @param string $ape2 Apellido mateno del profesor
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function EditarProfesor($run_profe,$telefono_profe,$tipo_profe,$nom1, $nom2, $ape1,$ape2)
+    public function EditarProfesor($run_profe,$telefono_profe,$tipo_profe,$nom1, $nom2, $ape1,$ape2,$correo1,$correo2)
     {
 		$data = array(					
 					'RUT_USUARIO2' => $run_profe ,
@@ -148,14 +148,19 @@ class Model_profesor extends CI_Model {
 		$this->db->where('RUT_USUARIO2', $run_profe);
         $datos = $this->db->update('profesor',$data);
 		
-		if($datos == true){
+	    $this->db->where('RUT_USUARIO',$run_profe);
+        $informacion_user = array(
+                        'CORREO1_USER' => $correo1,
+                        'CORREO2_USER' => $correo2,);
+        $datos2 = $this->db->update('usuario',$informacion_user);
+		
+		if($datos == true && $datos2==true){
 			return 1;
 		}
 		else{
 			return -1;
 		}	
     }
-
 
 	/**
 	* Obtiene los datos de todos los modulos de la base de datos
