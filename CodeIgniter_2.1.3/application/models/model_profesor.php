@@ -202,7 +202,7 @@ class Model_profesor extends CI_Model {
 	}
 
 	public function getDetallesProfesor($rut) {
-		$this->db->select('RUT_USUARIO2 AS rut');
+		$this->db->select('profesor.RUT_USUARIO2 AS rut');
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
 		$this->db->select('NOMBRE2_PROFESOR AS nombre2');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
@@ -211,8 +211,12 @@ class Model_profesor extends CI_Model {
 		$this->db->select('TIPO_PROFESOR AS tipo');
 		$this->db->select('CORREO1_USER AS correo');
 		$this->db->select('CORREO2_USER AS correo2');
-		 $this->db->join('usuario', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
-		$this->db->where('RUT_USUARIO2', $rut);
+		$this->db->select('NOMBRE_MODULO AS moduloTem');
+		$this->db->join('usuario', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+		$this->db->join('profe_seccion', 'profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2', 'LEFT OUTER');
+		$this->db->join('seccion_mod_tem', 'profe_seccion.COD_SECCION = seccion_mod_tem.COD_SECCION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'seccion_mod_tem.COD_MODULO_TEM = modulo_tematico.COD_MODULO_TEM', 'LEFT OUTER');
+		$this->db->where('profesor.RUT_USUARIO2', $rut);
 		$query = $this->db->get('profesor');
 		if ($query == FALSE) {
 			return array();
@@ -222,17 +226,23 @@ class Model_profesor extends CI_Model {
 
 	public function getProfesoresByFilter($texto, $textoFiltrosAvanzados)
 	{
-		$this->db->select('RUT_USUARIO2 AS rut');
+		$this->db->select('profesor.RUT_USUARIO2 AS rut');
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+		$this->db->select('NOMBRE_MODULO AS moduloTem');
+		$this->db->join('profe_seccion', 'profesor.RUT_USUARIO2 = profe_seccion.RUT_USUARIO2', 'LEFT OUTER');
+		$this->db->join('seccion_mod_tem', 'profe_seccion.COD_SECCION = seccion_mod_tem.COD_SECCION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'seccion_mod_tem.COD_MODULO_TEM = modulo_tematico.COD_MODULO_TEM', 'LEFT OUTER');
+
 		$this->db->order_by('APELLIDO1_PROFESOR', 'asc');
 
 		if ($texto != "") {
-			$this->db->like("RUT_USUARIO2", $texto);
+			$this->db->like("profesor.RUT_USUARIO2", $texto);
 			$this->db->or_like("NOMBRE1_PROFESOR", $texto);
 			$this->db->or_like("NOMBRE2_PROFESOR", $texto);
 			$this->db->or_like("APELLIDO1_PROFESOR", $texto);
 			$this->db->or_like("APELLIDO2_PROFESOR", $texto);
+			$this->db->or_like("NOMBRE_MODULO", $texto);
 		}
 
 		else {
@@ -241,10 +251,11 @@ class Model_profesor extends CI_Model {
 			define("BUSCAR_POR_RUT", 0);
 			define("BUSCAR_POR_NOMBRE", 1);
 			define("BUSCAR_POR_APELLIDO", 2);
+			define("BUSCAR_POR_MOD_TEM", 3);
 			
 			if($textoFiltrosAvanzados[BUSCAR_POR_RUT] != ''){
-				$this->db->like("RUT_USUARIO2", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
-			}			
+				$this->db->like("profesor.RUT_USUARIO2", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+			}
 			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
 				$this->db->where("(NOMBRE1_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
 				//$this->db->like("(NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
@@ -254,6 +265,9 @@ class Model_profesor extends CI_Model {
 				$this->db->where("(APELLIDO1_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
+			}
+			if($textoFiltrosAvanzados[BUSCAR_POR_MOD_TEM] != ''){
+				$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_MOD_TEM]);
 			}
 		}
 		$query = $this->db->get('profesor');

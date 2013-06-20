@@ -86,6 +86,9 @@ function cambioTipoFiltro(inputUsado) {
 					td = document.createElement('td');
 					tr.setAttribute("id", prefijo_tipoDato+arrayObjectRespuesta[i].rut); //Da lo mismo en este caso los id repetidos en los div
 					tr.setAttribute("onClick", "verDetalle(this)");
+					if (arrayRespuesta[i][j] == null) {
+						arrayRespuesta[i][j] = "";
+					}
 					nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);

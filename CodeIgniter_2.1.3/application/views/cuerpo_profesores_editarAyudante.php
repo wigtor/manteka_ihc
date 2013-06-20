@@ -1,6 +1,6 @@
 <script type="text/javascript">
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Sección"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>";
@@ -45,15 +45,6 @@
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				if (datos.nombre1 == null) {
 					datos.nombre1 = '';
-				}
-				if (datos.nombre2 == null) {
-					datos.nombre2 = '';
-				}
-				if (datos.apellido1 == null) {
-					datos.apellido1 = '';
-				}
-				if (datos.apellido2 == null) {
-					datos.apellido2 = '';
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
