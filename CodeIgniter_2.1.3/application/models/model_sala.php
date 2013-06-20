@@ -402,13 +402,13 @@ class Model_sala extends CI_Model {
 				$count = 0;														
 				foreach ($implementos as $implemento) {
 					if($count == 0)
-						$row->implementos = $implemento->NOMBRE_IMPLEMENTO;
+						$row->implementos = $implemento->nombre_implemento;
 					elseif ($count == 3) {										// Si son más de 3 elementos, sólo llevar 3.
 						$row->implementos .= ", etc.";
 						continue;
 					}
 					else
-						$row->implementos .= ", ".$implemento->NOMBRE_IMPLEMENTO;
+						$row->implementos .= ", ".$implemento->nombre_implemento;
 					$count++;
 				}
 			}
@@ -419,7 +419,7 @@ class Model_sala extends CI_Model {
 
 	private function getImpFromSala($num_sala)
 	{
-		$this->db->select('NOMBRE_IMPLEMENTO');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
 		$this->db->from('sala');
 		$this->db->join('sala_implemento','sala.COD_SALA = sala_implemento.COD_SALA');
 		$this->db->join('implemento','sala_implemento.COD_IMPLEMENTO = implemento.COD_IMPLEMENTO');
@@ -435,9 +435,9 @@ class Model_sala extends CI_Model {
 	}
 
 	public function getDetallesSala($num_sala){
-		$this->db->select('sala.NUM_SALA');
-		$this->db->select('sala.CAPACIDAD');
-		$this->db->select('sala.UBICACION');
+		$this->db->select('sala.NUM_SALA AS num_sala');
+		$this->db->select('sala.CAPACIDAD AS capacidad');
+		$this->db->select('sala.UBICACION AS ubicacion');
 		$this->db->where('sala.NUM_SALA',$num_sala);
 		$this->db->order_by('NUM_SALA', 'asc');
 		$query = $this->db->get('sala');
@@ -449,7 +449,7 @@ class Model_sala extends CI_Model {
 		$row = array();
 		if ($query->num_rows() > 0){
 			$row = $query->row();
-			$implementos = $this->getImpFromSala($row->NUM_SALA);
+			$implementos = $this->getImpFromSala($row->num_sala);
 			$row->implementos = $implementos;
 		}
 

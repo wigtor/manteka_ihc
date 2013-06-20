@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	var tiposFiltro = ["Numero", "Capacidad", "Implementos"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", ""];
-	var prefijo_tipoDato = "ayudante_";
+	var prefijo_tipoDato = "sala_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Salas/postBusquedaSalas") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/salas") ?>";
@@ -21,45 +21,34 @@
 			data: { num_sala: sala_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var rutDetalle = document.getElementById("rutDetalle");
-				var nombre1Detalle = document.getElementById("nombre1Detalle");
-				var nombre2Detalle = document.getElementById("nombre2Detalle");
-				var apellido1Detalle = document.getElementById("apellido1Detalle");
-				var apellido2Detalle = document.getElementById("apellido2Detalle");
-				var telefonoDetalle = document.getElementById("telefonoDetalle");
-				var correoDetalle = document.getElementById("correoDetalle");
-				var correoDetalle2 = document.getElementById("correoDetalle2");
-				var tipoDetalle = document.getElementById("tipoDetalle");
+				var numSala = document.getElementById("num_sala");
+				var capacidad = document.getElementById("capacidad");
+				var ubicacion = document.getElementById("ubicacion");
+				var impl = document.getElementById("impDetalle");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
-				if (datos.nombre1 == null) {
-					datos.nombre1 = '';
-				}
-				if (datos.nombre2 == null) {
-					datos.nombre2 = '';
-				}
-				if (datos.apellido1 == null) {
-					datos.apellido1 = '';
-				}
-				if (datos.apellido2 == null) {
-					datos.apellido2 = '';
-				}
-				if (datos.correo2 == null) {
-					datos.correo2 = '';
+				if (datos.capacidad == null) {
+					datos.capacidad = '';
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(rutDetalle).html(datos.rut);
-				$(nombre1Detalle).html($.trim(datos.nombre1));
-				$(nombre2Detalle).html($.trim(datos.nombre2));
-				$(apellido1Detalle).html($.trim(datos.apellido1));
-				$(apellido2Detalle).html($.trim(datos.apellido2));
-				$(telefonoDetalle).html($.trim(datos.telefono));
-				$(correoDetalle).html($.trim(datos.correo));
-				$(correoDetalle2).html($.trim(datos.correo2));
-				$(tipoDetalle).html($.trim(datos.tipo));
+				$(numSala).html(datos.num_sala);
+				$(capacidad).html($.trim(datos.capacidad));
+				$(ubicacion).html($.trim(datos.ubicacion));
+
+				/*	Setear los Implementos	*/
+				var length = datos.implementos.length,
+					elemento = null, salidaImp = "";
+				if (length == 0)
+					salidaImp = "No posee";
+				for(var i=0; i<length; i++){
+					imp = datos.implementos[i];
+					salidaImp += "\t"+imp["nombre_implemento"] + "\n"; 
+				}
+				
+				$(impl).html($.trim(salidaImp));
 				
 
 				/* Quito el div que indica que se está cargando */
@@ -116,11 +105,12 @@
 			</table>
 		</div>
 		<div class="span6" style="padding: 0%; ">
-	  <pre style="margin-top: 0%; margin-left: 0%;">
+  		<pre style="margin-top: 0%; margin-left: 0%;">
 Número sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicación:      <b id="ubicacion"></b>
-Implementos:    <b id="impDetalle"></b></pre>
+Implementos:    <b id="impDetalle"></b>
+		</pre>
 
 		</div>
 
