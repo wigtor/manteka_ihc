@@ -1,45 +1,13 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sección eliminada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al eliminar sección
-    		</div>		
-
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>	 
-				 No se puede eliminar una sección con alumnos
-    		</div>		
-
-		<?php
-		}
-	
-	}
-	unset($mensaje_confirmacion);
-}
-?>
 <script type="text/javascript">
-	function DetalleSeccion(cod_seccion){
+
+
+
+function DetalleSeccion(cod_seccion){
+			/*document.getElementById("seccion").value = cod_seccion;
+			var editar = document.getElementById("formDetalle");
+			editar.action = "<?php echo site_url("Secciones/verSecciones/") ?>/";
+			editar.submit();*/
+
 			/* Defino el ajax que hará la petición al servidor */
 			$.ajax({
 				type: "POST", /* Indico que es una petición POST al servidor */
@@ -80,17 +48,76 @@ if(isset($mensaje_confirmacion))
 				}
 		}
 		);
+
+		$.ajax({
+		type: "POST", /* Indico que es una petición POST al servidor */
+		url: "<?php echo site_url("Secciones/AlumnosSeccion") ?>", // Se setea la url del controlador que responderá */
+		data: { seccion: cod_seccion}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+			var tablaResultados = document.getElementById("listadoResultados");
+			$(tablaResultados).find('tbody').remove();
+			var arrayRespuesta = jQuery.parseJSON(respuesta);
+
+			
+			//CARGO EL CUERPO DE LA TABLA
+			tbody = document.createElement('tbody');
+			if (arrayRespuesta.length == 0) {
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				$(td).html("No se encontraron resultados");
+				$(td).attr('colspan',tiposFiltro.length);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+			}
+
+			for (var i = 0; i < arrayRespuesta.length; i++) {
+				tr = document.createElement('tr');
+				tr.setAttribute('style', "cursor:pointer");
+				for (var j = 0; j < 5; j++) {
+					td = document.createElement('td');
+					tr.setAttribute("onClick", "verDetalle(this)");
+					if(j==4){
+						nodoTexto = document.createTextNode(arrayRespuesta[i][j]+" "+arrayRespuesta[i][j+1]);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+						j=j+6;
+					}
+					else{
+
+						nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
+						td.appendChild(nodoTexto);
+						tr.appendChild(td);
+					}
+				}
+		
+
+				tbody.appendChild(tr);
+			}
+			tablaResultados.appendChild(tbody);
+
+			/* Quito el div que indica que se está cargando */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).hide();
+
+			
+			$('tbody tr').on('click', function(event) {
+				$(this).addClass('highlight').siblings().removeClass('highlight');
+			});
+		}
+		});
 		
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 
 	}
+			
+	
 </script>
 
 <script type="text/javascript">
 	function eliminarSeccion(){
-		var cod=document.getElementById("rs_seccion").value;
+		var cod=document.getElementById("codSeccion").value;
 
 		if(cod==""){
 			$('#modalSeleccioneAlgo').modal();
@@ -179,7 +206,7 @@ function ordenarFiltro(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"  style="cursor:pointer" onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -223,7 +250,7 @@ Bloque:  <b id="modulo"></b></pre>
                     <div class="row-fluid">
                         <div class="span13">
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
-                            <table class="table table-bordered">
+                            <table id="listadoResultados" class="table table-bordered">
                                 <thead  bgcolor="#e6e6e6">
                                     <tr>
                                         <th class="span2">Carrera</th>
@@ -235,19 +262,7 @@ Bloque:  <b id="modulo"></b></pre>
                                 </thead>
                                     <!-- esta fila es solo de ejemplo-->
                                 <tbody>
-                                    	<?php
-										$contador=0;
-										while ($contador<count($rs_estudiantes)){
-											echo '<tr>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][7].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][0].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][3].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][4].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].' </td>';
-											echo '</tr>';
-											$contador = $contador + 1;
-										}
-										?>
+                                    	
 									
                                 </tbody>
                                 

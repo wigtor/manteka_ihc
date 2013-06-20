@@ -480,6 +480,23 @@ public function verHorarioSegunSala($sala){
 
 }
 
+/**
+* Asigna una sección a sus correspondientes parametros
+* Estos parametros son: módulo tematico, profesor, sala y horario
+* 
+* @param $cod_seccion el código de la sección que será asignada
+* @param $cod_profesor el código del profesor al que se le asigna la sección
+* @param $cod_modulo el código del módulo tematico al que se le asigna la sección
+* @param $cod_sala el código de la sala a la que se le asigna la sección
+* @param $cod_dia el código del dia al que se le asigna la sección
+* @param $cod_bloque el código del bloque al que se le asigna la sección
+* @return 1 si la operación se realizó con éxito y - 1 si la operación falló
+**/
+
+public function AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$cod_dia,$cod_bloque){
+	return 1;
+}
+
 }
 
 

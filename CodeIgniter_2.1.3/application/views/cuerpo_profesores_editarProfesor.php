@@ -33,6 +33,7 @@
 				var correo2 = document.getElementById("correoEditar2");
 			//	var rut = document.getElementById("moduloProfeEdit").value = modulo;
 				var telefono = document.getElementById("fono");
+				var tipo = document.getElementById("tipoProfesor");
 			//	document.getElementById("moduloProfeEdit").value = modulo;
 			//	document.getElementById("seccionProfeEdit").value = seccion;
 				//var tipo = document.getElementById("tipoProfeEdit").value;	
@@ -52,7 +53,7 @@
 				$(correo).val($.trim(datos.correo));
 				$(correo2).val($.trim(datos.correo2));
 				$(telefono).val(datos.telefono == "" ? '' : $.trim(datos.telefono));
-
+				$(tipo).val($.trim(datos.tipo));
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
@@ -164,7 +165,7 @@
 		<div class="span6">
 			<?php
 				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal', 'onsubmit' => 'EditarProfesor()');
-				echo form_open('Coordinadores/editarProfesor', $attributes);
+				echo form_open('Profesores/editarProfesores', $attributes);
 			?>
 				<div class="control-group">
 					<label class="control-label" for="run_profe">1-.RUT</label>
@@ -214,6 +215,17 @@
 						<input type="text" id="fono" name="telefono_profe" maxlength="10" placeholder="44556677" >
 					</div>
 				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="inputInfo" style="cursor: default">9-.<font color="red">*</font>Tipo:</label>	
+					<div  class="controls">
+						<select id="tipoProfesor" title="Tipo de contrato" name="tipo_profesor">
+							<option value="Planta">Profesor Jornada Completa</option>
+							<option value="Hora">Profesor Por hora</option>
+						</select>
+					</div>
+				</div>
+				
 				<div class="control-group">
 					<label class="control-label" for="resetContrasegna">9-. Resetear contraseña</label>
 					<div class="controls">

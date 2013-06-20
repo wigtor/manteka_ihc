@@ -166,8 +166,8 @@
 		  					<div  class="span6">
 									<div  class="span6">
 									<select id="tipoDeFiltro" title="Tipo de contrato" name="tipo_profesor">
-										<option value="1">Profesor Jornada Completa</option>
-										<option value="2">Profesor Por hora</option>
+										<option value="Planta">Profesor Jornada Completa</option>
+										<option value="Hora">Profesor Por hora</option>
 								</select>
 								</div>
 								</div>
