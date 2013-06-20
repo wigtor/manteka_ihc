@@ -1,15 +1,4 @@
 
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha actualizado el estudiante");
-				}
-				else{
-					alert("Error al actualizar");
-				}
-	}
-</script>
 
 <script type="text/javascript">
 
@@ -139,8 +128,8 @@ function ordenarFiltro(){ //No funcional
 
 
 <script>
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Carrera", "Seccion"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>";
@@ -175,15 +164,21 @@ function ordenarFiltro(){ //No funcional
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(rutDetalle).val(datos.rut);
-				$(nombre1Detalle).val(datos.nombre1);
-				$(nombre2Detalle).val(datos.nombre2);
-				$(apellido1Detalle).val(datos.apellido1);
-				$(apellido2Detalle).val(datos.apellido2);
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.nombre_seccion == null) {
+					datos.nombre_seccion = '';
+				}
+				$(rutDetalle).val($.trim(datos.rut));
+				$(nombre1Detalle).val($.trim(datos.nombre1));
+				$(nombre2Detalle).val($.trim(datos.nombre2));
+				$(apellido1Detalle).val($.trim(datos.apellido1));
+				$(apellido2Detalle).val($.trim(datos.apellido2));
 				//$(carreraDetalle).val(datos.carrera);
 				setCheckedValue(seccionDetalle, datos.seccion);
 				//$(seccionDetalle).val(datos.seccion);
-				$(correoDetalle).val(datos.correo);
+				$(correoDetalle).val($.trim(datos.correo));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -277,129 +272,70 @@ function ordenarFiltro(){ //No funcional
 					1.-Listado alumnos:
 				</div>
 				<div class="span6" >
-					2.-Detalle alumno:
+					<font color="red">* Campos Obligatorios</font><br>
+						<p>Complete los datos del formulario para modificar el alumno</p>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-					<table id="listadoResultados" class="table table-hover">
-						<thead>
-							
-						</thead>
-						<tbody>
+				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
+					<table id="listadoResultados" class="table table-hover" style="width:600px !important; max-width:600px;">
 
-						</tbody>
 					</table>
 				</div>
+
+
 				<!-- Segunda columna -->
 				<div class="span6">
-
-					<font color="red">*Campos Obligatorios</font><br>
-					<div style="margin-bottom:2%">
-						Complete los datos del formulario para modificar el alumno
-					</div>
 					<?php
-						$atributos= array('onsubmit' => 'return editarEstudiante()', 'id' => 'FormEditar', 'name' => 'FormEditar');
+						$atributos= array('onsubmit' => 'return editarEstudiante()', 'id' => 'FormEditar', 'name' => 'FormEditar', 'class' => 'form-horizontal');
 						echo form_open('Alumnos/postEditarEstudiante/', $atributos);
 					?>
-						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">1-.RUT</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" id="rutEditar" name="rutEditar" readonly>
-		  							</div>
+						<div class="control-group">
+							<label class="control-label" for="rutEditar" style="cursor: default">1-. RUT</label>
+							<div class="controls">
+								<input type="text" id="rutEditar" name="rutEditar" class="span12" readonly>
 							</div>
 						</div>
-
-						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombreunoEditar" name="nombreunoEditar" maxlength="19" required>
-		  							</div>
+						<div class="control-group">
+							<label class="control-label" for="nombreunoEditar" style="cursor: default">2-.<font color="red">*</font> Primer nombre</label>
+							<div class="controls">
+								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombreunoEditar" name="nombreunoEditar" maxlength="19" required>
 							</div>
 						</div>
-						
-						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">3-.Segundo nombre</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="nombredosEditar" name="nombredosEditar" maxlength="19" >
-		  							</div>
+						<div class="control-group">
+							<label class="control-label" for="nombredosEditar" style="cursor: default">3-. Segundo nombre</label>
+							<div class="controls">
+								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombredosEditar" name="nombredosEditar" maxlength="19" >
 							</div>
 						</div>
-
-						
-
-						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Paterno</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
-		  							</div>
+						<div class="control-group">
+							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+							<div class="controls">
+								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
 							</div>
 						</div>
-
-						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido Materno</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
-		  							</div>
+						<div class="control-group">
+							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+							<div class="controls">
+								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
 							</div>
 						</div>
-
-						<div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="email" placeholder="nombre_usuario@miemail.com" id="correoEditar" name="correoEditar" maxlength="199" required>
-		  							</div>
+						<div class="control-group">
+							<label class="control-label" for="correoEditar" style="cursor: default">6-.<font color="red">*</font> Correo</label>
+							<div class="controls">
+								<input type="email" placeholder="nombre_usuario@miemail.com" id="correoEditar" class="span12" name="correoEditar" maxlength="199" required>
 							</div>
 						</div>
-						
-						<div class="row-fluid"> <!-- seccion-->
-							<div class="span4">
-								<div class="control-group">
-									<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Asignar sección</label>
-								</div>
-							</div>
-							<div  class="span5" >
-								<div class="controls">
-									<input type="text" onkeyup="ordenarFiltro2()" id="filtroSeccion" placeholder="Filtro de Sección">
-								</div>
+						<div class="control-group">
+							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font> Asignar sección</label>
+							<div class="controls">
+								<input type="text" onkeyup="ordenarFiltro2()" id="filtroSeccion" class="span12" placeholder="Filtro de Sección">
 							</div>
 						</div>
-						
-						<div class="row-fluid">
-							<div class="span5 offset4">
-								<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px; width: 127%" >
-								
-								
+						<div class="control-group">
+							<label class="control-label" for="inputInfo" style="cursor: default"></label>
+							<div class="controls">
+								<div style="border:#cccccc 1px solid;overflow-y:scroll; height:200px; -webkit-border-radius: 4px;" >
 									<table class="table table-hover" id="listadoSecciones">
 										<thead>
 
@@ -410,11 +346,13 @@ function ordenarFiltro(){ //No funcional
 								</div>
 							</div>
 						</div>
+						
+						
 						<div class="row" style= "margin-top:2%">
 							<div class="span3" style="margin-left:37%">
 								<button class ="btn" type="button" onclick="editarEstudiante()" >
-									<div class= "btn_with_icon_solo">Ã</div>
-									&nbsp Modificar
+									<div class= "icon-pencil"></div>
+									&nbsp Guardar
 								</button>
 							</div>
 							<div class="span3">

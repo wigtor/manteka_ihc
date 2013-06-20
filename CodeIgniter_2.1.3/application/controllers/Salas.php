@@ -48,7 +48,7 @@ class Salas extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
-		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
+		//$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
@@ -114,7 +114,6 @@ $tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
-		$cod_sala = $this->input->post("codEditar");
 		$cod_salaF=$this->input->post("cod_sala");
 	    $num_sala = $this->input->post("num_sala");
 		$ubicacion = $this->input->post("ubicacion");
@@ -158,6 +157,48 @@ $tipos_usuarios_permitidos = array();
 		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>$confirmacion, 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala(),'mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Salas", 'cuerpo_salas_eliminar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
+    }
+
+    /**
+    *	
+    *
+    *	@return json Resultado de la busqueda en forma de objeto json
+    */
+    public function postBusquedaSalas(){
+    	if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+
+		$this->load->model('Model_sala');
+		$resultado = $this->Model_sala->getSalasByFilter($textoFiltro, $textoFiltrosAvanzados);
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'salas', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'salas', $this->session->userdata('rut'));
+			}
+		}
+		echo json_encode($resultado);
+
+    }
+
+    public function postDetallesSala(){
+    	//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$num_sala = $this->input->post('num_sala');
+		$this->load->model('Model_sala');
+		$resultado = $this->Model_sala->getDetallesSala($num_sala);
+		echo json_encode($resultado);
     }
 
 	

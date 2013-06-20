@@ -8,18 +8,20 @@
 		<?php
 			echo $banner_portada;	//	Banner del sitio Web
 		?>
-		<div class="row-fluid">
-			<div class="span2">
-				<?php
-					echo $barra_usuario		//	Barra de control de usuario
-				?>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2 pull-right">
+					<?php
+						echo $barra_usuario		//	Barra de control de usuario
+					?>
+				</div>
+				<div class="span8 pull-right">
+					<?php
+						echo $menu_superior;	//	Barra con los menúes
+					?>
+				</div>
+				
 			</div>
-			<div class="span9">
-				<?php
-					echo $menu_superior;	//	Barra con los menúes
-				?>
-			</div>
-
 		</div>
 		<!-- Ahora debe ir el código de la barra lateral y el contenido de la operación -->
 		<div class="container-fluid">

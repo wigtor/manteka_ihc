@@ -46,7 +46,7 @@
 
 ?>
 
-	<div class="navbar">
+	<div class="navbar pull-right">
 		<div class="navbar-inner" style="margin-left:0px;">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >

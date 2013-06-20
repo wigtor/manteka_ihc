@@ -48,17 +48,14 @@ function verDetalle(elemTabla) {
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				if (datos.nombre1 == null) {
-					datos.nombre1 = '';
-				}
 				if (datos.nombre2 == null) {
 					datos.nombre2 = '';
 				}
-				if (datos.apellido1 == null) {
-					datos.apellido1 = '';
+				if (datos.fono == null) {
+					datos.fono = '';
 				}
-				if (datos.apellido2 == null) {
-					datos.apellido2 = '';
+				if (datos.correo2 == null) {
+					datos.correo2 = '';
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
@@ -136,12 +133,7 @@ function verDetalle(elemTabla) {
 	<div class="row-fluid">
 		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 			<table id="listadoResultados" class="table table-hover">
-				<thead>
-					
-				</thead>
-				<tbody>
-
-				</tbody>
+			
 			</table>
 		</div>
 		<div class="span6">

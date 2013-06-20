@@ -347,6 +347,115 @@ class Model_sala extends CI_Model {
 		}	
 		else {return 3;}
     }
+
+
+    /**
+    *
+    *	@return Salas retornadas según el filtro
+    */
+    public function getSalasByFilter($texto, $textoFiltrosAvanzados)
+	{
+		$this->db->select('sala.NUM_SALA');
+		$this->db->select('sala.CAPACIDAD');
+		$this->db->select('implemento.COD_IMPLEMENTO');
+		$this->db->from('sala');
+		$this->db->join('sala_implemento','sala_implemento.cod_sala = sala.cod_sala','left');
+		$this->db->join('implemento','sala_implemento.cod_implemento = implemento.cod_implemento','left');
+		$this->db->order_by('NUM_SALA', 'asc');
+
+		if ($texto != "") {
+			$this->db->like("NUM_SALA", $texto);
+			$this->db->or_like("CAPACIDAD", $texto);
+			$this->db->or_like("NOMBRE_IMPLEMENTO", $texto);
+		}
+
+		else {
+			
+			//Sólo para acordarse
+			define("BUSCAR_POR_NUM", 0);
+			define("BUSCAR_POR_CAPACIDAD", 1);
+			define("BUSCAR_POR_IMP", 2);
+			
+			if($textoFiltrosAvanzados[BUSCAR_POR_NUM] != ''){
+				$this->db->like("NUM_SALA", $textoFiltrosAvanzados[BUSCAR_POR_NUM]);
+			}			
+			if ($textoFiltrosAvanzados[BUSCAR_POR_CAPACIDAD] != '') {
+				$this->db->like("CAPACIDAD", $textoFiltrosAvanzados[BUSCAR_POR_CAPACIDAD]);
+
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_IMP] != '') {
+				$this->db->like("NOMBRE_IMPLEMENTO", $textoFiltrosAvanzados[BUSCAR_POR_IMP]);
+			}
+		}
+		$this->db->group_by("sala.COD_SALA");
+		$query = $this->db->get();
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+
+		foreach ($query->result() as $row) {
+			if (!is_null($row->COD_IMPLEMENTO))
+			{
+				$implementos = $this->getImpFromSala($row->NUM_SALA);
+				unset($row->COD_IMPLEMENTO);									// Ya no se necesita
+				$count = 0;														
+				foreach ($implementos as $implemento) {
+					if($count == 0)
+						$row->implementos = $implemento->nombre_implemento;
+					elseif ($count == 3) {										// Si son más de 3 elementos, sólo llevar 3.
+						$row->implementos .= ", etc.";
+						continue;
+					}
+					else
+						$row->implementos .= ", ".$implemento->nombre_implemento;
+					$count++;
+				}
+			}
+		}
+
+		return $query->result();
+	}
+
+	private function getImpFromSala($num_sala)
+	{
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
+		$this->db->from('sala');
+		$this->db->join('sala_implemento','sala.COD_SALA = sala_implemento.COD_SALA');
+		$this->db->join('implemento','sala_implemento.COD_IMPLEMENTO = implemento.COD_IMPLEMENTO');
+		$this->db->where('NUM_SALA',$num_sala);
+
+		$query = $this->db->get();
+
+		if ($query == FALSE){
+			return array();
+		}
+
+		return $query->result();
+	}
+
+	public function getDetallesSala($num_sala){
+		$this->db->select('sala.NUM_SALA AS num_sala');
+		$this->db->select('sala.CAPACIDAD AS capacidad');
+		$this->db->select('sala.UBICACION AS ubicacion');
+		$this->db->where('sala.NUM_SALA',$num_sala);
+		$this->db->order_by('NUM_SALA', 'asc');
+		$query = $this->db->get('sala');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+
+		$row = array();
+		if ($query->num_rows() > 0){
+			$row = $query->row();
+			$implementos = $this->getImpFromSala($row->num_sala);
+			$row->implementos = $implementos;
+		}
+
+		return $row;
+	}
 	
 }
 

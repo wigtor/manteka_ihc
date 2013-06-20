@@ -1,7 +1,7 @@
 <script>
 
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Profesores/postBusquedaProfesores") ?>";
