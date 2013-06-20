@@ -32,7 +32,7 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut));
+		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadRecibidos($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -122,17 +122,22 @@ class Correo extends MasterManteka {
 			redirect('/Correo/correosEnviados/'.$estado);
 		}	
 	}
+
+
+
+
+
 	/**
 	* Permite eliminar uno o varios correos de la bandeja de correos recibidos.
 	*
 	* A través del método post se obtienen los identificadores de los correos
 	* que se desean eliminar, luego se procede a la eliminación a través del
 	* de la función "EliminarCorreoRecibido" del modelo de correos, y finalmente se
-	* redirecciona a la vista de correos enviados, adjuntando la variable
+	* redirecciona a la vista de correos recibidos, adjuntando la variable
 	* "estado" para señalar si la eliminación se realizó correctamente o no
 	* y mostrar así un mensaje al usuario con el resultado de la operación.
 	* El resultado de esta función es la eliminación de los correos señalados
-	* y un redireccionamiento a la bandeja de correos enviados, indicando el
+	* y un redireccionamiento a la bandeja de correos recibidos, indicando el
 	* resultado de la operación.
 	*
 	* @author: Byron Lanas (BL)
@@ -148,7 +153,7 @@ class Correo extends MasterManteka {
 			$temp=$_POST['seleccion'];
 			$correos = explode(";",$temp);
 			$this->load->model('model_correo');
-			$this->model_correo->EliminarCorreo($correos);
+			$this->model_correo->EliminarRecibidos($correos,$rut);
 			if(isset($estado))
 				unset($estado);
 			$estado="1";
@@ -163,16 +168,16 @@ class Correo extends MasterManteka {
 		}	
 	}
 /**
-	* Permite eliminar uno o varios correos de la bandeja de correos recibidos.
+	* Permite eliminar uno o varios correos de la bandeja de borradores.
 	*
 	* A través del método post se obtienen los identificadores de los correos
 	* que se desean eliminar, luego se procede a la eliminación a través del
-	* de la función "EliminarCorreoRecibido" del modelo de correos, y finalmente se
-	* redirecciona a la vista de correos enviados, adjuntando la variable
+	* de la función "EliminarBorradores" del modelo de correos, y finalmente se
+	* redirecciona a la vista de borradores, adjuntando la variable
 	* "estado" para señalar si la eliminación se realizó correctamente o no
 	* y mostrar así un mensaje al usuario con el resultado de la operación.
 	* El resultado de esta función es la eliminación de los correos señalados
-	* y un redireccionamiento a la bandeja de correos enviados, indicando el
+	* y un redireccionamiento a la bandeja de borradores, indicando el
 	* resultado de la operación.
 	*
 	* @author: Byron Lanas (BL)
@@ -314,10 +319,16 @@ class Correo extends MasterManteka {
 
 		$to = $this->input->post('to');
 		$asunto ="[ManteKA] ".$this->input->post('asunto');
-		$mensaje =$this->input->post('editor');
+
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("YmdHis");
 		$codigoBorrador = $this->input->post('codigoBorrador');
+		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
+
+		$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
+		$link2="<br><a href='/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
+		$mensaje=$this->input->post('editor');
+		$mensajeMail =$mensaje.$link.$link2;
 
 		/* Se intenta el envío del correo propiamente tal.
 		Si el envío es exitoso, el correo, además de ser enviado, se guarda
@@ -336,10 +347,11 @@ class Correo extends MasterManteka {
 			$this->email->from('no-reply@manteka.cl', 'ManteKA');
 			$this->email->to($to);
 			$this->email->subject($asunto);
-			$this->email->message($mensaje);
+			
+			$this->email->message($mensajeMail);
 			if(!$this->email->send())
 				throw new Exception("error en el envio");
-			$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
+			
 			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
 			
 
@@ -386,7 +398,7 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 		$this->load->model('model_correo');
 
-		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
+		$resultado =$this->model_correo->VerCorreosRecibidos($rut,$offset);
 		echo json_encode($resultado);
 	}
 
@@ -496,7 +508,24 @@ class Correo extends MasterManteka {
 		$resultado =$this->model_correo->cargarBorrador($codigo,$rut);
 		echo json_encode($resultado);
 	}	
+/**
+	* carga los datos del correo para ver en su contexto
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postCargarCorreo()
+	{
+		if(!$this->isLogged()){
+			return;
+		}
 
+		$rut = $this->session->userdata('rut');
+		$codigo = $this->input->post('codigo');
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->cargarCorreo($codigo,$rut);
+		echo json_encode($resultado);
+	}
 	/**
 	* Establece como función principal a la función que renderiza la vista
 	* de correos recibidos. 
