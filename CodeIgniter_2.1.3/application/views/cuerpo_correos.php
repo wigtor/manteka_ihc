@@ -8,12 +8,13 @@
 * deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
 * Para ver como se configura esto se debe ver en el evento onclick() en donde están contenidos los correos (bandeja) .
 */
-function DetalleCorreo(hora,fecha,asunto,id)
+function DetalleCorreo(hora,fecha,asunto,id,de)
 {		
 
 	document.getElementById("fecha").innerHTML=fecha;
 	document.getElementById("hora").innerHTML=hora;
 	document.getElementById("asuntoDetalle").innerHTML=asunto;
+	document.getElementById("de").innerHTML=de;
 	document.getElementById("cuerpoMail").innerHTML=document.getElementById("c"+id).value;
 	$('#cuadroRecibidos').css({display:'none'});
 	$('#cuadroDetalleCorreo').css({display:'block'});
@@ -80,7 +81,7 @@ function cambiarCorreos(direccion,offset)
 			var nodoTexto;
 			$(tablaResultados).empty();		
 			listaRecibidos = JSON.parse(respuesta);
-				listaRecibidos.shift();
+
 			
 
 			for (var i = 0; i < listaRecibidos.length; i++) {
@@ -92,7 +93,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("align","center");				
 				check = document.createElement('input');
 				check.type='checkbox';
-				check.setAttribute("name",listaRecibidos[i][0].cod_correo);
+				check.setAttribute("name",listaRecibidos[i][0].codigo);
 				check.checked=false;
 				td.appendChild(check);
 				//td.setAttribute(onclick,);
@@ -101,28 +102,22 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "23%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
-				nodoTexto=document.createTextNode("ManteKA");
+				var de=listaRecibidos[i][1].nombre+" "+listaRecibidos[i][1].apellido1+" "+listaRecibidos[i][1].apellido2;
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+",'"+de+"')");
+				nodoTexto=document.createTextNode(de);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", "m"+i);
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
-				bold =document.createElement('b');
-				nodoTexto = document.createTextNode(listaRecibidos[i][0].asunto);
-				bold.appendChild(nodoTexto);
-				td.appendChild(bold);
-
-				nodoTexto = document.createTextNode(" "+listaRecibidos[i][0].cuerpo_email);
-				td.appendChild(nodoTexto);
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+",'"+de+"')");
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+",'"+de+"')");
 				nodoTexto=document.createTextNode(listaRecibidos[i][0].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
@@ -130,7 +125,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+")");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i][0].hora+"','"+listaRecibidos[i][0].fecha+"','"+listaRecibidos[i][0].asunto+"',"+i+",'"+de+"')");
 				
 				nodoTexto=document.createTextNode(listaRecibidos[i][0].hora);
 				td.appendChild(nodoTexto);
@@ -232,6 +227,48 @@ function eliminarCorreo()
 		}
 	}
 }
+
+
+/**
+ * Carga la información del correo a ver en su contexto.
+ * 
+ * @author Byron Lanas (BL)
+ * @param int codigo Corresponde al código identificador del borrador.
+ **/
+function cargarCorreo(codigo)
+{
+	
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postCargarCorreo") ?>",	
+		data: {codigo:codigo},
+		success: function(respuesta)
+		{
+			detalles = JSON.parse(respuesta);
+			
+			
+			if(detalles==""){
+				alert("El mensaje que intenta ver fue eliminado o no posee los permisos para verlo");
+			}else{
+				var tablaResultados = document.getElementById('tabla');
+				var cuerpo=detalles[0].cuerpo_email;
+				textarea=document.createElement('textarea');
+				textarea.setAttribute("id","cc");
+				textarea.setAttribute("style","display:none");
+				tablaResultados.appendChild(textarea);
+				document.getElementById("cc").value=cuerpo;
+				var de=detalles[1].nombre+" "+detalles[1].apellido1+" "+detalles[1].apellido2;
+				DetalleCorreo(detalles[0].hora,detalles[0].fecha,detalles[0].asunto,'c',de);
+			}
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).hide();
+		}
+	});
+	
+	/* Muestra el "div" que indica que se está cargando... */
+	var iconoCargado = document.getElementById("icono_cargando");
+	$(icono_cargando).show();
+}
 </script>
 
 <?php
@@ -263,6 +300,16 @@ if(isset($msj))
     			 El mensaje fue enviado satisfactoriamente.
     		</div>
 		<?php
+	}else{
+		$codigo=explode(":",$msj);
+		
+		?>
+
+			<script type="text/javascript">
+			cargarCorreo(<?php echo $codigo[1]; ?>)
+			</script>
+		<?php
+
 	}
 	unset($msj);
 }
@@ -371,7 +418,7 @@ if(isset($msj))
 	</br>
 	<pre class="detallesEmail">
 <div style="text-align:right;"><b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
-  De:     <b >ManteKA</b>
+  De:     <b id="de"></b>
   Asunto: <b id="asuntoDetalle"></b>
   <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
 	</pre>

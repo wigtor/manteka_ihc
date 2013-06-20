@@ -264,7 +264,8 @@ function timerBorradores()
 		data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
 		success: function(respuesta)
 		{
-			codigoBorrador = JSON.parse(respuesta);						
+			codigoBorrador = JSON.parse(respuesta);
+			document.getElementById("codigoBorrador").value=codigoBorrador;					
 			document.getElementById("guardado").innerHTML="Se ha guardado un borrador a las: "+t;
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).hide();
@@ -1363,6 +1364,7 @@ if(isset($codigo))
 		
 		<!-- Formulario para el envío de un correo. -->
 		<?php
+		
 		$attributes = array('onSubmit'=>'return validacionSeleccion();', 'id'=>'formEnviar', 'name'=>'formEnviar');
 		echo form_open('Correo/enviarPost',$attributes);
 		?>

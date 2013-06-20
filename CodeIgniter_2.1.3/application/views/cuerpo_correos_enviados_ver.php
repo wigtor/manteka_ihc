@@ -139,10 +139,10 @@ function cambiarCorreos(direccion,offset)
 				{j=0;
 					while(typeof listaEnviados[i][3][j] != 'undefined'){
 						if(destino==""){
-							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor+' &#60'+listaEnviados[i][3][j].correo_profesor+'&#62';					
 							para=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;
 						}else{
-							destino=destino+',<br>'+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							destino=destino+',<br>'+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor+' &#60'+listaEnviados[i][3][j].correo_profesor+'&#62';					
 							para=para+".....";
 						}
 						j++;	
@@ -153,10 +153,10 @@ function cambiarCorreos(direccion,offset)
 				{j=0;
 					while(typeof listaEnviados[i][4][j] != 'undefined'){
 						if(destino==""){
-							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador+' &#60'+listaEnviados[i][4][j].correo_coordinador+'&#62';					
 							para=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;
 						}else{
-							destino=destino+',<br>'+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							destino=destino+',<br>'+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador+' &#60'+listaEnviados[i][4][j].correo_coordinador+'&#62';					
 							para=para+".....";
 						}
 						j++;	
