@@ -1,6 +1,6 @@
 <script type="text/javascript">
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Profesores/postBusquedaProfesores") ?>";
@@ -33,9 +33,20 @@
 				var telefonoDetalle = document.getElementById("telefonoDetalle");
 				var correoDetalle = document.getElementById("correoDetalle");
 				var tipoDetalle = document.getElementById("tipoDetalle");
+				var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.correo2 == null) {
+					datos.correo2 = '';
+				}
+				if (datos.moduloTem == null) {
+					datos.moduloTem = '';
+				}
+
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				$(rutDetalle).html($.trim(datos.rut));
@@ -46,6 +57,7 @@
 				$(telefonoDetalle).html(datos.telefono == "" ? '' : $.trim(datos.telefono));
 				$(correoDetalle).html(datos.correo);
 				$(tipoDetalle).html(datos.tipo);
+				$(moduloTematicoDetalle).html($.trim(datos.moduloTem));
 
 				var rutInputHidden = document.getElementById("rutEliminar");
 				$(rutInputHidden).val(datos.rut);
@@ -166,7 +178,8 @@ Apellido materno: <b id="apellido2Detalle"></b>
 Telefono:         <b id="telefonoDetalle" ></b>
 Correo:           <b id="correoDetalle" ></b>
 Correo secundario:<b id="correoDetalle2" ></b>
-Tipo:             <b id="tipoDetalle"></b></pre>
+Tipo:             <b id="tipoDetalle"></b>
+Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 		<input name="rutEliminar" type="hidden" id="rutEliminar" value="">
 			<div class="control-group">
 				<div class="controls pull-right">
