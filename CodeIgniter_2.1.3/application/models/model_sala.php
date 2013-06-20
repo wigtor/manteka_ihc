@@ -420,6 +420,7 @@ class Model_sala extends CI_Model {
 	private function getImpFromSala($num_sala)
 	{
 		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
 		$this->db->from('sala');
 		$this->db->join('sala_implemento','sala.COD_SALA = sala_implemento.COD_SALA');
 		$this->db->join('implemento','sala_implemento.COD_IMPLEMENTO = implemento.COD_IMPLEMENTO');

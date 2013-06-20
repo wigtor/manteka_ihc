@@ -42,13 +42,13 @@
 				var length = datos.implementos.length,
 					elemento = null, salidaImp = "";
 				if (length == 0)
-					salidaImp = "No posee";
+					salidaImp = "<b>No posee</b>";
 				for(var i=0; i<length; i++){
 					imp = datos.implementos[i];
-					salidaImp += "\t"+imp["nombre_implemento"] + "\n"; 
+					salidaImp += '<b title=\"'+imp["descr_implemento"]+'\">'+imp["nombre_implemento"] + "\n</b>"; 
 				}
 				
-				$(impl).html($.trim(salidaImp));
+				$(impl).html(salidaImp);
 				
 
 				/* Quito el div que indica que se está cargando */
@@ -104,12 +104,12 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="span6" style="padding: 0%; ">
-  		<pre style="margin-top: 0%; margin-left: 0%;">
+		<div class="span6">
+  		<pre style="padding: 2%; cursor:default">
 Número sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicación:      <b id="ubicacion"></b>
-Implementos:    <b id="impDetalle"></b>
+Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div>
 		</pre>
 
 		</div>
