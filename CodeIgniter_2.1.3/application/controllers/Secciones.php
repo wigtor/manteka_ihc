@@ -213,6 +213,60 @@ class Secciones extends MasterManteka {
 	}
 
 	/**
+* Recibe los datos de la vista para hacer la asignación de secciones
+*
+* Se carga el modelo de secciones, donde se encuentra la función que realiza la asignación
+* Se capturan las variables enviadas por POST desde la vista
+* Se le dan los valores a la función y lo que retorna se guarda en confirmación
+* esto se le envía a la vista para dar feedback al usuario
+* Finalmente se carga toda la vista nuevamente en asignarAsecciones
+*
+**/
+
+	public function HacerAsignarAsecciones()
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+		}
+
+		$this->load->model('Model_secciones');
+
+		$cod_seccion = $this->input->post('seccion_seleccionada');
+		$cod_profesor = $this->input->post('profesor_seleccionado');
+		$cod_modulo = $this->input->post('modulo_seleccionado');
+		$cod_sala = $this->input->post('sala_seleccionada');
+		$cod_dia = $this->input->post('dia_seleccionado');
+		$cod_bloque = $this->input->post('bloque_seleccionado');
+
+		$confirmacion = $this->Model_modulo->AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$cod_dia,$cod_bloque);
+
+		/*$datos_vista = 0;		
+		$subMenuLateralAbierto = "asignarAseccion"; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar(), 'mensaje_confirmacion' => $confirmacion);
+        $this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso, $confirmacion);*/
+
+        $datos_plantilla["titulo_msj"] = "Accion Realizada";
+		$datos_plantilla["cuerpo_msj"] = "Se ha realizado la asignacion de la seccion";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Secciones/asignarAsecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Realizar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$datos_plantilla["mensaje_confirmacion"] = $confirmacion;
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+
+
+
+	}
+
+	/**
 	* Se eliminnan la asignaciones de una sección determinada 
 	* primero se realiza la rutina de comprobacion de usuaraio con la sesión iniciado
 	* luego se defienen como vacios los datos de la vista 
