@@ -81,15 +81,11 @@ function cambioTipoFiltro(inputUsado) {
 			for (var i = 0; i < arrayRespuesta.length; i++) {
 				tr = document.createElement('tr');
 				tr.setAttribute('style', "cursor:pointer");
-
+				tr.setAttribute("id", prefijo_tipoDato+arrayRespuesta[i][0]); //Da lo mismo en este caso los id repetidos en los div
+				tr.setAttribute("onClick", "verDetalle(this)");
 				for (var j = 0; j < tiposFiltro.length; j++) {
 					td = document.createElement('td');
-					tr.setAttribute("id", prefijo_tipoDato+arrayObjectRespuesta[i].rut); //Da lo mismo en este caso los id repetidos en los div
-					tr.setAttribute("onClick", "verDetalle(this)");
-					if (arrayRespuesta[i][j] == null) {
-						arrayRespuesta[i][j] = "";
-					}
-					nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
+					nodoTexto = document.createTextNode(arrayRespuesta[i][j] == null ? "" : arrayRespuesta[i][j]);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
 				}
