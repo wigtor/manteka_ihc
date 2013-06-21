@@ -74,7 +74,7 @@ function cambioTipoFiltro(inputUsado) {
 			var arrayRespuesta = new Array();
 			for (var i = 0; i < arrayObjectRespuesta.length; i++) {
 				arrayRespuesta[i] = $.map( arrayObjectRespuesta[i], function( value, key ) {
-					return value;
+					return (value == null ? "": value);
 				});
 			}
 
@@ -97,7 +97,11 @@ function cambioTipoFiltro(inputUsado) {
 				tr.setAttribute("onClick", "verDetalle(this)");
 				for (var j = 0; j < tiposFiltro.length; j++) {
 					td = document.createElement('td');
-					nodoTexto = document.createTextNode(arrayRespuesta[i][j] == null ? "" : arrayRespuesta[i][j]);
+					if(arrayRespuesta[i][j] == null){
+						arrayRespuesta[i][j] = " ";
+
+					}
+					nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
 				}
