@@ -20,7 +20,7 @@ class Model_sesiones extends CI_Model {
 
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('NOMBRE_MODULO AS mod_tem');
-		$this->db->select('COD_SESION AS codigo');
+		$this->db->select('COD_SESION AS id');
 		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT');
 		$this->db->order_by('NOMBRE_SESION');
 		
