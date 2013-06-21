@@ -1,8 +1,52 @@
 <script type="text/javascript">
 	function Cancelar(){
-		var borrar = document.getElementById("Cancelar");
+		var borrar = document.getElementById("formAsignar");
 		borrar.action ="<?php echo site_url("Secciones/asignarAsecciones/");?>"
 		borrar.submit()	
+	}
+
+	function AsignarSeccion(){
+		var seccion = 0;
+		var profesor = 0;
+		var modulo = 0;
+		var sala = 0;
+		var dia = 0;
+		var bloque = 0;
+		for (var i = 0; i < document.getElementsByName('seccion_seleccionada').length; i++) {
+			if(document.getElementById('seccion_'+i).checked==true){
+				seccion = seccion + 1;
+			}
+		}
+		for (var i = 0; i < document.getElementsByName('profesor_seleccionado').length; i++) {
+			if(document.getElementById('profesor_'+i).checked==true){
+				profesor = profesor + 1;
+			}
+		}
+		for (var i = 0; i < document.getElementsByName('modulo_seleccionado').length; i++) {
+			if(document.getElementById('modulo_'+i).checked==true){
+				modulo = modulo + 1;
+			}
+		}
+		for (var i = 0; i < document.getElementsByName('sala_seleccionada').length; i++) {
+			if(document.getElementById('sala_'+i).checked==true){
+				sala = sala + 1;
+			}
+		}
+		if(document.getElementById("dia").value != ""){
+			dia = dia + 1;
+		}
+		if(document.getElementById("bloque").value != ""){
+			bloque = bloque + 1;
+		}
+		if(seccion == 0 || profesor == 0 || modulo == 0 || sala == 0 || dia == 0 || bloque == 0){
+			// Mensaje de validacion de datos: "No ingresó todos los campos obligatorios"
+			document.write('Mensaje de validacion de datos: "No ingresó todos los campos obligatorios"');
+			return false;
+		}else{
+			var agregar = document.getElementById("formAgregar");
+			agregar.action ="<?php echo site_url("Secciones/HacerAsignarAsecciones/")?>";
+			agregar.submit();
+		}
 	}
 
 	function profesDelModulo(elemTabla) {
@@ -26,7 +70,7 @@
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				for (var i = 0; i < datos.length; i++) {
-					var profesores = profesores+'<tr><td style="width:26px;"><input type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+i+'"></td><td>'+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
+					var profesores = profesores+'<tr><td style="width:26px;"><input type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+i+'"> '+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
 				};
 				
 				$(profes).html(profesores);
@@ -49,7 +93,6 @@
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var sala_clickeada = elemTabla;
 		
-
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
@@ -64,8 +107,8 @@
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
-				var dias = '<option value="dia" disabled selected>Día</option>';
-				var bloques = '<option value="bloque" disabled selected>Bloque</option>';
+				var dias = '<option value="" disabled selected>Día</option>';
+				var bloques = '<option value="" disabled selected>Bloque</option>';
 
 
 				if(datos.length!=0){
@@ -99,7 +142,7 @@
 
 <div class="row-fluid">
 	<div class="span10">
-		<form id="Cancelar" method="post">
+		<form id="formAsignar" type="post" method="post" onsubmit="AsignarSeccion();return false">
 		<fieldset>
 			<legend>Asignaciones de Sección</legend>
 			<div class="row-fluid">
@@ -128,7 +171,7 @@
 										while ($contador<count($seccion)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$contador.'"></td><td> '.$seccion[$contador][1].' </td>';
+											echo '<td style="width:26px;"><input type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$contador.'"> '.$seccion[$contador][1].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -187,7 +230,7 @@
 										while ($contador<count($modulos)){
 											
 											echo '<tr>';
-											echo '<td><input onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$contador.'"></td><td> '.$modulos[$contador]['NOMBRE_MODULO'].' </td>';
+											echo '<td><input onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$contador.'"> '.$modulos[$contador]['NOMBRE_MODULO'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -232,7 +275,7 @@
 										while ($contador<count($salas)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$contador.'"></td><td> '.$salas[$contador]['NUM_SALA'].' </td>';
+											echo '<td style="width:26px;"><input onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$contador.'"> '.$salas[$contador]['NUM_SALA'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -243,14 +286,14 @@
 						</div>
 
 						<div class="row-fluid">
-								<select id="dia" class= "span4" style="margin-left: 2%">
+								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%">
 									<option value="" disabled selected>Día</option>
 									<option disabled>Elija una sala para ver sus dias disponibles</option>
 								</select>
 							
 
 						
-								<select id="bloque" class= "span4" style="margin-left: 2%; margin-top:5%" >
+								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%" >
 									<option value="" disabled selected>Bloque</option>
 									<option disabled>Elija una sala para ver sus bloques disponibles</option>
 								</select>
@@ -259,7 +302,7 @@
 
 						<div class="row-fluid" style="margin-top:5%; margin-left: 35%">
 							<div class="span3">
-									<button class="btn"  style="width:102px">
+									<button class="btn" type="submit" style="width:102px">
 										<div class= "btn_with_icon_solo">Ã</div>
 										&nbsp Asignar
 

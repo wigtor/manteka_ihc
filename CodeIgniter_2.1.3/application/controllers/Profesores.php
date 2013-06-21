@@ -177,15 +177,16 @@ class Profesores extends MasterManteka {
         $confirmacion = $this->Model_profesor->InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$correo_profesor1,$telefono_profesor, $tipo_profesor);
 	    
 		if($confirmacion != 1){
-			$datos_plantilla["titulo_msj"] = "Error";
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar insertar el profesor";
+			$datos_plantilla["tipo_msj"] = "alert-error";
 		}
 		else{
 			$datos_plantilla["titulo_msj"] = "Accion Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el profesor correctamente";
+			$datos_plantilla["tipo_msj"] = "alert-success";
 	
 		}
-		$datos_plantilla["tipo_msj"] = "alert-success";
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 		$datos_plantilla["redirecTo"] = "Profesores/agregarProfesores"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		$datos_plantilla["nombre_redirecTo"] = "Agregar profesores"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
@@ -285,100 +286,60 @@ class Profesores extends MasterManteka {
 
 	
 
-	/**
-	* Manda a la vista 'cuerpo_profesores_editarProfesor' los datos necesarios para su funcionamiento
-	*
-	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se cargan los datos para las plantillas de la página.
-	* Se carga el modelo de profesores, se cargan los datos de la vista con la lista 'rs_profesores' que contiene la lista de todos los profesores para que desde ahí en la vista
-	* se escoja un un profesor a editar.
-	* También se envía un mensaje de confirmación con valor 2, que indica que se está cargando por primera ves la vista de editar profesor.
-	* Finalmente se carga la vista con todos los datos.
-	*
-	*/
-	public function editarProfesores() // Carga la vista de modificar profesores
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
 
-		//cargo el modelo de profesores
-		$this->load->model('Model_profesor');
-		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["subVistaLateralAbierta"] = "editarProfesores"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
-		
-	}
-	
-	
-	/**
-	* Edita la información de un profesor del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_editarProfesor'
-	*
-	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se cargan los datos para las plantillas de la página.
-	* Se carga el modelo de profesor, se llama a la función EditarProfesor para editar el profesor
-	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
-	* El resultado de esta operacion se recibe en la variable 'confirmacion'
-	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
-	* Luego se cargan los datos de la vista con la lista 'rs_profesores' para que esté habilitada para nuevas ediciones.
-	* Finalmente se carga la vista con todos los datos.
-	*
-	*/
-    public function EditarProfesor() // Modifica profesor
+    public function EditarProfesores() // Modifica profesor
     {
-    			$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+
+		//SE DEBE COMPROBAR RUT ANTES O HAY UN PROBLEMA DE SEGURIDAD
+
+		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+			$this->load->model('Model_profesor');
+			$run_profe = $this->input->post("run_profe");
+			$nombre_1 = $this->input->post("nombre_1");
+			$nombre_2 = $this->input->post("nombre_2");
+			$apellidoPaterno_profe= $this->input->post("apellidoPaterno_profe");
+			$apellidoMaterno_profe= $this->input->post("apellidoMaterno_profe");
+	        $correo1 = $this->input->post("correo1");
+			$correo2 = $this->input->post("correo2");
+			$telefono_profe = $this->input->post("telefono_profe");
+     
+			$resetearPass = $this->input->post('resetContrasegna');
+			$tipo_profe = $this->input->post("tipo_profesor");
+			
+
+			if($resetearPass){
+				$this->load->model('model_coordinadores');
+				$this->model_coordinadores->modificarPassword($run_profe, $run_profe);
+			}
+			$confirmacion = $this->Model_profesor->EditarProfesor($run_profe,$telefono_profe,$tipo_profe, $nombre_1, $nombre_2, $apellidoPaterno_profe,$apellidoMaterno_profe,$correo1,$correo2);
+			
+			
+			if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El profesor fue editado correctamente.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error mientras se actualizaban los datos del profesor";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirecTo"] = 'Profesores/editarProfesores';
+			$datos_plantilla["nombre_redirecTo"] = "Editar profesores";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);	
 		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		
-		//cargo el modelo de profesores
-		$this->load->model('Model_profesor');
-			
-			$nombre_1 = $this->input->get("nombre_1");
-			$nombre_2 = $this->input->get("nombre_2");
-			$apellidoPaterno_profe= $this->input->get("apellidoPaterno_profe");
-			$apellidoMaterno_profe= $this->input->get("apellidoMaterno_profe");
-	        $run_profe = $this->input->get("run_profe");
-	        $mail_profe = $this->input->get("mail_profe");;
-	        $telefono_profe = $this->input->get("telefono_profe");
-	        $modulo_profe = $this->input->get("modulo_profe");
-	        $seccion_profe = $this->input->get("seccion_profe");
-			$tipo_profe = $this->input->get("tipo_profe");
-			
-		 $confirmacion = $this->Model_profesor->EditarProfesor($run_profe,$telefono_profe,$tipo_profe, $nombre_1, $nombre_2, $apellidoPaterno_profe,$apellidoMaterno_profe);
-		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_editarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', '', true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
+		else {
+			$datos_plantilla = array();
+			$subMenuLateralAbierto = 'editarProfesores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array();
+			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarTodo("Docentes", "cuerpo_profesores_editarProfesor", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+		}
+		//
     }
 
 

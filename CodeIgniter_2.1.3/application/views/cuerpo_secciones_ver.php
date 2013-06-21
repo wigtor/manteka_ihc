@@ -191,7 +191,7 @@ function ordenarFiltro(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"  style="cursor:pointer"  onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
@@ -243,22 +243,9 @@ Bloque:  <b id="modulo"></b>
                                         <th class="span9">Nombres</th>
                                     </tr>
                                 </thead>
-                                    <!-- esta fila es solo de ejemplo-->
+                                    
                                 <tbody>
-                                    	<?php
-										$contador=0;
-										while ($contador<count($rs_estudiantes)){
-											echo '<tr>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][7].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][0].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][3].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][4].' </td>';
-											echo '<td id="rs_estudiantesTd_'.$contador.'" > '.$rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].' </td>';
-											echo '</tr>';
-											$contador = $contador + 1;
-										}
-										?>
-									
+                                    	
                                 </tbody>
                                 
                             </table>
