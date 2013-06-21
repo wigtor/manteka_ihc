@@ -14,16 +14,20 @@
 	</li>
 </ul>
 	<form name="formulario" id="formul" method="post">
-			<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
-				
+			<table   class="table table-hover " style="cursor:pointer;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
+			<thead>	
 			<tr class="info">
-			<td width="5%" ><b></b></td>
-			<td width="27%" ><b>Nombre</b></td>
-			<td width="27%" ><b>Mensaje</b></td>
-			<td width="8%" ><b>Fecha</b></td>
-			<td width="8%" ><b>Hora</b></td>
+			<th width="5%" ></th>
+			<th width="27%" >Nombre</th>
+			<th width="27%" >Mensaje</th>
+			<th width="8%" >Fecha</th>
+			<th width="8%" >Hora</th>
 			</tr>
+		</thead>
 			<tbody id="tabla">
+				<tr>
+				<td colspan="5"> No se encontraron resultados </td>
+			</tr>
 		</tbody>
 		</table>
 </form>
@@ -51,7 +55,7 @@ function logRecibidos(){
 	$('#recibidos').addClass('active');
 	$('#borradores').removeClass('active');
 	$('#enviados').removeClass('active');
-	showLogTipo('recibidos');
+	showLogTipo('recibido');
 }
 </script>
 <script> 
@@ -69,6 +73,11 @@ function logEnviados(){
  </script>
 
  <script>
+ /**
+ * Función que muestra las auditorías en la tabla de logs según el tipo especificado, ya sea correos recibidos, correos enviados o borradores, y en su defecto todos
+ * @author Diego Gómez (DGL)
+ * @param string tipo, tipo de auditoría que se desea mostrar
+ */
  function showLogTipo(tipo){
  	$.ajax({
  		type: "POST",
@@ -78,6 +87,15 @@ function logEnviados(){
  			tablaResultados = document.getElementById('tabla');
  			//alert(respuesta);
  			listaLog = JSON.parse(respuesta);
+ 			if (listaLog.length == 0) {
+ 				$(tablaResultados).empty();
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				$(td).html("No se encontraron resultados");
+				$(td).attr('colspan',5);
+				tr.appendChild(td);
+				tablaResultados.appendChild(tr);
+			}else{
  			$(tablaResultados).empty();
  			
  			var nodoTexto;
@@ -86,24 +104,25 @@ function logEnviados(){
  				td = document.createElement('td');
  				tr.appendChild(td);
  				td = document.createElement('td');
- 				nodoTexto=document.createTextNode(listaLog[i].nombre+" "+listaLog[i].apellido1+" "+listaLog[i].apellido2);
+ 				nodoTexto=document.createTextNode(listaLog[i][1].nombre+" "+listaLog[i][1].apellido1+" "+listaLog[i][1].apellido2);
  				td.appendChild(nodoTexto);
  				tr.appendChild(td);
  				td = document.createElement('td');
- 				nodoTexto = document.createTextNode(listaLog[i].asunto);
+ 				nodoTexto = document.createTextNode(listaLog[i][0].asunto);
  				td.appendChild(nodoTexto);
  				tr.appendChild(td);
  				td = document.createElement('td');
- 				nodoTexto = document.createTextNode(listaLog[i].fecha);
+ 				nodoTexto = document.createTextNode(listaLog[i][0].fecha);
  				td.appendChild(nodoTexto);
  				tr.appendChild(td);
  				td = document.createElement('td');
- 				nodoTexto = document.createTextNode(listaLog[i].hora);
+ 				nodoTexto = document.createTextNode(listaLog[i][0].hora);
  				td.appendChild(nodoTexto);
  				tr.appendChild(td);
  				tablaResultados.appendChild(tr);
 
  			}
+ 		}
  			var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
  		}
@@ -112,4 +131,9 @@ function logEnviados(){
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).show();
  }
+</script>
+<script>
+if($(document).ready){
+	showLogTipo('enviado');
+}
 </script>

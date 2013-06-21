@@ -6,11 +6,7 @@ fieldset
 	margin-top:-10px;
 }
 
-fieldset legend
-{
-	color:#0088CC;
-	font-size:18px;
-}
+
 
 fieldset #lista
 {
@@ -392,17 +388,10 @@ fieldset #lista
 	margin-bottom:30px;
 	color:#666666;
 	cursor:default;
-	font-size:10pt;
+	font-size:11pt;
 	font-weight:bold;
 }
 
-#filtrosSelect label
-{
-	color:#0088CC;
-	cursor:default;
-	font-size:10pt;
-	font-weight:bold;
-}
 
 #filtrosSelect input
 {
@@ -430,16 +419,23 @@ fieldset #lista
 #listaResultadosFiltro
 {
 	border:#CCCCCC 1px solid;
-	overflow-y:auto;
 	-webkit-border-radius:4px;
 	height:298px;
 	background-color:#FCFCFC;
 	width:42%;
 }
+ /*BYRON ESTO ES PARA ESO*/
+tbody {
+    height: 290px;
+    overflow: auto;
+}
+thead > tr, tbody{
+    display:block;
+}
 
 #listaResultadosFiltro checkbox
 {
-	vetical-align:middle;
+	vertical-align:middle;
 }
 
 #listaResultadosFiltro table
@@ -448,11 +444,11 @@ fieldset #lista
 	margin-bottom:0px;
 	border-top:white 0px solid;
 	border-bottom:white 0px solid;
+	height:290px;
 }
 
 #listaResultadosFiltro th
 {
-	color:#FFFFFF;
 	font-size:10pt;
 	font-weight:bold;
 	cursor:pointer;
@@ -538,7 +534,6 @@ fieldset #lista
 
 #listaDestinatarios th
 {
-	color:#FFFFFF;
 	font-size:10pt;
 	font-weight:bold;
 	cursor:pointer;
