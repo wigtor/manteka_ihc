@@ -20,6 +20,7 @@ class Model_sesiones extends CI_Model {
 
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('NOMBRE_MODULO AS mod_tem');
+		$this->db->select('COD_SESION AS codigo');
 		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT');
 		$this->db->order_by('NOMBRE_SESION');
 		
@@ -53,8 +54,8 @@ class Model_sesiones extends CI_Model {
 	public function AgregarSesion($nombre_sesion,$descripcion_sesion)
 	{
 		if($nombre_sesion=="" || $descripcion_sesion =="") return 2;
-		$sql="SELECT * FROM sesion ORDER BY COD_SESION"; 
-		$datos=mysql_query($sql); 
+		$sql="SELECT * FROM sesion ORDER BY COD_SESION";
+		$datos=mysql_query($sql);
 		$contador = 0;
 		$lista=array();
 		$var=0;
@@ -68,19 +69,20 @@ class Model_sesiones extends CI_Model {
 		}	
 		
 		if($var!=1){
-		$data = array(	
-					'NOMBRE_SESION' => $nombre_sesion,
-					'DESCRIPCION_SESION' => $descripcion_sesion
-		);
-		$this->db->insert('sesion',$data); 
-		
-         
-		if($data == true){
-			return 1;
+			$data = array(	
+						'NOMBRE_SESION' => $nombre_sesion,
+						'DESCRIPCION_SESION' => $descripcion_sesion
+			);
+			$datos = $this->db->insert('sesion',$data); 
+			
+	         
+			if($datos){
+				return 1;
+			}
+			else{
+				return -1;
+			}
 		}
-		else{
-			return -1;
-		}}
 		else return 3;
     }
 

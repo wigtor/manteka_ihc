@@ -1,5 +1,5 @@
 <script>
-var tiposFiltro = ["Sesión", "Módulo temático"]; //Debe ser escrito con PHP
+	var tiposFiltro = ["Sesión", "Módulo temático"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", ""];
 	var prefijo_tipoDato = "sesion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
