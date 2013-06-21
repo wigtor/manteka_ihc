@@ -49,7 +49,7 @@ class Sesiones extends MasterManteka {
 		}
 		
 		$datos_vista = 0;		
-		$subMenuLateralAbierto = "agregarSesiones"; 
+		$subMenuLateralAbierto = "ingresarSesiones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;

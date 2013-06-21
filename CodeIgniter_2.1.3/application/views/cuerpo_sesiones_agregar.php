@@ -11,7 +11,6 @@
 				//$(tablaResultados).empty();
 				var existe = jQuery.parseJSON(respuesta);
 				if(existe == -1){
-					//alert("Rut en uso");
 					var mensaje = document.getElementById("mensaje");
 					$(mensaje).empty();
 			
@@ -38,8 +37,8 @@
 
 	function agregarSesion(){
 		var nombre = document.getElementById("nombre_sesion").value;
-		var descripcion = document.getElementById("nombre1_estudiante").value;
-	
+		var descripcion = document.getElementById("descripcion_sesion").value;
+		alert(nombre);
 		if(nombre!="" && descripcion!=""){
 					return true;
 		}
@@ -67,7 +66,7 @@
 			<div  class= "row-fluid">
 				<?php
 					$atributos= array('onsubmit' => 'return agregarSesion()', 'id' => 'formAgregar', 'name' => 'formAgregar', 'class' => 'form-horizontal');
-					echo form_open('Alumnos/agregarSesiones/', $atributos);
+					echo form_open('Sesiones/agregarSesiones/', $atributos);
 				?>
 				<div class= "span6">
 					<div class="control-group">
@@ -79,7 +78,7 @@
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripcion</label>
 						<div class="controls">
-							<textarea class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
+							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
 						</div>
 					</div>
 				</div> 
