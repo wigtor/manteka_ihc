@@ -373,7 +373,7 @@ public function EliminarAsignacion($cod_seccion)
 
 public function verModulosPorAsignar(){
 
-	$columnas = 'modulo_tematico.NOMBRE_MODULO';
+	$columnas = 'modulo_tematico.NOMBRE_MODULO, modulo_tematico.COD_MODULO_TEM';
 	$desde = '`modulo_tematico`';
 	$query = $this->db->select($columnas);
 	$query = $this->db->get($desde);
@@ -386,7 +386,7 @@ public function verModulosPorAsignar(){
 
 public function verProfeSegunModulo($modulo){
 
-	$columnas = 'profesor.NOMBRE1_PROFESOR, profesor.APELLIDO1_PROFESOR';
+	$columnas = 'profesor.NOMBRE1_PROFESOR, profesor.APELLIDO1_PROFESOR, profesor.RUT_USUARIO2';
 	$condiciones  = '(modulo_tematico.COD_MODULO_TEM = equipo_profesor.COD_MODULO_TEM) AND (modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO)AND(profe_equi_lider.COD_EQUIPO = equipo_profesor.COD_EQUIPO) AND (profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2) AND (modulo_tematico.NOMBRE_MODULO = \''.$modulo.'\')';
 	$desde = 'profesor, equipo_profesor, modulo_tematico, profe_equi_lider';
 
@@ -400,7 +400,7 @@ public function verProfeSegunModulo($modulo){
 
 public function verSalasPorAsignar(){
 
-	$columnas = '`sala.NUM_SALA`';
+	$columnas = '`sala.NUM_SALA`, `sala.COD_SALA`';
 	$desde = '`sala`';
 	$query = $this->db->select($columnas);
 	$query = $this->db->get($desde);
@@ -434,13 +434,58 @@ public function verHorarioSegunSala($sala){
 * @param $cod_profesor el código del profesor al que se le asigna la sección
 * @param $cod_modulo el código del módulo tematico al que se le asigna la sección
 * @param $cod_sala el código de la sala a la que se le asigna la sección
-* @param $cod_dia el código del dia al que se le asigna la sección
-* @param $cod_bloque el código del bloque al que se le asigna la sección
+* @param $nombre_dia el nombre del dia al que se le asigna la sección
+* @param $numero_modulo el número del bloque al que se le asigna la sección
 * @return 1 si la operación se realizó con éxito y - 1 si la operación falló
 **/
 
-public function AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$cod_dia,$cod_bloque){
-	return 1;
+public function AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo){
+	/*Se busca el código del horario correspondiente al dia y al bloque*/
+	if(strcmp($nombre_dia,"Miercoles")!=0){
+		$dia_abreviado = substr($nombre_dia,0,1);
+	}else{
+		$dia_abreviado = 'W';
+	}
+	$columnas = 'horario.COD_HORARIO';
+	$condiciones = '(dia.COD_ABREVIACION_DIA = \''.$dia_abreviado.'\') AND (modulo.NUMERO_MODULO = \''.$numero_modulo.'\') AND (dia.COD_DIA = horario.COD_DIA) AND (modulo.COD_MODULO = horario.COD_MODULO)';
+	$desde = 'dia, modulo, horario';
+	$this->db->select($columnas);
+	$this->db->where($condiciones);
+	$query = $this->db->get($desde);
+	$cod_horario = $query->result_array()[0]['COD_HORARIO'];
+
+	/*Se asocian la sala con el horario, para luego ser asociados a la sección*/
+	$sala_horario = array(
+			'COD_SALA' => $cod_sala,
+			'COD_HORARIO' => $cod_horario
+		);
+	$this->db->insert('sala_horario',$sala_horario);
+
+	/*Se asocia el profesor a la sección*/
+	$profe_seccion = array(
+			'COD_SECCION' => $cod_seccion,
+			'RUT_USUARIO2' => $cod_profesor
+		);
+	$this->db->insert('profe_seccion',$profe_seccion);
+
+	/*Se asocia el módulo, el horario y la sala a la sección*/
+	$this->db->select('ID_HORARIO_SALA');
+	$condiciones = '(sala_horario.COD_SALA = \''.$cod_sala.'\') AND (sala_horario.COD_HORARIO = \''.$cod_horario.'\')';
+	$this->db->where($condiciones);
+	$query2 = $this->db->get('sala_horario');
+	$id_horario_sala = $query2->result_array()[0]['ID_HORARIO_SALA'];
+	$seccion_mod_tem = array(
+			'COD_SECCION' => $cod_seccion,
+			'COD_MODULO_TEM' => $cod_modulo,
+			'ID_HORARIO_SALA' => $id_horario_sala
+		);
+	$this->db->insert('seccion_mod_tem',$seccion_mod_tem);
+
+	if($sala_horario == true && $profe_seccion == true && $seccion_mod_tem == true){
+		return 1;
+	}else{
+		return -1;
+	}
 }
 
 }

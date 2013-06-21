@@ -39,11 +39,10 @@
 			bloque = bloque + 1;
 		}
 		if(seccion == 0 || profesor == 0 || modulo == 0 || sala == 0 || dia == 0 || bloque == 0){
-			// Mensaje de validacion de datos: "No ingresó todos los campos obligatorios"
 			document.write('Mensaje de validacion de datos: "No ingresó todos los campos obligatorios"');
 			return false;
 		}else{
-			var agregar = document.getElementById("formAgregar");
+			var agregar = document.getElementById("formAsignar");
 			agregar.action ="<?php echo site_url("Secciones/HacerAsignarAsecciones/")?>";
 			agregar.submit();
 		}
@@ -69,9 +68,13 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				for (var i = 0; i < datos.length; i++) {
-					var profesores = profesores+'<tr><td style="width:26px;"><input type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+i+'"> '+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
-				};
+				if(datos.length!=0){
+					for (var i = 0; i < datos.length; i++) {
+						var profesores = profesores+'<tr><td style="width:26px;"><input type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+datos[i].RUT_USUARIO2+'"> '+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
+					}
+				}else{
+					var profesores = "";
+				}
 				
 				$(profes).html(profesores);
 				
@@ -171,7 +174,7 @@
 										while ($contador<count($seccion)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$contador.'"> '.$seccion[$contador][1].'</td>';
+											echo '<td style="width:26px;"><input type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$seccion[$contador][0].'"> '.$seccion[$contador][1].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -230,7 +233,7 @@
 										while ($contador<count($modulos)){
 											
 											echo '<tr>';
-											echo '<td><input onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$contador.'"> '.$modulos[$contador]['NOMBRE_MODULO'].'</td>';
+											echo '<td><input onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$modulos[$contador]['COD_MODULO_TEM'].'"> '.$modulos[$contador]['NOMBRE_MODULO'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -275,7 +278,7 @@
 										while ($contador<count($salas)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$contador.'"> '.$salas[$contador]['NUM_SALA'].'</td>';
+											echo '<td style="width:26px;"><input onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$salas[$contador]['COD_SALA'].'"> '.$salas[$contador]['NUM_SALA'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
