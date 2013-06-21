@@ -156,6 +156,9 @@ class Correo extends MasterManteka {
 		{	
 			
 			$correos = explode(";",$temp);
+			$this->load->model('model_log');
+			$date = date("YmdHis");
+			$this->model_log->LogRecibidos($correos,$rut,$date);
 			$this->load->model('model_correo');
 			$this->model_correo->EliminarRecibidos($correos,$rut);
 			
