@@ -3,7 +3,7 @@
 
 	function MostrarReporte(NombredelReporte) {
 			var myModal2 = document.getElementById("myModal2");
-			$(myModal2).attr('src','/<?php echo config_item("dir_alias") ?>/report_view.php?nombreReporte='+NombredelReporte);
+			$(myModal2).attr('src','/<?php echo config_item("dir_alias") ?>/report_view.php?nombreReporte='+NombredelReporte+"&mode=I");
 			$('#buttonDescarga').attr('name',NombredelReporte);
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).hide();	
@@ -12,7 +12,7 @@
 	function DescargarArchivo() {
 			var nombreReporte = $('#buttonDescarga').attr('name');
 			var myModal2 = document.getElementById("myModal2");
-			window.location = '/<?php echo config_item("dir_alias") ?>/report_descarga.php?nombreReporte='+nombreReporte;
+			window.location = '/<?php echo config_item("dir_alias") ?>/report_view.php?nombreReporte='+nombreReporte+"&mode=D";
 	}
 
 	$(document).ready(function(){

@@ -8,6 +8,8 @@ include ('PhpJasperLibrary/PHPJasperXML.inc.php');
 //database connection details
 if(isset($_GET["nombreReporte"]))
 	$nombreReporte = $_GET["nombreReporte"];
+if(!isset($_GET["mode"]))
+	exit();
 $server="127.0.0.1";
 $db="manteka_db";
 $user="root";
@@ -29,7 +31,7 @@ $PHPJasperXML = new PHPJasperXML();
 $PHPJasperXML->xml_dismantle($xml);
  
 $PHPJasperXML->transferDBtoArray($server,$user,$pass,$db);
-$PHPJasperXML->outpage("I");    //page output method I:standard output  D:Download file
+$PHPJasperXML->outpage($_GET["mode"]);    //page output method I:standard output  D:Download file
 
  
  
