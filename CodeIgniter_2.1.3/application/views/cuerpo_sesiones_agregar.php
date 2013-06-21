@@ -22,7 +22,7 @@
 	<div class= "span10">	
 		<fieldset>
 			<legend>Agregar Sesión</legend>
-		<form id="formAgregar" type="post" method="post">
+		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Sesiones/agregarSesiones/")?>">
 				<div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>
