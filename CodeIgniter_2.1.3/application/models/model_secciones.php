@@ -14,25 +14,35 @@ class Model_secciones extends CI_Model{
 	*/
 	public function VerTodosLosEstudiantes($cod_seccion)
 	{
+		
 		$lista=array();
-		if($cod_seccion!=''){
-		$sql="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
-		$datos=mysql_query($sql); 
-		$contador = 0;	
-		if (false != $datos) {
-			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-				$lista[$contador][0] = $row['COD_CARRERA'];
-				$lista[$contador][1] = $row['RUT_ESTUDIANTE'];
-				$lista[$contador][2] = $row['APELLIDO1_ESTUDIANTE'];
-				$lista[$contador][3] = $row['APELLIDO2_ESTUDIANTE'];
-				$lista[$contador][4] = $row['NOMBRE1_ESTUDIANTE'];
-				$lista[$contador][5] = $row['NOMBRE2_ESTUDIANTE'];
-				//$lista[$contador][6] = $row['COD_SECCION'];
-				//$lista[$contador][7] = $row['COD_CARRERA'];
+		if ($cod_seccion!=''){
+			$this->db->select('estudiante.COD_CARRERA AS cod');
+			$this->db->select('estudiante.RUT_ESTUDIANTE AS rut');
+			$this->db->select('estudiante.APELLIDO1_ESTUDIANTE AS apellido1');
+			$this->db->select('estudiante.APELLIDO2_ESTUDIANTE AS apellido2');
+			$this->db->select('estudiante.NOMBRE1_ESTUDIANTE AS nombre1');
+			$this->db->select('estudiante.NOMBRE2_ESTUDIANTE AS nombre2');
+			$this->db->from('estudiante');
+			$this->db->where('estudiante.COD_SECCION', $cod_seccion);
+			$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
+			$query =$this->db->get();
+			$datos=$query->result();
 
-				$contador = $contador + 1;
+			$contador=0;
+			if($datos != false){
+				foreach ($datos as $row) {
+					$lista[$contador]=array();
+					$lista[$contador][0]=$row->cod;
+					$lista[$contador][1]=$row->rut;
+					$lista[$contador][2]=$row->apellido1;
+					$lista[$contador][3]=$row->apellido2;
+					$lista[$contador][4]=$row->nombre1;
+					$lista[$contador][5]=$row->nombre2;
+					$contador=$contador+1;
+				}
 			}
-		}}
+		}
 		return $lista;
 	}
 	public function verPorSeccion($cod_seccion){	
@@ -64,16 +74,25 @@ class Model_secciones extends CI_Model{
 	public function VerTodasSecciones()
 	{
 		
-		$sql="SELECT * FROM seccion ORDER BY NOMBRE_SECCION"; 
-		$datos=mysql_query($sql); 
-		$contador = 0;
+
+		$this->db->select('seccion.COD_SECCION AS cod');
+		$this->db->select('seccion.NOMBRE_SECCION AS nombre');
+		$this->db->from('seccion');
+		$this->db->order_by("NOMBRE_SECCION", "asc");
+		$query =$this->db->get();
+		$datos=$query->result();
+
 		$lista=array();
-		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['COD_SECCION'];
-			$lista[$contador][1] = $row['NOMBRE_SECCION'];
-			$contador = $contador + 1;
-		}}
+
+		$contador=0;
+			if($datos != false){
+				foreach ($datos as $row) {
+					$lista[$contador]=array();
+					$lista[$contador][0]=$row->cod;
+					$lista[$contador][1]=$row->nombre;
+					$contador=$contador+1;
+				}
+			}
 		return $lista;
 	}
 	
@@ -181,14 +200,24 @@ class Model_secciones extends CI_Model{
 		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
 		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
-		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
-		$datos=mysql_query($sql); 
+		
+
+		$this->db->select('seccion.COD_SECCION AS cod');
+		$this->db->select('seccion.NOMBRE_SECCION AS nombre');
+		$this->db->from('seccion');
+		$this->db->order_by("COD_SECCION", "asc");
+		$query =$this->db->get();
+		$datos=$query->result(); 
+
+
+
 		$contador = 0;
 		$lista=array();
 		$var=0;
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			if( $row['NOMBRE_SECCION']==$nombre){
+		
+		foreach ($datos as $row) {
+			if( $row->nombre==$nombre){
 			$var=1;
 			}
 			$contador = $contador + 1;
@@ -225,15 +254,22 @@ class Model_secciones extends CI_Model{
 		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
 		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
-		$sql="SELECT * FROM seccion ORDER BY COD_SECCION"; 
-		$datos=mysql_query($sql); 
+
+		$this->db->select('seccion.COD_SECCION AS cod');
+		$this->db->select('seccion.NOMBRE_SECCION AS nombre');
+		$this->db->from('seccion');
+		$this->db->order_by("COD_SECCION", "asc");
+		$query =$this->db->get();
+		$datos=$query->result();
+
 		$contador = 0;
 		$var=0;
 		$lista=array();
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			if($row['COD_SECCION']!=$cod_seccion){
-				if( $row['NOMBRE_SECCION']==$nombre){
+		
+		foreach ($datos as $row) {
+			if($row->cod!=$cod_seccion){
+				if( $row->nombre==$nombre){
 				$var=1;
 				}
 			}

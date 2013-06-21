@@ -38,11 +38,7 @@ class Secciones extends MasterManteka {
 	*/
 	public function verSecciones()
 	{
-		//Se comprueba que quien hace esta petición este logueado
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
+		
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "verSecciones"; 
@@ -92,11 +88,7 @@ class Secciones extends MasterManteka {
 	*/
 	public function agregarSecciones()
 	{	
-		//Se comprueba que quien hace esta petición este logueado
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
+		
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "agregarSecciones"; 
@@ -212,11 +204,7 @@ class Secciones extends MasterManteka {
 	*/
     public function borrarSecciones()
     {
-		//Se comprueba que quien hace esta petición este logueado
-    	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
+		
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "borrarSecciones"; 
@@ -355,10 +343,7 @@ class Secciones extends MasterManteka {
 
 	public function borrarAsignacion()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
+		
 		$datos_vista = 0;		
 		$subMenuLateralAbierto = "borrarAsignar"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente

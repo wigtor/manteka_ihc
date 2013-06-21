@@ -129,7 +129,7 @@ function ordenarFiltro(){
 								while ($contador<count($seccion)){
 									
 									echo '<tr>';
-									echo '<td  id="rs_seccionTd_'.$contador.'"   onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+									echo '<td  id="rs_seccionTd_'.$contador.'"onclick="DetalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
 									echo '</tr>';
 																
 									$contador = $contador + 1;
