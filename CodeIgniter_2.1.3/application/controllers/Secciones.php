@@ -315,28 +315,26 @@ class Secciones extends MasterManteka {
 		$cod_profesor = $this->input->post('profesor_seleccionado');
 		$cod_modulo = $this->input->post('modulo_seleccionado');
 		$cod_sala = $this->input->post('sala_seleccionada');
-		$cod_dia = $this->input->post('dia_seleccionado');
-		$cod_bloque = $this->input->post('bloque_seleccionado');
+		$nombre_dia = $this->input->post('dia_seleccionado');
+		$numero_modulo = $this->input->post('bloque_seleccionado');
 
-		$confirmacion = $this->Model_modulo->AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$cod_dia,$cod_bloque);
+		$confirmacion = $this->Model_secciones->AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo);
 
-		/*$datos_vista = 0;		
-		$subMenuLateralAbierto = "asignarAseccion"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar(), 'mensaje_confirmacion' => $confirmacion);
-        $this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso, $confirmacion);*/
+        if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha asignado la sección con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la asignacion de secciones";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
 
-        $datos_plantilla["titulo_msj"] = "Accion Realizada";
-		$datos_plantilla["cuerpo_msj"] = "Se ha realizado la asignacion de la seccion";
-		$datos_plantilla["tipo_msj"] = "alert-success";
 		$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 		$datos_plantilla["redirecTo"] = "Secciones/asignarAsecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "Realizar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$datos_plantilla["mensaje_confirmacion"] = $confirmacion;
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
