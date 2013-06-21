@@ -41,7 +41,7 @@ class Sesiones extends MasterManteka {
 
 		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
-	public function agregarSesiones()
+	public function ingresarSesiones()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -53,14 +53,47 @@ class Sesiones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
+	}
+
+	public function agregarSesiones()
+	{
 		$this->load->model('Model_sesiones');
 		$nombre_sesion = $this->input->post("nombre_sesion");
 		$descripcion_sesion = $this->input->post("descripcion_sesion");
 		$confirmacion = $this->Model_sesiones->AgregarSesion($nombre_sesion,$descripcion_sesion);
-        $datos_vista = array('mensaje_confirmacion'=>$confirmacion);
-		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
+		// mostramos el mensaje de operacion realizada
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el alumno con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Sesiones/ingresarSesiones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Ingresar Sesion"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+	}
+
+    public function nombreExisteC() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_sesiones');
+		$nombre = $this->input->post('nombre_existe');
+
+		$resultado = $this->Model_estudiante->nombreExisteM($nombre);
+		echo json_encode($resultado);
 	}
 
 	
