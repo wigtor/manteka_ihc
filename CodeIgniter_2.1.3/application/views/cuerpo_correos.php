@@ -340,12 +340,13 @@ function cargarCorreo(codigo)
 		success: function(respuesta)
 		{
 			detalles = JSON.parse(respuesta);
-			
+			var tablaResultados = document.getElementById('listadoResultados');
+			$(tablaResultados).find('tbody').remove();
 			
 			if(detalles==""){
 				alert("El mensaje que intenta ver fue eliminado o no posee los permisos para verlo");
 			}else{
-				var tablaResultados = document.getElementById('tabla');
+				//var tablaResultados = document.getElementById('tabla');
 				var cuerpo=detalles[0].cuerpo_email;
 				textarea=document.createElement('textarea');
 				textarea.setAttribute("id","cc");
