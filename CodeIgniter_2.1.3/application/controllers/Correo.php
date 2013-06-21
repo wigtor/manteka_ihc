@@ -107,6 +107,9 @@ class Correo extends MasterManteka {
 		{
 			$temp=$_POST['seleccion'];
 			$correos = explode(";",$temp);
+			$this->load->model('model_log');
+			$date = date("YmdHis");
+			$this->model_log->LogEnviados($correos,$rut,$date);
 			$this->load->model('model_correo');
 			$this->model_correo->EliminarCorreo($correos);
 			if(isset($estado))
@@ -194,6 +197,9 @@ class Correo extends MasterManteka {
 		{
 			$temp=$_POST['seleccion'];
 			$correos = explode(";",$temp);
+			$this->load->model('model_log');
+			$date = date("YmdHis");
+			echo $this->model_log->LogBorradores($correos,$rut,$date);
 			$this->load->model('model_correo');
 			echo $this->model_correo->EliminarBorradores($correos);
 			if(isset($estado))
@@ -573,6 +579,12 @@ class Correo extends MasterManteka {
 		$this->correosRecibidos();
 	}
 
+/**
+* Función que retorna los destinatarios según el tipo seleccionado
+* @author: Diego Gómez 
+* @return arreglo con los atributos de los destinatarios seleccionados
+*/
+
 	public function postBusquedaTipoDestinatario() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -607,6 +619,11 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+* Función que retorna todas las carreras del sistema
+* @author: Diego Gómez
+* @return: arreglo con las carreras
+*/
 	public function postCarreras(){
 		if(!$this->isLogged()){
 			return;
@@ -616,6 +633,11 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+* Función que retorna todas las secciones del sistema
+* @author: Diego Gómez
+* @return: arreglo con las secciones
+*/
 	public function postSecciones(){
 		if(!$this->isLogged()){
 			return;
@@ -625,6 +647,11 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+* Función que retorna todos los bloques horarios del sistema
+* @author: Diego Gómez
+* @return: arreglo con los bloques horarios
+*/
 	public function postHorarios(){
 		if(!$this->isLogged()){
 			return;
@@ -633,6 +660,12 @@ class Correo extends MasterManteka {
 		$resultado = $this->Model_filtro->getAllHorarios();
 		echo json_encode($resultado);
 	}
+
+/**
+* Función que retorna todos los módulos temáticos del sistema del sistema
+* @author: Diego Gómez
+* @return: arreglo con los módulos temáticos
+*/
 
 	public function postModulosTematicos(){
 		if(!$this->isLogged()){
@@ -643,6 +676,11 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+* Función que retorna los atributos de los alumnos según los filtros seleccionados
+* @author: Diego Gómez
+* @return: arreglo con los atributos de los alumnos seleccionados
+*/
 	public function postAlumnosByFiltro(){
 		if(!$this->isLogged()){
 			return;
@@ -657,6 +695,11 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+* Función que retorna los atributos de los profesores según los filtros seleccionados
+* @author: Diego Gómez
+* @return: arreglo con los atributos de los profesores seleccionados
+*/
 	public function postProfesoresByFiltro(){
 		if(!$this->isLogged()){
 			return;
@@ -669,6 +712,11 @@ class Correo extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+* Función que retorna los atributos de los ayudantes según los filtros seleccionados
+* @author: Diego Gómez
+* @return: arreglo con los atributos de los ayudantes seleccionados
+*/
 	public function postAyudantesByFiltro(){
 		if(!$this->isLogged()){
 			return;
@@ -680,6 +728,46 @@ class Correo extends MasterManteka {
 		$this->load->model('Model_filtro');
 		$resultado = $this->Model_filtro->getAyudantesByFiltro($profesor,$seccion,$modulo_tematico,$bloque);
 		echo json_encode($resultado);
+	}
+
+	/**
+	* Función retorna los atributos de las auditorias según el tipo seleccionado
+	* ya se correo recibido, correo enviado o borrador
+	* @author Diego Gómez (DGL)
+	* @return arreglo con los atributos de las auditorias seleccionadas
+	*/
+
+	public function postLogEliminados(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$tipo = $this->input->post('tipo');
+		$this->load->model('model_log');
+		$resultado = $this->model_log->getLogEliminados($tipo);
+		echo json_encode($resultado);
+	}
+
+/**
+* Función que carga la vista de los Logs 
+* @author Diego Gómez (DGL)
+*/
+
+	public function logEliminados($msj=null)
+	{
+
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut));
+
+		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
+		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+		*/
+		$subMenuLateralAbierto = 'logEliminados'; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Correos", "cuerpo_log_eliminados", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
 }
