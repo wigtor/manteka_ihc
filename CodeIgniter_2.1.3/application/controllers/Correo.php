@@ -148,12 +148,14 @@ class Correo extends MasterManteka {
 		$rut = $this->session->userdata('rut');
 
 		/* Sólo se eliminan correos si la variable post que contiene los correos a eliminar está definida*/
-		if(isset($_POST['seleccion']))
-		{
-			$temp=$_POST['seleccion'];
+		$temp = $this->input->post("seleccion");
+		if($temp != '')
+		{	
+			
 			$correos = explode(";",$temp);
 			$this->load->model('model_correo');
 			$this->model_correo->EliminarRecibidos($correos,$rut);
+			
 			if(isset($estado))
 				unset($estado);
 			$estado="1";
@@ -396,9 +398,25 @@ class Correo extends MasterManteka {
 		}
 		$offset = $this->input->post('offset');
 		$rut = $this->session->userdata('rut');
+		$tipoUsuario = $this->session->userdata('id_tipo_usuario');
+		$textoFiltro = $this->input->post('textoBusqueda');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+
 		$this->load->model('model_correo');
 
-		$resultado =$this->model_correo->VerCorreosRecibidos($rut,$offset);
+		$resultado =$this->model_correo->VerCorreosRecibidos($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
+
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'correos', $this->session->userdata('rut'));
+			
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'correos', $this->session->userdata('rut'));
+			}
+			
+		}
 		echo json_encode($resultado);
 	}
 

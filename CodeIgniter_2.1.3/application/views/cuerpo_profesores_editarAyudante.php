@@ -190,7 +190,7 @@
 							</div>
 						</div>
 
-						<!-- Modal de confirmación -->
+						<!-- Modal de no ha seleccionado a nadie -->
 						<div id="modalSeleccioneAlgo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

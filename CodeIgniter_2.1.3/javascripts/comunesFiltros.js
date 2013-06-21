@@ -12,6 +12,7 @@ function escribirHeadTable() {
 	//SE CREA LA CABECERA DE LA TABLA
 	for (var i = 0; i < tiposFiltro.length; i++) {
 			th = document.createElement('th');
+			if (tiposFiltro[i] != '') {
 				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
 				
 
@@ -24,8 +25,19 @@ function escribirHeadTable() {
 					span.setAttribute('class', "icon-filter clickover");
 					//span.setAttribute('style', "vertical-align:middle;");
 				nodoBtnFiltroAvanzado.appendChild(span);
+
 			th.appendChild(nodoTexto);
 			th.appendChild(nodoBtnFiltroAvanzado);
+			}
+			else { //Esto es para el caso de los checkbox que marcan toda la tabla
+				nodoCheckeable = document.createElement('input');
+				nodoCheckeable.setAttribute('data-previous', "false,true,false");
+				nodoCheckeable.setAttribute('type', "checkbox");
+				nodoCheckeable.setAttribute('id', "selectorTodos");
+				nodoCheckeable.setAttribute('title', "Seleccionar todos");
+				th.appendChild(nodoCheckeable);
+			}
+			
 
 			var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
 			
