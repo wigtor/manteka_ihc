@@ -2030,6 +2030,9 @@ table {
   vertical-align: bottom;
   background-color: lightblue;
 }
+.table tbody tr {
+  cursor: pointer;
+}
 
 .table caption + thead tr:first-child th,
 .table caption + thead tr:first-child td,
