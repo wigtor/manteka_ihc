@@ -19,9 +19,7 @@ function DetalleCorreo(hora,fecha,asunto,id,de)
 	$('#cuadroRecibidos').css({display:'none'});
 	$('#cuadroDetalleCorreo').css({display:'block'});
 }
-</script>
 
-<script type="text/javascript">
 /** 
 * Esta función se llama al clickear el botón que se encuentra en el Detalle del Correo, para poder mostrar nuevamente la 
 * bandeja de correos enviados y ocultar el detalle del correo que se estaba mostrando.
@@ -32,10 +30,7 @@ function volverCorreosRecibidos()
 	$('#cuadroDetalleCorreo').css({display:'none'});
 	$('#cuadroRecibidos').css({display:'block'});
 }
-</script>
 
-
-<script type="text/javascript">
 /** 
 * Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
 * También se realiza una búsqueda
@@ -187,11 +182,7 @@ function strip(html)
    tmp.innerHTML = html;
    return tmp.textContent||tmp.innerText;
 }
-</script>
 
-
-
-<script type="text/javascript">
 /** 
 * Esta función permite eliminar el correo que se encuentre marcado con su checkbox, también es posible la eliminación en 
 * grupo (varios checkbox marcados).

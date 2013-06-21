@@ -37,12 +37,102 @@ class model_correo extends CI_Model
 	*
 	* @author: Claudio Rojas (CR) y Diego Garc?a (DGM). 
 	*/
-	public function VerCorreosUser($variable,$offset)
+	public function VerCorreosUser($rut,$offset, $tipoUsuario, $texto, $textoFiltrosAvanzados)
 	{
-		try
-		{
+		try {
+			$resultado=array();
+			$de=array();
+			$correos=array();
+			$correo=array();
+
+			//Constantes para facilitar saber que tipo de búsqueda se utiliza (El indice 0 no se usa en las búsquedas de correo, porque se usa para el checkbox)
+			define("BUSCAR_POR_REMITENTE", 1); //De
+			define("BUSCAR_POR_MENSAJE", 2); //Mensaje
+			define("BUSCAR_POR_FECHA", 3);
+			define("BUSCAR_POR_HORA", 4);
+
+			//Mi query
+			$this->db->select('carta.COD_CORREO AS codigo');
+			$this->db->select('ASUNTO AS asunto');
+			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
+			$this->db->select('FECHA AS fecha');
+			$this->db->select('HORA AS hora');
+			$this->db->select('carta.RUT_USUARIO AS de');
+			$this->db->from('carta');
+			
+			$this->db->where('RUT_USUARIO',$rut);
+			$this->db->where('COD_BORRADOR IS NULL');
+			$this->db->where('ENVIADO_CARTA', 1);
+			$this->db->order_by("COD2_CORREO", "desc");
+
+
+			/*
+			if ($tipoUsuario == TIPO_USR_COORDINADOR) { //Este es un entero: 1 o 2
+				$this->db->select('NOMBRE1_COORDINADOR AS nombre');
+				$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+				$this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+				$this->db->join('coordinador', 'coordinador.RUT_USUARIO3 = carta.RUT_USUARIO');
+				if (trim($texto) != '') {
+					$this->db->where("(ASUNTO LIKE '%".$texto."%' OR CUERPO_EMAIL LIKE '%".$texto."%' OR NOMBRE1_COORDINADOR LIKE '%".$texto."%'OR APELLIDO1_COORDINADOR LIKE '%".$texto."%' OR APELLIDO2_COORDINADOR LIKE '%".$texto."%' OR FECHA LIKE '%".$texto."%' OR HORA LIKE '%".$texto."%')");
+					
+				}
+				else { //Búsqueda avanzada por campos separados
+					if ($textoFiltrosAvanzados[BUSCAR_POR_REMITENTE] != '') {
+						$this->db->where("(NOMBRE1_COORDINADOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'OR APELLIDO1_COORDINADOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%' OR APELLIDO2_COORDINADOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')");
+					}
+					if ($textoFiltrosAvanzados[BUSCAR_POR_MENSAJE] != '') {
+						$this->db->where("(ASUNTO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' OR CUERPO_EMAIL LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')");
+					}
+					if ($textoFiltrosAvanzados[BUSCAR_POR_FECHA] != '') {
+						$this->db->where("(FECHA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%')");
+					}
+					if ($textoFiltrosAvanzados[BUSCAR_POR_HORA] != '') {
+						$this->db->where("(HORA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_HORA]."%')");
+					}
+				}
+			}
+			if ($tipoUsuario == TIPO_USR_PROFESOR) {//Este es un entero: 1 o 2
+				$this->db->select('NOMBRE1_PROFESOR AS nombre');
+				$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+				$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+				$this->db->join('profesor', 'profesor.RUT_USUARIO2 = carta.RUT_USUARIO');
+				if (trim($texto) != '') {
+					$this->db->where("(ASUNTO LIKE '%".$texto."%' OR CUERPO_EMAIL LIKE '%".$texto."%' OR NOMBRE1_PROFESOR LIKE '%".$texto."%'OR APELLIDO1_PROFESOR LIKE '%".$texto."%' OR APELLIDO2_PROFESOR LIKE '%".$texto."%')");
+					
+				}
+				else { //Busqueda avanzada por campos separados
+					if ($textoFiltrosAvanzados[BUSCAR_POR_REMITENTE] != '') {
+						$this->db->where("(APELLIDO1_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'OR APELLIDO1_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%' OR APELLIDO2_PROFESOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')");
+					}
+					if ($textoFiltrosAvanzados[BUSCAR_POR_MENSAJE] != '') {
+						$this->db->where("(ASUNTO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' OR CUERPO_EMAIL LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')");
+					}
+					if ($textoFiltrosAvanzados[BUSCAR_POR_FECHA] != '') {
+						$this->db->where("(FECHA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%')");
+					}
+					if ($textoFiltrosAvanzados[BUSCAR_POR_HORA] != '') {
+						$this->db->where("(HORA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_HORA]."%')");
+					}
+
+				}
+			}
+			*/
+			$this->db->limit(5, $offset);
+			$query = $this->db->get();
+			//echo $this->db->last_query().'   ';return;
+			return $query->result();
+
+
+
+
+
+
+
+
+
+
 			/* Se obtienen todos los correos enviados por un usuario. */
-			$sql="SELECT * FROM carta  WHERE RUT_USUARIO='$variable' AND COD_BORRADOR IS NULL AND ENVIADO_CARTA = 1 ORDER BY COD2_CORREO DESC LIMIT $offset,5";
+			$sql="SELECT * FROM carta  WHERE RUT_USUARIO='$rut' AND COD_BORRADOR IS NULL AND ENVIADO_CARTA = 1 ORDER BY COD2_CORREO DESC LIMIT $offset,5";
 			$datos=mysql_query($sql);
 			$listaCompleta=array();
 			while($row=mysql_fetch_array($datos))
@@ -381,92 +471,6 @@ class model_correo extends CI_Model
 			$query = $this->db->get();
 			//echo $this->db->last_query().'   ';return;
 			return $query->result();
-			
-
-			/*
-			$resultado = array();
-			array_push($resultado, $query->result());
-			return $resultado;
-			*/
-
-			/*
-			$this->db->select('carta.COD_CORREO AS codigo');
-			$this->db->select('ASUNTO AS asunto');
-			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
-			$this->db->select('FECHA AS fecha');
-			$this->db->select('HORA AS hora');
-			$this->db->select('carta.RUT_USUARIO AS de');
-			$this->db->from('carta');
-			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
-			$this->db->where('cartar_user.RUT_USUARIO',$rut);
-			$this->db->where('COD_BORRADOR IS NULL');
-			$this->db->where('RECIBIDO_CARTA_USER',1);
-			$this->db->order_by("COD2_CORREO", "desc");
-			$this->db->limit( 5,$offset);
-			$query = $this->db->get();
-			
-			if ($query == FALSE) {
-				return array();
-			}
-
-			$correos=$query->result();
-
-			foreach ($correos as $row)
-			{
-				$this->db->select('NOMBRE1_COORDINADOR AS nombre');
-				$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
-				$this->db->select('APELLIDO2_COORDINADOR AS apellido2');
-				$this->db->where('RUT_USUARIO3',$row->de);
-				$query1 = $this->db->get('coordinador');
-
-				$this->db->select('NOMBRE1_PROFESOR AS nombre');
-				$this->db->select('APELLIDO1_PROFESOR AS apellido1');
-				$this->db->select('APELLIDO2_PROFESOR AS apellido2');
-				$this->db->where('RUT_USUARIO2',$row->de);
-				$query2 = $this->db->get('profesor');
-
-				if($query1->num_rows() > 0)
-				{
-					
-					foreach ($query1->result() as $row1)
-					{
-						$de=array();
-						$correos=array();
-						$correo=array();
-					   	array_push($de, $row1);
-					   	array_push($correo,$row);
-					   	
-					   	$correos=  array_merge($correo,$de);
-					   	array_push($resultado, $correos);
-					   
-					}
-				}
-
-				
-
-				else if($query2->num_rows() > 0)
-				{
-					
-					foreach ($query2->result() as $row2)
-					{
-						$de=array();
-						$correos=array();
-						$correo=array();
-					   	array_push($de, $row2);
-					   	array_push($correo,$row);
-					   	
-					   	$correos=  array_merge($correo,$de);
-					   	array_push($resultado, $correos);
-					   
-					}	
-				}
-				
-				
-			}
-			//$resultado=  array_merge($correo,$de);
-			return $resultado;
-			*/
-
 		}
 		catch(Exception $e)
 		{
