@@ -40,79 +40,7 @@ if(isset($mensaje_confirmacion))
 }
 ?>
 
-<script>
 
-	var tiposFiltro = ["Numero", "Capacidad", "Implementos"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
-	var prefijo_tipoDato = "sala_";
-	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Salas/postBusquedaSalas") ?>";
-	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/salas") ?>";
-
-	function verDetalle(elemTabla) {
-
-		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
-		var idElem = elemTabla.id;
-		sala_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
-		//var rut_clickeado = elemTabla;
-
-
-		/* Defino el ajax que hará la petición al servidor */
-		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Salas/postDetallesSala") ?>", /* Se setea la url del controlador que responderá */
-			data: { num_sala: sala_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var numSala = document.getElementById("num_sala");
-				var capacidad = document.getElementById("capacidad");
-				var ubicacion = document.getElementById("ubicacion");
-				var impl = document.getElementById("impDetalle");
-				
-				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
-				var datos = jQuery.parseJSON(respuesta);
-
-				if (datos.capacidad == null) {
-					datos.capacidad = '';
-				}
-
-				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(numSala).val(datos.num_sala);
-				$(capacidad).val($.trim(datos.capacidad));
-				$(ubicacion).val($.trim(datos.ubicacion));
-
-				/*	Setear los Implementos	*/
-				var length = datos.implementos.length,
-					elemento = null, salidaImp = "";
-				if (length == 0)
-					salidaImp = "No posee";
-				for(var i=0; i<length; i++){
-					imp = datos.implementos[i];
-					salidaImp += '<b title=\"'+imp["descr_implemento"]+'\">'+imp["nombre_implemento"] + "\n</b>"; 
-				}
-				
-				$(impl).html(salidaImp);
-				
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-
-			}
-		});
-		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
-	}
-	
-	//Se cargan por ajax
-	$(document).ready(function() {
-		escribirHeadTable();
-		cambioTipoFiltro(undefined);
-	});
-
-</script>
 
 <script type="text/javascript">
 	function EditarSala(){
@@ -123,10 +51,46 @@ if(isset($mensaje_confirmacion))
 			return;
 		}
 		else{
+			
 			$('#modalConfirmacion').modal();
 		}
 	}
+</script>
 
+<script type="text/javascript">
+function ordenarFiltro(){
+	var filtroLista = document.getElementById("filtroLista").value;
+
+	
+	var arreglo = new Array();
+	var sala;
+	var ocultar;
+	var cont;
+	
+	<?php
+	$contadorE = 0;
+	while($contadorE<count($rs_sala)){
+		echo 'arreglo['.$contadorE.']=new Array();';
+		echo 'arreglo['.$contadorE.'][1] = "'.$rs_sala[$contadorE][1].'";';
+		$contadorE = $contadorE + 1;
+	}
+	?>
+	
+	
+	for(cont=0;cont < arreglo.length;cont++){
+		ocultar=document.getElementById(cont);
+		if(0 > arreglo[cont][1].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
+			ocultar.style.display='none';
+		}
+		else
+		{
+			ocultar.style.display='';
+		}
+    }
+}
+</script>
+
+<script type="text/javascript">
 	function datosEditarSala(cod_sala,num_sala,ubicacion,capacidad){
 			document.getElementById("cod_sala").value = '';
 			document.getElementById("codEditar").value = cod_sala;
@@ -137,147 +101,268 @@ if(isset($mensaje_confirmacion))
 	}
 </script>
 
-<fieldset>
-	<legend>Editar Sala</legend>
-	<div class="row-fluid">
-		<div class="span6">
-			<font color="red">*Campos Obligatorios</font>
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span6">
-			<div class="controls controls-row">
-				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
-					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
-				</div>
-				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
-			</div>
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span6" >
-			1.-Listado salas
-		</div>
-		<div class="span6" >
-			2.-Complete los datos del formulario para modificar la sala:
-		</div>
-	</div>
 
-	<div class="row-fluid">
-		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-			<table id="listadoResultados" class="table table-hover">
-				<thead>
+<div class="row_fluid">
+	<div class="span10">
+		<fieldset>
+		<legend>Editar Sala</legend>
+		 <form id="formDetalle" type="post" method="post" >
+			
+			<div>
+				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="span6"><!--    INICIO LISTA SALA -->
+						<div class="row-fluid">
+							<div class="span6">
+							1.-Seleccione la sala a modificar
+							</div>
+						</div>
 					
-				</thead>
-				<tbody>
-
-				</tbody>
-			</table>
-		</div>
-
-		<div class="span6">	
-			<?php
-				$attributes = array('id' => 'formDetalle', 'class' => 'form-horizontal', 'onsubmit' => 'EditarSala()');
-				echo form_open('Salas/editarSalas', $attributes);
-			?>
-			<input type="hidden" id="cod_sala" name="cod_sala" maxlength="3" min="1" readonly>
-			<div class="control-group">
-					<label class="control-label" for="cod_sala">1-.Número sala</label>
-					<div class="controls">
-						<input type="text" id="num_sala" name="num_sala" maxlength="3" title="Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" required>
-					</div>
-			</div>
-			<div class="control-group">
-					<label class="control-label" for="cod_sala">2-.Capacidad</label>
-					<div class="controls">
-						<input type="text" id="capacidad" name="capacidad" maxlength="3" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
-					</div>
-			</div>
-			<div class="control-group">
-					<label class="control-label" for="cod_sala">3-.Ubicación</label>
-					<div class="controls">
-						<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" id="ubicacion" name="ubicacion"  maxlength="100" required="required" style="resize: none"></textarea>
-					</div>
-			</div>
-
-			<div class="control-group">
-				<br>
-				<h5>Si desea modificar los implementos de la sala, elija entre los siguientes:</h5>
-				(Los implementos marcados son los que tiene actualmente la sala)
-				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:105px; -webkit-border-radius: 4px" >
-					<table class="table table-hover">
-						<thead>
-
-						</thead>
-						<tbody>									
-				
-						<?php
-						$contador=0;
 						
-						while ($contador<count($implemento)){
-							echo '<tr>';
-							echo '<td title="Descripción: '.$implemento[$contador][3]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][1].'" value="'.$implemento[$contador][1].'" name="cod_implemento[]" type="checkbox" checked>'.' '.$implemento[$contador][2].'</td>';
-							echo '</tr>';
-							$contador = $contador + 1;
-						}
-						$contador=0;
+						<div class="row-fluid">	
+							<div class="span11">
+								<div class="controls controls-row">
+			    					<div class="input-append span7">
+										<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
+										<button class="btn" onClick="ordenarFiltro()" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+									</div>
+			
+								</div>	
+							</div>
+						</div>
 						
-						while ($contador<count($implementoA)){
-							echo '<tr>';
-							echo '<td title="Descripción: '.$implementoA[$contador][3]. '" id="implementoATd_'.$contador.'" ><input id="'.$implementoA[$contador][1].'" value="'.$implementoA[$contador][1].'" name="cod_implementoA[]" type="checkbox">'.' '.$implementoA[$contador][2].'</td>';
-							echo '</tr>';
-							$contador = $contador + 1;
-						}
-						?>
-
+						
+						<!--AQUÍ VA LA LISTA-->
+						
+						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table class="table table-hover">
+						<tbody>
+						<input id="codEditar" type="text" name="codEditar" style="display:none">
+							<?php
+							$contador=0;
+							$comilla= "'";
+					
+							while ($contador<count($rs_sala)){
+								
+								echo '<tr>';
+								echo	'<td  id="'.$contador.'" onclick="datosEditarSala('.$comilla.$rs_sala[$contador][0].$comilla.','.$comilla. $rs_sala[$contador][1].$comilla.','.$comilla. $rs_sala[$contador][2].$comilla.','.$comilla. $rs_sala[$contador][3].$comilla.')" 
+											  style="text-align:left;">
+											  '. $rs_sala[$contador][1].' </td>';
+								echo '</tr>';
+															
+								$contador = $contador + 1;
+							}
+							
+							?>
+													
 						</tbody>
+						</table>
+						</div>
+						<!--AQUÍ VA LA LISTA-->
+
+					</div> <!--    FIN DE LISTA SALAS -->
+					<div class="span6">
+						<div style="margin-bottom:2%">
+							2.- Complete los datos del formulario para modificar la sala
+							
+						</div>
+
+						<div class="row-fluid">
+							
+		  					<div class="span5">	
+		  							<div class="controls">
+									<?php
+									
+									if(count($sala)==1){
+									
+		    							echo '<tr>';
+										echo '<td><input id="cod_sala" name="cod_sala" value="'.$sala[0][0].'" maxlength="3" min="1" type="hidden" readonly>'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="cod_sala" name="cod_sala" value="" maxlength="0" min="0" type="hidden" readonly>'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span4">
+								<div class="control-group">
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Número sala: </label>
+		  						</div>
+		  					</div>
+		  					<div class="span5">	
+		  							<div class="controls">
+									<?php
+									
+									if(count($sala)==1){
+									
+		    							echo '<tr>';
+										echo '<td><input id="num_sala" name="num_sala" value="'.$sala[0][1].'" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text" required>'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="num_sala" name="num_sala" value=" " maxlength="0" type="text" >'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
+							</div>
+						</div>
+						
+						<div class="row-fluid">
+							<div class="span4">
+								<div class="control-group">
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Capacidad: </label>
+		  						</div>
+		  					</div>
+		  					<div class="span5">	
+		  						<div class="controls">
+									<?php
+									if(count($sala)==1){
+		    							echo '<tr>';
+										echo '<td><input title="Ingrese la capacidad de la sala" id="capacidad" name="capacidad" value="'.$sala[0][3].'" max="999" min="1" type="number" required>'.'</td>';
+										echo '</tr>';						
+										}
+									else{
+									    echo '<tr>';
+										echo '<td><input id="capacidad" name="capacidad" value=" " max="0" type="number">'.'</td>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
+							</div>
+						</div>
+
+						
+
+						<div class="row-fluid">
+							<div class="span4">
+								<div class="control-group">
+
+		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Ubicación:</label>
+		  						</div>
+		  					</div>
+							
+							<div class="span5">	
+		  						<div class="controls">
+									<?php
+															
+									if(count($sala)==1){
+		    							echo '<tr>';
+										echo '<td><textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" id="ubicacion" name="ubicacion"  maxlength="100" required="required">'.$sala[0][2].'</textarea>'.'</td>';
+										echo '</tr>';							
+										}
+									else{
+									    echo '<tr>';
+										echo '<textarea id="ubicacion" name="ubicacion"  maxlength="0"> </textarea>';
+										echo '</tr>';	
+									}
+		  							?>
+									</div>
+							</div>
+							
+
+						</div>
+						
+
+					<div class="row-fluid" style="width: 386px;">		
+					<br>
+					<h5>Si desea modificar los implementos de la sala, elija entre los siguientes:</h5>
+					(los implementos marcados son los que tiene actualmente la sala)
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:105px; -webkit-border-radius: 4px" >
+					
+					
+					<table class="table table-hover">
+										<thead>
+
+										</thead>
+										<tbody>									
+								
+										<?php
+										$contador=0;
+										
+										while ($contador<count($implemento)){
+											echo '<tr>';
+											echo '<td title="Descripción: '.$implemento[$contador][3]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][1].'" value="'.$implemento[$contador][1].'" name="cod_implemento[]" type="checkbox" checked>'.' '.$implemento[$contador][2].'</td>';
+											echo '</tr>';
+											$contador = $contador + 1;
+										}
+										$contador=0;
+										
+										while ($contador<count($implementoA)){
+											echo '<tr>';
+											echo '<td title="Descripción: '.$implementoA[$contador][3]. '" id="implementoATd_'.$contador.'" ><input id="'.$implementoA[$contador][1].'" value="'.$implementoA[$contador][1].'" name="cod_implementoA[]" type="checkbox">'.' '.$implementoA[$contador][2].'</td>';
+											echo '</tr>';
+											$contador = $contador + 1;
+										}
+										?>
+								
+								
+										</tbody>
 					</table>
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="controls ">
-					<button type="button" class="btn" onclick="EditarSala()">
-						<i class= "icon-pencil"></i>
-						&nbsp; Guardar
-					</button>
-					<button class="btn" type="button" onclick="resetearSala()" >
-						<div class="btn_with_icon_solo">Â</div>
-						&nbsp; Cancelar
-					</button>&nbsp;
-
-					<!-- Modal de confirmación -->
-					<div id="modalConfirmacion" class="modal hide fade">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>Confirmación</h3>
-						</div>
-						<div class="modal-body">
-							<p>Se van a guardar los cambios de la sala ¿Está seguro?</p>
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-							<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-						</div>
+						
 					</div>
 
-					<!-- Modal de aviso que no ha seleccionado algo -->
-					<div id="modalSeleccioneAlgo" class="modal hide fade">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>No ha seleccionado una sala</h3>
+					</div>
+		
+
+		
+						<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
+		
+							<button class ="btn" type="button" onclick="EditarSala()"  >
+								<div class="btn_with_icon_solo">Ã</div>
+								&nbsp Modificar
+							</button>
+							<button class ="btn" type="reset" onclick="datosEditarSala('','','','')"  >
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancelar
+							</button>
 						</div>
-						<div class="modal-body">
-							<p>Por favor seleccione una sala y vuelva a intentarlo</p>
+						<div id="modalConfirmacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Confirmación</h3>
+							</div>
+							<div class="modal-body">
+								<p>Se va a editar la sala seleccionada ¿Está seguro?</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="submit"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+								
+							</div>
 						</div>
-						<div class="modal-footer">
-							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+
+						<!-- Modal de seleccionaAlgo -->
+						<div id="modalSeleccioneAlgo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado ninguna sala</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione una sala y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
 						</div>
+
+					
+					<!-- AQUI TERMINA  -->
+
 					</div>
 				</div>
 			</div>
-			<?php echo form_close(""); ?>
-		</div>
+			</form>
+		</fieldset>
 	</div>
-</fieldset>
+</div>
