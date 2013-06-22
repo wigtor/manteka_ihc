@@ -110,13 +110,13 @@ class Secciones extends MasterManteka {
 		$confirmacion = $this->Model_secciones->AgregarSeccion($nombre_seccion1,$nombre_seccion2);
         
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado la sección con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso en base de datos";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en el ingreso en base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
@@ -172,13 +172,13 @@ class Secciones extends MasterManteka {
         
         // se muestra mensaje de operación realizada
     	if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha modificado la sección con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la edición en base de datos";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la edición en base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
@@ -228,13 +228,13 @@ class Secciones extends MasterManteka {
 		$confirmacion = $this->Model_secciones->EliminarSeccion($cod_seccion);
         
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sección con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación en base de datos";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la eliminación en base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
@@ -309,13 +309,13 @@ class Secciones extends MasterManteka {
 		$confirmacion = $this->Model_secciones->AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo);
 
         if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha asignado la sección con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la asignacion de secciones";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la asignación de secciones";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 
@@ -397,14 +397,22 @@ class Secciones extends MasterManteka {
 		$cod_seccion = $this->input->post('cod_seccion');
 
 		$confirmacion = $this->Model_secciones->EliminarAsignacion($cod_seccion);
+
+		if ($confirmacion==1){
+			// mostramos el mensaje de operacion realizada
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la asignación de la sección";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error con la eliminación en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
 		
-		// mostramos el mensaje de operacion realizada
-		$datos_plantilla["titulo_msj"] = "Accion Realizada";
-		$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la asignacion de la seccion";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 		$datos_plantilla["redirecTo"] = "Secciones/borrarAsignacion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "Eliminar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
