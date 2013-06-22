@@ -219,7 +219,7 @@ class Model_ayudante extends CI_Model {
 	*/
     public function getAyudantesByFilter($texto, $textoFiltrosAvanzados)
    	{
-		$this->db->select('ayudante.RUT_AYUDANTE AS rut');
+		$this->db->select('ayudante.RUT_AYUDANTE AS id');
 		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
 		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
 		$this->db->select('NOMBRE_SECCION AS seccion');

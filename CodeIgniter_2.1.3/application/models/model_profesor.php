@@ -231,7 +231,7 @@ class Model_profesor extends CI_Model {
 
 	public function getProfesoresByFilter($texto, $textoFiltrosAvanzados)
 	{
-		$this->db->select('profesor.RUT_USUARIO2 AS rut');
+		$this->db->select('profesor.RUT_USUARIO2 AS id');
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1');
 		$this->db->select('NOMBRE_MODULO AS moduloTem');

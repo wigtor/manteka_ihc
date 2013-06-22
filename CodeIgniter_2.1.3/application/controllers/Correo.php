@@ -59,7 +59,7 @@ class Correo extends MasterManteka {
 	*/
 	public function correosEnviados($msj=null)
 	{
-		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
+		
 		$rut = $this->session->userdata('rut');
 
 			
@@ -501,9 +501,25 @@ class Correo extends MasterManteka {
 		}
 		$offset = $this->input->post('offset');
 		$rut = $this->session->userdata('rut');
+		$tipoUsuario = $this->session->userdata('id_tipo_usuario');
+		$textoFiltro = $this->input->post('textoBusqueda');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+
 		$this->load->model('model_correo');
 
-		$resultado =$this->model_correo->VerCorreosUser($rut,$offset);
+		$resultado =$this->model_correo->VerCorreosUser($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
+
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'correos', $this->session->userdata('rut'));
+			
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'correos', $this->session->userdata('rut'));
+			}
+			
+		}
 		echo json_encode($resultado);
 	}
 	
