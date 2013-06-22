@@ -40,10 +40,21 @@ function DetalleSeccion(cod_seccion){
 						dia.innerHTML = "sin asignación";
 						
 					}
+					/*Para el caso de que se presione el botón Cancelar*/
+					if (cod_seccion==""){
+						seccion.innerHTML = "";
+						modulo.innerHTML = "";
+						dia.innerHTML = "";
+
+					}
 
 					/* Quito el div que indica que se está cargando */
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
+
+					$('tbody tr').on('click', function(event) {
+					$(this).addClass('highlight').siblings().removeClass('highlight');
+			});
 
 				}
 		}
@@ -55,20 +66,15 @@ function DetalleSeccion(cod_seccion){
 		data: { seccion: cod_seccion}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 			var tablaResultados = document.getElementById("listadoResultados");
+			//var indicador = document.getElementById("ind");
 			$(tablaResultados).find('tbody').remove();
 			var arrayRespuesta = jQuery.parseJSON(respuesta);
 
 			
+			
 			//CARGO EL CUERPO DE LA TABLA
 			tbody = document.createElement('tbody');
-			if (arrayRespuesta.length == 0) {
-				tr = document.createElement('tr');
-				td = document.createElement('td');
-				$(td).html("No se encontraron resultados");
-				$(td).attr('colspan',tiposFiltro.length);
-				tr.appendChild(td);
-				tbody.appendChild(tr);
-			}
+			
 
 			for (var i = 0; i < arrayRespuesta.length; i++) {
 				tr = document.createElement('tr');
@@ -103,12 +109,16 @@ function DetalleSeccion(cod_seccion){
 			$('tbody tr').on('click', function(event) {
 				$(this).addClass('highlight').siblings().removeClass('highlight');
 			});
+
+			
 		}
 		});
 		
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
+
+
 
 	}
 			
@@ -118,18 +128,42 @@ function DetalleSeccion(cod_seccion){
 <script type="text/javascript">
 	function eliminarSeccion(){
 		var cod=document.getElementById("codSeccion").value;
+		
 
-		if(cod==""){
-			$('#modalSeleccioneAlgo').modal();
-			return;
-		}
-		else{
+		$.ajax({
+		type: "POST", /* Indico que es una petición POST al servidor */
+		url: "<?php echo site_url("Secciones/AlumnosSeccion") ?>", // Se setea la url del controlador que responderá */
+		data: { seccion: cod}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+			var arrayRespuesta = jQuery.parseJSON(respuesta);
+
+			if(cod==""){
+				$('#modalSeleccioneAlgo').modal();
+				return;
+			}
+			else{
+				if (arrayRespuesta!= ""){
+					$('#modalNoEliminacion').modal();
+					
+				}
+				else{
+					$('#modalConfirmacion').modal();
+				}
+				}
+
+
 			
-			$('#modalConfirmacion').modal();
+
+			
 		}
+		});
+
+		
 		
 	}
 </script>
+
+
 
 <script type="text/javascript">
 function ordenarFiltro(){
@@ -166,7 +200,7 @@ function ordenarFiltro(){
     <div class= "span11">
         <fieldset> 
 		<legend>Borrar Sección</legend>
-		<form id="formDetalle" type="post" method="post">
+		<!--<form id="formDetalle" type="post" method="post">-->
            
             
             <div class="row-fluid">
@@ -223,18 +257,22 @@ function ordenarFiltro(){
 
                 </div>
 				
-                <div class="span6">
+                <div class="span7">
 				
                     <div class="row-fluid">
                         <div class="span5">
                             2.-Información de la sección
                         </div>
                     </div>
-				<form id="formBorrar" type="post" method="post" onsubmit="eliminarSeccion()">
-				<!--<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">-->
+				<!--<form id="formBorrar" type="post" method="post" onsubmit="eliminarSeccion()">-->
+				<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
+				<?php
+				$atributos= array('onsubmit' => 'return eliminarAsignacion()', 'id' => 'formBorrar');
+		 		echo form_open('Secciones/eliminarSecciones/', $atributos);
+				?>
                     <div class="row-fluid">
 	<pre style="margin-top: 0%; margin-left: 0%;">
-Seccion: <b id="nombre_seccion"></b>
+Sección: <b id="nombre_seccion"></b>
 Día:     <b id="dia"></b>
 Bloque:  <b id="modulo"></b></pre>
 <input name="cod_seccion" type="hidden" id="codSeccion" value="">
@@ -260,7 +298,7 @@ Bloque:  <b id="modulo"></b></pre>
                                         <th class="span9">Nombres</th>
                                     </tr>
                                 </thead>
-                                    <!-- esta fila es solo de ejemplo-->
+                                   
                                 <tbody>
                                     	
 									
@@ -311,13 +349,28 @@ Bloque:  <b id="modulo"></b></pre>
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>
+
+						<!-- Modal de noEliminacion -->
+						<div id="modalNoEliminacion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No se pudo eliminar</h3>
+							</div>
+							<div class="modal-body">
+								<p>La sección tiene alumnos asignados. Por favor seleccione una sección y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
      
                 </div>
-				</form>
+				<!--</form>-->
 			
 				
             </div>
-         </form>
+         <!--</form>-->
+         <?php echo form_close(''); ?>
         </fieldset>
     </div>
 </div>
