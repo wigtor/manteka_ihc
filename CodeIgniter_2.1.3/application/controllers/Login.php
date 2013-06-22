@@ -572,7 +572,6 @@ class Login extends MasterManteka {
     	}
     	else{
     		redirect('Otros');
-    		return;
 
     	}
         $provider = $this -> oauth2 -> provider($provider, $keys_array);
@@ -667,7 +666,9 @@ class Login extends MasterManteka {
             else
             {
               $datos_plantilla["titulo_msj"] = "Error";
-              $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA";
+              $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA.\n\n";
+              $datos_plantilla["cuerpo_msj"] += "* Si presiona Volver, se deslogueará de sus cuentas de Google.\n";
+              $datos_plantilla["cuerpo_msj"] += "** Si no desea desloguearse de su cuenta de Google, presione ir a Inicio de sesión.";
               $datos_plantilla["tipo_msj"] = "alert-error";
 
               /* Finalmente muestro la vista que indica que esto fue realizado correctamente */
@@ -677,12 +678,9 @@ class Login extends MasterManteka {
               
               $datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
               $datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-              //$datos_plantilla["redirecFrom"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-              //$datos_plantilla["nombre_redirecFrom"] = "Volver"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+              $datos_plantilla["redirecFromFullUrl"] = "Login/signInGoogle/google"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
               $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
               $this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
-
-
             }
         // En caso de que haya habido un error en la operación
         } catch (OAuth2_Exception $e) {

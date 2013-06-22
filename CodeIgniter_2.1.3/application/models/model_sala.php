@@ -111,16 +111,19 @@ class Model_sala extends CI_Model {
 	*/
 	public function VerTodosLosImplementos()
 	{
-		$this->db->select('COD_IMPLEMENTO AS codigo_implemento');
-		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
-		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
-		$query = $this->db->get('implemento');
+		$sql="SELECT * FROM implemento ORDER BY NOMBRE_IMPLEMENTO"; //código MySQL
+		$datos=mysql_query($sql); //enviar código MySQL
+		$contador = 0;
+		$lista = array();
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			$lista[$contador][0] = $row['COD_IMPLEMENTO'];
+			$lista[$contador][1] = $row['NOMBRE_IMPLEMENTO'];
+			$lista[$contador][2] = $row['DESCRIPCION_IMPLEMENTO'];
+			$contador = $contador + 1;
+		}}
 
-		if ($query == FALSE){
-			return array();
-		}
-
-		return $query->result();
+		return $lista;
 	}
 	
 		/**
@@ -451,6 +454,28 @@ class Model_sala extends CI_Model {
 		}
 
 		return $row;
+	}
+
+	/**
+	* Obtiene los datos de todos los implementos de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los implementos del sistema
+	*/
+	public function VerTodosLosImplementosSimple()
+	{
+		$this->db->select('COD_IMPLEMENTO AS codigo_implemento');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
+		$query = $this->db->get('implemento');
+
+		if ($query == FALSE){
+			return array();
+		}
+
+		return $query->result();
 	}
 	
 }

@@ -121,7 +121,7 @@ $tipos_usuarios_permitidos = array();
 		$capacidad = $this->input->post("capacidad");
 		$implementos = $this->input->post("implementos");
         $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos);  
-		$datos_vista = array('implementos' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);
+		$datos_vista = array('implementos' => $this->Model_sala->VerTodosLosImplementosSimple(),'mensaje_confirmacion'=>$confirmacion);
 
 		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 

@@ -31,6 +31,9 @@
 		    	<?php 
 		    		if (isset($redirecFrom)) {
 		    			echo '<a class="pull-left" href="'.site_url($redirecFrom).'">Volver</a>';
+	    			elseif (isset($redirecFromFUllUrl)) {								// Para el caso de Volver desde Google. Se redirige a una URL externa a ManteKA
+	    				echo '<a class="pull-left" href="'$redirecFromFullUrl.'">Volver</a>';
+	    			}
 		    	}
 		    	?>
 	        	<a class="pull-right" href="<?php echo site_url($redirecTo) ?>">Ir a <?php echo $nombre_redirecTo ?></a>
