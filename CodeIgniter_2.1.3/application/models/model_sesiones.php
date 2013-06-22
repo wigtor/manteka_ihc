@@ -6,11 +6,12 @@ class Model_sesiones extends CI_Model {
 
 
 	public function getDetallesSesion($codigo) {
+		$this->db->select('COD_SESION AS codigo_sesion');
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('NOMBRE_MODULO AS mod_tem');
 		$this->db->select('DESCRIPCION_SESION AS descripcion');
 		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT OUTER');
-		$this->db->where('NOMBRE_SESION', $codigo);
+		$this->db->where('COD_SESION', $codigo);
 		$query = $this->db->get('sesion');
 		return $query->row();
 	}

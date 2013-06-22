@@ -12,7 +12,6 @@ function EditarSesion(){
 		var rut = document.getElementById("nombresesion").value;
 		var nombre1 =document.getElementById("descripcionSesion").value;
 		var cod =document.getElementById("codigoSesion").value;
-		alert(cod);
 	//var apellidoPaterno =document.getElementById("apellidoPaternoProfeEdit").value;
 	//	var apellidoMaterno =document.getElementById("apellidoMaternoProfeEdit").value;
 		//var correo = document.getElementById("mailProfeEdit").value;
@@ -20,22 +19,27 @@ function EditarSesion(){
 	//	var modulo = document.getElementById("moduloProfeEdit").value;
 		//var seccion = document.getElementById("seccionProfeEdit").value;
 	//	var tipo = document.getElementById("tipoProfeEdit").value;
-		if(rut!="" && nombre1!="" && cod!=""){
-					var answer = confirm("¿Está seguro de realizar cambios?");
-					if (!answer){
-						return false;
-					}
-					else{
-						var editar = document.getElementById("FormEditar");
-						editar.action = "<?php echo site_url("Sesiones/editarSesiones/") ?>";
-						editar.submit();
-					}
+		if(!(rut!="" && nombre1!="" && cod!="")){
+			$('#modalSeleccioneAlgo').modal();
+			return;
 		}
-		else{
-				alert("Inserte todos los datos");
-				return false;
-		}
+		$('#modalConfirmacion').modal();
 }
+
+function resetearSesion() {
+
+	var nombreDetalle = document.getElementById("nombresesion");
+	var descripcionDetalle = document.getElementById("descripcionSesion");
+	var codigoDetalle = document.getElementById("codigoSesion");
+	
+	$(nombreDetalle).val("");
+	$(codigoDetalle).val("");
+	$(descripcionDetalle).val("");
+
+	//Se limpia lo que está seleccionado en la tabla
+	$('tbody tr').removeClass('highlight');
+}
+
 function verDetalle(elemTabla) {
 
 	/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
@@ -62,7 +66,7 @@ function verDetalle(elemTabla) {
 			/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 			//$(codigoDetalle).html(datos.cod_sesion);
 			$(nombreDetalle).val(datos.nombre);
-			$(codigoDetalle).val(datos.cod_sesion);
+			$(codigoDetalle).val(datos.codigo_sesion);
 			$(descripcionDetalle).val(datos.descripcion);
 		
 
@@ -118,22 +122,19 @@ function verDetalle(elemTabla) {
 			</table>
 		</div>
 		<div class="span6">
-			<form id="FormEditar" type="post" method="post" onsubmit="EditarSesion();return false">
+			<?php
+				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal', 'onsubmit' => 'EditarProfesor()');
+				echo form_open('Sesiones/editarSesiones/', $attributes);
+			?>
+			<input type="hidden" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
 			<div class="control-group">
-				<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Código de sesión</label>
-				<div class="controls">
-					<input type="text" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
-				</div>
-
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Nombre de sesión</label>
+				<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Nombre de sesión</label>
 				<div class="controls">
 					<input type="text" id="nombresesion" name="nombre_sesion" maxlength="99" required >
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="inputInfo">3-.<font color="red">*</font> Descripción</label>
+				<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Descripción</label>
 				<div class="controls">
 					<textarea type="text" id="descripcionSesion" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
 				</div>
@@ -141,17 +142,48 @@ function verDetalle(elemTabla) {
 			
 			<div class="control-group">
 				<div class="controls ">
-					<button type="button" class="btn"  type="submit">
+					<button type="button" class="btn"  type="submit" onClick="EditarSesion()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
 					</button>
-					<button  class ="btn" type="button" 'onclick="datosEditarProfesor("","","","","","")"' >
+					<button  class ="btn" type="button" onclick="resetearSesion()" >
 						<div class="btn_with_icon_solo">Â</div>
 						&nbsp; Cancelar
 					</button>
 				</div>
+
+				<!-- Modal de confirmación -->
+				<div id="modalConfirmacion" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Confirmación</h3>
+					</div>
+					<div class="modal-body">
+						<p>Se van a guardar los cambios de la sesión ¿Está seguro?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+					</div>
+				</div>
+
+				<!-- Modal de aviso que no ha seleccionado algo -->
+				<div id="modalSeleccioneAlgo" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No ha seleccionado una sesión</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione una sesión y vuelva a intentarlo</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
 			</div>
 		</div>
-			</form>
+		<?php echo form_close(""); ?>
+
+
 	</div>
 </fieldset>

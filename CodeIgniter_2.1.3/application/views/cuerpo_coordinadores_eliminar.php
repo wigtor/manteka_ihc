@@ -96,6 +96,7 @@ function verDetalle(elemTabla) {
 		$(apellido2Detalle).html("");
 		$(fonoDetalle).html("");
 		$(correoDetalle).html("");
+		$(correoDetalle2).html("");
 
 		//Se limpia lo que está seleccionado en la tabla
 		$('tbody tr').removeClass('highlight');

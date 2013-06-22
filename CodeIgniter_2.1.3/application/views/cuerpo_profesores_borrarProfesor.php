@@ -117,6 +117,7 @@
 		var telefonoDetalle = document.getElementById("telefonoDetalle");
 		var correoDetalle = document.getElementById("correoDetalle");
 		var tipoDetalle = document.getElementById("tipoDetalle");
+		var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
 		
 		/* Seteo los valores a string vacio */
 		$(rutDetalle).html("");
@@ -127,6 +128,10 @@
 		$(telefonoDetalle).html("");
 		$(correoDetalle).html("");
 		$(tipoDetalle).html("");
+		$(moduloTematicoDetalle).html("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
 	}
 </script>
 

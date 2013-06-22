@@ -88,6 +88,9 @@
 		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
 		var correoDetalle = document.getElementById("correoDetalle");
 		var profesorDetalle = document.getElementById("profesorDetalle");
+		var secciones = document.getElementById('seccionesDetalle');
+		
+		$(secciones).html("");
 		$(rutDetalle).html("");
 		$(rutEliminar).val("");
 		$(nombre1Detalle).html("");

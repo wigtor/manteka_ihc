@@ -122,6 +122,9 @@ function ordenarFiltro(){ //No funcional
 		$(apellido1Detalle).val("");
 		$(apellido2Detalle).val("");
 		$(correoDetalle).val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
 	}
 </script>
 
