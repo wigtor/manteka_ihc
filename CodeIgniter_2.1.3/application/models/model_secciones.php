@@ -157,20 +157,26 @@ class Model_secciones extends CI_Model{
     {
 		if($cod_seccion==""){ return 2;}
 		else{
-		$sql1="SELECT * FROM estudiante WHERE COD_SECCION= '$cod_seccion' ORDER BY APELLIDO2_ESTUDIANTE"; 
-		$datos1=mysql_query($sql1); 
+
+		/* se comprueba si la seccion tiene estudiantes*/	
+
+		$this->db->select('estudiante.RUT_ESTUDIANTE AS rut');
+		$this->db->from('estudiante');
+		$this->db->where('estudiante.COD_SECCION', $cod_seccion);
+		$query=$this->db->get();
+		$datos1=$query->result();
+
 		$contador = 0;
 		if (false != $datos1) {
-		while ($row=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+		foreach ($datos1 as $row) {
 			$contador = $contador + 1;
 		}}
 		if($contador==0){
-			$sql="DELETE FROM seccion WHERE COD_SECCION = '$cod_seccion' "; //código MySQL
-			$datos=mysql_query($sql); //enviar código MySQL
+			$this->db->where('seccion.COD_SECCION', $cod_seccion);
+			$query=$this->db->delete('seccion');
+			$datos=$query;
 		}
 		else{return 3;}
-		
-
 
 		if($datos == true && $contador==0){
 			return 1;
