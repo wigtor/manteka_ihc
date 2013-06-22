@@ -19,20 +19,7 @@ class Model_sala extends CI_Model {
 	*/
 	public function InsertarSala($num_sala, $ubicacion, $capacidad, $implementos) {
 		if($num_sala=="") return 2;
-		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
-		$datos=mysql_query($sql); 
-		$contador = 0;
-		$lista=array();
-		$var=0;
-		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			if( $row['NUM_SALA']==$num_sala){
-			$var=1;
-			}
-			$contador = $contador + 1;
-		}}
-		
-		if($var!=1){
+
 		// se convierte todo el texto de la ubicación en minúscula
 		$ubicacion = strtolower($ubicacion);
 		$data1 = array(	
@@ -42,7 +29,7 @@ class Model_sala extends CI_Model {
 					
 		);
 		if($num_sala !="" && $ubicacion!="" && $capacidad!=""){
-			$this->db->insert('sala',$data1);}
+		$this->db->insert('sala',$data1);}
 	   $cod_sala=$this->db->insert_id();
 	   $contador = 0;
    	   while ($contador <count($implementos)) {
@@ -62,8 +49,7 @@ class Model_sala extends CI_Model {
 		else{
 			return -1;
 		}
-		}
-		else{return 3;}
+		
     }
 
 	/**
@@ -288,22 +274,8 @@ class Model_sala extends CI_Model {
 	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos)
 	{
 		if($cod_sala=="" || $num_sala=="" || $ubicacion=="" || $capacidad=="") return 2;
-		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
-		$datos=mysql_query($sql); 
-		$contador = 0;
-		$lista=array();
-		$var=0;
-		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			if($row['COD_SALA']!=$cod_sala){
-				if( $row['NUM_SALA']==$num_sala){
-				$var=1;
-				}
-			}
-			$contador = $contador + 1;
-		}}
 		
-		if($var!=1){
+		
 		// se convierte todo el texto de la ubicación en minúscula
 		$ubicacion = strtolower($ubicacion);
 		$data = array(	
@@ -335,8 +307,7 @@ class Model_sala extends CI_Model {
 		else{
 			return -1;
 		}
-		}	
-		else {return 3;}
+		
     }
 
 
@@ -478,6 +449,58 @@ class Model_sala extends CI_Model {
 		return $query->result();
 	}
 	
+		/**
+	* Dado un número de sala se comprueba si este ya existe
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el número de casa sala y se compara con el que se desea ingresar
+	* Finalmente se retorna 1 si ya existe y cero si no
+	*
+	* @return $var es 1 es el valor de existencia del número de la sala, siendo si 1 y no 2
+	*/
+	public function numSala($num_sala)
+	{
+		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if( $row['NUM_SALA']==$num_sala){
+			$var=1;
+			}
+			$contador = $contador + 1;
+		}}
+		return $var;
+	}
+	/**
+	* Dado un número de sala y un código se comprueba si este ya existe
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el número de casa sala y código y se compara con el que se desea editar
+	* comprobando que el código de la sala a editar sea distinto al consultado
+	* Finalmente se retorna 1 si ya existe y cero si no
+	*
+	* @return $var es 1 es el valor de existencia del número de la sala, siendo si 1 y no 2
+	*/
+	
+	public function numSalaE($num_sala,$cod_sala)
+	{
+		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if($row['COD_SALA']!=$cod_sala){
+				if( $row['NUM_SALA']==$num_sala){
+				$var=1;
+				}
+			}
+			$contador = $contador + 1;
+		}}
+		return $var;
+	}
 }
 
 ?>

@@ -269,7 +269,29 @@ class Salas extends MasterManteka {
 		echo json_encode($resultado);
     }
 
+	public function numExiste() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_sala');
+		$num = $this->input->post('num_post');
+
+		$resultado = $this->Model_sala->numSala($num);
+		echo json_encode($resultado);
+	}
 	
+	public function numExisteE() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_sala');
+		$num = $this->input->post('num_post');
+		$cod = $this->input->post('cod_post');
+		$resultado = $this->Model_sala->numSalaE($num,$cod);
+		echo json_encode($resultado);
+	}
 }
 
 /* End of file Correo.php */
