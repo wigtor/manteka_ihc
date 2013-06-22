@@ -12,8 +12,13 @@
 				//$(tablaResultados).empty();
 				var existe = jQuery.parseJSON(respuesta);
 				if(existe == -1){
-					alert("Rut en uso");
+					//alert("Rut en uso");
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalRutUsado').modal();
 					document.getElementById("rut_estudiante").value = "";
+
 				}
 
 				/* Quito el div que indica que se está cargando */
@@ -240,6 +245,20 @@ function ordenarFiltro(){
 						</div>
 
 					</div>
+
+					<!-- Modal de modalRutUsado -->
+						<div id="modalRutUsado" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>RUT ingresado está en uso</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 							
 				</div>
 				</form>

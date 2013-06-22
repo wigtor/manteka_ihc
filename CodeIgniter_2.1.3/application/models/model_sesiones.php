@@ -52,38 +52,19 @@ class Model_sesiones extends CI_Model {
 	}
 
 	public function AgregarSesion($nombre_sesion,$descripcion_sesion)
-	{
-		if($nombre_sesion=="" || $descripcion_sesion =="") return 2;
-		$sql="SELECT * FROM sesion ORDER BY COD_SESION";
-		$datos=mysql_query($sql);
-		$contador = 0;
-		$lista=array();
-		$var=0;
-		if (false != $datos) {
-			while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-				if( $row['NOMBRE_SESION']==$nombre_sesion){
-					$var=1;
-				}
-				$contador = $contador + 1;
-			}
-		}	
+	{	
+		$data = array(	
+					'NOMBRE_SESION' => $nombre_sesion,
+					'DESCRIPCION_SESION' => $descripcion_sesion
+		);
+		$datos = $this->db->insert('sesion',$data); 
 		
-		if($var!=1){
-			$data = array(	
-						'NOMBRE_SESION' => $nombre_sesion,
-						'DESCRIPCION_SESION' => $descripcion_sesion
-			);
-			$datos = $this->db->insert('sesion',$data); 
-			
-	         
-			if($datos){
-				return 1;
-			}
-			else{
-				return -1;
-			}
+     	if($datos == true){
+			return 1;
 		}
-		else return 3;
+		else{
+			return -1;
+		}
     }
 
     public function VerTodasLasSesiones()
@@ -134,6 +115,30 @@ class Model_sesiones extends CI_Model {
 			return -1;
 		}	
     }
+
+    public function nombreExisteM($nombre){
+	//return $rut;
+		$lista = array();
+		$contador = 0;
+		
+		//lista usuarios
+		$this->db->select('NOMBRE_SESION');
+		$this->db->from('sesion');
+		$query = $this->db->get();
+		$datos = $query->result();
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->NOMBRE_SESION;
+			$contador++;
+		}
+		$contador = 0;
+		while($contador < count($lista)){
+			if(strtolower($lista[$contador]) == strtolower($nombre)){
+				return -1;
+			}
+		$contador = $contador + 1;
+		}
+		return 1;
+	}
 }
 
 ?>
