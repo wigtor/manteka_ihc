@@ -45,7 +45,7 @@ if(isset($mensaje_confirmacion))
 		<fieldset>
 			<legend>Agregar Sala</legend>
 			
-			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/agregarSalas/")?>">
+			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/ingresarSalas/")?>">
 			
 			<div>
 				<div class="row-fluid">

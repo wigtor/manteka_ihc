@@ -192,7 +192,7 @@ if(isset($mensaje_confirmacion))
 		<div class="span6">	
 			<?php
 				$attributes = array('id' => 'formDetalle', 'class' => 'form-horizontal', 'onsubmit' => 'EditarSala()');
-				echo form_open('Salas/editarSalas', $attributes);
+				echo form_open('Salas/modificarSalas', $attributes);
 			?>
 			<input type="hidden" id="cod_sala" name="cod_sala" maxlength="3" min="1" readonly>
 			<div class="control-group">
@@ -204,7 +204,7 @@ if(isset($mensaje_confirmacion))
 			<div class="control-group">
 					<label class="control-label" for="cod_sala">2-.Capacidad</label>
 					<div class="controls">
-						<input type="text" id="capacidad" name="capacidad" maxlength="3" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
+						<input id="capacidad" name="capacidad" maxlength="3" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
 					</div>
 			</div>
 			<div class="control-group">
