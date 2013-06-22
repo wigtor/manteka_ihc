@@ -151,7 +151,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "23%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				var de=listaRecibidos[i].nombre+" "+listaRecibidos[i].apellido1+" "+listaRecibidos[i].apellido2;
+				var de=listaRecibidos[i].nombre_destinatario;
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
 				nodoTexto=document.createTextNode(de);
 				td.appendChild(nodoTexto);
@@ -671,7 +671,7 @@ if(isset($msj))
 	<?php
 		
 		$attributes = array('onsubmit' => 'return evitarEnvioVacio()', 'id' => 'formu', 'name' => "formulario");
-		echo form_open('Correo/EliminarCorreoRecibido', $attributes);
+		echo form_open('Correo/EliminarCorreo', $attributes);
 		
 	?>
 		<div class="row-fluid">
