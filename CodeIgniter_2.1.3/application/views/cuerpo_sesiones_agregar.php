@@ -57,11 +57,11 @@
 						<font color="red">*Campos Obligatorios</font>
 					</div>
 				</div>
-			</div>
+			
 			
 			<div class= "row-fluid">
 				<div class= "span6">
-					<p>Complete los datos del formulario para agregar ena sesion:</p>
+					<p>Complete los datos del formulario para agregar una sesión:</p>
 				</div>
 			</div>
 					
@@ -74,11 +74,11 @@
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> Nombre</label>
 						<div class="controls">
-							<input id="nombre_sesion" onblur="comprobarNombre()" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombre1_estudiante" name="nombre1_estudiante" maxlength="19" required >
+							<input id="nombre_sesion" onblur="comprobarNombre()" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" name="nombre_sesion" maxlength="99" required >
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripcion</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripción</label>
 						<div class="controls">
 							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
 						</div>
@@ -107,7 +107,7 @@
 							<h3>Nombre de la sesion ya existe.</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para la sesion y vuelva a intentarlo</p>
+						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
