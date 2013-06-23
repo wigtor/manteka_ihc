@@ -99,7 +99,7 @@
 					</table>
 				</div>
 				<div class="span6">
-				<pre style="margin-top: 2%; padding: 2%">
+				<pre style="padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
