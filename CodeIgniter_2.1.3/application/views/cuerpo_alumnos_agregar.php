@@ -46,6 +46,8 @@
 		var apellidoMaterno = document.getElementById("apellido_materno").value;
 		var correo = document.getElementById("correo_estudiante").value;
 		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
+
+
 	
 		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
 					return true;
@@ -110,6 +112,7 @@ function ordenarFiltro(){
 
 					td2 = document.createElement('td');
 					radioInput = document.createElement('input');
+					radioInput.setAttribute('required');
 					radioInput.setAttribute('type', 'radio');
 					radioInput.setAttribute('name', name);
 					radioInput.setAttribute("id", "seccion_"+arrayRespuesta[i].cod);
