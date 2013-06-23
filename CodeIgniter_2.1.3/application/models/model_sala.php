@@ -122,7 +122,7 @@ class Model_sala extends CI_Model {
 			$lista[$contador][2] = $row['DESCRIPCION_IMPLEMENTO'];
 			$contador = $contador + 1;
 		}}
-		
+
 		return $lista;
 	}
 	
@@ -285,7 +285,7 @@ class Model_sala extends CI_Model {
 	* @param string $ubicacion ubicaciona  editar de la sala
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA)
+	public function ActualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos)
 	{
 		if($cod_sala=="" || $num_sala=="" || $ubicacion=="" || $capacidad=="") return 2;
 		$sql="SELECT * FROM sala ORDER BY COD_SALA"; 
@@ -317,26 +317,17 @@ class Model_sala extends CI_Model {
 		$contador = 0;
 		$sql="DELETE FROM sala_implemento WHERE COD_SALA = '$cod_sala' "; //código MySQL
 		$datos=mysql_query($sql); //enviar código MySQL
-   	    while ($contador <count($implementos)) {
 
-			 if($implementos[$contador]!=NULL){
-			 $data2 = array(					
-						'COD_SALA' => $cod_sala,
-						'COD_IMPLEMENTO' => $implementos[$contador]
-			);	
-				$datos2 = $this->db->insert('sala_implemento',$data2);}
-				$contador++;
-         }
-		$contador = 0;
-   	    while ($contador <count($implementosA)) {
-			 if($implementosA[$contador]!=NULL){
-			 $data3 = array(					
-						'COD_SALA' => $cod_sala,
-						'COD_IMPLEMENTO' => $implementosA[$contador]
-			);	
-				$datos3 = $this->db->insert('sala_implemento',$data3);}
-				$contador++;
-         }
+		if(is_array($implementos)){
+
+			foreach ($implementos as $imp){
+				$data2 = array(
+					'COD_SALA' => $cod_sala,
+					'COD_IMPLEMENTO' => $imp
+					);
+				$datos = $this->db->insert('sala_implemento', $data2);
+			}
+		}
          
 		if($data == true){
 			return 1;
@@ -358,6 +349,7 @@ class Model_sala extends CI_Model {
 		$this->db->select('sala.NUM_SALA');
 		$this->db->select('sala.CAPACIDAD');
 		$this->db->select('implemento.COD_IMPLEMENTO');
+		$this->db->select('sala.COD_SALA AS id');
 		$this->db->from('sala');
 		$this->db->join('sala_implemento','sala_implemento.cod_sala = sala.cod_sala','left');
 		$this->db->join('implemento','sala_implemento.cod_implemento = implemento.cod_implemento','left');
@@ -397,8 +389,12 @@ class Model_sala extends CI_Model {
 		foreach ($query->result() as $row) {
 			if (!is_null($row->COD_IMPLEMENTO))
 			{
-				$implementos = $this->getImpFromSala($row->NUM_SALA);
+				$implementos = $this->getImpFromSala($row->id);
 				unset($row->COD_IMPLEMENTO);									// Ya no se necesita
+
+				$codigo = $row->id;
+				unset($row->id);												// Se borra y se setea después de foreach, para que quede en el último lugar del array
+				
 				$count = 0;														
 				foreach ($implementos as $implemento) {
 					if($count == 0)
@@ -411,19 +407,22 @@ class Model_sala extends CI_Model {
 						$row->implementos .= ", ".$implemento->nombre_implemento;
 					$count++;
 				}
+				$row->id = $codigo;												// Se vuelve a setear, ahora queda al final del array;
 			}
 		}
 
 		return $query->result();
 	}
 
-	private function getImpFromSala($num_sala)
+	private function getImpFromSala($cod_sala)
 	{
+		$this->db->select('implemento.COD_IMPLEMENTO AS codigo_implemento');
 		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
 		$this->db->from('sala');
 		$this->db->join('sala_implemento','sala.COD_SALA = sala_implemento.COD_SALA');
 		$this->db->join('implemento','sala_implemento.COD_IMPLEMENTO = implemento.COD_IMPLEMENTO');
-		$this->db->where('NUM_SALA',$num_sala);
+		$this->db->where('sala.COD_SALA',$cod_sala);
 
 		$query = $this->db->get();
 
@@ -434,11 +433,12 @@ class Model_sala extends CI_Model {
 		return $query->result();
 	}
 
-	public function getDetallesSala($num_sala){
+	public function getDetallesSala($cod_sala){
 		$this->db->select('sala.NUM_SALA AS num_sala');
+		$this->db->select('sala.COD_SALA AS codigo_sala');
 		$this->db->select('sala.CAPACIDAD AS capacidad');
 		$this->db->select('sala.UBICACION AS ubicacion');
-		$this->db->where('sala.NUM_SALA',$num_sala);
+		$this->db->where('sala.COD_SALA',$cod_sala);
 		$this->db->order_by('NUM_SALA', 'asc');
 		$query = $this->db->get('sala');
 		//echo $this->db->last_query();
@@ -449,11 +449,33 @@ class Model_sala extends CI_Model {
 		$row = array();
 		if ($query->num_rows() > 0){
 			$row = $query->row();
-			$implementos = $this->getImpFromSala($row->num_sala);
+			$implementos = $this->getImpFromSala($row->codigo_sala);
 			$row->implementos = $implementos;
 		}
 
 		return $row;
+	}
+
+	/**
+	* Obtiene los datos de todos los implementos de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada implemento y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return array $lista Contiene la información de todos los implementos del sistema
+	*/
+	public function VerTodosLosImplementosSimple()
+	{
+		$this->db->select('COD_IMPLEMENTO AS codigo_implemento');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
+		$query = $this->db->get('implemento');
+
+		if ($query == FALSE){
+			return array();
+		}
+
+		return $query->result();
 	}
 	
 }

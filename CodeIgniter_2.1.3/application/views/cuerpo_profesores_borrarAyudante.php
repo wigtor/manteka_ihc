@@ -11,7 +11,7 @@
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		rut_clickeado = idElem.substring("ayudante_".length, idElem.length);
+		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");
@@ -88,6 +88,9 @@
 		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
 		var correoDetalle = document.getElementById("correoDetalle");
 		var profesorDetalle = document.getElementById("profesorDetalle");
+		var secciones = document.getElementById('seccionesDetalle');
+		
+		$(secciones).html("");
 		$(rutDetalle).html("");
 		$(rutEliminar).val("");
 		$(nombre1Detalle).html("");

@@ -219,7 +219,7 @@ class Model_ayudante extends CI_Model {
 	*/
     public function getAyudantesByFilter($texto, $textoFiltrosAvanzados)
    	{
-		$this->db->select('ayudante.RUT_AYUDANTE AS rut');
+		$this->db->select('ayudante.RUT_AYUDANTE AS id');
 		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
 		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
 		$this->db->select('NOMBRE_SECCION AS seccion');
@@ -227,7 +227,7 @@ class Model_ayudante extends CI_Model {
 		$this->db->join('seccion', 'ayu_profe.COD_SECCION  = seccion.COD_SECCION ', 'LEFT OUTER');
 		$this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
 
-		if ($texto != "") {
+		if (trim($texto) != "") {
 			$this->db->like("ayudante.RUT_AYUDANTE", $texto);
 			$this->db->or_like("NOMBRE1_AYUDANTE", $texto);
 			$this->db->or_like("NOMBRE2_AYUDANTE", $texto);
@@ -252,7 +252,7 @@ class Model_ayudante extends CI_Model {
 				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 			}
-			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
+			if ($textoFiltrosAvanzados[BUSCAR_POR_SECCION] != '') {
 				$this->db->like("NOMBRE_SECCION", $textoFiltrosAvanzados[BUSCAR_POR_SECCION]);
 			}
 		}

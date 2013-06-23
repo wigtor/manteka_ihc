@@ -127,6 +127,9 @@
 		$(carreraDetalle).html("");
 		$(correoDetalle).html("");
 		$(seccionDetalle).html("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
 	}
 </script>
 

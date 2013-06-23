@@ -97,16 +97,16 @@ class Sesiones extends MasterManteka {
 	}
 
 	
-    public function postDetallesSesiones() {
+    public function postDetallesSesion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
 
-		$codigo = $this->input->post('codigo');
+		$codigo = $this->input->post('sesion');
 		$this->load->model('Model_sesiones');
-		$resultado = $this->Model_sesiones->getDetallesSesiones($codigo);
+		$resultado = $this->Model_sesiones->getDetallesSesion($codigo);
 		echo json_encode($resultado);
 	}
 
@@ -115,11 +115,13 @@ class Sesiones extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$textoFiltro = $this->input->post('textoFiltro');
-		$tipoFiltro = $this->input->post('tipoFiltro');
+		
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		
 		$this->load->model('Model_sesiones');
-
-		$resultado = $this->Model_sesiones->getSesionesByFilter($tipoFiltro, $textoFiltro);
+		$resultado = $this->Model_sesiones->getSesionesByFilter($textoFiltro, $textoFiltrosAvanzados);
+		
 		echo json_encode($resultado);
 	}
     

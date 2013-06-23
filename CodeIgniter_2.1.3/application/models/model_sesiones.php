@@ -5,42 +5,47 @@ class Model_sesiones extends CI_Model {
 
 
 
-	public function getDetallesSesiones($codigo) {
-		$this->db->select('COD_SESION AS cod_sesion');
-		$this->db->select('NOMBRE_MODULO AS cod_mod_tem');
+	public function getDetallesSesion($codigo) {
+		$this->db->select('COD_SESION AS codigo_sesion');
 		$this->db->select('NOMBRE_SESION AS nombre');
-		$this->db->select('DESCRIPCION_SESION AS descipcion');
+		$this->db->select('NOMBRE_MODULO AS mod_tem');
+		$this->db->select('DESCRIPCION_SESION AS descripcion');
 		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT OUTER');
 		$this->db->where('COD_SESION', $codigo);
 		$query = $this->db->get('sesion');
 		return $query->row();
 	}
 
-public function getSesionesByFilter($tipoFiltro, $textoFiltro)
+	public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 	{
 
-		//Sólo para acordarse
-		define("BUSCAR_POR_NOMBRE", 1);
-		define("BUSCAR_POR_CODIGO", 2);
-
-		$attr_filtro = "";
-		if ($tipoFiltro == BUSCAR_POR_NOMBRE) {
-			$attr_filtro = "NOMBRE_SESION";
-		}
-		else if ($tipoFiltro == BUSCAR_POR_CODIGO) {
-			$attr_filtro = "CODIGO_SESION";
-		}
-		else {
-			return array(); //No es válido, devuelvo vacio
-		}
-
-		$this->db->select('COD_SESION AS cod_sesion');
-		//$this->db->select('NOMBRE_MODULO AS cod_mod_tem');
 		$this->db->select('NOMBRE_SESION AS nombre');
-		$this->db->select('DESCRIPCION_SESION AS descripcion');
-		//$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM');
-		$this->db->like($attr_filtro, $textoFiltro);
+		$this->db->select('NOMBRE_MODULO AS mod_tem');
+		$this->db->select('COD_SESION AS id');
+		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT');
+		$this->db->order_by('NOMBRE_SESION');
+		
+		if ($texto != "") {
+			$this->db->like("NOMBRE_SESION", $texto);
+			$this->db->or_like("NOMBRE_MODULO", $texto);
+		}
+		else{
+			
+			//Sólo para acordarse
+			define("BUSCAR_POR_NOMBRE_SESION", 0);
+			define("BUSCAR_POR_NOMBRE_MOD", 1);
+
+			if($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_SESION] != ''){
+				$this->db->like("NOMBRE_SESION", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_SESION]);
+			}
+			if($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_MOD] != ''){
+				$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_MOD]);
+			}
+
+		}
+
 		$query = $this->db->get('sesion');
+		
 		if ($query == FALSE) {
 			return array();
 		}
@@ -61,7 +66,6 @@ public function getSesionesByFilter($tipoFiltro, $textoFiltro)
 		else{
 			return -1;
 		}
-		
     }
 
     public function VerTodasLasSesiones()

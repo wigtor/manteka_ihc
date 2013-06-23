@@ -12,6 +12,7 @@ function escribirHeadTable() {
 	//SE CREA LA CABECERA DE LA TABLA
 	for (var i = 0; i < tiposFiltro.length; i++) {
 			th = document.createElement('th');
+			if (tiposFiltro[i] != '') {
 				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
 				
 
@@ -24,8 +25,19 @@ function escribirHeadTable() {
 					span.setAttribute('class', "icon-filter clickover");
 					//span.setAttribute('style', "vertical-align:middle;");
 				nodoBtnFiltroAvanzado.appendChild(span);
+
 			th.appendChild(nodoTexto);
 			th.appendChild(nodoBtnFiltroAvanzado);
+			}
+			else { //Esto es para el caso de los checkbox que marcan toda la tabla
+				nodoCheckeable = document.createElement('input');
+				nodoCheckeable.setAttribute('data-previous', "false,true,false");
+				nodoCheckeable.setAttribute('type', "checkbox");
+				nodoCheckeable.setAttribute('id', "selectorTodos");
+				nodoCheckeable.setAttribute('title', "Seleccionar todos");
+				th.appendChild(nodoCheckeable);
+			}
+			
 
 			var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
 			
@@ -62,7 +74,7 @@ function cambioTipoFiltro(inputUsado) {
 			var arrayRespuesta = new Array();
 			for (var i = 0; i < arrayObjectRespuesta.length; i++) {
 				arrayRespuesta[i] = $.map( arrayObjectRespuesta[i], function( value, key ) {
-					return value;
+					return (value == null ? "": value);
 				});
 			}
 
@@ -81,11 +93,15 @@ function cambioTipoFiltro(inputUsado) {
 			for (var i = 0; i < arrayRespuesta.length; i++) {
 				tr = document.createElement('tr');
 				tr.setAttribute('style', "cursor:pointer");
-				tr.setAttribute("id", prefijo_tipoDato+arrayRespuesta[i][0]); //Da lo mismo en este caso los id repetidos en los div
+				tr.setAttribute("id", prefijo_tipoDato+arrayObjectRespuesta[i].id); //Da lo mismo en este caso los id repetidos en los div
 				tr.setAttribute("onClick", "verDetalle(this)");
 				for (var j = 0; j < tiposFiltro.length; j++) {
 					td = document.createElement('td');
-					nodoTexto = document.createTextNode(arrayRespuesta[i][j] == null ? "" : arrayRespuesta[i][j]);
+					if(arrayRespuesta[i][j] == null){
+						arrayRespuesta[i][j] = " ";
+
+					}
+					nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
 				}

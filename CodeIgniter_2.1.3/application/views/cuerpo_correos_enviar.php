@@ -264,7 +264,8 @@ function timerBorradores()
 		data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
 		success: function(respuesta)
 		{
-			codigoBorrador = JSON.parse(respuesta);						
+			codigoBorrador = JSON.parse(respuesta);
+			document.getElementById("codigoBorrador").value=codigoBorrador;					
 			document.getElementById("guardado").innerHTML="Se ha guardado un borrador a las: "+t;
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).hide();
@@ -560,7 +561,8 @@ function muestraTabla(respuesta)
 	prefijo = prefijo.concat('x');
 	var tablaResultados = document.getElementById('tabla');
 	var nodoTexto;
-	$(tablaResultados).empty();		
+	$(tablaResultados).empty();
+	tablaResultados.setAttribute("style","height:290px")		
 	arrayRespuesta = JSON.parse(respuesta);
 	var thead = document.createElement('thead');
 	thead.setAttribute("style","width:100%");
@@ -571,27 +573,38 @@ function muestraTabla(respuesta)
 	var th = document.createElement('th');
 	th.id='allcheck';
 	var check = document.createElement('input');
+	var label = document.createElement('label');
+	check.id='normal';
 	check.id='todos';
 	check.type='checkbox';
+	check.checked=false;
+	check.setAttribute('onClick','selectAll(this)');
 	check.checked=false;					
 	th.appendChild(check);
-	thead.appendChild(th);
+	tr.appendChild(th);
+	thead.appendChild(tr);
 	th = document.createElement('th');
 	th.id = 'txtTodos';
 	nodoTexto =document.createTextNode('Destinatarios disponibles');
-	th.appendChild(nodoTexto);
-	thead.appendChild(th);
+	label.setAttribute('for','todos');
+	label.setAttribute('style','font-weight:bold');
+	label.appendChild(nodoTexto);
+	th.appendChild(label);
+	tr.appendChild(th);
+	thead.appendChild(tr);
 	tablaResultados.appendChild(thead);
-	tbody.setAttribute("style","width:100%");
+	tbody.setAttribute("style","width:100%;overflow:auto;height: 290px");
 	for (var i = 0; i < arrayRespuesta.length; i++)
 	{
 		tr = document.createElement('tr');
 		td = document.createElement('td');
 		td.id='check';
 		check = document.createElement('input');
+		label = document.createElement('label');
 		check.type='checkbox';
 		check.checked=false;
 		check.id='check'+i;
+
 		$('#todos').click(seleccionar_todo);
 		td.appendChild(check);
 		tr.appendChild(td);
@@ -602,7 +615,9 @@ function muestraTabla(respuesta)
 		nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
 		tr.setAttribute('rut',arrayRespuesta[i].rut);
 		tr.setAttribute('correo',arrayRespuesta[i].correo);
-		td.appendChild(nodoTexto);
+		label.setAttribute('for','check'+i);
+		label.appendChild(nodoTexto);
+		td.appendChild(label);
 		td.setAttribute("style","width:100%");
 		tr.appendChild(td);
 		tbody.appendChild(tr);
@@ -1103,7 +1118,7 @@ if(isset($codigo))
 				<div class="control-group span4">
 					<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 					<div class="controls">
-						<select id="filtroPorProfesorEncargado" title="Tipo de destinatario" class="filtro-primario" onChange="showDestinatarioByFiltro()">
+						<select id="filtroPorProfesorEncargado" title="Profesor encargado" class="filtro-primario" onChange="showDestinatarioByFiltro()">
 							<option  value="0">Todos</option>
 						</select>
 					</div>
@@ -1113,7 +1128,7 @@ if(isset($codigo))
 				<div class="control-group span4">
 					<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
 					<div class="controls">
-						<select id="filtroPorCarrera" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
+						<select id="filtroPorCarrera" title="Carrera" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
 						</select>
 					</div>
@@ -1127,7 +1142,7 @@ if(isset($codigo))
 				<div class="control-group span4">
 					<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 					<div class="controls">
-						<select id="filtroPorModuloTematico" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
+						<select id="filtroPorModuloTematico" title="Módulo temático" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
 						</select>
 					</div>
@@ -1137,7 +1152,7 @@ if(isset($codigo))
 				<div class="control-group span4">
 					<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
 					<div class="controls">
-						<select id="filtroPorSeccion" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
+						<select id="filtroPorSeccion" title="Sección" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todas</option>
 						</select>
 					</div>
@@ -1147,7 +1162,7 @@ if(isset($codigo))
 				<div class="control-group span4">
 					<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
 					<div class="controls">
-						<select id="filtroPorBloqueHorario" title="Tipo de destinatario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
+						<select id="filtroPorBloqueHorario" title="Bloque horario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
 						</select>
 					</div>
@@ -1363,6 +1378,7 @@ if(isset($codigo))
 		
 		<!-- Formulario para el envío de un correo. -->
 		<?php
+		
 		$attributes = array('onSubmit'=>'return validacionSeleccion();', 'id'=>'formEnviar', 'name'=>'formEnviar');
 		echo form_open('Correo/enviarPost',$attributes);
 		?>

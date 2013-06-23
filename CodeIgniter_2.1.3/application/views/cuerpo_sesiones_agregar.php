@@ -51,9 +51,11 @@
 
 		<fieldset>
 			<legend>Agregar Sesión</legend>
-			<div class="row-fluid">
-				<div class="span6">
-					<font color="red">*Campos Obligatorios</font>
+		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Sesiones/agregarSesiones/")?>">
+				<div class="row-fluid">
+					<div class="span6">
+						<font color="red">*Campos Obligatorios</font>
+					</div>
 				</div>
 			</div>
 			

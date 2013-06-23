@@ -185,7 +185,7 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function getAlumnosByFilter($texto, $textoFiltrosAvanzados)
 	{
-		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('RUT_ESTUDIANTE AS id');
 		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
 		//$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
 		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');

@@ -32,137 +32,106 @@ class model_correo extends CI_Model
 	* El primer elemento del array devuelto por la funci?n corresponde a un entero que puede ser 1 ? -1 y se
 	* utiliza para indicar el estado de la funci?n. (-1 indica que la obtención de los correos no se ejecut?
 	* correctamente, y 1 indica que el resultado de la funci?n es totalmente válido.)
-	* param int $variable
-	* return array $listaCompleta
+	* @param int $variable
+	* @return array $listaCompleta
 	*
 	* @author: Claudio Rojas (CR) y Diego Garc?a (DGM). 
 	*/
-	public function VerCorreosUser($variable,$offset)
+	public function VerCorreosUser($rut,$offset, $tipoUsuario, $texto, $textoFiltrosAvanzados)
 	{
-		try
-		{
-			/* Se obtienen todos los correos enviados por un usuario. */
-			$sql="SELECT * FROM carta  WHERE rut_usuario='$variable' AND COD_BORRADOR IS NULL ORDER BY COD_CORREO DESC LIMIT $offset,5";
-			$datos=mysql_query($sql);
-			$listaCompleta=array();
-			while($row=mysql_fetch_array($datos))
-			{
-				$lista = array();
-				$correo = array();
-				$correo['cod_correo']=$row['COD_CORREO'];
-				$correo['rut_usuario']=$row['RUT_USUARIO'];
-				$correo['id_plantilla']=$row['ID_PLANTILLA'];
-				$correo['hora']=$row['HORA']; 
-				$correo['fecha']=$row['FECHA'];
-				$correo['cuerpo_email']=$row['CUERPO_EMAIL'];
-				$correo['asunto']=$row['ASUNTO'];
-				array_push($lista,$correo);
-				
-				/* Para cada correo se obtienen los destinatarios agrupados por categor?a. */
-				$codigo=$row['COD_CORREO'];
-				$sql1="SELECT RUT_ESTUDIANTE FROM cartar_estudiante WHERE COD_CORREO='$codigo'";
-				$sql2="SELECT RUT_AYUDANTE FROM cartar_ayudante WHERE COD_CORREO='$codigo'";
-				$sql3="SELECT RUT_USUARIO FROM cartar_user WHERE COD_CORREO='$codigo'";
-				$rutDestinoEstudiantes=array();
-				$rutDestinoAyudantes=array();
-				$rutDestinoUsuarios=array();
-				$datos1=mysql_query($sql1);
-				while($row1=mysql_fetch_array($datos1))
-					array_push($rutDestinoEstudiantes,$row1['RUT_ESTUDIANTE']);
-				$datos2=mysql_query($sql2); 
-				while($row2=mysql_fetch_array($datos2))
-					array_push($rutDestinoAyudantes,$row2['RUT_AYUDANTE']);
-				$datos3=mysql_query($sql3); 
-				while($row3=mysql_fetch_array($datos3))
-					array_push($rutDestinoUsuarios,$row3['RUT_USUARIO']);
-				$estudiantes=array();
-				
-				/* Para cada destinatario estudiante del correo actual se obtienen los datos de
-				del estudiante. */
-				foreach($rutDestinoEstudiantes as $rutEstudiante)
-				{
-					$sqlEstudiante="SELECT * FROM estudiante WHERE RUT_ESTUDIANTE='$rutEstudiante'";
-					$datosEstudiante=mysql_query($sqlEstudiante);
-					while($rowDatosEstudiante=mysql_fetch_array($datosEstudiante))
-					{
-						$estudiante=array();
-						$estudiante['rut_estudiante']=$rowDatosEstudiante['RUT_ESTUDIANTE'];
-						$estudiante['cod_carrera']=$rowDatosEstudiante['COD_CARRERA'];
-						$estudiante['cod_seccion']=$rowDatosEstudiante['COD_SECCION'];
-						$estudiante['nombre1_estudiante']=$rowDatosEstudiante['NOMBRE1_ESTUDIANTE'];
-						$estudiante['nombre2_estudiante']=$rowDatosEstudiante['NOMBRE2_ESTUDIANTE'];
-						$estudiante['apellido_paterno']=$rowDatosEstudiante['APELLIDO1_ESTUDIANTE'];
-						$estudiante['apellido_materno']=$rowDatosEstudiante['APELLIDO2_ESTUDIANTE'];
-						$estudiante['correo_estudiante']=$rowDatosEstudiante['CORREO_ESTUDIANTE'];
-						array_push($estudiantes,$estudiante);
-					}
-				}
-				$ayudantes=array();
-				
-				/* Para cada destinatario ayudante del correo actual se obtienen los datos de
-				del ayudante. */
-				foreach($rutDestinoAyudantes as $rutAyudante)
-				{
-					$sqlAyudante="SELECT * FROM ayudante WHERE RUT_AYUDANTE='$rutAyudante'";
-					$datosAyudante=mysql_query($sqlAyudante);
-					while($rowDatosAyudante=mysql_fetch_array($datosAyudante))
-					{
-						$ayudante=array();
-						$ayudante['rut_ayudante']=$rowDatosAyudante['RUT_AYUDANTE'];
-						$ayudante['nombre1_ayudante']=$rowDatosAyudante['NOMBRE1_AYUDANTE'];
-						$ayudante['nombre2_ayudante']=$rowDatosAyudante['NOMBRE2_AYUDANTE'];
-						$ayudante['apellido_paterno']=$rowDatosAyudante['APELLIDO1_AYUDANTE'];
-						$ayudante['apellido_materno']=$rowDatosAyudante['APELLIDO2_AYUDANTE'];
-						$ayudante['correo_ayudante']=$rowDatosAyudante['CORREO_AYUDANTE'];
-						array_push($ayudantes,$ayudante);
-					}
-				}
-				$profesores=array();
-				$coordinadores=array();
-				
-				/* Para cada destinatario profesor o coordinador del correo actual se obtienen los datos de
-				del profesor o coordinador. */
-				foreach($rutDestinoUsuarios as $rutUsuario)
-				{
-					$sqlProfesor="SELECT * FROM profesor WHERE RUT_USUARIO2='$rutUsuario'";
-					$datosProfesor=mysql_query($sqlProfesor);
+		try {
+			$resultado=array();
+			$de=array();
+			$correos=array();
+			$correo=array();
 
-					while($rowDatosProfesor=mysql_fetch_array($datosProfesor))
-					{
-						$profesor=array();
-						$profesor['rut_usuario2']=$rowDatosProfesor['RUT_USUARIO2'];
-						$profesor['nombre1_profesor']=$rowDatosProfesor['NOMBRE1_PROFESOR'];
-						$profesor['nombre2_profesor']=$rowDatosProfesor['NOMBRE2_PROFESOR'];
-						$profesor['apellido1_profesor']=$rowDatosProfesor['APELLIDO1_PROFESOR'];
-						$profesor['apellido2_profesor']=$rowDatosProfesor['APELLIDO2_PROFESOR'];
-						$profesor['telefono_profesor']=$rowDatosProfesor['TELEFONO_PROFESOR'];
-						$profesor['tipo_profesor']=$rowDatosProfesor['TIPO_PROFESOR'];
-						array_push($profesores,$profesor);
-					}
-					$sqlCoordinador="SELECT * FROM coordinador WHERE RUT_USUARIO3='$rutUsuario'";
-					$datosCoordinador=mysql_query($sqlCoordinador);
-					while($rowDatosCoordinador=mysql_fetch_array($datosCoordinador))
-					{
-						$coordinador=array();
-						$coordinador['rut_usuario3']=$rowDatosCoordinador['RUT_USUARIO3'];
-						$coordinador['nombre1_coordinador']=$rowDatosCoordinador['NOMBRE1_COORDINADOR'];
-						$coordinador['nombre2_coordinador']=$rowDatosCoordinador['NOMBRE2_COORDINADOR'];
-						$coordinador['apellido1_coordinador']=$rowDatosCoordinador['APELLIDO1_COORDINADOR'];
-						$coordinador['apellido2_coordinador']=$rowDatosCoordinador['APELLIDO2_COORDINADOR'];
-						$coordinador['telefono_coordinador']=$rowDatosCoordinador['TELEFONO_COORDINADOR'];
-						array_push($coordinadores,$coordinador);
-					}
-				}
-				array_push($lista, $estudiantes);
-				array_push($lista, $ayudantes);
-				array_push($lista, $profesores);
-				array_push($lista, $coordinadores);
-				array_push($listaCompleta, $lista);
+			//Constantes para facilitar saber que tipo de búsqueda se utiliza (El indice 0 no se usa en las búsquedas de correo, porque se usa para el checkbox)
+			define("BUSCAR_POR_DESTINATARIO", 1); //Para
+			define("BUSCAR_POR_MENSAJE", 2); //Mensaje
+			define("BUSCAR_POR_FECHA", 3);
+			define("BUSCAR_POR_HORA", 4);
+
+			$consultasLikes = '1';
+			if (trim($texto) != '') {
+				$consultasLikes = "(ASUNTO LIKE '%".$texto."%' 
+					OR CUERPO_EMAIL LIKE '%".$texto."%' 
+					OR nombre_destinatario LIKE '%".$texto."%' 
+					OR FECHA LIKE '%".$texto."%' 
+					OR HORA LIKE '%".$texto."%')";
 			}
-			/* Se agrega la variable de estado 1 al array que ser? retornado. */
-			array_unshift($listaCompleta,1);
+			else {
+				if ($textoFiltrosAvanzados[BUSCAR_POR_DESTINATARIO] != '') {
+					$consultasLikes = "nombre_destinatario LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_DESTINATARIO]."%'";
+				}
+				if ($textoFiltrosAvanzados[BUSCAR_POR_MENSAJE] != '') {
+					$consultasLikes = "(ASUNTO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' 
+						OR CUERPO_EMAIL LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')";
+				}
+				if ($textoFiltrosAvanzados[BUSCAR_POR_FECHA] != '') {
+					$consultasLikes = "FECHA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%'";
+
+				}
+				if ($textoFiltrosAvanzados[BUSCAR_POR_HORA] != '') {
+					$consultasLikes = "HORA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_HORA]."%'";
+				}
+			}
+
+			$queryHorrible = "SELECT T.COD_CORREO AS codigo, GROUP_CONCAT(T.nombre_destinatario) AS nombre_destinatario, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora FROM 
+			(
+			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_COORDINADOR, \" \", APELLIDO1_COORDINADOR, \" \", APELLIDO2_COORDINADOR)) AS nombre_destinatario
+			FROM carta
+			LEFT JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
+			LEFT JOIN coordinador ON coordinador.RUT_USUARIO3 = cartar_user.RUT_USUARIO
+			WHERE carta.RUT_USUARIO = $rut
+			AND COD_BORRADOR IS NULL
+			AND ENVIADO_CARTA =1
+			GROUP BY carta.COD_CORREO )
+
+			UNION
+
+			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_PROFESOR, \" \", APELLIDO1_PROFESOR, \" \", APELLIDO2_PROFESOR)) AS nombre_destinatario
+			FROM carta
+			LEFT JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
+			LEFT JOIN profesor ON profesor.RUT_USUARIO2 = cartar_user.RUT_USUARIO
+			WHERE carta.RUT_USUARIO = $rut
+			AND COD_BORRADOR IS NULL
+			AND ENVIADO_CARTA =1
+			GROUP BY carta.COD_CORREO )
+
+			UNION
+
+			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_AYUDANTE, \" \", APELLIDO1_AYUDANTE, \" \", APELLIDO2_AYUDANTE)) AS nombre_destinatario
+			FROM carta
+			LEFT JOIN cartar_ayudante ON cartar_ayudante.COD_CORREO = carta.COD_CORREO
+			LEFT JOIN ayudante ON ayudante.RUT_AYUDANTE = cartar_ayudante.RUT_AYUDANTE
+			WHERE carta.RUT_USUARIO = $rut
+			AND COD_BORRADOR IS NULL
+			AND ENVIADO_CARTA =1
+			GROUP BY carta.COD_CORREO )
+
+			UNION
+
+			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_ESTUDIANTE, \" \", APELLIDO1_ESTUDIANTE, \" \", APELLIDO2_ESTUDIANTE)) AS nombre_destinatario
+			FROM carta
+			LEFT JOIN cartar_estudiante ON cartar_estudiante.COD_CORREO = carta.COD_CORREO
+			LEFT JOIN estudiante ON estudiante.RUT_ESTUDIANTE = cartar_estudiante.RUT_ESTUDIANTE
+			WHERE carta.RUT_USUARIO = $rut
+			AND COD_BORRADOR IS NULL
+			AND ENVIADO_CARTA =1
+			GROUP BY carta.COD_CORREO )
+
+			) AS T
 			
-			return $listaCompleta;
+			WHERE $consultasLikes
+
+			GROUP BY T.COD_CORREO
+			ORDER BY T.COD2_CORREO DESC
+			LIMIT $offset, 5"; //NIKAGANDO LA HAGO EN ACTIVERECORD!!!
+
+
+			$query = $this->db->query($queryHorrible);
+			//echo $this->db->last_query().'   ';return;
+			return $query->result();
 		}
 		catch(Exception $e)
 		{
@@ -188,47 +157,60 @@ class model_correo extends CI_Model
 	* de la eliminaci?n para cada correo. 
 	*
 	* @param array $correos
-	* @return array $resultados
-	* @author Diego Garc?a (DGM)
+	* @author Diego Garc?a (DGM) y Byron Lanas (BL) 
 	*
 	*/
 	public function EliminarCorreo($correos)
 	{
-		$resultados1=array();
-		$resultados2=array();
-		$resultados3=array();
-		$resultados4=array();
-		$resultadosFinales=array();
+
 		foreach($correos as $correo)
 		{
-			$sqlEliminarCorreoEstudiante="DELETE FROM cartar_estudiante WHERE COD_CORREO='$correo'";
-			$resultados1[$correo][$resultado]=mysql_query($sqlEliminarCorreoEstudiante);
-			$sqlEliminarCorreoAyudante="DELETE FROM cartar_ayudante WHERE COD_CORREO='$correo'";
-			$resultados2[$correo][$resultado]=mysql_query($sqlEliminarCorreoAyudante);
-			$sqlEliminarCorreoUsuario="DELETE FROM cartar_user WHERE COD_CORREO='$correo'";
-			$resultados3[$correo][$resultado]=mysql_query($sqlEliminarCorreoUsuario);
-			$sqlEliminarCorreo="DELETE FROM carta WHERE COD_CORREO='$correo'";
-			$resultados4[$correo][$resultado]=mysql_query($sqlEliminarCorreo);
+
+			$this->db->where('COD_CORREO',$correo);
+			$this->db->update('carta',array('ENVIADO_CARTA' => 0));
+
+
 		}
-		array_push($resultadosFinales,$resultados1);
-		array_push($resultadosFinales,$resultados2);
-		array_push($resultadosFinales,$resultados3);
-		array_push($resultadosFinales,$resultados4);
-		return $resultadosFinales;
+
 	}
-	
 	/**
 	* Elimina 1 o varios borradores de la base de datos de la aplicación.
 	*
 	* Para cada borrador se elimina los datos de dicho borrador en la
 	* tabla carta.
 	* En el array de entrada se especifican los identificadores de todos
-	* los correos a eliminar.
-	* En el array de salida se especifica el resultado de la consulta de
-	* de la eliminaci?n para cada correo. 
+	* los correos a eliminar. 
 	*
 	* @param array $correos
-	* @return array $resultados
+	* @return int 1
+	* @author Byron Lanas (BL)
+	*
+	*/
+	public function EliminarRecibidos($correos,$rut)
+	{
+
+		foreach($correos as $correo)
+		{	
+			echo $correo;
+			$this->db->where('COD_CORREO',$correo);
+			$this->db->where('RUT_USUARIO',$rut);
+			$this->db->update('cartar_user',array('RECIBIDO_CARTA_USER' => 0));
+			//echo $this->db->last_query();
+		}
+
+		return 1;
+	}
+
+	/**
+	* Elimina 1 o varios borradores de la base de datos de la aplicación.
+	*
+	* Para cada borrador se elimina los datos de dicho borrador en la
+	* tabla carta.
+	* En el array de entrada se especifican los identificadores de todos
+	* los correos a eliminar. 
+	*
+	* @param array $correos
+	* @return int 1
 	* @author Byron Lanas (BL)
 	*
 	*/
@@ -261,6 +243,93 @@ class model_correo extends CI_Model
 		return 1;
 	}
 
+	/**
+	* Muestra los correos recibidos por el usuario
+	*
+	* @param int $rut
+	* @param int $offset
+	* @param string $texto
+	* @param array $textoFiltrosAvanzados
+	* @return array $listaCompleta
+	* @author Byron Lanas (BL)
+	*
+	*/
+	public function VerCorreosRecibidos($rut,$offset, $tipoUsuario, $texto, $textoFiltrosAvanzados)
+	{
+		try
+		{
+			$resultado=array();
+			$de=array();
+			$correos=array();
+			$correo=array();
+
+			//Constantes para facilitar saber que tipo de búsqueda se utiliza (El indice 0 no se usa en las búsquedas de correo, porque se usa para el checkbox)
+			define("BUSCAR_POR_REMITENTE", 1); //De
+			define("BUSCAR_POR_MENSAJE", 2); //Mensaje o asunto
+			define("BUSCAR_POR_FECHA", 3);
+			define("BUSCAR_POR_HORA", 4);
+
+			$consultasLikes = "1";
+			if (trim($texto) != '') {
+				$consultasLikes = "(asunto LIKE '%".$texto."%' OR cuerpo_email LIKE '%".$texto."%' OR nombre LIKE '%".$texto."%' OR apellido1 LIKE '%".$texto."%' OR apellido2 LIKE '%".$texto."%' OR fecha LIKE '%".$texto."%' OR hora LIKE '%".$texto."%')";
+			}
+			else {
+				if ($textoFiltrosAvanzados[BUSCAR_POR_REMITENTE] != '') {
+					$consultasLikes = "(nombre1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
+						OR apellido1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
+						OR apellido2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')";
+				}
+				if ($textoFiltrosAvanzados[BUSCAR_POR_MENSAJE] != '') {
+					$consultasLikes = "(asunto LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' 
+						OR cuerpo_email LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')";
+				}
+				if ($textoFiltrosAvanzados[BUSCAR_POR_FECHA] != '') {
+					$consultasLikes = "fecha LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%'";
+
+				}
+				if ($textoFiltrosAvanzados[BUSCAR_POR_HORA] != '') {
+					$consultasLikes = "hora LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_HORA]."%'";
+				}
+			}
+
+			$queryDeMierda = "SELECT T.COD_CORREO AS codigo, T.nombre, T.apellido1, T.apellido2, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora
+				FROM 
+				(
+				(SELECT carta.*, NOMBRE1_COORDINADOR AS nombre, APELLIDO1_COORDINADOR AS apellido1, APELLIDO2_COORDINADOR AS apellido2
+				FROM carta
+				JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
+				JOIN coordinador ON coordinador.RUT_USUARIO3 = cartar_user.RUT_USUARIO
+				WHERE cartar_user.RUT_USUARIO = $rut
+				AND COD_BORRADOR IS NULL
+				AND RECIBIDO_CARTA_USER =1
+				)
+
+				UNION
+
+				(SELECT carta.*, NOMBRE1_PROFESOR AS nombre, APELLIDO1_PROFESOR AS apellido1, APELLIDO2_PROFESOR AS apellido2
+				FROM carta
+				JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
+				JOIN profesor ON profesor.RUT_USUARIO2 = cartar_user.RUT_USUARIO
+				WHERE cartar_user.RUT_USUARIO = $rut
+				AND COD_BORRADOR IS NULL
+				AND RECIBIDO_CARTA_USER =1
+				)
+
+				) AS T
+
+				WHERE $consultasLikes
+
+				ORDER BY T.COD2_CORREO DESC
+				LIMIT $offset, 5";
+			$query = $this->db->query($queryDeMierda);
+			//echo $this->db->last_query().'   ';return;
+			return $query->result();
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+	}
 
 	/**
 	* Inserta un correo enviado a la base de datos o elimina el borrador si el correo ya existe.
@@ -320,7 +389,7 @@ class model_correo extends CI_Model
 				$this->db->delete('cartar_user', array('COD_CORREO' => $cod)); 
 
 				$this->db->where('COD_BORRADOR',$codigoBorrador);
-				$this->db->update('carta',array('COD_BORRADOR' => NULL,'FECHA'=> date("Y-m-d"),'HORA'=>date("H:i:s")));
+				$this->db->update('carta',array('COD_BORRADOR' => NULL,'FECHA'=> date("Y-m-d"),'HORA'=>date("H:i:s"),'ASUNTO'=>$asunto,'CUERPO_EMAIL'=>$mensaje,'COD2_CORREO'=>$codCorreo));
 				$this->db->delete('borrador', array('COD_BORRADOR' => $codigoBorrador)); 
 			}
 			
@@ -577,6 +646,7 @@ class model_correo extends CI_Model
 		{
 			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->where('COD_BORRADOR IS NULL');
+			$this->db->where('ENVIADO_CARTA',1);
 			$this->db->from('carta');
 			return $this->db->count_all_results();
 			
@@ -588,6 +658,35 @@ class model_correo extends CI_Model
 			return -1;
 		}
     }
+
+/**
+	* Obtiene la cantidad de correos recibidos por el usuario
+	*
+	* @param int $rut
+	* @return int
+	* @author Byron Lanas (BL)
+	*
+	*/
+    public function cantidadRecibidos($rut)
+	{
+		try
+		{
+			$this->db->where('cartar_user.RUT_USUARIO', $rut);
+			$this->db->where('COD_BORRADOR IS NULL');
+			$this->db->where('RECIBIDO_CARTA_USER',1);
+			$this->db->from('carta');
+			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
+			return $this->db->count_all_results();
+			
+
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
+
 
 
     /**
@@ -778,6 +877,82 @@ class model_correo extends CI_Model
 		{
 			return -1;
 		}
-    }    
+    }
+    /**
+	* devuelve los datos del correo a ver en su contexto
+	*
+	* @param int $codigo
+	* @param int $rut
+	* @return array
+	* @author Byron Lanas (BL)
+	*
+	*/
+    public function cargarCorreo($codigo,$rut)
+	{
+		try
+		{    
+			$detalles=array();
+			$de=array();
+			$resultado=array();
+
+			$this->db->select('carta.COD_CORREO AS codigo');
+			$this->db->select('ASUNTO AS asunto');
+			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
+			$this->db->select('FECHA AS fecha');
+			$this->db->select('HORA AS hora');
+			$this->db->select('carta.RUT_USUARIO AS de');
+			$this->db->from('carta');
+			$this->db->join('cartar_user','cartar_user.COD_CORREO = carta.COD_CORREO');
+			$this->db->where('carta.COD_CORREO',$codigo);
+			$this->db->where('cartar_user.RUT_USUARIO',$rut);
+			$query = $this->db->get();
+			
+			if ($query == FALSE) {
+				return array();
+			}
+			$detalles= $query->result();
+			foreach ($query->result() as $row)
+			{
+				$this->db->select('NOMBRE1_COORDINADOR AS nombre');
+				$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+				$this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+				$this->db->where('RUT_USUARIO3',$row->de);
+				$query1 = $this->db->get('coordinador');
+
+				$this->db->select('NOMBRE1_PROFESOR AS nombre');
+				$this->db->select('APELLIDO1_PROFESOR AS apellido1');
+				$this->db->select('APELLIDO2_PROFESOR AS apellido2');
+				$this->db->where('RUT_USUARIO2',$row->de);
+				$query2 = $this->db->get('profesor');
+
+				if($query1->num_rows() > 0)
+				{				
+					foreach ($query1->result() as $row1)
+					{
+						$de=array();
+					   	array_push($de, $row1);					   	
+					   	$resultado=  array_merge($detalles,$de); 
+					}	
+				}
+				else if($query2->num_rows() > 0)
+				{
+					foreach ($query2->result() as $row2)
+					{
+						$de=array();
+					   	array_push($de, $row2);
+					   	$resultado=  array_merge($detalles,$de);					   
+					}	
+				}
+				
+				
+			}
+			return $resultado;
+
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+	}
 }
 ?>

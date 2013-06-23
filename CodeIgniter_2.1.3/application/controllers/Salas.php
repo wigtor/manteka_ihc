@@ -48,7 +48,7 @@ class Salas extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
-		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
+		//$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
@@ -119,12 +119,12 @@ $tipos_usuarios_permitidos = array();
 	    $num_sala = $this->input->post("num_sala");
 		$ubicacion = $this->input->post("ubicacion");
 		$capacidad = $this->input->post("capacidad");
-		$implementos = $this->input->post("cod_implemento");
-		$implementosA= $this->input->post("cod_implementoA");
-        $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos,$implementosA);  
-		$datos_vista = array('implementoA'=>$this->Model_sala->ImplementosAusentes($cod_sala),'mensaje_confirmacion'=>2,'rs_sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>2,'implemento' => $this->Model_sala->ImplementosParticulares($cod_sala),'mensaje_confirmacion'=>2,'sala' => $this->Model_sala->VerSala($cod_sala),'mensaje_confirmacion'=>$confirmacion);
-	
+		$implementos = $this->input->post("implementos");
+        $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos);  
+		$datos_vista = array('implementos' => $this->Model_sala->VerTodosLosImplementosSimple(),'mensaje_confirmacion'=>$confirmacion);
+
 		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
 	
     }
 
@@ -153,7 +153,7 @@ $tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
-		$cod_sala = $this->input->post("codEliminar");
+		$cod_sala = $this->input->post("cod_sala");
 		$confirmacion = $this->Model_sala->EliminarSala($cod_sala);
 		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>$confirmacion, 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala(),'mensaje_confirmacion'=>$confirmacion);
 		$this->cargarTodo("Salas", 'cuerpo_salas_eliminar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);

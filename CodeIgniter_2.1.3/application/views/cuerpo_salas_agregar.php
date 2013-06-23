@@ -93,7 +93,7 @@ if(isset($mensaje_confirmacion))
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required"></textarea>
+		    							<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required" style="resize: none;"></textarea>
 		  							</div>
 							</div>
 
