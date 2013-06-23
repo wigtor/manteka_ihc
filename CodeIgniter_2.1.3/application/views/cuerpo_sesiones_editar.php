@@ -9,21 +9,25 @@
 
 function EditarSesion(){
 							
-		var rut = document.getElementById("nombresesion").value;
-		var nombre1 =document.getElementById("descripcionSesion").value;
+		var nombre = document.getElementById("nombresesion").value;
+		var descripcion =document.getElementById("descripcionSesion").value;
 		var cod =document.getElementById("codigoSesion").value;
-	//var apellidoPaterno =document.getElementById("apellidoPaternoProfeEdit").value;
-	//	var apellidoMaterno =document.getElementById("apellidoMaternoProfeEdit").value;
-		//var correo = document.getElementById("mailProfeEdit").value;
-	//	var telefono = document.getElementById("telefonoProfeEdit").value;
-	//	var modulo = document.getElementById("moduloProfeEdit").value;
-		//var seccion = document.getElementById("seccionProfeEdit").value;
-	//	var tipo = document.getElementById("tipoProfeEdit").value;
-		if(!(rut!="" && nombre1!="" && cod!="")){
-			$('#modalSeleccioneAlgo').modal();
+
+		
+	
+		if(descripcion!="" && nombre!=""){
+			
+			$('#modalConfirmacion').modal();
 			return;
 		}
-		$('#modalConfirmacion').modal();
+		else{
+			if( descripcion=="" && nombre==""){
+				$('#modalSeleccioneAlgo').modal();
+			}
+			else{
+				$('#modalCamposVacios').modal();
+			}
+		}
 }
 
 function resetearSesion() {
@@ -130,19 +134,19 @@ function verDetalle(elemTabla) {
 			<div class="control-group">
 				<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Nombre de sesión</label>
 				<div class="controls">
-					<input type="text" id="nombresesion" name="nombre_sesion" maxlength="99" required >
+					<input type="text" id="nombresesion" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Descripción</label>
 				<div class="controls">
-					<textarea type="text" id="descripcionSesion" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
+					<textarea type="text" id="descripcionSesion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion_sesion" maxlength="99" required></textarea>
 				</div>
 			</div>
 			
 			<div class="control-group">
 				<div class="controls ">
-					<button type="button" class="btn"  type="submit" onClick="EditarSesion()">
+					<button type="button" class="btn"  type="button" onClick="EditarSesion()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
 					</button>
@@ -175,6 +179,20 @@ function verDetalle(elemTabla) {
 					</div>
 					<div class="modal-body">
 						<p>Por favor seleccione una sesión y vuelva a intentarlo</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+
+				<!-- Modal de campos vacíos -->
+				<div id="modalCamposVacios" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Campos Obligatorios Vacíos</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor  complete todos los campos obligatorios y vuelva a intentarlo</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

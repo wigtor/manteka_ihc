@@ -66,19 +66,19 @@ class Sesiones extends MasterManteka {
 
 		// mostramos el mensaje de operacion realizada
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el alumno con éxito";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado la sesión con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en el ingreso a la base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 		$datos_plantilla["redirecTo"] = "Sesiones/ingresarSesiones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-		$datos_plantilla["nombre_redirecTo"] = "Ingresar Sesion"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$datos_plantilla["nombre_redirecTo"] = "Ingresar Sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
@@ -132,14 +132,25 @@ class Sesiones extends MasterManteka {
 		$codEliminar = $this->input->post('codEliminar');
 
 		$confirmacion = $this->Model_sesiones->EliminarSesion($codEliminar);
-		$datos_vista = array('mensaje_confirmacion'=>$confirmacion);//
-
-
-		$subMenuLateralAbierto = "borrarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		
+		
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sesión con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error con la eliminación en la base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Sesiones/borrarSesiones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Borrar Sesiones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
     
     public function borrarSesiones()//carga la vista para borrar alumnos
