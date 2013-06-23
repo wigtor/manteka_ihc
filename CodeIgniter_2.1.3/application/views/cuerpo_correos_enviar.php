@@ -623,6 +623,7 @@ function muestraTabla(respuesta)
 		tbody.appendChild(tr);
 	}
 	tablaResultados.appendChild(tbody);
+	$('#filtroLista').val('');
 
 	/* Se oculta el "div" que indica que se está cargando. */
 	var iconoCargado = document.getElementById("icono_cargando");
