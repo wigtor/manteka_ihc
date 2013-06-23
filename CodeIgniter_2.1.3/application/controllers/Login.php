@@ -666,9 +666,9 @@ class Login extends MasterManteka {
             else
             {
               $datos_plantilla["titulo_msj"] = "Error";
-              $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA.\n\n";
-              $datos_plantilla["cuerpo_msj"] .= "* Si presiona Volver, se deslogueará de sus cuentas de Google.\n";
-              $datos_plantilla["cuerpo_msj"] .= "** Si no desea desloguearse de su cuenta de Google, presione ir a Inicio de sesión.";
+              $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA.";
+              $datos_plantilla["cuerpo_msj"] .= "<br>* Si presiona Volver, se deslogueará de sus cuentas de Google.";
+              $datos_plantilla["cuerpo_msj"] .= "<br>** Si no desea desloguearse de su cuenta de Google, presione ir a Inicio de sesión.";
               $datos_plantilla["tipo_msj"] = "alert-error";
 
               /* Finalmente muestro la vista que indica que esto fue realizado correctamente */
