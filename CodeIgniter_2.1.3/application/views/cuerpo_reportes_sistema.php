@@ -37,8 +37,8 @@
 					<td>Este reporte entrega los datos personales de los estudiantes</td>
 				</tr>
 				<tr>
-					<td><a>Reporte Profesores</a></td>
-					<td>Este reporte entrega los datos personales de los profesores</td>
+					<td><a href="#myModal" onClick="MostrarReporte('Estudiantes por Seccion')" data-toggle="modal">Reporte Estudiantes por Seccion</a></td>
+					<td>Este reporte entrega la información relacionada con las secciones</td>
 				</tr>
 			</tbody>
 		</table>
@@ -48,7 +48,7 @@
 	  	<div  class="modal-header">
 	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
 	    	<button onClick="DescargarArchivo()" id="buttonDescarga"type="button" class="close" style="margin-right:100px" aria-hidden="true">Descargar</button>
-	    	<h3 id="myModalLabel" style="color: #0088cc;">Reporte Estudiantes</h3>
+	    	<h3 id="myModalLabel" style="color: #0088cc;">Reporte</h3>
 	  	</div>
 	  	<iframe class="modal-body" id="myModal2" style="width:100%; height:90%; max-height:90%; border:0px; padding: 1px 0px 0px 0px;"></iframe>
 	  	
