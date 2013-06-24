@@ -15,8 +15,8 @@
 			/*  */
 
 			/* se marca el objeto cliqueado */
-			$('tr.success').removeClass("success");
-			$("#"+cliqueado).addClass("success");
+			$('tr.highlight').removeClass("highlight");
+			$("#"+cliqueado).addClass("highlight");
 
 			/* Defino el ajax que hará la petición al servidor */
 			$.ajax({

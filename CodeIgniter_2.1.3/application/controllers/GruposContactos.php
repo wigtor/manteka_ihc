@@ -142,6 +142,17 @@ class GruposContactos extends MasterManteka {
 		$resultado = $this->model_grupos_contacto->getDatosGrupo($id_grupo);
 		echo json_encode($resultado);
 	}
+	public function eliminarGrupo(){
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			return;
+		}
+		$id_grupo = $this->input->post('id');
+		$this->load->model('model_grupos_contacto');
+		$resultado = $this->model_grupos_contacto->eliminarGrupo($id_grupo);
+		echo json_encode($resultado);
+	}
+	
 
 	public function verGrupos()
 	{

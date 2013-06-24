@@ -8,11 +8,13 @@
 */
 ?>
 <script type="text/javascript">
+	var grupoEliminar = "";
 	function DetalleGrupo(id_grupo, cliqueado){
 		//function DetalleSeccion(cod_seccion){
 			/* se marca el objeto cliqueado */
-			$('tr.error').removeClass("error");
-			$("#"+cliqueado).addClass("error");
+			$('tr.highlight').removeClass("highlight");
+			$("#"+cliqueado).addClass("highlight");
+			grupoEliminar = id_grupo;
 
 			/* Defino el ajax que hará la petición al servidor */
 			$.ajax({
@@ -40,7 +42,7 @@
 					var iconoCargado = document.getElementById("icono_cargando");
 					$(icono_cargando).hide();
 				}
-		}
+			}
 		);
 		
 		/* Muestro el div que indica que se está cargando... */
@@ -157,11 +159,11 @@ function ordenarFiltro(){
 			</div>
 			<div class="row-fluid text-right" style="margin-top: 4%;">
 			
-				<button class ="btn" type="button" onclick="eliminarSeccion()" >
+				<button class ="btn" type="button" onclick="verificarGrupo()" >
 					<div class="btn_with_icon_solo">Ë</div>
 					&nbsp Eliminar
 				</button>
-				<button class ="btn" type="reset" onclick="CancelarSeccion()"  >
+				<button class ="btn" type="reset" onclick="CancelarSeleccion()"  >
 					<div class="btn_with_icon_solo">Â</div>
 					&nbsp Cancelar
 				</button>
@@ -174,10 +176,10 @@ function ordenarFiltro(){
 					<h3>Confirmación</h3>
 				</div>
 				<div class="modal-body">
-					<p>Se va a eliminar la sección seleccionada ¿Está seguro?</p>
+					<p>Se va a eliminar el grupo seleccionado ¿Está seguro?</p>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+					<button class="btn" type="button" data-dismiss="modal" onclick="eliminarGrupo()" ><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
 					<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
 					
 				</div>
@@ -187,10 +189,23 @@ function ordenarFiltro(){
 			<div id="modalSeleccioneAlgo" class="modal hide fade">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>No ha seleccionado ninguna sección</h3>
+					<h3>No ha seleccionado ningún grupo</h3>
 				</div>
 				<div class="modal-body">
-					<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+					<p>Por favor seleccione un grupo y vuelva a intentarlo</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+			<!-- Modal de eliminado Correctamente -->
+			<div id="modalListo" class="modal hide fade">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3>Eliminado</h3>
+				</div>
+				<div class="modal-body">
+					<p>Se ha eliminado correctamente el grupo seleccionado.</p>
 				</div>
 				<div class="modal-footer">
 					<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -203,9 +218,40 @@ function ordenarFiltro(){
 </div>
 
 <script type="text/javascript">
-	function CancelarSeccion(){
+	function CancelarSeleccion(){
 		$('#tbody2').empty();
-		$('tr.error').removeClass("error");
+		$('tr.highlight').removeClass("highlight");
+		grupoEliminar = "";
 	}
-
+	function verificarGrupo(){
+		if(grupoEliminar !=""){
+			$('#modalConfirmacion').modal();
+			return false;
+		}
+		else{
+			$('#modalSeleccioneAlgo').modal();
+		}
+	}
+	function eliminarGrupo(){
+		/* Defino el ajax que hará la petición al servidor */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+		$('#modalConfirmacion').hide();
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("GruposContactos/eliminarGrupo") ?>", /* Se setea la url del controlador que responderá */
+			data: { id: grupoEliminar }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				console.log (respuesta);
+				/* Obtengo los objetos HTML donde serán escritos los resultados */
+				var tbody = document.getElementById("tbody2");
+				$('#tbody2').empty();
+				$('tr.highlight').remove();
+			}
+		});
+		/* Quito el div que indica que se está cargando */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).hide();
+		$('#modalListo').modal();
+	}
 </script>
