@@ -414,7 +414,9 @@ class Alumnos extends MasterManteka {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url'));
-	}	
+	}
+
+
 
 	function cargaMasivaAlumnos()
 	{
@@ -447,8 +449,22 @@ class Alumnos extends MasterManteka {
 			$data = array('upload_data' => $this->upload->data());
 
 			$datos_vista = $data;
+			$datos = $data['upload_data'];
+			$nombre_archivo = $datos['full_path'];
 
-			$upload_data['full_path'];
+			//falta valida aqui el archivo
+
+			$this->load->model('Model_estudiante');
+
+			if(($this->Model_estudiante->cargaMasiva($nombre_archivo)) !== TRUE){
+
+					$datos_vista = array('error' => 'Los datos del archivo son erroneos');
+
+					$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+				exit();
+
+			}
 
 			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
