@@ -924,6 +924,7 @@ function validar(form){
 		}	
 		if(!string.length){
 			alert('Debe seleccionar un contacto de la tabla Destinatario')
+			
 		}
 		else{
 			if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
@@ -939,11 +940,15 @@ function validar(form){
 				// Mostramos un mensaje con la respuesta de PHP
 				success: function(data){				
 				}
-				})	
-			
+				})				
+			alert('¡Grupo de Contactos exitosamente agregado!')
 			}
+		
 		}	
-		alert('¡Grupo de Contactos exitosamente agregado!')
+		
+		
+		
+		
 		return false;		
 	}
 	else{
