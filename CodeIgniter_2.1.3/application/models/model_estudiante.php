@@ -149,6 +149,22 @@ class Model_estudiante extends CI_Model {
 	}
 	
 
+	public function	getEstudiantesSeccion($cod_seccion){
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		$this->db->where('COD_SECCION', $cod_seccion);
+		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
+		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	
+	}
+	
 	/**
 	* Obtiene los nombre y rut de todos los estudiantes del sistema
 	*
