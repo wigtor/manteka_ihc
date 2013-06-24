@@ -174,7 +174,7 @@ class model_correo extends CI_Model
 
 	}
 	/**
-	* Elimina 1 o varios borradores de la base de datos de la aplicación.
+	* Elimina 1 o varios correos recibidos de la base de datos de la aplicación.
 	*
 	* Para cada borrador se elimina los datos de dicho borrador en la
 	* tabla carta.
@@ -292,10 +292,10 @@ class model_correo extends CI_Model
 				}
 			}
 
-			$queryDeMierda = "SELECT T.COD_CORREO AS codigo, T.nombre, T.apellido1, T.apellido2, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora
+			$queryDeMierda = "SELECT T.COD_CORREO AS codigo, T.nombre, T.apellido1, T.apellido2, T.no_leido,ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora 
 				FROM 
 				(
-				(SELECT carta.*, NOMBRE1_COORDINADOR AS nombre, APELLIDO1_COORDINADOR AS apellido1, APELLIDO2_COORDINADOR AS apellido2
+				(SELECT carta.*, NOMBRE1_COORDINADOR AS nombre, APELLIDO1_COORDINADOR AS apellido1, APELLIDO2_COORDINADOR AS apellido2, NO_LEIDO_CARTA_USER AS no_leido
 				FROM carta
 				JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
 				JOIN coordinador ON coordinador.RUT_USUARIO3 = cartar_user.RUT_USUARIO
@@ -306,7 +306,7 @@ class model_correo extends CI_Model
 
 				UNION
 
-				(SELECT carta.*, NOMBRE1_PROFESOR AS nombre, APELLIDO1_PROFESOR AS apellido1, APELLIDO2_PROFESOR AS apellido2
+				(SELECT carta.*, NOMBRE1_PROFESOR AS nombre, APELLIDO1_PROFESOR AS apellido1, APELLIDO2_PROFESOR AS apellido2 , NO_LEIDO_CARTA_USER AS no_leido
 				FROM carta
 				JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
 				JOIN profesor ON profesor.RUT_USUARIO2 = cartar_user.RUT_USUARIO
@@ -952,6 +952,35 @@ class model_correo extends CI_Model
 		catch(Exception $e)
 		{
 			return -1;
+		}
+	}
+
+	/**
+	* Marca el correo seleccionado como leído
+	*
+	* @param int $codigo
+	* @param int $rut
+	* @return boolean
+	* @author Byron Lanas (BL)
+	*
+	*/
+    public function marcarLeido($rut,$codigo)
+	{
+		try
+		{    
+
+
+			$this->db->where('COD_CORREO',$codigo);
+			$this->db->where('RUT_USUARIO',$rut);
+			$this->db->update('cartar_user',array('NO_LEIDO_CARTA_USER' => 0));
+			
+			
+			return true;
+
+		}
+		catch(Exception $e)
+		{
+			return false;
 		}
 	}
 }

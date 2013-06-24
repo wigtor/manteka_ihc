@@ -447,6 +447,25 @@ class Correo extends MasterManteka {
 		$resultado =$this->model_correo->VerBorradores($rut,$offset);
 		echo json_encode($resultado);
 	}
+
+	/**
+	*Marca el correo seleccionado como leído
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function postLeido(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$codigo = $this->input->post('codigo');
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+
+		$resultado =$this->model_correo->marcarLeido($rut,$codigo);
+		echo json_encode($resultado);
+	}
+
 /**
 	* Guarda borradores automaticamente
 	*

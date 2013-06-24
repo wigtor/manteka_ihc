@@ -157,11 +157,14 @@ function cambiarCorreos(direccion,offset)
 				}
 				document.getElementById("ant").removeAttribute('class');
 
-			}else 
-			if(offset+5>=<?php echo $cantidadBorradores;?>){
+			}else{
+				if(offset+5>=<?php echo $cantidadBorradores;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
+				if(offset==0)
+					document.getElementById("ant").removeAttribute('onClick');
+			}
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadBorradores;?>;
 
 			
