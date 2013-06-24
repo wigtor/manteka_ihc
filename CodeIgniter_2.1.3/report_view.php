@@ -1,19 +1,21 @@
 <?php 
- 
+define ('BASEPATH','./');
 //Import the PhpJasperLibrary
 
 include ('PhpJasperLibrary/tcpdf/tcpdf.php');
 include ('PhpJasperLibrary/PHPJasperXML.inc.php');
- 
+require_once 'application/config/database.php';
+
 //database connection details
 if(isset($_GET["nombreReporte"]))
 	$nombreReporte = $_GET["nombreReporte"];
 if(!isset($_GET["mode"]))
 	exit();
-$server="127.0.0.1";
-$db="manteka_db";
-$user="root";
-$pass="";
+
+$server= $db['default']['hostname'];
+$datbas=$db['default']['database'];
+$user=$db['default']['username'];
+$pass=$db['default']['password'];
 $version="0.8b";
 $pgport=3306;
 $pchartfolder="./class/pchart2";
@@ -30,9 +32,8 @@ $PHPJasperXML = new PHPJasperXML();
 //$PHPJasperXML->arrayParameter=array("parameter1"=>1);
 $PHPJasperXML->xml_dismantle($xml);
  
-$PHPJasperXML->transferDBtoArray($server,$user,$pass,$db);
+$PHPJasperXML->transferDBtoArray($server,$user,$pass,$datbas);
 $PHPJasperXML->outpage($_GET["mode"]);    //page output method I:standard output  D:Download file
 
- 
  
 ?>
