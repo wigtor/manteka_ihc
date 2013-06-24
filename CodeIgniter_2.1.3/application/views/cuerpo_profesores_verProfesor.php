@@ -81,7 +81,7 @@
 
 
 <fieldset>
-	<legend>Ver profesores</legend>
+	<legend>Ver Profesor</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">

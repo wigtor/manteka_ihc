@@ -294,7 +294,7 @@ function ordenarFiltro(){ //No funcional
 						echo form_open('Alumnos/postEditarEstudiante/', $atributos);
 					?>
 						<div class="control-group">
-							<label class="control-label" for="rutEditar" style="cursor: default">1-. RUT</label>
+							<label class="control-label" for="rutEditar" style="cursor: default">1-.<font color="red">*</font>  RUT</label>
 							<div class="controls">
 								<input type="text" id="rutEditar" name="rutEditar" class="span12" readonly>
 							</div>

@@ -147,7 +147,7 @@
 	<div class="span10">
 		<form id="formAsignar" type="post" method="post" onsubmit="AsignarSeccion();return false">
 		<fieldset>
-			<legend>Asignaciones de Sección</legend>
+			<legend>Asignación de Sección</legend>
 			<div class="row-fluid">
 				<div class= "span6">
 					<div class="row-fluid">

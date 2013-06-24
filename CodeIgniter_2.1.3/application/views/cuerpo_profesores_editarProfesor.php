@@ -168,7 +168,7 @@
 				echo form_open('Profesores/editarProfesores', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="run_profe">1-.RUT</label>
+					<label class="control-label" for="run_profe">1-.<font color="red">*</font> RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar" name="run_profe" readonly>
 					</div>
