@@ -144,7 +144,7 @@ if(isset($mensaje_confirmacion))
 						
 
 <fieldset>
-	<legend>Eliminar Sala</legend>
+	<legend>Borrar Sala</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
