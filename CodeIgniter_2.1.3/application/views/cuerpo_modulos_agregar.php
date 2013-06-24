@@ -182,7 +182,7 @@ function nombreEnUso(){
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
-									<label  class="control-label" for="inputInfo">2-.Agregar Sesiones Existentes</label>
+									<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Agregar Sesiones Existentes</label>
 								</div>
 							</div>
 						</div>
