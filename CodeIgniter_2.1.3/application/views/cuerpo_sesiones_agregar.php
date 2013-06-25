@@ -1,10 +1,10 @@
 <script>
 
 	function comprobarNombre() {
-		var rut = document.getElementById("nombre_sesion").value;
+		var nombre = document.getElementById("nombre_sesion").value;
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Sesion/nombreExisteC") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Sesiones/nombreExisteC") ?>", /* Se setea la url del controlador que responderá */
 			data: { nombre_post: nombre},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				//var tablaResultados = document.getElementById("modulos");
@@ -38,8 +38,8 @@
 	function agregarSesion(){
 		var nombre = document.getElementById("nombre_sesion").value;
 		var descripcion = document.getElementById("descripcion_sesion").value;
-		alert(nombre);
-		if(nombre!="" && descripcion!=""){
+
+		if(nombre!="" ){
 					return true;
 		}
 		else {
@@ -51,7 +51,7 @@
 
 		<fieldset>
 			<legend>Agregar Sesión</legend>
-		<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Sesiones/agregarSesiones/")?>">
+		
 				<div class="row-fluid">
 					<div class="span6">
 						<font color="red">*Campos Obligatorios</font>

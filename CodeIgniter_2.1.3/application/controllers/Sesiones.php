@@ -80,6 +80,7 @@ class Sesiones extends MasterManteka {
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "Ingresar Sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
+		$subMenuLateralAbierto = "ingresarSesiones"; 
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
@@ -90,9 +91,9 @@ class Sesiones extends MasterManteka {
 			return;
 		}
 		$this->load->model('Model_sesiones');
-		$nombre = $this->input->post('nombre_existe');
+		$nombre = $this->input->post('nombre_post');
 
-		$resultado = $this->Model_estudiante->nombreExisteM($nombre);
+		$resultado = $this->Model_sesiones->nombreExisteM($nombre);
 		echo json_encode($resultado);
 	}
 
