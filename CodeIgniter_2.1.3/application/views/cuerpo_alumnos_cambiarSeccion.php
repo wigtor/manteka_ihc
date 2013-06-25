@@ -121,7 +121,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 		<fieldset>
 			<legend>Cambio de sección</legend>
 			<div class= "row-fluid">
-				<form id="FormS1" type="post" onsubmit="cambioSeccion() ;return false" method="post" action="<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/")?>"><!--FORM PRIMERA SECCION-->
+				<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/")?>"><!--FORM PRIMERA SECCION-->
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6"> 
@@ -133,7 +133,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 								<br>
 								<br>
 								Mover de sección:
-								<button class="btn" type="submit" name="botonCambio" value="1">   >   </button>
+								<button class="btn"  type="button" onclick="cambioSeccion()" name="botonCambio" value="1">   >   </button>
 				
 						</div>
 						<div class="span6" style="align:right">
@@ -215,7 +215,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 								<br>
 								<br>
 								Mover de sección:
-									<button class="btn" type="submit" name="botonCambio" value="2">   <   </button>
+									<button class="btn" type="button" onclick="cambioSeccion()" name="botonCambio" value="2">   <   </button>
 				
 						</div>
 						<div class="span6">
