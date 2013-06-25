@@ -70,7 +70,7 @@
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				if(datos.length!=0){
 					for (var i = 0; i < datos.length; i++) {
-						var profesores = profesores+'<tr><td style="width:26px;"><input type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+datos[i].RUT_USUARIO2+'"> '+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
+						var profesores = profesores+'<tr><td style="width:26px;"><input required type="radio" name="profesor_seleccionado" id="profesor_'+i+'" value="'+datos[i].RUT_USUARIO2+'"> '+datos[i].NOMBRE1_PROFESOR+' '+datos[i].APELLIDO1_PROFESOR+'</td></tr>';
 					}
 				}else{
 					var profesores = "";
@@ -165,7 +165,7 @@
 										
 									</tr>
 								</thead>
-								<tbody>
+								<tbody >
 
 								<?php
 									$contador=0;
@@ -174,7 +174,7 @@
 										while ($contador<count($seccion)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$seccion[$contador][0].'"> '.$seccion[$contador][1].'</td>';
+											echo '<td style="width:26px;"><input required type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$seccion[$contador][0].'"> '.$seccion[$contador][1].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -200,7 +200,7 @@
 										
 									</tr>
 								</thead>
-								<tbody id="profes">
+								<tbody id="profes" >
 									
 								</tbody>
 							</table>
@@ -225,7 +225,7 @@
 										
 									</tr>
 								</thead>
-								<tbody>
+								<tbody >
 									<?php
 										$contador=0;
 										$comilla= "'";
@@ -233,7 +233,7 @@
 										while ($contador<count($modulos)){
 											
 											echo '<tr>';
-											echo '<td><input onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$modulos[$contador]['COD_MODULO_TEM'].'"> '.$modulos[$contador]['NOMBRE_MODULO'].'</td>';
+											echo '<td><input required onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$modulos[$contador]['COD_MODULO_TEM'].'"> '.$modulos[$contador]['NOMBRE_MODULO'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -269,7 +269,7 @@
 										
 									</tr>
 								</thead>
-								<tbody>
+								<tbody >
 									<?php
 										$contador=0;
 										$comilla= "'";
@@ -278,7 +278,7 @@
 										while ($contador<count($salas)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$salas[$contador]['COD_SALA'].'"> '.$salas[$contador]['NUM_SALA'].'</td>';
+											echo '<td style="width:26px;"><input required onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$salas[$contador]['COD_SALA'].'"> '.$salas[$contador]['NUM_SALA'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -289,14 +289,14 @@
 						</div>
 
 						<div class="row-fluid">
-								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%">
+								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%" required>
 									<option value="" disabled selected>Día</option>
 									<option disabled>Elija una sala para ver sus dias disponibles</option>
 								</select>
 							
 
 						
-								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%" >
+								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%" required>
 									<option value="" disabled selected>Bloque</option>
 									<option disabled>Elija una sala para ver sus bloques disponibles</option>
 								</select>
