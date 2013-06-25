@@ -34,7 +34,7 @@ class model_coordinadores extends CI_Model{
       * @param none
       * @return array $datos  datos de los coordinadores
       */
-   	function ObtenerTodosCoordinadores(){
+   		function ObtenerTodosCoordinadores(){
    		/* SUMARIO DE LA FUNCIÓN:
    			La función simplemente obtiene desde la base de datos
    			todos las coordinaciones disponibles en el
@@ -47,17 +47,17 @@ class model_coordinadores extends CI_Model{
    		*/
 		
 		$this->db->select('*');
-		$this->db->from('coordinador');	
+		$this->db->from('coordinador');
 		$this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
 		$query = $this->db->get();
-		
+				
    		/*$query = $this->db->get('coordinador');¨*/
    		$ObjetoListaResultados = $query->result_array();
 		/*'id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",
 		*/
 		$datos = array();
 		$contador = 0;		
-		foreach ($ObjetoListaResultados as $row) {
+		foreach ($ObjetoListaResultados as $row) {						
                         $datos[$contador] = array(
 								'id'=>intval($row['RUT_USUARIO3']),
 								'rut'=>$row['RUT_USUARIO3'],
@@ -66,10 +66,56 @@ class model_coordinadores extends CI_Model{
 								        'correo1'=>$row['CORREO1_USER'],
 								        'correo2'=>$row['CORREO2_USER'],
                         );
-                        $contador++;
+					    $contador++;
+						
 		}
    		return $datos;
    	}
+
+
+   	function ObtenerTodosCoordinadoresEliminar($rut){
+   		/* SUMARIO DE LA FUNCIÓN:
+   			La función simplemente obtiene desde la base de datos
+   			todos las coordinaciones disponibles en el
+   			sistema.
+
+   			El resultado es entregado al controlador en forma de
+   			array de objetos, por tanto éste debe recorrer el
+            array y transformar los objetos en filas para
+            obtener la información correspondiente.
+   		*/
+		
+		$this->db->select('*');
+		$this->db->from('coordinador');
+		$this->db->join('usuario', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+		$query = $this->db->get();
+				
+   		/*$query = $this->db->get('coordinador');¨*/
+   		$ObjetoListaResultados = $query->result_array();
+		/*'id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",
+		*/
+		$datos = array();
+		$contador = 0;		
+		foreach ($ObjetoListaResultados as $row) {
+				
+				
+						if(strcmp($row['RUT_USUARIO3'],$rut)==0){
+						}
+						else{
+                        $datos[$contador] = array(
+								'id'=>intval($row['RUT_USUARIO3']),
+								'rut'=>$row['RUT_USUARIO3'],
+                                'nombre'=> $row['APELLIDO1_COORDINADOR']." ".$row['APELLIDO2_COORDINADOR']." ".$row['NOMBRE1_COORDINADOR']." ".$row['NOMBRE2_COORDINADOR'],
+                                'fono'=> intval($row['TELEFONO_COORDINADOR']),
+								        'correo1'=>$row['CORREO1_USER'],
+								        'correo2'=>$row['CORREO2_USER'],
+                        );
+					    $contador++;
+						}
+						}
+   		return $datos;
+   	}
+
 
 
    /**
@@ -195,10 +241,19 @@ class model_coordinadores extends CI_Model{
       * @return none
       */	
       function borrarCoordinadores($array){
+		$this->db->select('*');
+		$this->db->from('coordinador');
+		$query = $this->db->get(); 
+		if($query->num_rows < 2) {
+			return FALSE;	
+		}
+		else{
          $this->db->where('RUT_USUARIO3',$array);
          $this->db->delete('coordinador');
          $this->db->where('RUT_USUARIO',$array);
          $this->db->delete('usuario');
+		 return TRUE;
+		 }
       }
 
 	  
@@ -305,7 +360,7 @@ class model_coordinadores extends CI_Model{
          $this->db->insert('usuario',$informacion_user);
          $informacion_coord = array('RUT_USUARIO3'          => $rut, 
                                     'NOMBRE1_COORDINADOR'   => $nombre1,
-                                    'NOMBRE2_COORDINADOR'   => $nombre1,
+                                    'NOMBRE2_COORDINADOR'   => $nombre2,
                                     'APELLIDO1_COORDINADOR'   => $apellido1,
                                     'APELLIDO2_COORDINADOR'   => $apellido2,
                                     'TELEFONO_COORDINADOR'  => $fono);
@@ -390,7 +445,8 @@ class model_coordinadores extends CI_Model{
       return $query->row();
    }
 
-   public function getAllCoordinadores(){
+   public function getAllCoordinadorsses(){
+	
       $this->db->select('RUT_USUARIO3 AS rut');
       $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
       $this->db->select('NOMBRE2_COORDINADOR AS nombre2');

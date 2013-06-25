@@ -57,7 +57,7 @@ function verDetalle(elemTabla) {
 				if (datos.apellido1 == null) {
 					datos.apellido1 = '';
 				}
-				if (datos.apellido2 == null) {
+				if (datos.apello2 == null) {
 					datos.apellido2 = '';
 				}
 
@@ -140,7 +140,7 @@ function verDetalle(elemTabla) {
 					
 				</thead>
 				<tbody>
-
+					
 				</tbody>
 			</table>
 		</div>
