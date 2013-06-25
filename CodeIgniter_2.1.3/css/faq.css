@@ -2,3 +2,4 @@
 .faqs h4.active	{ color :  rgba(30,87,153,1);}
 .faqs div p { text-align:justify; max-width: 100%; padding-bottom: 15px; margin-left: 30px; margin-right: 20px; line-height: 35px;}
 .faqs div {display: none;}
+#textAbout p {text-align:justify; max-width: 100%; padding-bottom: 15px; margin-left: 30px; margin-right: 20px; line-height: 35px;}
