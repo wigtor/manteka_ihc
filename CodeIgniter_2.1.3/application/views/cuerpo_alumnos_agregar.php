@@ -154,7 +154,7 @@ function ordenarFiltro(){
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT</label>
 						<div class="controls">
-							<input id="rut_estudiante"  pattern="\d{8,9}" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su rut sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:17785874" required>
+							<input id="rut_estudiante"  pattern="\d{8,9}" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su rut sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:177858741" required>
 						</div>
 					</div>
 					<div class="control-group">
