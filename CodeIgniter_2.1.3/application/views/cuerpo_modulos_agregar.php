@@ -149,7 +149,7 @@ function nombreEnUso(){
 <div class="row-fluid">
 	<div class="span10">
 		<fieldset>
-			<legend>Agregar Módulos</legend>
+			<legend>Agregar Módulo</legend>
 
 			<form id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
 			<div class="row-fluid">
@@ -165,7 +165,7 @@ function nombreEnUso(){
 						<div class="span12">
 								<div class="span4">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">1-.<font color="red">*</font>Nombre Módulo</label>
+										<label  class="control-label" for="inputInfo">1-.<font color="red">*</font>Nombre módulo</label>
 									</div>
 								</div>
 								<div class="span7">	
@@ -182,7 +182,7 @@ function nombreEnUso(){
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
-									<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Agregar Sesiones Existentes</label>
+									<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Agregar sesiones existentes</label>
 								</div>
 							</div>
 						</div>
@@ -242,7 +242,7 @@ function nombreEnUso(){
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
-									<label  class="control-label" for="inputInfo">4-.Agregar Requisitos Existentes</label>
+									<label  class="control-label" for="inputInfo">4-.Agregar requisitos existentes</label>
 								</div>
 							</div>
 						</div>
@@ -293,8 +293,8 @@ function nombreEnUso(){
 							<input id="1filtroLista"  onkeyup="ordenarFiltro('1')" type="text" placeholder="Filtro búsqueda">
 
 								<select id="1tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="2">Filtrar por Apellido paterno</option>
+								<option value="1">Filtrar por nombre</option>
+								<option value="2">Filtrar por apellido paterno</option>
 								<option value="0">Filtrar por RUT</option>
 								</select> 
 							

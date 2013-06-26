@@ -354,7 +354,7 @@ function editarMod(){
 	<div class="span10">
 	<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
 		<fieldset>
-			<legend>Editar Módulos</legend>
+			<legend>Editar Módulo</legend>
 			<div class="row-fluid" style="margin-bottom:5px">
 				<font color="red">*Campos Obligatorios</font>
 			</div>
@@ -388,7 +388,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span7">
-								2-.<font color="red">*</font> Sesiones del Módulo Temático
+								2-.<font color="red">*</font> Sesiones del módulo temático
 							</div>
 					</div>
 
@@ -410,7 +410,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span7">
-								3-.<font color="red">*</font> Profesores del Módulo Temático
+								3-.<font color="red">*</font> Profesores del módulo temático
 							</div>
 					</div>
 
@@ -453,7 +453,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span6">
-								5-.<font color="red">*</font> Profesor Lider 
+								5-.<font color="red">*</font> Profesor lider 
 							</div>
 
 					</div>
@@ -475,7 +475,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:3%">
 							<div class="span8">
-								6-. Descripción del Módulo 
+								6-. Descripción del módulo 
 							</div>					
 					</div>
 					<div class="row-fluid" >
@@ -489,7 +489,7 @@ function editarMod(){
 
 					<div class="row-fluid" >
 							<div class="span6">
-								7. Requisitos del Módulo
+								7. Requisitos del módulo
 							</div>
 					</div>
 
