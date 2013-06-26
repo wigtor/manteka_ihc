@@ -90,17 +90,18 @@ function verDetalle(elemTabla) {
 		$('#modalConfirmacion').modal();
 	}
     function resetearCoordinador(){
-    	$(rutDetalle).html("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(fonoDetalle).html("");
-		$(correoDetalle).html("");
-		$(correoDetalle2).html("");
+    	$('#rutToDelete').val("");
+		$('#rutDetalle').html("");
+		$('#nombre1Detalle').html("");
+		$('#nombre2Detalle').html("");
+		$('#apellido1Detalle').html("");
+		$('#apellido2Detalle').html("");
+		$('#fonoDetalle').html("");
+		$('#correoDetalle').html("");
+		$('#correoDetalle2').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
-		$('tbody tr').removeClass('highlight');
+		$('#listadoResultados tbody tr').removeClass('highlight');
     }
 
     //Se cargan por ajax
@@ -118,7 +119,7 @@ function verDetalle(elemTabla) {
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>

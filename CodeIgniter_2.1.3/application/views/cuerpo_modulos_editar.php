@@ -349,16 +349,14 @@ function editarMod(){
 
 </script>
 
-<div class="row-floid">
-
-	<div class="span10">
-	<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
-		<fieldset>
+	<fieldset>
 			<legend>Editar Módulo</legend>
 			<div class="row-fluid" style="margin-bottom:5px">
 				<font color="red">*Campos Obligatorios</font>
 			</div>
 	  		<div class="row-fluid">
+	  			<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
+				
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6">
@@ -385,7 +383,7 @@ function editarMod(){
 					</div>
 
 
-
+					
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span7">
 								2-.<font color="red">*</font> Sesiones del módulo temático
@@ -429,11 +427,7 @@ function editarMod(){
 							</table>
 						</div>
 					</div>
-
-
-
-			
-		</div>
+				</div>
 		
 				<div class="span6" style="margin-left: 2%; padding: 0%; ">
 					<div class="row-fluid">
@@ -521,8 +515,6 @@ function editarMod(){
 						</div>
 					</div>
 				</div>
+				</form>
 			</div>	
-		</fieldset>
-		</form>
-	</div>	
-</div>
+	</fieldset>

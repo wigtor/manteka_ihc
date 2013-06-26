@@ -232,9 +232,8 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 
 </script>
 
-<div>
-	<div class="span10">
-		<fieldset>
+
+	<fieldset>
 		<legend>Borrar Módulo</legend>
 		<form id="FormBorrar" type="post" onsubmit="eliminarModulo();return false" method="post">
 			
@@ -367,7 +366,4 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 	    </div>
 
 		</form>
-		</fieldset>
-	</div>
-
-</div>
+	</fieldset>

@@ -55,8 +55,8 @@
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
 				$(telefonoDetalle).html(datos.telefono == "" ? '' : $.trim(datos.telefono));
-				$(correoDetalle).html(datos.correo);
-				$(tipoDetalle).html(datos.tipo);
+				$(correoDetalle).html($.trim(datos.correo));
+				$(tipoDetalle).html($.trim(datos.tipo));
 				$(moduloTematicoDetalle).html($.trim(datos.moduloTem));
 
 				var rutInputHidden = document.getElementById("rutEliminar");
@@ -93,35 +93,23 @@
 		$('#modalConfirmacion').modal();
 	}
 
-	function resetear() {
+	function resetearProfesor() {
 		//ESTO ES DE QUIENES HICIERON EL BORRADO
-		var rutInputHidden = document.getElementById("rutEliminar");
-		$(rutInputHidden).val("");
+		$('#rutEliminar').val("");
 
-		/* Obtengo los objetos HTML donde serán escritos los resultados */
-		var rutDetalle = document.getElementById("rutDetalle");
-		var nombre1Detalle = document.getElementById("nombre1Detalle");
-		var nombre2Detalle = document.getElementById("nombre2Detalle");
-		var apellido1Detalle = document.getElementById("apellido1Detalle");
-		var apellido2Detalle = document.getElementById("apellido2Detalle");
-		var telefonoDetalle = document.getElementById("telefonoDetalle");
-		var correoDetalle = document.getElementById("correoDetalle");
-		var tipoDetalle = document.getElementById("tipoDetalle");
-		var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
-		
 		/* Seteo los valores a string vacio */
-		$(rutDetalle).html("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(telefonoDetalle).html("");
-		$(correoDetalle).html("");
-		$(tipoDetalle).html("");
-		$(moduloTematicoDetalle).html("");
+		$('#rutDetalle').html("");
+		$('#nombre1Detalle').html("");
+		$('#nombre2Detalle').html("");
+		$('#apellido1Detalle').html("");
+		$('#apellido2Detalle').html("");
+		$('#telefonoDetalle').html("");
+		$('#correoDetalle').html("");
+		$('#tipoDetalle').html("");
+		$('#moduloTematicoDetalle').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
-		$('tbody tr').removeClass('highlight');
+		$('#listadoResultados tbody tr').removeClass('highlight');
 	}
 </script>
 
@@ -134,7 +122,7 @@
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -182,7 +170,7 @@ Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
 					</button>
-					<button class="btn" type="button" onclick="resetear()" >
+					<button class="btn" type="button" onclick="resetearProfesor()" >
 						<div class="btn_with_icon_solo">Â</div>
 						&nbsp; Cancelar
 					</button>&nbsp;
