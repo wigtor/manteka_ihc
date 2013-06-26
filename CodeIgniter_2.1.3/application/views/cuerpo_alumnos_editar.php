@@ -351,14 +351,12 @@ function ordenarFiltro(){ //No funcional
 						</div>
 						
 						
-						<div class="row" style= "margin-top:2%">
-							<div class="span3" style="margin-left:37%">
+						<div class="row" >
+							<div class="controls pull-right">
 								<button class ="btn" type="button" onclick="editarEstudiante()" >
 									<div class= "icon-pencil"></div>
 									&nbsp Guardar
 								</button>
-							</div>
-							<div class="span3">
 								<button  class ="btn" type="reset" onclick="resetSeleccionado()" >
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar
