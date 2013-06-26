@@ -34,7 +34,6 @@
 				var correoDetalle = document.getElementById("correoDetalle");
 				var tipoDetalle = document.getElementById("tipoDetalle");
 				var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
-				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 				if (datos.nombre2 == null) {
@@ -44,7 +43,7 @@
 					datos.correo2 = '';
 				}
 				if (datos.moduloTem == null) {
-					datos.moduloTem = '';
+					datos.moduloTem = 'Sin asignación';
 				}
 
 
