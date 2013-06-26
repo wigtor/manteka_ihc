@@ -176,8 +176,8 @@ function ordenarFiltro(){
 					</div>
 				</div>
 
-				<div class="control-group">
-					<div class="controls ">
+				<div class="row">
+				<div class="controls pull-right">
 						<button type="button" class="btn" onclick="agregarAyudante()">
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Agregar
