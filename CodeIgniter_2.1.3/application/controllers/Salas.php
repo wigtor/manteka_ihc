@@ -63,7 +63,7 @@ class Salas extends MasterManteka {
 	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra sala.
 	*
 	*/
-	public function agregarSalas($mensajes_alert = array())
+	public function agregarSalas()
     {
 		//Se comprueba que quien hace esta petición este logueado
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
@@ -75,19 +75,42 @@ class Salas extends MasterManteka {
 		$subMenuLateralAbierto = "agregarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		
-$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->load->model('Model_sala');
+		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos());
+		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+    }
+	public function ingresarSalas()
+	{	
+		
+		
 		$this->load->model('Model_sala');
         $num_sala = $this->input->get("num_sala");
         $ubicacion = $this->input->get("ubicacion");
         $capacidad = $this->input->get("capacidad");
 		$implementos = $this->input->get("cod_implemento");
         $confirmacion = $this->Model_sala->InsertarSala($num_sala,$ubicacion,$capacidad,$implementos);
-	
-		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos(),'mensaje_confirmacion'=>$confirmacion);
-		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+        
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado la sala con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en el ingreso en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Salas/agregarSalas"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Agregar Salas"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 
-    }
+	}
     
 	/**
 	* Editar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_editar'
@@ -114,6 +137,16 @@ $tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
+		$datos_vista = array('implementos' => $this->Model_sala->VerTodosLosImplementosSimple());
+	
+		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+	
+    }
+	
+	public function modificarSalas()
+	{
+		$this->load->model('Model_sala');
 		$cod_sala = $this->input->post("codEditar");
 		$cod_salaF=$this->input->post("cod_sala");
 	    $num_sala = $this->input->post("num_sala");
@@ -121,13 +154,25 @@ $tipos_usuarios_permitidos = array();
 		$capacidad = $this->input->post("capacidad");
 		$implementos = $this->input->post("implementos");
         $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos);  
-		$datos_vista = array('implementos' => $this->Model_sala->VerTodosLosImplementosSimple(),'mensaje_confirmacion'=>$confirmacion);
-
-		$this->cargarTodo("Salas", 'cuerpo_salas_editar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-	
-    }
-
+		
+        // se muestra mensaje de operación realizada
+    	if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha modificado la sala con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la edición en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Salas/editarSalas"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Editar Salas"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+	}
 	/**
 	* Borrar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_eliminar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
@@ -153,12 +198,34 @@ $tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
-		$cod_sala = $this->input->post("cod_sala");
-		$confirmacion = $this->Model_sala->EliminarSala($cod_sala);
-		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(),'mensaje_confirmacion'=>$confirmacion, 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala(),'mensaje_confirmacion'=>$confirmacion);
+		$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
 		$this->cargarTodo("Salas", 'cuerpo_salas_eliminar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
+	public function eliminarSalas()
+    {
+		$this->load->model('Model_sala');
+		$cod_sala = $this->input->post("cod_sala");
+		$confirmacion = $this->Model_sala->EliminarSala($cod_sala);
+		
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sala con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la eliminación en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Salas/borrarSalas"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Borrar Salas"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+
+	}
 
     /**
     *	
@@ -202,7 +269,29 @@ $tipos_usuarios_permitidos = array();
 		echo json_encode($resultado);
     }
 
+	public function numExiste() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_sala');
+		$num = $this->input->post('num_post');
+
+		$resultado = $this->Model_sala->numSala($num);
+		echo json_encode($resultado);
+	}
 	
+	public function numExisteE() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_sala');
+		$num = $this->input->post('num_post');
+		$cod = $this->input->post('cod_post');
+		$resultado = $this->Model_sala->numSalaE($num,$cod);
+		echo json_encode($resultado);
+	}
 }
 
 /* End of file Correo.php */

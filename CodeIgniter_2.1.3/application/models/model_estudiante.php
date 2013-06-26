@@ -5,14 +5,14 @@
 * @author Grupo 4
 */
 class Model_estudiante extends CI_Model {
-    public $rut_estudiante = 0;
-    var $nombre1_estudiante = '';
-    var $nombre2_estudiante  = '';
-    var $apellido_paterno='';
-    var $apellido_materno='';
-    var $correo_estudiante='';
-    var $cod_seccion='';
-    var $cod_carrera='';
+	public $rut_estudiante = 0;
+	var $nombre1_estudiante = '';
+	var $nombre2_estudiante  = '';
+	var $apellido_paterno='';
+	var $apellido_materno='';
+	var $correo_estudiante='';
+	var $cod_seccion='';
+	var $cod_carrera='';
 
 	/**
 	* Inserta un estudiante en la base de datos
@@ -30,19 +30,19 @@ class Model_estudiante extends CI_Model {
 	* @param string $cod_carrera Código de carrera del estudiante a insertar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera) 
+	public function InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera) 
 	{
 		$data = array(					
-					'RUT_ESTUDIANTE' => $rut_estudiante ,
-					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
-					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
-					'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
-					'CORREO_ESTUDIANTE' => $correo_estudiante ,
-					'COD_SECCION' =>  $cod_seccion ,
-					'COD_CARRERA' => $cod_carrera 
-		);
-        $datos = $this->db->insert('estudiante',$data);
+			'RUT_ESTUDIANTE' => $rut_estudiante ,
+			'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
+			'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
+			'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
+			'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
+			'CORREO_ESTUDIANTE' => $correo_estudiante ,
+			'COD_SECCION' =>  $cod_seccion ,
+			'COD_CARRERA' => $cod_carrera 
+			);
+		$datos = $this->db->insert('estudiante',$data);
 		if($datos == true){
 			return 1;
 		}
@@ -50,7 +50,7 @@ class Model_estudiante extends CI_Model {
 			return -1;
 		}
 		
-    }
+	}
 	
 	/**
 	* Edita la información de un estudiante en la base de datos
@@ -70,15 +70,15 @@ class Model_estudiante extends CI_Model {
 	public function ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$seccion)
 	{
 		$data = array(					
-					'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
-					'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
-					'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
-					'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
-					'CORREO_ESTUDIANTE' => $correo_estudiante,
-					'COD_SECCION'=>$seccion
-		);
+			'NOMBRE1_ESTUDIANTE' => $nombre1_estudiante ,
+			'NOMBRE2_ESTUDIANTE' => $nombre2_estudiante ,
+			'APELLIDO1_ESTUDIANTE' => $apellido_paterno ,
+			'APELLIDO2_ESTUDIANTE' => $apellido_materno ,
+			'CORREO_ESTUDIANTE' => $correo_estudiante,
+			'COD_SECCION'=>$seccion
+			);
 		$this->db->where('RUT_ESTUDIANTE', $rut_estudiante);
-        $datos = $this->db->update('estudiante',$data);
+		$datos = $this->db->update('estudiante',$data);
         //echo $this->db->last_query();
 		if($datos == true){
 			return 1;
@@ -86,7 +86,7 @@ class Model_estudiante extends CI_Model {
 		else{
 			return -1;
 		}		
-    }
+	}
 
 	/**
 	* Eliminar un estudiante de la base de datos
@@ -97,8 +97,8 @@ class Model_estudiante extends CI_Model {
 	* @param string $rut_estudiante Rut del estudiante que se eliminará de la base de datos
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function EliminarEstudiante($rut_estudiante)
-    {
+	public function EliminarEstudiante($rut_estudiante)
+	{
 		$this->db->where('rut_estudiante', $rut_estudiante);
 		$datos = $this->db->delete('estudiante'); 
 		
@@ -108,7 +108,7 @@ class Model_estudiante extends CI_Model {
 		else{
 			return -1;
 		}
-    }
+	}
 
 	/**
 	* Obtiene los datos de todos lo estudiantes de la base de datos
@@ -149,6 +149,22 @@ class Model_estudiante extends CI_Model {
 	}
 	
 
+	public function	getEstudiantesSeccion($cod_seccion){
+		$this->db->select('RUT_ESTUDIANTE AS rut');
+		$this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+		$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+		$this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+		$this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+		$this->db->where('COD_SECCION', $cod_seccion);
+		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
+		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	
+	}
+	
 	/**
 	* Obtiene los nombre y rut de todos los estudiantes del sistema
 	*
@@ -337,21 +353,21 @@ class Model_estudiante extends CI_Model {
 	}
 	
 	function CambioDeSecciones($seccionOUT,$listaRut){
-			$contador = 0;
-			$confirmacion = 1;
-			while ($contador<count($listaRut)){
-				$data = array(
-               'COD_SECCION' => $seccionOUT
+		$contador = 0;
+		$confirmacion = 1;
+		while ($contador<count($listaRut)){
+			$data = array(
+				'COD_SECCION' => $seccionOUT
 				);
-				$this->db->where('RUT_ESTUDIANTE', $listaRut[$contador]);
-				$datos = $this->db->update('estudiante',$data);
-				if($datos != true){
-					$confirmacion = -1;
-				}
-	
-			$contador = $contador + 1;
+			$this->db->where('RUT_ESTUDIANTE', $listaRut[$contador]);
+			$datos = $this->db->update('estudiante',$data);
+			if($datos != true){
+				$confirmacion = -1;
 			}
-			return $confirmacion;
+
+			$contador = $contador + 1;
+		}
+		return $confirmacion;
 	}
 	
 	public function getAllRut(){
@@ -425,11 +441,88 @@ class Model_estudiante extends CI_Model {
 			if(strtolower($lista[$contador]) == strtolower($rut)){
 				return -1;
 			}
-		$contador = $contador + 1;
+			$contador = $contador + 1;
 		}
 		return 1;
 	}
 
+	function validaRut($rut){
+		if(strpos($rut,"-")==false){
+			$RUT[0] = substr($rut, 0, -1);
+			$RUT[1] = substr($rut, -1);
+		}else{
+			$RUT = explode("-", trim($rut));
+		}
+		$elRut = str_replace(".", "", trim($RUT[0]));
+		$factor = 2;
+		for($i = strlen($elRut)-1; $i >= 0; $i--):
+			$factor = $factor > 7 ? 2 : $factor;
+		$suma += $elRut{$i}*$factor++;
+		endfor;
+		$dv = 11 - ($suma % 11); 
+		if($dv == 11){
+			$dv=0;
+		}else if($dv == 10){
+			$dv="k";
+		}
+		if($dv == trim(strtolower($RUT[1]))){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function cargaMasiva($archivo){
+
+		if(!file_exists($archivo) || !is_readable($archivo))
+			return FALSE;
+
+		$f = fopen($archivo, "r");
+
+		$header = NULL;
+		$data = array();
+		$splitArray = array();
+		$count = 0;
+		while(($linea = fgetcsv($f, 201, ',','"','\\')) !== FALSE)
+		{			
+
+			if(!$header){
+				$header = $linea;            	
+			}
+			else{
+
+				if(($data = array_combine($header, $linea)) == FALSE) {
+					continue;
+				}
+
+				try{					
+					if(($this->validaRut($data['RUT_ESTUDIANTE'])) == FALSE){
+						continue;
+					}
+				}catch(Exception $e){
+					continue;
+				}
+
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[^\-\.]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
+
+				if($this->rutExisteM($data['RUT_ESTUDIANTE']) !== -1){                	
+					$this->db->insert('estudiante',$data);
+				}
+
+               //echo $data['RUT_ESTUDIANTE'].'<br>' ;
+
+				if($data['RUT_ESTUDIANTE'] == '17316139'){
+					echo "string";
+				}
+			}            
+		}
+
+		fclose($f);
+
+		return TRUE;
+	}
+
 }
- 
+
 ?>
