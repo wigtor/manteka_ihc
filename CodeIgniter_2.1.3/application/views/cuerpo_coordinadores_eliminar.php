@@ -14,8 +14,9 @@
 	var valorFiltrosJson = ["", "", ""];
 	var prefijo_tipoDato = "coordinador_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>";
+	var url_post_busquedas = "<?php echo site_url("Coordinadores/postBusquedaCoordinadoresEliminar") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>";
+	var id_coordinador     = "<?php echo $rut_sesion;?>";
 
 
 function verDetalle(elemTabla) {
@@ -106,6 +107,7 @@ function verDetalle(elemTabla) {
 	$(document).ready(function() {
 		escribirHeadTable();
 		cambioTipoFiltro(undefined);
+		
 	});
 
 </script>
@@ -134,7 +136,8 @@ function verDetalle(elemTabla) {
 	<div class="row-fluid">
 		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 			<table id="listadoResultados" class="table table-hover">
-			
+
+				
 			</table>
 		</div>
 		<div class="span6">

@@ -128,7 +128,63 @@ class GruposContactos extends MasterManteka {
 		}
 
 
-}
+	}
+
+	public function getDatosGrupo(){
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_grupo = $this->input->post('id');
+		$this->load->model('model_grupos_contacto');
+		$resultado = $this->model_grupos_contacto->getDatosGrupo($id_grupo);
+		echo json_encode($resultado);
+	}
+	public function eliminarGrupo(){
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			return;
+		}
+		$id_grupo = $this->input->post('id');
+		$this->load->model('model_grupos_contacto');
+		$resultado = $this->model_grupos_contacto->eliminarGrupo($id_grupo);
+		echo json_encode($resultado);
+	}
+	
+
+	public function verGrupos()
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
+		$this->load->model('model_grupos_contacto');
+		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
+		$subMenuLateralAbierto = 'verGrupos'; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarTodo("Correos", "cuerpo_grupo_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	}
+	public function borrarGrupos()
+	{
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
+		$this->load->model('model_grupos_contacto');
+		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
+		$subMenuLateralAbierto = 'borrarGrupos'; 
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarTodo("Correos", "cuerpo_grupos_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	}
+
 }
 /* End of file Grupo.php */
 /* Location: ./application/controllers/Grupo.php */

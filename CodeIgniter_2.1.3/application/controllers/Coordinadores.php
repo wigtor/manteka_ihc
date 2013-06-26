@@ -179,32 +179,59 @@ class Coordinadores extends MasterManteka {
     public function borrarCoordinadores()
     {
 		$this->load->model('model_coordinadores');
-		$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadores();
+		$rut = $this->session->userdata('rut');
+		$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadoresEliminar($rut);
+		$datos_cuerpo_central['rut_sesion'] = $this->session->userdata['rut'];
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/
 		$subMenuLateralAbierto = 'borrarCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(); 
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarTodo("Docentes", "cuerpo_coordinadores_eliminar", "barra_lateral_profesores", $datos_cuerpo_central, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		return ;
-		
+
     }
 
     public function postEliminarCoordinador(){
     	$rutEliminar = $this->input->post('rutToDelete');
 		$respuesta = '';
 		$this->load->model('model_coordinadores');
-		$this->model_coordinadores->borrarCoordinadores($rutEliminar);
-
-		$datos_plantilla["titulo_msj"] = "Coordinador eliminados";
-		$datos_plantilla["cuerpo_msj"] = "El coordinador fue eliminado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		$rutdeSesion = $this->session->userdata('rut');
+		if($rutEliminar == $rutdeSesion){
+		$datos_plantilla["titulo_msj"] = "Coordinador no puede ser eliminado";
+		$datos_plantilla["cuerpo_msj"] = "El usuario no puede eliminarse así mismo.";
+		$datos_plantilla["tipo_msj"] = "alert-error";
 		$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
 		$datos_plantilla["nombre_redirecTo"] = "Eliminar coordinador";
 		$datos_plantilla["redirectAuto"] = TRUE;
 		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
+		else{
+			if($this->model_coordinadores->borrarCoordinadores($rutEliminar) == FALSE){
+				$datos_plantilla["titulo_msj"] = "Coordinador no puede ser eliminado";
+				$datos_plantilla["cuerpo_msj"] = "Existen sólo este coordinador en el sistema en este momento,es imposible utilizar ManteK-A sin un coordinador.";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+				$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
+				$datos_plantilla["nombre_redirecTo"] = "Eliminar coordinador";
+				$datos_plantilla["redirectAuto"] = TRUE;
+				$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+				$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Coordinador eliminados";
+				$datos_plantilla["cuerpo_msj"] = "El coordinador fue eliminado correctamente.";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+				$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
+				$datos_plantilla["nombre_redirecTo"] = "Eliminar coordinador";
+				$datos_plantilla["redirectAuto"] = TRUE;
+				$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+				$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+			}
+		}
+		
     }
 
     /**
@@ -231,9 +258,29 @@ class Coordinadores extends MasterManteka {
 		}
 		$textoFiltro = $this->input->post('textoFiltroBasico');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
-
 		$this->load->model('model_coordinadores');
 		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($textoFiltro, $textoFiltrosAvanzados);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'coordinadores', $this->session->userdata('rut'));
+			}
+		}
+		echo json_encode($resultado);
+	}
+	public function postBusquedaCoordinadoresEliminar() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		$this->load->model('model_coordinadores');
+		$resultado = $this->model_coordinadores->getCoordinadoresByFilterE($textoFiltro, $textoFiltrosAvanzados);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {

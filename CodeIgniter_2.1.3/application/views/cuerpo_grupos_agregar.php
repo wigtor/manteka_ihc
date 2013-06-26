@@ -200,6 +200,19 @@
 		<?php echo form_close(""); ?>
 	</div><!--primero-->
 
+	<!-- modal de aviso existe uno repetido -->
+	<div id="repetido" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Uno o mas de los contactos no fue agregado debido a que ya se encontraba en la lista destino.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
 </fieldset>
 
 
@@ -874,7 +887,7 @@ function pasarContactos(){
  var tbody2 = document.getElementById('tbody2');
  var cont = 0;
  var total=tbody.getElementsByTagName('tr').length;
-
+ var flag=false;
 	for (var x=0; x < total; x++) {		
 		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
 			if(revisarRut(tbody.getElementsByTagName('tr')[x].getAttribute("rut"))){	
@@ -882,9 +895,14 @@ function pasarContactos(){
 				total--;
 				x--;
 			}
-			else
-				tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked=false;				
+			else{
+				tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked=false;
+				flag = true;
+			}
 		}
+	}
+	if(flag){
+		$('#repetido').modal();
 	}
 }
 
@@ -892,7 +910,7 @@ function revisarRut(rut){
 	var tbody2 = document.getElementById('tbody2');
 	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
 		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
-			return false;	
+			return false;
 		}
 	}
 	return true;	
@@ -924,6 +942,7 @@ function validar(form){
 		}	
 		if(!string.length){
 			alert('Debe seleccionar un contacto de la tabla Destinatario')
+			
 		}
 		else{
 			if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
@@ -939,11 +958,15 @@ function validar(form){
 				// Mostramos un mensaje con la respuesta de PHP
 				success: function(data){				
 				}
-				})	
-			
+				})				
+			alert('¡Grupo de Contactos exitosamente agregado!')
 			}
+		
 		}	
-		alert('¡Grupo de Contactos exitosamente agregado!')
+		
+		
+		
+		
 		return false;		
 	}
 	else{
