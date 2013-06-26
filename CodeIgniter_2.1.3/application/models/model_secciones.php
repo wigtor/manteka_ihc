@@ -455,7 +455,7 @@ public function verSalasPorAsignar(){
 
 public function verHorarioSegunSala($sala){
 
-	$columnas = 'dia.NOMBRE_DIA, modulo.NUMERO_MODULO';
+	$columnas = 'dia.NOMBRE_DIA, modulo.NUMERO_MODULO, dia.COD_ABREVIACION_DIA';
 	$condiciones = '(sala.NUM_SALA = \''.$sala.'\') AND (sala.COD_SALA = sala_horario.COD_SALA) AND (sala_horario.COD_HORARIO = horario.COD_HORARIO) AND (horario.COD_DIA = dia.COD_DIA) AND (horario.COD_MODULO = modulo.COD_MODULO)';
 	$desde = 'dia, modulo, horario, sala_horario, sala';
 	$query = $this->db->select($columnas);
