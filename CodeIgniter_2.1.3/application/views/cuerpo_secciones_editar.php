@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	 var tiposFiltro = ["Nombre sección"]; //Debe ser escrito con PHP
+	var tiposFiltro = ["Nombre sección"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = [""];
 	var prefijo_tipoDato = "seccion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
@@ -69,8 +69,7 @@
 	}
 </script>
 
-<div class="row-fluid">
-    <div class= "span11">
+
         <fieldset> 
 		<legend>Editar Sección</legend>
 			<div class="row-fluid">
@@ -168,5 +167,3 @@
                 </div>
             </div>
         </fieldset>
-    </div>
-</div>

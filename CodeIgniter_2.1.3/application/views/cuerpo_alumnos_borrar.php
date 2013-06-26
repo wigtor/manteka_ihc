@@ -104,32 +104,23 @@
 		}
 	}
 
-	function resetear() {
+	function resetearAlumno() {
 		//ESTO ES DE QUIENES HICIERON EL BORRADO
 		var rutInputHidden = document.getElementById("rutEliminar");
-		$(rutInputHidden).val("");
+		$('#rutEliminar').val("");
 		/* Obtengo los objetos HTML donde serán escritos los resultados */
-		var rutDetalle = document.getElementById("rutDetalle");
-		var nombre1Detalle = document.getElementById("nombre1Detalle");
-		var nombre2Detalle = document.getElementById("nombre2Detalle");
-		var apellido1Detalle = document.getElementById("apellido1Detalle");
-		var apellido2Detalle = document.getElementById("apellido2Detalle");
-		var carreraDetalle = document.getElementById("carreraDetalle");
-		var correoDetalle = document.getElementById("correoDetalle");
-		var seccionDetalle = document.getElementById("seccionDetalle");
-		
 		/* Seteo los valores a string vacio */
-		$(rutDetalle).html("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(carreraDetalle).html("");
-		$(correoDetalle).html("");
-		$(seccionDetalle).html("");
+		$('#rutDetalle').html("");
+		$('#nombre1Detalle').html("");
+		$('#nombre2Detalle').html("");
+		$('#apellido1Detalle').html("");
+		$('#apellido2Detalle').html("");
+		$('#carreraDetalle').html("");
+		$('#correoDetalle').html("");
+		$('#seccionDetalle').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
-		$('tbody tr').removeClass('highlight');
+		$('#listadoResultados tbody tr').removeClass('highlight');
 	}
 </script>
 
@@ -178,11 +169,11 @@ Correo:           <b id="correoDetalle"></b></pre>
 					<input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
 					<div class="control-group">
 						<div class="controls pull-right">
-							<button type="button" class="btn" onclick="eliminarCoordinador()">
+							<button type="button" class="btn" onclick="eliminarAlumno()">
 								<i class= "icon-trash"></i>
 								&nbsp; Eliminar
 							</button>
-							<button class="btn" type="button" onclick="resetearCoordinador()" >
+							<button class="btn" type="button" onclick="resetearAlumno()" >
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp; Cancelar
 							</button>&nbsp;

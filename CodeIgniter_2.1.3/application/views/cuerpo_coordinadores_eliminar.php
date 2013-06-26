@@ -90,17 +90,18 @@ function verDetalle(elemTabla) {
 		$('#modalConfirmacion').modal();
 	}
     function resetearCoordinador(){
-    	$(rutDetalle).html("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(fonoDetalle).html("");
-		$(correoDetalle).html("");
-		$(correoDetalle2).html("");
+    	$('#rutToDelete').val("");
+		$('#rutDetalle').html("");
+		$('#nombre1Detalle').html("");
+		$('#nombre2Detalle').html("");
+		$('#apellido1Detalle').html("");
+		$('#apellido2Detalle').html("");
+		$('#fonoDetalle').html("");
+		$('#correoDetalle').html("");
+		$('#correoDetalle2').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
-		$('tbody tr').removeClass('highlight');
+		$('#listadoResultados tbody tr').removeClass('highlight');
     }
 
     //Se cargan por ajax
