@@ -210,7 +210,7 @@ function ordenarFiltro(){
                 </div>
                 <div class="span7">
                     <div class="row-fluid">
-                        <div class="span5">
+                        <div class="span7">
                             2.-Información de la sección
                         </div>
                     </div>

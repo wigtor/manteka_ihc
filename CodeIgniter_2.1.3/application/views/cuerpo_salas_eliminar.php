@@ -189,8 +189,7 @@ Ubicación:      <b id="ubicacion"></b>
 Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div>
 			</pre>
 			
-			<div class="control-group">
-				<div class="controls pull-right">
+			<div class="control-group" style="text-align: right">
 					<button type="button" class="btn" onclick="eliminarSala()">
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
@@ -199,7 +198,7 @@ Implementos:    <div style="display: inline-block; vertical-align: top;" id="imp
 						<div class="btn_with_icon_solo">Â</div>
 						&nbsp; Cancelar
 					</button>&nbsp;
-			</div>
+					
 			<!-- Modal Confirmación -->
 			<div id="modalConfirmacion" class="modal hide fade">
 				<div class="modal-header">

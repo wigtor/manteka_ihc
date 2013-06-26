@@ -210,8 +210,18 @@
 
 			<div class="control-group">
 				<br>
-				<h5>Si desea modificar los implementos de la sala, elija entre los siguientes:</h5>
-				(Los implementos marcados son los que tiene actualmente la sala)
+				<div class="row-fluid">
+					<div class="span13">
+					<b>Si desea modificar los implementos de la sala, elija entre los siguientes:</b>
+					</div>
+				</div>
+
+				<div class="row-fluid">
+					<div class="span13">
+					(Los implementos marcados son los que tiene actualmente la sala)
+					</div>
+				</div>
+				
 				<div style="border:#cccccc 1px solid;overflow-y:scroll; -webkit-border-radius: 4px" >
 					<table class="table table-hover">
 						<tbody>
@@ -232,8 +242,8 @@
 				</div>
 			</div>
 
-			<div class="control-group">
-				<div class="controls ">
+			<div class="control-group" style="text-align: right">
+				<!--<div class="controls ">-->
 					<button type="button" class="btn" onclick="EditarSala()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
@@ -284,7 +294,7 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>	
-				</div>
+				<!--</div>-->
 			</div>
 			<?php echo form_close(""); ?>
 		</div>

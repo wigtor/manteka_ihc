@@ -206,7 +206,7 @@ function ordenarFiltro(){
             <div class="row-fluid">
                 <div class="span5">
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span7">
                             1.-Seleccionar sección
                         </div>
 					</div>
@@ -260,7 +260,7 @@ function ordenarFiltro(){
                 <div class="span7">
 				
                     <div class="row-fluid">
-                        <div class="span5">
+                        <div class="span7">
                             2.-Información de la sección
                         </div>
                     </div>
