@@ -147,7 +147,7 @@ class Profesores extends MasterManteka {
 	 public function insertarProfesor()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
+		/*if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
 		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
@@ -162,7 +162,7 @@ class Profesores extends MasterManteka {
 		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
 		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
 		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
+		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);*/
 		$this->load->model('Model_profesor');
 
 		$rut_profesor = $this->input->post("rut_profesor");
@@ -177,12 +177,12 @@ class Profesores extends MasterManteka {
         $confirmacion = $this->Model_profesor->InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$correo_profesor1,$telefono_profesor, $tipo_profesor);
 	    
 		if($confirmacion != 1){
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar insertar el profesor";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar insertar el profesor";
 			$datos_plantilla["tipo_msj"] = "alert-error";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el profesor correctamente";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 	
@@ -252,35 +252,27 @@ class Profesores extends MasterManteka {
 	{
 		$rut_profesor = $this->input->post("rutEliminar");
 
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-
-
 		$this->load->model('Model_profesor');
 		$confirmacion = $this->Model_profesor->EliminarProfesor($rut_profesor);
-		$datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),'mensaje_confirmacion'=>$confirmacion);
+		
 
-
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "borrarProfesores"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha borrado el profesor con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Profesores/borrarProfesores"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Borrar Profesores"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		
 	}
 
@@ -315,12 +307,12 @@ class Profesores extends MasterManteka {
 			
 			
 			if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "El profesor fue editado correctamente.";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 			}
 			else{
-				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error mientras se actualizaban los datos del profesor";
 				$datos_plantilla["tipo_msj"] = "alert-error";	
 			}

@@ -56,7 +56,7 @@
 					<p>Ingrese la información de la sección:</p>
 				</div>
 			</div>
-
+			
 			<?php
 				$attributes = array('onsubmit' => 'return comprobarSeccion()','id' => 'formAgregar', 'class' => 'form-horizontal');
 				echo form_open('Secciones/ingresarSecciones', $attributes);
@@ -72,7 +72,6 @@
 						-<input id="rs_seccion2" name="rs_seccion2"  maxlength="2"  title=" Ingrese sólo dos dígitos" pattern="[0-9]{2}" type="text" class="span2" required>
 					</div>
 				</div>
-
 				<div class="control-group">
 					<div class="controls ">
 						<button class="btn" type="submit">

@@ -215,16 +215,27 @@ class Model_sala extends CI_Model {
 	*/
 	public function VerTodasLasSalas()
 	{
-		$sql="SELECT * FROM sala ORDER BY NUM_SALA"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM sala ORDER BY NUM_SALA"; //código MySQL
+		$this->db->select('sala.COD_SALA AS cod');
+		$this->db->select('sala.NUM_SALA AS num');
+		$this->db->select('sala.UBICACION AS ubic');
+		$this->db->select('sala.CAPACIDAD AS cap');
+		$this->db->from('sala');
+		$this->db->order_by("sala.NUM_SALA", "asc");
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); //enviar código MySQL
+
 		$contador = 0;
 		$lista = array();
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['COD_SALA'];
-			$lista[$contador][1] = $row['NUM_SALA'];
-			$lista[$contador][2] = $row['UBICACION'];
-			$lista[$contador][3] = $row['CAPACIDAD'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista[$contador]=array();
+			$lista[$contador][0] = $row->cod;//$row['COD_SALA'];
+			$lista[$contador][1] = $row->num;//$row['NUM_SALA'];
+			$lista[$contador][2] = $row->ubic;//$row['UBICACION'];
+			$lista[$contador][3] = $row->cap;//$row['CAPACIDAD'];
 			$contador = $contador + 1;
 		}
 		}
@@ -241,16 +252,27 @@ class Model_sala extends CI_Model {
 	*/
 	public function VerSala($cod_sala)
 	{
-		$sql="SELECT * FROM sala WHERE COD_SALA='$cod_sala'"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM sala WHERE COD_SALA='$cod_sala'"; //código MySQL
+		$this->db->select('sala.COD_SALA AS cod');
+		$this->db->select('sala.NUM_SALA AS num');
+		$this->db->select('sala.UBICACION AS ubic');
+		$this->db->select('sala.CAPACIDAD AS cap');
+		$this->db->from('sala');
+		$this->db->where('sala.COD_SALA', $cod_sala);
+		$query=$this->db->get();
+		$datos=$query->result();
+
+		//$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['COD_SALA'];
-			$lista[$contador][1] = $row['NUM_SALA'];
-			$lista[$contador][2] = $row['UBICACION'];
-			$lista[$contador][3] = $row['CAPACIDAD'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista[$contador]=array();	
+			$lista[$contador][0] = $row->cod;//$row['COD_SALA'];
+			$lista[$contador][1] = $row->num;//$row['NUM_SALA'];
+			$lista[$contador][2] = $row->ubic;//$row['UBICACION'];
+			$lista[$contador][3] = $row->cap;//$row['CAPACIDAD'];
 			$contador = $contador + 1;
 		}
 		}
