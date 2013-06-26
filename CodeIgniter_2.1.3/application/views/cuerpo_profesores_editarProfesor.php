@@ -69,7 +69,22 @@
 	});
 
 </script>
+<script>
+	function correo() {
+		var correo = document.getElementById("correoEditar").value;
+		var correo1 = document.getElementById("correoEditar2").value;
+		if(correo==correo1){
+			if(correo!='' && correo1!=''){
+				var mensaje = document.getElementById("mensaje");
+				$(mensaje).empty();
+				$('#modalCorreo').modal();
+				document.getElementById("correoEditar").value = "";
+				document.getElementById("correoEditar2").value = "";
+			}
+		}
+	}
 
+</script>
 <script type="text/javascript">
 	function editarProfesor(){
 		rutAEliminar = $("#rutEditar").val();
@@ -200,13 +215,13 @@
 				<div class="control-group">
 					<label class="control-label" for="correo1">6-.<font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" id="correoEditar" onblur = "correo()" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="correo2">7-.<font color="red">*</font> Correo secundario</label>
 					<div class="controls">
-						<input type="email" id="correoEditar2" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+						<input type="email" id="correoEditar2" onblur = "correo()" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
 					</div>
 				</div>
 				<div class="control-group">
@@ -271,6 +286,18 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>
+						<div id="modalCorreo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>El correo secundario y principal son iguales</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese correos distintos y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>		
 
 					</div>
 				</div>

@@ -40,6 +40,8 @@
 				var mensaje = document.getElementById("mensaje");
 				$(mensaje).empty();
 				$('#modalCorreo').modal();
+				document.getElementById("correo_profesor").value = "";
+				document.getElementById("correo_profesor1").value = "";
 			}
 		}
 	}
