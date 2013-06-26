@@ -92,11 +92,11 @@ class model_coordinadores extends CI_Model{
 				
    		/*$query = $this->db->get('coordinador');¨*/
    		$ObjetoListaResultados = $query->result_array();
-		/*'id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",
-		*/
-		$datos = array();
-		$contador = 0;		
-		foreach ($ObjetoListaResultados as $row) {
+		   /*'id'=>1 , 'nombre'=>"asd", 'rut'=>"1213451-1", 'contrasena'=>"asd", 'correo1'=>"correo1",'correo2'=>"correo2",'fono'=>"81234567",
+		   */
+		   $datos = array();
+		   $contador = 0;		
+		   foreach ($ObjetoListaResultados as $row) {
 				
 				
 						if(strcmp($row['RUT_USUARIO3'],$rut)==0){
@@ -248,10 +248,11 @@ class model_coordinadores extends CI_Model{
 			return FALSE;	
 		}
 		else{
-         $this->db->where('RUT_USUARIO3',$array);
-         $this->db->delete('coordinador');
          $this->db->where('RUT_USUARIO',$array);
          $this->db->delete('usuario');
+         $this->db->where('RUT_USUARIO3',$array);
+         $this->db->delete('coordinador');
+         
 		 return TRUE;
 		 }
       }
@@ -393,6 +394,42 @@ class model_coordinadores extends CI_Model{
             $this->db->or_like("NOMBRE2_COORDINADOR", $texto);
             $this->db->or_like("APELLIDO1_COORDINADOR", $texto);
             $this->db->or_like("APELLIDO2_COORDINADOR", $texto);
+         }
+         else {
+            //Sólo para acordarse
+            define("BUSCAR_POR_RUT", 0);
+            define("BUSCAR_POR_NOMBRE", 1);
+            define("BUSCAR_POR_APELLIDO", 2);
+            $this->db->like("RUT_USUARIO3", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+            if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
+               $this->db->where("(NOMBRE1_COORDINADOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_COORDINADOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
+               
+            }
+            if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
+               $this->db->where("(APELLIDO1_COORDINADOR = '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_COORDINADOR LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+               
+            }
+         }
+         $query = $this->db->get('coordinador');
+         //echo $this->db->last_query();
+         if ($query == FALSE) {
+            return array();
+         }
+         return $query->result();
+   }
+   /* Version de getCoordinadoresByFilter para la vista de eliminar coordinador, no incluye al coordinador que realiza la busqueda */
+   public function getCoordinadoresByFilterE($texto, $textoFiltrosAvanzados)
+      {
+         $this->db->select('RUT_USUARIO3 AS rut');
+         $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+         $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+         $this->db->order_by('APELLIDO1_COORDINADOR', 'asc');
+         $rut = $this->session->userdata['rut'];
+         $this->db->where('RUT_USUARIO3 !=', $rut);
+
+         if ($texto != "") {
+            $this->db->where('RUT_USUARIO3 !=', $rut);
+            $this->db->where("(RUT_USUARIO3 LIKE '%".$texto."%'  OR NOMBRE1_COORDINADOR LIKE '%".$texto."%' OR NOMBRE2_COORDINADOR LIKE '%".$texto."%' OR APELLIDO1_COORDINADOR LIKE '%".$texto."%' OR APELLIDO2_COORDINADOR LIKE '%".$texto."%')");
          }
          else {
             //Sólo para acordarse

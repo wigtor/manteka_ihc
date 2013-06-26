@@ -181,6 +181,7 @@ class Coordinadores extends MasterManteka {
 		$this->load->model('model_coordinadores');
 		$rut = $this->session->userdata('rut');
 		$datos_cuerpo_central['listado_coordinadores'] = $this->model_coordinadores->ObtenerTodosCoordinadoresEliminar($rut);
+		$datos_cuerpo_central['rut_sesion'] = $this->session->userdata['rut'];
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/
@@ -201,7 +202,7 @@ class Coordinadores extends MasterManteka {
 		if($rutEliminar == $rutdeSesion){
 		$datos_plantilla["titulo_msj"] = "Coordinador no puede ser eliminado";
 		$datos_plantilla["cuerpo_msj"] = "El usuario no puede eliminarse así mismo.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["tipo_msj"] = "alert-error";
 		$datos_plantilla["redirecTo"] = 'Coordinadores/borrarCoordinadores';
 		$datos_plantilla["nombre_redirecTo"] = "Eliminar coordinador";
 		$datos_plantilla["redirectAuto"] = TRUE;
@@ -259,6 +260,27 @@ class Coordinadores extends MasterManteka {
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
 		$this->load->model('model_coordinadores');
 		$resultado = $this->model_coordinadores->getCoordinadoresByFilter($textoFiltro, $textoFiltrosAvanzados);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'coordinadores', $this->session->userdata('rut'));
+			}
+		}
+		echo json_encode($resultado);
+	}
+	public function postBusquedaCoordinadoresEliminar() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		$this->load->model('model_coordinadores');
+		$resultado = $this->model_coordinadores->getCoordinadoresByFilterE($textoFiltro, $textoFiltrosAvanzados);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
