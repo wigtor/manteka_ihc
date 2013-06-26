@@ -70,7 +70,7 @@
 					$atributos= array('onsubmit' => 'return agregarSesion()', 'id' => 'formAgregar', 'name' => 'formAgregar', 'class' => 'form-horizontal');
 					echo form_open('Sesiones/agregarSesiones/', $atributos);
 				?>
-				<div class= "span6">
+				<div class= "span7">
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> Nombre</label>
 						<div class="controls">
@@ -84,21 +84,21 @@
 						</div>
 					</div>
 				</div> 
-			
-				<div class="row" style="margin-top:2%">
-					<div class="span2 offset5">
-						<button class="btn" type="submit" style="width:102px">
-							<div class= "btn_with_icon_solo">Ã</div>
+			</div>
+			<div class="span7">
+				<div class="controls pull-right">
+					<button class="btn" type="submit" style="width:102px">
+						<div class= "btn_with_icon_solo">Ã</div>
 							&nbsp Agregar
-						</button>
-					</div>
-					<div class="span3" style = "margin-left: -25px">
-						<button class="btn" type="reset" style="width:105px">
-							<div class= "btn_with_icon_solo">Â</div>
-								&nbsp Cancelar
-						</button>
-					</div>
+					</button>
+			
+				
+					<button class="btn" type="reset" style="width:105px">
+						<div class= "btn_with_icon_solo">Â</div>
+							&nbsp Cancelar
+					</button>
 				</div>
+			</div>
 							
 							<!-- Modal de modalNombreUsado -->
 				<div id="modalNombreUsado" class="modal hide fade">
