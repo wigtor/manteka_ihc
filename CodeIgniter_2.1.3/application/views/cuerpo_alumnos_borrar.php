@@ -178,11 +178,11 @@ Correo:           <b id="correoDetalle"></b></pre>
 					<input name="rut_estudiante" type="hidden" id="rutEliminar" value="">
 					<div class="control-group">
 						<div class="controls pull-right">
-							<button type="button" class="btn" onclick="eliminarCoordinador()">
+							<button type="button" class="btn" onclick="eliminarAlumno()">
 								<i class= "icon-trash"></i>
 								&nbsp; Eliminar
 							</button>
-							<button class="btn" type="button" onclick="resetearCoordinador()" >
+							<button class="btn" type="button" onclick="resetear()" >
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp; Cancelar
 							</button>&nbsp;
