@@ -307,12 +307,12 @@ class Profesores extends MasterManteka {
 			
 			
 			if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "El profesor fue editado correctamente.";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 			}
 			else{
-				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error mientras se actualizaban los datos del profesor";
 				$datos_plantilla["tipo_msj"] = "alert-error";	
 			}
