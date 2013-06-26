@@ -41,24 +41,37 @@ class model_grupos_contacto extends CI_Model{
 
    function eliminarGrupoContactoPorNombre($rut,$nombre_grupo_contacto){
       /**
-   *  Elimina un grupo de contacto perteneciente
-   *  a un determinado usuario por el nombre asignado.
-   *
-   *
-   *  @param string $rut RUT del usuario del cual se solicitan los grupos de contacto.
-   *  @param string $nombre_grupo_contacto nombre del grupo de contacto a eliminar.
-   *  @return none
-   */
+      *  Elimina un grupo de contacto perteneciente
+      *  a un determinado usuario por el nombre asignado.
+      *
+      *
+      *  @param string $rut RUT del usuario del cual se solicitan los grupos de contacto.
+      *  @param string $nombre_grupo_contacto nombre del grupo de contacto a eliminar.
+      *  @return none
+      */
       $query = $this->db->where('RUT_USUARIO',$rut);
       $query = $this->db->where('NOMBRE_FILTRO_CONTACTO',$nombre_grupo_contacto);
       $query = $this->db->delete('filtro_contacto');
    }
+   function eliminarGrupo($id_grupo){
+      /**
+      *  Elimina un grupo de contacto perteneciente
+      *  a un determinado usuario por el identificador primario.
+      *
+      *
+      *  @param string $id_grupo identificador del grupo a eliminar.
+      *  @return valor que identifica exito o fracazo de la operación.
+      */
+      $query = $this->db->where('ID_FILTRO_CONTACTO',$id_grupo);
+      $query = $this->db->delete('filtro_contacto');
+      return $query;
+   }
    
    public function insertarGrupo($rut,$rut_contactos,$nombre_filtro){
-   $grupo_de_contacto = array('RUT_USUARIO'=> $rut,
+      $grupo_de_contacto = array('RUT_USUARIO'=> $rut,
                                     'QUERY_FILTRO_CONTACTO'=> $rut_contactos ,                                   
                                     'NOMBRE_FILTRO_CONTACTO'=>$nombre_filtro );
-         $this->db->insert('filtro_contacto',$grupo_de_contacto);  
+      $this->db->insert('filtro_contacto',$grupo_de_contacto);  
    }
    
    public function VerGrupos($rut){
@@ -77,12 +90,77 @@ class model_grupos_contacto extends CI_Model{
 		$ObjetoListaResultados = $query->result_array();	
 		return $ObjetoListaResultados;	
 	}
-    function modificarGrupo($id, $nuevo_filtro){
-         $this->db->where('ID_FILTRO_CONTACTO',$id);
-         //$data = array('PASSWORD_PRIMARIA'=>$pass,);
-         $data = array('QUERY_FILTRO_CONTACTO'=>$nuevo_filtro,);
-         $this->db->update('filtro_contacto', $data);
+   public function modificarGrupo($id, $nuevo_filtro){
+      $this->db->where('ID_FILTRO_CONTACTO',$id);
+      $data = array('QUERY_FILTRO_CONTACTO'=>$nuevo_filtro,);
+      $this->db->update('filtro_contacto', $data);
+   }
+
+   public function getDatosGrupo($id_grupo){
+
+      $this->db->select('QUERY_FILTRO_CONTACTO');
+      $this->db->from('filtro_contacto');
+      $this->db->where('ID_FILTRO_CONTACTO', $id_grupo);
+      $query = $this->db->get();
+      $str_ruts = $query->result_array()[0]['QUERY_FILTRO_CONTACTO'];
+      $ruts = explode(",", $str_ruts);
+      
+      $this->db->select('*');
+      $this->db->from('estudiante');
+      $this->db->where_in('RUT_ESTUDIANTE', $ruts);
+      $estudiantes = $this->db->get()->result_array();
+
+      $this->db->select('*');
+      $this->db->from('usuario');
+      $this->db->where_in('RUT_USUARIO', $ruts);
+      $usuario = $this->db->get()->result_array();
+
+      $this->db->select('*');
+      $this->db->from('ayudante');
+      $this->db->where_in('RUT_AYUDANTE', $ruts);
+      $ayudantes = $this->db->get()->result_array();
+
+      $contador=0;
+      $resultado = array();
+      for($i=0 ; $i < count($estudiantes) ; $i++){
+         $resultado[$contador] = [$estudiantes[$i]['RUT_ESTUDIANTE'] ,
+                                  $estudiantes[$i]['NOMBRE1_ESTUDIANTE']." ".$estudiantes[$i]['NOMBRE2_ESTUDIANTE']." ".$estudiantes[$i]['APELLIDO1_ESTUDIANTE']." ".$estudiantes[$i]['APELLIDO2_ESTUDIANTE'],
+                                  "Estudiante",
+                                  $estudiantes[$i]['CORREO_ESTUDIANTE'] ];
+         $contador++;
       }
+      for($i=0;$i<count($usuario);$i++){
+         $nombre = "nombre";
+         if($usuario[$i]['ID_TIPO'] == 1){
+              $tipo = "Profesor";
+              $this->db->select('*');
+              $this->db->from('profesor');
+              $this->db->where('RUT_USUARIO2', $usuario[$i]['RUT_USUARIO']);
+              $profe_completo = $this->db->get()->result_array();
+              $nombre = $profe_completo[0]['NOMBRE1_PROFESOR']." ".$profe_completo[0]['NOMBRE2_PROFESOR']." ".$profe_completo[0]['APELLIDO1_PROFESOR']." ".$profe_completo[0]['APELLIDO2_PROFESOR'];
+         }else{
+              $tipo = "Coordinador";
+              $this->db->select('*');
+              $this->db->from('coordinador');
+              $this->db->where('RUT_USUARIO3', $usuario[$i]['RUT_USUARIO']);
+              $profe_completo = $this->db->get()->result_array();
+              $nombre = $profe_completo[0]['NOMBRE1_COORDINADOR']." ".$profe_completo[0]['NOMBRE2_COORDINADOR']." ".$profe_completo[0]['APELLIDO1_COORDINADOR']." ".$profe_completo[0]['APELLIDO2_COORDINADOR'];
+         }
+         $resultado[$contador] = [$usuario[$i]['RUT_USUARIO'] ,
+                                  $nombre,
+                                  $tipo,
+                                  $usuario[$i]['CORREO1_USER'] ];
+         $contador++;
+      }
+      for($i=0;$i<count($ayudantes);$i++){
+         $resultado[$contador] = [$ayudantes[$i]['RUT_AYUDANTE'] ,
+                                  $ayudantes[$i]['NOMBRE1_AYUDANTE']." ".$ayudantes[$i]['NOMBRE2_AYUDANTE']." ".$ayudantes[$i]['APELLIDO1_AYUDANTE']." ".$ayudantes[$i]['APELLIDO2_AYUDANTE'],
+                                  "Ayudante",
+                                  $ayudantes[$i]['CORREO_AYUDANTE'] ];
+         $contador++;
+      }
+      return $resultado;
+   }
    
 }
 ?>

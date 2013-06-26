@@ -167,7 +167,7 @@
 					$atributos= array('onsubmit' => 'return eliminarAlumno()', 'id' => 'FormBorrar');
 					echo form_open('Alumnos/eliminarAlumno/', $atributos);
 				?>
-				<pre style="margin-top: 2%; padding: 2%">
+				<pre style="padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>

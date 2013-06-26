@@ -1,4 +1,4 @@
-﻿<!-- <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" /> -->
+﻿<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
 
 <script type="text/javascript">
 
@@ -23,7 +23,7 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 	
 	this.id=id;
 
-		destinoaux=destino;
+		destinoaux=destino.replace(/,/g,",<br>");
 		document.getElementById("destinos").innerHTML=destino.split(",",1 );
 
 	
@@ -153,7 +153,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				var de=listaRecibidos[i].nombre_destinatario;
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				nodoTexto=document.createTextNode(de);
+				nodoTexto=document.createTextNode(de.replace(/,/g,", "));
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -218,10 +218,14 @@ function cambiarCorreos(direccion,offset)
 				}
 				document.getElementById("ant").removeAttribute('class');
 
-			}else if(offset+5>=<?php echo $cantidadCorreos;?>){
+			}else{
+				if(offset+5>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
+				if(offset==0)
+					document.getElementById("ant").removeAttribute('onClick');
+			}
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
 
 			
@@ -732,9 +736,9 @@ if(isset($msj))
 	</div>
 	</br>
 	<pre class="detallesEmail">
-<div style="text-align:right; margin-bottom:0px;">Fecha: <b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0px; border-top:0px;">
-<td style="text-align:left; margin:px;  border-top:0px" > Para: <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div></td>
-</table>  Asunto:  <b  id="asuntoDetalle"></b>
+<div style="text-align:right; margin-bottom:0px;">Fecha: <b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
+ Para:   <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div>
+ Asunto: <b  id="asuntoDetalle"></b>
   <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
 	</pre>
 </fieldset>
