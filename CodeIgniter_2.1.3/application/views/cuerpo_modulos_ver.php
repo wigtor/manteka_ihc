@@ -163,7 +163,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 <div>
 	<div class="span10">
 		<fieldset>
-			<legend>Ver Módulos</legend>
+			<legend>Ver Módulo</legend>
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="controls controls-row">
@@ -180,7 +180,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 					1. Escoja un módulo de la lista
 				</div>
 				<div class="span6">
-					2. Detalle Módulo Temático
+					2. Detalle módulo temático
 				</div>
 			</div>
 
@@ -209,7 +209,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					<div class="row-fluid">
 					
 						<div class="span6">
-							3. Sesiones del Módulo Temático
+							3. Sesiones del módulo temático
 						</div>
 						
 					</div>
@@ -229,7 +229,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					<div class="row-fluid">
 						<div class="row-fluid" style="margin-top:2%">
 								<div class="span7">
-									4. Profesores del Módulo Temático
+									4. Profesores del módulo temático
 								</div>
 						</div>
 					</div>
@@ -252,7 +252,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					<div class="row-fluid">
 						<div class="row-fluid" style="margin-top:2%">
 								<div class="span7">
-									5. Requisitos del Módulo Temático
+									5. Requisitos del módulo temático
 								</div>
 						</div>
 					</div>

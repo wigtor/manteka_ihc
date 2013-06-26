@@ -77,8 +77,8 @@
 		    </div>
 		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inAsignaciones; ?>">
 		    	<div class="accordion-inner nav nav-list">
-					<li <?php echo $asignarAseccion; ?> ><a href="<?php echo site_url("Secciones/asignarAsecciones")?>">Agregar asignación</a></li>
-					<li <?php echo $borrarAsignar; ?> ><a href="<?php echo site_url("Secciones/borrarAsignacion")?>">Eliminar asignación</a></li>
+					<li <?php echo $asignarAseccion; ?> ><a href="<?php echo site_url("Secciones/asignarAsecciones")?>">Agregar asignaciones</a></li>
+					<li <?php echo $borrarAsignar; ?> ><a href="<?php echo site_url("Secciones/borrarAsignacion")?>">Borrar asignaciones</a></li>
 		     	</div>
 		    </div>
 	  	</div>

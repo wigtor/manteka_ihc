@@ -139,7 +139,7 @@
 
 
 <fieldset>
-	<legend>Borrar profesores</legend>
+	<legend>Borrar Profesor</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">

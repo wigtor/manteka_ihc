@@ -60,7 +60,7 @@
 	});
 </script>
 <fieldset>
-	<legend>Ver Sesiones</legend>
+	<legend>Ver Sesión</legend>
 
 	<div class="row-fluid">
 		<div class="span6">

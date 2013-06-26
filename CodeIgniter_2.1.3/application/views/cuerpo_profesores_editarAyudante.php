@@ -163,8 +163,8 @@
 					</div>
 				</div>
 
-				<div class="control-group">
-					<div class="controls ">
+				<div class="row">
+				<div class="controls pull-right">
 						<button type="button" class="btn" onclick="editarAyudante()">
 							<i class= "icon-pencil"></i>
 							&nbsp; Guardar

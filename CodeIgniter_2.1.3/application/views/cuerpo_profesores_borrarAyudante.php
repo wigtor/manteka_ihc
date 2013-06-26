@@ -124,7 +124,7 @@
 </script>
 
 <fieldset>
-	<legend>Borrar ayudantes</legend>
+	<legend>Borrar Ayudante</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
