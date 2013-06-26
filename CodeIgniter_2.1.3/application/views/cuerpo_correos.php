@@ -8,7 +8,10 @@
 * deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
 * Para ver como se configura esto se debe ver en el evento onclick() en donde están contenidos los correos (bandeja) .
 */
-function DetalleCorreo(hora,fecha,asunto,id,de)
+
+var offset=0;
+
+function DetalleCorreo(hora,fecha,asunto,id,de,codigo)
 {		
 
 	document.getElementById("fecha").innerHTML=fecha;
@@ -16,6 +19,24 @@ function DetalleCorreo(hora,fecha,asunto,id,de)
 	document.getElementById("asuntoDetalle").innerHTML=asunto;
 	document.getElementById("de").innerHTML=de;
 	document.getElementById("cuerpoMail").innerHTML=document.getElementById("c"+id).value;
+
+
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postLeido") ?>",
+			
+		data: {codigo:codigo},
+		success: function(respuesta)
+		{
+			codigoBorrador = JSON.parse(respuesta);
+			$(icono_cargando).hide();
+		}
+	});
+	
+	/* Muestra el "div" que indica que se está cargando... */
+	var iconoCargado = document.getElementById("icono_cargando");
+	$(icono_cargando).show();
+
 	$('#cuadroRecibidos').css({display:'none'});
 	$('#cuadroDetalleCorreo').css({display:'block'});
 }
@@ -26,7 +47,8 @@ function DetalleCorreo(hora,fecha,asunto,id,de)
 * Para ver como se configura esto se debe ver en el evento onclick() del botón que se encuentra en el Detalle de Correo.
 */
 function volverCorreosRecibidos()
-{		
+{	
+	cambiarCorreos("volver",offset);
 	$('#cuadroDetalleCorreo').css({display:'none'});
 	$('#cuadroRecibidos').css({display:'block'});
 }
@@ -36,14 +58,14 @@ function volverCorreosRecibidos()
 * También se realiza una búsqueda
 */
 
-function cambiarCorreos(direccion,offset)
+function cambiarCorreos(direccion,offsetL)
 {
 	
 	if (direccion=="ant") {
-		offset=offset-5;
+		offset=offsetL-5;
 	}
 	else if(direccion=="sig") {
-		offset=offset+5;
+		offset=offsetL+5;
 	}
 	
 	var filtroBusqueda = document.getElementById("filtroLista");
@@ -70,12 +92,17 @@ function cambiarCorreos(direccion,offset)
 				tbody.appendChild(tr);
 			}
 			for (var i = 0; i < listaRecibidos.length; i++) {
+
+				var noLeido=listaRecibidos[i].no_leido;
+
 				tr = document.createElement('tr');
+
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","padding-top:4px;padding-bottom:8px;");
 				td.setAttribute("align","center");				
+
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name", prefijo_tipoDato + listaRecibidos[i].codigo);
@@ -89,34 +116,58 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				var de=listaRecibidos[i].nombre+" "+listaRecibidos[i].apellido1+" "+listaRecibidos[i].apellido2;
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
 				nodoTexto=document.createTextNode(de);
-				td.appendChild(nodoTexto);
+
+				if(noLeido==1){
+					tr.setAttribute("bgcolor","#E0f8f7");
+					b=document.createElement("b");
+					b.appendChild(nodoTexto);
+					td.appendChild(b);
+				}else
+					td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", "m"+i);
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				var textoTemp = "<b>"+listaRecibidos[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......";
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
+				
+
+				if(noLeido==1){
+					var textoTemp = "<b>"+listaRecibidos[i].asunto+"</b> - <font color='#999999'>"+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......</font>";
+				}else
+					var textoTemp = listaRecibidos[i].asunto+" - <font color='#999999'>"+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......</font>";				
 				td.innerHTML = textoTemp;
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
 				nodoTexto=document.createTextNode(listaRecibidos[i].fecha);
-				td.appendChild(nodoTexto);
+				if(noLeido==1){		
+					b=document.createElement("b");			
+					b.appendChild(nodoTexto);
+					td.appendChild(b);
+				}else
+					td.appendChild(nodoTexto);
+				
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
 				
 				nodoTexto=document.createTextNode(listaRecibidos[i].hora);
-				td.appendChild(nodoTexto);
+				if(noLeido==1){					
+					b=document.createElement("b");
+					b.appendChild(nodoTexto);
+					td.appendChild(b);
+				}else
+					td.appendChild(nodoTexto);
+
 				tr.appendChild(td);
 				tbody.appendChild(tr);
 				
@@ -155,10 +206,18 @@ function cambiarCorreos(direccion,offset)
 				}
 				document.getElementById("ant").removeAttribute('class');
 
-			}else if(offset+5>=<?php echo $cantidadCorreos;?>){
+			}else{
+				if(offset+5>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
+				if(offset==0)
+					document.getElementById("ant").removeAttribute('onClick');
+			}
+			if (listaRecibidos.length == 0) {
+				document.getElementById("mostrando").innerHTML="mostrando "+ (offset)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
+			}else
+
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
 
 			
@@ -549,7 +608,7 @@ if(isset($msj))
 	</div>
 	</br>
 	<pre class="detallesEmail">
-<div class="pull-right"><b  id="fecha"> </b>  <b class="pull-right" id="hora"></b></div>
+<div class="pull-right">Fecha: <b  id="fecha"> </b>  <b class="pull-right" id="hora"></b></div>
   De:     <b id="de"></b>
   Asunto: <b id="asuntoDetalle"></b>
 	<fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset></pre>
