@@ -190,19 +190,19 @@
 			?>
 			<input type="hidden" id="cod_sala" name="cod_sala" maxlength="3" min="1" readonly>
 			<div class="control-group">
-					<label class="control-label" for="cod_sala">1-.Número sala</label>
+					<label class="control-label" for="cod_sala">1-.<font color="red">*</font>Número sala</label>
 					<div class="controls">
 						<input type="text" onblur="comprobarNum()" id="num_sala" name="num_sala" maxlength="3" title="Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" required>
 					</div>
 			</div>
 			<div class="control-group">
-					<label class="control-label" for="cod_sala">2-.Capacidad</label>
+					<label class="control-label" for="cod_sala">2-.<font color="red">*</font>Capacidad</label>
 					<div class="controls">
 						<input id="capacidad" name="capacidad" maxlength="3" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
 					</div>
 			</div>
 			<div class="control-group">
-					<label class="control-label" for="cod_sala">3-.Ubicación</label>
+					<label class="control-label" for="cod_sala">3-.<font color="red">*</font>Ubicación</label>
 					<div class="controls">
 						<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" id="ubicacion" name="ubicacion"  maxlength="100" required="required" style="resize: none"></textarea>
 					</div>
