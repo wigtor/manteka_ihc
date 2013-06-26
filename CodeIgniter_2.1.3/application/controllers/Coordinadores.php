@@ -272,6 +272,7 @@ class Coordinadores extends MasterManteka {
 		}
 		echo json_encode($resultado);
 	}
+	
 	public function postBusquedaCoordinadoresEliminar() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';

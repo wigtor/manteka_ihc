@@ -246,20 +246,20 @@ function ordenarFiltro(){
 
 
 					<!-- Modal de modalRutUsado -->
-						<div id="modalRutUsado" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>RUT ingresado está en uso</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>	
+					<div id="modalRutUsado" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>RUT ingresado está en uso</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
 							
 				</div>
-				</form>
+				<?php echo form_close(''); ?>
 			</div>
 		</fieldset>

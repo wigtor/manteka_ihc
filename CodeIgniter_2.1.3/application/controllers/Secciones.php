@@ -63,6 +63,21 @@ class Secciones extends MasterManteka {
 		$resultado = $this->Model_secciones->VerSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
+
+	public function secExiste() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$letra_post = $this->input->post('letra_post');
+		$num_post = $this->input->post('num_post');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->existeSeccion($letra_post."-".$num_post);
+		echo json_encode($resultado);
+	}
+
 	public function AlumnosSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -367,7 +382,7 @@ class Secciones extends MasterManteka {
 	*
 	**/
 
-	public function postDetalleSeccion() {
+	public function postDetallesSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -376,7 +391,26 @@ class Secciones extends MasterManteka {
 
 		$cod_seccion = $this->input->post('seccion');
 		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->getDetalleSeccion($cod_seccion);
+		$resultado = $this->Model_secciones->getDetallesSeccion($cod_seccion);
+		echo json_encode($resultado);
+	}
+
+
+	public function postBusquedaSecciones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$this->load->model('model_secciones');
+		$resultado = $this->model_secciones->getSeccionesByFilter($textoFiltro);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'secciones', $this->session->userdata('rut'));
+		}
 		echo json_encode($resultado);
 	}
 

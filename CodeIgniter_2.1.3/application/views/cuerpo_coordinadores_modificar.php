@@ -13,7 +13,7 @@
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -165,7 +165,7 @@
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
+		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		//var rut_clickeado = elemTabla;
 
 		/* Muestro el div que indica que se está cargando... */
