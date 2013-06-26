@@ -148,7 +148,7 @@ function ordenarFiltro(){
                 </div>
                 <div class="span6">
                     <div class="row-fluid">
-                        <div class="span5">
+                        <div class="span7">
                             2.-Información de la sección
 							
                         </div>
@@ -156,8 +156,8 @@ function ordenarFiltro(){
 					
 					<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
                     <div class="row-fluid">
-							<div class="span4">
-								<div class="control-group">
+							<div class="span4" style="min-width: 140px">
+								<div class="control-group" >
 									
 		  							<label class="control-label" for="inputInfo"><font color="red">*</font> Sección:</label>
 									<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
