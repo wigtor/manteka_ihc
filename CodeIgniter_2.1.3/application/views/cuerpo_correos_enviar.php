@@ -1250,6 +1250,19 @@ if(isset($codigo))
 		<div class="inicio bloque" title="Paso 2: Ingrese el mensaje">
 			Paso 2: Ingrese el mensaje.
 		</div>
+
+		<?php
+		if($msj==='1')
+		{
+			?>
+			<!-- Muestra al usuario un mensaje indicando que existen variables no permitidas. -->
+			<div class="alert alert-error" id="msjError">
+			<button type="button" class="close" id="btnMsjError2" data-dismiss="alert">&times;</button>
+			Para poder utilizar esta plantilla todos los destinatarios deben ser del tipo estudiante.
+			</div>
+			<?php
+		}
+		?>
 		
 		<!-- Muestra al usuario un mensaje indicando que se ha guardado un borrador. -->
 		<div class="alert alert-success" id="msjOk">

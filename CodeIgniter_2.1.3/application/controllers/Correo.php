@@ -233,7 +233,7 @@ class Correo extends MasterManteka {
 	*
 	* @author: Byron Lanas (BL)
 	*/
-	public function enviarCorreo($codigo=null)
+	public function enviarCorreo($codigo=null, $msj=null)
 	{
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 
@@ -248,7 +248,8 @@ class Correo extends MasterManteka {
  							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
  							 'rut'=>  $this->session->userdata('rut'),
  							 'codigo'=>$codigo,
-							 'plantillas'=>$this->model_plantilla->ObtenerListaPlantillas());
+							 'plantillas'=>$this->model_plantilla->ObtenerListaPlantillas(),
+							 'msj'=>$msj);
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
 		*/
@@ -296,102 +297,328 @@ class Correo extends MasterManteka {
 	}
 
 	/**
-	* Permite el envío de un nuevo correo electrónico.
+	* Permite el envío de un correo electrónico.
 	*
-	* Esta función es la que realiza el envio de un correo propiamente tal.
+	* Esta función es la que realiza el envío de un correo propiamente tal.
 	* El resultado de esta función es un nuevo correo electrónico enviado
 	* y el registro de dicho correo en las tablas correspondientes.
 	* O un mensaje de error, en caso de que el correo no haya podido ser
 	* enviado.
 	* Se obtienen mediante método post, los datos del correo a enviar,
-	* asi como también, el tipo de destinatario al cual va dirijido.
-	* Además se cargan los modelos necesarios para guardar el correo
-	* una vez que es enviado.
+	* asi como también, los destinatarios a los cuales va dirijido.
+	* Además se reemplazan las variables de plantillas si es que existen y 
+	* se cargan los modelos necesarios para guardar el correo una vez que es enviado.
 	*
 	* @author: Byron Lanas (BL) y Diego García (DGM)
-	*
 	*/
 	public function enviarPost()
 	{
-
-
-		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
-		$rut = $this->session->userdata('rut');
-		if ($rut == false)
+		/* Verifica si el usuario que intenta acceder está autentificado o no. */
+		$rut=$this->session->userdata('rut');
+		if($rut == false)
 			redirect('/Login/', '');
-
-		/* Se obtienen los datos del correo a enviar, asi como también,
-		el tipo de destinatario al cual va dirijido. Además se cargan los
-		modelos necesarios para guardar el correo una vez que es enviado. */
+			
+		/* Se cargan los modelos necesarios para guardar los correos enviados, con el
+		fin de que aparezcan en la bandeja de recibidos y enviados según corresponda. */
 		$this->load->model('model_correo');
 		$this->load->model('model_correo_e');
 		$this->load->model('model_correo_u');
 		$this->load->model('model_correo_a');
-
-		$to = $this->input->post('to');
-		$asunto ="[ManteKA] ".$this->input->post('asunto');
-
-		$rutRecept = $this->input->post('rutRecept');
-		$date = date("YmdHis");
-		$codigoBorrador = $this->input->post('codigoBorrador');
+		
+		/* Se obtiene la información del correo a enviar. */
+		$rutRecept=$this->input->post('rutRecept');
+		$asunto="[ManteKA] ".$this->input->post('asunto');
+		$codigoBorrador=$this->input->post('codigoBorrador');
+		$date=date("YmdHis");
 		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
-
+		$mensaje=$this->input->post('editor');
+		
+		/* Se asigna un hipervínculo al correo con el fin de que el usuario pueda ver el correo directamente en el sistema Manteka. */
 		$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
 		$link2="<br><a href='/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
-		$mensaje=$this->input->post('editor');
-		$mensajeMail =$mensaje.$link.$link2;
-
-		/* Se intenta el envío del correo propiamente tal.
-		Si el envío es exitoso, el correo, además de ser enviado, se guarda
-		en las tablas correspondientes.
-		Si el envío fracasa, se muestra un mensaje de error. */
-
 		
-		
-		
-		
-		try 
+		/* Se realiza el reemplazo de aquellas variables predefinidas que NO cambian según el destinatario.
+		En este caso, dichas variables son %%hoy (fecha actual) y %%remitente (Nombre y apellido de quién envía el correo). */
+		$variableHoyAsunto=substr_count($asunto, '%%hoy');
+		$variableHoyCuerpo=substr_count($mensaje, '%%hoy');
+		$variableRemitenteAsunto=substr_count($asunto, '%%remitente');
+		$variableRemitenteCuerpo=substr_count($mensaje, '%%remitente');
+		$variableHoy=$variableHoyAsunto + $variableHoyCuerpo;
+		$variableRemitente=$variableRemitenteAsunto + $variableRemitenteCuerpo;
+		$modeloUsuarioCargado=false;
+		if($variableHoy > 0)
 		{
-			date_default_timezone_set("Chile/Continental");
-			$config['mailtype'] = 'html';
-			$this->email->initialize($config);
-			$this->email->from('no-reply@manteka.cl', 'ManteKA');
-			$this->email->to($to);
-			$this->email->subject($asunto);
-			
-			$this->email->message($mensajeMail);
-			if(!$this->email->send())
-				throw new Exception("error en el envio");
-			
-			$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
-			
-
-			$receptores = explode(",",$rutRecept);
-			foreach ($receptores as $receptor) {
+			$asunto = str_replace('%%hoy', date("d/m/Y"), $asunto);
+			$mensaje = str_replace('%%hoy', date("d/m/Y"), $mensaje);
+		}
+		if($variableRemitente > 0)
+		{
+			$this->load->model('Model_usuario');
+			$modeloUsuarioCargado=true;
+			$remitente=$this->Model_usuario->datos_usuario($rut);
+			$remitente=trim($remitente->nombre1).' '.trim($remitente->apellido1);
+			$asunto=str_replace('%%remitente', $remitente, $asunto);
+			$mensaje=str_replace('%%remitente', $remitente, $mensaje);
+		}
+		
+		/* Se realiza una copia del asunto y el mensaje del correo para ser utilizadas al momento de insertar el correo en la bandeja de enviados. */
+		$mensajeAux=$mensaje;
+		$asuntoAux=$asunto;
+		
+		/* Se obtiene un array con los ruts de los destinatarios. */
+		$receptores=explode(",",$rutRecept);
+		
+		/* Se valida si las variables predefinidas cuyo valor cambia según el destinatario, son coherentes con la lista de destinatarios especificada.
+		Es decir las variables predefinidas %%carrera_estudiante, %%seccion_estudiante y %%modulo_estudiante sólo pueden ser utilizadas si todos los destinatarios son del tipo estudiante. */
+		
+		/* Primero se verifica si existen variables predefinidas propias de los estudiantes. */
+		$variableModuloAsunto=substr_count($asunto, '%%modulo_estudiante');
+		$variableModuloCuerpo=substr_count($mensaje, '%%modulo_estudiante');
+		$variableCarreraAsunto=substr_count($asunto, '%%carrera_estudiante');
+		$variableCarreraCuerpo=substr_count($mensaje, '%%carrera_estudiante');
+		$variableSeccionAsunto=substr_count($asunto, '%%seccion_estudiante');
+		$variableSeccionCuerpo=substr_count($mensaje, '%%seccion_estudiante');
+		$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;  
+		$variableCarrera=$variableCarreraAsunto + $variableCarreraCuerpo;
+		$variableSeccion=$variableSeccionAsunto + $variableSeccionCuerpo;
+		$variablesEstudiante=$variableModulo + $variableCarrera + $variableSeccion;
+		
+		/* Si hay variables exclusivas de los estudiantes y al menos un destinatario no es del tipo estudiante, entonces
+		se vuelve a la vista para el envío de correos y se indica al usuario el error ocurrido. */
+		if($variablesEstudiante > 0)
+		{
+			$hayEstudiantes=false;
+			$hayProfesores=false;
+			$hayCoordinadores=false;
+			$hayAyudantes=false;
+			$hayOtroTipoDestinatario=false;
+			foreach($receptores as $receptor)
+			{
 				$estudiante=$this->model_correo->getRutEst($receptor);
-			if($estudiante!=0)
-				$this->model_correo_e->InsertarCorreoE($receptor,$cod);
-			$user=$this->model_correo->getRutUser($receptor);
-			if($user!=0)
-				$this->model_correo_u->InsertarCorreoU($receptor,$cod);
-			$ayudante=$this->model_correo->getRutAyu($receptor);
-			if($ayudante!=0)
-				$this->model_correo_a->InsertarCorreoA($receptor,$cod);
+				$user=$this->model_correo->getRutUser($receptor);
+				$ayudante=$this->model_correo->getRutAyu($receptor);
+				if($estudiante != 0)
+					$hayEstudiantes=true;
+				else if($user != 0)
+				{
+					$usuario=$this->Model_usuario->datos_usuario($receptor);
+					if($usuario->ID_TIPO == 1)
+						$hayProfesores=true;
+					else
+						$hayCoordinadores=true;
+					break(1);
+				}
+				else if($ayudante != 0)
+				{
+					$hayAyudantes=true;
+					break(1);
+				}
+				else
+				{
+					$hayOtroTipoDestinatario=true;
+					break(1);
+				}
+			}
+			if($hayAyudantes || $hayProfesores || $hayCoordinadores || $hayOtroTipoDestinatario)
+			{
+				$msj='1';
+				redirect('/Correo/enviarCorreo/'.$codigoBorrador.'/'.$msj);
+			}
+		}
+		
+		/* Se determina si se han definido las variables predefinidas %%nombre y %%rut en el correo a enviar. */
+		$variableNombreAsunto=substr_count($asunto, '%%nombre');
+		$variableNombreCuerpo=substr_count($mensaje, '%%nombre');
+		$variableRutAsunto=substr_count($asunto, '%%rut');
+		$variableRutCuerpo=substr_count($mensaje, '%%rut');
+		$variableNombre=$variableNombreAsunto + $variableNombreCuerpo;
+		$variableRut=$variableRutAsunto + $variableRutCuerpo;
+		$envioPersonalizado=$variableNombre + $variableRut;
+		
+		/* Si existen variables predefinidas que cambian según el destinatario, el envio de los correos debe hacerse uno por uno.*/
+		$error=array();
+		if($variablesEstudiante > 0 || $envioPersonalizado > 0)
+		{
+			function digitoVerificador($rut)
+			{
+				$invertir=strrev($rut); 
+				$multiplicar = 2; 
+				
+				for ($i = 0; $i <= strlen($invertir); $i++)
+				{  
+					if ($multiplicar > 7) $multiplicar = 2;  
+					$suma = $multiplicar * substr($invertir, $i, 1) + $suma; 
+					$multiplicar = $multiplicar + 1; 
+				} 
+				$valor = 11 - ($suma % 11); 
+				if ($valor == 11)
+					$verificador = "0"; 
+				elseif ($valor == 10)
+					$verificador = "k"; 
+				else
+					$verificador = $valor; 
+				return $verificador; 
 			}
 			
+			$enviados=0;
+			$this->load->model('model_estudiante');
+			$this->load->model('model_ayudante');
+			if(!$modeloUsuarioCargado)
+				$this->load->model('model_usuario');
+			foreach ($receptores as $receptor) 
+			{	
+				try 
+				{
+					$mensajePersonalizado=$mensaje;
+					$asuntoPersonalizado=$asunto;
+					$estudiante=$this->model_correo->getRutEst($receptor);
+					$user=$this->model_correo->getRutUser($receptor);
+					$ayudante=$this->model_correo->getRutAyu($receptor);					
+					if($estudiante != 0)
+					{
+						$datosEstudiante=$this->model_estudiante->getDetallesEstudiante($receptor);
+						$to=$datosEstudiante->correo;
+						$nombreEstudiante=trim($datosEstudiante->nombre1).' '.trim($datosEstudiante->apellido1);
+						$rutEstudiante=trim($datosEstudiante->rut);
+						$largoRut=strlen($rutEstudiante);
+						$cientosRut=substr($rutEstudiante,$largoRut-3,3);
+						$milesRut=substr($rutEstudiante,$largoRut-6,3);
+						$millonesRut=substr($rutEstudiante,0,$largoRut-6);
+						$rutEstudiante=$millonesRut.'.'.$milesRut.'.'.$cientosRut.'-'.digitoVerificador($rutEstudiante);
+						$carreraEstudiante=trim($datosEstudiante->carrera);
+						$seccionEstudiante=trim($datosEstudiante->nombre_seccion);
+						$asuntoPersonalizado=str_replace('%%nombre', $nombreEstudiante, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%rut', $rutEstudiante, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%carrera_estudiante', $carreraEstudiante, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%seccion_estudiante', $seccionEstudiante, $asuntoPersonalizado);
+						$mensajePersonalizado=str_replace('%%nombre', $nombreEstudiante, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%rut', $rutEstudiante, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%carrera_estudiante', $carreraEstudiante, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%seccion_estudiante', $seccionEstudiante, $mensajePersonalizado);
+					}
+					else if($user != 0)
+					{
+						$datosUsuario=$this->Model_usuario->datos_usuario($receptor);
+						$to=$datosUsuario->email1;
+						$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
+						$rutUsuario=trim($datosUsuario->rut);
+						$largoRut=strlen($rutUsuario);
+						$cientosRut=substr($rutUsuario,$largoRut-3,3);
+						$milesRut=substr($rutUsuario,$largoRut-6,3);
+						$millonesRut=substr($rutUsuario,0,$largoRut-6);
+						$rutUsuario=$millonesRut.'.'.$milesRut.'.'.$cientosRut.'-'.digitoVerificador($rutUsuario);
+						$asuntoPersonalizado=str_replace('%%nombre', $nombreUsuario, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%rut', $rutUsuario, $asuntoPersonalizado);
+						$mensajePersonalizado=str_replace('%%nombre', $nombreUsuario, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%rut', $rutUsuario, $mensajePersonalizado);
+					}
+					else if($ayudante != 0)
+					{
+						$datosAyudante=$this->model_ayudante->getDetallesAyudante($receptor);
+						$to=$datosAyudante->correo;
+						$nombreAyudante=trim($datosAyudante->nombre1).' '.trim($datosAyudante->apellido1);
+						$rutAyudante=trim($datosAyudante->rut);
+						$largoRut=strlen($rutAyudante);
+						$cientosRut=substr($rutAyudante,$largoRut-3,3);
+						$milesRut=substr($rutAyudante,$largoRut-6,3);
+						$millonesRut=substr($rutAyudante,0,$largoRut-6);
+						$rutAyudante=$millonesRut.'.'.$milesRut.'.'.$cientosRut.'-'.digitoVerificador($rutAyudante);
+						$asuntoPersonalizado=str_replace('%%nombre', $nombreAyudante, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%rut', $rutAyudante, $asuntoPersonalizado);
+						$mensajePersonalizado=str_replace('%%nombre', $nombreAyudante, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%rut', $rutAyudante, $mensajePersonalizado);
+					}
+					date_default_timezone_set("Chile/Continental");
+					$mensajeMail =$mensajePersonalizado.$link.$link2;
+					$config['mailtype'] = 'html';
+					$this->email->initialize($config);
+					$this->email->from('no-reply@manteka.cl', 'ManteKA');
+					$this->email->to($to);
+					$this->email->subject($asuntoPersonalizado);
+					$this->email->message($mensajeMail);
+					if($this->email->send())
+						$enviados+=1;
+				}
+				catch(Exception $e)
+				{
+					array_push($error, $receptor);
+				}
+			}
+			$asuntoAux=str_replace('%%nombre', '[Nombre destinatario]', $asuntoAux);
+			$asuntoAux=str_replace('%%rut', '[Rut destinatario]', $asuntoAux);
+			$asuntoAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $asuntoAux);
+			$asuntoAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $asuntoAux);
+			$mensajeAux=str_replace('%%nombre', '[Nombre destinatario]', $mensajeAux);
+			$mensajeAux=str_replace('%%rut', '[Rut destinatario]', $mensajeAux);
+			$mensajeAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $mensajeAux);
+			$mensajeAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $mensajeAux);
+			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador);
 			
+			/* Se guarda la información que asocia el correo enviado con cada destinatario. */
+			foreach($receptores as $receptor)
+			{
+				if(!in_array($receptor, $error))
+				{
+					$estudiante=$this->model_correo->getRutEst($receptor);
+					if($estudiante!=0)
+						$this->model_correo_e->InsertarCorreoE($receptor,$cod);
+								
+					$user=$this->model_correo->getRutUser($receptor);
+					if($user!=0)
+						$this->model_correo_u->InsertarCorreoU($receptor,$cod);
+							
+					$ayudante=$this->model_correo->getRutAyu($receptor);
+					if($ayudante!=0)
+						$this->model_correo_a->InsertarCorreoA($receptor,$cod);
+				}
+			}
+			$estado="2";
+			redirect('/Correo/correosRecibidos/'.$estado);
 		}
-		catch (Exception $e) {
-			if($e->getMessage()=="error en el envio")
-				redirect("/Otros/sendMailError", "sendMailError");
-			else
-				redirect("/Otros", "databaseError");
+		/* Si no hay variables predefinidas que cambien según el destinatario, entonces se realiza un sólo envío con copia a todos los destinatarios. */
+		else
+		{
+			try
+			{
+				$to=$this->input->post('to');
+				$mensajeMail=$mensaje.$link.$link2;
+				date_default_timezone_set("Chile/Continental");
+				$config['mailtype'] = 'html';
+				$this->email->initialize($config);
+				$this->email->from('no-reply@manteka.cl', 'ManteKA');
+				$this->email->to($to);
+				$this->email->subject($asunto);
+				$this->email->message($mensajeMail);
+				if(!$this->email->send())
+					throw new Exception("error en el envio");
+				$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
+				
+				/* Se guarda la información que asocia el correo enviado con cada destinatario. */
+				foreach($receptores as $receptor)
+				{
+					$estudiante=$this->model_correo->getRutEst($receptor);
+					if($estudiante!=0)
+						$this->model_correo_e->InsertarCorreoE($receptor,$cod);
+						
+					$user=$this->model_correo->getRutUser($receptor);
+					if($user!=0)
+						$this->model_correo_u->InsertarCorreoU($receptor,$cod);
+							
+					$ayudante=$this->model_correo->getRutAyu($receptor);
+					if($ayudante!=0)
+						$this->model_correo_a->InsertarCorreoA($receptor,$cod);
+				}
+			}
+			catch (Exception $e)
+			{
+				if($e->getMessage()=="error en el envio")
+					redirect("/Otros/sendMailError", "sendMailError");
+				else
+					redirect("/Otros", "databaseError");
+			}
+			$estado="2";
+			redirect('/Correo/correosRecibidos/'.$estado);
 		}
-		
-		$estado="2";
-		redirect('/Correo/correosRecibidos/'.$estado);
-
-
 	}
 
 	/**

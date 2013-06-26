@@ -10,6 +10,7 @@
  
 ?>
 <html>
+
 	<head>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
 		<title>Editar plantilla</title>
@@ -186,7 +187,7 @@
 		$idPrevio=$msj[1];
 		$nombrePrevio=$msj[2];
 		$asuntoPrevio=$msj[3];
-		$cuerpoPrevio=$msj[4];
+		$cuerpoPrevio=utf8_encode($msj[4]);
 		unset($msj);
 	}
 	else
