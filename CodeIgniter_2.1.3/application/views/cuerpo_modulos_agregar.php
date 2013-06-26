@@ -146,8 +146,7 @@ function nombreEnUso(){
 
 </script>
 
-<div class="row-fluid">
-	<div class="span10">
+
 		<fieldset>
 			<legend>Agregar Módulo</legend>
 
@@ -400,5 +399,3 @@ function nombreEnUso(){
 
 	</form>
 	</fieldset>
-	</div>
-</div>

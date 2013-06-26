@@ -160,8 +160,6 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 
 </script>
 
-<div>
-	<div class="span10">
 		<fieldset>
 			<legend>Ver Módulo</legend>
 			<div class="row-fluid">
@@ -276,5 +274,3 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 				</div>
 			</div>
 		</fieldset>
-	</div>
-</div>
