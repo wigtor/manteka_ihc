@@ -81,17 +81,7 @@
 	});
 
 </script>
-<script type="text/javascript">
-	
-	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
-				alert("Profesor eliminado correctamente");
-				}
-				else{
-					alert("Error al eliminar");
-				}
-	}
-</script>
+
 
 <script>
 	function eliminarProfesor(){

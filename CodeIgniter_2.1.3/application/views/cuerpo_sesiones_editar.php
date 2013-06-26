@@ -112,7 +112,7 @@ function verDetalle(elemTabla) {
 		</div>
 		<div class="span6" >
 			<font color="red">* Campos Obligatorios</font><br>
-				<p>Complete los datos del formulario para modificar la sesion</p>
+				<p>Complete los datos del formulario para modificar la sesión</p>
 		</div>
 	</div>
 	<div class="row-fluid">
