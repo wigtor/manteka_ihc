@@ -31,7 +31,20 @@
 	}
 
 </script>
+<script>
+	function correo() {
+		var correo = document.getElementById("correo_profesor").value;
+		var correo1 = document.getElementById("correo_profesor1").value;
+		if(correo==correo1){
+			if(correo!='' && correo1!=''){
+				var mensaje = document.getElementById("mensaje");
+				$(mensaje).empty();
+				$('#modalCorreo').modal();
+			}
+		}
+	}
 
+</script>
 		<div id="mensaje"></div>
 		<fieldset>		
 			<legend>Agregar Profesor</legend>	
@@ -126,7 +139,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
+		    							<input type="email" id="correo_profesor" name="correo_profesor" onblur = "correo()" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
 		  							</div>
 							</div>
 
@@ -139,7 +152,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input type="email" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
+		    							<input type="email" id="correo_profesor1" name="correo_profesor1" onblur = "correo()" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
 		  							</div>
 							</div>
 						</div>
@@ -166,8 +179,8 @@
 		  					<div  class="span6">
 									<div  class="span6">
 									<select id="tipoDeFiltro" title="Tipo de contrato" name="tipo_profesor">
-										<option value="Jornada Completa">Profesor Jornada Completa</option>
-										<option value="Por hora">Profesor Por hora</option>
+										<option value="Planta">Profesor Jornada Completa</option>
+										<option value="Hora">Profesor Por hora</option>
 								</select>
 								</div>
 								</div>
@@ -220,3 +233,16 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>		
+						<div id="modalCorreo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>El correo secundario y principal son iguales</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese correos distintos y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>		
+
