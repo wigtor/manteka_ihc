@@ -24,7 +24,7 @@
         <h4>Grupo 1</h4>
         <p>....</p>
       </div> 
-    </div>
+  </div>
 
     <div class="item">
       <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpYzkCMAPM.jpg">
@@ -65,6 +65,8 @@
          <p>....</p>
         </div> 
     </div>
+
+  </div>
   <!-- Carousel nav -->
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
