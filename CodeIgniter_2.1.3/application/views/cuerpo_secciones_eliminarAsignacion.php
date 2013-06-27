@@ -115,7 +115,7 @@ function eliminarAsignacion(){
 <div class="row-fluid">
 	<div class="span10">
 		<fieldset>
-			<legend>Eliminar Asignación</legend>
+			<legend>Borrar Asignación</legend>
 			<?php
 				$atributos= array('onsubmit' => 'return eliminarAsignacion()', 'id' => 'FormDetalle');
 		 		echo form_open('Secciones/eliminarAsignacion/', $atributos);

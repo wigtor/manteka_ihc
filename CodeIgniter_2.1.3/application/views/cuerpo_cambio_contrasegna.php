@@ -26,6 +26,9 @@
 		</div>
 		<br>
 		<hr>
+		<div class="row-fluid">
+			<font class="span6" color="red">* Campos Obligatorios</font>
+		</div>
 		<div style ="display:inline-block">
 			<label>Teléfono</label>
 			<input type="text" name="telefono" placeholder="<?php echo $datos->telefono ?>" value="<?php echo $datos->telefono ?>" >
@@ -56,7 +59,9 @@
 			}
 		?>
 		
-
+		<div class="row-fluid">
+			<font class="span12" color="red">* Campos Obligatorios, Si no desea cambiar su contraseña deje estos campos en blanco.</font>
+		</div>
 		<div class="control-group <?php echo $hay_error_contrasegna_actual ?>">  
             <label class="control-label" for="contrasegna_actual"><font color="red">*</font> Contraseña actual</label>  
             <div class="controls">
@@ -86,7 +91,7 @@
 		</div>
 		&nbsp; &nbsp;
 		<div style ="display:inline-block">
-			<button type="button" class="btn" onclick="window.location.href='<?php echo site_url("Login/index/") ?>'"><div class="btn_with_icon_solo">Ã</div>&nbsp; Cancelar</button>
+			<button type="button" class="btn" onclick="window.location.href='<?php echo site_url("Login/index/") ?>'"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
 		</div>
 	</div>
 	<?php echo form_close(""); ?>

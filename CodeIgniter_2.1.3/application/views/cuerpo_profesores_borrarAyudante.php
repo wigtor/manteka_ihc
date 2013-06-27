@@ -1,6 +1,6 @@
 <script type="text/javascript">
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Sección"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>";
@@ -11,7 +11,7 @@
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		rut_clickeado = idElem.substring("ayudante_".length, idElem.length);
+		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");
@@ -38,17 +38,11 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				if (datos.nombre1 == null) {
-					datos.nombre1 = '';
-				}
 				if (datos.nombre2 == null) {
 					datos.nombre2 = '';
 				}
-				if (datos.apellido1 == null) {
-					datos.apellido1 = '';
-				}
-				if (datos.apellido2 == null) {
-					datos.apellido2 = '';
+				if (datos.seccion == null) {
+					datos.seccion = '';
 				}
 				var nombre_completo_profe;
 				if (datos.nombre1_profe == null) {
@@ -68,10 +62,9 @@
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
 				$(correoDetalle).html($.trim(datos.correo));
-				
-				
 				$(profesorDetalle).html(nombre_completo_profe);
-				var secciones = "";
+				var secciones = document.getElementById('seccionesDetalle');
+				$(secciones).html($.trim(datos.seccion));
 				/* Esto no se implementa puesto no hay forma de relacionar un ayudante con una sección aún
 				for (var i = 0; i < datos.secciones.length; i++) {
 					secciones = secciones + ", " + datos.secciones[i];
@@ -95,6 +88,9 @@
 		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
 		var correoDetalle = document.getElementById("correoDetalle");
 		var profesorDetalle = document.getElementById("profesorDetalle");
+		var secciones = document.getElementById('seccionesDetalle');
+		
+		$(secciones).html("");
 		$(rutDetalle).html("");
 		$(rutEliminar).val("");
 		$(nombre1Detalle).html("");
@@ -128,12 +124,12 @@
 </script>
 
 <fieldset>
-	<legend>Borrar ayudantes</legend>
+	<legend>Borrar Ayudante</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>

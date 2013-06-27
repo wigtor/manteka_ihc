@@ -1,51 +1,43 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sala agregada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al agregar sala
-    		</div>		
 
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 
-				 Una sala con el mismo nombre ya se ha ingresado 
-    		</div>		
 
-		<?php
-		}
+<script>
+	function comprobarNum() {
+		var num = document.getElementById("num_sala").value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Salas/NumExiste") ?>", /* Se setea la url del controlador que responderá */
+			data: { num_post: num},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == 1){
+
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalNum').modal();
+					document.getElementById("num_sala").value = "";
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
 	
-	}
-	unset($mensaje_confirmacion);
-}
-?>
-
+</script>
 <div class= "row-fluid">
 	<div class= "span10">	
 		<fieldset>
 			<legend>Agregar Sala</legend>
 			
-			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/agregarSalas/")?>">
+			<form id="formAgregar" type="post" action="<?php echo site_url("Salas/ingresarSalas/")?>">
 			
 			<div>
 				<div class="row-fluid">
@@ -68,7 +60,7 @@ if(isset($mensaje_confirmacion))
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="inputInfo" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text"  name="num_sala" placeholder="Ej:258" required>
+		    							<input id="num_sala" onblur="comprobarNum()" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text"  name="num_sala" placeholder="Ej:258" required>
 		  							</div>
 							</div>
 						</div>
@@ -93,7 +85,7 @@ if(isset($mensaje_confirmacion))
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required"></textarea>
+		    							<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required" style="resize: none;"></textarea>
 		  							</div>
 							</div>
 
@@ -139,6 +131,19 @@ if(isset($mensaje_confirmacion))
 								&nbsp Cancelar
 							</button>
 					</div>
+											<!-- Modal de modalNum -->
+						<div id="modalNum" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Número de sala ingresado está en uso</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese otro número y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>		
 					</div> 
 
 					

@@ -13,7 +13,7 @@
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -52,49 +52,49 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">1-.RUT</label>
 					<div class="controls">
-						<input type="text" id="rutEditar" name="rutEditar" readonly>
+						<input type="text" id="rutEditar" class="span12" name="rutEditar" readonly>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Primer nombre</label>
 					<div class="controls">
-						<input type="text" id="nombreunoEditar" name="nombre1" maxlength="20" required>
+						<input type="text" id="nombreunoEditar" placeholder="Juan" class="span12" name="nombre1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">3-. Segundo nombre</label>
 					<div class="controls">
-						<input type="text" id="nombredosEditar" name="nombre2" maxlength="20" >
+						<input type="text" id="nombredosEditar" placeholder="Mario" class="span12" name="nombre2" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Apellido Paterno</label>
 					<div class="controls">
-						<input type="text" id="apellidopaternoEditar" name="apellido1" maxlength="20" required>
+						<input type="text" id="apellidopaternoEditar" placeholder="Perez" class="span12" name="apellido1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">5-.<font color="red">*</font> Apellido Materno</label>
 					<div class="controls">
-						<input type="text" id="apellidomaternoEditar" name="apellido2" maxlength="20" required>
+						<input type="text" id="apellidomaternoEditar" placeholder="Perez" class="span12" name="apellido2" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">6-.<font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" id="correoEditar" class="span12" name="correo1" maxlength="40" placeholder="correoPrimario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">7-.<font color="red">*</font> Correo secundario</label>
 					<div class="controls">
-						<input type="email" id="correoEditar2" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+						<input type="email" id="correoEditar2" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">8-.<font color="red">*</font> Teléfono</label>
 					<div class="controls">
-						<input type="text" id="fono" name="fono" maxlength="10" placeholder="44556677" >
+						<input type="text" id="fono" class="span12" name="fono" maxlength="10" placeholder="44556677" >
 					</div>
 				</div>
 				<div class="control-group">
@@ -165,7 +165,7 @@
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		rut_clickeado = idElem.substring("coordinador_".length, idElem.length);
+		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		//var rut_clickeado = elemTabla;
 
 		/* Muestro el div que indica que se está cargando... */

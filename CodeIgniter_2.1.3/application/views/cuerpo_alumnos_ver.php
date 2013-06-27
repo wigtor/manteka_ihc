@@ -1,6 +1,6 @@
 <script>
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Carrera", "Seccion"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>";
@@ -35,14 +35,20 @@
 				var datos = jQuery.parseJSON(respuesta);
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.nombre_seccion == null) {
+					datos.nombre_seccion = '';
+				}
 				$(rutDetalle).html(datos.rut);
-				$(nombre1Detalle).html(datos.nombre1);
-				$(nombre2Detalle).html(datos.nombre2);
-				$(apellido1Detalle).html(datos.apellido1);
-				$(apellido2Detalle).html(datos.apellido2);
-				$(carreraDetalle).html(datos.carrera);
-				$(seccionDetalle).html(datos.nombre_seccion);
-				$(correoDetalle).html(datos.correo);
+				$(nombre1Detalle).html($.trim(datos.nombre1));
+				$(nombre2Detalle).html($.trim(datos.nombre2));
+				$(apellido1Detalle).html($.trim(datos.apellido1));
+				$(apellido2Detalle).html($.trim(datos.apellido2));
+				$(carreraDetalle).html($.trim(datos.carrera));
+				$(seccionDetalle).html($.trim(datos.nombre_seccion));
+				$(correoDetalle).html($.trim(datos.correo));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -72,7 +78,7 @@
 				<div class="span6">
 					<div class="controls controls-row">
 						<div class="input-append span7">
-							<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+							<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 							<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 						</div>
 						<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -88,26 +94,19 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-					<table id="listadoResultados" class="table table-hover">
-						<thead>
-							
-						</thead>
-						<tbody>
-
-						</tbody>
+				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
+					<table id="listadoResultados" class="table table-hover" style="width:600px !important; max-width:600px;">
 					</table>
 				</div>
 				<div class="span6">
-				<pre style="margin-top: 2%; padding: 2%">
+				<pre style="padding: 2%">
 Rut:              <b id="rutDetalle"></b>
 Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
 Apellido paterno: <b id="apellido1Detalle" ></b>
 Apellido materno: <b id="apellido2Detalle"></b>
 Carrera:          <b id="carreraDetalle" ></b>
 Sección:          <b id="seccionDetalle"></b>
-Correo:           <b id="correoDetalle"></b>
-				</pre>
+Correo:           <b id="correoDetalle"></b></pre>
 				</div>
 			</div>
 		</fieldset>

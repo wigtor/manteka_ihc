@@ -49,17 +49,14 @@ function verDetalle(elemTabla) {
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				if (datos.nombre1 == null) {
-					datos.nombre1 = '';
-				}
 				if (datos.nombre2 == null) {
 					datos.nombre2 = '';
 				}
-				if (datos.apellido1 == null) {
-					datos.apellido1 = '';
+				if (datos.fono == null) {
+					datos.fono = '';
 				}
-				if (datos.apello2 == null) {
-					datos.apellido2 = '';
+				if (datos.correo2 == null) {
+					datos.correo2 = '';
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
@@ -93,16 +90,18 @@ function verDetalle(elemTabla) {
 		$('#modalConfirmacion').modal();
 	}
     function resetearCoordinador(){
-    	$(rutDetalle).html("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(fonoDetalle).html("");
-		$(correoDetalle).html("");
+    	$('#rutToDelete').val("");
+		$('#rutDetalle').html("");
+		$('#nombre1Detalle').html("");
+		$('#nombre2Detalle').html("");
+		$('#apellido1Detalle').html("");
+		$('#apellido2Detalle').html("");
+		$('#fonoDetalle').html("");
+		$('#correoDetalle').html("");
+		$('#correoDetalle2').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
-		$('tbody tr').removeClass('highlight');
+		$('#listadoResultados tbody tr').removeClass('highlight');
     }
 
     //Se cargan por ajax
@@ -120,7 +119,7 @@ function verDetalle(elemTabla) {
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -138,12 +137,8 @@ function verDetalle(elemTabla) {
 	<div class="row-fluid">
 		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 			<table id="listadoResultados" class="table table-hover">
-				<thead>
-					
-				</thead>
-				<tbody>
-					
-				</tbody>
+
+				
 			</table>
 		</div>
 		<div class="span6">

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_prueba" language="javascript" columnCount="2" pageWidth="612" pageHeight="792" columnWidth="286" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" uuid="d3bd466f-de57-4a3c-9743-1c0828d4b9e0">
+	<property name="ireport.zoom" value="1.2100000000000009"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="708451cc-d20b-49c8-b47b-34cf40bf2c09"/>
+	<queryString>
+		<![CDATA[SELECT
+     COUNT(estudiante.`RUT_ESTUDIANTE`) AS cantidad_estudiante,
+     estudiante.`RUT_ESTUDIANTE` AS estudiante_RUT_ESTUDIANTE,
+     estudiante.`COD_CARRERA` AS estudiante_COD_CARRERA,
+     estudiante.`COD_SECCION` AS estudiante_COD_SECCION,
+     estudiante.`NOMBRE1_ESTUDIANTE` AS estudiante_NOMBRE1_ESTUDIANTE,
+     estudiante.`NOMBRE2_ESTUDIANTE` AS estudiante_NOMBRE2_ESTUDIANTE,
+     estudiante.`APELLIDO1_ESTUDIANTE` AS estudiante_APELLIDO1_ESTUDIANTE,
+     estudiante.`APELLIDO2_ESTUDIANTE` AS estudiante_APELLIDO2_ESTUDIANTE,
+     estudiante.`CORREO_ESTUDIANTE` AS estudiante_CORREO_ESTUDIANTE,
+     seccion.`COD_SECCION` AS seccion_COD_SECCION,
+     seccion.`NOMBRE_SECCION` AS seccion_NOMBRE_SECCION
+FROM
+     `seccion` seccion INNER JOIN `estudiante` estudiante ON seccion.`COD_SECCION` = estudiante.`COD_SECCION`
+
+GROUP BY
+	seccion.`COD_SECCION`
+     ]]>
+	</queryString>
+	<field name="cantidad_estudiante" class="java.lang.Long"/>
+	<field name="estudiante_RUT_ESTUDIANTE" class="java.lang.Integer"/>
+	<field name="estudiante_COD_CARRERA" class="java.lang.Integer"/>
+	<field name="estudiante_COD_SECCION" class="java.lang.Integer"/>
+	<field name="estudiante_NOMBRE1_ESTUDIANTE" class="java.lang.String"/>
+	<field name="estudiante_NOMBRE2_ESTUDIANTE" class="java.lang.String"/>
+	<field name="estudiante_APELLIDO1_ESTUDIANTE" class="java.lang.String"/>
+	<field name="estudiante_APELLIDO2_ESTUDIANTE" class="java.lang.String"/>
+	<field name="estudiante_CORREO_ESTUDIANTE" class="java.lang.String"/>
+	<field name="seccion_COD_SECCION" class="java.lang.Integer"/>
+	<field name="seccion_NOMBRE_SECCION" class="java.lang.String"/>
+	<group name="estudiante_RUT_ESTUDIANTE">
+		<groupExpression><![CDATA[$F{estudiante_RUT_ESTUDIANTE}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="95" splitType="Immediate">
+			<staticText>
+				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="0" y="0" width="572" height="72"/>
+				<textElement textAlignment="Center">
+					<font size="36" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte Alumos por Seccion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d8959039-3d2f-4223-ba7e-dfc695da8714" mode="Opaque" x="0" y="72" width="285" height="23" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isItalic="false" isUnderline="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Seccion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2cb3adbf-894a-4caa-9725-1f21670d5356" mode="Opaque" x="285" y="72" width="287" height="23" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isItalic="false" isUnderline="false" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Cantidad de Alumnos]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a46f03ff-02dc-46b7-b683-9428bf373390" x="285" y="0" width="287" height="24"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_estudiante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4e84e34c-ec4d-4775-b46f-3df7c163c7ba" x="0" y="0" width="285" height="24"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{seccion_NOMBRE_SECCION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement uuid="4267ab9b-be5b-4748-a606-532ec596e2f2" x="502" y="3" width="17" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3d503f50-c61b-4894-88ec-07e3d1c12d4f" x="457" y="3" width="45" height="20"/>
+				<textElement/>
+				<text><![CDATA[Pagina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a7f4be17-ca69-4ada-bfeb-a09072e8bc71" x="519" y="3" width="19" height="20"/>
+				<textElement/>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="8597f04f-2f50-40a6-97e8-4d4bba2fec95" x="538" y="3" width="24" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

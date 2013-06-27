@@ -219,24 +219,29 @@ class Model_ayudante extends CI_Model {
 	*/
     public function getAyudantesByFilter($texto, $textoFiltrosAvanzados)
    	{
-		$this->db->select('RUT_AYUDANTE AS rut');
+		$this->db->select('ayudante.RUT_AYUDANTE AS id');
 		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
 		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
+		$this->db->join('seccion', 'ayu_profe.COD_SECCION  = seccion.COD_SECCION ', 'LEFT OUTER');
 		$this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
 
-		if ($texto != "") {
-			$this->db->like("RUT_AYUDANTE", $texto);
+		if (trim($texto) != "") {
+			$this->db->like("ayudante.RUT_AYUDANTE", $texto);
 			$this->db->or_like("NOMBRE1_AYUDANTE", $texto);
 			$this->db->or_like("NOMBRE2_AYUDANTE", $texto);
 			$this->db->or_like("APELLIDO1_AYUDANTE", $texto);
 			$this->db->or_like("APELLIDO2_AYUDANTE", $texto);
+			$this->db->or_like("NOMBRE_SECCION", $texto);
 		}
 		else {
 			//Sólo para acordarse
 			define("BUSCAR_POR_RUT", 0);
 			define("BUSCAR_POR_NOMBRE", 1);
 			define("BUSCAR_POR_APELLIDO", 2);
-			$this->db->like("RUT_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+			define("BUSCAR_POR_SECCION", 3);
+			$this->db->like("ayudante.RUT_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
 			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
 				$this->db->where("(NOMBRE1_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
 				//$this->db->like("(NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
@@ -247,6 +252,9 @@ class Model_ayudante extends CI_Model {
 				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_SECCION] != '') {
+				$this->db->like("NOMBRE_SECCION", $textoFiltrosAvanzados[BUSCAR_POR_SECCION]);
+			}
 		}
 		$query = $this->db->get('ayudante');
 		//echo $this->db->last_query();
@@ -256,37 +264,39 @@ class Model_ayudante extends CI_Model {
 		return $query->result();
    }
 
-   /**
-   * Obtiene los detalles de un ayudante
-   * 
-   * Se recibe un rut y se hace la consulta para obtener todos los demás atributos del ayudante
-   * con ese rut. Los atributos del objeto obtenido son:
-   * rut, nombre1, nombre2, apellido1, apellido2, fono, correo, nombre1_profe, nombre2_profe, apellido1_profe, apellido2_profe
-   * 
-   * @author Alex Ahumada
-   * @param int $rut El rut del ayudante que se busca
-   * @return Se retorna un objeto cuyos atributos son los atributos del ayudante, FALSE si no se encontró
-   */
-   public function getDetallesAyudante($rut) {
-      $this->db->select('ayudante.RUT_AYUDANTE AS rut');
-      $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
-      $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
-      $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
-      $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
-      $this->db->select('CORREO_AYUDANTE AS correo');
-      $this->db->select('NOMBRE1_PROFESOR AS nombre1_profe');
-      $this->db->select('NOMBRE2_PROFESOR AS nombre2_profe');
-      $this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
-      $this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
-      $this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
-      $this->db->join('profesor', 'profesor.RUT_USUARIO2 = ayu_profe.RUT_USUARIO2', 'LEFT OUTER');
-      $this->db->where('ayudante.RUT_AYUDANTE', $rut);
-      $query = $this->db->get('ayudante');
-      if ($query == FALSE) {
-         return array();
-      }
-      return $query->row();
-   }
+	/**
+	* Obtiene los detalles de un ayudante
+	* 
+	* Se recibe un rut y se hace la consulta para obtener todos los demás atributos del ayudante
+	* con ese rut. Los atributos del objeto obtenido son:
+	* rut, nombre1, nombre2, apellido1, apellido2, fono, correo, nombre1_profe, nombre2_profe, apellido1_profe, apellido2_profe
+	* 
+	* @author Alex Ahumada
+	* @param int $rut El rut del ayudante que se busca
+	* @return Se retorna un objeto cuyos atributos son los atributos del ayudante, FALSE si no se encontró
+	*/
+	public function getDetallesAyudante($rut) {
+		$this->db->select('ayudante.RUT_AYUDANTE AS rut');
+		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+		$this->db->select('CORREO_AYUDANTE AS correo');
+		$this->db->select('NOMBRE1_PROFESOR AS nombre1_profe');
+		$this->db->select('NOMBRE2_PROFESOR AS nombre2_profe');
+		$this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
+		$this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
+		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
+		$this->db->join('seccion', 'ayu_profe.COD_SECCION  = seccion.COD_SECCION ', 'LEFT OUTER');
+		$this->db->join('profesor', 'profesor.RUT_USUARIO2 = ayu_profe.RUT_USUARIO2', 'LEFT OUTER');
+		$this->db->where('ayudante.RUT_AYUDANTE', $rut);
+		$query = $this->db->get('ayudante');
+		if ($query == FALSE) {
+		 return array();
+		}
+		return $query->row();
+	}
 }
 
 ?>

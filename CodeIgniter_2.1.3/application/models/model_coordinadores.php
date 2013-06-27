@@ -383,7 +383,7 @@ class model_coordinadores extends CI_Model{
       */
       public function getCoordinadoresByFilter($texto, $textoFiltrosAvanzados)
       {
-         $this->db->select('RUT_USUARIO3 AS rut');
+         $this->db->select('RUT_USUARIO3 AS id');
          $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
          $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
          $this->db->order_by('APELLIDO1_COORDINADOR', 'asc');
@@ -420,7 +420,7 @@ class model_coordinadores extends CI_Model{
    /* Version de getCoordinadoresByFilter para la vista de eliminar coordinador, no incluye al coordinador que realiza la busqueda */
    public function getCoordinadoresByFilterE($texto, $textoFiltrosAvanzados)
       {
-         $this->db->select('RUT_USUARIO3 AS rut');
+         $this->db->select('RUT_USUARIO3 AS id');
          $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
          $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
          $this->db->order_by('APELLIDO1_COORDINADOR', 'asc');

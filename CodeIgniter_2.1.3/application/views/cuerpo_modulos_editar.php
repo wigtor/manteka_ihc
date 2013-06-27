@@ -349,17 +349,18 @@ function editarMod(){
 
 </script>
 
-<div class="row-floid">
-
-	<div class="span10">
-	<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
-		<fieldset>
-			<legend>Editar Módulos</legend>
+	<fieldset>
+			<legend>Editar Módulo</legend>
+			<div class="row-fluid" style="margin-bottom:5px">
+				<font color="red">*Campos Obligatorios</font>
+			</div>
 	  		<div class="row-fluid">
+	  			<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
+				
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6">
-							1. Escoja un módulo de la lista
+							1-.<font color="red">*</font> Escoja un módulo de la lista
 						</div>
 					</div>
 
@@ -382,10 +383,10 @@ function editarMod(){
 					</div>
 
 
-
+					
 					<div class="row-fluid" style="margin-top:2%">
-							<div class="span6">
-								2. Sesiones del Módulo Temático
+							<div class="span7">
+								2-.<font color="red">*</font> Sesiones del módulo temático
 							</div>
 					</div>
 
@@ -407,7 +408,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span7">
-								3. Profesores del Módulo Temático
+								3-.<font color="red">*</font> Profesores del módulo temático
 							</div>
 					</div>
 
@@ -426,16 +427,12 @@ function editarMod(){
 							</table>
 						</div>
 					</div>
-
-
-
-			
-		</div>
+				</div>
 		
 				<div class="span6" style="margin-left: 2%; padding: 0%; ">
 					<div class="row-fluid">
 						<div class="span6">
-							4. Nombre del módulo
+							4-.<font color="red">*</font> Nombre del módulo
 						</div>
 					</div>
 
@@ -450,7 +447,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span6">
-								5. Profesor Lider 
+								5-.<font color="red">*</font> Profesor lider 
 							</div>
 
 					</div>
@@ -472,7 +469,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:3%">
 							<div class="span8">
-								6. Descripción del Módulo 
+								6-. Descripción del módulo 
 							</div>					
 					</div>
 					<div class="row-fluid" >
@@ -486,7 +483,7 @@ function editarMod(){
 
 					<div class="row-fluid" >
 							<div class="span6">
-								7. Requisitos del Módulo
+								7. Requisitos del módulo
 							</div>
 					</div>
 
@@ -518,8 +515,6 @@ function editarMod(){
 						</div>
 					</div>
 				</div>
+				</form>
 			</div>	
-		</fieldset>
-		</form>
-	</div>	
-</div>
+	</fieldset>

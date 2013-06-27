@@ -1,14 +1,5 @@
-<script type="text/javascript">
-	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se han cambiado de sección a todos los alumnos correctamente");
-				}
-				else{
-					alert("Error al realizar el cambio de sección");
-				}
-	}
-</script>
+
+
 
 <script type="text/javascript">
 	function cambioSeccion(){
@@ -30,65 +21,63 @@
 			}
 		}
 	
-		if(seccion1[numS1].value == seccion2[numS2].value){
-			alert("Debe escoger secciones distintas");
+		if(seccion1[numS1].value == seccion2[numS2].value){		
+			$('#modalSeccionIgual').modal();
 			return false;
 		}
-		
-		var answer = confirm("¿Está seguro de realizar cambios? ")
-		if (!answer){
-			return false;//terminar
-		}
-		else{
-
-		var cambio = document.getElementById("FormS1");
-		cambio.action = "<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/") ?>";				
-		cambio.submit();
-		}
-		return false;
+				
+		$('#modalConfirmacion').modal();
 	
 	}
 </script>
 
 <script type="text/javascript">
 	function mostrarS(cod_seccion,tipo_lista){
+	//
+	$.ajax({//
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/obtenerAlumnosSeccion") ?>", /* Se setea la url del controlador que responderá */
+			data: { cod_seccion_post: cod_seccion},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 
-	var arreglo = new Array();
-	var ocultar;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($rs_estudiantes)){
-		echo 'arreglo['.$contadorE.']= "'.$rs_estudiantes[$contadorE][6].'";';
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	if(tipo_lista == "lista1_"){
-		var checkboxlistaS1 = document.getElementsByName("seleccionadosS1[]");
-		for(cont=0;cont < checkboxlistaS1.length;cont++){
-			checkboxlistaS1[cont].checked = false;
-		}
-	}
-	else{
-		var checkboxlistaS2 = document.getElementsByName("seleccionadosS2[]");
-		for(cont=0;cont < checkboxlistaS2.length;cont++){
-			checkboxlistaS2[cont].checked = false;
-		}
-	}
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(tipo_lista+cont);
-		if(0 > arreglo[cont].toLowerCase().indexOf(cod_seccion.toLowerCase())){
-			ocultar.style.display='none';
-		}
-		else
-		{
-			ocultar.style.display='';
-		}
-    }
-	
+				var tablaResultados = document.getElementById(tipo_lista+"tabla");
+				$(tablaResultados).empty();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				var tr, td, th, thead, input,nodoTexto;
+				thead = document.createElement('thead');
+				tr = document.createElement('tr');
+				th = document.createElement('th');
+				nodoTexto = document.createTextNode("Nombre alumnos de sesión");
+				th.appendChild(nodoTexto);
+				tr.appendChild(th);
+				thead.appendChild(tr);
+				tablaResultados.appendChild(thead);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					td = document.createElement('td');
+					input = document.createElement('input');
+					input.setAttribute('type','checkbox');
+					if(tipo_lista == "lista1_"){
+						input.setAttribute('name','seleccionadosS1[]');
+					}
+					else{
+						input.setAttribute('name','seleccionadosS2[]');
+					}
+					input.setAttribute('value', arrayRespuesta[i].rut);
+					nodoTexto = document.createTextNode(" "+arrayRespuesta[i].apellido1+" "+arrayRespuesta[i].apellido2+" "+arrayRespuesta[i].nombre1+" "+arrayRespuesta[i].nombre2);
+					td.appendChild(input);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+					tablaResultados.appendChild(tr);
+					
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+	//
 	}
 </script>
 
@@ -124,43 +113,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 </script>
 
 
-<script type="text/javascript">
-function ordenarFiltro(tipo_lista){
-	var filtroLista = document.getElementById(tipo_lista+"filtro").value;
-	var tipoDeFiltro = document.getElementById(tipo_lista+"tipoDeFiltro").value;
 
-	var arreglo = new Array();
-	var ocultar;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($rs_estudiantes)){
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][1] = "'.$rs_estudiantes[$contadorE][1].'";';
-		echo 'arreglo['.$contadorE.'][3] = "'.$rs_estudiantes[$contadorE][3].'";';
-		echo 'arreglo['.$contadorE.'][4] = "'.$rs_estudiantes[$contadorE][4].'";';
-		echo 'arreglo['.$contadorE.'][7] = "'.$rs_estudiantes[$contadorE][7].'";';
-		echo 'arreglo['.$contadorE.'][6] = "'.$rs_estudiantes[$contadorE][6].'";';
-		$contadorE = $contadorE + 1;
-	}
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultar=document.getElementById(tipo_lista+cont);
-		ocultarCb=document.getElementById("c_"+tipo_lista+cont);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
-			ocultarCb.checked = false;
-		}
-		else
-		{
-			ocultar.style.display='';
-		}
-    }
-}
-</script>
 
 
 <div class= "row-fluid">
@@ -168,7 +121,7 @@ function ordenarFiltro(tipo_lista){
 		<fieldset>
 			<legend>Cambio de sección</legend>
 			<div class= "row-fluid">
-				<form id="FormS1" type="post" onsubmit="cambioSeccion() ;return false" method="post"><!--FORM PRIMERA SECCION-->
+				<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/")?>"><!--FORM PRIMERA SECCION-->
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6"> 
@@ -180,7 +133,7 @@ function ordenarFiltro(tipo_lista){
 								<br>
 								<br>
 								Mover de sección:
-								<button class="btn" type="submit" name="botonCambio" value="1">   >   </button>
+								<button class="btn"  type="button" onclick="cambioSeccion()" name="botonCambio" value="1">   >   </button>
 				
 						</div>
 						<div class="span6" style="align:right">
@@ -242,33 +195,10 @@ function ordenarFiltro(tipo_lista){
 			
 					<div class="row-fluid" style="margin-left: 0%;">
 						
-							<thead>
-								<tr>
-									<th style="text-align:left;">Nombre Completo</th>
-									
-								</tr>
-							</thead>
+
 							<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-								<table class="table table-hover">
-									<tbody>
-									
-										<?php
-										$contador=0;
-										$comilla= "'";
-										
-										while ($contador<count($rs_estudiantes)){
-											
-											echo '<tr>';
-											echo	'<td  id="lista1_'.$contador.'"  style="text-align:left;display:none;">
-													<input id="c_lista1_'.$contador.'" type="checkbox" name="seleccionadosS1[]" value="'.$rs_estudiantes[$contador][0].'">  '.$rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
-											echo '</tr>';
-																		
-											$contador = $contador + 1;
-										}
-										
-										?>
-																
-									</tbody>
+								<table class="table table-hover" id="lista1_tabla">
+
 								</table>
 							</div>
 
@@ -285,7 +215,7 @@ function ordenarFiltro(tipo_lista){
 								<br>
 								<br>
 								Mover de sección:
-									<button class="btn" type="submit" name="botonCambio" value="2">   <   </button>
+									<button class="btn" type="button" onclick="cambioSeccion()" name="botonCambio" value="2">   <   </button>
 				
 						</div>
 						<div class="span6">
@@ -336,35 +266,42 @@ function ordenarFiltro(tipo_lista){
 					</div>
 				</div>
 					<div class="row-fluid" style="margin-left: 0%;">
-							<thead>
-								<tr>
-									<th style="text-align:left;">Nombre Completo</th>
-									
-								</tr>
-							</thead>
+
 							<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-								<table class="table table-hover">
-									<tbody>
-									
-										<?php
-										$contador=0;
-										$comilla= "'";
-										
-										while ($contador<count($rs_estudiantes)){
-											
-											echo '<tr>';
-											echo	'<td  id="lista2_'.$contador.'" style="text-align:left;display:none;" >
-														  <input id="c_lista2_'.$contador.'" type="checkbox" name="seleccionadosS2[]" value="'.$rs_estudiantes[$contador][0].'">  '. $rs_estudiantes[$contador][3].' '.$rs_estudiantes[$contador][4].' ' . $rs_estudiantes[$contador][1].' '.$rs_estudiantes[$contador][2].'</td>';
-											echo '</tr>';
-																		
-											$contador = $contador + 1;
-										}								
-										?>
-																
-									</tbody>
+								<table class="table table-hover" id="lista2_tabla">
+
 								</table>
 							</div>
 
+					</div>
+				</div>
+				
+				<!-- Modal de confirmación -->
+				<div id="modalConfirmacion" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Confirmación</h3>
+					</div>
+					<div class="modal-body">
+						<p>Se realizará el cambio de sección ¿Está seguro?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+					</div>
+				</div>
+
+				<!-- Modal de aviso que no ha seleccionado algo -->
+				<div id="modalSeccionIgual" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Se han seleccionado dos secciones iguales</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione dos secciones distintas para hacer el cambio</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
 				</form><!--FORM SEGUNDA SECCION-->
@@ -376,12 +313,20 @@ function ordenarFiltro(tipo_lista){
 	</div>
 </div>
 
-<script type="text/javascript">
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		//para cargar la pagina con lo que quedo
-		document.getElementById("filtro1_<?php echo $seccion1;?>").checked = true;
-		document.getElementById("filtro2_<?php echo $seccion2;?>").checked = true;
-		mostrarS('<?php echo $seccion1;?>','lista1_');
-		mostrarS('<?php echo $seccion2;?>','lista2_');
-	}
-</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

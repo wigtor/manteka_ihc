@@ -1,86 +1,3 @@
-fieldset
-{
-	clear:both;
-	border-color:lightblue;
-	margin-bottom:15px;
-	margin-top:-10px;
-}
-
-fieldset legend
-{
-	color:#0088CC;
-	font-size:18px;
-}
-
-.filaPersona
-{
-	cursor:pointer;
-}
-
-
-
-.listaDestinatarios
-{
-	padding-left:5px;
-	padding-right:5px;
-	margin-right:4px;
-	margin-left:4px;
-	margin-top:8px;
-	margin-bottom:4px;
-	width:97%;
-}
-
-.detallesEmail
-{
-	padding-left:5px;
-	padding-right:5px;
-	margin-right:4px;
-	margin-left:4px;
-	margin-top:16px;
-	margin-bottom:4px;
-	width:97%;
-}
-
-.tituloPre
-{
-	float:left;
-}
-
-.tituloPreTxt
-{
-	font-size:10pt;
-	color:#666666;
-	float:left;
-	margin-left:4px;
-	line-height:35px;
-	font-weight:bold;
-}
-
-#sinCorreos
-{
-	font-size:10pt;
-	color:#666666;
-	float:left;
-	margin-top:9px;
-	margin-left:4px;
-	line-height:35px;
-	font-weight:bold;
-}
-
-.etiqueta
-{
-	margin-left:30px;
-	text-decoration:underline;
-	font-weight:bold;
-}
-
-
-
-.txt2
-{
-	margin-left:30px;
-	margin-bottom:-25px;
-}
 
 .tooltip-inner {
 	background-color: blue; color: #fff;
@@ -93,7 +10,7 @@ border:0px;
 }
 
  .popover {
- 	min-width: 600px;
+ 	min-width: 380px;
     
     border-color: transparent;
 

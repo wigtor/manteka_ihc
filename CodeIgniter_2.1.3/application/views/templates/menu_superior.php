@@ -17,7 +17,7 @@
 		$Planificacion = "";
 		$Salas = "";
 		$Alumnos = "";
-		$Informes = "";
+		$Reportes = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
@@ -39,14 +39,14 @@
 		else if ($menuSuperiorAbierto == "Alumnos") {
 			$Alumnos = 'class="active"';
 		}
-		else if ($menuSuperiorAbierto == "Informes") {
-			$Informes = 'class="active"';
+		else if ($menuSuperiorAbierto == "Reportes") {
+			$Reportes = 'class="active"';
 		}
 
 
 ?>
 
-	<div class="navbar">
+	<div class="navbar pull-right">
 		<div class="navbar-inner" style="margin-left:0px;">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >
@@ -68,8 +68,8 @@
 					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>
 				</li>
 				<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-				<li <?php echo $Informes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Informes/index") ?>">E Informes</a>
+				<li <?php echo $Reportes;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("ReportesSistema/index") ?>">E Reportes</a>
 				</li>
 				<?php } ?>
 			</ul>

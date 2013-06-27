@@ -23,7 +23,7 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 	
 	this.id=id;
 
-		destinoaux=destino;
+		destinoaux=destino.replace(/,/g,",<br>");
 		document.getElementById("destinos").innerHTML=destino.split(",",1 );
 
 	
@@ -54,32 +54,196 @@ function strip(html)
    tmp.innerHTML = html;
    return tmp.textContent||tmp.innerText;
 }
-</script>
 
-<script type="text/javascript">
-/** 
-* Esta función se llama al hacer click en el checkbox principal, permitiendo marcar o desmarcar (según sea el caso) cada checkbox
-* de los correos enviados del usuario. 
-* Para marcar o desmarcar los checkbox, sólo se reconocen los elementos de tipo checkbox dentro del formulario, no se 
-* hace una dsitinción o búsqueda por id del checkbox.
-* Para ver como se configura esto se debe ver en el evento onclick() en donde se está creando el checkbox principal.
-*/
-function selectall(form)
+/**
+ * Carga la información del correo a ver en su contexto.
+ * 
+ * @author Byron Lanas (BL)
+ * @param int codigo Corresponde al código identificador del borrador.
+ **/
+function cargarCorreo(codigo)
 {
-	var formulario=eval(form);  
-	for (var i=0,len=formulario.elements.length; i<len;i++)  
-	{  
-		if (formulario.elements[i].type=="checkbox")
-			formulario.elements[i].checked=formulario.elements[0].checked; 
-	}
+	
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postCargarCorreo") ?>",	
+		data: {codigo:codigo},
+		success: function(respuesta)
+		{
+			detalles = JSON.parse(respuesta);
+			
+			
+			if(detalles==""){
+				alert("El mensaje que intenta ver fue eliminado o no posee los permisos para verlo");
+			}else{
+				var tablaResultados = document.getElementById('tabla');
+				var cuerpo=detalles[0].cuerpo_email;
+				textarea=document.createElement('textarea');
+				textarea.setAttribute("id","cc");
+				textarea.setAttribute("style","display:none");
+				tablaResultados.appendChild(textarea);
+				document.getElementById("cc").value=cuerpo;
+				var de=detalles[1].nombre+" "+detalles[1].apellido1+" "+detalles[1].apellido2;
+				DetalleCorreo(detalles[0].hora,detalles[0].fecha,detalles[0].asunto,'c',de);
+			}
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).hide();
+		}
+	});
+	
+	/* Muestra el "div" que indica que se está cargando... */
+	var iconoCargado = document.getElementById("icono_cargando");
+	$(icono_cargando).show();
 }
-</script>
-<script type="text/javascript">
+
 /** 
 * Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
 */
-
 function cambiarCorreos(direccion,offset)
+{
+	
+	if (direccion=="ant") {
+		offset=offset-5;
+	}
+	else if(direccion=="sig") {
+		offset=offset+5;
+	}
+	
+	var filtroBusqueda = document.getElementById("filtroLista");
+	var textoBusqueda = $(filtroBusqueda).val();
+
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/postEnviados") ?>",
+		data: { offset: offset, textoBusqueda: textoBusqueda, textoFiltrosAvanzados: valorFiltrosJson},
+		success: function(respuesta){
+			var tablaResultados = document.getElementById('listadoResultados');
+			var nodoTexto;
+			$(tablaResultados).find('tbody').remove();
+			listaRecibidos = JSON.parse(respuesta);
+
+			
+			tbody = document.createElement('tbody');
+			if (listaRecibidos.length == 0) {
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				$(td).html("No se encontraron resultados");
+				$(td).attr('colspan',tiposFiltro.length);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+			}
+			for (var i = 0; i < listaRecibidos.length; i++) {
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				td.setAttribute("width", "5%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","padding-top:4px;padding-bottom:8px;");
+				td.setAttribute("align","center");				
+				check = document.createElement('input');
+				check.type='checkbox';
+				check.setAttribute("name", prefijo_tipoDato + listaRecibidos[i].codigo);
+				check.checked=false;
+				td.appendChild(check);
+				//td.setAttribute(onclick,);
+				var cuerpo = listaRecibidos[i].cuerpo_email;
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "23%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				var de=listaRecibidos[i].nombre_destinatario;
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				nodoTexto=document.createTextNode(de.replace(/,/g,", "));
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("id", "m"+i);
+				td.setAttribute("width", "27%");
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				var textoTemp = "<b>"+listaRecibidos[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......";
+				td.innerHTML = textoTemp;
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "8%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				nodoTexto=document.createTextNode(listaRecibidos[i].fecha);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td = document.createElement('td');
+				td.setAttribute("width", "8%");
+				td.setAttribute("id", i);
+				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				
+				nodoTexto=document.createTextNode(listaRecibidos[i].hora);
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+				
+
+				textarea=document.createElement('textarea');
+				textarea.setAttribute("id","c"+i);
+				textarea.setAttribute("style","display:none");
+				textarea.value = cuerpo;
+				tbody.appendChild(textarea);
+			}
+
+			tablaResultados.appendChild(tbody);
+
+			var limite;
+			if(<?php echo $cantidadCorreos;?><offset+5)
+				limite=<?php echo $cantidadCorreos;?>;
+			else
+				limite=offset+5;
+
+			
+			
+			document.getElementById("sig").setAttribute("onClick", "cambiarCorreos('sig',"+offset+")");
+			document.getElementById("ant").setAttribute("onClick", "cambiarCorreos('ant',"+offset+")");
+			if (direccion=="ant") {
+					
+					if(offset==0){
+						document.getElementById("ant").className="disabled";
+						document.getElementById("ant").removeAttribute('onClick');
+					}
+					document.getElementById("sig").removeAttribute('class');
+			}else if(direccion=="sig"){
+				
+				if(offset+5>=<?php echo $cantidadCorreos;?>){
+					document.getElementById("sig").className="disabled";
+					document.getElementById("sig").removeAttribute('onClick');
+				}
+				document.getElementById("ant").removeAttribute('class');
+
+			}else{
+				if(offset+5>=<?php echo $cantidadCorreos;?>){
+					document.getElementById("sig").className="disabled";
+					document.getElementById("sig").removeAttribute('onClick');
+				}
+				if(offset==0)
+					document.getElementById("ant").removeAttribute('onClick');
+			}
+			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
+
+			
+			
+			var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+		}
+	});
+	/* Muestro el div que indica que se está cargando... */
+			var iconoCargado = document.getElementById("icono_cargando");
+			$(icono_cargando).show();
+	
+}
+
+
+
+
+function cambiarCorreos2(direccion,offset)
 {
 	
 	if (direccion=="ant") {
@@ -139,10 +303,10 @@ function cambiarCorreos(direccion,offset)
 				{j=0;
 					while(typeof listaEnviados[i][3][j] != 'undefined'){
 						if(destino==""){
-							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							destino=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor+' &#60'+listaEnviados[i][3][j].correo_profesor+'&#62';					
 							para=listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;
 						}else{
-							destino=destino+',<br>'+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor;					
+							destino=destino+',<br>'+listaEnviados[i][3][j].nombre1_profesor+' '+listaEnviados[i][3][j].apellido1_profesor+' '+listaEnviados[i][3][j].apellido2_profesor+' &#60'+listaEnviados[i][3][j].correo_profesor+'&#62';					
 							para=para+".....";
 						}
 						j++;	
@@ -153,10 +317,10 @@ function cambiarCorreos(direccion,offset)
 				{j=0;
 					while(typeof listaEnviados[i][4][j] != 'undefined'){
 						if(destino==""){
-							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							destino=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador+' &#60'+listaEnviados[i][4][j].correo_coordinador+'&#62';					
 							para=listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;
 						}else{
-							destino=destino+',<br>'+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador;					
+							destino=destino+',<br>'+listaEnviados[i][4][j].nombre1_coordinador+' '+listaEnviados[i][4][j].apellido1_coordinador+' '+listaEnviados[i][4][j].apellido2_coordinador+' &#60'+listaEnviados[i][4][j].correo_coordinador+'&#62';					
 							para=para+".....";
 						}
 						j++;	
@@ -277,29 +441,156 @@ function cambiarCorreos(direccion,offset)
 */
 function eliminarCorreo()
 {
-	var checked_ids = [];
-	for(i=0;i<document.formulario.elements.length;i++)
+	$("#seleccion").val("");
+	var temp, idCorreo;
+	$(':checkbox').each(function()
 	{
-		if((document.formulario[i].type=='checkbox') && (document.formulario[i].checked==true))
-			checked_ids.push(document.formulario[i].name);
-	}
-	if(checked_ids.length==0)
-		alert('Debes seleccionar al menos un correo para eliminar.');
-	else
-	{
-		if (confirm('Estás a punto de eliminar correos.\n¿Realmente deseas continuar?'))
-		{
-			$('#cuadroEnviados').css({display:'none'});
-			$('#cuadroDetalleCorreo').css({display:'none'});
-			$('#cRC').css({display:'block'});
-			if(checked_ids[0]=="marcar")
-				checked_ids.shift();
-			document.getElementById('seleccion').value=checked_ids.join(";");
-			formulario.action="<?php echo site_url("Correo/EliminarCorreo")?>";
-			formulario.submit();
+		if (this.checked) {
+			if (this.id != 'selectorTodos') { //Evito que se incluya el checkbox que los marca a todos
+				temp = $(this).attr('name');
+				idCorreo = temp.substring(prefijo_tipoDato.length, temp.length);
+				if ($("#seleccion").val()== '') {
+					$("#seleccion").val(idCorreo);
+				}
+				else {
+					$("#seleccion").val($("#seleccion").val()+idCorreo+";");
+				}
+			}
 		}
+	});
+
+	if ($("#seleccion").val() == '') {
+		$('#modalSeleccioneAlgo').modal();
+		return;
 	}
+	$('#modalConfirmacion').modal();
 }
+
+function limpiarFiltrosCorreo() {
+	var tam = valorFiltrosJson.length;
+	for (var i = 0; i < tam; i++) {
+		valorFiltrosJson[i] = "";
+	}
+	var inputTextoFiltro = document.getElementById('filtroLista');
+	$(inputTextoFiltro).val("");
+
+	//Luego de limpiar los filtros, se debe iniciar una nueva búsqueda
+	cambiarCorreos('inicial', 0);
+}
+
+function cambioTipoFiltroCorreos(inputUsado) {
+	if (inputUsado != undefined) {
+		var idElem = inputUsado.id;
+		var index = idElem.substring(prefijo_tipoFiltro.length, idElem.length);
+		valorFiltrosJson[index] = inputUsado.value; //Copio el valor del input al array de filtros
+	}
+	cambiarCorreos("inicial", 0);
+}
+
+function evitarEnvioVacio() {
+	$("#seleccion").val("");
+	var temp, idCorreo;
+	$(':checkbox').each(function()
+	{
+		if (this.checked) {
+			if (this.id != 'selectorTodos') { //Evito que se incluya el checkbox que los marca a todos
+				temp = $(this).attr('name');
+				idCorreo = temp.substring(prefijo_tipoDato.length, temp.length);
+				if ($("#seleccion").val() == '') {
+					$("#seleccion").val(idCorreo);
+				}
+				else {
+					$("#seleccion").val($("#seleccion").val()+idCorreo+";");
+				}
+			}
+		}
+	});
+
+	if ($("#seleccion").val() == '') {
+		return false;
+	}
+	return true;
+}
+
+function escribirHeadTableCorreos() {
+
+	var tablaResultados = document.getElementById("listadoResultados");
+	$(tablaResultados).find('tbody').remove();
+	var tr, td, th, thead, nodoTexto, nodoBtnFiltroAvanzado;
+	thead = document.createElement('thead');
+	thead.setAttribute('style', "cursor:default;");
+	tr = document.createElement('tr');
+
+	//SE CREA LA CABECERA DE LA TABLA
+	for (var i = 0; i < tiposFiltro.length; i++) {
+			th = document.createElement('th');
+			if (tiposFiltro[i] != '') {
+				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
+				
+
+				nodoBtnFiltroAvanzado = document.createElement('a');
+				nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-mini clickover");
+				nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
+				//$(nodoBtnFiltroAvanzado).attr('title', "Buscar por "+tiposFiltro[i]);
+				nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;");
+					span = document.createElement('i');
+					span.setAttribute('class', "icon-filter clickover");
+					//span.setAttribute('style', "vertical-align:middle;");
+				nodoBtnFiltroAvanzado.appendChild(span);
+
+			th.appendChild(nodoTexto);
+			th.appendChild(nodoBtnFiltroAvanzado);
+			}
+			else { //Esto es para el caso de los checkbox que marcan toda la tabla
+				nodoCheckeable = document.createElement('input');
+				nodoCheckeable.setAttribute('data-previous', "false,true,false");
+				nodoCheckeable.setAttribute('type', "checkbox");
+				nodoCheckeable.setAttribute('id', "selectorTodos");
+				nodoCheckeable.setAttribute('title', "Seleccionar todos");
+				th.appendChild(nodoCheckeable);
+			}
+			
+
+			var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
+			
+			var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltroCorreos(this)" ><button class="btn" onClick="cambioTipoFiltroCorreos(this)" type="button"><i class="icon-search"></i></button></div>';
+			
+
+			$(nodoBtnFiltroAvanzado).clickover({html:true, content: divs, placement:'top', onShown: despuesDeMostrarPopOver, title:"Búsqueda sólo por " + tiposFiltro[i], rel:"clickover", indice: i});
+
+			
+		tr.appendChild(th);
+	}
+	thead.appendChild(tr);
+	
+	tablaResultados.appendChild(thead);
+}
+
+</script>
+
+<script>
+	var tiposFiltro = ["", "Para", "Mensaje", "Fecha", "Hora"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", "", ""]; //Esta es variable global que almacena el valor de los input de búsqueda en específico
+	var prefijo_tipoDato = "correo_rec_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+	var url_post_busquedas = "<?php echo site_url("Correos/postEnviados") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/correos") ?>";
+
+	//Se cargan por ajax
+	$(document).ready(function() {
+		escribirHeadTableCorreos();
+		cambiarCorreos('inicial', 0);
+
+		//Hace que se seleccionen todos los checkbox al presionar el selectorTodos
+		$("#selectorTodos").click(function()				
+		{
+			var checked_status = this.checked;
+			$(':checkbox').each(function()
+			{
+				this.checked = checked_status;
+			});
+		});
+	});
 </script>
 
 <?php
@@ -328,111 +619,126 @@ if(isset($msj))
 }
 ?>
 
-
-
 <fieldset id="cuadroEnviados">
-	<legend>&nbsp;Correos enviados&nbsp;</legend>
+	<legend>Correos enviados</legend>
 	<?php
-	$contador=0;
-	$offset=0;
+		$contador=0;
+		$offset=0;
 
-	if($cantidadCorreos<$offset+5)
-		$limite=$cantidadCorreos;
-	else
-		$limite=$offset+5;
-
-	$comilla= "'";
-	$estado=1;
-	
-	if($estado==1)
-	{
-
-		if($cantidadCorreos!==0)
-		{
-	
-	
-			?>
-			<button  class ="btn"  onclick="eliminarCorreo()" style=" margin-right:4px; float:right;" ><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
-			<?php
-		}
-
-		if($cantidadCorreos==0)
-		{
-			?>
-			<div id="sinCorreos">
-			Estimado usuario</br>
-			La bandeja de correos enviados se encuentra vacía.
-			</div>
-			<?php
-		}
+		if($cantidadCorreos<$offset+5)
+			$limite=$cantidadCorreos;
 		else
-		{?>
-		    <ul id="pager" class="pager" style="text-align:right;margin:0px" >
-		    	<span id="mostrando">  mostrando <?php echo ($offset+1)."-".$limite. " de: ".$cantidadCorreos; ?></span>
-	    		<li id="ant" class="disabled" ><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
-	    		<?php 
-	    		if($limite<$cantidadCorreos){
-	    			?>
-	    			<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
-	    			<?php
-	    		}else{
-	    			?>
-	    			<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)" class="disabled"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
-	    			<?php
-	    		}
-	    		?>
+			$limite=$offset+5;
 
-	   	 		
-			</ul>
-			<form name="formulario" id="formu" method="post">
-			<table width="98%" align="center" height="30px" class="table table-hover" style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:20px; margin-bottom:0px">
-			<tr class="info">
-			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-			<td width="23%" ><b>Para</b></td>
-			<td width="27%" ><b>Mensaje</b></td>
-			<td width="8%" ><b>Fecha</b></td>
-			<td width="8%" ><b>Hora</b></td>
-			</tr>
-			
-			
-			<tbody id="tabla">
-				<script type="text/javascript">cambiarCorreos("inicio",0)</script>
-			<?php		
-			
-		}
-		?>
-		</tbody>
-		</table>
-		
-		<input type="hidden" id="seleccion" name="seleccion" value="">
-		</form>
-		<?php
-	}
-	else
-	{
-		?>
-		<p id="errorBD">
-		No se puede acceder a la lista de correos enviados en estos momentos.
-		</br>
-		</br>
-		Inténtalo más tarde o contacta al administrador del sitio.
-		</p>
-		<?php
-	}
+		$comilla= "'";
+
 	?>
+
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="controls controls-row">
+			    <div class="input-append span7">
+					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambiarCorreos('inicial', 0)" placeholder="Filtro búsqueda">
+					<button class="btn" onClick="cambiarCorreos('inicial', 0)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+				</div>
+				<button class="btn" onClick="limpiarFiltrosCorreo()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+			</div>
+		</div>
+		<div class="span6" >
+			<button class ="btn pull-right" onclick="eliminarCorreo() "><div class="btn_with_icon_solo">Ë</div> Eliminar seleccionados</button><br><br>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6" >
+			
+		</div>
+		<div class="span6" >
+			<ul id="pager" class="pager" style="text-align:right; margin:0px" >
+				<span id="mostrando">  mostrando <?php echo ($offset+1)."-".$limite. " de: ".$cantidadCorreos; ?></span>
+				<li id="ant" class="disabled" ><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
+				<?php 
+				if ($limite<$cantidadCorreos) {
+					?>
+					<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+					<?php
+				}
+				else {
+					?>
+					<li id ="sig" onClick="cambiarCorreos('sig',<?php echo $offset; ?>)" class="disabled"><a href="#"><div class="btn_with_icon_solo">=</div></a></li>
+					<?php
+				}
+				?>
+			</ul>
+		</div>
+	</div>
+
+	<?php
+		
+		$attributes = array('onsubmit' => 'return evitarEnvioVacio()', 'id' => 'formu', 'name' => "formulario");
+		echo form_open('Correo/EliminarCorreo', $attributes);
+		
+	?>
+		<div class="row-fluid">
+			<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+				<table id="listadoResultados" class="table table-hover">
+					
+					<!-- Acá va el tbody cargado por ajax -->
+
+				</table>
+			</div>
+		</div>
+		
+
+		<!-- Modal de confirmación -->
+		<div id="modalConfirmacion" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Confirmación</h3>
+			</div>
+			<div class="modal-body">
+				<p>Se van a eliminar los correos seleccionados ¿Está seguro?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+				<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+			</div>
+		</div>
+
+		<!-- Modal de no ha seleccionado a nadie -->
+		<div id="modalSeleccioneAlgo" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>No ha seleccionado un correo</h3>
+			</div>
+			<div class="modal-body">
+				<p>Por favor seleccione un correo para eliminar y vuelva a intentarlo</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+
+		<input type="hidden" id="seleccion" name="seleccion" value="">
+	</form>
 </fieldset>
 
+
 <fieldset id="cuadroDetalleCorreo" style="display:none;">
-	<legend>&nbsp;Correos enviados <font color="black">:::</font> detalles&nbsp;</legend>
-	<div class="tituloPre2"><div class="tituloPreTxt">Detalles del correo seleccionado</div>
-	<button class="btn" style="margin-bottom:20px; margin-right:14px; float:right;" onclick="volverCorreosEnviados()"><div class="btn_with_icon_solo"><</div> Volver</button>
+	<legend>Correos recibidos ::: detalles</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			Detalles del correo seleccionado
+		</div>
+		<div class="span6">
+			<button class="btn pull-right" onclick="volverCorreosEnviados()" ><div class="btn_with_icon_solo"><</div> Volver</button>
+		</div>
+		
 	</div>
 	</br>
-
 	<pre class="detallesEmail">
-<div style="text-align:right; margin-bottom:0px;">Fecha: <b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div><table class="table table-hover" style="margin:0px; border-top:0px;">
-<td style="text-align:left; margin:px;  border-top:0px" > Para: <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div></td>
-</table>  Asunto:  <b  id="asuntoDetalle"></b>
+<div style="text-align:right; margin-bottom:0px;">Fecha: <b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
+ Para:   <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div>
+ Asunto: <b  id="asuntoDetalle"></b>
   <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
 	</pre>
 </fieldset>

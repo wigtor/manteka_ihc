@@ -1,6 +1,6 @@
 <script type="text/javascript">
-	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", ""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Profesores/postBusquedaProfesores") ?>";
@@ -33,9 +33,20 @@
 				var telefonoDetalle = document.getElementById("telefonoDetalle");
 				var correoDetalle = document.getElementById("correoDetalle");
 				var tipoDetalle = document.getElementById("tipoDetalle");
+				var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
 				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
+				if (datos.nombre2 == null) {
+					datos.nombre2 = '';
+				}
+				if (datos.correo2 == null) {
+					datos.correo2 = '';
+				}
+				if (datos.moduloTem == null) {
+					datos.moduloTem = '';
+				}
+
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				$(rutDetalle).html($.trim(datos.rut));
@@ -44,8 +55,9 @@
 				$(apellido1Detalle).html(datos.apellido1);
 				$(apellido2Detalle).html(datos.apellido2);
 				$(telefonoDetalle).html(datos.telefono == "" ? '' : $.trim(datos.telefono));
-				$(correoDetalle).html(datos.correo);
-				$(tipoDetalle).html(datos.tipo);
+				$(correoDetalle).html($.trim(datos.correo));
+				$(tipoDetalle).html($.trim(datos.tipo));
+				$(moduloTematicoDetalle).html($.trim(datos.moduloTem));
 
 				var rutInputHidden = document.getElementById("rutEliminar");
 				$(rutInputHidden).val(datos.rut);
@@ -69,17 +81,7 @@
 	});
 
 </script>
-<script type="text/javascript">
-	
-	if("<?php echo $mensaje_confirmacion;?>"!="2"){
-		if("<?php echo $mensaje_confirmacion;?>"!="-1"){
-				alert("Profesor eliminado correctamente");
-				}
-				else{
-					alert("Error al eliminar");
-				}
-	}
-</script>
+
 
 <script>
 	function eliminarProfesor(){
@@ -91,30 +93,23 @@
 		$('#modalConfirmacion').modal();
 	}
 
-	function resetear() {
+	function resetearProfesor() {
 		//ESTO ES DE QUIENES HICIERON EL BORRADO
-		var rutInputHidden = document.getElementById("rutEliminar");
-		$(rutInputHidden).val("");
+		$('#rutEliminar').val("");
 
-		/* Obtengo los objetos HTML donde serán escritos los resultados */
-		var rutDetalle = document.getElementById("rutDetalle");
-		var nombre1Detalle = document.getElementById("nombre1Detalle");
-		var nombre2Detalle = document.getElementById("nombre2Detalle");
-		var apellido1Detalle = document.getElementById("apellido1Detalle");
-		var apellido2Detalle = document.getElementById("apellido2Detalle");
-		var telefonoDetalle = document.getElementById("telefonoDetalle");
-		var correoDetalle = document.getElementById("correoDetalle");
-		var tipoDetalle = document.getElementById("tipoDetalle");
-		
 		/* Seteo los valores a string vacio */
-		$(rutDetalle).html("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(telefonoDetalle).html("");
-		$(correoDetalle).html("");
-		$(tipoDetalle).html("");
+		$('#rutDetalle').html("");
+		$('#nombre1Detalle').html("");
+		$('#nombre2Detalle').html("");
+		$('#apellido1Detalle').html("");
+		$('#apellido2Detalle').html("");
+		$('#telefonoDetalle').html("");
+		$('#correoDetalle').html("");
+		$('#tipoDetalle').html("");
+		$('#moduloTematicoDetalle').html("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('#listadoResultados tbody tr').removeClass('highlight');
 	}
 </script>
 
@@ -122,12 +117,12 @@
 
 
 <fieldset>
-	<legend>Borrar profesores</legend>
+	<legend>Borrar Profesor</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
 				<div class="input-append span7">
-					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
 				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -166,7 +161,8 @@ Apellido materno: <b id="apellido2Detalle"></b>
 Telefono:         <b id="telefonoDetalle" ></b>
 Correo:           <b id="correoDetalle" ></b>
 Correo secundario:<b id="correoDetalle2" ></b>
-Tipo:             <b id="tipoDetalle"></b></pre>
+Tipo:             <b id="tipoDetalle"></b>
+Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 		<input name="rutEliminar" type="hidden" id="rutEliminar" value="">
 			<div class="control-group">
 				<div class="controls pull-right">
@@ -174,7 +170,7 @@ Tipo:             <b id="tipoDetalle"></b></pre>
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
 					</button>
-					<button class="btn" type="button" onclick="resetear()" >
+					<button class="btn" type="button" onclick="resetearProfesor()" >
 						<div class="btn_with_icon_solo">Â</div>
 						&nbsp; Cancelar
 					</button>&nbsp;

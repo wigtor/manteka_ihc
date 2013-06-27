@@ -19,7 +19,7 @@ class Alumnos extends MasterManteka {
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->getAllAlumnos());
+        $datos_vista = array('rs_estudiantes' => array());
 	     
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -45,7 +45,7 @@ class Alumnos extends MasterManteka {
 	{
 
 		$this->load->model('Model_estudiante');
-        $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
+        $datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
 	    
 
 		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
@@ -76,7 +76,7 @@ class Alumnos extends MasterManteka {
 	{
 		$this->load->model('Model_estudiante');
 
-	    $datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2);
+	    $datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion'=>2);
 
 		$subMenuLateralAbierto = "borrarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -106,14 +106,33 @@ class Alumnos extends MasterManteka {
 		$rut_estudiante = $this->input->post('rut_estudiante');
 
 		$confirmacion = $this->Model_estudiante->EliminarEstudiante($rut_estudiante);
-		$datos_vista = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion);//
+		//$datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion'=>$confirmacion);//
 
 
-		$subMenuLateralAbierto = "borrarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		//$subMenuLateralAbierto = "borrarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
+		//$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		//$tipos_usuarios_permitidos = array();
+		//$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		//$this->cargarTodo("Alumnos", 'cuerpo_alumnos_borrar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	
+		// mostramos el mensaje de operacion realizada
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha borrado el alumno con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación en base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Alumnos/borrarAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Borrar Alumno"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_borrar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 
 
@@ -175,14 +194,24 @@ class Alumnos extends MasterManteka {
 		
         $confirmacion = $this->Model_estudiante->InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera);
 	    
-		$datos_vista = array('lista_rut' => $this->Model_estudiante->getAllRut(),'carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'mensaje_confirmacion'=>$confirmacion);
-      
-		$subMenuLateralAbierto = "agregarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		// mostramos el mensaje de operacion realizada
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el alumno con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Alumnos/agregarAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Agregar Alumno"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_agregar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
-
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 
 
@@ -212,6 +241,18 @@ class Alumnos extends MasterManteka {
 		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 	}
 
+	public function obtenerAlumnosSeccion() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod_seccion = $this->input->post('cod_seccion_post');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getEstudiantesSeccion($cod_seccion);
+		echo json_encode($resultado);
+	}
 
 	public function postEditarEstudiante() {
 		$rut_estudiante = $this->input->post("rutEditar");
@@ -224,24 +265,34 @@ class Alumnos extends MasterManteka {
 
 		$this->load->model('Model_estudiante');
 		$confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
-		$datos_vista = array();
-		$subMenuLateralAbierto = "editarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha actualizado el alumno con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la actualización de la base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Alumnos/editarAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+		$datos_plantilla["nombre_redirecTo"] = "Editar Alumno"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
-	
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+
+
 	}
 	
 	public function cambiarSeccionAlumnos()
 	{
 
 		$this->load->model('Model_estudiante');
-		$seccion1 = 0;
-		$seccion2 = 0;
 
-		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>2,'seccion1'=>$seccion1,'seccion2'=>$seccion2);
-		
+		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones());
 
 		$subMenuLateralAbierto = "cambiarSeccionAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -262,7 +313,7 @@ class Alumnos extends MasterManteka {
 	*
 	**/
 
-		public function HacerCambiarSeccionAlumnos()
+	public function HacerCambiarSeccionAlumnos()
 	{
 		//@ViewBag.Test = data[0]; // Data will be set to P1
 		$this->load->model('Model_estudiante');
@@ -282,15 +333,23 @@ class Alumnos extends MasterManteka {
 				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
 		}
 		//echo count($lista_seleccionados);
-		$datos_vista = array('secciones' => $this->Model_estudiante->VerSecciones(),'rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),'mensaje_confirmacion'=>$confirmacion,'seccion1'=>$seccion1,'seccion2'=>$seccion2);
+		if($confirmacion != 1){
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar cambiar de sección";
+			$datos_plantilla["tipo_msj"] = "alert-error";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha cambiado de sección correctamente";
+			$datos_plantilla["tipo_msj"] = "alert-success";
 	
-		$subMenuLateralAbierto = "cambiarSeccionAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Alumnos/cambiarSeccionAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Cambio de sección alumnos"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cambiarSeccion', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-	
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 
 	
@@ -372,7 +431,9 @@ class Alumnos extends MasterManteka {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url'));
-	}	
+	}
+
+
 
 	function cargaMasivaAlumnos()
 	{
@@ -405,8 +466,22 @@ class Alumnos extends MasterManteka {
 			$data = array('upload_data' => $this->upload->data());
 
 			$datos_vista = $data;
+			$datos = $data['upload_data'];
+			$nombre_archivo = $datos['full_path'];
 
-			$upload_data['full_path'];
+			//falta valida aqui el archivo
+
+			$this->load->model('Model_estudiante');
+
+			if(($this->Model_estudiante->cargaMasiva($nombre_archivo)) !== TRUE){
+
+					$datos_vista = array('error' => 'Los datos del archivo son erroneos');
+
+					$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
+				exit();
+
+			}
 
 			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
