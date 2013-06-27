@@ -19,8 +19,9 @@
 			
 					$('#modalSeccionExiste').modal();
 					document.getElementById("rs_seccion").value = "";
-				}
-
+					document.getElementById("rs_seccion2").value = "";
+				}else {document.getElementById("formAgregar").submit();}
+				
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
