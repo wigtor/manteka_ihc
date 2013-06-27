@@ -136,6 +136,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 				for (var i = 0; i < arrayRespuesta.length; i++){
 					tr = document.createElement('tr');
 					td = document.createElement('td');
+					tr.setAttribute("style", "cursor:pointer");
 					tr.setAttribute("id", "modulo_"+arrayRespuesta[i].cod_mod);
 					tr.setAttribute("onClick", "detalleModulo('"+arrayRespuesta[i].cod_mod+"','"+arrayRespuesta[i].descripcion+"','"+arrayRespuesta[i].cod_equipo+"','"+arrayRespuesta[i].nombre_mod+"')");
 					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre_mod);
@@ -198,8 +199,8 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 				<div class="span6" style="padding: 0%; ">
 					<div class ="row-fluid">
 						<pre style="padding: 2%; height:6%">
-Nombre del módulo:	<b id="nombre_modulo"></b>
-Profesor lider: 	<b id="profesor_lider"></b>
+Nombre del módulo:  <b id="nombre_modulo"></b>
+Profesor lider:     <b id="profesor_lider"></b>
 Descripción módulo: <b id="descripcion_modulo"></b>
 </pre>
 						

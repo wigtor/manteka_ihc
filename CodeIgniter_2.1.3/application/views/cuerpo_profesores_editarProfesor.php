@@ -192,56 +192,56 @@
 				echo form_open('Profesores/editarProfesores', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="run_profe">1.- RUT</label>
+					<label class="control-label" style="cursor: default" for="run_profe">1.- RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar"class="span12" name="run_profe" readonly>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="nombre_1">2.-<font color="red">*</font> Primer nombre</label>
+					<label class="control-label" style="cursor: default" for="nombre_1">2.-<font color="red">*</font> Primer nombre</label>
 					<div class="controls">
 						<input type="text"  class="span12" id="nombreunoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre_1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="nombre_2">3.- Segundo nombre</label>
+					<label class="control-label"  style="cursor: default" for="nombre_2">3.- Segundo nombre</label>
 					<div class="controls">
 						<input type="text" id="nombredosEditar"  class="span12" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="nombre_2" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellidoPaterno_profe">4.-<font color="red">*</font> Apellido Paterno</label>
+					<label class="control-label" style="cursor: default" for="apellidoPaterno_profe">4.-<font color="red">*</font> Apellido Paterno</label>
 					<div class="controls">
 						<input type="text" id="apellidopaternoEditar" class="span12" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellidoPaterno_profe" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellidoMaterno_profe">5.-<font color="red">*</font> Apellido Materno</label>
+					<label class="control-label" style="cursor: default" for="apellidoMaterno_profe">5.-<font color="red">*</font> Apellido Materno</label>
 					<div class="controls">
 						<input type="text" id="apellidomaternoEditar" class="span12" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" title="Use solo letras para este campo" name="apellidoMaterno_profe" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="correo1">6.-<font color="red">*</font> Correo</label>
+					<label class="control-label" style="cursor: default" for="correo1">6.-<font color="red">*</font> Correo</label>
 					<div class="controls">
 						<input type="email" id="correoEditar" onblur = "correo()" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="correo2">7.-<font color="red">*</font> Correo secundario</label>
+					<label class="control-label" style="cursor: default" for="correo2">7.-<font color="red">*</font> Correo secundario</label>
 					<div class="controls">
 						<input type="email" id="correoEditar2" onblur = "correo()" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="telefono_profe">8.-<font color="red">*</font> Teléfono</label>
+					<label class="control-label" style="cursor: default" for="telefono_profe">8.-<font color="red">*</font> Teléfono</label>
 					<div class="controls">
 						<input type="text" id="fono" class="span12" name="telefono_profe" maxlength="10" placeholder="44556677" >
 					</div>
 				</div>
 				
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">9.-<font color="red">*</font>Tipo:</label>	
+					<label class="control-label" style="cursor: default" for="inputInfo" style="cursor: default">9.-<font color="red">*</font>Tipo:</label>	
 					<div  class="controls">
 						<select id="tipoProfesor" class="span12" title="Tipo de contrato" name="tipo_profesor">
 							<option value="Planta">Profesor Jornada Completa</option>
@@ -251,7 +251,7 @@
 				</div>
 				
 				<div class="control-group">
-					<label class="span4" for="resetContrasegna">10.- Resetear contraseña</label>
+					<label class="span4"  for="resetContrasegna">10.- Resetear contraseña</label>
 					<div class="controls">
 						<input type="checkbox" id="resetContrasegna" name="resetContrasegna">
 					</div>
