@@ -159,16 +159,22 @@ class Modulos extends MasterManteka {
 		$cod_mod = $this->input->post('cod_modulo');
 
 		$confirmacion = $this->Model_modulo->EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod);
-
-		$datos_vista = array('nombre_modulos' => $this->Model_modulo->listaNombreModulos(),'mensaje_confirmacion'=>$confirmacion);
-
-	 
-		$subMenuLateralAbierto = "editarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha editado el módulo con éxito";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+			$datos_plantilla["tipo_msj"] = "alert-error";	
+		}
+		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+		$datos_plantilla["redirecTo"] = "Modulos/editarModulos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Editar módulo"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Planificacion", 'cuerpo_modulos_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
     }
 
 	/**

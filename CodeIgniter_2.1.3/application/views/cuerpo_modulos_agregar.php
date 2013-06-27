@@ -405,7 +405,7 @@ function ordenarFiltro(numeroLista){
 						<div id="LiderDelEquipo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No puedo seleccionar el lider como parte del equipo</h3>
+								<h3>No puede seleccionar el lider como parte del equipo</h3>
 							</div>
 							<div class="modal-body">
 								<p>Por favor no seleccione al lider como parte del equipo</p>

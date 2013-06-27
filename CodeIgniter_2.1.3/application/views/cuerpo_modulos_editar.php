@@ -1,30 +1,3 @@
-<?php
-	if($mensaje_confirmacion != 2)	{
-		if($mensaje_confirmacion==-1){
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-   			 <h4>Error</h4>
-				 Error al actualizar módulo
-    		</div>		
-
-		<?php
-		}
-		else if($mensaje_confirmacion==1)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>	 
-				 Módulo actualizado correctamente
-    		</div>		
-
-		<?php
- 		}
- 
-}
-?>
-
 <script>
 	function Cancelar(){
 		document.getElementById("nombre_modulo").value = "";
@@ -112,7 +85,10 @@
 				thead.appendChild(tr);
 				tablaResultados.appendChild(thead);
 				for (var i = 0; i < arrayRespuesta.length; i++){
-					if(arrayRespuesta[i][0] == cod_equipo  || arrayRespuesta[i][0] == ""){
+					if( arrayRespuesta[i][0] == cod_equipo  || arrayRespuesta[i][0] == "" || arrayRespuesta[i][7] == cod_equipo
+						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==1)
+						|| (arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==1)
+					){
 						tr = document.createElement('tr');
 						td = document.createElement('td');
 						input = document.createElement('input');
@@ -120,8 +96,14 @@
 						input.setAttribute('id',arrayRespuesta[i][1]);
 						input.setAttribute('value', arrayRespuesta[i][1]);
 						input.setAttribute("name", "profesores[]");
-						input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','1')");
-						if(arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6] != 1){
+						if(	(arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6]==1 && arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==0)
+						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==0 && arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8]==1)){
+							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','1','9')");
+							}
+						else{
+							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','1','0')");
+						}
+						if( (arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6] != 1) || (arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8] != 1)){
 							input.setAttribute('checked', 'true');
 						}
 						nodoTexto = document.createTextNode(arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
@@ -142,8 +124,12 @@
 				tr.appendChild(th);
 				thead.appendChild(tr);
 				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++){
-					if(arrayRespuesta[i][0] == cod_equipo  || arrayRespuesta[i][0] == ""){
+				for (var i = 0; i < arrayRespuesta.length; i++){	
+					if( arrayRespuesta[i][0] == cod_equipo  || arrayRespuesta[i][0] == "" || arrayRespuesta[i][7] == cod_equipo
+						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==0)
+						|| (arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==0)
+					)			
+					{
 						tr = document.createElement('tr');
 						td = document.createElement('td');
 						input = document.createElement('input');
@@ -151,8 +137,16 @@
 						input.setAttribute('value', arrayRespuesta[i][1]);
 						input.setAttribute('id',arrayRespuesta[i][1]);
 						input.setAttribute("name", "cod_profesor_lider");
-						input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','2')");
-						if(arrayRespuesta[i][6] == 1){
+						if(	(arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6]==0 && arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==1)
+						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==1 && arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8]==0)){
+							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','2','9')");
+						}
+						else{
+							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','2','0')");
+							}
+						if( (arrayRespuesta[i][6] == 1 && arrayRespuesta[i][0] == cod_equipo)
+							||	(arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8]==1)
+						){
 							input.setAttribute('checked', 'true');
 						}
 						nodoTexto = document.createTextNode(arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
@@ -276,7 +270,7 @@ function nombreEnUso(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		if(arreglo[cont].toLowerCase () == nombre_tentativo.value.toLowerCase() && nombre_tentativo.value != nombre_tentativo2.value){
-				alert("Nombre en uso. Use otro nombre");
+				$('#NombreEnUso').modal();
 				nombre_tentativo.value="";
 				return;
 		}
@@ -284,7 +278,7 @@ function nombreEnUso(){
     }
 
 }
-function noPuedeEstar(rut,num_lista){
+function noPuedeEstar(rut,num_lista,nopuede){
 		var lider = document.getElementsByName("cod_profesor_lider");
 		var equipo = document.getElementsByName("profesores[]");
 		var cont;
@@ -298,7 +292,7 @@ function noPuedeEstar(rut,num_lista){
 				}
 			}
 			if(lider[numS].value == rut){
-				alert("No puede escoger al lider para el equipo");
+				$('#LiderDelEquipo').modal();
 				document.getElementById(rut).checked = false;
 				return;
 			}
@@ -306,14 +300,32 @@ function noPuedeEstar(rut,num_lista){
 		else{
 			for(cont=0;cont < equipo.length;cont++){
 				if(equipo[cont].checked == true && equipo[cont].value ==rut){
-					alert("Se sacará a esta persona del equipo para que pueda ser lider");
+					$('#LiderDelEquipo').modal();
 					document.getElementById(rut).checked = false;
 					return;						
 				}
 			}
 		}
-
-
+		if(nopuede == 9){
+			if(num_lista == 1){
+				for(cont=0;cont < equipo.length;cont++){
+					if(equipo[cont].checked == true && equipo[cont].value ==rut){
+						$('#noDosequipos').modal();
+						equipo[cont].checked = false;
+						return;						
+					}
+				}			
+			}
+			else{
+				for(cont=0;cont < lider.length;cont++){
+					if(lider[cont].checked == true && lider[cont].value ==rut){
+						$('#noDosequipos').modal();
+						lider[cont].checked = false;
+						return;						
+					}
+				}
+			}
+		}
 }
 function editarMod(){
 		var sesion = document.getElementsByName("sesion[]");
@@ -327,7 +339,7 @@ function editarMod(){
 			}
 		}
 		if(numS == 0){
-			alert("Debe escoger por lo menos una sesión");
+			$('#EscojaSesion').modal();
 			return false;
 		}
 		for(cont=0;cont < equipo.length;cont++){
@@ -336,13 +348,10 @@ function editarMod(){
 			}
 		}
 		if(numE == 0){
-			alert("Debe escoger por lo menos un equipo");
+			$('#EscojaEquipo').modal();
 			return false;
 		}
-		
-		var editar = document.getElementById("formEditar");
-		editar.action ="<?php echo site_url("Modulos/HacerEditarModulo/")?>";
-		editar.submit();
+		$('#modalConfirmacion').modal();
 }
 
 
@@ -355,7 +364,7 @@ function editarMod(){
 				<font color="red">*Campos Obligatorios</font>
 			</div>
 	  		<div class="row-fluid">
-	  			<form id="formEditar" type="post" method="post" onsubmit="editarMod();return false">
+	  			<form id="formEditar" type="post" method="post"  action="<?php echo site_url("Modulos/HacerEditarModulo/")?>">
 				
 				<div class="span6">
 					<div class="row-fluid">
@@ -502,7 +511,7 @@ function editarMod(){
 					</div>
 					<div class="row-fluid" style="margin-top: 2%">
 						<div class= "span4" style="margin-left:43%">
-							<button class ="btn" type="submit" style="width: 111px">
+							<button type="button" class ="btn" onclick="editarMod();return false" style="width: 111px">
 								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Modificar
 							</button>
@@ -515,6 +524,92 @@ function editarMod(){
 						</div>
 					</div>
 				</div>
+				
+				<!-- Modal de confirmación -->
+				<div id="modalConfirmacion" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Confirmación</h3>
+					</div>
+					<div class="modal-body">
+						<p>Se van a guardar los cambios del módulo ¿Está seguro?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+					</div>
+				</div>
+
+				<!-- Modal -->
+				<div id="EscojaEquipo" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No ha seleccionado algún profesor para el equipo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+				
+			<!-- Modal -->
+				<div id="EscojaSesion" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No ha seleccionado una sesión para el módulo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione por lo menos una sesión</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+				
+			<!-- Modal -->
+				<div id="LiderDelEquipo" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No seleccione un profesor como lider y como parte del equipo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor haga su selección nuevamente</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+				
+			<!-- Modal -->
+				<div id="NombreEnUso" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>El nombre del módulo está en uso</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor ingrese otro nombre para el nuevo módulo</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+				
+			<!-- Modal -->
+				<div id="noDosequipos" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>El profesor ya pertenece a otro equipo con este cargo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione otro profesor para este cargo</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+		
 				</form>
 			</div>	
 	</fieldset>

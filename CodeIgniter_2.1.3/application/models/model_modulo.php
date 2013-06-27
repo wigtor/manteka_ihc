@@ -23,6 +23,8 @@ class Model_modulo extends CI_Model {
 			$profes[$contador][4] = $row->APELLIDO1_PROFESOR;
 			$profes[$contador][5] = $row->APELLIDO2_PROFESOR;
 			$profes[$contador][6] = 0;
+			$profes[$contador][7] = -1;
+			$profes[$contador][8] = -1;
 			$contador = $contador + 1;
 		}
 		
@@ -44,11 +46,17 @@ class Model_modulo extends CI_Model {
 		$contador = 0;
 		$contador2 = 0;
 		while($contador < count($profes)){
+			$profes[$contador][9] = 0;
 			while($contador2 < count($lista)){
 				if($profes[$contador][1] == $lista[$contador2][1]){
-					$profes[$contador][0] = $lista[$contador2][0];
-					if($lista[$contador2][2] == 1){
-						$profes[$contador][6] = 1;
+					if($profes[$contador][9] == 0){
+						$profes[$contador][0] = $lista[$contador2][0];
+						$profes[$contador][6] = $lista[$contador2][2];
+						$profes[$contador][9]++;
+					}
+					else{
+						$profes[$contador][7] = $lista[$contador2][0];
+						$profes[$contador][8] = $lista[$contador2][2];					
 					}
 				}
 				$contador2++;
