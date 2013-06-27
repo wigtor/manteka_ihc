@@ -581,7 +581,7 @@ class Model_modulo extends CI_Model {
 	* Obtiene la lista de los profesores que no tienen equipo
 	*
 	*/
-	public function VerTodosLosProfesoresAddModulo(){
+	public function VerTodosLosProfesoresAddModulo($lider){
 		$this->db->select('*');
 		$this->db->from('profesor');
 		$query = $this->db->get();
@@ -597,6 +597,7 @@ class Model_modulo extends CI_Model {
 		}
 		
 		$this->db->select('RUT_USUARIO2');
+		$this->db->select('LIDER_PROFESOR');
 		$this->db->from('profe_equi_lider');
 		$query = $this->db->get();
 		$datos = $query->result();
@@ -605,6 +606,7 @@ class Model_modulo extends CI_Model {
 		$lista = array();
 		foreach ($datos as $row) {  
 			$lista[$contador] = array();
+			$lista[$contador][0] = $row->LIDER_PROFESOR;
 			$lista[$contador][1] = $row->RUT_USUARIO2;
 			$contador = $contador + 1;
 		}
@@ -616,8 +618,9 @@ class Model_modulo extends CI_Model {
 		$esta =false;
 		while($contador < count($profes)){
 			while($contador2 < count($lista)){
-				if($profes[$contador][0] == $lista[$contador2][1]){
+				if($profes[$contador][0] == $lista[$contador2][1] && $lista[$contador2][0] == $lider){
 					$esta=true;
+					$contador2 = count($lista);
 				}
 				$contador2++;
 			}
