@@ -12,6 +12,9 @@
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
     <li data-target="#myCarousel" data-slide-to="1"></li>
     <li data-target="#myCarousel" data-slide-to="2"></li>
+    <li data-target="#myCarousel" data-slide-to="3"></li>
+    <li data-target="#myCarousel" data-slide-to="4"></li>
+    <li data-target="#myCarousel" data-slide-to="5"></li>
   </ol>
   <!-- Carousel items -->
   <div class="carousel-inner">
@@ -22,14 +25,46 @@
         <p>....</p>
       </div> 
     </div>
+
+    <div class="item">
+      <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpYzkCMAPM.jpg">
+        <div class="carousel-caption" align="left">
+         <h4>Grupo 2</h4>
+         <p>....</p>
+        </div> 
+    </div>
+
+    <div class="item">
+      <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpvwpePOPM.jpg">
+        <div class="carousel-caption" align="left">
+         <h4>Grupo 3</h4>
+         <p>....</p>
+        </div> 
+    </div>
+
     <div class="item">
     	<img src="/<?php echo config_item('dir_alias') ?>/img/about_img/php1oWgkVPM.jpg">
-      <div class="carousel-caption" align="left">
-        <h4>Grupo 4</h4>
-        <p>....</p>
-      </div> 
+        <div class="carousel-caption" align="left">
+         <h4>Grupo 4</h4>
+         <p>....</p>
+        </div> 
+    </div>
+
+    <div class="item">
+      <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpBbRckXPM.jpg">
+        <div class="carousel-caption" align="left">
+         <h4>Jefe del Proyecto</h4>
+         <p>....</p>
+        </div> 
     </div>
    
+    <div class="item">
+      <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpnnc31sPM.jpg">
+        <div class="carousel-caption" align="left">
+         <h4>Profesor y Ayudante</h4>
+         <p>....</p>
+        </div> 
+    </div>
   <!-- Carousel nav -->
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
