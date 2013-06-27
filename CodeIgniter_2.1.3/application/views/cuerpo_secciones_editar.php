@@ -59,12 +59,21 @@
 		var cod1=document.getElementById("rs_seccion").value;
 		var cod2=document.getElementById("rs_seccion2").value;
 		if(cod!=""){
-			$('#modalConfirmacion').modal();					
+				if(cod1!="" && cod2!=""){
+				$('#modalConfirmacion').modal();	
+				return;
+			}
+			else{$('#modalFaltanCampos').modal();return;}
+							
 		}
 		else{
 			$('#modalSeleccioneAlgo').modal();
-			return;
-		}
+			
+				
+			
+			}
+			
+		
 		
 	}
 </script>
@@ -163,6 +172,19 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
+
 					<?php echo form_close(''); ?>
                 </div>
             </div>
