@@ -19,50 +19,52 @@ function escribirHeadTable() {
 	//SE CREA LA CABECERA DE LA TABLA
 
 	// Si existe un sólo filtro, la tabla no necesita filtros avanzados, puesto que el filtro general ya cumple dicha función
-	if (tiposFiltro.length > 1){
-		for (var i = 0; i < tiposFiltro.length; i++) {
-				th = document.createElement('th');
-				if (tiposFiltro[i] != '') {
-					nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
-					
+	for (var i = 0; i < tiposFiltro.length; i++) {
+			th = document.createElement('th');
+			if (tiposFiltro[i] != '') {
+				
+				// Texto
+				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
+				th.appendChild(nodoTexto);
+				
+				if(tiposFiltro.length > 1){
 
+					// Botón de filtros avanzado
 					nodoBtnFiltroAvanzado = document.createElement('a');
 					nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-mini clickover");
 					nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
 					//$(nodoBtnFiltroAvanzado).attr('title', "Buscar por "+tiposFiltro[i]);
 					nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;");
-						span = document.createElement('i');
-						span.setAttribute('class', "icon-filter clickover");
+					span = document.createElement('i');
+					span.setAttribute('class', "icon-filter clickover");
 						//span.setAttribute('style', "vertical-align:middle;");
 					nodoBtnFiltroAvanzado.appendChild(span);
+					th.appendChild(nodoBtnFiltroAvanzado);
 
-				th.appendChild(nodoTexto);
-				th.appendChild(nodoBtnFiltroAvanzado);
+					// Se comprueba que existe un elemento para dicha posición del Array inputAllowedFiltro. En caso de que no, se setea en string vacío
+					inputAllowedFiltro[i] = typeof(inputAllowedFiltro[i]) == 'undefined' ? "" : inputAllowedFiltro[i];
+					/// Se asigna el valor del atributo pattern que tendrá el input.
+					var inputPattern = inputAllowedFiltro[i] != "" ? 'pattern="'+inputAllowedFiltro[i]+'"' : "";
+
+					var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
+					
+					var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" '+inputPattern+' id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(this)" ><button class="btn" onClick="cambioTipoFiltro(this.parentNode.firstChild)" type="button"><i class="icon-search"></i></button></div>';
+					
+
+					$(nodoBtnFiltroAvanzado).clickover({html:true, content: divs, placement:'top', onShown: despuesDeMostrarPopOver, title:"Búsqueda sólo por " + tiposFiltro[i], rel:"clickover", indice: i});
 				}
-				else { //Esto es para el caso de los checkbox que marcan toda la tabla
-					nodoCheckeable = document.createElement('input');
-					nodoCheckeable.setAttribute('data-previous', "false,true,false");
-					nodoCheckeable.setAttribute('type', "checkbox");
-					nodoCheckeable.setAttribute('id', "selectorTodos");
-					nodoCheckeable.setAttribute('title', "Seleccionar todos");
-					th.appendChild(nodoCheckeable);
-				}
 
-				// Se comprueba que existe un elemento para dicha posición del Array inputAllowedFiltro. En caso de que no, se setea en string vacío
-				inputAllowedFiltro[i] = typeof(inputAllowedFiltro[i]) == 'undefined' ? "" : inputAllowedFiltro[i];
-				/// Se asigna el valor del atributo pattern que tendrá el input.
-				var inputPattern = inputAllowedFiltro[i] != "" ? 'pattern="'+inputAllowedFiltro[i]+'"' : "";
-
-				var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
-				
-				var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" '+inputPattern+' id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(this)" ><button class="btn" onClick="cambioTipoFiltro(this.parentNode.firstChild)" type="button"><i class="icon-search"></i></button></div>';
-				
-
-				$(nodoBtnFiltroAvanzado).clickover({html:true, content: divs, placement:'top', onShown: despuesDeMostrarPopOver, title:"Búsqueda sólo por " + tiposFiltro[i], rel:"clickover", indice: i});
-
-				
-			tr.appendChild(th);
-		}
+			}
+			else { //Esto es para el caso de los checkbox que marcan toda la tabla
+				nodoCheckeable = document.createElement('input');
+				nodoCheckeable.setAttribute('data-previous', "false,true,false");
+				nodoCheckeable.setAttribute('type', "checkbox");
+				nodoCheckeable.setAttribute('id', "selectorTodos");
+				nodoCheckeable.setAttribute('title', "Seleccionar todos");
+				th.appendChild(nodoCheckeable);
+			}
+			
+		tr.appendChild(th);
 	}
 	thead.appendChild(tr);
 	
