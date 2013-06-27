@@ -80,7 +80,7 @@
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripción</label>
 						<div class="controls">
-							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
+							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" required ></textarea>
 						</div>
 					</div>
 				</div> 

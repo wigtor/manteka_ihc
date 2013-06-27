@@ -12,21 +12,18 @@
 		var correo = document.getElementById("correoEditar").value;
 		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
 	
-		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
-					/*var answer = confirm("¿Está seguro que desea aplicar los cambios?")
-					if (!answer){
-						return false;
-					}
-					else{
-						return true;
-					}*/
-
-					$('#modalConfirmacion').modal();
+		if(rut=="" && nombreUno==""  && apellidoPaterno=="" && apellidoMaterno=="" && correo==""){
+					
+					$('#modalSeleccioneAlgo').modal();
+					
 		}
-		else {
-				//alert("Ingrese todos los datos");
-				$('#modalSeleccioneAlgo').modal();
-				return false;
+		else if ((rut=="") || (nombreUno=="")  || (apellidoPaterno=="") || (apellidoMaterno=="") || (correo=="")){
+				
+				
+				$('#modalFaltanCampos').modal();
+		}
+		else{
+			$('#modalConfirmacion').modal();
 		}
 	}
 </script>
@@ -393,6 +390,20 @@ function ordenarFiltro(){ //No funcional
 								
 							</div>
 						</div>
+
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 					<?php echo form_close(''); ?>
 				</div>
 

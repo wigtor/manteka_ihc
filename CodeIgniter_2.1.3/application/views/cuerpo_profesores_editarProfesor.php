@@ -99,10 +99,17 @@
 		correoDetalle = $("#correoEditar").val();
 		correoDetalle2 = $("#correoEditar2").val();
 		fonoDetalle = $("#fono").val();
+
 		if ((rutAEliminar == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "")) {
-			return; //Faltan campos!!!
+			$('#modalFaltanCampos').modal();
 		}
-		$('#modalConfirmacion').modal();
+		else{
+			$('#modalConfirmacion').modal();
+		}
+		
+		
+		
+		
 	}
 
 
@@ -288,6 +295,7 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>
+						<!-- Modal Correos iguales-->
 						<div id="modalCorreo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -295,6 +303,20 @@
 							</div>
 							<div class="modal-body">
 								<p>Por favor ingrese correos distintos y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
