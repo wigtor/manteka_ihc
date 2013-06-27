@@ -1,7 +1,7 @@
 
 <fieldset>
 	<legend>Carga masiva de alumnos</legend>
-	<h3>Su archivo se ha cargado <?php echo $error;?></h3>
+	<h3><?php echo $error;?></h3>
 
 	<table class="table-striped table table-hover center">							
 		<?php
