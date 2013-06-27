@@ -224,13 +224,13 @@
 				<div class="control-group">
 					<label class="control-label" style="cursor: default" for="correo1">6.-<font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" onblur = "correo()" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar" onblur = "correo()" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" style="cursor: default" for="correo2">7.-<font color="red">*</font> Correo secundario</label>
 					<div class="controls">
-						<input type="email" id="correoEditar2" onblur = "correo()" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar2" onblur = "correo()" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
 					</div>
 				</div>
 				<div class="control-group">
