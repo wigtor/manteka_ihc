@@ -105,78 +105,29 @@
 		  					<div class="controls">
 		    					<input type="email" class="span12" name="correo_profesor" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
 		  					</div>
-<<<<<<< HEAD
 						</div>
 						<div class="control-group">
   							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo secundario:</label>
   							<div class="controls">
     							<input type="email" class="span12" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
   							</div>
-=======
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="email" id="correo_profesor" name="correo_profesor" onblur = "correo()" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
-		  							</div>
-							</div>
-
-						</div>
-						<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo secundario:</label>
-		  						</div>
-		  					</div>
-		  					<div class="span5">	
-		  							<div class="controls">
-		    							<input type="email" id="correo_profesor1" name="correo_profesor1" onblur = "correo()" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
-		  							</div>
-							</div>
->>>>>>> d036ea0853cb43af40c033ee0e7729c645f47e1e
-						</div>
+		  				</div>	
 						<div class="control-group">
   							<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font>Telefono:</label>
   							<div class="controls">
     							<input id="inputInfo"  class="span12" maxlength="10" minlength="7" type="text" pattern="[0-9]+" title="Ingrese sólo números" name="telefono_profesor" placeholder="Ingrese solo numeros" required>
   							</div>
 						</div>
-<<<<<<< HEAD
 						<div class="control-group">
 		  					<label class="control-label" for="inputInfo" style="cursor: default">9-.<font color="red">*</font>Tipo:</label>
 		  					<div class="controls">
 								<select id="tipoDeFiltro"  class="span12" title="Tipo de contrato" name="tipo_profesor">
 									<option value="Jornada Completa">Profesor Jornada Completa</option>
 									<option value="Por hora">Profesor Por hora</option>
-=======
-						<div class="row">
-							<div class="span4">
-								<div class="control-group">
-		  							<label class="control-label" for="inputInfo" style="cursor: default">9-.<font color="red">*</font>Tipo:</label>
-		  						</div>
-		  					</div>
-		  					<div  class="span6">
-									<div  class="span6">
-									<select id="tipoDeFiltro" title="Tipo de contrato" name="tipo_profesor">
-										<option value="Planta">Profesor Jornada Completa</option>
-										<option value="Hora">Profesor Por hora</option>
->>>>>>> d036ea0853cb43af40c033ee0e7729c645f47e1e
 								</select>
 							</div>
 						</div>
 					
-						<!--<div class="row" style="">		
-							<div class="span2" style="margin-left: 654px;">
-								<button class="btn" type="submit" style="width:102px">
-									<div class= "btn_with_icon_solo">Ã</div>
-									&nbsp Agregar
-								</button>
-							</div>
-							<div class="span2" style="margin-left: -32px;">
-								<button class="btn" type="reset" style="width: 105px">
-									<div class= "btn_with_icon_solo">Â</div>
-									&nbsp Cancelar
-								</button>
-							</div>
-						</div>-->
 						<div class="row">
 							<div class="controls pull-right">
 								<button class="btn" type="submit">
@@ -188,8 +139,7 @@
 								</button>
 							</div>
 						</div>
-			</form>
-		</fieldset>		
+					
 						<!-- Modal de modalRutUsado -->
 						<div id="modalRutUsado" class="modal hide fade">
 							<div class="modal-header">
@@ -202,7 +152,7 @@
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
-						</div>		
+						</div>	
 						<div id="modalCorreo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -214,6 +164,8 @@
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
-						</div>		
-
-
+						</div>
+					</div>
+			</form>
+			</div>
+		</fieldset>
