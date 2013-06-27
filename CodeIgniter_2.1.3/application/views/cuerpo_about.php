@@ -22,7 +22,9 @@
     	<img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phppDo97CPM.jpg">
       <div class="carousel-caption" align="left">
         <h4>Grupo 1</h4>
-        <p>....</p>
+        <p>Encargados de establecer y hacer cumplir estándares de programación, velar por la correcta utilización del Framework de desarrollo y el repositorio principal. 
+          Responsables de desarrollar los mecanismos de Login, seguridad, búsquedas y reportes en MANTEKA.</p>
+        <p style="font-size:xx-small;">(En la fotografía, arriba de izquierda a derecha: Carlos Barrera, Víctor Flores, Gary Fuenzalida. Abajo de izquierda a derecha: Alex Ahumada, Marco Baeza, Jose Varela)</p>
       </div> 
   </div>
 
@@ -30,7 +32,7 @@
       <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpYzkCMAPM.jpg">
         <div class="carousel-caption" align="left">
          <h4>Grupo 2</h4>
-         <p>....</p>
+         <p style="font-size:xx-small;">(En la fotografía, arriba de izquierda a derecha: Diego Berríos, Diego Jaume, Gabriela León, Macarena Pérez, Armando Rojas. Abajo de izquierda a derecha: Mario Muñoz, Vicente Bravo)</p>
         </div> 
     </div>
 
@@ -55,9 +57,9 @@
         <div class="carousel-caption" align="left">
          <h4>Jefe del Proyecto</h4>
          <p>Encargado de gestionar el trabajo y comunicación de los grupos, vigilar el controlador de versiones de la aplicación, respaldar el progreso del sistema en tiempos definidos,
-         documentador del software, encargado de la heurística 10 de MANTEKA, empaquetador del proyecto e instaladores por parte del cliente y servidor, establecer estándares de entregables y
+         documentador del software, encargado de la heurística 10 de Nielsen en MANTEKA, empaquetador del proyecto e instaladores por parte del cliente y servidor, establecer estándares de entregables y
           compilador del trabajo final de todos los grupos. Una de sus funciones más importantes es solucionar todos los problemas y obstáculos que experimenten los grupos con el fin de agilizar el avance del proyecto. </p>
-          <p>(En la fotografía: Aldo César Navarrete Muñoz)</p>
+          <p style="font-size:xx-small;">(En la fotografía: Aldo César Navarrete Muñoz)</p>
         </div> 
     </div>
    
