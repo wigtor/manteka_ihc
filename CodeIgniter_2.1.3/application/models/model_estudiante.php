@@ -507,7 +507,7 @@ class Model_estudiante extends CI_Model {
 		if ($sec == FALSE) {
 			return FALSE;
 		}	
-	
+
 		return $sec->COD_SECCION;
 	}
 
@@ -542,15 +542,20 @@ class Model_estudiante extends CI_Model {
 		{			
 
 			if(!$header){
-				$header = $linea;  
+				$header = $linea; 
+				if(strcmp($header[0], 'RUT_ESTUDIANTE') != 0){
+					fclose($f);
+					unlink($archivo);
+					return FALSE;
+				} 
 				$c++;
 			}
 			else{
 
 				if(($data = array_combine($header, $linea)) == FALSE) {
-					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($f);
+					unlink($archivo);
+					return FALSE;					
 				}
 
 				try{					
@@ -570,61 +575,61 @@ class Model_estudiante extends CI_Model {
 					$stack[$c] = $linea;
 					$c++;
 					continue;}
-				$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
-				if(!$validador){
-					$stack[$c] = $linea;
-					$c++;
-					continue;}				
-				$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
-				if(!$validador){
-					$stack[$c] = $linea;
-					$c++;
-					continue;}
-				$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
-				$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
-				if(!$validador){
-					$stack[$c] = $linea;
-					$c++;
-					continue;}
-				$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
-				if(!$validador){
-					$stack[$c] = $linea;
-					$c++;
-					continue;}
+					$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
+					if(!$validador){
+						$stack[$c] = $linea;
+						$c++;
+						continue;}				
+						$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
+						if(!$validador){
+							$stack[$c] = $linea;
+							$c++;
+							continue;}
+							$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
+							$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
+							if(!$validador){
+								$stack[$c] = $linea;
+								$c++;
+								continue;}
+								$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
+								if(!$validador){
+									$stack[$c] = $linea;
+									$c++;
+									continue;}
 
-				if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
-					$stack[$c] = $linea;
-					$c++;
-					continue;
-				}
-				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
-					$stack[$c] = $linea;
-					$c++;
-					continue;
-				}
+									if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
+										$stack[$c] = $linea;
+										$c++;
+										continue;
+									}
+									if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
+										$stack[$c] = $linea;
+										$c++;
+										continue;
+									}
 
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
+									$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
+									$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
+									$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
 
-				
-				
-				if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
-					$this->db->insert('estudiante',$data);
-				} else{
-					$stack[$c] = $linea;
-					$c++;
-					continue;
-				}	
 
-			}            
-		}
 
-		fclose($f);
-		unlink($archivo);
-		return $stack;
-	}
+									if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
+										$this->db->insert('estudiante',$data);
+									} else{
+										$stack[$c] = $linea;
+										$c++;
+										continue;
+									}	
 
-}
+								}            
+							}
 
-?>
+							fclose($f);
+							unlink($archivo);
+							return $stack;
+						}
+
+					}
+
+					?>
