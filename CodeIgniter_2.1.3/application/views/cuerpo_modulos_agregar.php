@@ -1,31 +1,3 @@
-<?php
-	if($mensaje_confirmacion != 2)	{
-		if($mensaje_confirmacion==-1){
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-   			 <h4>Error</h4>
-				 Error al agregar el módulo
-    		</div>		
-
-		<?php
-		}
-		else if($mensaje_confirmacion==1)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>	 
-				 Módulo agregado correctamente
-    		</div>		
-
-		<?php
- 		}
- 
-}
-?>
-
-
 <script type="text/javascript">
 function ordenarFiltro(numeroLista){
 	var filtroLista = document.getElementById(numeroLista+"filtroLista").value;
@@ -36,18 +8,28 @@ function ordenarFiltro(numeroLista){
 	var alumno;
 	var ocultar;
 	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($profesores)){
-		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//rut
-		echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
-		echo 'arreglo['.$contadorE.'][2] = "'.$profesores[$contadorE][2].'";';//apellido
-		$contadorE = $contadorE + 1;
+	if(numeroLista == 1){
+		<?php
+		$contadorE = 0;
+		while($contadorE<count($profesoresL)){
+			echo 'arreglo['.$contadorE.']=new Array();';
+			echo 'arreglo['.$contadorE.'][0] = "'.$profesoresL[$contadorE][0].'";';//rut
+			echo 'arreglo['.$contadorE.'][1] = "'.$profesoresL[$contadorE][1].'";';//nombre
+			echo 'arreglo['.$contadorE.'][2] = "'.$profesoresL[$contadorE][2].'";';//apellido
+			$contadorE = $contadorE + 1;
+		}?>
 	}
-	?>
-	
+	else{
+		<?php
+		$contadorE = 0;
+		while($contadorE<count($profesores)){
+			echo 'arreglo['.$contadorE.']=new Array();';
+			echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//rut
+			echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
+			echo 'arreglo['.$contadorE.'][2] = "'.$profesores[$contadorE][2].'";';//apellido
+			$contadorE = $contadorE + 1;
+		}?>
+	}
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultarTd=document.getElementById(numeroLista+"profesores_"+cont);
@@ -67,28 +49,10 @@ function ordenarFiltro(numeroLista){
 
 
 <script type="text/javascript">
-function sacarDelEquipo(contadorProfe){
-	
-	var numero_profesores =	<?php echo count($profesores);?>;
-	var cont = 0;
-	
-	for(cont=0;cont < numero_profesores;cont++){	
-		document.getElementById("2profesores_"+cont).style.display='';
-	}
-	document.getElementById("2profesores_"+contadorProfe).style.display='none';
-	document.getElementById("cb_2profesores_"+contadorProfe).checked=false;
-}
-</script>
-
-<script type="text/javascript">
-function nombreEnUso(){
+	function nombreEnUso(){
 	nombre_tentativo = document.getElementById("nombre_modulo_in");
 	
-	var limpiarControlGroupRut = document.getElementById("groupNombreMod");
-	$(limpiarControlGroupRut).removeClass("error") ;
-	var spanError = document.getElementById("spanInputNombreModError");
-	$(spanError).empty();
-	
+
 	var arreglo = new Array();
 	var cont = 0;
 	<?php
@@ -101,12 +65,7 @@ function nombreEnUso(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		if(arreglo[cont].toLowerCase () == nombre_tentativo.value.toLowerCase ()){
-				var controlGroupRut = document.getElementById("groupNombreMod");
-				$(controlGroupRut).addClass("error");
-				var spanError = document.getElementById("spanInputNombreModError");
-				$(spanError).html("El nombre ya está en uso, intente otro.");
-
-				
+				$('#NombreEnUso').modal();
 				nombre_tentativo.value="";
 				return;
 		}
@@ -116,6 +75,8 @@ function nombreEnUso(){
 }
 	function validarMod(){
 		var sesion = document.getElementsByName("cod_sesion[]");
+		var lider = document.getElementsByName("cod_profesor_lider");
+		var rutLider;
 		var equipo = document.getElementsByName("cod_profesor_equipo[]");
 		var cont;
 		var numS = 0;
@@ -126,16 +87,28 @@ function nombreEnUso(){
 			}
 		}
 		if(numS == 0){
-			alert("Debe escoger por lo menos una sesión");
+			$('#EscojaSesion').modal();
 			return false;
 		}
+		
+		for(cont=0;cont < lider.length;cont++){
+			if(lider[cont].checked == true){
+				rutLider = lider[cont].value;
+				cont = lider.length +1 ;
+			}
+		}
+		
 		for(cont=0;cont < equipo.length;cont++){
 			if(equipo[cont].checked == true){
 				numE = numE + 1;
+				if(equipo[cont].value == rutLider){
+					$('#LiderDelEquipo').modal();
+					return false;
+				}
 			}
 		}
 		if(numE == 0){
-			alert("Debe escoger por lo menos un equipo");
+			$('#EscojaEquipo').modal();
 			return false;
 		}
 		
@@ -313,17 +286,17 @@ function nombreEnUso(){
 
 							</thead>
 							<tbody>									
-					
 							<?php
 							$contador=0;
 							$comilla= "'";
-							while ($contador<count($profesores)){
+							while ($contador<count($profesoresL)){
 								echo '<tr>';
-								echo '<td id="1profesores_'.$contador.'" ><input required  onclick="sacarDelEquipo('.$comilla.$contador.$comilla.')" value="'.$profesores[$contador][0].'" name="cod_profesor_lider" type="radio" ></input> '.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
+								echo '<td id="1profesores_'.$contador.'" ><input required value="'.$profesoresL[$contador][0].'" name="cod_profesor_lider" type="radio" ></input> '.$profesoresL[$contador][1].'  '.$profesoresL[$contador][2].'</td>';
 								echo '</tr>';
 								$contador = $contador + 1;
 							}
 							?>
+
 							</tbody>
 						</table>
 					</div>
@@ -399,3 +372,59 @@ function nombreEnUso(){
 
 	</form>
 	</fieldset>
+	
+							<!-- Modal -->
+						<div id="EscojaEquipo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado algún profesor para el equipo</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+						
+					<!-- Modal -->
+						<div id="EscojaSesion" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No ha seleccionado una sesión para el módulo</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor seleccione por lo menos una sesión</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+						
+					<!-- Modal -->
+						<div id="LiderDelEquipo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No puedo seleccionar el lider como parte del equipo</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor no seleccione al lider como parte del equipo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+						
+					<!-- Modal -->
+						<div id="NombreEnUso" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>El nombre del módulo está en uso</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese otro nombre para el nuevo módulo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
