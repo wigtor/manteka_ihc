@@ -54,7 +54,9 @@
       <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpBbRckXPM.jpg">
         <div class="carousel-caption" align="left">
          <h4>Jefe del Proyecto</h4>
-         <p>....</p>
+         <p>Encargado de gestionar el trabajo y comunicación de los grupos, vigilar el controlador de versiones de la aplicación, respaldar el progreso del sistema en tiempos definidos,
+         documentador del software, encargado de la heurística 10 de MANTEKA, empaquetador del proyecto e instaladores por parte del cliente y servidor, establecer estándares de entregables y
+          compilador del trabajo final de todos los grupos. Una de sus funciones más importantes es solucionar todos los problemas y obstáculos que experimenten los grupos con el fin de agilizar el avance del proyecto. </p>
         </div> 
     </div>
    
