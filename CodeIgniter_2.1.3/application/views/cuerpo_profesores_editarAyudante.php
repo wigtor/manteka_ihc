@@ -159,7 +159,7 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 
