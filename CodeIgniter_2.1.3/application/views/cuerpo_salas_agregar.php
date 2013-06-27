@@ -50,19 +50,19 @@
 				<div  class= "row-fluid">
 					<div class= "span6">
 						<div class="control-group">
-		  					<label class="control-label" for="inputInfo" > 1-.<font color="red">*</font>Número de la sala:</label>
+		  					<label class="control-label" style="cursor: default" for="inputInfo" > 1-.<font color="red">*</font>Número de la sala:</label>
 		  					<div class="controls">
 		    					<input  id="num_sala"  class="span12" onblur="comprobarNum()" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text"  name="num_sala" placeholder="Ej:258" required>
 		  					</div>
 						</div>
 						<div class="control-group">
-		  					<label class="control-label" for="inputInfo" > 2-.<font color="red">*</font>Capacidad:</label>
+		  					<label class="control-label" style="cursor: default" for="inputInfo" > 2-.<font color="red">*</font>Capacidad:</label>
 		  					<div class="controls">
 		    					<input title="Ingrese la capacidad de la sala"  class="span12" id="inputInfo" max="999" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
 		  					</div>
 						</div>
 						<div class="control-group">
-  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Ubicación:</label>
+  							<label class="control-label" style="cursor: default" for="inputInfo">3-.<font color="red">*</font>Ubicación:</label>
   							<div class="controls">
     							<textarea  class="span12" title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required" style="resize: none;"></textarea>
   							</div>
@@ -72,7 +72,7 @@
 					<!-- Segunda columna -->
 					<div class="span6">
 						<div class="control-group">
-							<label class="control-label" style="width: 150px" for="run_profe">4-. Seleccione los implementos</label>
+							<label class="control-label" style="cursor: default" style="width: 150px" for="run_profe">4-. Seleccione los implementos</label>
 							<div class="controls">
 								<div class="span12" style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 									<table class="table table-hover">
