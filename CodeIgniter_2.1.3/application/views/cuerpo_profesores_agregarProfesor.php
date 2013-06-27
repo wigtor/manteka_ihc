@@ -133,7 +133,7 @@
 					
 						<div class="row">
 							<div class="controls pull-right">
-								<button class="btn" type="submit">
+								<button class="btn" type="submit" style= "margin-right: 7px">
 									<div class= "btn_with_icon_solo">Ã</div>
 									&nbsp Agregar
 								<button class="btn" type="reset" >

@@ -85,9 +85,9 @@
 					</div>
 				</div> 
 			</div>
-			<div class="span7">
+			<div class="span7" style="margin-left: 0px">
 				<div class="controls pull-right">
-					<button class="btn" type="submit" style="width:102px">
+					<button class="btn" type="submit" style= "margin-right: 7px" style="width:102px">
 						<div class= "btn_with_icon_solo">Ã</div>
 							&nbsp Agregar
 					</button>

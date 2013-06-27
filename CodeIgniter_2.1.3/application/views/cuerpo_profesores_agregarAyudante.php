@@ -78,7 +78,7 @@ function ordenarFiltro(){
 		if ((rut == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "")) {
 			return; //Faltan campos!!!
 		}
-		$('#modalConfirmacion').modal();
+		
 	}
 </script>
 
@@ -177,34 +177,22 @@ function ordenarFiltro(){
 				</div>
 
 				<div class="row">
-				<div class="controls pull-right">
-						<button type="button" class="btn" onclick="agregarAyudante()">
+					<div class="controls pull-right">
+						<button type="submit" class="btn" style= "margin-right: 7px" onclick="agregarAyudante()">
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Agregar
 						</button>
-						<button class="btn" type="button" onclick="resetearProfesor()" >
+						<button class="btn" type="reset" onclick="resetearAyudante()" >
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
 						</button>&nbsp;
-
-						<!-- Modal de confirmación -->
-						<div id="modalConfirmacion" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>Confirmación</h3>
-							</div>
-							<div class="modal-body">
-								<p>Se van a guardar los cambios del ayudante ¿Está seguro?</p>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-							</div>
-						</div>
 					</div>
 				</div>
-
+						
+					
 			</div>
+
+			
 		</div>
 	<?php echo form_close(""); ?>			
 </fieldset>

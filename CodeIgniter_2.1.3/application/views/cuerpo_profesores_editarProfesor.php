@@ -163,7 +163,8 @@
 			1.- Listado profesores
 		</div>
 		<div class="span6" >
-			2.- Complete los datos del formulario para modificar el profesor:
+			<font color="red">* Campos Obligatorios</font>
+			<p>2.-Complete los datos del formulario para modificar el profesor:</p>
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -183,7 +184,7 @@
 				echo form_open('Profesores/editarProfesores', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="run_profe">1-.<font color="red">*</font> RUT</label>
+					<label class="control-label" for="run_profe">1-. RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar"class="span12" name="run_profe" readonly>
 					</div>
@@ -249,7 +250,7 @@
 				</div>
 				<div class="row">
 				<div class="controls pull-right">
-						<button type="button" class="btn" onclick="editarProfesor()">
+						<button type="button" class="btn" style= "margin-right: 4px" onclick="editarProfesor()">
 							<i class= "icon-pencil"></i>
 							&nbsp; Guardar
 						</button>

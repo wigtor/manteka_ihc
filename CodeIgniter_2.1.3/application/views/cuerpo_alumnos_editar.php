@@ -353,7 +353,7 @@ function ordenarFiltro(){ //No funcional
 						
 						<div class="row" >
 							<div class="controls pull-right">
-								<button class ="btn" type="button" onclick="editarEstudiante()" >
+								<button class ="btn" style= "margin-right: 4px"type="button" onclick="editarEstudiante()" >
 									<div class= "icon-pencil"></div>
 									&nbsp Guardar
 								</button>

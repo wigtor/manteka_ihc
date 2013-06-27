@@ -165,7 +165,7 @@ Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 		<input name="rutEliminar" type="hidden" id="rutEliminar" value="">
 			<div class="control-group">
 				<div class="controls pull-right">
-					<button type="button" class="btn" onclick="eliminarProfesor()">
+					<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarProfesor()">
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
 					</button>

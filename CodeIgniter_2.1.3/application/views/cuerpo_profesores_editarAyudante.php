@@ -127,7 +127,7 @@
 				echo form_open('Ayudantes/EditarAyudante', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">1-.RUT</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font>-.RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar" class="span12" name="rutEditar" readonly>
 					</div>
@@ -165,7 +165,7 @@
 
 				<div class="row">
 				<div class="controls pull-right">
-						<button type="button" class="btn" onclick="editarAyudante()">
+						<button type="button" class="btn" style= "margin-right: 4px" onclick="editarAyudante()">
 							<i class= "icon-pencil"></i>
 							&nbsp; Guardar
 						</button>

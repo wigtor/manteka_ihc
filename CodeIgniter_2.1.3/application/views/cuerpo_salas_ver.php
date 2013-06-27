@@ -109,8 +109,7 @@
 Número sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicación:      <b id="ubicacion"></b>
-Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div>
-		</pre>
+Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div></pre>
 
 		</div>
 
