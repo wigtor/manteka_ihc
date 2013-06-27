@@ -72,7 +72,7 @@
 						<div class="control-group">
 		  					<label class="control-label" for="inputInfo" style="cursor: default" > 1-.<font color="red">*</font>RUN:</label>
 		  					<div class="controls">
-		    					<input id="rut_profesor"  class="span12" onblur="comprobarRut()" type="text" maxlength="9" pattern="\d{8,9}" title="Ingrese su rut sin puntos ni guion" min="1" name="rut_profesor" placeholder="Ej:177858741" required>
+		    					<input id="rut_profesor"  class="span12" onblur="comprobarRut()" type="text" maxlength="9" pattern="^\d{7,8}[0-9kK]{1}$" title="Ingrese su RUN sin puntos ni guion" min="1" name="rut_profesor" placeholder="Ej:177858741" required>
 		  					</div>
 						</div>
 						<div class="control-group">
