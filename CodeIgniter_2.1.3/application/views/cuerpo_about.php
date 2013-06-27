@@ -41,6 +41,7 @@
         <div class="carousel-caption" align="left">
          <h4>Grupo 3</h4>
          <p>....</p>
+         <p style="font-size:xx-small;">(En la fotografía de izquierda a derecha: Diego García, Byron Lanas, Miguel Jara, Diego Gómez, Carolina Orrego)</p>
         </div> 
     </div>
 
@@ -49,6 +50,7 @@
         <div class="carousel-caption" align="left">
          <h4>Grupo 4</h4>
          <p>....</p>
+         <p style="font-size:xx-small;">(En la fotografía, arriba de izquierda a derecha: Daniel Quinteros, Felipe Piñeiro, Marco Acevedo, Cristian Cornejo. Abajo de izquierda a derecha: Aileen Esparza, Diego Escobar, Juan Vargas)</p>
         </div> 
     </div>
 
@@ -67,7 +69,8 @@
       <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpnnc31sPM.jpg">
         <div class="carousel-caption" align="left">
          <h4>Profesor y Ayudante</h4>
-         <p>....</p>
+         <p>Encargados de la guía y orientación de los diferentes grupos de trabajo para la completitud de las diferentes actividades de gestión, planificación, codificación, documentación y externalización para cada una de las etapas del proyecto, las cuales operan bajo la metodología ágil de SCRUM la cual involucra una participación activa con el cliente y una coordinación eficiente y efectiva.</p>
+         <p style="font-size:xx-small;">(En la fotografía de izquierda a derecha: Profesor Edmundo Leiva Lobos, Ayudante Gerardo Alonso Mellado)</p>
         </div> 
     </div>
 
