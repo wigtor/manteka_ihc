@@ -33,7 +33,7 @@
 	
 </script>
 <div class= "row-fluid">
-	<div class= "span10">	
+	<div class= "span13" style="min-width: 1000px;">	
 		<fieldset>
 			<legend>Agregar Sala</legend>
 			
@@ -46,82 +46,87 @@
 					</div>
 				</div>
 				<div class= "row-fluid">
-					<div class= "span6" style="margin-bottom:2%">
+					<div class= "span6" >
 						Complete los datos del formulario para ingresar una sala:
 					</div>
 				</div>
 				<div  class= "row-fluid" style="margin-left:2%">
-					<div class= "span6">
-						<div class="row">
-							<div class="span4">
+					<div class= "span5" style="min-width:400px">
+						
+
+						<div class="row-fluid">
+							<div class="span5">
 								<div class="control-group">
 		  							<label class="control-label" for="inputInfo" > 1-.<font color="red">*</font>Número de la sala:</label>
 		  						</div>
 		  					</div>
-		  					<div class="span5">	
+		  					<div class="span6">	
 		  							<div class="controls">
-		    							<input id="num_sala" onblur="comprobarNum()" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text"  name="num_sala" placeholder="Ej:258" required>
+		    							<input  id="num_sala" onblur="comprobarNum()" maxlength="3"  title=" Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" type="text"  name="num_sala" placeholder="Ej:258" required>
 		  							</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="span4">
+						<div class="row-fluid">
+							<div class="span5">
 								<div class="control-group">
 		  							<label class="control-label" for="inputInfo" > 2-.<font color="red">*</font>Capacidad:</label>
 		  						</div>
 		  					</div>
-		  					<div class="span5">	
+		  					<div class="span6">	
 		  							<div class="controls">
 		    							<input title="Ingrese la capacidad de la sala" id="inputInfo" max="999" type="number" min="1" name="capacidad" placeholder="Número de personas. Ej:80" required>
 		  							</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="span4">
+						<div class="row-fluid">
+							<div class="span5">
 								<div class="control-group">
 
 		  							<label class="control-label" for="inputInfo">3-.<font color="red">*</font>Ubicación:</label>
 		  						</div>
 		  					</div>
-		  					<div class="span5">	
+		  					<div class="span6">	
 		  							<div class="controls">
 		    							<textarea title= "Ingrese la ubicación de la sala en no más de 100 carácteres" name="ubicacion" maxlength="100" required="required" style="resize: none;"></textarea>
 		  							</div>
 							</div>
 
 						</div>
+					</div>
 
 
 
-
-					<div class="row" style="width: 386px;">		
-
-					<br>
-					Seleccione los implementos que tiene la sala:
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+					<div class="span6" style="min-width:500px">
+					<div class="row-fluid" >
+						<div class="span5">
+							4-. Seleccione los implementos:
+						</div>		
+						
 					
-					<table class="table table-hover">
-										<thead>
+						<div class="span7" style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
+						
+							<table class="table table-hover">
+								<thead>
 
-										</thead>
-										<tbody>									
-								
-										<?php
-										$contador=0;
-										while ($contador<count($implemento)){
-											echo '<tr>';
-											echo '<td title="Descripción: '.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
-											echo '</tr>';
-											$contador = $contador + 1;
-										}
-										?>
-										</tbody>
-									</table>
-									
+								</thead>
+								<tbody>									
+						
+								<?php
+								$contador=0;
+								while ($contador<count($implemento)){
+									echo '<tr>';
+									echo '<td title="Descripción: '.$implemento[$contador][2]. '" id="implementoTd_'.$contador.'" ><input id="'.$implemento[$contador][0].'" value="'.$implemento[$contador][0].'" name="cod_implemento[]" type="checkbox" >'.' '.$implemento[$contador][1].'</td>';
+									echo '</tr>';
+									$contador = $contador + 1;
+								}
+								?>
+								</tbody>
+							</table>
+										
+						</div>
 					</div>
-					</div>
-					<div class="row-fluid" style="margin-top: 4%; margin-left:35%">
-		
+					<div class="row-fluid" style="margin-top: 2%; text-align: right ">
+						
 							<button class ="btn" type="submit" >
 								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Agregar
@@ -130,6 +135,7 @@
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>
+						
 					</div>
 											<!-- Modal de modalNum -->
 						<div id="modalNum" class="modal hide fade">
@@ -144,7 +150,8 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>		
-					</div> 
+					</div>
+
 
 					
 				</div>

@@ -152,9 +152,9 @@ function ordenarFiltro(){
 				?>
 				<div class="span6">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUN</label>
 						<div class="controls">
-							<input id="rut_estudiante"  pattern="\d{8,9}" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su rut sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:177858741" required>
+							<input id="rut_estudiante"  pattern="^\d{7,8}[0-9kK]{1}$" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su RUN sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:177858741" required>
 						</div>
 					</div>
 					<div class="control-group">

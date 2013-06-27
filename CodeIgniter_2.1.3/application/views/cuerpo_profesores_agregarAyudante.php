@@ -106,9 +106,9 @@ function ordenarFiltro(){
 		<div class="row-fluid">
 			<div class= "span6" >
 				<div class="control-group">
-					<label class="control-label" for="rut_ayudante" style="cursor: default">1-.<font color="red">*</font> RUT</label>
+					<label class="control-label" for="rut_ayudante" style="cursor: default">1-.<font color="red">*</font> RUN</label>
 					<div class="controls">
-						<input id="rut_ayudante" name="rut_ayudante" maxlength="9" min="1" type="text" pattern="\d{8,9}" class="span12" placeholder="Ej:177858741" title="Ingrese su rut sin puntos ni guion" required>
+						<input id="rut_ayudante" name="rut_ayudante" maxlength="9" min="1" type="text" pattern="^\d{7,8}[0-9kK]{1}$" class="span12" placeholder="Ej:177858741" title="Ingrese su RUN sin puntos ni guion" required>
 					</div>
 				</div>
 				<div class="control-group">
