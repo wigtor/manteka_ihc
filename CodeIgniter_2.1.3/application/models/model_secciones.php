@@ -300,8 +300,35 @@ class Model_secciones extends CI_Model{
 		else{return 3;}
     }
  
+	public function existeSeccion($nombreSeccion) {
+		$this->db->select('COD_SECCION as codigo');
+		$this->db->where('NOMBRE_SECCION = $nombreSeccion');
+		$query = $this->db->get("seccion");
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
 
-/**
+
+	public function getSeccionesByFilter($texto)
+	{
+		$this->db->select('NOMBRE_SECCION AS nombre');
+		$this->db->select('COD_SECCION AS id');
+		$this->db->order_by('NOMBRE_SECCION', 'asc');
+
+		if ($texto != "") {
+			$this->db->like("NOMBRE_SECCION", $texto);
+		}
+		$query = $this->db->get('seccion');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+	/**
 	* Obtener detalles de las secciones
 	*
 	* Obtiene detalles de la sección que se le pida a travez de del dato seleccionado en la vista
@@ -310,8 +337,9 @@ class Model_secciones extends CI_Model{
 	* @return $lista arreglo que coniene el detalle de la sección solicitada
 	*/
 
-public function getDetalleSeccion($cod_seccion)
-{
+	public function getDetallesSeccion($cod_seccion)
+	{
+		$this->db->select('seccion.COD_SECCION as cod_seccion');
 		$this->db->select('seccion.NOMBRE_SECCION as nombre_seccion');
 		$this->db->select('NOMBRE_MODULO AS modulo');
 		$this->db->select('NUM_SALA AS sala');
@@ -319,7 +347,6 @@ public function getDetalleSeccion($cod_seccion)
 		$this->db->select('APELLIDO1_PROFESOR as apellido1');
 		$this->db->select('APELLIDO2_PROFESOR as apellido2');
 		$this->db->select('NOMBRE_HORARIO as horario');
-		$this->db->from('seccion');
 		$this->db->where('seccion.COD_SECCION', $cod_seccion);
 		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION', 'LEFT OUTER');
 		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM=seccion_mod_tem.COD_MODULO_TEM', 'LEFT OUTER');
@@ -330,32 +357,12 @@ public function getDetalleSeccion($cod_seccion)
 		$this->db->join('profe_seccion','profe_seccion.COD_SECCION= seccion.COD_SECCION', 'LEFT OUTER');
 		$this->db->join('profesor','profe_seccion.RUT_USUARIO2=profesor.RUT_USUARIO2', 'LEFT OUTER');
 		
-		$query = $this->db->get();
+		$query = $this->db->get('seccion');
 		//echo $this->db->last_query();
 		if ($query == FALSE) {
 			return array();
 		}
-		
-		$lista = array();
-
-		if ($datos = $query->row()){
-
-
-		$lista[0] = $datos->nombre_seccion;
-		$lista[1] = $datos->modulo;
-		$lista[2] = $datos->nombre1;
-		$lista[3] = $datos->apellido1;
-		$lista[4] = $datos->apellido2;
-		$lista[5] = $datos->sala;
-		$lista[6] = $datos->horario;
-
-		}
-		
-		
-	
-		return $lista;
-
-	
+		return $query->row();
 }
 
 /**
@@ -455,7 +462,7 @@ public function verSalasPorAsignar(){
 
 public function verHorarioSegunSala($sala){
 
-	$columnas = 'dia.NOMBRE_DIA, modulo.NUMERO_MODULO';
+	$columnas = 'dia.NOMBRE_DIA, modulo.NUMERO_MODULO, dia.COD_ABREVIACION_DIA';
 	$condiciones = '(sala.NUM_SALA = \''.$sala.'\') AND (sala.COD_SALA = sala_horario.COD_SALA) AND (sala_horario.COD_HORARIO = horario.COD_HORARIO) AND (horario.COD_DIA = dia.COD_DIA) AND (horario.COD_MODULO = modulo.COD_MODULO)';
 	$desde = 'dia, modulo, horario, sala_horario, sala';
 	$query = $this->db->select($columnas);

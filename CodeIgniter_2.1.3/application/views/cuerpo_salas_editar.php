@@ -1,44 +1,38 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sala editada correctamente
-    		</div>	
-		<?php
-	}
-	else{ if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al editar sala
-    		</div>		
 
-		<?php
-	}
-		else if($mensaje_confirmacion==3)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 
-				 Una sala con el mismo nombre ya se ha ingresado 
-    		</div>		
 
-		<?php
-		}
+<script>
+	function comprobarNum() {
+		var num = document.getElementById("num_sala").value;
+		var cod = document.getElementById("cod_sala").value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Salas/NumExisteE") ?>", /* Se setea la url del controlador que responderá */
+			data: { num_post: num, cod_post:cod},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == 1){
+
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalNum').modal();
+					document.getElementById("num_sala").value = "";
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
 	
-	}
-	unset($mensaje_confirmacion);
-}
-?>
+</script>
 
 <script>
 
@@ -192,19 +186,19 @@ if(isset($mensaje_confirmacion))
 		<div class="span6">	
 			<?php
 				$attributes = array('id' => 'formDetalle', 'class' => 'form-horizontal', 'onsubmit' => 'EditarSala()');
-				echo form_open('Salas/editarSalas', $attributes);
+				echo form_open('Salas/modificarSalas', $attributes);
 			?>
 			<input type="hidden" id="cod_sala" name="cod_sala" maxlength="3" min="1" readonly>
 			<div class="control-group">
 					<label class="control-label" for="cod_sala">1-.Número sala</label>
 					<div class="controls">
-						<input type="text" id="num_sala" name="num_sala" maxlength="3" title="Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" required>
+						<input type="text" onblur="comprobarNum()" id="num_sala" name="num_sala" maxlength="3" title="Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" required>
 					</div>
 			</div>
 			<div class="control-group">
 					<label class="control-label" for="cod_sala">2-.Capacidad</label>
 					<div class="controls">
-						<input type="text" id="capacidad" name="capacidad" maxlength="3" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
+						<input id="capacidad" name="capacidad" maxlength="3" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
 					</div>
 			</div>
 			<div class="control-group">
@@ -216,8 +210,18 @@ if(isset($mensaje_confirmacion))
 
 			<div class="control-group">
 				<br>
-				<h5>Si desea modificar los implementos de la sala, elija entre los siguientes:</h5>
-				(Los implementos marcados son los que tiene actualmente la sala)
+				<div class="row-fluid">
+					<div class="span13">
+					<b>Si desea modificar los implementos de la sala, elija entre los siguientes:</b>
+					</div>
+				</div>
+
+				<div class="row-fluid">
+					<div class="span13">
+					(Los implementos marcados son los que tiene actualmente la sala)
+					</div>
+				</div>
+				
 				<div style="border:#cccccc 1px solid;overflow-y:scroll; -webkit-border-radius: 4px" >
 					<table class="table table-hover">
 						<tbody>
@@ -238,8 +242,8 @@ if(isset($mensaje_confirmacion))
 				</div>
 			</div>
 
-			<div class="control-group">
-				<div class="controls ">
+			<div class="control-group" style="text-align: right">
+				<!--<div class="controls ">-->
 					<button type="button" class="btn" onclick="EditarSala()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
@@ -277,7 +281,20 @@ if(isset($mensaje_confirmacion))
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 						</div>
 					</div>
-				</div>
+																<!-- Modal de modalNum -->
+						<div id="modalNum" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Número de sala ingresado está en uso</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese otro número y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
+				<!--</div>-->
 			</div>
 			<?php echo form_close(""); ?>
 		</div>

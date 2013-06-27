@@ -263,7 +263,7 @@ function ordenarFiltro(){ //No funcional
 				<div class="span6">
 					<div class="controls controls-row">
 						<div class="input-append span7">
-							<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+							<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
 							<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 						</div>
 						<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
@@ -294,7 +294,7 @@ function ordenarFiltro(){ //No funcional
 						echo form_open('Alumnos/postEditarEstudiante/', $atributos);
 					?>
 						<div class="control-group">
-							<label class="control-label" for="rutEditar" style="cursor: default">1-. RUT</label>
+							<label class="control-label" for="rutEditar" style="cursor: default">1-.<font color="red">*</font>  RUT</label>
 							<div class="controls">
 								<input type="text" id="rutEditar" name="rutEditar" class="span12" readonly>
 							</div>
@@ -351,14 +351,12 @@ function ordenarFiltro(){ //No funcional
 						</div>
 						
 						
-						<div class="row" style= "margin-top:2%">
-							<div class="span3" style="margin-left:37%">
+						<div class="row" >
+							<div class="controls pull-right">
 								<button class ="btn" type="button" onclick="editarEstudiante()" >
 									<div class= "icon-pencil"></div>
 									&nbsp Guardar
 								</button>
-							</div>
-							<div class="span3">
 								<button  class ="btn" type="reset" onclick="resetSeleccionado()" >
 									<div class= "btn_with_icon_solo">Â</div>
 									&nbsp Cancelar

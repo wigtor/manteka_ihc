@@ -67,7 +67,8 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">1-.<font color="red">*</font> RUT</label>
 					<div class="controls">
-						<input type="text" id="rutEditar" placeholder="11223344" class="span12" name="rutEditar" maxlength="10" required>
+						<!--<input type="text" id="rutEditar" placeholder="11223344" class="span12" name="rutEditar" maxlength="10" required> -->
+						<input id="rutEditar" class="span12" onblur="comprobarRut()" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador" min="1" name="rutEditar" placeholder="Ej:17785874" required>
 					</div>
 				</div>
 				<div class="control-group">
@@ -148,68 +149,50 @@
 			</div>	
 		<?php echo form_close(""); ?>
 	</div>
-
-
-
-
-
-
-
-
-
-
-
-	<!--
-		<div class="span7">
-		<div class="span12">
-			<h4>Complete los siguientes datos para agregar un coordinador:</h4><br/>
-				<?php
-					$attributes = array('onSubmit' => 'return validar(this)', 'class' => 'span9');
-					echo form_open('Coordinadores/agregarCoordinadores', $attributes);
-				?>
-				<br/>
-				<table>
-					<tr>
-					<td><h6><span class="text-error">(*)</span>Nombre completo:</h6></td>
-					<td><input class ="input-xlarge" name='nombre' type="text" placeholder="ej:SOLAR FUENTES MAURICIO IGNACIO" required></td>
-					</tr>
-					<tr>
-					<td><h6><span class="text-error">(*)</span>Rut :</h6></td>
-					<td><input class ="input-xlarge" name='rut' type="text" placeholder="ej:5946896-3" required pattern="([0-9]{8}|[0-9]{7})-([0-9]{1}|k)" ></td>
-					</tr>			
-					<tr>
-					<td><h6><span class="text-error">(*)</span>Contraseña:</h6></td>
-					<td><input class ="input-xlarge" name='contrasena'  type="password" placeholder="*******" required></td>
-					</tr>
-					<tr>
-					<td><h6><span class="text-error">(*)</span>Confirmar contraseña:</h6></td>
-					<td><input class ="input-xlarge" name='contrasena2' type="password" placeholder="*******" required></td>
-					</tr>
-					<tr>
-					<td><h6><span class="text-error">(*)</span>Correo 1:</h6></td>
-					<td><input class ="input-xlarge" name='correo1' type="email" placeholder="ej:edmundo.leiva@usach.cl" required ></td>
-					</tr>
-					<tr>
-					<td><h6>Correo 2:</h6></td>
-					<td><input class ="input-xlarge" name='correo2' type="email" placeholder="ej:edmundo.leiva@gmail.com"></td>
-					</tr>
-					<tr>
-					<td><h6><span class="text-error">(*)</span>Teléfono:</h6></td>
-					<td><input class ="input-xlarge" name='fono' type="text" placeholder="ej:9-87654321" required></td>
-					</tr>
-					<tr>
-					<td></td>
-					<td>Los campos con <span class="text-error">(*)</span> son obligatorios</td>
-					</tr>
-				</table>
-				<br />
-				<div class="span6 offset6">
-					<button class="btn" type="submit">Agregar</button>
-					<a class="btn" href="/manteka/index.php/Coordinadores/verCoordinadores/" type="button">Cancelar</a>
-				</div>
-			<?php echo form_close(""); ?>
+	<!-- Modal de modalRutUsado -->
+	<div id="modalRutUsado" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>RUT ingresado está en uso</h3>
 		</div>
-	</div>
--->
+		<div class="modal-body">
+			<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>		
 </fieldset>
 
+<script>
+	function comprobarRut() {
+		var rut = document.getElementById("rutEditar").value;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut_post: rut},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == -1){
+
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalRutUsado').modal();
+					document.getElementById("rutEditar").value = "";
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
+
+</script>

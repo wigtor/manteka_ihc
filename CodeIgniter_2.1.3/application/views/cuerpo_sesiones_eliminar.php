@@ -107,7 +107,7 @@ function resetear(){
 						
 
 <fieldset>
-	<legend>Eliminar Sesión</legend>
+	<legend>Borrar Sesión</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">

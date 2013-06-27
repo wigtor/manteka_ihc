@@ -111,7 +111,8 @@ function verDetalle(elemTabla) {
 			1.-Listado sesiones
 		</div>
 		<div class="span6" >
-			2.-Detalle sesión:
+			<font color="red">* Campos Obligatorios</font><br>
+				<p>Complete los datos del formulario para modificar la sesión</p>
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -125,27 +126,29 @@ function verDetalle(elemTabla) {
 				</tbody>
 			</table>
 		</div>
+
+		<!-- Segunda columna -->
 		<div class="span6">
 			<?php
 				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal', 'onsubmit' => 'EditarProfesor()');
 				echo form_open('Sesiones/editarSesiones/', $attributes);
 			?>
 			<input type="hidden" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
-			<div class="control-group">
-				<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Nombre de sesión</label>
-				<div class="controls">
-					<input type="text" id="nombresesion" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Descripción</label>
-				<div class="controls">
-					<textarea type="text" id="descripcionSesion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion_sesion" maxlength="99" required></textarea>
-				</div>
-			</div>
 			
 			<div class="control-group">
-				<div class="controls ">
+				<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> Nombre de sesión</label>
+				<div class="controls">
+					<input type="text" id="nombresesion" class="span12" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripción</label>
+				<div class="controls">
+					<textarea type="text" class="span12" id="descripcionSesion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion_sesion" maxlength="99" required></textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="controls pull-right">
 					<button type="button" class="btn"  type="button" onClick="EditarSesion()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
@@ -155,7 +158,8 @@ function verDetalle(elemTabla) {
 						&nbsp; Cancelar
 					</button>
 				</div>
-
+		</div>
+	</div>
 				<!-- Modal de confirmación -->
 				<div id="modalConfirmacion" class="modal hide fade">
 					<div class="modal-header">
@@ -198,10 +202,9 @@ function verDetalle(elemTabla) {
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
-			</div>
-		</div>
+		
 		<?php echo form_close(""); ?>
 
 
-	</div>
+
 </fieldset>

@@ -154,7 +154,7 @@ function ordenarFiltro(){
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT</label>
 						<div class="controls">
-							<input id="rut_estudiante" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador"  name="rut_estudiante" placeholder="Ej:17785874" required>
+							<input id="rut_estudiante"  pattern="\d{8,9}" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su rut sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:177858741" required>
 						</div>
 					</div>
 					<div class="control-group">
@@ -229,41 +229,37 @@ function ordenarFiltro(){
 						</div>
 					</div>		
 				
-
-
-					<div class="row-fluid" style="margin-top:2%">
-						<div class="span3 offset5">
+					<div class="row">
+						<div class="controls pull-right">
 							<button class="btn" type="submit" >
-								<div class= "btn_with_icon_solo">Ã</div>
+								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Agregar
-
 							</button>
-						</div>
-						<div class="span3">
 							<button class="btn" type="reset" >
-								<div class= "btn_with_icon_solo">Â</div>
-								&nbsp Cancelar
-
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp Cancela
 							</button>
 						</div>
-
 					</div>
+					
+
+
 
 					<!-- Modal de modalRutUsado -->
-						<div id="modalRutUsado" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>RUT ingresado está en uso</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>	
+					<div id="modalRutUsado" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>RUT ingresado está en uso</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
 							
 				</div>
-				</form>
+				<?php echo form_close(''); ?>
 			</div>
 		</fieldset>

@@ -58,7 +58,7 @@
 		  					</div>
 		  					<div class="span5">	
 		  							<div class="controls">
-		    							<input id="rut_profesor" onblur="comprobarRut()" type="text" maxlength="10" pattern="[0-9]+" title="Ingrese sólo números sin dígito verificador" min="1" name="rut_profesor" placeholder="Ej:17785874" required>
+		    							<input id="rut_profesor" onblur="comprobarRut()" type="text" maxlength="9" pattern="\d{8,9}" title="Ingrese su rut sin puntos ni guion" min="1" name="rut_profesor" placeholder="Ej:177858741" required>
 		  							</div>
 							</div>
 						</div>
@@ -166,8 +166,8 @@
 		  					<div  class="span6">
 									<div  class="span6">
 									<select id="tipoDeFiltro" title="Tipo de contrato" name="tipo_profesor">
-										<option value="Planta">Profesor Jornada Completa</option>
-										<option value="Hora">Profesor Por hora</option>
+										<option value="Jornada Completa">Profesor Jornada Completa</option>
+										<option value="Por hora">Profesor Por hora</option>
 								</select>
 								</div>
 								</div>
