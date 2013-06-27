@@ -46,13 +46,16 @@
 		}
 	}
 
-<<<<<<< HEAD
-=======
+
 </script>
 		<div id="mensaje"></div>
 		<fieldset>		
 			<legend>Agregar Profesor</legend>	
-			<form id="formAgregar" type="post" method="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
+			<form  class="form-horizontal" id="formAgregar" type="post" method="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
+			<!--<?php
+					$atributos= array('id' => 'formAgregar');
+					echo form_open('Profesores/insertarProfesor/', $atributos);
+				?>	-->
 			
 			<div class="row-fluid">
 				<div class="span6">
@@ -166,6 +169,7 @@
 							</div>
 						</div>
 					</div>
+					<!--<?php echo form_close(''); ?>-->
 			</form>
 			</div>
 		</fieldset>
