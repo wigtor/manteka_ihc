@@ -261,43 +261,20 @@ class Model_secciones extends CI_Model{
 		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 
-		$this->db->select('seccion.COD_SECCION AS cod');
-		$this->db->select('seccion.NOMBRE_SECCION AS nombre');
-		$this->db->from('seccion');
-		$this->db->order_by("COD_SECCION", "asc");
-		$query =$this->db->get();
-		$datos=$query->result();
-
-		$contador = 0;
-		$var=0;
-		$lista=array();
-		if (false != $datos) {
 		
-		foreach ($datos as $row) {
-			if($row->cod!=$cod_seccion){
-				if( $row->nombre==$nombre){
-				$var=1;
-				}
-			}
-			$contador = $contador + 1;
-		}}
-		
-		if($var!=1){
 		$data = array(	
 					'COD_SECCION' => $cod_seccion,
 					'NOMBRE_SECCION' => $nombre	
 		);
 		$this->db->where('COD_SECCION', $cod_seccion);
-		$this->db->update('seccion',$data); 
-		
-         
-		if($data == true){
+		$confirmacion0 = $this->db->update('seccion',$data);
+
+		if($confirmacion0 == true){
 			return 1;
 		}
 		else{
 			return -1;
-		}}
-		else{return 3;}
+		}
     }
  
 	public function existeSeccion($nombre_seccion1,$nombre_seccion2) {

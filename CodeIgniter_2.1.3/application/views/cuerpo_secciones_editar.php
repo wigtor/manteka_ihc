@@ -36,7 +36,7 @@
 				var numeroSeccion = datos.nombre_seccion.substring(datos.nombre_seccion.indexOf('-')+1);
 				$(letraDetalle).val($.trim(letraSeccion));
 				$(numeroDetalle).val($.trim(numeroSeccion));
-				$(cod_seccion).val($.trim(datos.nombre_seccion));
+				$(cod_seccion).val($.trim(datos.cod_seccion));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -56,22 +56,45 @@
 <script type="text/javascript">
 	function EditarSeccion(){
 		var cod=document.getElementById("cod_seccion").value;
-		var cod1=document.getElementById("rs_seccion").value;
-		var cod2=document.getElementById("rs_seccion2").value;
-		if(cod!=""){
-				if(cod1!="" && cod2!=""){
-				$('#modalConfirmacion').modal();	
-				return;
-			}
-			else{$('#modalFaltanCampos').modal();return;}
-							
-		}
-		else{
-			$('#modalSeleccioneAlgo').modal();
-			
-				
-			
-			}
+		var letra = document.getElementById("rs_seccion").value;
+		var num = document.getElementById("rs_seccion2").value;
+		var resultadoAjax =false;
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Secciones/secExiste") ?>", /* Se setea la url del controlador que responderá */
+			data: { letra_post:letra,num_post: num},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta); 
+				if(cod!=""){
+				if(existe == 1){		
+					$('#modalSeccionExiste').modal();
+					document.getElementById("rs_seccion").value = "";
+					document.getElementById("rs_seccion2").value = "";
+					
+				}
+				else{
+					if(letra!="" && num!=""){
+					alert(document.getElementById("cod_seccion").value+" y "+document.getElementById("rs_seccion").value+"y "+document.getElementById("rs_seccion2").value);
+					$('#modalConfirmacion').modal();
+					return;				
+				}
+					else{$('#modalFaltanCampos').modal();}
+				}
+				}
+				else {$('#modalSeleccioneAlgo').modal();}
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+		
+		
 			
 		
 		
@@ -184,6 +207,19 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>	
+						<!-- Modal de modalRutUsado -->
+					<div id="modalSeccionExiste" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>La sección ingresada ya existe</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor ingrese otro nombre de sección y vuelva a intentarlo</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
 
 					<?php echo form_close(''); ?>
                 </div>
