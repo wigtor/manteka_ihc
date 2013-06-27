@@ -229,6 +229,7 @@
 				for (var i = 0; i < arrayRespuesta.length; i++){
 					tr = document.createElement('tr');
 					td = document.createElement('td');
+					tr.setAttribute("style", "cursor: pointer");
 					tr.setAttribute("id", "modulo_"+arrayRespuesta[i].cod_mod);
 					tr.setAttribute("onClick", "detalleModulo('"+arrayRespuesta[i].cod_mod+"','"+arrayRespuesta[i].descripcion+"','"+arrayRespuesta[i].cod_equipo+"','"+arrayRespuesta[i].nombre_mod+"')");
 					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre_mod);
@@ -368,7 +369,7 @@ function editarMod(){
 				
 				<div class="span6">
 					<div class="row-fluid">
-						<div class="span6">
+						<div class="span7">
 							1-.<font color="red">*</font> Escoja un módulo de la lista
 						</div>
 					</div>
@@ -416,7 +417,7 @@ function editarMod(){
 
 
 					<div class="row-fluid" style="margin-top:2%">
-							<div class="span7">
+							<div class="span8">
 								3-.<font color="red">*</font> Profesores del módulo temático
 							</div>
 					</div>
@@ -446,11 +447,11 @@ function editarMod(){
 					</div>
 
 					<div class="row-fluid" style="margin-top:2%">
-						<div class="span6">
+						<div class="span8">
 								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
 								<input id="cod_modulo" type="hidden" name="cod_modulo">
 								<input id="nombre_modulo2" type="hidden" name="nombre_modulo2">
-								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49"  onblur="nombreEnUso()">
+								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49" placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
 						</div>
 					</div>
 
@@ -476,17 +477,17 @@ function editarMod(){
 					</div>
 
 
-					<div class="row-fluid" style="margin-top:3%">
+					<div class="row-fluid" style="margin-top:2%">
 							<div class="span8">
 								6-. Descripción del módulo 
 							</div>					
 					</div>
 					<div class="row-fluid" >
-						<div class="span8">		
-								<div class="controls">
-										<textarea id="descripcion" required name="descripcion_modulo" maxlength="99" rows="5" cols="100" style="width:414px; height: 142px"></textarea>
-								</div>
-							</div>
+								
+								<!--<div class="controls">-->
+										<textarea id="descripcion" required name="descripcion_modulo" maxlength="99" rows="5" cols="100" style="width:97%; height: 142px"></textarea>
+								<!--</div>-->
+							
 						
 					</div>
 
@@ -510,13 +511,13 @@ function editarMod(){
 						</table>
 					</div>
 					<div class="row-fluid" style="margin-top: 2%">
-						<div class= "span4" style="margin-left:43%">
+						<div class="controls pull-right" >
 							<button type="button" class ="btn" onclick="editarMod();return false" style="width: 111px">
-								<div class="btn_with_icon_solo">Ã</div>
-								&nbsp Modificar
+								<i class= "icon-pencil"></i>
+								&nbsp Guardar
 							</button>
-						</div>
-						<div class= "span3" style="margin-left:0%">
+						
+						
 							<button class ="btn" onclick="Cancelar();return false" style="width:105px">
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar

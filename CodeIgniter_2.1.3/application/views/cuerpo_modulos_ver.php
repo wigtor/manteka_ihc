@@ -206,7 +206,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					</div>
 					<div class="row-fluid">
 					
-						<div class="span6">
+						<div class="span7">
 							3. Sesiones del módulo temático
 						</div>
 						

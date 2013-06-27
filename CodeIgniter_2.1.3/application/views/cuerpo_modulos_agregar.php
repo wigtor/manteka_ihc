@@ -123,7 +123,7 @@ function ordenarFiltro(numeroLista){
 		<fieldset>
 			<legend>Agregar Módulo</legend>
 
-			<form id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
+			<form   id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
 			<div class="row-fluid">
 				<div class="span6">
 					<font color="red">*Campos Obligatorios</font>
@@ -140,12 +140,12 @@ function ordenarFiltro(numeroLista){
 										<label  class="control-label" for="inputInfo">1-.<font color="red">*</font>Nombre módulo</label>
 									</div>
 								</div>
-								<div class="span7">	
+								<!--<div class="span7">-->	
 									<div class="control-group" id="groupNombreMod">											
-											<input id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="49"  placeholder="Comunicación no verbal" onblur="nombreEnUso()">
+											<input class="span7" id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="49"  placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
 											<span id="spanInputNombreModError" class="help-inline"></span>
 									</div>
-								</div>
+								<!--</div>-->
 						</div>
 					</div>
 

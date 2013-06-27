@@ -185,6 +185,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 				for (var i = 0; i < arrayRespuesta.length; i++){
 					tr = document.createElement('tr');
 					td = document.createElement('td');
+					tr.setAttribute("style", "cursor: pointer");
 					tr.setAttribute("id", "modulo_"+arrayRespuesta[i].cod_mod);
 					tr.setAttribute("onClick", "detalleModulo('"+arrayRespuesta[i].cod_mod+"','"+arrayRespuesta[i].descripcion+"','"+arrayRespuesta[i].cod_equipo+"','"+arrayRespuesta[i].nombre_mod+"')");
 					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre_mod);
@@ -240,7 +241,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 	  		<div class="row-fluid">
 				<div class="span6">
 					<div class="row-fluid">
-						<div class="span6">
+						<div class="span7">
 							1. Escoja un módulo de la lista
 						</div>
 					</div>
@@ -270,9 +271,13 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 		</div>
 		
 		<div class="span6" style="margin-left: 2%; padding: 0%;  ">
-			2. Detalle módulo temático
-			<div class ="row-fluid" style="margin-top:5%">
-				<pre style="margin-top: 2%; padding: 2%; height:6%">
+			<div class="row-fluid">
+				<div class="span7">
+					2. Detalle módulo temático
+				</div>
+			</div>
+			<div class ="row-fluid" style="">
+				<pre style=" padding: 2%; height:6%">
 Nombre del módulo:	<b id="nombre_modulo"></b>
 Profesor lider: 	<b id="profesor_lider"></b>
 Descripción módulo: <b id="descripcion_modulo"></b></pre>
@@ -280,10 +285,8 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 				
 			</div>
 			<div class="row-fluid">
-				<div class="row-fluid">
-						<div class="span6">
-							3. Sesiones del módulo temático
-						</div>
+				<div class="span7">
+					3. Sesiones del módulo temático
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -344,16 +347,17 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 				</div>
 			</div>
 			
-			<div class="row" style="margin-top: 2%">
+			<div class="row-fluid" style="margin-top: 2%; ">
 
-					<div class="span3 offset6">
+					<div class="controls pull-right">
 						<button class="btn" type="submit" style="width: 93px">
-							<div class= "btn_with_icon_solo">b</div>
+							<i class= "icon-trash"></i>
+
 							&nbsp Borrar
 						</button>
-					</div>
+					
 
-					<div class = "span3 ">
+					
 						<button  class ="btn" onclick="Cancelar();return false" style="width: 105px">
 							<div class= "btn_with_icon_solo">Â</div>
 							&nbsp Cancelar
