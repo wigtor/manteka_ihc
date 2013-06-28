@@ -155,6 +155,7 @@
 	<legend>Editar Sala</legend>
 	<div class="row-fluid">
 		<div class="span6">
+		<font color="red">* Campos Obligatorios</font>
 			<div class="controls controls-row">
 				<div class="input-append span7">
 					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -166,11 +167,9 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			<font color="red">* Campos Obligatorios</font>
-			<p>1.- <font color="red">*</font>Seleccione la sala a editar:</p>
+			<p>1.- Seleccione la sala a editar:</p>
 		</div>
 		<div class="span6" >
-			</br>
 			<p>2.- Complete los datos del formulario para modificar la sala:</p>
 		</div>
 	</div>
@@ -194,19 +193,19 @@
 			?>
 			<input type="hidden" id="cod_sala" name="cod_sala" maxlength="3" min="1" readonly>
 			<div class="control-group">
-					<label class="control-label" style="cursor: default" for="cod_sala">1.-<font color="red">*</font>Número sala</label>
+					<label class="control-label" style="cursor: default" for="cod_sala">1.- <font color="red">*</font> Número sala</label>
 					<div class="controls">
 						<input type="text" onblur="comprobarNum()" id="num_sala" class="span12" name="num_sala" maxlength="3" title="Ingrese el número de la sala usando tres dígitos" pattern="[0-9]{3}" required>
 					</div>
 			</div>
 			<div class="control-group">
-					<label class="control-label" style="cursor: default" for="cod_sala">2.-<font color="red">*</font>Capacidad</label>
+					<label class="control-label" style="cursor: default" for="cod_sala">2.- <font color="red">*</font> Capacidad</label>
 					<div class="controls">
 						<input id="capacidad" name="capacidad" maxlength="3" class="span12" title="Ingrese la capacidad de la sala" max="999" min="1" type="number" required>
 					</div>
 			</div>
 			<div class="control-group">
-					<label class="control-label" style="cursor: default" for="cod_sala">3.-<font color="red">*</font>Ubicación</label>
+					<label class="control-label" style="cursor: default" for="cod_sala">3.- <font color="red">*</font> Ubicación</label>
 					<div class="controls">
 						<textarea class="span12" title= "Ingrese la ubicación de la sala en no más de 100 carácteres" id="ubicacion" name="ubicacion"  maxlength="100" required="required" style="resize: none"></textarea>
 					</div>

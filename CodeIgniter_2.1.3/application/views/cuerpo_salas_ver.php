@@ -88,10 +88,10 @@
 
 	<div class="row-fluid">
 		<div class="span6">
-			1.-Listado sala
+			1.- Seleccione una sala para ver sus detalles:
 		</div>
 		<div class="span6">
-			2.-Detalle de la sala:
+			2.- Detalle de la sala:
 		</div>
 	</div>
 	<div class="row-fluid">

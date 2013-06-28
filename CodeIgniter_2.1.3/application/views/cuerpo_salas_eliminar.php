@@ -158,10 +158,10 @@ if(isset($mensaje_confirmacion))
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado salas
+			1.- Seleccione la sala que desea eliminar:
 		</div>
 		<div class="span6" >
-			2.-Detalle de la Sala:
+			2.- Detalle de la Sala:
 		</div>
 	</div>
 	<div class="row-fluid">
