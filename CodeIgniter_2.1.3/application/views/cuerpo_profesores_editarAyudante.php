@@ -8,11 +8,23 @@
 
 	function editarAyudante(){
 		rutAEditar = $("#rutEditar").val();
+		nombre1 = $("#nombreunoEditar").val();
+		nombre2 = $("#nombredosEditar").val();
+		apellido1 = $("#apellidopaternoEditar").val();
+		apellido2 = $("#apellidomaternoEditar").val();
+		correo = $("#correoEditar").val();
+
 		if(rutAEditar == ""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
-		$('#modalConfirmacion').modal();
+		else if((nombre1 == "") || (apellido1 == "") || (apellido2 == "") || (correo == "")){
+			$('#modalFaltanCampos').modal();
+		}
+		else if((nombre1 != "") && (apellido1 != "") && (apellido2 != "") && (correo != "")){
+			$('#modalConfirmacion').modal();
+		}
+		
 	}
 	
 	function verDetalle(elemTabla) {
@@ -198,6 +210,20 @@
 							</div>
 							<div class="modal-body">
 								<p>Por favor seleccione un ayudante y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
