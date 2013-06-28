@@ -646,5 +646,68 @@ class Model_modulo extends CI_Model {
 		return $profes2;
 
 	}
+
+
+	/**
+	* Función que obtiene los modulos que coinciden con cierta búsqueda
+	*
+	* Esta función recibe un texto para realizar una búsqueda y un tipo de atributo por el cual filtrar.
+	* Se realiza una consulta a la base de datos y se obtiene la lista de ayudantes que coinciden con la búsqueda
+	* Esta búsqueda se realiza mediante la sentencia like de SQL.
+	*
+	* @param int $tipoFiltro Un valor entre 1 a 4 que indica el tipo de filtro a usar.
+	* @param string $texto Es el texto que se desea hacer coincidir en la búsqueda
+	* @return Se devuelve un array de objetos modulos
+	* @author Alex Ahumada
+	*/
+    public function getModulosByFilter($texto, $textoFiltrosAvanzados)
+   	{
+   		$this->db->select('NOMBRE_MODULO AS nombre');
+   		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+		$this->db->select('COD_MODULO_TEM AS id');
+		$this->db->order_by('NOMBRE_MODULO', 'asc');
+
+		if (trim($texto) != "") {
+			$this->db->like("NOMBRE_MODULO", $texto);
+			$this->db->or_like("DESCRIPCION_MODULO", $texto);
+		}
+		else {
+			//Sólo para acordarse
+			define("BUSCAR_POR_NOMBRE", 0);
+			define("BUSCAR_POR_DESCRIPCION", 1);
+			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
+				$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_DESCRIPCION] != '') {
+				$this->db->like("DESCRIPCION_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_DESCRIPCION]);
+			}
+		}
+		$query = $this->db->get('modulo_tematico');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+   }
+
+   /**
+	*
+	* Obtiene los detalles de un módulo temático
+	*
+	*/
+	public function getDetallesModulo($cod)
+	{
+		$this->db->select('COD_MODULO_TEM AS cod_mod');
+		$this->db->select('COD_EQUIPO AS cod_equipo');
+		$this->db->select('NOMBRE_MODULO AS nombre_mod');
+		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+		$this->db->where('COD_MODULO_TEM', $cod);
+		$this->db->order_by('NOMBRE_MODULO','asc');
+		$query = $this->db->get('modulo_tematico');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->row();
+	}
 }
 ?>

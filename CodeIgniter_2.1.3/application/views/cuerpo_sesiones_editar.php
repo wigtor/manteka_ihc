@@ -127,6 +127,7 @@ function verDetalle(elemTabla) {
 	<legend>Editar Sesión</legend>
 	<div class="row-fluid">
 		<div class="span6">
+		<font color="red">* Campos Obligatorios</font>
 			<div class="controls controls-row">
 			    <div class="input-append span7">
 					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -138,10 +139,9 @@ function verDetalle(elemTabla) {
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.- Seleccione una sesion para editarla
+			1.- Seleccione la sesión a editar:
 		</div>
 		<div class="span6" >
-			<font color="red">* Campos Obligatorios</font><br>
 				<p>Complete los datos del formulario para modificar la sesión</p>
 		</div>
 	</div>
@@ -166,13 +166,13 @@ function verDetalle(elemTabla) {
 			<input type="hidden" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
 			
 			<div class="control-group">
-				<label class="control-label" for="inputInfo" style="cursor: default">1.-<font color="red">*</font> Nombre de sesión</label>
+				<label class="control-label" for="inputInfo" style="cursor: default">1.- <font color="red">*</font> Nombre de sesión</label>
 				<div class="controls">
 					<input type="text" id="nombresesion" onblur="comprobarNombre()" class="span12" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="inputInfo" style="cursor: default">2.-<font color="red">*</font> Descripción</label>
+				<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
 				<div class="controls">
 					<textarea type="text" class="span12" id="descripcionSesion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion_sesion" maxlength="99" required></textarea>
 				</div>
