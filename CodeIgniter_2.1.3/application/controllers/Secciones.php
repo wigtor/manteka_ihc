@@ -74,7 +74,7 @@ class Secciones extends MasterManteka {
 		$letra_post = $this->input->post('letra_post');
 		$num_post = $this->input->post('num_post');
 		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->existeSeccion($letra_post."-".$num_post);
+		$resultado = $this->Model_secciones->existeSeccion($letra_post,$num_post);
 		echo json_encode($resultado);
 	}
 

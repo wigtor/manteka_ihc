@@ -300,14 +300,30 @@ class Model_secciones extends CI_Model{
 		else{return 3;}
     }
  
-	public function existeSeccion($nombreSeccion) {
-		$this->db->select('COD_SECCION as codigo');
-		$this->db->where('NOMBRE_SECCION = $nombreSeccion');
+	public function existeSeccion($nombre_seccion1,$nombre_seccion2) {
+		$nombre_seccion1=strtoupper($nombre_seccion1);
+		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+		/*$this->db->select('seccion.COD_SECCION as codigo');
+		$this->db->select('seccion.NOMBRE_SECCION as nombre');
+		$this->db->where('seccion.NOMBRE_SECCION',$nombre);
 		$query = $this->db->get("seccion");
 		if ($query == FALSE) {
-			return array();
+			return 0;
 		}
-		return $query->result();
+		else{ return 1;}*/
+		$sql="SELECT * FROM seccion"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if( $row['NOMBRE_SECCION']==$nombre){
+			$var=1;
+			}
+			$contador = $contador + 1;
+		}}
+		return $var;
 	}
 
 
