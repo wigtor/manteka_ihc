@@ -268,7 +268,15 @@ class Salas extends MasterManteka {
 		$resultado = $this->Model_sala->getDetallesSala($num_sala);
 		echo json_encode($resultado);
     }
-
+	
+	/**
+	* Comprobar que el número de sala a ingresar no se encuentra en el sistema
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se carga el model de secciones, se captura el numero de sala a ingresar
+	* Finalmente se llama a la función numSala del modelo, que retorna 1 si el numero de sala
+	* Existe en el sistema, y 0 en caso contrario.
+	*
+	*/
 	public function numExiste() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -281,6 +289,16 @@ class Salas extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	
+	/**
+	* Comprobar que el número de sala a que se está editando no pertenezca a otra sala del sistema
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se carga el model de secciones, se captura el numero de sala a ingresar y el código
+	* De la sala, para que cuando se haga la consulta de si existe una sala con el número consultado
+	* Se descarte la misma sala, y aquello se logra con el código.
+	* Finalmente se llama a la función numSala del modelo, que retorna 1 si el numero de sala
+	* Existe en el sistema, y 0 en caso contrario.
+	*
+	*/
 	public function numExisteE() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
