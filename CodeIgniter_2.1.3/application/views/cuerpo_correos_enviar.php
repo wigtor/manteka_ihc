@@ -1413,7 +1413,7 @@ if(isset($codigo))
 				</div>
 				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
 				<div class="txt2">
-					Adjuntos: (25MB máximo)
+					Adjuntos: (30MB máximo)
 				</div>
 				<div class="container " style="margin:0px; width:414px;">
 
@@ -1505,11 +1505,11 @@ if(isset($codigo))
 				    		var cancelFileUploadIndexes = new Array();
 
     						$.each(data.files, function (index, file) {
-    							/*if(file.size>(30*1024*1024)){
-    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 25MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
+    							if(file.size>(30*1024*1024)){
+    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 30MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
     								cancelFileUploadIndexes[j] = index;
     								j++;
-    							}else{*/	
+    							}else{	
 	    							adjuntos[i]=new Array();
 	    							adjuntos[i][0]=(file.name);
 	    							var iconClass='icon icon-' + file.type.replace(/\W/g, '-');
