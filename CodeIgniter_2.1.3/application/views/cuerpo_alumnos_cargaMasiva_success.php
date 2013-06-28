@@ -1,15 +1,44 @@
 
 <fieldset>
 	<legend>Carga masiva de alumnos</legend>
-		<h3>Su archivo se ha cargado con éxito</h3>
+	<h3><?php echo $error;?></h3>
 
-		<ul>
-			<?php foreach ($upload_data as $item => $value):?>
+	<table class="table-striped table table-hover center">							
+		<?php
+		if (isset($filas)) {?>
+		<thead>
+			<tr>
+				<th>Linea</th>
+				<th>Rut</th>
+				<th>Carrera</th>
+				<th>Seccion</th>
+				<th>Primer Nombre</th>
+				<th>Segundo Nombre</th>
+				<th>Apellido materno</th>
+				<th>Apellido paterno</th>
+				<th>Correo</th>
+			</tr>
+		</thead>
+		<tbody>
 			
-			<li><?php echo $item;?>: <?php echo $value;?></li>
-			<?php endforeach; ?>
-		</ul>
+			<?php	 foreach ($filas as $clave => $valor){?>
+			
+			<tr>	<td><?php echo $clave;?> </td>
+				<?php foreach ($valor as $key => $value){?> 
 
-		<p><?php echo anchor('Alumnos/cargaMasivaAlumnos', 'Cargue un nuevo archivo!'); ?></p>
+				<td> <?php echo $value;?> </td>
+
+
+				<?php	}?>
+			</tr>
+		<?php }}?>		
+
+
+	</tbody>	
+
+</table>
+<div style="text-align:center!important;width: 100%">
+	<button class="btn"><?php echo anchor('Alumnos/cargaMasivaAlumnos', 'Cargue un nuevo archivo!'); ?></button> 
+</div>
 
 </fieldset>

@@ -138,7 +138,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado ayudantes
+			1.-Seleccione el ayudante que desea eliminar:
 		</div>
 		<div class="span6" >
 			2.-Detalle ayudante:
@@ -171,7 +171,7 @@ Secciones:        <b id="seccionesDetalle" ></b></pre>
 				<input type="hidden" id="rutToDelete" name="rutToDelete" value="">
 				<div class="control-group">
 					<div class="controls pull-right">
-						<button type="button" class="btn" onclick="eliminarAyudante()">
+						<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarAyudante()">
 							<i class= "icon-trash"></i>
 							&nbsp; Eliminar
 						</button>

@@ -162,7 +162,7 @@ class Model_estudiante extends CI_Model {
 			return array();
 		}
 		return $query->result();
-	
+
 	}
 	
 	/**
@@ -447,6 +447,7 @@ class Model_estudiante extends CI_Model {
 	}
 
 	function validaRut($rut){
+		$suma = 0;
 		if(strpos($rut,"-")==false){
 			$RUT[0] = substr($rut, 0, -1);
 			$RUT[1] = substr($rut, -1);
@@ -472,6 +473,58 @@ class Model_estudiante extends CI_Model {
 		}
 	}
 
+	function validarDatos($campo,$tipo){
+		switch ($tipo) {
+			case "carrera":				
+			return filter_var($campo, FILTER_VALIDATE_INT);     
+			break;
+			case "seccion":
+			$reg = array("options"=>array("regexp"=>"/^[a-zA-Z0-9\-]+$/"));
+			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+			break;
+			case "nombre":
+			$reg = array("options"=>array("regexp"=>"/^[a-zA-Z\-]+$/"));
+			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+			break;
+			case "rut":
+			$reg = array("options"=>array("regexp"=>"/^[k0-9\-\.]+$/"));
+			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+			break;
+			case "correo":
+			return filter_var($campo, FILTER_VALIDATE_EMAIL);
+			break;
+		} 
+		return FALSE;
+	} 
+
+	function validarSeccion($seccion){
+		
+		$query = $this->db->select('seccion.COD_SECCION');
+		$query = $this->db->from('seccion');
+		$query = $this->db->where('NOMBRE_SECCION',$seccion);
+		$query = $this->db->get();
+		$sec = $query->row();
+		if ($sec == FALSE) {
+			return FALSE;
+		}	
+
+		return $sec->COD_SECCION;
+	}
+
+
+	function validarCarrera($carrera){
+
+		$query = $this->db->select('COD_CARRERA');
+		$query = $this->db->from('carrera');
+		$query = $this->db->where('COD_CARRERA',$carrera);
+		$query = $this->db->get();
+		$car = $query->row();
+		if ($car == FALSE) {
+			return FALSE;
+		} 
+		return $carrera;
+	}
+
 	public function cargaMasiva($archivo){
 
 		if(!file_exists($archivo) || !is_readable($archivo))
@@ -480,49 +533,103 @@ class Model_estudiante extends CI_Model {
 		$f = fopen($archivo, "r");
 
 		$header = NULL;
-		$data = array();
+		$data = array();		
 		$splitArray = array();
-		$count = 0;
+
+		$stack  = array();
+		$c = 1;
 		while(($linea = fgetcsv($f, 201, ',','"','\\')) !== FALSE)
 		{			
 
 			if(!$header){
-				$header = $linea;            	
+				$header = $linea; 
+				if(strcmp($header[0], 'RUT_ESTUDIANTE') != 0){
+					fclose($f);
+					unlink($archivo);
+					return FALSE;
+				} 
+				$c++;
 			}
 			else{
 
 				if(($data = array_combine($header, $linea)) == FALSE) {
-					continue;
+					fclose($f);
+					unlink($archivo);
+					return FALSE;					
 				}
 
 				try{					
 					if(($this->validaRut($data['RUT_ESTUDIANTE'])) == FALSE){
+						$stack[$c] = $linea;
+						$c++;
 						continue;
 					}
 				}catch(Exception $e){
+					$stack[$c] = $linea;
+					$c++;
 					continue;
 				}
 
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[^\-\.]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
+				$validador = $this->validarDatos($data['RUT_ESTUDIANTE'],"rut");				
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;}
+					$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
+					if(!$validador){
+						$stack[$c] = $linea;
+						$c++;
+						continue;}				
+						$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
+						if(!$validador){
+							$stack[$c] = $linea;
+							$c++;
+							continue;}
+							$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
+							$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
+							if(!$validador){
+								$stack[$c] = $linea;
+								$c++;
+								continue;}
+								$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
+								if(!$validador){
+									$stack[$c] = $linea;
+									$c++;
+									continue;}
 
-				if($this->rutExisteM($data['RUT_ESTUDIANTE']) !== -1){                	
-					$this->db->insert('estudiante',$data);
-				}
+									if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
+										$stack[$c] = $linea;
+										$c++;
+										continue;
+									}
+									if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
+										$stack[$c] = $linea;
+										$c++;
+										continue;
+									}
 
-               //echo $data['RUT_ESTUDIANTE'].'<br>' ;
+									$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
+									$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
+									$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
 
-				if($data['RUT_ESTUDIANTE'] == '17316139'){
-					echo "string";
-				}
-			}            
-		}
 
-		fclose($f);
 
-		return TRUE;
-	}
+									if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
+										$this->db->insert('estudiante',$data);
+									} else{
+										$stack[$c] = $linea;
+										$c++;
+										continue;
+									}	
 
-}
+								}            
+							}
 
-?>
+							fclose($f);
+							unlink($archivo);
+							return $stack;
+						}
+
+					}
+
+					?>

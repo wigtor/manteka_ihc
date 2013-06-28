@@ -183,7 +183,7 @@ class Profesores extends MasterManteka {
 		}
 		else{
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el profesor correctamente";
+			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el profesor con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 	
 		}
@@ -308,7 +308,7 @@ class Profesores extends MasterManteka {
 			
 			if ($confirmacion==1){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "El profesor fue editado correctamente.";
+			$datos_plantilla["cuerpo_msj"] = "El profesor fue editado con éxito.";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 			}
 			else{

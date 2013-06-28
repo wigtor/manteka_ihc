@@ -220,6 +220,16 @@
 		<!--<form id="formAsignar" type="post" method="post" onsubmit="AsignarSeccion();return false">-->
 		<fieldset>
 			<legend>Asignación de Sección</legend>
+			<div class="row-fluid">
+				<div class="span6">
+					<font color="red">* Campos Obligatorios</font>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span6" >
+					<p>Complete los datos del formulario para agregar una asignacion:</p>
+				</div>
+			</div>
 			<?php
 				$atributos= array('onsubmit' => 'return AsignarSeccion()', 'id' => 'formAsignar');
 		 		echo form_open('Secciones/HacerAsignarAsecciones/', $atributos);
@@ -270,7 +280,7 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:7%">
-							<table id="profesores" class="table table-hover">
+							<table required id="profesores" class="table table-hover">
 								<thead>
 									<tr>
 										

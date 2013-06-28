@@ -23,6 +23,8 @@ class Model_modulo extends CI_Model {
 			$profes[$contador][4] = $row->APELLIDO1_PROFESOR;
 			$profes[$contador][5] = $row->APELLIDO2_PROFESOR;
 			$profes[$contador][6] = 0;
+			$profes[$contador][7] = -1;
+			$profes[$contador][8] = -1;
 			$contador = $contador + 1;
 		}
 		
@@ -44,11 +46,17 @@ class Model_modulo extends CI_Model {
 		$contador = 0;
 		$contador2 = 0;
 		while($contador < count($profes)){
+			$profes[$contador][9] = 0;
 			while($contador2 < count($lista)){
 				if($profes[$contador][1] == $lista[$contador2][1]){
-					$profes[$contador][0] = $lista[$contador2][0];
-					if($lista[$contador2][2] == 1){
-						$profes[$contador][6] = 1;
+					if($profes[$contador][9] == 0){
+						$profes[$contador][0] = $lista[$contador2][0];
+						$profes[$contador][6] = $lista[$contador2][2];
+						$profes[$contador][9]++;
+					}
+					else{
+						$profes[$contador][7] = $lista[$contador2][0];
+						$profes[$contador][8] = $lista[$contador2][2];					
 					}
 				}
 				$contador2++;
@@ -581,7 +589,7 @@ class Model_modulo extends CI_Model {
 	* Obtiene la lista de los profesores que no tienen equipo
 	*
 	*/
-	public function VerTodosLosProfesoresAddModulo(){
+	public function VerTodosLosProfesoresAddModulo($lider){
 		$this->db->select('*');
 		$this->db->from('profesor');
 		$query = $this->db->get();
@@ -597,6 +605,7 @@ class Model_modulo extends CI_Model {
 		}
 		
 		$this->db->select('RUT_USUARIO2');
+		$this->db->select('LIDER_PROFESOR');
 		$this->db->from('profe_equi_lider');
 		$query = $this->db->get();
 		$datos = $query->result();
@@ -605,6 +614,7 @@ class Model_modulo extends CI_Model {
 		$lista = array();
 		foreach ($datos as $row) {  
 			$lista[$contador] = array();
+			$lista[$contador][0] = $row->LIDER_PROFESOR;
 			$lista[$contador][1] = $row->RUT_USUARIO2;
 			$contador = $contador + 1;
 		}
@@ -616,8 +626,9 @@ class Model_modulo extends CI_Model {
 		$esta =false;
 		while($contador < count($profes)){
 			while($contador2 < count($lista)){
-				if($profes[$contador][0] == $lista[$contador2][1]){
+				if($profes[$contador][0] == $lista[$contador2][1] && $lista[$contador2][0] == $lider){
 					$esta=true;
+					$contador2 = count($lista);
 				}
 				$contador2++;
 			}

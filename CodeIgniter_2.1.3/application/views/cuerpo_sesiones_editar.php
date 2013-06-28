@@ -149,7 +149,7 @@ function verDetalle(elemTabla) {
 			</div>
 			<div class="row">
 				<div class="controls pull-right">
-					<button type="button" class="btn"  type="button" onClick="EditarSesion()">
+					<button type="button" class="btn" style= "margin-right: 4px" type="button" onClick="EditarSesion()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
 					</button>

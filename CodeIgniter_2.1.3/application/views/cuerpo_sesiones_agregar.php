@@ -80,14 +80,14 @@
 					<div class="control-group">
 						<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripción</label>
 						<div class="controls">
-							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" ></textarea>
+							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" required ></textarea>
 						</div>
 					</div>
 				</div> 
 			</div>
-			<div class="span7">
+			<div class="span7" style="margin-left: 0px">
 				<div class="controls pull-right">
-					<button class="btn" type="submit" style="width:102px">
+					<button class="btn" type="submit" style= "margin-right: 7px" style="width:102px">
 						<div class= "btn_with_icon_solo">Ã</div>
 							&nbsp Agregar
 					</button>

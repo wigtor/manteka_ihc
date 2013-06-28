@@ -12,21 +12,18 @@
 		var correo = document.getElementById("correoEditar").value;
 		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
 	
-		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
-					/*var answer = confirm("¿Está seguro que desea aplicar los cambios?")
-					if (!answer){
-						return false;
-					}
-					else{
-						return true;
-					}*/
-
-					$('#modalConfirmacion').modal();
+		if(rut=="" && nombreUno==""  && apellidoPaterno=="" && apellidoMaterno=="" && correo==""){
+					
+					$('#modalSeleccioneAlgo').modal();
+					
 		}
-		else {
-				//alert("Ingrese todos los datos");
-				$('#modalSeleccioneAlgo').modal();
-				return false;
+		else if ((rut=="") || (nombreUno=="")  || (apellidoPaterno=="") || (apellidoMaterno=="") || (correo=="")){
+				
+				
+				$('#modalFaltanCampos').modal();
+		}
+		else{
+			$('#modalConfirmacion').modal();
 		}
 	}
 </script>
@@ -261,6 +258,7 @@ function ordenarFiltro(){ //No funcional
 			<legend>Editar Alumno</legend>
 			<div class= "row-fluid">
 				<div class="span6">
+					<font color="red">* Campos Obligatorios</font>
 					<div class="controls controls-row">
 						<div class="input-append span7">
 							<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -272,10 +270,9 @@ function ordenarFiltro(){ //No funcional
 			</div>
 			<div class="row-fluid">
 				<div class="span6" >
-					1.-Listado alumnos:
+					1.- Seleccione el alumno a editar:
 				</div>
 				<div class="span6" >
-					<font color="red">* Campos Obligatorios</font><br>
 						<p>Complete los datos del formulario para modificar el alumno</p>
 				</div>
 			</div>
@@ -294,43 +291,43 @@ function ordenarFiltro(){ //No funcional
 						echo form_open('Alumnos/postEditarEstudiante/', $atributos);
 					?>
 						<div class="control-group">
-							<label class="control-label" for="rutEditar" style="cursor: default">1-.<font color="red">*</font>  RUT</label>
+							<label class="control-label" for="rutEditar" style="cursor: default">1.- RUT</label>
 							<div class="controls">
 								<input type="text" id="rutEditar" name="rutEditar" class="span12" readonly>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="nombreunoEditar" style="cursor: default">2-.<font color="red">*</font> Primer nombre</label>
+							<label class="control-label" for="nombreunoEditar" style="cursor: default">2.- <font color="red">*</font> Primer nombre</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombreunoEditar" name="nombreunoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="nombredosEditar" style="cursor: default">3-. Segundo nombre</label>
+							<label class="control-label" for="nombredosEditar" style="cursor: default">3.- Segundo nombre</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombredosEditar" name="nombredosEditar" maxlength="19" >
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4.- <font color="red">*</font> Apellido paterno</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5.- <font color="red">*</font> Apellido materno</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="correoEditar" style="cursor: default">6-.<font color="red">*</font> Correo</label>
+							<label class="control-label" for="correoEditar" style="cursor: default">6.- <font color="red">*</font> Correo</label>
 							<div class="controls">
-								<input type="email" placeholder="nombre_usuario@miemail.com" id="correoEditar" class="span12" name="correoEditar" maxlength="199" required>
+								<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" placeholder="nombre_usuario@miemail.com" id="correoEditar" class="span12" name="correoEditar" maxlength="199" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font> Asignar sección</label>
+							<label class="control-label" for="inputInfo" style="cursor: default">7.- <font color="red">*</font> Asignar sección</label>
 							<div class="controls">
 								<input type="text" onkeyup="ordenarFiltro2()" id="filtroSeccion" class="span12" placeholder="Filtro de Sección">
 							</div>
@@ -353,7 +350,7 @@ function ordenarFiltro(){ //No funcional
 						
 						<div class="row" >
 							<div class="controls pull-right">
-								<button class ="btn" type="button" onclick="editarEstudiante()" >
+								<button class ="btn" style= "margin-right: 4px"type="button" onclick="editarEstudiante()" >
 									<div class= "icon-pencil"></div>
 									&nbsp Guardar
 								</button>
@@ -393,6 +390,20 @@ function ordenarFiltro(){ //No funcional
 								
 							</div>
 						</div>
+
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 					<?php echo form_close(''); ?>
 				</div>
 

@@ -97,8 +97,7 @@
 			<pre style="padding: 2%; cursor:default">
 Nombre de la sesión: 	    <b id="nombreDetalle"></b>
 Nombre del módulo temático: <b id="mod_temDetalle"></b>
-Descripción: 		    <b id="descripcionDetalle"></b>
-			</pre>
+Descripción: 		    <b id="descripcionDetalle"></b></pre>
 		</div>
 	</div>
 
