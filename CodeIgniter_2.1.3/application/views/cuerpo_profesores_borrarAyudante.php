@@ -138,10 +138,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Seleccione el ayudante que desea eliminar:
+			1.- Seleccione el ayudante que desea eliminar:
 		</div>
 		<div class="span6" >
-			2.-Detalle ayudante:
+			2.- Detalle ayudante:
 		</div>
 	</div>
 	<div class="row-fluid">
