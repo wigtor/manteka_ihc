@@ -276,15 +276,12 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 						</div>
 					</div>
 					<div class="row-fluid">
-						<div class="controls pull-right">
+						<div class="controls pull-right" style="margin-top:5px;">
 							<button class="btn" type="button" onclick="eliminarModulo()">
 								<i class="icon-trash"></i>
-								&nbsp; Borrar
+								&nbsp; Eliminar
 							</button>
-						
-
-						
-							<button  class ="btn" onclick="resetModulos();return false">
+							<button  class ="btn" type="button" onclick="resetModulos()">
 								<div class= "btn_with_icon_solo">Â</div>
 								&nbsp; Cancelar
 							</button>

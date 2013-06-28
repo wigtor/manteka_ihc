@@ -106,37 +106,37 @@ function ordenarFiltro(){
 		<div class="row-fluid">
 			<div class= "span6" >
 				<div class="control-group">
-					<label class="control-label" for="rut_ayudante" style="cursor: default">1-.<font color="red">*</font> RUN</label>
+					<label class="control-label" for="rut_ayudante" style="cursor: default">1.- <font color="red">*</font> RUN</label>
 					<div class="controls">
 						<input id="rut_ayudante" name="rut_ayudante" maxlength="9" min="1" type="text" pattern="^\d{7,8}[0-9kK]{1}$" class="span12" placeholder="Ej:177858741" title="Ingrese su RUN sin puntos ni guion" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="nombre1_ayudante" style="cursor: default">2-.<font color="red">*</font> Primer nombre</label>
+					<label class="control-label" for="nombre1_ayudante" style="cursor: default">2.- <font color="red">*</font> Primer nombre</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombre1_ayudante" name="nombre1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="nombre2_ayudante" style="cursor: default">3-. Segundo nombre</label>
+					<label class="control-label" for="nombre2_ayudante" style="cursor: default">3.- Segundo nombre</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombre2_ayudante" name="nombre2_ayudante" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellido1_ayudante" style="cursor: default">4-.<font color="red">*</font> Apellido paterno</label>
+					<label class="control-label" for="apellido1_ayudante" style="cursor: default">4.- <font color="red">*</font> Apellido paterno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido1_ayudante" name="apellido1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellido2_ayudante" style="cursor: default">5-.<font color="red">*</font> Apellido materno</label>
+					<label class="control-label" for="apellido2_ayudante" style="cursor: default">5.- <font color="red">*</font> Apellido materno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido2_ayudante" name="apellido2_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="correo_ayudante" style="cursor: default">6-.<font color="red">*</font> Correo</label>
+					<label class="control-label" for="correo_ayudante" style="cursor: default">6.- <font color="red">*</font> Correo</label>
 					<div class="controls">
 						<input type="email" id="correo_ayudante" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
@@ -145,7 +145,7 @@ function ordenarFiltro(){
 
 			<div class="span6">
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Asignar profesor</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">7.- <font color="red">*</font> Asignar profesor</label>
 					<div class="controls">
 						<input id="filtroLista"  onkeyup="ordenarFiltro()" type="text" class="span12" placeholder="Filtro búsqueda">
 						<div class="row-fluid" style="margin-top:2%">

@@ -16,7 +16,7 @@
 
 		<br /><br />
 
-		<div><font color="red">*</font>Solo es posible subir achivos con formato csv (Revisar manual de usuario)</div>
+		<div><font style="font-weight:bold" color="red">Aviso: </font>Solo es posible subir archivos con formato csv (Revisar manual de usuario)</div>
 	</div>
 </form>
 </fieldset>

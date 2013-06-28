@@ -71,26 +71,7 @@
 				var bloques = '<option value="" disabled selected>Bloque</option>';
 
 				var validacion_dias = [0,0,0,0,0,0,0];
-				
-				/*validacion_dias[0] = 0; //Lunes
-				validacion_dias[1] = 0; //Martes
-				validacion_dias[2] = 0; //Miercoles
-				validacion_dias[3] = 0; //Jueves
-				validacion_dias[4] = 0; //Viernes
-				validacion_dias[5] = 0; //Sabado
-				validacion_dias[6] = 0; //Domingo*/
-
 				var validacion_horarios = [0,0,0,0,0,0,0,0,0]
-
-				/*validacion_horarios[0] = 0; //08:00
-				validacion_horarios[1] = 0; //09:40
-				validacion_horarios[2] = 0; //11:20
-				validacion_horarios[3] = 0; //13:50
-				validacion_horarios[4] = 0; //15:30
-				validacion_horarios[5] = 0; //17:10
-				validacion_horarios[6] = 0; //19:00
-				validacion_horarios[7] = 0; //20:20
-				validacion_horarios[8] = 0; //22:00*/
 
 				if(datos.length!=0){
 					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
@@ -206,9 +187,9 @@
 			bloque = bloque + 1;
 		}
 		if(seccion == 0 || profesor == 0 || modulo == 0 || sala == 0 || dia == 0 || bloque == 0){
-			$('#modalFaltaAlgo').modal();
+			document.write('Deficiencia');
+			return false;
 		}else{
-			$('#modalConfirmacion').modal();
 			return;
 		}
 	}
@@ -216,7 +197,7 @@
 </script>
 
 <div class="row-fluid">
-	<div class="span10">
+	<div class="span12">
 		<!--<form id="formAsignar" type="post" method="post" onsubmit="AsignarSeccion();return false">-->
 		<fieldset>
 			<legend>Asignación de Sección</legend>
@@ -239,12 +220,12 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Seleccione la sección para asignación</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">1-.<font color="red">*</font> Seleccione la sección para asignación</label>
 							</div>
 						</div>
 					</div>
 					<div class="row-fluid">
-						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
+						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
 							<table id="listadoSecciones" class="table table-hover">
 								<thead>
 									<tr>
@@ -271,15 +252,15 @@
 							</table>
 						</div>
 					</div>
-					<div class="row-fluid" style="margin-top:2%">
+					<div class="row-fluid" style="margin-top:7%">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">3-.<font color="red">*</font> Seleccione el profesor disponible del módulo</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">3-.<font color="red">*</font> Seleccione el profesor disponible del módulo</label>
 							</div>
 						</div>
 					</div>
 					<div class="row-fluid">
-						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:7%">
+						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:1%">
 							<table required id="profesores" class="table table-hover">
 								<thead>
 									<tr>
@@ -299,12 +280,12 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Seleccione el módulo a asignar</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">2-.<font color="red">*</font> Seleccione el módulo a asignar</label>
 							</div>
 						</div>
 					</div>
 					<div class="row-fluid">
-						<div class="span10" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
+						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
 							<table class="table table-hover">
 								<thead>
 									<tr>
@@ -333,7 +314,7 @@
 					<div class="row-fluid" style="margin-top:2%">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Seleccione la sala y horario</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">4-.<font color="red">*</font> Seleccione la sala y horario</label>
 							</div>
 						</div>
 					</div>
@@ -375,67 +356,34 @@
 						</div>
 
 						<div class="row-fluid">
-								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%">
+								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%" required>
 									<option value="" disabled selected>Día</option>
 									<option disabled>Elija una sala para ver sus dias disponibles</option>
 								</select>
 							
 
 						
-								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%">
+								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%" required>
 									<option value="" disabled selected>Bloque</option>
 									<option disabled>Elija una sala para ver sus bloques disponibles</option>
 								</select>
 							
 						</div>
 
-						<div class="row-fluid" style="margin-top:5%; margin-left: 35%">
-							<div class="span3">
-									<button class="btn" onClick="AsignarSeccion()" type="button" style="width:102px">
-										<div class= "btn_with_icon_solo">Ã</div>
-										&nbsp Asignar
+						<div class="control-group" style="margin-top:5%; margin-left: 35%">
+							<div class="controls">
+								<button class="btn" type="submit" style="width:102px">
+									<div class= "btn_with_icon_solo">Ã</div>
+									&nbsp Asignar
 
-									</button>
-								</div>
-								<div class="span3">
-									<button class="btn" onClick="Cancelar()" type="reset" style="width:105px">
-										<div class= "btn_with_icon_solo">Â</div>
-										&nbsp Cancelar
+								</button>
+								<button class="btn" onClick="Cancelar()" type="reset" style="width:105px">
+									<div class= "btn_with_icon_solo">Â</div>
+									&nbsp Cancelar
 
-									</button>
+								</button>
 							</div>
 						</div>
-
-						<!-- Modal de confirmación -->
-						<div id="modalConfirmacion" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>Confirmación</h3>
-							</div>
-							<div class="modal-body">
-								<p>Se va a realizar asignación de la seccion ¿Está seguro?</p>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-								
-							</div>
-						</div>
-
-						<!-- Modal de faltaAlgo -->
-						<div id="modalFaltaAlgo" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No se puede realizar la asignación</h3>
-							</div>
-							<div class="modal-body">
-								<p>Debe seleccionar todos los datos requeridos para la asignación</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
-
 					</div>
 				</div>
 			</div>

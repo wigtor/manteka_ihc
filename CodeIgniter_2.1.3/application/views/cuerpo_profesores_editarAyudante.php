@@ -118,10 +118,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Seleccione el ayudante a editar:
+			1.- Seleccione el ayudante a editar:
 		</div>
 		<div class="span6" >
-			<p>2.-Complete los datos del formulario para modificar el ayudante:</p>
+			<p>2.- Complete los datos del formulario para modificar el ayudante:</p>
 		</div>
 	</div>
 
@@ -139,37 +139,37 @@
 				echo form_open('Ayudantes/EditarAyudante', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">1-. RUT</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">1.- RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar" class="span12" name="rutEditar" readonly>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Primer nombre</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombreunoEditar" name="nombre1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">3-. Segundo nombre</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">3.- Segundo nombre</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombredosEditar" name="nombre2_ayudante" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido paterno</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">4.- <font color="red">*</font> Apellido paterno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellido_paterno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido materno</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">5.- <font color="red">*</font> Apellido materno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellido_materno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">6.- <font color="red">*</font> Correo</label>
 					<div class="controls">
 						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
