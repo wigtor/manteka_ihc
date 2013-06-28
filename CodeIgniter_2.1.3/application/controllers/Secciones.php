@@ -482,6 +482,20 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	public function postDetalleUnaSeccion() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod_seccion = $this->input->post('seccion');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->getDetalleUnaSeccion($cod_seccion);
+		echo json_encode($resultado);
+	}
+
+
 	
 	
 	
