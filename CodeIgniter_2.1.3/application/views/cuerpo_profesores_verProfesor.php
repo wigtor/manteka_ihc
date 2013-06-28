@@ -95,10 +95,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Seleccione un profesor para ver sus detalles:
+			1.- Seleccione un profesor para ver sus detalles:
 		</div>
 		<div class="span6" >
-			2.-Detalle profesor:
+			2.- Detalle profesor:
 		</div>
 	</div>
 	<div class="row-fluid">
