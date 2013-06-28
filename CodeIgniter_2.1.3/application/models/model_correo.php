@@ -912,7 +912,11 @@ class model_correo extends CI_Model
 			}
 			$detalles= $query->result();
 			foreach ($query->result() as $row)
-			{
+			{	
+				$this->db->where('RUT_USUARIO',$rut);
+				$this->db->where('COD_CORREO',$codigo);
+				$this->db->update('cartar_user',array('NO_LEIDO_CARTA_USER' => 0));
+
 				$this->db->select('NOMBRE1_COORDINADOR AS nombre');
 				$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
 				$this->db->select('APELLIDO2_COORDINADOR AS apellido2');

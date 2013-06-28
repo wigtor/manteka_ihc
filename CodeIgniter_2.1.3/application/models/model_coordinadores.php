@@ -482,7 +482,7 @@ class model_coordinadores extends CI_Model{
       return $query->row();
    }
 
-   public function getAllCoordinadorsses(){
+   public function getAllCoordinadores(){
 	
       $this->db->select('RUT_USUARIO3 AS rut');
       $this->db->select('NOMBRE1_COORDINADOR AS nombre1');

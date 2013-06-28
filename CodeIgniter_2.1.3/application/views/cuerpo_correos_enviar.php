@@ -309,7 +309,8 @@ function pasoDosUno()
  * @author Byron Lanas (BL)
  **/
 function pasoUnoDos()
-{
+{	
+
 	var rutRecept = [];
 	var to = "";
 	for(var i =0;i < tbody2.getElementsByTagName('tr').length;i++)
@@ -1497,18 +1498,18 @@ if(isset($codigo))
 				        maxChunkSize:0,
 				        singleFileUploads: false,
 				        maxNumberOfFiles:5,
-				        maxFileSize: 25*1024*1024
+				        maxFileSize: 30*1024*1024
 				    })
 				    .bind('fileuploadadd', function (e, data) {
 				    		var j=0;
 				    		var cancelFileUploadIndexes = new Array();
 
     						$.each(data.files, function (index, file) {
-    							if(file.size>(30*1024*1024)){
+    							/*if(file.size>(30*1024*1024)){
     								alert("El archivo \""+file.name+"\" tiene un peso mayor a 25MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
     								cancelFileUploadIndexes[j] = index;
     								j++;
-    							}else{	
+    							}else{*/	
 	    							adjuntos[i]=new Array();
 	    							adjuntos[i][0]=(file.name);
 	    							var iconClass='icon icon-' + file.type.replace(/\W/g, '-');
@@ -1521,7 +1522,7 @@ if(isset($codigo))
 	    								"<td style='width:95%; display:inline-table;height:10px'><div id='progress' class='progress progress-info progress-striped' style=' margin-bottom:0;height:8px'><div class='bar' ></div></div></td></tr>"    								
 	    								);
         						    i++;
-    							}   
+    							//}   
 						    });
 
 						    for(var k=0; k<cancelFileUploadIndexes.length; k++) {
