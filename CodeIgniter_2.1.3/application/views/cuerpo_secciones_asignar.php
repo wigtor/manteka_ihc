@@ -198,7 +198,6 @@
 
 <div class="row-fluid">
 	<div class="span12">
-		<!--<form id="formAsignar" type="post" method="post" onsubmit="AsignarSeccion();return false">-->
 		<fieldset>
 			<legend>Asignación de Sección</legend>
 			<div class="row-fluid">
