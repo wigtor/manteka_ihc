@@ -11,7 +11,8 @@
 ?>
 
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
-
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/css/jquery.fileupload-ui.css" type="text/css" media="all" />
 <script type='text/javascript'>
 /**
  * Función que se encarga de evitar el envío de emails sin destinatario(s) o sin asunto ni cuerpo del mensaje.
@@ -28,6 +29,7 @@ var arrayRespuesta;
 var arrayCarreras;
 var myVar;
 var codigoBorrador=-1;
+var adjuntos= new Array();
 
 function validacionSeleccion()
 {
@@ -96,6 +98,7 @@ function CargarPlantilla(asunto, cuerpo, id)
  **/
 function enviarCorreo()
 {
+	document.getElementById("adjuntos").value=JSON.stringify(adjuntos);
 	if(validacionSeleccion())
 	{
 		$('#contenedorEnvio').css({display:'none'});
@@ -1409,13 +1412,145 @@ if(isset($codigo))
 				</div>
 				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
 				<div class="txt2">
-					Adjunto:
+					Adjuntos: (25MB máximo)
 				</div>
-				<div class="fileupload fileupload-new" data-provides="fileupload">
-					<div class="input-append">
-						<div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Seleccionar archivo</span><span class="fileupload-exists">Cambiar</span><input type="file" name = "userfile"/></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Eliminar</a>
-					</div>
+				<div class="container " style="margin:0px; width:414px;">
+
+				    <!-- The fileinput-button span is used to style the file input field as button -->
+				    <span class="btn  fileinput-button">
+				       	<img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip" alt=":" >
+				        <!-- The file input field used as target for the file upload widget -->
+				        <input id="fileupload" type="file" name="files[]" data-url="/<?php echo config_item('dir_alias') ?>/adjuntos/" multiple>
+				    </span>
+				    <div id="dropzone" class="fade well" style="margin-bottom: 8px;margin-top:8px">Arrastre sus archivos aquí</div>
+				    
+				    <!-- The container for the uploaded files -->
+				    
+				    <table id="files" class="files" style="height:auto;width:100%;"><tbody  style="height:auto;width:100%;"></tbody></table>
+				    
+				    
+
+				    
+
 				</div>
+			
+				<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+
+				<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+				<!-- The basic File Upload plugin -->
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.fileupload-ui.js"></script>
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.fileupload-process.js"></script>
+				<script>
+
+				function eliminarAdjunto(index){
+					tabla=document.getElementById('b'+index).parentNode;
+					tabla.removeChild(document.getElementById('b'+index));
+					tabla.removeChild(document.getElementById('f'+index));
+					adjuntos[index][1]="";
+					adjuntos[index][0]="";
+				}
+
+
+				$(document).bind('dragover', function (e) {
+				    var dropZone = $('#dropzone'),
+				        timeout = window.dropZoneTimeout;
+				    if (!timeout) {
+				        dropZone.addClass('in');
+				    } else {
+				        clearTimeout(timeout);
+				    }
+				    var found = false,
+				      	node = e.target;
+				    do {
+				        if (node === dropZone[0]) {
+				       		found = true;
+				       		break;
+				       	}
+				       	node = node.parentNode;
+				    } while (node != null);
+				    if (found) {
+				        dropZone.addClass('hover');
+				    } else {
+				        dropZone.removeClass('hover');
+				    }
+				    window.dropZoneTimeout = setTimeout(function () {
+				        window.dropZoneTimeout = null;
+				        dropZone.removeClass('in hover');
+				    }, 100);
+				});
+				/*jslint unparam: true */
+				/*global window, $ */
+
+				var i=0;
+				
+
+				$(function () {
+				    'use strict';
+
+				    $('#fileupload').fileupload({
+				        dropZone: $('#dropzone'),
+				        dataType: 'json',
+				        autoUpload:'false',
+				        maxChunkSize:0,
+				        singleFileUploads: false,
+				        maxNumberOfFiles:5,
+				        maxFileSize: 25*1024*1024
+				    })
+				    .bind('fileuploadadd', function (e, data) {
+				    		var j=0;
+				    		var cancelFileUploadIndexes = new Array();
+
+    						$.each(data.files, function (index, file) {
+    							if(file.size>(30*1024*1024)){
+    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 25MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
+    								cancelFileUploadIndexes[j] = index;
+    								j++;
+    							}else{	
+	    							adjuntos[i]=new Array();
+	    							adjuntos[i][0]=(file.name);
+	    							var iconClass='icon icon-' + file.type.replace(/\W/g, '-');
+	    							$('#files').append("<tr id='f"+(i)+"' style='margin-left:0px;display:block;'><td style='width:95%;display:inline-table;font-size:10px;'>"+
+	  								"<span class='"+iconClass+"'></span> "
+	    								+file.name+
+	    								" - "+(file.size/1024).toFixed(1)+"KB</td>"+
+	    								"<td  style='width:5%;display:inline-table;vertical-align:middle;'>"+"<button type='button' class='close' onclick='eliminarAdjunto("+i+")' style='text-align:center'>&times;</button></td></tr>"+
+										"<tr id='b"+(i)+"' style='margin-left:0px;display:block;'>"+
+	    								"<td style='width:95%; display:inline-table;height:10px'><div id='progress' class='progress progress-info progress-striped' style=' margin-bottom:0;height:8px'><div class='bar' ></div></div></td></tr>"    								
+	    								);
+        						    i++;
+    							}   
+						    });
+
+						    for(var k=0; k<cancelFileUploadIndexes.length; k++) {
+				                data.files.splice(cancelFileUploadIndexes[k]-k,1);
+				            }
+				            if (data.files.length > 0) {
+				                data.submit();
+				            }
+						    
+						    
+						})
+				    .bind('fileuploaddone', function (e, data) {
+				            $.each(data.result.files, function (index, file) {
+				                //$('<p/>').text(file.name+" - "+(index+i-data.files.length)).appendTo('#files');
+				                adjuntos[index+i-data.files.length][1]=file.name;
+				                
+		                	});
+				        })
+				    .bind('fileuploadprogress', function (e, data) {
+				    	var progress = parseInt(data.loaded / data.total * 100, 10);
+				    	$('#progress .bar').css(
+			                'width',
+			                progress + '%'
+			            );
+
+				    })
+				    
+				});
+				</script>
 			</div>
 		</div>
 		
@@ -1453,6 +1588,7 @@ if(isset($codigo))
 				<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
 				<input type="hidden" name="codigoBorrador" id="codigoBorrador" value="<?php set_value('codigoBorrador');?>"/>
 				<input name="idPlantilla" type="hidden" id="idPlantilla" maxlength="6">
+				<input type="hidden" name="adjuntos" id="adjuntos" value="asd"/>
 			</div>
 		</div>
 		

@@ -1,19 +1,112 @@
-fieldset
-{
-	clear:both;
-	border-color:lightblue;
-	margin-bottom:15px;
-	margin-top:-10px;
+.icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+    
+}
+
+/*WORD*/
+.icon-application-msword {
+background: url('../img/doc-icon.gif');
+}
+
+.icon-application-vnd-openxmlformats-officedocument-wordprocessingml-document {
+background: url('../img/doc-icon.gif');
+}
+/*TXT y no definidos*/
+.icon-text-plain {
+background: url('../img/txt-icon.gif');
+}
+
+.icon- {
+background: url('../img/txt-icon.gif');
+}
+
+/*PDF*/
+
+.icon-application-pdf {
+background: url('../img/pdf_icon.gif');
 }
 
 
+/*EXCEL*/
+.icon-application-vnd-ms-excel {
+background: url('../img/icon_excel.jpg');
+}
+.icon-application-vnd-openxmlformats-officedocument-spreadsheetml-sheet {
+background: url('../img/icon_excel.jpg');
+}
 
-fieldset #lista
-{
-	clear:both;
-	border-color:#f0f0f0;
-	margin-bottom:15px;
-	margin-top:-10px;
+
+/*PPT*/
+.icon-application-vnd-ms-powerpoint {
+background: url('../img/ppt.png');
+}
+.icon-application-vnd-openxmlformats-officedocument-presentationml-presentation {
+background: url('../img/ppt.png');
+}
+
+/*audio*/
+.icon-audio-x-ms-wma {
+background: url('../img/icon-itunes.png');
+}
+.icon-audio-mp3 {
+background: url('../img/icon-itunes.png');
+}
+.icon-video-x-ms-wmv {
+background: url('../img/icon-itunes.png');
+}
+/*video*/
+.icon-video-avi {
+background: url('../img/icon_video16.gif');
+}
+.icon-video-mpeg {
+background: url('../img/icon_video16.gif');
+}
+/*TAR*/
+.icon-application-x-gzip {
+background: url('../img/rar.gif');
+}
+
+/*IMAGENES*/
+.icon-image-png {
+background: url('../img/img_icon.gif');
+}
+
+.icon-image-jpeg {
+background: url('../img/img_icon.gif');
+}
+.icon-image-gif {
+background: url('../img/img_icon.gif');
+}
+
+#dropzone {
+    background: #E0f8f7;
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    font-weight: bold;
+
+}
+#dropzone.in {
+    width: 600px;
+    height: 200px;
+    line-height: 200px;
+    font-size: larger;
+}
+#dropzone.hover {
+    background: #0088CC;
+}
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
 }
 
 #contenedorFiltro1
