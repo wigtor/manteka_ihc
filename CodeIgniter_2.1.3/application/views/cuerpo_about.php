@@ -49,7 +49,7 @@
     	<img src="/<?php echo config_item('dir_alias') ?>/img/about_img/php1oWgkVPM.jpg">
         <div class="carousel-caption" align="left">
          <h4>Grupo 4</h4>
-         <p>....</p>
+         <p>Encargados de modelar, manejar e implementar el almacenamiento de los datos manejados por el sistema, con el fin de que puedan ser accedidos por las diversas funcionalidades de MANTEKA. Responsables de desarrollar los mantenedores de docencia, secciones, planificación, salas y alumnos.</p>
          <p style="font-size:xx-small;">(En la fotografía, arriba de izquierda a derecha: Daniel Quinteros, Felipe Piñeiro, Marco Acevedo, Cristian Cornejo. Abajo de izquierda a derecha: Aileen Esparza, Diego Escobar, Juan Vargas)</p>
         </div> 
     </div>
@@ -79,6 +79,48 @@
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
+
+
+<div id="textAbout" align="center">
+      <p>Para la creación de MANTEKA fueron utilizadas las siguientes tecnologías y herramientas: </p>
+      <table>
+        <tr>
+          <td>
+          <UL type = disk >
+            <LI><a href="http://ellislab.com/codeigniter" target="blank">CodeIgniter</a>
+            <LI><a href="http://twitter.github.io/bootstrap/" target="blank">Bootstrap</a>
+            <LI><a href="http://www.w3schools.com/js/" target="blank">JavaScript</a>
+          </UL>
+          </td>
+          <td>
+          <UL type = disk >
+            <LI><a href="http://www.w3schools.com/ajax/" target="blank">AJAX</a>
+            <LI><a href="http://jquery.com/" target="blank">jQuery</a>
+            <LI><a href="http://www.json.org/" target="blank">JSON</a>
+          </UL>
+          </td>
+          <td>
+          <UL type = disk >
+            <LI><a href="http://www.wampserver.com/" target="blank">WAMP</a>
+            <LI><a href="http://community.jaspersoft.com/project/jasperreports-library" target="blank">JasperReports</a>
+            <LI><a href="http://www.sublimetext.com/2" target="blank">Sublime Text 2</a>
+          </UL>
+          </td>
+          <td>
+          <UL type = disk >
+            <LI><a href="https://github.com/" target="blank">GitHub</a>
+            <LI><a href="http://dev.mysql.com/downloads/" target="blank">MySQL</a>
+            <LI><a href="http://www.sybase.com/products/modelingdevelopment/powerdesigner" target="blank">Power Designer</a>
+          </UL>
+          </td>
+        </tr>
+      </table>
+     
+        
+      
+    </div>
+
+
 </fieldset>
 
 
