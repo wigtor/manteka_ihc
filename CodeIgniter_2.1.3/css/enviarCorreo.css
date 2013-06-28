@@ -5,6 +5,7 @@
     line-height: 14px;
     vertical-align: text-top;
     background-repeat: no-repeat;
+    background: url('../img/txt-icon.gif');
     
 }
 
@@ -49,6 +50,8 @@ background: url('../img/ppt.png');
 background: url('../img/ppt.png');
 }
 
+
+
 /*audio*/
 .icon-audio-x-ms-wma {
 background: url('../img/icon-itunes.png');
@@ -56,7 +59,8 @@ background: url('../img/icon-itunes.png');
 .icon-audio-mp3 {
 background: url('../img/icon-itunes.png');
 }
-.icon-video-x-ms-wmv {
+
+.icon-audio-mid {
 background: url('../img/icon-itunes.png');
 }
 /*video*/
@@ -64,6 +68,9 @@ background: url('../img/icon-itunes.png');
 background: url('../img/icon_video16.gif');
 }
 .icon-video-mpeg {
+background: url('../img/icon_video16.gif');
+}
+.icon-video-x-ms-wmv {
 background: url('../img/icon_video16.gif');
 }
 /*TAR*/
