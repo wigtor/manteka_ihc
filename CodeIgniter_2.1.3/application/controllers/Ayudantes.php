@@ -97,9 +97,17 @@ class Ayudantes extends MasterManteka {
 	    
 
 		//Debe estar en un if según lo que contenga $confirmacion
-		$datos_plantilla["titulo_msj"] = "Ayudante creado";
-		$datos_plantilla["cuerpo_msj"] = "El ayudante fue creado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El ayudante fue ingresado con éxito.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar ingresar el ayudante";
+			$datos_plantilla["tipo_msj"] = "alert-error";
+		}
+
 		$datos_plantilla["redirecTo"] = 'Ayudantes/agregarAyudantes';
 		$datos_plantilla["nombre_redirecTo"] = "Agregar ayudante";
 		$datos_plantilla["redirectAuto"] = TRUE;
@@ -158,9 +166,19 @@ class Ayudantes extends MasterManteka {
 
 		$confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
 
-		$datos_plantilla["titulo_msj"] = "Ayudante editado";
-		$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		if($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado con éxito.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar editar el ayudante";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		
+
+
 		$datos_plantilla["redirecTo"] = 'Ayudantes/editarAyudantes';
 		$datos_plantilla["nombre_redirecTo"] = "Editar ayudantes";
 		$datos_plantilla["redirectAuto"] = TRUE;
@@ -209,10 +227,16 @@ class Ayudantes extends MasterManteka {
 		$rut_ayudante = $this->input->post('rutToDelete');
 		$confirmacion = $this->Model_ayudante->EliminarAyudante($rut_ayudante);
 		
-
-		$datos_plantilla["titulo_msj"] = "Ayudante eliminado";
-		$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		if ($confirmacion == 1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado con éxito.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar eliminar el ayudante";
+			$datos_plantilla["tipo_msj"] = "alert-error";
+		}
 		$datos_plantilla["redirecTo"] = 'Ayudantes/borrarAyudantes';
 		$datos_plantilla["nombre_redirecTo"] = "Eliminar ayudantes";
 		$datos_plantilla["redirectAuto"] = TRUE;
