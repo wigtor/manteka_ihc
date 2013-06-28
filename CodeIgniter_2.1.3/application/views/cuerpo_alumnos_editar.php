@@ -323,7 +323,7 @@ function ordenarFiltro(){ //No funcional
 						<div class="control-group">
 							<label class="control-label" for="correoEditar" style="cursor: default">6-.<font color="red">*</font> Correo</label>
 							<div class="controls">
-								<input type="email" placeholder="nombre_usuario@miemail.com" id="correoEditar" class="span12" name="correoEditar" maxlength="199" required>
+								<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" placeholder="nombre_usuario@miemail.com" id="correoEditar" class="span12" name="correoEditar" maxlength="199" required>
 							</div>
 						</div>
 						<div class="control-group">
