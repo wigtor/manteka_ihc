@@ -330,12 +330,11 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 			<div class="row-fluid" style="margin-top: 2%; ">
 
 					<div class="controls pull-right">
-						<button class="btn" type="button"  onclick="eliminarModulo()" style="width: 93px">
-							<i class= "icon-trash"></i>
 
-							&nbsp Borrar
-						</button>
-					
+					<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarModulo()">
+						<i class= "icon-trash"></i>
+						&nbsp; Eliminar
+					</button>
 
 					
 						<button  class ="btn" onclick="Cancelar();return false" style="width: 105px">
