@@ -140,6 +140,25 @@ class Model_sesiones extends CI_Model {
 		}
 		return 1;
 	}
+
+	public function nombreExisteEM($nombre, $codigo){
+		$sql="SELECT * FROM sesion ORDER BY COD_SESION"; 
+		$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+			if($row['COD_SESION']!=$codigo){
+				if( $row['NOMBRE_SESION']==$nombre){
+				$var=1;
+				}
+			}
+			$contador = $contador + 1;
+		}}
+		return $var;
+	}
+
 }
 
 ?>
