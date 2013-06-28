@@ -258,6 +258,7 @@ function ordenarFiltro(){ //No funcional
 			<legend>Editar Alumno</legend>
 			<div class= "row-fluid">
 				<div class="span6">
+					<font color="red">* Campos Obligatorios</font>
 					<div class="controls controls-row">
 						<div class="input-append span7">
 							<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -269,10 +270,9 @@ function ordenarFiltro(){ //No funcional
 			</div>
 			<div class="row-fluid">
 				<div class="span6" >
-					1.-Listado alumnos:
+					1.-Seleccione el alumno a editar:
 				</div>
 				<div class="span6" >
-					<font color="red">* Campos Obligatorios</font><br>
 						<p>Complete los datos del formulario para modificar el alumno</p>
 				</div>
 			</div>
@@ -291,7 +291,7 @@ function ordenarFiltro(){ //No funcional
 						echo form_open('Alumnos/postEditarEstudiante/', $atributos);
 					?>
 						<div class="control-group">
-							<label class="control-label" for="rutEditar" style="cursor: default">1-.<font color="red">*</font>  RUT</label>
+							<label class="control-label" for="rutEditar" style="cursor: default">1-. RUT</label>
 							<div class="controls">
 								<input type="text" id="rutEditar" name="rutEditar" class="span12" readonly>
 							</div>
@@ -309,13 +309,13 @@ function ordenarFiltro(){ //No funcional
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4-.<font color="red">*</font> Apellido paterno</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5-.<font color="red">*</font> Apellido materno</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
 							</div>

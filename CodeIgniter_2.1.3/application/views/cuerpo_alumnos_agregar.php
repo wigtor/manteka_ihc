@@ -169,13 +169,13 @@ function ordenarFiltro(){
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font> Apellido paterno</label>
 						<div class="controls">
 							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido_paterno" name="apellido_paterno" maxlength="19" required>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font> Apellido materno</label>
 						<div class="controls">
 							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido_materno" name="apellido_materno" maxlength="19" required>
 						</div>
@@ -192,7 +192,7 @@ function ordenarFiltro(){
 				<!-- Segunda columna -->
 				<div class="span6" >
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font> Asignar Carrera</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font> Asignar carrera</label>
 						<div class="controls">
 							<select required id="cod_carrera" name="cod_carrera" class="span12" title="asigne carrera" >
 							<?php

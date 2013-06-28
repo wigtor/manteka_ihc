@@ -116,7 +116,7 @@
   							</div>
 		  				</div>	
 						<div class="control-group">
-  							<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font>Telefono:</label>
+  							<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font>Teléfono:</label>
   							<div class="controls">
     							<input id="inputInfo"  class="span12" maxlength="10" minlength="7" type="text" pattern="[0-9]+" title="Ingrese sólo números" name="telefono_profesor" placeholder="Ingrese solo numeros" required>
   							</div>

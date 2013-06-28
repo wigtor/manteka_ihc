@@ -87,7 +87,7 @@
 			</div>
 			<div class="row-fluid">
 				<div class="span6" >
-					1.-Listado alumnos:
+					1.-Seleccione un alumno para ver sus detalles:
 				</div>
 				<div class="span6" >
 					2.-Detalle alumno:

@@ -110,13 +110,20 @@
 <script type="text/javascript">
 	function EditarSala(){
 		var cod = document.getElementById("cod_sala").value;
-		
+		var num = document.getElementById("num_sala").value;
+		var cap = document.getElementById("capacidad").value;
+		var ubi = document.getElementById("ubicacion").value;
 		if(cod==""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
 		else{
-			$('#modalConfirmacion').modal();
+			if(num!="" && cap!="" && ubi!=""){
+				$('#modalConfirmacion').modal();
+			}
+			else{
+				$('#modalFaltanCampos').modal();
+			}
 		}
 	}
 
@@ -287,6 +294,19 @@
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 						</div>
 					</div>	
+											<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 
 				<!--</div>-->
 			</div>

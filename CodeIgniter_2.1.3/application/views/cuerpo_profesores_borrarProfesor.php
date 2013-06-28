@@ -130,7 +130,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado profesores
+			1.-Seleccione el profesor que desea eliminar:
 		</div>
 		<div class="span6" >
 			2.-Detalle profesor:
