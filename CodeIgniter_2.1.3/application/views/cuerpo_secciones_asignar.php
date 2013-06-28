@@ -371,8 +371,8 @@
 						</div>
 
 						<div class="control-group" style="margin-top:5%; margin-left: 35%">
-							<div class="controls">
-								<button class="btn" type="submit" style="width:102px">
+							<div class="controls pull-right">
+								<button class="btn" type="submit" style="width:102px; margin-right: 7px">
 									<div class= "btn_with_icon_solo">Ã</div>
 									&nbsp Asignar
 
