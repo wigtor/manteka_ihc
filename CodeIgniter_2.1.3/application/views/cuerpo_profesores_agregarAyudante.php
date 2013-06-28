@@ -124,13 +124,13 @@ function ordenarFiltro(){
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellido1_ayudante" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+					<label class="control-label" for="apellido1_ayudante" style="cursor: default">4-.<font color="red">*</font> Apellido paterno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido1_ayudante" name="apellido1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="apellido2_ayudante" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+					<label class="control-label" for="apellido2_ayudante" style="cursor: default">5-.<font color="red">*</font> Apellido materno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido2_ayudante" name="apellido2_ayudante" maxlength="20" required>
 					</div>

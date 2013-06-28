@@ -94,6 +94,7 @@
 	<legend>Editar ayudante</legend>
 	<div class="row-fluid">
 		<div class="span6">
+		<font color="red">* Campos Obligatorios</font>
 			<div class="controls controls-row">
 				<div class="input-append span7">
 					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -105,10 +106,9 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado ayudantes
+			1.-Seleccione el ayudante a editar:
 		</div>
 		<div class="span6" >
-			<font color="red">* Campos Obligatorios</font>
 			<p>2.-Complete los datos del formulario para modificar el ayudante:</p>
 		</div>
 	</div>
@@ -127,7 +127,7 @@
 				echo form_open('Ayudantes/EditarAyudante', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font>-.RUT</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">1-. RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar" class="span12" name="rutEditar" readonly>
 					</div>
@@ -145,13 +145,13 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Paterno</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido paterno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellido_paterno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido Materno</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido materno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellido_materno" maxlength="20" required>
 					</div>
