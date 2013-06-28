@@ -181,7 +181,7 @@ Horario:           <b id="horario_asig"></b></pre>
 					</div>
 
 					<div class="control-group">
-						<div class="controls">
+						<div class="controls pull-right">
 						<!--<div class="span3 offset6">-->
 							<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarAsignacion()">
 								<i class= "icon-trash"></i>
