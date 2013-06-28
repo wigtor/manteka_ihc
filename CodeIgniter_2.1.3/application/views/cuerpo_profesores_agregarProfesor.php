@@ -106,13 +106,13 @@
 						<div class="control-group">
 		  					<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo:</label>
 		  					<div class="controls">
-		    					<input type="email" class="span12" name="correo_profesor" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
+		    					<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" class="span12" name="correo_profesor" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
 		  					</div>
 						</div>
 						<div class="control-group">
   							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font>Correo secundario:</label>
   							<div class="controls">
-    							<input type="email" class="span12" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
+    							<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" class="span12" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
   							</div>
 		  				</div>	
 						<div class="control-group">
