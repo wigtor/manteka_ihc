@@ -11,6 +11,9 @@
 		/* Obtengo el código del módulo clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		var codigo_modulo = idElem.substring(prefijo_tipoDato.length, idElem.length);
+		
+		$('#cod_modulo_eliminar').val(codigo_modulo); //Se setea el inputo que almacena el módulo que se tiene seleccionado
+
 
 		var descripcion, cod_equipo, nombre_modulo; //Se setean en el primer ajax
 
@@ -131,43 +134,28 @@
 	}
 
 	function resetModulos(){
-		document.getElementById("nombre_modulo").innerHTML  = "";
-		document.getElementById("descripcion_modulo").innerHTML  = "";
-		document.getElementById("profesor_lider").innerHTML  = "";
-		document.getElementById("cod_modulo_eliminar").innerHTML  = "";
-		document.getElementById("cod_modulo_eliminar").value  = "";
-	
-		var sesiones = document.getElementById("sesiones");
-		$(sesiones).empty();
-		var equipo = document.getElementById("equipo");
-		$(equipo).empty();
-		var profLider = document.getElementById("prof_lider");
-		$(profLider).empty();
-		var requisitos = document.getElementById("requisitos");
-		$(requisitos).empty();
+		$('#nombre_modulo').html("");
+		$('#descripcion_modulo').html("");
+		$('#profesor_lider').html("");
+		$('#cod_modulo_eliminar').val("");
+		$('#sesiones tbody').remove();
+		$('#equipo tbody').remove();
+		$('#prof_lider tbody').remove();
+		$('#requisitos tbody').remove();
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('#listadoResultados tbody tr').removeClass('highlight');
 		
 		return false;
 	}
 
 	function eliminarModulo(){
-		if(document.getElementById("cod_modulo_eliminar").value == ""){
-			
+		if($('#cod_modulo_eliminar').val() == ""){
 			$('#modalSeleccioneAlgo').modal();
 		}
 		else{
 			$('#modalConfirmacion').modal();
 		}
-		/*var answer = confirm("¿Está seguro de eliminar este módulo?")
-		if (!answer){
-			return false;
-		}
-		else{
-
-		var borrar = document.getElementById("FormBorrar");
-		borrar.action ="<?php echo site_url("Modulos/hacerBorrarModulos/");?>"
-		borrar.submit();
-		}*/
-
 	}
 
 	//Se cargan por ajax
@@ -179,7 +167,7 @@
 </script>
 
 		<fieldset>
-			<legend>Ver Módulo</legend>
+			<legend>Borrar Módulo</legend>
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="controls controls-row">
