@@ -1,30 +1,4 @@
 
-<?php
-	if($mensaje_confirmacion != 2)	{
-		if($mensaje_confirmacion==-1){
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-   			 <h4>Error</h4>
-				 Error al eliminar módulo
-    		</div>		
-
-		<?php
-		}
-		else if($mensaje_confirmacion==1)
-		{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>	 
-				 Módulo eliminado correctamente
-    		</div>		
-
-		<?php
- 		}
- 
-}
-?>
 
 <script>
 	function Cancelar(){
@@ -214,11 +188,13 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 <script type="text/javascript">
 	function eliminarModulo(){
 		if(document.getElementById("cod_modulo_eliminar").value == ""){
-			alert("Debe seleccionar un módulo");
-			return false;
+			
+			$('#modalSeleccioneAlgo').modal();
 		}
-
-		var answer = confirm("¿Está seguro de eliminar este módulo?")
+		else{
+			$('#modalConfirmacion').modal();
+		}
+		/*var answer = confirm("¿Está seguro de eliminar este módulo?")
 		if (!answer){
 			return false;
 		}
@@ -227,7 +203,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 		var borrar = document.getElementById("FormBorrar");
 		borrar.action ="<?php echo site_url("Modulos/hacerBorrarModulos/");?>"
 		borrar.submit();
-		}
+		}*/
 
 	}
 
@@ -236,7 +212,11 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 
 	<fieldset>
 		<legend>Borrar Módulo</legend>
-		<form id="FormBorrar" type="post" onsubmit="eliminarModulo();return false" method="post">
+		<!--<form id="FormBorrar" type="post" onsubmit="eliminarModulo();return false" method="post">-->
+		<?php
+			$atributos= array('onsubmit' => 'return eliminarModulo()', 'id' => 'FormBorrar');
+			echo form_open('Modulos/hacerBorrarModulos/', $atributos);
+		?>
 			
 	  		<div class="row-fluid">
 				<div class="span6">
@@ -350,7 +330,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 			<div class="row-fluid" style="margin-top: 2%; ">
 
 					<div class="controls pull-right">
-						<button class="btn" type="submit" style="width: 93px">
+						<button class="btn" type="button"  onclick="eliminarModulo()" style="width: 93px">
 							<i class= "icon-trash"></i>
 
 							&nbsp Borrar
@@ -365,9 +345,40 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 					</div>
 
 			</div>
+
+			<!-- Modal de Confirmación -->
+			<div id="modalConfirmacion" class="modal hide fade">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3>Confirmación</h3>
+				</div>
+				<div class="modal-body">
+					<p>Se va a eliminar un módulo ¿Está seguro?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+					<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+					
+				</div>
+			</div>
+
+			<!-- Modal de seleccionaAlgo -->
+			<div id="modalSeleccioneAlgo" class="modal hide fade">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3>No ha seleccionado ningun módulo</h3>
+				</div>
+				<div class="modal-body">
+					<p>Por favor seleccione un módulo y vuelva a intentarlo</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+
 			
 		</div>
 	    </div>
-
-		</form>
+	    <?php echo form_close(''); ?>
+		<!--</form>-->
 	</fieldset>
