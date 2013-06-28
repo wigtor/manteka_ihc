@@ -270,7 +270,7 @@ function ordenarFiltro(){ //No funcional
 			</div>
 			<div class="row-fluid">
 				<div class="span6" >
-					1.-Seleccione el alumno a editar:
+					1.- Seleccione el alumno a editar:
 				</div>
 				<div class="span6" >
 						<p>Complete los datos del formulario para modificar el alumno</p>
@@ -291,43 +291,43 @@ function ordenarFiltro(){ //No funcional
 						echo form_open('Alumnos/postEditarEstudiante/', $atributos);
 					?>
 						<div class="control-group">
-							<label class="control-label" for="rutEditar" style="cursor: default">1-. RUT</label>
+							<label class="control-label" for="rutEditar" style="cursor: default">1.- RUT</label>
 							<div class="controls">
 								<input type="text" id="rutEditar" name="rutEditar" class="span12" readonly>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="nombreunoEditar" style="cursor: default">2-.<font color="red">*</font> Primer nombre</label>
+							<label class="control-label" for="nombreunoEditar" style="cursor: default">2.- <font color="red">*</font> Primer nombre</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombreunoEditar" name="nombreunoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="nombredosEditar" style="cursor: default">3-. Segundo nombre</label>
+							<label class="control-label" for="nombredosEditar" style="cursor: default">3.- Segundo nombre</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombredosEditar" name="nombredosEditar" maxlength="19" >
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4-.<font color="red">*</font> Apellido paterno</label>
+							<label class="control-label" for="apellidopaternoEditar" style="cursor: default">4.- <font color="red">*</font> Apellido paterno</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellidopaternoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5-.<font color="red">*</font> Apellido materno</label>
+							<label class="control-label" for="apellidomaternoEditar" style="cursor: default">5.- <font color="red">*</font> Apellido materno</label>
 							<div class="controls">
 								<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellidomaternoEditar" maxlength="19" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="correoEditar" style="cursor: default">6-.<font color="red">*</font> Correo</label>
+							<label class="control-label" for="correoEditar" style="cursor: default">6.- <font color="red">*</font> Correo</label>
 							<div class="controls">
 								<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" placeholder="nombre_usuario@miemail.com" id="correoEditar" class="span12" name="correoEditar" maxlength="199" required>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font> Asignar sección</label>
+							<label class="control-label" for="inputInfo" style="cursor: default">7.- <font color="red">*</font> Asignar sección</label>
 							<div class="controls">
 								<input type="text" onkeyup="ordenarFiltro2()" id="filtroSeccion" class="span12" placeholder="Filtro de Sección">
 							</div>

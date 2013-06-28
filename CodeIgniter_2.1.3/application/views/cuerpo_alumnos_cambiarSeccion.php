@@ -125,7 +125,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6"> 
-							1.-Seleccione una sección:
+							1.- Seleccione una sección:
 								<br>
 								<br>
 								<br>
@@ -207,7 +207,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6"> 
-							2.-Seleccione una segunda sección:
+							2.- Seleccione una segunda sección:
 							
 								<br>
 								<br>
