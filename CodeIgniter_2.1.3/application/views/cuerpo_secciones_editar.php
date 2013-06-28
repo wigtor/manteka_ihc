@@ -76,8 +76,11 @@
 				}
 				else{
 					if(letra!="" && num!=""){
-					alert(document.getElementById("cod_seccion").value+" y "+document.getElementById("rs_seccion").value+"y "+document.getElementById("rs_seccion2").value);
+					//alert(document.getElementById("cod_seccion").value+" y "+document.getElementById("rs_seccion").value+"y "+document.getElementById("rs_seccion2").value);
 					$('#modalConfirmacion').modal();
+					// en caso de que se presione cancelar se quita el icono de cargando
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
 					return;				
 				}
 					else{$('#modalFaltanCampos').modal();}
