@@ -49,7 +49,7 @@
     	<img src="/<?php echo config_item('dir_alias') ?>/img/about_img/php1oWgkVPM.jpg">
         <div class="carousel-caption" align="left">
          <h4>Grupo 4</h4>
-         <p>....</p>
+         <p>Encargados de modelar, manejar e implementar el almacenamiento de los datos manejados por el sistema, con el fin de que puedan ser accedidos por las diversas funcionalidades de MANTEKA. Responsables de desarrollar los mantenedores de docencia, secciones, planificación, salas y alumnos.</p>
          <p style="font-size:xx-small;">(En la fotografía, arriba de izquierda a derecha: Daniel Quinteros, Felipe Piñeiro, Marco Acevedo, Cristian Cornejo. Abajo de izquierda a derecha: Aileen Esparza, Diego Escobar, Juan Vargas)</p>
         </div> 
     </div>
