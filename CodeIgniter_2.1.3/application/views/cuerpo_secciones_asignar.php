@@ -220,7 +220,7 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">1-.<font color="red">*</font> Seleccione la sección para asignación</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">1.- <font color="red">*</font> Seleccione la sección para asignación</label>
 							</div>
 						</div>
 					</div>
@@ -255,7 +255,7 @@
 					<div class="row-fluid" style="margin-top:7%">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">3-.<font color="red">*</font> Seleccione el profesor disponible del módulo</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">3.- <font color="red">*</font> Seleccione el profesor disponible del módulo</label>
 							</div>
 						</div>
 					</div>
@@ -280,7 +280,7 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">2-.<font color="red">*</font> Seleccione el módulo a asignar</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">2.- <font color="red">*</font> Seleccione el módulo a asignar</label>
 							</div>
 						</div>
 					</div>
@@ -314,17 +314,17 @@
 					<div class="row-fluid" style="margin-top:2%">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">4-.<font color="red">*</font> Seleccione la sala y horario</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">4.- <font color="red">*</font> Seleccione la sala y horario</label>
 							</div>
 						</div>
 					</div>
 
 					<div class="row-fluid" style="margin-left:3%">
 						<div class="span6" >
-							4.1- Sala
+							4.1.- Sala
 						</div>
 						<div class="span6" >
-							4.2- Horario
+							4.2.- Horario
 						</div>
 					</div>
 
