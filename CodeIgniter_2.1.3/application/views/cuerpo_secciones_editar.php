@@ -20,7 +20,7 @@
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Secciones/postDetallesSeccion") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Secciones/postDetalleUnaSeccion") ?>", /* Se setea la url del controlador que responderá */
 			data: { seccion: cod_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */
