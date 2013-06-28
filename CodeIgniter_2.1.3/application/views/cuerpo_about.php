@@ -79,6 +79,48 @@
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
+
+
+<div id="textAbout" align="center">
+      <p>Para la creación de MANTEKA fueron utilizadas las siguientes tecnologías y herramientas: </p>
+      <table>
+        <tr>
+          <td>
+          <UL type = disk >
+            <LI><a href="http://ellislab.com/codeigniter" target="blank">CodeIgniter</a>
+            <LI><a href="http://twitter.github.io/bootstrap/" target="blank">Bootstrap</a>
+            <LI><a href="http://www.w3schools.com/js/" target="blank">JavaScript</a>
+          </UL>
+          </td>
+          <td>
+          <UL type = disk >
+            <LI><a href="http://www.w3schools.com/ajax/" target="blank">AJAX</a>
+            <LI><a href="http://jquery.com/" target="blank">jQuery</a>
+            <LI><a href="http://www.json.org/" target="blank">JSON</a>
+          </UL>
+          </td>
+          <td>
+          <UL type = disk >
+            <LI><a href="http://www.wampserver.com/" target="blank">WAMP</a>
+            <LI><a href="http://community.jaspersoft.com/project/jasperreports-library" target="blank">JasperReports</a>
+            <LI><a href="http://www.sublimetext.com/2" target="blank">Sublime Text 2</a>
+          </UL>
+          </td>
+          <td>
+          <UL type = disk >
+            <LI><a href="https://github.com/" target="blank">GitHub</a>
+            <LI><a href="http://dev.mysql.com/downloads/" target="blank">MySQL</a>
+            <LI><a href="http://www.sybase.com/products/modelingdevelopment/powerdesigner" target="blank">Power Designer</a>
+          </UL>
+          </td>
+        </tr>
+      </table>
+     
+        
+      
+    </div>
+
+
 </fieldset>
 
 
