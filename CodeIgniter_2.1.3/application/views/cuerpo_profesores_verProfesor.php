@@ -42,7 +42,7 @@
 					datos.correo2 = '';
 				}
 				if (datos.moduloTem == null) {
-					datos.moduloTem = '';
+					datos.moduloTem = 'Sin asignación';
 				}
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
@@ -55,7 +55,7 @@
 				$(correoDetalle).html($.trim(datos.correo));
 				$(correoDetalle2).html($.trim(datos.correo2));
 				$(tipoDetalle).html($.trim(datos.tipo));
-				
+				$(moduloTematicoDetalle).html($.trim(datos.moduloTem));
 
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -95,10 +95,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado profesores
+			1.- Seleccione un profesor para ver sus detalles:
 		</div>
 		<div class="span6" >
-			2.-Detalle profesor:
+			2.- Detalle profesor:
 		</div>
 	</div>
 	<div class="row-fluid">

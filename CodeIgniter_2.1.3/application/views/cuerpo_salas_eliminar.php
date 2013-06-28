@@ -158,10 +158,10 @@ if(isset($mensaje_confirmacion))
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado salas
+			1.- Seleccione la sala que desea eliminar:
 		</div>
 		<div class="span6" >
-			2.-Detalle de la Sala:
+			2.- Detalle de la Sala:
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -186,11 +186,10 @@ if(isset($mensaje_confirmacion))
 Número sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicación:      <b id="ubicacion"></b>
-Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div>
-			</pre>
+Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div></pre>
 			
 			<div class="control-group" style="text-align: right">
-					<button type="button" class="btn" onclick="eliminarSala()">
+					<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarSala()">
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
 					</button>

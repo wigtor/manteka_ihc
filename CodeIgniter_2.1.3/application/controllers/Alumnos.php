@@ -117,12 +117,12 @@ class Alumnos extends MasterManteka {
 	
 		// mostramos el mensaje de operacion realizada
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha borrado el alumno con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación en base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
@@ -267,12 +267,12 @@ class Alumnos extends MasterManteka {
 		$confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
 		
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha actualizado el alumno con éxito";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha editado el alumno con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la actualización de la base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
@@ -334,12 +334,12 @@ class Alumnos extends MasterManteka {
 		}
 		//echo count($lista_seleccionados);
 		if($confirmacion != 1){
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar cambiar de sección";
 			$datos_plantilla["tipo_msj"] = "alert-error";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha cambiado de sección correctamente";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 	
@@ -465,23 +465,37 @@ class Alumnos extends MasterManteka {
 		{
 			$data = array('upload_data' => $this->upload->data());
 
-			$datos_vista = $data;
+			
 			$datos = $data['upload_data'];
 			$nombre_archivo = $datos['full_path'];
 
 			//falta valida aqui el archivo
 
 			$this->load->model('Model_estudiante');
+			$stack = array();
+			$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo);
+			
+			if ($stack !== FALSE) {
+			
+			
 
-			if(($this->Model_estudiante->cargaMasiva($nombre_archivo)) !== TRUE){
-
-					$datos_vista = array('error' => 'Los datos del archivo son erroneos');
-
-					$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-				exit();
-
+			if(count($stack) != 0) {
+			$datos_vista = array(
+				'error' => 'Su archivo se ha cargado sin las siguientes filas erroneas.',
+				'filas' => $stack,
+				);
+			} else  {
+				$datos_vista = array(
+				'error' => 'Su archivo se ha cargado exitosamente.',
+				);
 			}
+		}else{
+			$datos_vista = array(
+				'error' => 'Error, el archivo no tiene el formato correcto.',
+				);
+
+		}
+
 
 			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
