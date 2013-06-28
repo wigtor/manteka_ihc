@@ -222,7 +222,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span7">
-							1. Escoja un módulo de la lista
+							1.- Seleccione el módulo temático que desea eliminar:
 						</div>
 					</div>
 
@@ -253,7 +253,7 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 		<div class="span6" style="margin-left: 2%; padding: 0%;  ">
 			<div class="row-fluid">
 				<div class="span7">
-					2. Detalle módulo temático
+					2.- Detalle módulo temático
 				</div>
 			</div>
 			<div class ="row-fluid" style="">
@@ -266,7 +266,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 			</div>
 			<div class="row-fluid">
 				<div class="span7">
-					3. Sesiones del módulo temático
+					3.- Sesiones del módulo temático
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -285,7 +285,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 			<div class="row-fluid">
 				<div class="row-fluid" style="margin-top:2%">
 						<div class="span7">
-							4. Profesores del módulo temático
+							4.- Profesores del módulo temático
 						</div>
 				</div>
 			</div>
@@ -308,7 +308,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 			<div class="row-fluid">
 				<div class="row-fluid" style="margin-top:2%">
 						<div class="span7">
-							5. Requisitos del módulo temático
+							5.- Requisitos del módulo temático
 						</div>
 				</div>
 			</div>

@@ -126,7 +126,7 @@ function ordenarFiltro(numeroLista){
 			<form   id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
 			<div class="row-fluid">
 				<div class="span6">
-					<font color="red">*Campos Obligatorios</font>
+					<font color="red">* Campos Obligatorios</font>
 				</div>
 			</div>	
 	  		<div class="row-fluid">
@@ -137,7 +137,7 @@ function ordenarFiltro(numeroLista){
 						<div class="span12">
 								<div class="span4">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">1-.<font color="red">*</font>Nombre módulo</label>
+										<label  class="control-label" for="inputInfo">1.- <font color="red">*</font> Nombre módulo</label>
 									</div>
 								</div>
 								<!--<div class="span7">-->	
@@ -154,7 +154,7 @@ function ordenarFiltro(numeroLista){
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
-									<label  class="control-label" for="inputInfo">2-.<font color="red">*</font>Agregar sesiones existentes</label>
+									<label  class="control-label" for="inputInfo">2.- <font color="red">*</font> Agregar sesiones existentes</label>
 								</div>
 							</div>
 						</div>
@@ -195,7 +195,7 @@ function ordenarFiltro(numeroLista){
 						<div class="span12">
 								<div class="span7">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">3-.<font color="red">*</font>Ingrese una descripción del módulo</label>
+										<label  class="control-label" for="inputInfo">3.- <font color="red">*</font> Ingrese una descripción del módulo</label>
 									</div>
 								</div>
 								
@@ -214,7 +214,7 @@ function ordenarFiltro(numeroLista){
 						<div class= "row-fluid">
 							<div class="span10" style="margin-top:2%">
 								<div class="control-group">
-									<label  class="control-label" for="inputInfo">4-.Agregar requisitos existentes</label>
+									<label  class="control-label" for="inputInfo">4.- Agregar requisitos existentes</label>
 								</div>
 							</div>
 						</div>
@@ -256,7 +256,7 @@ function ordenarFiltro(numeroLista){
 			<div class="row-fluid"> 
 				<div class="span5">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo">5-.<font color="red">*</font>Asignar profesor lider</label>
+						<label class="control-label" for="inputInfo">5.- <font color="red">*</font> Asignar profesor lider</label>
 					</div>
 				</div>
 				<div  class="span6" >	
@@ -308,7 +308,7 @@ function ordenarFiltro(numeroLista){
 			<div class="row-fluid"> 
 				<div class="span5">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo">6-.<font color="red">*</font>Asignar equipo profesores</label>
+						<label class="control-label" for="inputInfo">6.- <font color="red">*</font> Asignar equipo profesores</label>
 					</div>
 				</div>
 				<div  class="span6" style="margin-top:6%" >	

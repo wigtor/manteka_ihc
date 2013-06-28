@@ -160,7 +160,6 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 
 
 </script>
-
 		<fieldset>
 			<legend>Ver Módulo</legend>
 			<div class="row-fluid">
@@ -173,16 +172,14 @@ function detalleModulo(codigo_modulo,descripcion,cod_equipo,nombre_modulo){
 					</div>
 				</div>
 			</div>
-			
 	  		<div class="row-fluid">
 				<div class="span6">
-					1. Escoja un módulo de la lista
+					1.- Seleccione un módulo temático para ver sus detalles:
 				</div>
 				<div class="span6">
-					2. Detalle módulo temático
+					2.- Detalle módulo temático
 				</div>
 			</div>
-
 			<div class="row-fluid" >
 				<div class="span6" style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
 					<table id="modulos" class="table table-hover">
@@ -208,7 +205,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					<div class="row-fluid">
 					
 						<div class="span7">
-							3. Sesiones del módulo temático
+							3.- Sesiones del módulo temático
 						</div>
 						
 					</div>
@@ -216,11 +213,8 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >																		
 								<table id="sesiones" class="table table-hover">
 									<thead>
-
 									</thead>
-									<tbody>									
-												
-														
+									<tbody>					
 									</tbody>
 								</table>
 						</div>
@@ -228,7 +222,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					<div class="row-fluid">
 						<div class="row-fluid" style="margin-top:2%">
 								<div class="span7">
-									4. Profesores del módulo temático
+									4.- Profesores del módulo temático
 								</div>
 						</div>
 					</div>
@@ -251,7 +245,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 					<div class="row-fluid">
 						<div class="row-fluid" style="margin-top:2%">
 								<div class="span7">
-									5. Requisitos del módulo temático
+									5.- Requisitos del módulo temático
 								</div>
 						</div>
 					</div>
@@ -262,9 +256,7 @@ Descripción módulo: <b id="descripcion_modulo"></b>
 									<thead>
 
 									</thead>
-									<tbody>									
-												
-														
+									<tbody>				
 									</tbody>
 								</table>
 						</div>
