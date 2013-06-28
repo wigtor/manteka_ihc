@@ -5,9 +5,7 @@
 		var letra = document.getElementById("rs_seccion").value;
 		var num = document.getElementById("rs_seccion2").value;
 		var resultadoAjax =false;
-
 		$.ajax({
-		
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Secciones/secExiste") ?>", /* Se setea la url del controlador que responderá */
 			data: { letra_post:letra,num_post: num},
@@ -16,31 +14,21 @@
 				//$(tablaResultados).empty();
 				var existe = jQuery.parseJSON(respuesta);
 				if(existe == 1){
-
-					resultadoAjax =false;alert(resultadoAjax);
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalSeccionExiste').modal();
 					document.getElementById("rs_seccion").value = "";
-				document.getElementById("rs_seccion2").value = "";
 				}
-				
-				else{resultadoAjax =true;alert(resultadoAjax);}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
 				}
-				
 		});
 
-	
-
-		if (resultadoAjax == false) {
-				var mensaje = document.getElementById("mensaje");
-				$(mensaje).empty();
-				$('#modalSeccionExiste').modal();
-				document.getElementById("rs_seccion").value = "";
-				document.getElementById("rs_seccion2").value = "";
-				return false;
-		}
-		else {
-			return true;
-		}
-			var iconoCargado = document.getElementById("icono_cargando");
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 	}
 </script>
@@ -80,7 +68,7 @@
 				</div>
 				<div class="control-group">
 					<div class="controls ">
-						<button class="btn" type="submit">
+						<button class="btn" type="button" onClick="comprobarSeccion()">
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Agregar
 						</button>
