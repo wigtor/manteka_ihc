@@ -356,6 +356,52 @@ class Modulos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	
+	/**
+	* Se buscan módulos de forma asincrona para mostrarlos en la vista
+	*
+	**/
+	public function postBusquedaModulos() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		
+		$this->load->model('Model_modulo');
+		$resultado = $this->Model_modulo->getModulosByFilter($textoFiltro, $textoFiltrosAvanzados);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('model_busquedas');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'modulos', $this->session->userdata('rut'));
+			
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'modulos', $this->session->userdata('rut'));
+			}
+			
+		}
+		echo json_encode($resultado);
+	}
+
+	/**
+	* Método que responde a una solicitud de post para pedir los datos de un módulo temático
+	* Recibe como parámetro el código del módulo temático
+	*/
+	public function postDetallesModulo() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod = $this->input->post('cod_modulo');
+		$this->load->model('Model_modulo');
+		$resultado = $this->Model_modulo->getDetallesModulo($cod);
+		echo json_encode($resultado);
+	}
 
 }
 
