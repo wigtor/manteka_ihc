@@ -353,9 +353,9 @@ class Correo extends MasterManteka {
 		}
 		if($variableRemitente > 0)
 		{
-			$this->load->model('Model_usuario');
+			$this->load->model('model_usuario');
 			$modeloUsuarioCargado=true;
-			$remitente=$this->Model_usuario->datos_usuario($rut);
+			$remitente=$this->model_usuario->datos_usuario($rut);
 			$remitente=trim($remitente->nombre1).' '.trim($remitente->apellido1);
 			$asunto=str_replace('%%remitente', $remitente, $asunto);
 			$mensaje=str_replace('%%remitente', $remitente, $mensaje);
@@ -392,6 +392,8 @@ class Correo extends MasterManteka {
 			$hayCoordinadores=false;
 			$hayAyudantes=false;
 			$hayOtroTipoDestinatario=false;
+			if(!$modeloUsuarioCargado)
+				$this->load->model('model_usuario');
 			foreach($receptores as $receptor)
 			{
 				$estudiante=$this->model_correo->getRutEst($receptor);
@@ -401,7 +403,7 @@ class Correo extends MasterManteka {
 					$hayEstudiantes=true;
 				else if($user != 0)
 				{
-					$usuario=$this->Model_usuario->datos_usuario($receptor);
+					$usuario=$this->model_usuario->datos_usuario($receptor);
 					if($usuario->ID_TIPO == 1)
 						$hayProfesores=true;
 					else
