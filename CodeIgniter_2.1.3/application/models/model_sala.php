@@ -66,11 +66,15 @@ class Model_sala extends CI_Model {
 		if($cod_sala==""){ return 2;}
 		else{
 		
-		$sql="DELETE FROM sala_implemento WHERE COD_SALA = '$cod_sala' "; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="DELETE FROM sala_implemento WHERE COD_SALA = '$cod_sala' "; //código MySQL
+		$this->db->where('COD_SALA', $cod_sala);
+		$datos=$this->db->delete('sala_implemento');
+		//$datos=mysql_query($sql); //enviar código MySQL
 		
-		$sql1="DELETE FROM sala WHERE COD_SALA = '$cod_sala' "; //código MySQL
-		$datos1=mysql_query($sql1); //enviar código MySQL
+		//$sql1="DELETE FROM sala WHERE COD_SALA = '$cod_sala' "; //código MySQL
+		$this->db->where('COD_SALA', $cod_sala);
+		$datos1=$this->db->delete('sala');
+		//$datos1=mysql_query($sql1); //enviar código MySQL
 
 
 		if($datos == true && $datos1==true){
@@ -97,15 +101,22 @@ class Model_sala extends CI_Model {
 	*/
 	public function VerTodosLosImplementos()
 	{
-		$sql="SELECT * FROM implemento ORDER BY NOMBRE_IMPLEMENTO"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM implemento ORDER BY NOMBRE_IMPLEMENTO"; //código MySQL
+		$this->db->select('*');
+		$this->db->from('implemento');
+		$this->db->order_by("NOMBRE_IMPLEMENTO", "asc");
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['COD_IMPLEMENTO'];
-			$lista[$contador][1] = $row['NOMBRE_IMPLEMENTO'];
-			$lista[$contador][2] = $row['DESCRIPCION_IMPLEMENTO'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista[$contador]=array();
+			$lista[$contador][0] = $row->COD_IMPLEMENTO;
+			$lista[$contador][1] = $row->NOMBRE_IMPLEMENTO;
+			$lista[$contador][2] = $row->DESCRIPCION_IMPLEMENTO;
 			$contador = $contador + 1;
 		}}
 
@@ -122,21 +133,33 @@ class Model_sala extends CI_Model {
 	*/
 	public function VerTodosLosImplementosSala()
 	{
-		$sql="SELECT * FROM sala_implemento "; //código MySQL
-		$datos1=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM sala_implemento "; //código MySQL
+		$this->db->select('*');
+		$this->db->from('sala_implemento');
+		$query=$this->db->get();
+		$datos1=$query->result();
+		//$datos1=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
 		if (false != $datos1) {
-		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
-			$cod=$row1['COD_IMPLEMENTO'];
-			$sql1="SELECT * FROM implemento WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
-			$datos=mysql_query($sql1); //enviar código MySQL
+		//while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+		foreach ($datos1 as $row1 ) {
+			$cod=$row1->COD_IMPLEMENTO;
+			//$sql1="SELECT * FROM implemento WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
+			$this->db->select('*');
+			$this->db->from('implemento');
+			$this->db->where('COD_IMPLEMENTO', $cod);
+			$query=$this->db->get();
+			$datos=$query->result();
+			//$datos=mysql_query($sql1); //enviar código MySQL
 			if (false != $datos) {
-			while ($row=mysql_fetch_array($datos)) {
-				$lista[$contador][0] = $row1['COD_SALA'];
-				$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
-				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
-				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
+			//while ($row=mysql_fetch_array($datos)) {
+			foreach ($datos as $row) {
+				$lista[$contador]=array();
+				$lista[$contador][0] = $row1->COD_SALA;
+				$lista[$contador][1] = $row1->COD_IMPLEMENTO;
+				$lista[$contador][2] = $row->NOMBRE_IMPLEMENTO;
+				$lista[$contador][3] = $row->DESCRIPCION_IMPLEMENTO;
 			}}
 			$contador++;
 		}}
@@ -155,21 +178,35 @@ class Model_sala extends CI_Model {
 	*/
 	public function ImplementosParticulares($cod_sala)
 	{
-		$sql="SELECT * FROM sala_implemento WHERE COD_SALA ='$cod_sala' "; //código MySQL
-		$datos1=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM sala_implemento WHERE COD_SALA ='$cod_sala' "; //código MySQL
+		$this->db->select('*');
+		$this->db->from('sala_implemento');
+		$this->db->where('COD_SALA', $cod_sala);
+		$query=$this->db->get();
+		$datos1=$query->result();
+		//$datos1=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
 		if (false != $datos1) {
-		while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
-			$cod=$row1['COD_IMPLEMENTO'];
-			$sql1="SELECT * FROM implemento WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
-			$datos=mysql_query($sql1); //enviar código MySQL
+		//while ($row1=mysql_fetch_array($datos1)) { //Bucle para ver todos los registros
+		foreach ($datos1 as $row1) {
+			
+			$cod=$row1->COD_IMPLEMENTO;
+			//$sql1="SELECT * FROM implemento WHERE COD_IMPLEMENTO = '$cod'"; //código MySQL
+			$this->db->select('*');
+			$this->db->from('implemento');
+			$this->db->where('COD_IMPLEMENTO', $cod);
+			$query=$this->db->get();
+			$datos=$query->result();
+			//$datos=mysql_query($sql1); //enviar código MySQL
 			if (false != $datos) {
-			while ($row=mysql_fetch_array($datos)) {
-				$lista[$contador][0] = $row1['COD_SALA'];
-				$lista[$contador][1] = $row1['COD_IMPLEMENTO'];
-				$lista[$contador][2] = $row['NOMBRE_IMPLEMENTO'];
-				$lista[$contador][3] = $row['DESCRIPCION_IMPLEMENTO'];
+			//while ($row=mysql_fetch_array($datos)) {
+			foreach ($datos as $row) {
+				$lista[$contador]=array();
+				$lista[$contador][0] = $row1->COD_SALA;
+				$lista[$contador][1] = $row1->COD_IMPLEMENTO;
+				$lista[$contador][2] = $row->NOMBRE_IMPLEMENTO;
+				$lista[$contador][3] = $row->DESCRIPCION_IMPLEMENTO;
 			}}
 			$contador++;
 		}}
