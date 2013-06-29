@@ -44,23 +44,10 @@ class Carreras extends CI_Controller {
 		$this->load->view('templates/template_general', $datos_plantilla);
 	}
     
-    public function crearCarreras()
-    {
-    	//
-    }
-    
-    public function modificarCarreras()
-    {
-    	//
-    }
 
-    public function eliminarCarreras()
-    {
-    	//
-    }
 
 
 }
 
-/* End of file Correo.php */
-/* Location: ./application/controllers/Correo.php */
+/* End of file Carreras.php */
+/* Location: ./application/controllers/Carreras.php */
