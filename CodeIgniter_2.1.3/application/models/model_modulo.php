@@ -660,10 +660,10 @@ class Model_modulo extends CI_Model {
 	* @return Se devuelve un array de objetos modulos
 	* @author Alex Ahumada
 	*/
-    public function getModulosByFilter($texto, $textoFiltrosAvanzados)
-   	{
-   		$this->db->select('NOMBRE_MODULO AS nombre');
-   		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+	public function getModulosByFilter($texto, $textoFiltrosAvanzados)
+	{
+		$this->db->select('NOMBRE_MODULO AS nombre');
+		$this->db->select('DESCRIPCION_MODULO AS descripcion');
 		$this->db->select('COD_MODULO_TEM AS id');
 		$this->db->order_by('NOMBRE_MODULO', 'asc');
 

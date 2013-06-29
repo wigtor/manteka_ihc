@@ -98,7 +98,7 @@
 				</div>
 				<div id="collapseOne" class="accordion-body collapse <?php echo $inCorreos; ?>">
 					<div class="accordion-inner nav nav-list">
-						<li <?php echo $correosRecibidos; ?> ><a href="<?php echo site_url("Correo/correosRecibidos")?>">Correos recibidos<?php echo $mensajesNoLeidos ?></a></li>
+						<li <?php echo $correosRecibidos; ?> ><a href="<?php echo site_url("Correo/correosRecibidos")?>">Correos recibidos <span id="botonLateralCorreosRecibidos"><?php echo $mensajesNoLeidos ?></span></a></li>
 						<li <?php echo $correosEnviados; ?> ><a href="<?php echo site_url("Correo/correosEnviados")?>">Correos enviados</a></li>
 						<li <?php echo $enviarCorreo; ?> ><a href="<?php echo site_url("Correo/enviarCorreo")?>">Enviar correo</a></li>
 						<li <?php echo $verBorradores; ?> ><a href="<?php echo site_url("Correo/verBorradores")?>">Ver borradores</a></li>
