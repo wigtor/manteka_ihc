@@ -43,14 +43,20 @@
 			$Reportes = 'class="active"';
 		}
 
-
+		
+		$mensajesNoLeidos = "";
+		if (isset($numNoLeidos)) {
+			if ($numNoLeidos > 0) {
+				$mensajesNoLeidos = " (".$numNoLeidos.")";
+			}
+		}
 ?>
 
 	<div class="navbar pull-right">
 		<div class="navbar-inner" style="margin-left:0px;">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos</a>
+					<a class="btn_with_icon" href="<?php echo site_url("Correo/index") ?>">M Correos<?php echo $mensajesNoLeidos ?></a>
 				</li>
 				<li <?php echo $Docentes;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docencia</a>

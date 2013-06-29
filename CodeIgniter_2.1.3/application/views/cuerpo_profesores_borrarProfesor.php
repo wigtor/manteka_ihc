@@ -34,7 +34,6 @@
 				var correoDetalle = document.getElementById("correoDetalle");
 				var tipoDetalle = document.getElementById("tipoDetalle");
 				var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
-				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 				if (datos.nombre2 == null) {
@@ -44,7 +43,7 @@
 					datos.correo2 = '';
 				}
 				if (datos.moduloTem == null) {
-					datos.moduloTem = '';
+					datos.moduloTem = 'Sin asignación';
 				}
 
 
@@ -131,10 +130,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado profesores
+			1.- Seleccione el profesor que desea eliminar:
 		</div>
 		<div class="span6" >
-			2.-Detalle profesor:
+			2.- Detalle profesor:
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -166,7 +165,7 @@ Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 		<input name="rutEliminar" type="hidden" id="rutEliminar" value="">
 			<div class="control-group">
 				<div class="controls pull-right">
-					<button type="button" class="btn" onclick="eliminarProfesor()">
+					<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarProfesor()">
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
 					</button>
@@ -183,7 +182,7 @@ Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 							<h3>Confirmación</h3>
 						</div>
 						<div class="modal-body">
-							<p>Se va a eliminar el profesor ¿Está seguro?</p>
+							<p style="font-weight: normal">Se va a eliminar el profesor ¿Está seguro?</p>
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
@@ -198,7 +197,7 @@ Módulo temático:  <b id="moduloTematicoDetalle"></pre>
 							<h3>No ha seleccionado un profesor</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor seleccione un profesor y vuelva a intentarlo</p>
+							<p style="font-weight: normal">Por favor seleccione un profesor y vuelva a intentarlo</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

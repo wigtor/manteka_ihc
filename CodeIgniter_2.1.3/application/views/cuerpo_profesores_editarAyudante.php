@@ -8,11 +8,23 @@
 
 	function editarAyudante(){
 		rutAEditar = $("#rutEditar").val();
+		nombre1 = $("#nombreunoEditar").val();
+		nombre2 = $("#nombredosEditar").val();
+		apellido1 = $("#apellidopaternoEditar").val();
+		apellido2 = $("#apellidomaternoEditar").val();
+		correo = $("#correoEditar").val();
+
 		if(rutAEditar == ""){
 			$('#modalSeleccioneAlgo').modal();
 			return;
 		}
-		$('#modalConfirmacion').modal();
+		else if((nombre1 == "") || (apellido1 == "") || (apellido2 == "") || (correo == "")){
+			$('#modalFaltanCampos').modal();
+		}
+		else if((nombre1 != "") && (apellido1 != "") && (apellido2 != "") && (correo != "")){
+			$('#modalConfirmacion').modal();
+		}
+		
 	}
 	
 	function verDetalle(elemTabla) {
@@ -94,6 +106,7 @@
 	<legend>Editar ayudante</legend>
 	<div class="row-fluid">
 		<div class="span6">
+		<font color="red">* Campos Obligatorios</font>
 			<div class="controls controls-row">
 				<div class="input-append span7">
 					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -105,11 +118,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado ayudantes
+			1.- Seleccione el ayudante a editar:
 		</div>
 		<div class="span6" >
-			<font color="red">* Campos Obligatorios</font>
-			<p>2.-Complete los datos del formulario para modificar el ayudante:</p>
+			<p>2.- Complete los datos del formulario para modificar el ayudante:</p>
 		</div>
 	</div>
 
@@ -127,45 +139,45 @@
 				echo form_open('Ayudantes/EditarAyudante', $attributes);
 			?>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">1-.RUT</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">1.- RUT</label>
 					<div class="controls">
 						<input type="text" id="rutEditar" class="span12" name="rutEditar" readonly>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font>Primer nombre</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Primer nombre</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombreunoEditar" name="nombre1_ayudante" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">3-. Segundo nombre</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">3.- Segundo nombre</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombredosEditar" name="nombre2_ayudante" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font>Apellido Paterno</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">4.- <font color="red">*</font> Apellido paterno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidopaternoEditar" name="apellido_paterno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font>Apellido Materno</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">5.- <font color="red">*</font> Apellido materno</label>
 					<div class="controls">
 						<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellidomaternoEditar" name="apellido_materno" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font>Correo</label>
+					<label class="control-label" for="inputInfo" style="cursor: default">6.- <font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar" name="correo_ayudante" class="span12" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 
 				<div class="row">
 				<div class="controls pull-right">
-						<button type="button" class="btn" onclick="editarAyudante()">
+						<button type="button" class="btn" style= "margin-right: 4px" onclick="editarAyudante()">
 							<i class= "icon-pencil"></i>
 							&nbsp; Guardar
 						</button>
@@ -198,6 +210,20 @@
 							</div>
 							<div class="modal-body">
 								<p>Por favor seleccione un ayudante y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

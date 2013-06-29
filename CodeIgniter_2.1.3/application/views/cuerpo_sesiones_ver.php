@@ -75,10 +75,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado sesiones
+			1.- Seleccione una sesión para ver sus detalles:
 		</div>
 		<div class="span6" >
-			2.-Detalle sesión:
+			2.- Detalle sesión:
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -97,8 +97,7 @@
 			<pre style="padding: 2%; cursor:default">
 Nombre de la sesión: 	    <b id="nombreDetalle"></b>
 Nombre del módulo temático: <b id="mod_temDetalle"></b>
-Descripción: 		    <b id="descripcionDetalle"></b>
-			</pre>
+Descripción: 		    <b id="descripcionDetalle"></b></pre>
 		</div>
 	</div>
 

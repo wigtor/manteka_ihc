@@ -6,7 +6,7 @@
 			<tr>
 				<th>Sección</th>
 				<th>Profesor</th>
-				<th>Módulo Temático</th>
+				<th>Módulo temático</th>
 				<th>Sala</th>
 				<th>Bloque</th>
 				<th>Hora</th>
@@ -20,8 +20,8 @@
 			//foreach ($lista as $fila) {
 			$contador=0;
 			while($contador<count($lista)){
-				echo '<tr>';
-				echo '<td>'.$lista[$contador][0].'</td>';
+				echo '<tr style="cursor:default">';
+				echo '<td >'.$lista[$contador][0].'</td>';
 				echo '<td>'.$lista[$contador][1].' '.$lista[$contador][2].' '.$lista[$contador][3].'</td>';
 				echo '<td>'.$lista[$contador][4].'</td>';
 				echo '<td>'.$lista[$contador][5].'</td>';
