@@ -80,6 +80,8 @@ function CargarPlantilla(asunto, cuerpo, id)
 	{
 		document.getElementById('idPlantilla').value=id;
 		document.getElementById('asunto').value=asunto;
+		cuerpo=cuerpo.replace('&#39;','\'');
+		cuerpo=cuerpo.replace('&#34;','"');
 		CKEDITOR.instances.editor.setData (cuerpo);
 	}
 }
@@ -309,8 +311,7 @@ function pasoDosUno()
  * @author Byron Lanas (BL)
  **/
 function pasoUnoDos()
-{	
-
+{
 	var rutRecept = [];
 	var to = "";
 	for(var i =0;i < tbody2.getElementsByTagName('tr').length;i++)
@@ -1329,7 +1330,7 @@ if(isset($codigo))
 								foreach($plantillas as $plantilla)
 								{
 									echo '<tr>';
-									echo '<td id="p'.$plantilla->ID_PLANTILLA.'" onclick="javascript:CargarPlantilla('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.htmlentities($plantilla->CUERPO_PLANTILLA).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
+									echo '<td id="p'.$plantilla->ID_PLANTILLA.'" onclick="javascript:CargarPlantilla('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.str_replace('"','&#34;', str_replace('\'','&#39;', $plantilla->CUERPO_PLANTILLA)).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
 									echo '</tr>';
 								}
 							}
@@ -1413,7 +1414,7 @@ if(isset($codigo))
 				</div>
 				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
 				<div class="txt2">
-					Adjuntos: (30MB máximo)
+					Adjuntos: (25MB máximo)
 				</div>
 				<div class="container " style="margin:0px; width:414px;">
 
@@ -1498,7 +1499,7 @@ if(isset($codigo))
 				        maxChunkSize:0,
 				        singleFileUploads: false,
 				        maxNumberOfFiles:5,
-				        maxFileSize: 30*1024*1024
+				        maxFileSize: 25*1024*1024
 				    })
 				    .bind('fileuploadadd', function (e, data) {
 				    		var j=0;
@@ -1506,7 +1507,7 @@ if(isset($codigo))
 
     						$.each(data.files, function (index, file) {
     							if(file.size>(30*1024*1024)){
-    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 30MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
+    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 25MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
     								cancelFileUploadIndexes[j] = index;
     								j++;
     							}else{	
@@ -1522,7 +1523,7 @@ if(isset($codigo))
 	    								"<td style='width:95%; display:inline-table;height:10px'><div id='progress' class='progress progress-info progress-striped' style=' margin-bottom:0;height:8px'><div class='bar' ></div></div></td></tr>"    								
 	    								);
         						    i++;
-    							//}   
+    							}   
 						    });
 
 						    for(var k=0; k<cancelFileUploadIndexes.length; k++) {
