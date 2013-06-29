@@ -372,16 +372,16 @@ class Correo extends MasterManteka {
 		Es decir las variables predefinidas %%carrera_estudiante y %%seccion_estudiante sólo pueden ser utilizadas si todos los destinatarios son del tipo estudiante. */
 		
 		/* Primero se verifica si existen variables predefinidas propias de los estudiantes. */
-		//$variableModuloAsunto=substr_count($asunto, '%%modulo_estudiante');
-		//$variableModuloCuerpo=substr_count($mensaje, '%%modulo_estudiante');
+		$variableModuloAsunto=substr_count($asunto, '%%modulo_estudiante');
+		$variableModuloCuerpo=substr_count($mensaje, '%%modulo_estudiante');
 		$variableCarreraAsunto=substr_count($asunto, '%%carrera_estudiante');
 		$variableCarreraCuerpo=substr_count($mensaje, '%%carrera_estudiante');
 		$variableSeccionAsunto=substr_count($asunto, '%%seccion_estudiante');
 		$variableSeccionCuerpo=substr_count($mensaje, '%%seccion_estudiante');
-		//$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;  
+		$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;
 		$variableCarrera=$variableCarreraAsunto + $variableCarreraCuerpo;
 		$variableSeccion=$variableSeccionAsunto + $variableSeccionCuerpo;
-		$variablesEstudiante=$variableCarrera + $variableSeccion;
+		$variablesEstudiante=$variableModulo + $variableCarrera + $variableSeccion;
 		
 		/* Si hay variables exclusivas de los estudiantes y al menos un destinatario no es del tipo estudiante, entonces
 		se vuelve a la vista para el envío de correos y se indica al usuario el error ocurrido. */
@@ -477,6 +477,10 @@ class Correo extends MasterManteka {
 					if($estudiante != 0)
 					{
 						$datosEstudiante=$this->model_estudiante->getDetallesEstudiante($receptor);
+						$seccionEstudiante=$datosEstudiante->seccion;
+						$this->load->model('model_secciones');
+						$moduloEstudiante=$this->model_secciones->getDetallesSeccion($seccionEstudiante);
+						$moduloEstudiante=trim($moduloEstudiante[1]);
 						$to=$datosEstudiante->correo;
 						$nombreEstudiante=trim($datosEstudiante->nombre1).' '.trim($datosEstudiante->apellido1);
 						$rutEstudiante=trim($datosEstudiante->rut);
@@ -491,10 +495,12 @@ class Correo extends MasterManteka {
 						$asuntoPersonalizado=str_replace('%%rut', $rutEstudiante, $asuntoPersonalizado);
 						$asuntoPersonalizado=str_replace('%%carrera_estudiante', $carreraEstudiante, $asuntoPersonalizado);
 						$asuntoPersonalizado=str_replace('%%seccion_estudiante', $seccionEstudiante, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%modulo_estudiante', $moduloEstudiante, $asuntoPersonalizado);
 						$mensajePersonalizado=str_replace('%%nombre', $nombreEstudiante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%rut', $rutEstudiante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%carrera_estudiante', $carreraEstudiante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%seccion_estudiante', $seccionEstudiante, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%modulo_estudiante', $moduloEstudiante, $mensajePersonalizado);
 					}
 					else if($user != 0)
 					{
@@ -548,10 +554,12 @@ class Correo extends MasterManteka {
 			$asuntoAux=str_replace('%%rut', '[Rut destinatario]', $asuntoAux);
 			$asuntoAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $asuntoAux);
 			$asuntoAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $asuntoAux);
+			$asuntoAux=str_replace('%%modulo_estudiante', '[Módulo estudiante destinatario]', $asuntoAux);
 			$mensajeAux=str_replace('%%nombre', '[Nombre destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%rut', '[Rut destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $mensajeAux);
+			$mensajeAux=str_replace('%%modulo_estudiante', '[Módulo estudiante destinatario]', $mensajeAux);
 			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador);
 			
 			/* Se guarda la información que asocia el correo enviado con cada destinatario. */
