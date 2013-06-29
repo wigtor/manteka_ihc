@@ -297,6 +297,21 @@ class Model_profesor extends CI_Model {
     {
 		$this->db->where('RUT_USUARIO2', $rut_profesor);
 		if($this->db->delete('profesor')) {
+			$retorno1=1;
+		}
+		else{
+			$retorno1=0;
+		}
+
+		$this->db->where('RUT_USUARIO', $rut_profesor);
+		if($this->db->delete('usuario')) {
+			$retorno2=1;
+		}
+		else{
+			$retorno2=0;
+		}
+
+		if(($retorno1==1) && ($retorno2==1)){
 			return 1;
 		}
 		else{
