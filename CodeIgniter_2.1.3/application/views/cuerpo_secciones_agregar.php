@@ -20,7 +20,16 @@
 					$('#modalSeccionExiste').modal();
 					document.getElementById("rs_seccion").value = "";
 					document.getElementById("rs_seccion2").value = "";
-				}else {document.getElementById("formAgregar").submit();}
+				}else {
+					if(letra!="" &&num!="") {
+					document.getElementById("formAgregar").submit();}
+					else{
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalFaltanCampos').modal();
+					
+					}}
 				
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
@@ -92,6 +101,18 @@
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 						</div>
 					</div>
+					<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 				
 			</div>
 			<?php echo form_close(''); ?>
