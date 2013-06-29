@@ -369,19 +369,19 @@ class Correo extends MasterManteka {
 		$receptores=explode(",",$rutRecept);
 		
 		/* Se valida si las variables predefinidas cuyo valor cambia según el destinatario, son coherentes con la lista de destinatarios especificada.
-		Es decir las variables predefinidas %%carrera_estudiante, %%seccion_estudiante y %%modulo_estudiante sólo pueden ser utilizadas si todos los destinatarios son del tipo estudiante. */
+		Es decir las variables predefinidas %%carrera_estudiante y %%seccion_estudiante sólo pueden ser utilizadas si todos los destinatarios son del tipo estudiante. */
 		
 		/* Primero se verifica si existen variables predefinidas propias de los estudiantes. */
-		$variableModuloAsunto=substr_count($asunto, '%%modulo_estudiante');
-		$variableModuloCuerpo=substr_count($mensaje, '%%modulo_estudiante');
+		//$variableModuloAsunto=substr_count($asunto, '%%modulo_estudiante');
+		//$variableModuloCuerpo=substr_count($mensaje, '%%modulo_estudiante');
 		$variableCarreraAsunto=substr_count($asunto, '%%carrera_estudiante');
 		$variableCarreraCuerpo=substr_count($mensaje, '%%carrera_estudiante');
 		$variableSeccionAsunto=substr_count($asunto, '%%seccion_estudiante');
 		$variableSeccionCuerpo=substr_count($mensaje, '%%seccion_estudiante');
-		$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;  
+		//$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;  
 		$variableCarrera=$variableCarreraAsunto + $variableCarreraCuerpo;
 		$variableSeccion=$variableSeccionAsunto + $variableSeccionCuerpo;
-		$variablesEstudiante=$variableModulo + $variableCarrera + $variableSeccion;
+		$variablesEstudiante=$variableCarrera + $variableSeccion;
 		
 		/* Si hay variables exclusivas de los estudiantes y al menos un destinatario no es del tipo estudiante, entonces
 		se vuelve a la vista para el envío de correos y se indica al usuario el error ocurrido. */
@@ -498,7 +498,7 @@ class Correo extends MasterManteka {
 					}
 					else if($user != 0)
 					{
-						$datosUsuario=$this->Model_usuario->datos_usuario($receptor);
+						$datosUsuario=$this->model_usuario->datos_usuario($receptor);
 						$to=$datosUsuario->email1;
 						$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
 						$rutUsuario=trim($datosUsuario->rut);
@@ -637,12 +637,50 @@ class Correo extends MasterManteka {
 		$tipoUsuario = $this->session->userdata('id_tipo_usuario');
 		$textoFiltro = $this->input->post('textoBusqueda');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
-
+		
+		function digitoVerificador($rut)
+		{
+			$invertir=strrev($rut); 
+			$multiplicar = 2; 
+			$suma=0;
+			for ($i = 0; $i <= strlen($invertir); $i++)
+			{  
+				if ($multiplicar > 7) $multiplicar = 2;  
+				$suma = $multiplicar * substr($invertir, $i, 1) + $suma; 
+				$multiplicar = $multiplicar + 1; 
+			} 
+			$valor = 11 - ($suma % 11); 
+			if ($valor == 11)
+				$verificador = "0"; 
+			elseif ($valor == 10)
+				$verificador = "k"; 
+			else
+				$verificador = $valor; 
+			return $verificador; 
+		}
+		$this->load->model('model_usuario');
+		$datosUsuario=$this->model_usuario->datos_usuario($rut);
+		$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
+		$rutUsuario=trim($datosUsuario->rut);
+		$largoRut=strlen($rutUsuario);
+		$cientosRut=substr($rutUsuario,$largoRut-3,3);
+		$milesRut=substr($rutUsuario,$largoRut-6,3);
+		$millonesRut=substr($rutUsuario,0,$largoRut-6);
+		$rutUsuario=$millonesRut.'.'.$milesRut.'.'.$cientosRut.'-'.digitoVerificador($rutUsuario);
 		$this->load->model('model_correo');
-
 		$resultado =$this->model_correo->VerCorreosRecibidos($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
-
-		if (count($resultado) > 0) {
+		
+		$resultadoAux=array();
+		
+		foreach ($resultado as $temp)
+		{
+			$temp=str_replace('[Rut destinatario]', $rutUsuario, $temp);
+			$temp=str_replace('[Nombre destinatario]', $nombreUsuario, $temp);
+			array_push($resultadoAux, $temp);
+		}
+		$resultado=$resultadoAux;
+		
+		if (count($resultado) > 0) {			
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'correos', $this->session->userdata('rut'));

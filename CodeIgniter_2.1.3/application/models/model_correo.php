@@ -323,7 +323,7 @@ class model_correo extends CI_Model
 				LIMIT $offset, 5";
 			$query = $this->db->query($queryDeMierda);
 			//echo $this->db->last_query().'   ';return;
-			return $query->result();
+			return $query->result_array();
 		}
 		catch(Exception $e)
 		{
