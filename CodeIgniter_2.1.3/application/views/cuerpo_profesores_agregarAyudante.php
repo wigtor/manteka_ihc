@@ -47,8 +47,6 @@
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
-
 	
 	var arreglo = new Array();
 	var alumno;
@@ -59,8 +57,8 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($profesores)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//rut
-		echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
+		echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//
+     	echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
 		echo 'arreglo['.$contadorE.'][2] = "'.$profesores[$contadorE][2].'";';//apellido
 		$contadorE = $contadorE + 1;
 	}
@@ -69,14 +67,11 @@ function ordenarFiltro(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultarTd=document.getElementById("profesoresTd_"+cont);
-		ocultar =document.getElementById(arreglo[cont][0]);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
+		if(0 > (arreglo[cont][1]+arreglo[cont][2]).toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultarTd.style.display='none';
 		}
 		else
 		{
-			ocultar.style.display='';
 			ocultarTd.style.display='';
 		}
     }
