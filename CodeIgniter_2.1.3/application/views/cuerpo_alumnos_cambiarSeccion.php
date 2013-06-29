@@ -117,7 +117,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 
 
 <div class= "row-fluid">
-	<div class= "span10">
+	<div class= "span12">
 		<fieldset>
 			<legend>Cambio de sección</legend>
 			<div class= "row-fluid">

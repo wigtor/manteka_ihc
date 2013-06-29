@@ -121,10 +121,10 @@ function resetear(){
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado sesiones
+			1.- Seleccione la sesión que desea eliminar:
 		</div>
 		<div class="span6" >
-			2.-Detalle sesión:
+			2.- Detalle sesión:
 		</div>
 	</div>
 	<div class="row-fluid">

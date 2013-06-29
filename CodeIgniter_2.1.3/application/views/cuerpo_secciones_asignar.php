@@ -198,7 +198,6 @@
 
 <div class="row-fluid">
 	<div class="span12">
-		<!--<form id="formAsignar" type="post" method="post" onsubmit="AsignarSeccion();return false">-->
 		<fieldset>
 			<legend>Asignación de Sección</legend>
 			<div class="row-fluid">
@@ -220,7 +219,7 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">1-.<font color="red">*</font> Seleccione la sección para asignación</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">1.- <font color="red">*</font> Seleccione la sección para asignación</label>
 							</div>
 						</div>
 					</div>
@@ -255,7 +254,7 @@
 					<div class="row-fluid" style="margin-top:7%">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">3-.<font color="red">*</font> Seleccione el profesor disponible del módulo</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">3.- <font color="red">*</font> Seleccione el profesor disponible del módulo</label>
 							</div>
 						</div>
 					</div>
@@ -280,7 +279,7 @@
 					<div class="row-fluid">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">2-.<font color="red">*</font> Seleccione el módulo a asignar</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">2.- <font color="red">*</font> Seleccione el módulo a asignar</label>
 							</div>
 						</div>
 					</div>
@@ -314,17 +313,17 @@
 					<div class="row-fluid" style="margin-top:2%">
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">4-.<font color="red">*</font> Seleccione la sala y horario</label>
+								<label class="control-label" for="inputInfo" style="cursor:default">4.- <font color="red">*</font> Seleccione la sala y horario</label>
 							</div>
 						</div>
 					</div>
 
 					<div class="row-fluid" style="margin-left:3%">
 						<div class="span6" >
-							4.1- Sala
+							4.1.- Sala
 						</div>
 						<div class="span6" >
-							4.2- Horario
+							4.2.- Horario
 						</div>
 					</div>
 
@@ -371,8 +370,8 @@
 						</div>
 
 						<div class="control-group" style="margin-top:5%; margin-left: 35%">
-							<div class="controls">
-								<button class="btn" type="submit" style="width:102px">
+							<div class="controls pull-right">
+								<button class="btn" type="submit" style="width:102px; margin-right: 7px">
 									<div class= "btn_with_icon_solo">Ã</div>
 									&nbsp Asignar
 

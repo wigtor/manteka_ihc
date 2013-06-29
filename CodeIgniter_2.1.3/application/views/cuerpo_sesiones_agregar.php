@@ -54,7 +54,7 @@
 		
 				<div class="row-fluid">
 					<div class="span6">
-						<font color="red">*Campos Obligatorios</font>
+						<font color="red">* Campos Obligatorios</font>
 					</div>
 				</div>
 			
@@ -72,13 +72,13 @@
 				?>
 				<div class= "span7">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> Nombre</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">1.- <font color="red">*</font> Nombre</label>
 						<div class="controls">
 							<input id="nombre_sesion" onblur="comprobarNombre()" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" name="nombre_sesion" maxlength="99" required >
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripción</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
 						<div class="controls">
 							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" required ></textarea>
 						</div>

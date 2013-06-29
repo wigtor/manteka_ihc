@@ -153,6 +153,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				var de=listaRecibidos[i].nombre_destinatario;
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				
 				nodoTexto=document.createTextNode(de.replace(/,/g,", "));
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);

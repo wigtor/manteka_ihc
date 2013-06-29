@@ -212,7 +212,7 @@
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" style="cursor: default"for="cod_sala">4.- Seleccione los implementos</br><em>(Los implementos marcados son los que tiene actualmente la sala)<em></label>
+				<label class="control-label" style="cursor: default"for="cod_sala">4.- Seleccione los implementos</br><em>(Los implementos marcados son los que tiene actualmente la sala)</em></label>
 				<!--</br>
 				<b>Si desea modificar los implementos de la sala, elija entre los siguientes:</b></br>
 				(Los implementos marcados son los que tiene actualmente la sala)
