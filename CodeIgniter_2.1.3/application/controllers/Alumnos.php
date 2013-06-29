@@ -241,6 +241,15 @@ class Alumnos extends MasterManteka {
 		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 	}
 
+	/**
+	*
+	* Obtiene para la vista los estudiantes de una sección determinada
+	*
+	* Se consulta el estado de logeado del usuario si lo esta se llama a la función
+	* en el modelo para obtener los datos de los estudianes que pertencenede a la sección $cod_seccion 
+	* obtenida de la vista.
+	**/
+
 	public function obtenerAlumnosSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -253,6 +262,17 @@ class Alumnos extends MasterManteka {
 		$resultado = $this->Model_estudiante->getEstudiantesSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
+
+	/**
+	*
+	* Se obtiene la información para editar un estudiante de la vista y se llama a la función en el modelo para 
+	* onsertarla en la base de datos.
+	*
+	* Se obtienen lo datos moddificados de la vista, se carga el modelo de estudiantes se llama ala función
+	* actualizar estudiante en el modelo  si la confimacion es positva se despliega el mensaje de exito si es negativa
+	* se depliega el mesaje de error
+	*
+	**/
 
 	public function postEditarEstudiante() {
 		$rut_estudiante = $this->input->post("rutEditar");
@@ -286,6 +306,12 @@ class Alumnos extends MasterManteka {
 
 
 	}
+
+	/**
+	*
+	* Carga la vista para el cambio de sección
+	*
+	**/
 	
 	public function cambiarSeccionAlumnos()
 	{
@@ -354,6 +380,12 @@ class Alumnos extends MasterManteka {
 	}
 
 	
+	/**
+	*
+	* Carga la vista ver alumnos por defecto al entrar en la seccion alumnos
+	*
+	**/
+
 	public function index() //Esto hace que el index sea la vista que se desee
 	{
 		$this->verAlumnos();
@@ -405,6 +437,12 @@ class Alumnos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	*
+	* Se obtienen todas las secciones que hay ingresadas en manteka
+	*
+	**/
+
 	public function postGetSecciones() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -416,6 +454,17 @@ class Alumnos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	
+	/**
+	*
+	* Se comprueba si existe el rut
+	*
+	* Se obtiene un rut desde la vista y se comprueba si este
+	* existe en el sitema se deveulve el resultado de forma asincrona
+	*
+	*
+	**/
+
+
 	public function rutExisteC() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -434,7 +483,18 @@ class Alumnos extends MasterManteka {
 		$this->load->helper(array('form', 'url'));
 	}
 
-
+	/**
+	*
+	* Controla la carga masiva de estudiantes en el sistema
+	*
+	* Se realiza la configuración del archivo que esta permitido cargar en el sistema indicando la ruta, la extención y el tamaño
+	* si no se ha subido ningun archivo entonces se despliega la vista correspondiente a la carga masiva
+	* en caso contrario se evalua el resultado de la carga y se obtiene la ruta completa
+	* se carga el modelo de estudiantes y se inicia la carga masiva en la base de datos
+	* se carga la vista de exito con las filas erroneas si exitieran o en caso de falla critica se devuelve un error
+	*
+	*
+	**/
 
 	function cargaMasivaAlumnos()
 	{
