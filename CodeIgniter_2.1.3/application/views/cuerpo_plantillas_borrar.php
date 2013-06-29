@@ -48,6 +48,8 @@
 		{
 			document.getElementById('idPlantilla').value=id;
 			document.getElementById('inputAsunto').value=asunto;
+			cuerpo=cuerpo.replace('&#39;','\'');
+			cuerpo=cuerpo.replace('&#34;','"');
 			CKEDITOR.instances.editor.setData (cuerpo);
 		}
 		</script>
@@ -199,7 +201,7 @@
 		foreach($plantillas as $plantilla)
 		{
 			echo '<tr>';
-			echo '<td id="'.$plantilla->ID_PLANTILLA.'" onclick="javascript:VistaPrevia('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.htmlentities($plantilla->CUERPO_PLANTILLA).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
+			echo '<td id="'.$plantilla->ID_PLANTILLA.'" onclick="javascript:VistaPrevia('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.str_replace('"','&#34;', str_replace('\'','&#39;', $plantilla->CUERPO_PLANTILLA)).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
 			echo '</tr>';
 		}
 	}

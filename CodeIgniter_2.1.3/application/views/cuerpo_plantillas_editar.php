@@ -51,6 +51,8 @@
 			document.getElementById('nombrePlantilla').value=nombre;
 			document.getElementById('idPlantilla').value=id;
 			document.getElementById('asunto').value=asunto;
+			cuerpo=cuerpo.replace('&#39;','\'');
+			cuerpo=cuerpo.replace('&#34;','"');
 			CKEDITOR.instances.editor.setData(cuerpo);
 		}
 		</script>
@@ -233,7 +235,7 @@
 		{
 			/* Al seleccionar una plantilla de la lista se muestra una vista previa de esta. */
 			echo '<tr>';
-			echo '<td id="'.$plantilla->ID_PLANTILLA.'" onclick="javascript:VistaPrevia('.$comilla.$plantilla->NOMBRE_PLANTILLA.$comilla.', '.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.htmlentities($plantilla->CUERPO_PLANTILLA).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
+			echo '<td id="'.$plantilla->ID_PLANTILLA.'" onclick="javascript:VistaPrevia('.$comilla.$plantilla->NOMBRE_PLANTILLA.$comilla.', '.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.str_replace('"','&#34;', str_replace('\'','&#39;', $plantilla->CUERPO_PLANTILLA)).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
 			echo '</tr>';
 		}
 	}
