@@ -1,8 +1,18 @@
-
+<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
 <script>
-
+	
 	function comprobarRut() {
 		var rut = document.getElementById("rut_estudiante").value;
+		
+		dv = rut.charAt(rut.length-1);
+		rut = rut.substring(0,rut.length-1);
+		if(calculaDigitoVerificador(rut,dv) != 0){
+			$('#modalRutIncorrecto').modal();
+			document.getElementById("rut_estudiante").value = "";
+			return;
+		}
+		
+		
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
@@ -38,57 +48,35 @@
 
 
 	function agregarEstudiante(){
-
-		var rut = document.getElementById("rut_estudiante").value;
-		var nombreUno =	document.getElementById("nombre1_estudiante").value;
-		var nombreDos =	document.getElementById("nombre2_estudiante").value;
-		var apellidoPaterno = document.getElementById("apellido_paterno").value;
-		var apellidoMaterno = document.getElementById("apellido_materno").value;
-		var correo = document.getElementById("correo_estudiante").value;
-		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
-
-
-	
-		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
-					return true;
-		}
-		else {
-				alert("Ingrese todos los datos");
-				return false;
-		}
+			var rut = document.getElementById("rut_estudiante").value;
+			document.getElementById("rut_estudiante").value = rut.substring(0,rut.length-1);
+			return true;
 	}
 
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroSeccion").value;
 	var arreglo = new Array();
-	var ocultarInput;
-	var ocultarTd;
+	var ocultarTr;
 	var cont;
 	
-	<?php
-	/*
-	$contadorE = 0;
-	while($contadorE<count($secciones)){
-		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
-		$contadorE = $contadorE + 1;
-	}
-	*/
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		desmarcar=document.getElementById(arreglo[cont]);
-		ocultarTd=document.getElementById("seccionTd_"+cont);
-		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			desmarcar.checked = false;
-			ocultarTd.style.display='none';
-		}
-		else
-		{
-			
-			ocultarTd.style.display='';
-		}
-    }
+	$.ajax({
+		type: "POST", /* Indico que es una petición POST al servidor */
+		url: "<?php echo site_url("Alumnos/postGetSecciones") ?>", /* Se setea la url del controlador que responderá */
+		data: { }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+		arreglo = jQuery.parseJSON(respuesta);
+			for(cont=0;cont < arreglo.length;cont++){
+				ocultarTr=document.getElementById("seccionTr"+cont);
+				if(0 > arreglo[cont].nombre.toLowerCase().indexOf(filtroLista.toLowerCase ())){
+					ocultarTr.style.display='none';
+				}
+				else
+				{		
+					ocultarTr.style.display='';
+				}
+			}
+		}});
 }
 
 
@@ -108,7 +96,7 @@ function ordenarFiltro(){
 					td = document.createElement('td');
 					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
 					td.appendChild(nodoTexto);
-					
+					tr.setAttribute("id", "seccionTr"+i);
 
 					td2 = document.createElement('td');
 					radioInput = document.createElement('input');
@@ -252,6 +240,20 @@ function ordenarFiltro(){
 						</div>
 						<div class="modal-body">
 							<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+					
+					<!-- Modal de modalRutIncorrecto -->
+					<div id="modalRutIncorrecto" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>Dígito verificador incorrecto</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor ingrese el rut nuevamente</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

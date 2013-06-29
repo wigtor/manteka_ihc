@@ -1073,4 +1073,20 @@ class Correo extends MasterManteka {
 		$this->cargarTodo("Correos", "cuerpo_log_eliminados", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+
+	/**
+	* Función que retorna la cantidad de correos no leidos por el usuario
+	* @author: Víctor flores
+	* @return: int La cantidad de correos no leidos
+	*/
+	public function postCantidadCorreosNoLeidos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+		$resultado = $this->model_correo->cantidadRecibidosNoLeidos($rut);
+		echo $resultado;
+	}
+
 }

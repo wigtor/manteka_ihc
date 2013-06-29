@@ -56,7 +56,7 @@
 			
             <div class="span8">
 				<div class="control-group">
-					<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Sección:<br>
+					<label class="control-label" for="inputInfo">1.- <font color="red">*</font> Sección:<br>
 						<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 					</label>
 					

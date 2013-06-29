@@ -113,7 +113,7 @@ function eliminarAsignacion(){
 
 
 <div class="row-fluid">
-	<div class="span10">
+	<div class="span13">
 		<fieldset>
 			<legend>Borrar Asignación</legend>
 			<?php
