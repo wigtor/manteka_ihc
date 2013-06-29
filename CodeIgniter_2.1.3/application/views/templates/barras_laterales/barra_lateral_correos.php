@@ -80,6 +80,13 @@
 			$logEliminados = 'class="active"';
 			$inCorreos = "in";
 		}
+
+		$mensajesNoLeidos = "";
+		if (isset($numNoLeidos)) {
+			if ($numNoLeidos > 0) {
+				$mensajesNoLeidos = " (".$numNoLeidos.")";
+			}
+		}
 	?>
 
 	<!--	Barra lateral de correos	-->
@@ -91,7 +98,7 @@
 				</div>
 				<div id="collapseOne" class="accordion-body collapse <?php echo $inCorreos; ?>">
 					<div class="accordion-inner nav nav-list">
-						<li <?php echo $correosRecibidos; ?> ><a href="<?php echo site_url("Correo/correosRecibidos")?>">Correos recibidos</a></li>
+						<li <?php echo $correosRecibidos; ?> ><a href="<?php echo site_url("Correo/correosRecibidos")?>">Correos recibidos<?php echo $mensajesNoLeidos ?></a></li>
 						<li <?php echo $correosEnviados; ?> ><a href="<?php echo site_url("Correo/correosEnviados")?>">Correos enviados</a></li>
 						<li <?php echo $enviarCorreo; ?> ><a href="<?php echo site_url("Correo/enviarCorreo")?>">Enviar correo</a></li>
 						<li <?php echo $verBorradores; ?> ><a href="<?php echo site_url("Correo/verBorradores")?>">Ver borradores</a></li>

@@ -50,6 +50,9 @@ class MasterManteka extends CI_Controller {
 			redirect('/Login/', ''); //Redirijo si el usuario no puede usar esta vista
 		}
 
+		//Se carga la cantidad de correos sin leer
+		$this->load->model('model_correo');
+		$datos_plantilla["numNoLeidos"] = $this->model_correo->cantidadRecibidosNoLeidos($rut);
 		
 		/* Carga en el layout los menús, variables, configuraciones y elementos necesarios para ver las vistas */
 		//Se setea el título de la página.

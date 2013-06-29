@@ -677,9 +677,6 @@ class model_correo extends CI_Model
 			$this->db->from('carta');
 			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
 			return $this->db->count_all_results();
-			
-
-
 		}
 		catch(Exception $e)
 		{
@@ -687,7 +684,31 @@ class model_correo extends CI_Model
 		}
     }
 
-
+    /**
+	* Obtiene la cantidad de correos recibidos por el usuario y que no han sido leidos
+	*
+	* @param int $rut
+	* @return int
+	* @author Víctor Flores
+	*
+	*/
+    public function cantidadRecibidosNoLeidos($rut)
+	{
+		try
+		{
+			$this->db->from('carta');
+			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
+			$this->db->where('cartar_user.RUT_USUARIO', $rut);
+			$this->db->where('COD_BORRADOR IS NULL');
+			$this->db->where('RECIBIDO_CARTA_USER',1);
+			$this->db->where('NO_LEIDO_CARTA_USER', 1);
+			return $this->db->count_all_results();
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
 
     /**
 	* Obtiene la cantidad de borradores correspondientes al usuario
