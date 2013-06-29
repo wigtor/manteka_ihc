@@ -1,3 +1,5 @@
+
+
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once APPPATH.'controllers/Master.php'; 
@@ -46,14 +48,19 @@ class Salas extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_sala');
+		//$datos_vista = array('sala' => $this->Model_sala->VerTodasLasSalas(), 'salaImplemento' => $this->Model_sala->VerTodosLosImplementosSala());
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
 	/**
-	* Es la vista que se muestra para agregar una sala.
+	* Agregar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_agregar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se carga el modelo de sala, para poder ver todos los implementos que una sala puede tener.
-	* Finalmente se cargan todos los datos.
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas, se llama a la función InsertarSala para insertar la sala
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra sala.
 	*
 	*/
 	public function agregarSalas()
@@ -75,17 +82,6 @@ class Salas extends MasterManteka {
 		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
-	
-	/**
-	* Agregar una sala del sistema y mostrar si se realizó con éxito o no.
-	* Primero se cargan los datos para las plantillas de la página.
-	* Se carga el modelo de salas, se llama a la función InsertarSala para insertar la sala
-	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
-	* El resultado de ésta se recibe en la variable 'confirmacion'
-	* Si confirmación es 1 la acción se realizó y se muestra en una vista que la acción se realizó con
-	* Éxito, si no un mensaje con el error, en ambos casos se muestra un enlace para volver a agregar salas.
-	*
-	*/
 	public function ingresarSalas()
 	{	
 		
@@ -116,13 +112,15 @@ class Salas extends MasterManteka {
 
 	}
     
-
 	/**
-	* Es la vista que se muestra para editar una sala.
+	* Editar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_editar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se carga el modelo de sala, para poder ver todos los implementos que una sala tiene y estos se
-	* Mostrarán marcados, y los implementos que la sala podría tener, los que se mostrarán sin marcar.
-	* Finalmente se cargan todos los datos.
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas, se llama a la función AtualizarSala para editar la sala
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la edición de otra sala.
 	*
 	*/
     public function editarSalas()
@@ -146,17 +144,6 @@ class Salas extends MasterManteka {
 	
     }
 	
-	/**
-	* Modificar una sala del sistema y mostrar si se realizó con éxito o no.
-	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se cargan los datos para las plantillas de la página.
-	* Se carga el modelo de salas, se llama a la función AtualizarSala para insertar la sala
-	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
-	* El resultado de ésta se recibe en la variable 'confirmacion'
-	* Si confirmación es 1 la acción se realizó y se muestra en una vista que la acción se realizó con
-	* Éxito, si no un mensaje con el error, en ambos casos se muestra un enlace para volver a editar salas.
-	*
-	*/
 	public function modificarSalas()
 	{
 		$this->load->model('Model_sala');
@@ -186,13 +173,16 @@ class Salas extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
-
 	/**
-	* Es la vista que se muestra para borrar una sala.
+	* Borrar una sala del sistema y luego carga los datos para volver a la vista 'cuerpo_salas_eliminar'
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se carga el modelo de sala, para poder ver todos los implementos que una sala tiene y estos se
-	* Mostrarán marcados.Además para cargar los nombres de todas las salas exitentes.
-	* Finalmente se cargan todos los datos.
+	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* Se carga el modelo de salas, se llama a la función EliminarSala para borrar la sala
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de ésta se recibe en la variable 'confirmacion'
+	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
+	* Finalmente se carga la vista nuevamente con todos los datos para permitir la eliminación de otra sala.
+	*
 	*/
 	 public function borrarSalas()
     {
@@ -212,17 +202,6 @@ class Salas extends MasterManteka {
 		$this->cargarTodo("Salas", 'cuerpo_salas_eliminar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
     }
-	
-	/**
-	* Borrar una sala del sistema y mostrar si se realizó con éxito o no.
-	* Primero se cargan los datos para las plantillas de la página.
-	* Se carga el modelo de salas, se llama a la función EliminarSala para insertar la sala
-	* con el código de sala capturado un paso antes en el controlador desde la vista con el uso del POST.
-	* El resultado de ésta se recibe en la variable 'confirmacion'
-	* Si confirmación es 1 la acción se realizó y se muestra en una vista que la acción se realizó con
-	* Éxito, si no un mensaje con el error, en ambos casos se muestra un enlace para volver a borrar salas.
-	*
-	*/
 	public function eliminarSalas()
     {
 		$this->load->model('Model_sala');
@@ -256,7 +235,6 @@ class Salas extends MasterManteka {
 	* el filtro básico, y una por cada filtro avanzado seleccionado. 
 	* Finalmente se retorna el resultado de la búsqueda, dados los filtros seleccionados.
 	* @return json Resultado de la busqueda en forma de objeto json
-	*
 	*/
     public function postBusquedaSalas(){
     	if (!$this->isLogged()) {
@@ -289,7 +267,6 @@ class Salas extends MasterManteka {
 	* Sala a ya que el numero de sala es único en el sistema es equivalente a capturar el codigo.
 	* Finalmente se llama a la función getDetallesSala del modelo, que retorna el detalle de la sala.
 	* @return json Resultado de la busqueda en forma de objeto json
-	*
 	*/
     public function postDetallesSala(){
     	//Se comprueba que quien hace esta petición de ajax esté logueado
@@ -311,7 +288,6 @@ class Salas extends MasterManteka {
 	* De sala a ingresar.F inalmente se llama a la función numSala del modelo, que retorna 1 si el
 	* Numero de sala Existe en el sistema, y 0 en caso contrario.
 	* @return json Resultado de la busqueda en forma de objeto json
-	*
 	*/
 	public function numExiste() {
 		if (!$this->isLogged()) {
@@ -334,7 +310,6 @@ class Salas extends MasterManteka {
 	* Finalmente se llama a la función numSala del modelo, que retorna 1 si el numero de sala
 	* Existe en el sistema, y 0 en caso contrario.
 	* @return json Resultado de la busqueda en forma de objeto json
-	*
 	*/
 	public function numExisteE() {
 		if (!$this->isLogged()) {
@@ -349,5 +324,5 @@ class Salas extends MasterManteka {
 	}
 }
 
-/* End of file Salas.php */
-/* Location: ./application/controllers/Salas.php */
+/* End of file Correo.php */
+/* Location: ./application/controllers/Correo.php */
