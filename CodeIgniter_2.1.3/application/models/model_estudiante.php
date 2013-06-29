@@ -99,7 +99,7 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function EliminarEstudiante($rut_estudiante)
 	{
-		$this->db->where('rut_estudiante', $rut_estudiante);
+		$this->db->where('RUT_ESTUDIANTE', $rut_estudiante);
 		$datos = $this->db->delete('estudiante'); 
 		
 		if($datos == true){
@@ -352,6 +352,14 @@ class Model_estudiante extends CI_Model {
 		return $lista;
 	}
 	
+
+	/**
+	* Camobia todos los estudiantes con rut en $listaRut a la seección $seccionOUT 
+	*
+	* @param $seccionOUT Corresponde la sección a la que se cambiara la lista de rut
+	* @param $listaRut Lista de rutd correspondedientes a los estudiantes que se cambiaran de sección
+	* @return $conformacion resultado de la función que es uno en el caso exitoso y -1 en el caso fallido
+	*/	
 	function CambioDeSecciones($seccionOUT,$listaRut){
 		$contador = 0;
 		$confirmacion = 1;
@@ -370,6 +378,17 @@ class Model_estudiante extends CI_Model {
 		return $confirmacion;
 	}
 	
+
+	/**
+	*  
+	* Obtiene todos los rut para todasla secciones de manteka
+	*
+	* Primero realiza una consulta por medio de active record para obtener los rut de los usuarios,
+	* luego repite la misma operación para ayudantes y estudiantes.
+	*
+	* @return array $lista Contiene la información de los rut de todas las secciones del sistema
+	*/	
+
 	public function getAllRut(){
 		$lista = array();
 		$contador = 0;
@@ -404,6 +423,18 @@ class Model_estudiante extends CI_Model {
 		return $lista;  	
 	}
 	
+
+
+	/**
+	* Obtiene los rut de la base de datos y los compara con el entregado como parametro
+	*
+	* Consulta la base de datos por medio de active record para obtener los rut de usuarios y los agrega a $lista,
+	* luego realiza la misma operaciópara ayudantes y estudiantes, finalmente se compara $rut con cada elemento de $lista
+	* de encontrarse coincidencia el rut ya existe en el sistema y se retorna -1 en caso contrario se retorna 1
+	*
+	* @param $rut el rut de cual se quiere comprobar su existencia en manteka
+	* @return 1 o -1 , 1 para el caso de que el rut no exista -1 en caso de que el rut ya existe en la base de datos
+	*/	
 	public function rutExisteM($rut){
 	//return $rut;
 		$lista = array();
@@ -446,6 +477,18 @@ class Model_estudiante extends CI_Model {
 		return 1;
 	}
 
+
+	/**
+	* Valida el rut para chile
+	*
+	* Se evalua si la cadena $rut contiene guión, de existir se elimina, luego se considera el ultimo elemento como
+	* el digito vericador, se procede a a plicar el algoritmo de comprobación de rut y finalmente retorna TRUE si
+	* es un rut valido y FALSE si es invalido.
+	*
+	* @param $rut rut de cual se quiere comprobar su validez.
+	* @return bool TRUE o FALSE segun corresponda si el rut es valido o no.
+	*/	
+
 	function validaRut($rut){
 		$suma = 0;
 		if(strpos($rut,"-")==false){
@@ -473,6 +516,17 @@ class Model_estudiante extends CI_Model {
 		}
 	}
 
+
+	/**
+	* Función que valida que los campos ingresados posean solo caracteres validos 
+	*
+	* Se evalua cual es campo a validar por medio de $tipo y se filtra el campo con la función filter_var y un 
+	* filtro segun el tipo de campo-
+	* 
+	* @param $campo corresponde al campo que se quiere filtrar.
+	* @param $tipo es el tipo de campo que se filtrara nombre, mail, carrera, rut.
+	* @return retorna el valor que devuleva filter_var o en su defecto retorna FALSE
+	*/	
 	function validarDatos($campo,$tipo){
 		switch ($tipo) {
 			case "carrera":				
@@ -497,6 +551,14 @@ class Model_estudiante extends CI_Model {
 		return FALSE;
 	} 
 
+	/**
+	* Valida que la sección a la que pertenece el estudiante a ingresar ya exista en el sistema
+	*
+	* Se obtiene el el codigo de sección que corresponde al nombre entregado como parametro
+	*
+	* @param $seccion es el nombre de la sección que se evaluará
+	* @return $sec->COD_SECCION es el codigo de la sección que corresponde al nombre ingresado en $seccion
+	*/	
 	function validarSeccion($seccion){
 		
 		$query = $this->db->select('seccion.COD_SECCION');
@@ -511,6 +573,14 @@ class Model_estudiante extends CI_Model {
 		return $sec->COD_SECCION;
 	}
 
+	/**
+	* Valida que la carrera a la que pertenece el estudiante a ingresar ya exista en el sistema
+	*
+	* Se retorna el valor de $carrera o FALSE en caso de que la carrera consulta no esista en el sistema
+	*
+	* @param $carrera es el codigo de la carrera que se evaluará
+	* @return $carrerra es el codigo de la carrera, se retorna FALSE en caso de que la carrera no exista
+	*/	
 
 	function validarCarrera($carrera){
 
@@ -525,6 +595,20 @@ class Model_estudiante extends CI_Model {
 		return $carrera;
 	}
 
+
+	/**
+	* Carga de forma masiva los datos de estudiantes en el sistema
+	*
+	* Se evalua si existe el archivo en la ruta indicada en $archvivo y se procede a la lectura de este 
+	* se evalua campo a campo la información obtenoda del archivo csv y se recopila información de la filas erroneas
+	* si los datos no contienen un error se inserta en la base de datos y se procede con la linea siguiente
+	* se cierra el descriptor de lectura y se elimina el archivo del servidor
+	* de encontrarse algun error critico se termina el ciclo de lectura y se retorna FALSE
+	* si la función termina exitosamente se entregan las filas con errores en $stack
+	*
+	* @param $archivo ruta del archivo con la información de los estudiantes que se desea ingresarf a manteka
+	* @return $stack lineas del archivo csv que contienen errores retorna FALSE en caso de error critico
+	*/
 	public function cargaMasiva($archivo){
 
 		if(!file_exists($archivo) || !is_readable($archivo))
@@ -538,7 +622,7 @@ class Model_estudiante extends CI_Model {
 
 		$stack  = array();
 		$c = 1;
-		while(($linea = fgetcsv($f, 201, ',','"','\\')) !== FALSE)
+		while(($linea = fgetcsv($f, 201, ';','"','\\')) !== FALSE)
 		{			
 
 			if(!$header){
@@ -552,7 +636,7 @@ class Model_estudiante extends CI_Model {
 			}
 			else{
 
-				if(($data = array_combine($header, $linea)) == FALSE) {
+				if(($data = array_combine($header, $linea)) == FALSE) {					
 					fclose($f);
 					unlink($archivo);
 					return FALSE;					
@@ -574,62 +658,67 @@ class Model_estudiante extends CI_Model {
 				if(!$validador){
 					$stack[$c] = $linea;
 					$c++;
-					continue;}
-					$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
-					if(!$validador){
-						$stack[$c] = $linea;
-						$c++;
-						continue;}				
-						$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
-						if(!$validador){
-							$stack[$c] = $linea;
-							$c++;
-							continue;}
-							$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
-							$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
-							if(!$validador){
-								$stack[$c] = $linea;
-								$c++;
-								continue;}
-								$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
-								if(!$validador){
-									$stack[$c] = $linea;
-									$c++;
-									continue;}
+					continue;
+				}
+				$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}				
+				$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
+				$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
+				$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
+				$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
 
-									if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
-										$stack[$c] = $linea;
-										$c++;
-										continue;
-									}
-									if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
-										$stack[$c] = $linea;
-										$c++;
-										continue;
-									}
+				if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
+				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
 
-									$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
-									$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
-									$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
 
 
 
-									if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
-										$this->db->insert('estudiante',$data);
-									} else{
-										$stack[$c] = $linea;
-										$c++;
-										continue;
-									}	
+				if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
+					$this->db->insert('estudiante',$data);
+				} else{
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}	
 
-								}            
-							}
+			}            
+		}
 
-							fclose($f);
-							unlink($archivo);
-							return $stack;
-						}
+		fclose($f);
+		unlink($archivo);
+		return $stack;
+	}
 
-					}
+}
 
-					?>
+?>

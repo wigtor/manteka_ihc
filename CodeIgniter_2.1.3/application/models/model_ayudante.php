@@ -65,8 +65,11 @@ class Model_ayudante extends CI_Model {
 	*/
     public function EliminarAyudante($rut_ayudante)
     {
-		$sql="DELETE FROM ayudante WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="DELETE FROM ayudante WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
+
+		$this->db->where('RUT_AYUDANTE', $rut_ayudante);
+		$datos= $this->db->delete('ayudante');
+		//$datos=mysql_query($sql); //enviar código MySQL
 		if($datos == true){
 			return 1;
 		}
@@ -87,23 +90,43 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerTodosLosAyudantes()
 	{
-		$sql="SELECT * FROM ayudante ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM ayudante ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
+
+		$this->db->select('*');
+		$this->db->from('ayudante');
+		$this->db->order_by("APELLIDO1_AYUDANTE", "asc");
+		$query=$this->db->get();
+
+		//$datos=mysql_query($sql); //enviar código MySQL
+		$datos= $query->result();
 		$contador = 0;
 		$lista = array();
-		echo mysql_error();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['RUT_AYUDANTE'];
-			$lista[$contador][1] = $row['NOMBRE1_AYUDANTE'];
-			$lista[$contador][2] = $row['NOMBRE2_AYUDANTE'];
-			$lista[$contador][3] = $row['APELLIDO1_AYUDANTE'];
-			$lista[$contador][4] = $row['APELLIDO2_AYUDANTE'];
-			$lista[$contador][5] = $row['CORREO_AYUDANTE'];
+		//echo mysql_error();
+
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			# code...
+			$lista[$contador]=array();
+			$lista[$contador][0] = $row->RUT_AYUDANTE;
+			$lista[$contador][1] = $row->NOMBRE1_AYUDANTE;
+			$lista[$contador][2] = $row->NOMBRE2_AYUDANTE;
+			$lista[$contador][3] = $row->APELLIDO1_AYUDANTE;
+			$lista[$contador][4] = $row->APELLIDO2_AYUDANTE;
+			$lista[$contador][5] = $row->CORREO_AYUDANTE;
 			$contador = $contador + 1;
 		}
 		
 		return $lista;
 		}
+
+	/**
+	* Obtiene los datos de todos los ayudantes de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada ayudante y se va guardando en un arreglo de dos dimensiones
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return arreglo de 2 dimensiones que contiene en cada linea la información de un ayudante.
+	*/	
 
 		public function getAllAyudantes()
 	{
@@ -132,14 +155,21 @@ class Model_ayudante extends CI_Model {
 	*/
 		public function VerTodosLosProfesores()
 	{
-		$sql="SELECT * FROM profesor ORDER BY NOMBRE1_PROFESOR"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM profesor ORDER BY NOMBRE1_PROFESOR"; //código MySQL
+		$this->db->select('*');
+		$this->db->from('profesor');
+		$this->db->order_by("NOMBRE1_PROFESOR", "asc");
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['RUT_USUARIO2'];
-			$lista[$contador][1] = $row['NOMBRE1_PROFESOR'];
-			$lista[$contador][2] = $row['APELLIDO1_PROFESOR'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista[$contador]=array();
+			$lista[$contador][0] = $row->RUT_USUARIO2;
+			$lista[$contador][1] = $row->NOMBRE1_PROFESOR;
+			$lista[$contador][2] = $row->APELLIDO1_PROFESOR;
 			$contador = $contador + 1;
 		}
 		
@@ -156,12 +186,18 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function VerSecciones()
 	{
-		$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
+		$this->db->select('COD_SECCION');
+		$this->db->from('seccion');
+		$query=$this->db->get();
+		$datos=$query->result();
+
+		//$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador] = $row['COD_SECCION'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista[$contador] = $row->COD_SECCION;
 			$contador = $contador + 1;
 		}
 		

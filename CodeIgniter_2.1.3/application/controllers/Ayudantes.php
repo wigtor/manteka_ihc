@@ -221,6 +221,20 @@ class Ayudantes extends MasterManteka {
 	*
 	* @param string $rut_estudiante
 	*/
+
+	/**
+	*Elimina la información de un ayudante del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_editarAyudante'
+	*
+	* 
+	* Se cargan los datos para las plantillas de la página de realización.
+	* Se carga el modelo de ayudantes, se llama a la función EliminarAyudante 
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de esta operacion se recibe en la variable 'confirmacion'
+	* la que de acuerdo el valor se envía el mensaje de error o realización correspondiente, dando la opción de volver a la vista Borrar Ayudantes
+	* 
+	*
+	*
+	*/
 	public function EliminarAyudante()
 	{
 		$this->load->model('Model_ayudante');
@@ -265,6 +279,12 @@ class Ayudantes extends MasterManteka {
 		$resultado = $this->Model_ayudante->getDetallesAyudante($rut);
 		echo json_encode($resultado);
 	}
+
+	/**
+	* Método que responde a una busqueda de ayudantes a través de un filtro. Si esta búsqueda no se ha realizado antes, se guarda en el historial
+	* para una próxima oportunidad.
+	*
+	*/
 
 	public function postBusquedaAyudantes() {
 		if (!$this->isLogged()) {
