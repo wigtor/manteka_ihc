@@ -569,25 +569,11 @@ public function getDetalleUnaSeccion($cod_seccion)
 		$this->db->join('profesor','profe_seccion.RUT_USUARIO2=profesor.RUT_USUARIO2', 'LEFT OUTER');
 		$query = $this->db->get('seccion');
 
-		//echo $this->db->last_query();
-
 		
 		if ($query == FALSE) {
 			return array();
 		}
-		/*else{
-			$datos=$query->result();
-			foreach ($datos as $row) {
-				$lista[0]=$row->nombre_seccion;
-				$lista[1]=$row->modulo;
-				$lista[2]=$row->nombre1;
-				$lista[3]=$row->apellido1;
-				$lista[4]=$row->apellido2;
-				$lista[5]=$row->sala;
-				$lista[6]=$row->horario;
-			}
-
-		}*/
+		
 		
 		return $query->row();
 }

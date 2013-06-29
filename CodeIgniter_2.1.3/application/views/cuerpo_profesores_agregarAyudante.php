@@ -1,20 +1,52 @@
-<script type="text/javascript">
+<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
+<script>
 	
-	if(Number("<?php echo $mensaje_confirmacion?>") != 2){
-		if(Number("<?php echo $mensaje_confirmacion?>") != -1){
-				alert("Se ha agregado el ayudante");
+	function comprobarRut() {
+		var rut = document.getElementById("rut_ayudante").value;
+		
+		dv = rut.charAt(rut.length-1);
+		rut = rut.substring(0,rut.length-1);
+		if(calculaDigitoVerificador(rut,dv) != 0){
+			$('#modalRutIncorrecto').modal();
+			document.getElementById("rut_ayudante").value = "";
+			return;
+		}
+		
+		
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
+			data: { rut_post: rut},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == -1){
+					//alert("Rut en uso");
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalRutUsado').modal();
+					document.getElementById("rut_ayudante").value = "";
+
 				}
-				else{
-					alert("Error al agregar");
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
 				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
 	}
+
 </script>
 
 <script type="text/javascript">
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroLista").value;
-	var tipoDeFiltro = document.getElementById("tipoDeFiltro").value;
-
 	
 	var arreglo = new Array();
 	var alumno;
@@ -25,8 +57,8 @@ function ordenarFiltro(){
 	$contadorE = 0;
 	while($contadorE<count($profesores)){
 		echo 'arreglo['.$contadorE.']=new Array();';
-		echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//rut
-		echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
+		echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//
+     	echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
 		echo 'arreglo['.$contadorE.'][2] = "'.$profesores[$contadorE][2].'";';//apellido
 		$contadorE = $contadorE + 1;
 	}
@@ -35,14 +67,11 @@ function ordenarFiltro(){
 	
 	for(cont=0;cont < arreglo.length;cont++){
 		ocultarTd=document.getElementById("profesoresTd_"+cont);
-		ocultar =document.getElementById(arreglo[cont][0]);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultar.style.display='none';
+		if(0 > (arreglo[cont][1]+arreglo[cont][2]).toLowerCase ().indexOf(filtroLista.toLowerCase ())){
 			ocultarTd.style.display='none';
 		}
 		else
 		{
-			ocultar.style.display='';
 			ocultarTd.style.display='';
 		}
     }
@@ -69,15 +98,10 @@ function ordenarFiltro(){
 	}
 
 	function agregarAyudante(){
-		rut = $("#rut_ayudante").val();
-		nombre1Detalle = $("#nombre1_ayudante").val();
-		nombre2Detalle = $("#nombre2_ayudante").val();
-		apellido1Detalle = $("#apellido1_ayudante").val();
-		apellido2Detalle = $("#apellido2_ayudante").val();
-		correoDetalle = $("#correo_ayudante").val();
-		if ((rut == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "")) {
-			return; //Faltan campos!!!
-		}
+			var rut = document.getElementById("rut_ayudante").value;
+			document.getElementById("rut_ayudante").value = rut.substring(0,rut.length-1);
+			return true;
+
 		
 	}
 </script>
@@ -86,7 +110,7 @@ function ordenarFiltro(){
 <fieldset>
 	<legend>Agregar Ayudante</legend>
 	<?php
-		$attributes = array('id' => 'formAgregar', 'class' => 'form-horizontal');
+		$attributes = array('onsubmit' => 'return agregarAyudante()', 'class' => 'form-horizontal');
 		echo form_open('Ayudantes/insertarAyudante', $attributes);
 	?>
 		<div class="row-fluid">
@@ -108,7 +132,7 @@ function ordenarFiltro(){
 				<div class="control-group">
 					<label class="control-label" for="rut_ayudante" style="cursor: default">1.- <font color="red">*</font> RUN</label>
 					<div class="controls">
-						<input id="rut_ayudante" name="rut_ayudante" maxlength="9" min="1" type="text" pattern="^\d{7,8}[0-9kK]{1}$" class="span12" placeholder="Ej:177858741" title="Ingrese su RUN sin puntos ni guion" required>
+						<input id="rut_ayudante" name="rut_ayudante" onblur="comprobarRut()" maxlength="9" min="1" type="text" pattern="^\d{7,8}[0-9kK]{1}$" class="span12" placeholder="Ej:177858741" title="Ingrese su RUN sin puntos ni guion" required>
 					</div>
 				</div>
 				<div class="control-group">
@@ -178,7 +202,7 @@ function ordenarFiltro(){
 
 				<div class="row">
 					<div class="controls pull-right">
-						<button type="submit" class="btn" style= "margin-right: 7px" onclick="agregarAyudante()">
+						<button type="submit" class="btn" style= "margin-right: 7px" >
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Agregar
 						</button>
@@ -196,3 +220,31 @@ function ordenarFiltro(){
 		</div>
 	<?php echo form_close(""); ?>			
 </fieldset>
+
+<!-- Modal de modalRutUsado -->
+<div id="modalRutUsado" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>RUT ingresado está en uso</h3>
+	</div>
+	<div class="modal-body">
+		<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+	</div>
+</div>
+
+<!-- Modal de modalRutIncorrecto -->
+<div id="modalRutIncorrecto" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Dígito verificador incorrecto</h3>
+	</div>
+	<div class="modal-body">
+		<p>Por favor ingrese el rut nuevamente</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+	</div>
+</div>
