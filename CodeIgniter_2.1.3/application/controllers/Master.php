@@ -100,6 +100,8 @@ class MasterManteka extends CI_Controller {
 		}
 		//Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
+
+		$this->ejecutarCronjobs();
 	}
 
 	/**
@@ -178,6 +180,8 @@ class MasterManteka extends CI_Controller {
 
 		//Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
+
+		$this->ejecutarCronjobs();
 	}
 
 	/**
@@ -288,6 +292,38 @@ class MasterManteka extends CI_Controller {
 		//	Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
 		
+		$this->ejecutarCronjobs();
 	}
 
+	/**
+	* Método que ejecuta los cronjobs que se encuentren en la base de datos
+	* 
+	*/
+	private function ejecutarCronjobs() {
+		$this->load->model('Model_cronJobs');
+		$cronJobs = $this->Model_cronJobs->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
+		$cantidadCronJobs = count($cronJobs);
+		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
+		try {
+			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
+				$ruta = $cronJobs[$i]->rutaPhp;
+				if (PHP_OS == 'WINNT' || PHP_OS == 'WIN32') {
+					//echo 'Es windows ';
+					$toExec = 'start /b C:\\wamp\\bin\\php\\php5.4.3\\php c:\\wamp\\scripts\\'.$ruta;
+					//echo $toExec;
+					$ppointer = popen($toExec, 'r');
+				} else {
+					$ppointer = popen('php ~/scripts/'.$ruta.' > /dev/null &', 'r');
+				}
+				pclose($ppointer);
+				//exec("c:\\".$ruta);
+				//shell_exec($ruta . "> /dev/null 2>/dev/null &");
+				//echo ' Ejecutando '.$ruta;
+			}
+		}
+		catch (Exception $e) {
+			echo '<!-- Ha ocurrido un error al ejecutar un cronjob, revise que la ruta sea correcta -->';
+		}
+
+	}
 }
