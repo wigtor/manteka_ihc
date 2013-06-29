@@ -94,8 +94,8 @@ class Profesores extends MasterManteka {
 	/**
 	* Manda a la vista 'cuerpo_profesores_agregarProfesor' los datos necesarios para su funcionamiento
 	*
-	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Siguiente a esto se cargan los datos para las plantillas de la página.
+	* 
+	* Se cargan los datos para las plantillas de la página.
 	* Se envía un mensaje de confirmación con valor 2, que indica que se está cargando
 	* por primera ves la vista de agregar profesor. Finalmente se carga la vista con todos los datos.
 	*
@@ -106,29 +106,14 @@ class Profesores extends MasterManteka {
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarProfesor', '', true); //Esta es la linea que cambia por cada controlador
+		
+		$datos_vista=0;
+		$subMenuLateralAbierto = "agregarProfesores"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", 'cuerpo_profesores_agregarprofesor', "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 
-		$datos_vista = array('mensaje_confirmacion'=>2);
-        $datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_agregarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		
-		
-		//Ahora se especifica que vista está abierta para mostrar correctamente el menu lateral
-		$datos_plantilla["subVistaLateralAbierta"] = "agregarProfesores"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);
 		
 	}
 
@@ -189,7 +174,7 @@ class Profesores extends MasterManteka {
 	/**
 	* Manda a la vista 'cuerpo_profesores_borrarProfesor' los datos necesarios para su funcionamiento
 	*
-	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* 
 	* Siguiente a esto se cargan los datos para las plantillas de la página.
 	* Se carga el modelo de profesores, se cargan los datos de la vista con la lista 'rs_profesores' que contiene toda la información de los
 	* profesores del sistema y se envia un 'mensaje_confirmacion' que sirve en la vista para que ésta sepa que se está cargando la página por primera vez.
@@ -197,29 +182,18 @@ class Profesores extends MasterManteka {
 	*
 	*/
 	public function borrarProfesores(){
-		$datos_plantilla["rut_usuario"] = $this->session->userdata('rut');
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');
-		$datos_plantilla["title"] = "ManteKA";
-		$datos_plantilla["menuSuperiorAbierto"] = "Docentes";
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-		$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, true);
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-		$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, true);
-		$datos_plantilla["barra_navegacion"] = $this->load->view('templates/barra_navegacion', '', true);
-		$datos_plantilla["mostrarBarraProgreso"] = FALSE; //Cambiar en caso que no se necesite la barra de progreso
-		$datos_plantilla["barra_progreso_atras_siguiente"] = $this->load->view('templates/barra_progreso_atras_siguiente', $datos_plantilla, true);
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);
-
-
+		
 		$this->load->model('Model_profesor');
 
         $datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
 		
-		$datos_plantilla["cuerpo_central"] = $this->load->view('cuerpo_profesores_borrarProfesor', $datos_vista, true); //Esta es la linea que cambia por cada controlador
-		$datos_plantilla["subVistaLateralAbierta"] = "borrarProfesores"; //Usen el mismo nombre de la sección donde debe estar
-		$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, true); //Esta linea tambi?n cambia seg?n la vista como la anterior
-		$this->load->view('templates/template_general', $datos_plantilla);	
+		$subMenuLateralAbierto = "agregarProfesores"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array();
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$this->cargarTodo("Docentes", 'cuerpo_profesores_borrarProfesor', "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+
+
 	}
 
 	/**
@@ -266,7 +240,7 @@ class Profesores extends MasterManteka {
 	/**
 	* Modifica los datos de un profesor y luego carga la vista de realización de acuerdo al resultado que le arroje el modelo
 	*
-	*En primer lugar se reciben los nuevos datos del  profesor que se desea editar mediante el metodo POST
+	*En primer lugar se reciben los nuevos datos del  profesor que se desea editar mediante el método POST
 	*Luego se envian estos datos al modelo para que se realice la actualización en la base de datos. A partir de esto se recibe un -1 en caso de error
 	*o un 1 en caso de transacción exitosa, por lo que de acuerdo a esta respuesta se muestra la vista de acción realizada o acción no realizada 
 	*
