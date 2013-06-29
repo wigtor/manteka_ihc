@@ -126,15 +126,6 @@ function ordenarFiltroSeccion(tipo_seccion){
 					<div class="row-fluid">
 						<div class="span6"> 
 							1.- Seleccione una sección:
-								<br>
-								<br>
-								<br>
-								<br>
-								<br>
-								<br>
-								Mover de sección:
-								<button class="btn"  type="button" onclick="cambioSeccion()" name="botonCambio" value="1">   >   </button>
-				
 						</div>
 						<div class="span6" style="align:right">
 							
@@ -168,20 +159,18 @@ function ordenarFiltroSeccion(tipo_seccion){
 						 
 						<br>
 						<br>
-						<div class="span11">
+						<div class="row-fluid">
 						
-							<div class="row-fluid">
+							<div class="span12">
 								<div class="span6">
-									
-									
 									<input id="lista1_filtro"  onkeyup="ordenarFiltro('lista1_')" type="text" placeholder="Filtro búsqueda" style="width:90%">
 								</div>
 							
 
-								<div class="span6">
+								<div class="span6" >
 										
 										
-										<select id="lista1_tipoDeFiltro" title="Tipo de filtro">
+										<select id="lista1_tipoDeFiltro" title="Tipo de filtro" style="width:100%">
 										<option value="1">Filtrar por Nombre</option>
 										<option value="3">Filtrar por Apellido paterno</option>
 										<option value="4">Filtrar por Apellido materno</option>
@@ -203,25 +192,23 @@ function ordenarFiltroSeccion(tipo_seccion){
 							</div>
 
 					</div>
+
+					<div class="controls pull-right" style="margin-top: 7px">
+						<button class="btn"  type="button" onclick="cambioSeccion()" name="botonCambio" value="1">
+							<i class="icon-chevron-right"></i>
+							Cambiar de sección
+						</button>
+					</div>
 				</div>
 				<div class="span6">
 					<div class="row-fluid">
 						<div class="span6"> 
-							2.- Seleccione una segunda sección:
-							
-								<br>
-								<br>
-								<br>
-								<br>
-								<br>
-								Mover de sección:
-									<button class="btn" type="button" onclick="cambioSeccion()" name="botonCambio" value="2">   <   </button>
-				
+							2.- Seleccione una sección:
 						</div>
 						<div class="span6">
 							
 							<div class="controls">
-								<input type="text" onkeyup="ordenarFiltroSeccion('filtro2_')" id="filtro2_" placeholder="Filtro de Sección" style:"width:93%">
+								<input type="text" onkeyup="ordenarFiltroSeccion('filtro2_')" id="filtro2_" placeholder="Filtro de Sección" style="width:93%">
 							</div>
 							<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px;-webkit-border-radius: 4px" >
 								<table class="table table-hover">
@@ -248,14 +235,14 @@ function ordenarFiltroSeccion(tipo_seccion){
 					Estudiantes de la sección:
 					<br>
 					<br>
-					<div class="span11">
+					<div class="row-fluid">
 					
-						<div class="row-fluid">
+						<div class="span12">
 							<div class="span6">
 								<input id="lista2_filtro"  onkeyup="ordenarFiltro('lista2_')" type="text" placeholder="Filtro búsqueda" style="width:90%">
 							</div>
 							<div class="span6">
-									<select id="lista2_tipoDeFiltro" title="Tipo de filtro" >
+									<select id="lista2_tipoDeFiltro" title="Tipo de filtro" style="width:100%">
 									<option value="1">Filtrar por Nombre</option>
 									<option value="3">Filtrar por Apellido paterno</option>
 									<option value="4">Filtrar por Apellido materno</option>
@@ -273,6 +260,12 @@ function ordenarFiltroSeccion(tipo_seccion){
 								</table>
 							</div>
 
+					</div>
+					<div class="controls pull-right" style="margin-top:7px">
+						<button class="btn" type="button" onclick="cambioSeccion()" name="botonCambio" value="2">
+							<i class="icon-chevron-left"></i>
+							Cambiar de sección
+						</button>
 					</div>
 				</div>
 				

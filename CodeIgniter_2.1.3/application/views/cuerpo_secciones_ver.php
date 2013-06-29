@@ -137,10 +137,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span5" >
-			1.-Listado secciones:
+			1.- Seleccione una sección para ver sus detalles:
 		</div>
 		<div class="span7" >
-			2.-Detalle sección:
+			2.- Detalle sección:
 		</div>
 	</div>
 
