@@ -109,6 +109,7 @@
 		<legend>Editar Sección</legend>
 			<div class="row-fluid">
 				<div class="span5">
+				<font color="red">* Campos Obligatorios</font>
 					<div class="controls controls-row">
 						<div class="input-append span9">
 							<input id="filtroLista" class="span8" type="text" onkeypress="getDataSource(this)" onChange="ordenarFiltro()" placeholder="Filtro búsqueda">
@@ -118,15 +119,14 @@
 					</div>
 				</div>
 				<div class="span7" >
-					<font color="red">* Campos Obligatorios</font>
 				</div>
 			</div>
 			<div class="row-fluid">
 				<div class="span5" >
-					1.-Listado secciones
+					1.- Seleccione la sección a editar:
 				</div>
 				<div class="span7" >
-					<p>2.-Complete los datos del formulario para modificar la sección:</p>
+					<p>2.- Complete los datos del formulario para modificar la sección:</p>
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -145,7 +145,7 @@
 						<input id="cod_seccion" type="text" name="cod_seccion" style="display:none">
 						
 						<div class="control-group">
-							<label class="control-label" for="inputInfo">1-.<font color="red">*</font> Sección:<br>
+							<label class="control-label" for="inputInfo">1.- <font color="red">*</font> Sección:<br>
 								<i>(la sección debe estar compuesta por una letra y un número. Ej: B-12)</i>
 							</label>
 							
