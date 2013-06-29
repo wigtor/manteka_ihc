@@ -245,7 +245,7 @@ class Alumnos extends MasterManteka {
 	*
 	* Obtiene para la vista los estudiantes de una sección determinada
 	*
-	* Se consulta el estado de logeado del usuario si lo esta se llama a la función
+	* Se consulta el estado de logueado del usuario si lo esta se llama a la función
 	* en el modelo para obtener los datos de los estudianes que pertencenede a la sección $cod_seccion 
 	* obtenida de la vista.
 	**/
@@ -309,7 +309,10 @@ class Alumnos extends MasterManteka {
 
 	/**
 	*
-	* Carga la vista para el cambio de sección
+	* Carga la vista para el cambio de sección. 
+	*
+	*Se cargan a través del modelo las seccines de estudiantes que serán mostradasn en pantalla.
+	*
 	*
 	**/
 	
@@ -331,9 +334,9 @@ class Alumnos extends MasterManteka {
 	
 
 	/**
-	* Esta función cambia de foema masiva a los estudiantes selecionandos a una nueva secciion selecionada
+	* Esta función cambia de forma masiva a los estudiantes selecionandos a una nueva sección selecionada
 	* Primero se carga el modelo de estudiantes 
-	* Se determina desde que seccion y a cual seccion se cambiaran los alumnos
+	* Se determina desde que sección y a cual sección se cambiarán los alumnos
 	* Se obtiene la lista de selecionados que seránm cambiaados de sección
 	* Se cargan los datos a la vista
 	*
@@ -553,12 +556,7 @@ class Alumnos extends MasterManteka {
 					$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 					$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 					
-					/**$datos_vista = array(
-						'error' => 'Su archivo se ha cargado sin las siguientes filas erroneas.',
-						'filas' => $stack,
-						);
-					$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-					**/
+					
 				} else  {
 					$datos_plantilla["titulo_msj"] = "Acción Realizada";
 					$datos_plantilla["cuerpo_msj"] = "El archivo se ha cargado exitosamente.";
