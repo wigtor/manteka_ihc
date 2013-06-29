@@ -538,7 +538,7 @@ class Model_estudiante extends CI_Model {
 
 		$stack  = array();
 		$c = 1;
-		while(($linea = fgetcsv($f, 201, ',','"','\\')) !== FALSE)
+		while(($linea = fgetcsv($f, 201, ';','"','\\')) !== FALSE)
 		{			
 
 			if(!$header){
@@ -552,7 +552,7 @@ class Model_estudiante extends CI_Model {
 			}
 			else{
 
-				if(($data = array_combine($header, $linea)) == FALSE) {
+				if(($data = array_combine($header, $linea)) == FALSE) {					
 					fclose($f);
 					unlink($archivo);
 					return FALSE;					
@@ -574,62 +574,67 @@ class Model_estudiante extends CI_Model {
 				if(!$validador){
 					$stack[$c] = $linea;
 					$c++;
-					continue;}
-					$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
-					if(!$validador){
-						$stack[$c] = $linea;
-						$c++;
-						continue;}				
-						$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
-						if(!$validador){
-							$stack[$c] = $linea;
-							$c++;
-							continue;}
-							$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
-							$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
-							if(!$validador){
-								$stack[$c] = $linea;
-								$c++;
-								continue;}
-								$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
-								if(!$validador){
-									$stack[$c] = $linea;
-									$c++;
-									continue;}
+					continue;
+				}
+				$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}				
+				$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
+				$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
+				$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
+				$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
+				if(!$validador){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
 
-									if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
-										$stack[$c] = $linea;
-										$c++;
-										continue;
-									}
-									if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
-										$stack[$c] = $linea;
-										$c++;
-										continue;
-									}
+				if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
+				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}
 
-									$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
-									$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
-									$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
 
 
 
-									if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
-										$this->db->insert('estudiante',$data);
-									} else{
-										$stack[$c] = $linea;
-										$c++;
-										continue;
-									}	
+				if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
+					$this->db->insert('estudiante',$data);
+				} else{
+					$stack[$c] = $linea;
+					$c++;
+					continue;
+				}	
 
-								}            
-							}
+			}            
+		}
 
-							fclose($f);
-							unlink($archivo);
-							return $stack;
-						}
+		fclose($f);
+		unlink($archivo);
+		return $stack;
+	}
 
-					}
+}
 
-					?>
+?>
