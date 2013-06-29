@@ -1,7 +1,15 @@
+<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
 
 <script>
 	function comprobarRut() {
-		var rut = document.getElementById("rut_profesor").value;
+		var rut = document.getElementById("rut_profesor").value;	
+		dv = rut.charAt(rut.length-1);
+		rut = rut.substring(0,rut.length-1);
+		if(calculaDigitoVerificador(rut,dv) != 0){
+			$('#modalRutIncorrecto').modal();
+			document.getElementById("rut_profesor").value = "";
+			return;
+		}
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
@@ -45,17 +53,18 @@
 			}
 		}
 	}
-
+	function agregarProfesor(){
+			var rut = document.getElementById("rut_profesor").value;
+			document.getElementById("rut_profesor").value = rut.substring(0,rut.length-1);
+			return true;
+	}
 
 </script>
 		<div id="mensaje"></div>
 		<fieldset>		
 			<legend>Agregar Profesor</legend>	
-			<form  class="form-horizontal" id="formAgregar" type="post" method="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
-			<!--<?php
-					$atributos= array('id' => 'formAgregar');
-					echo form_open('Profesores/insertarProfesor/', $atributos);
-				?>	-->
+			<form  class="form-horizontal" id="formAgregar" onsubmit="agregarProfesor()" type="post" method="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
+
 			
 			<div class="row-fluid">
 				<div class="span6">
@@ -168,6 +177,20 @@
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>
+						<!-- Modal de modalRutIncorrecto -->
+					<div id="modalRutIncorrecto" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>Dígito verificador incorrecto</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor ingrese el rut nuevamente</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+					
 					</div>
 					<!--<?php echo form_close(''); ?>-->
 			</form>

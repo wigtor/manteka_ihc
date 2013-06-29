@@ -2,7 +2,7 @@
 
 
 <script type="text/javascript">
-	function cambioSeccion(){
+	function cambioSeccion(desde){
 		var seccion1 = document.getElementsByName("cod_seccion1");
 		var seccion2 = document.getElementsByName("cod_seccion2");
 		var cont;
@@ -25,7 +25,13 @@
 			$('#modalSeccionIgual').modal();
 			return false;
 		}
-				
+		
+		if(desde == 1){
+			document.getElementById("boton_desde").value = "1";
+		}
+		else{
+			document.getElementById("boton_desde").value = "2";
+		}
 		$('#modalConfirmacion').modal();
 	
 	}
@@ -47,7 +53,7 @@
 				thead = document.createElement('thead');
 				tr = document.createElement('tr');
 				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre alumnos de sesión");
+				nodoTexto = document.createTextNode("Nombre alumnos de sección");
 				th.appendChild(nodoTexto);
 				tr.appendChild(th);
 				thead.appendChild(tr);
@@ -121,8 +127,9 @@ function ordenarFiltroSeccion(tipo_seccion){
 		<fieldset>
 			<legend>Cambio de sección</legend>
 			<div class= "row-fluid">
-				<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/")?>"><!--FORM PRIMERA SECCION-->
+				<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/")?>"><!--FORM  SECCION-->
 				<div class="span6">
+				<input id="boton_desde" type="hidden" name="direccion" value="">
 					<div class="row-fluid">
 						<div class="span6"> 
 							1.- Seleccione una sección:
@@ -194,7 +201,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 					</div>
 
 					<div class="controls pull-right" style="margin-top: 7px">
-						<button class="btn"  type="button" onclick="cambioSeccion()" name="botonCambio" value="1">
+						<button class="btn"  type="button" onclick="cambioSeccion(1)">
 							<i class="icon-chevron-right"></i>
 							Cambiar de sección
 						</button>
@@ -262,7 +269,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 
 					</div>
 					<div class="controls pull-right" style="margin-top:7px">
-						<button class="btn" type="button" onclick="cambioSeccion()" name="botonCambio" value="2">
+						<button class="btn" type="button" onclick="cambioSeccion(2)">
 							<i class="icon-chevron-left"></i>
 							Cambiar de sección
 						</button>
@@ -297,7 +304,8 @@ function ordenarFiltroSeccion(tipo_seccion){
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
-				</form><!--FORM SEGUNDA SECCION-->
+				
+				</form><!--FORM SECCION-->
 			</div>
 
 			

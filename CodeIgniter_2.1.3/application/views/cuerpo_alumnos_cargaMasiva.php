@@ -31,7 +31,7 @@ function validacion(){
 		</div>
 
 
-		<button type="button"  onclick="validacion()" value="upload" class="btn">Subir</button>
+		<button type="button"  onclick="validacion()" value="upload" class="btn"><i class="icon-upload"></i>&nbsp;Subir</button>
 
 		<br /><br />
 
