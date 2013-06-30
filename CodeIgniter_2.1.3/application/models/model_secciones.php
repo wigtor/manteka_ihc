@@ -63,7 +63,7 @@ class Model_secciones extends CI_Model{
 
 
 	
-			/**
+	/**
 	* Obtiene los datos de todos las secciones de la base de datos
 	*
 	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada seccion y se va guardando en un arreglo de dos dimensiones
@@ -577,6 +577,81 @@ public function getDetalleUnaSeccion($cod_seccion)
 		
 		return $query->row();
 }
+
+	/**
+	* Obtiene los datos de todos las secciones, de la base de datos, que no estan asignadas.
+	*
+	* Se crea la consulta y luego se ejecuta ésta.
+	* Luego con un ciclo se va extrayendo la información de cada seccion y se va guardando en un arreglo de dos dimensiones.
+	* Finalmente se retorna la lista con los datos.
+	*
+	* @return array $lista Contiene la información de todas las secciones del sistema que no estan asignadas
+	*/
+	public function VerSeccionesNoAsignadas()
+	{
+		$this->db->select('seccion.COD_SECCION');
+		$this->db->from('seccion, profe_seccion, seccion_mod_tem');
+		$condiciones = '(seccion.COD_SECCION = profe_seccion.COD_SECCION) AND (seccion.COD_SECCION = seccion_mod_tem.COD_SECCION)';
+		$this->db->where($condiciones);
+		$queryNotIn = $this->db->get();
+		$datosNotIn = $queryNotIn->result_array();
+		$whereNotIn = array();
+		foreach($datosNotIn as $row){
+			array_push($whereNotIn, $row['COD_SECCION']);
+		}
+		$this->db->select('seccion.COD_SECCION AS cod, seccion.NOMBRE_SECCION AS nombre');
+		$this->db->from('seccion');
+		if(count($whereNotIn)!=0){
+			$this->db->where_not_in('COD_SECCION', $whereNotIn);
+		}
+		$this->db->order_by("NOMBRE_SECCION", "asc");
+		$query = $this->db->get();
+		if($query == FALSE){
+			return array();
+		}else{
+			$datos = $query->result();
+		}
+
+		$lista=array();
+
+		$contador=0;
+			if($datos != false){
+				foreach ($datos as $row) {
+					$lista[$contador]=array();
+					$lista[$contador][0]=$row->cod;
+					$lista[$contador][1]=$row->nombre;
+					$contador=$contador+1;
+				}
+			}
+		return $lista;
+	}
+
+	public function getVerificaHorarios($dia, $bloque){
+		/*Se busca el código del horario correspondiente al dia y al bloque*/
+		if(strcmp($dia,"Miercoles")!=0){
+			$dia_abreviado = substr($dia,0,1);
+		}else{
+			$dia_abreviado = 'W';
+		}
+		$columnas = 'horario.COD_HORARIO';
+		$condiciones = '(dia.COD_ABREVIACION_DIA = \''.$dia_abreviado.'\') AND (modulo.NUMERO_MODULO = \''.$bloque.'\') AND (dia.COD_DIA = horario.COD_DIA) AND (modulo.COD_MODULO = horario.COD_MODULO)';
+		$desde = 'dia, modulo, horario';
+		$this->db->select($columnas);
+		$this->db->where($condiciones);
+		$query = $this->db->get($desde);
+		$cod_horario = $query->result_array()[0]['COD_HORARIO'];
+
+		/*Se revisa si el horario ya le pertenece a otra sala*/
+		$this->db->select('sala_horario.ID_HORARIO_SALA');
+		$this->db->from('sala_horario');
+		$this->db->where('sala_horario.COD_HORARIO = \''.$cod_horario.'\'');
+		$query2 = $this->db->get();
+		if(count($query2->result_array())>0){
+			return 1; //Ya existe el horario
+		}else{
+			return 0; //No existe el horario
+		}
+	}
 
 }
 

@@ -287,7 +287,7 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar());
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerSeccionesNoAsignadas(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
@@ -462,7 +462,6 @@ class Secciones extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-
 		$nombre_modulo = $this->input->post('nombre_modulo');
 		$this->load->model('Model_secciones');
 		$resultado = $this->Model_secciones->verProfeSegunModulo($nombre_modulo);
@@ -495,8 +494,17 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-
-	
-	
-	
+	public function postVerificaHorarios() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$dia = $this->input->post('dia_post');
+		$bloque = $this->input->post('bloque_post');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->getVerificaHorarios($dia, $bloque);
+		echo json_encode($resultado);
+	}
+		
 }
