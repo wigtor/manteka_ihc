@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
+
 
 <script type="text/javascript">
 /** 
@@ -48,11 +48,11 @@ function cambiarCorreos(direccion,offset)
 {
 	
 	if (direccion=="ant") {
-		offset=offset-5;
+		offset=offset-20;
 
 		
 	}else if(direccion=="sig"){
-		offset=offset+5;
+		offset=offset+20;
 		
 
 	}
@@ -68,10 +68,10 @@ function cambiarCorreos(direccion,offset)
 			
 			for (var i = 0; i < listaBorradores.length; i++) {
 				tr = document.createElement('tr');
+				tr.setAttribute("style","display:block;");
 				td = document.createElement('td');
-				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","padding-top:4px;padding-bottom:8px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:5%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("align","center");				
 				check = document.createElement('input');
 				check.type='checkbox';
@@ -81,9 +81,8 @@ function cambiarCorreos(direccion,offset)
 				//td.setAttribute(onclick,);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "23%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:22%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				span=document.createElement('span');
 				span.setAttribute('style','color:#DF0101');
@@ -93,8 +92,7 @@ function cambiarCorreos(direccion,offset)
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", "m"+i);
-				td.setAttribute("width", "27%");
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:53%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				bold =document.createElement('b');
 				nodoTexto = document.createTextNode(listaBorradores[i].asunto);
@@ -105,17 +103,15 @@ function cambiarCorreos(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:10%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				nodoTexto=document.createTextNode(listaBorradores[i].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:10%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				
 				nodoTexto=document.createTextNode(listaBorradores[i].hora);
@@ -127,16 +123,16 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
 				var cuerpo=listaBorradores[i].cuerpo_email;
-				document.getElementById("m"+i).innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaBorradores[i].asunto.length)+"......";
+				document.getElementById("m"+i).innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaBorradores[i].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				
 			}
 			var limite;
-			if(<?php echo $cantidadBorradores;?><offset+5)
+			if(<?php echo $cantidadBorradores;?><offset+20)
 				limite=<?php echo $cantidadBorradores;?>;
 			else
-				limite=offset+5;
+				limite=offset+20;
 
 			
 			
@@ -151,14 +147,14 @@ function cambiarCorreos(direccion,offset)
 					document.getElementById("sig").removeAttribute('class');
 			}else if(direccion=="sig"){
 				
-				if(offset+5>=<?php echo $cantidadBorradores;?>){
+				if(offset+20>=<?php echo $cantidadBorradores;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
 				document.getElementById("ant").removeAttribute('class');
 
 			}else{
-				if(offset+5>=<?php echo $cantidadBorradores;?>){
+				if(offset+20>=<?php echo $cantidadBorradores;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
@@ -258,10 +254,10 @@ if(isset($msj))
 	$contador=0;
 	$offset=0;
 
-	if($cantidadBorradores<$offset+5)
+	if($cantidadBorradores<$offset+20)
 		$limite=$cantidadBorradores;
 	else
-		$limite=$offset+5;
+		$limite=$offset+20;
 
 	$comilla= "'";
 	$estado=1;
@@ -306,20 +302,20 @@ if(isset($msj))
 			</ul>
 			<form name="formulario" id="formu" method="post">
 
-			<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
-				
-			<tr class="info">
-			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-			<td width="23%" ><b></b></td>
-			<td width="27%" ><b>Mensaje</b></td>
-			<td width="8%" ><b>Fecha</b></td>
-			<td width="8%" ><b>Hora</b></td>
+			<table  align="center"  class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;margin-top:4px; margin-bottom:0px">
+			<thead style="height:auto;width:100%;display:block;">
+			<tr class="info" style="display:table;width:100%">
+			<th style="width:5%;margin:0px;display:inline-table;height:36px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></th>
+			<th style="width:22%; margin:0px;display:inline-table;height:36px;"><b></b></th>
+			<th style="width:53%;margin:0px;display:inline-table;height:36px; "><b>Mensaje</b></th>
+			<th style="width:10%;margin:0px;display:inline-table;height:36px; "><b>Fecha</b></th>
+			<th style="width:10%; margin:0px;display:inline-table;height:36px"><b>Hora</b></th>
 			</tr>
-
+		</thead>
 			
 
 			
-			<tbody id="tabla">
+			<tbody id="tabla" style=";overflow-y:scroll; height:295px;display:block;">
 				<script type="text/javascript">cambiarCorreos("inicio",0);</script>
 			<?php		
 			

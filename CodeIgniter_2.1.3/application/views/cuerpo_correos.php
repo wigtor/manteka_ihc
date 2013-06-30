@@ -62,10 +62,10 @@ function cambiarCorreos(direccion,offsetL)
 {
 	
 	if (direccion=="ant") {
-		offset=offsetL-5;
+		offset=offsetL-20;
 	}
 	else if(direccion=="sig") {
-		offset=offsetL+5;
+		offset=offsetL+20;
 	}
 	
 	var filtroBusqueda = document.getElementById("filtroLista");
@@ -83,6 +83,7 @@ function cambiarCorreos(direccion,offsetL)
 
 			
 			tbody = document.createElement('tbody');
+			tbody.setAttribute("style","overflow-y:scroll; height:295px;display:block;");
 			if (listaRecibidos.length == 0) {
 				tr = document.createElement('tr');
 				td = document.createElement('td');
@@ -182,10 +183,10 @@ function cambiarCorreos(direccion,offsetL)
 			tablaResultados.appendChild(tbody);
 
 			var limite;
-			if(<?php echo $cantidadCorreos;?><offset+5)
+			if(<?php echo $cantidadCorreos;?><offset+20)
 				limite=<?php echo $cantidadCorreos;?>;
 			else
-				limite=offset+5;
+				limite=offset+20;
 
 			
 			
@@ -200,14 +201,14 @@ function cambiarCorreos(direccion,offsetL)
 					document.getElementById("sig").removeAttribute('class');
 			}else if(direccion=="sig"){
 				
-				if(offset+5>=<?php echo $cantidadCorreos;?>){
+				if(offset+20>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
 				document.getElementById("ant").removeAttribute('class');
 
 			}else{
-				if(offset+5>=<?php echo $cantidadCorreos;?>){
+				if(offset+20>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
@@ -326,8 +327,9 @@ function escribirHeadTableCorreos() {
 	$(tablaResultados).find('tbody').remove();
 	var tr, td, th, thead, nodoTexto, nodoBtnFiltroAvanzado;
 	thead = document.createElement('thead');
-	thead.setAttribute('style', "cursor:default;");
+	thead.setAttribute('style', "cursor:default;width:100%;display:block;");
 	tr = document.createElement('tr');
+	tr.setAttribute("style","display:table;width:100%");
 
 	//SE CREA LA CABECERA DE LA TABLA
 	for (var i = 0; i < tiposFiltro.length; i++) {
@@ -495,10 +497,10 @@ if(isset($msj))
 		$contador=0;
 		$offset=0;
 
-		if($cantidadCorreos<$offset+5)
+		if($cantidadCorreos<$offset+20)
 			$limite=$cantidadCorreos;
 		else
-			$limite=$offset+5;
+			$limite=$offset+20;
 
 		$comilla= "'";
 
@@ -549,7 +551,7 @@ if(isset($msj))
 		
 	?>
 		<div class="row-fluid">
-			<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+			<div class="span12" style="border:#cccccc 1px solid; height:400px; -webkit-border-radius: 4px;">
 				<table id="listadoResultados" class="table table-hover">
 					
 					<!-- Acá va el tbody cargado por ajax -->
