@@ -120,19 +120,22 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function VerTodosLosEstudiantes()
 	{
-		/*
-		$this->db->order_by("APELLIDO_PATERNO", "asc"); 
+		
+		$this->db->order_by("APELLIDO2_ESTUDIANTE", "asc"); 
 		$query = $this->db->get('estudiante'); //Acá va el nombre de la tabla
 		// Se obtiene la fila del resultado de la consulta a la base de datos
-		$filaResultado = $query->row();
-		return $filaResultado;
-		*/
+				
+		
+		
+
+/***
 		$sql="SELECT * FROM estudiante ORDER BY APELLIDO1_ESTUDIANTE"; 
 		$datos=mysql_query($sql); 
-		echo mysql_error();
+		echo mysql_error();**/
+
 		$contador = 0;
 		$lista = array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($query->result_array() as $row) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['RUT_ESTUDIANTE'];
 			$lista[$contador][1] = $row['NOMBRE1_ESTUDIANTE'];
 			$lista[$contador][2] = $row['NOMBRE2_ESTUDIANTE'];
@@ -309,24 +312,19 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function VerCarreras()
 	{
-		/*
+		
 		$query = $this->db->get('carrera'); //Acá va el nombre de la tabla
 		// Se obtiene la fila del resultado de la consulta a la base de datos
-		$filaResultado = $query->row();
-		return $filaResultado;
-		*/
+		/***$sql="SELECT * FROM carrera"; 
+		$datos=mysql_query($sql); **/
 
-		$sql="SELECT * FROM carrera"; 
-		$datos=mysql_query($sql); 
 		$contador = 0;
 		$lista = array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($query->result_array() as $row) { //Bucle para ver todos los registros
 			$lista[$contador][0] = $row['COD_CARRERA'];
-			$lista[$contador][1] = $row['NOMBRE_CARRERA'];
-			
+			$lista[$contador][1] = $row['NOMBRE_CARRERA'];			
 			$contador = $contador + 1;
-		}
-		
+		}		
 		return $lista;
 	}
 
