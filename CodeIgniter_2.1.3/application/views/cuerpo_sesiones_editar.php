@@ -7,6 +7,36 @@
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/secciones") ?>";
 
 
+function comprobarNombre() {
+		var nombre = document.getElementById("nombresesion").value;
+		var codigo = document.getElementById("codigoSesion").value;
+			$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Sesiones/nombreExisteEC") ?>", /* Se setea la url del controlador que responderá */
+			data: { nombre_post: nombre, codigo_post: codigo},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				//var tablaResultados = document.getElementById("modulos");
+				//$(tablaResultados).empty();
+				var existe = jQuery.parseJSON(respuesta);
+				if(existe == 1){
+					var mensaje = document.getElementById("mensaje");
+					$(mensaje).empty();
+			
+					$('#modalNombreUsado').modal();
+					document.getElementById("nombresesion").value = "";
+
+				}
+
+				/* Quito el div que indica que se está cargando */
+				var iconoCargado = document.getElementById("icono_cargando");
+				$(icono_cargando).hide();
+				}
+		});
+
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+	}
 function EditarSesion(){
 							
 		var nombre = document.getElementById("nombresesion").value;
@@ -97,6 +127,7 @@ function verDetalle(elemTabla) {
 	<legend>Editar Sesión</legend>
 	<div class="row-fluid">
 		<div class="span6">
+		<font color="red">* Campos Obligatorios</font>
 			<div class="controls controls-row">
 			    <div class="input-append span7">
 					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
@@ -108,10 +139,9 @@ function verDetalle(elemTabla) {
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado sesiones
+			1.- Seleccione la sesión a editar:
 		</div>
 		<div class="span6" >
-			<font color="red">* Campos Obligatorios</font><br>
 				<p>Complete los datos del formulario para modificar la sesión</p>
 		</div>
 	</div>
@@ -131,25 +161,25 @@ function verDetalle(elemTabla) {
 		<div class="span6">
 			<?php
 				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal', 'onsubmit' => 'EditarProfesor()');
-				echo form_open('Sesiones/editarSesiones/', $attributes);
+				echo form_open('Sesiones/cambiarSesiones/', $attributes);
 			?>
 			<input type="hidden" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
 			
 			<div class="control-group">
-				<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> Nombre de sesión</label>
+				<label class="control-label" for="inputInfo" style="cursor: default">1.- <font color="red">*</font> Nombre de sesión</label>
 				<div class="controls">
-					<input type="text" id="nombresesion" class="span12" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
+					<input type="text" id="nombresesion" onblur="comprobarNombre()" class="span12" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Descripción</label>
+				<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
 				<div class="controls">
 					<textarea type="text" class="span12" id="descripcionSesion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion_sesion" maxlength="99" required></textarea>
 				</div>
 			</div>
 			<div class="row">
 				<div class="controls pull-right">
-					<button type="button" class="btn"  type="button" onClick="EditarSesion()">
+					<button type="button" class="btn" style= "margin-right: 4px" type="button" onClick="EditarSesion()">
 						<i class= "icon-pencil"></i>
 						&nbsp; Guardar
 					</button>
@@ -190,6 +220,19 @@ function verDetalle(elemTabla) {
 				</div>
 
 				<!-- Modal de campos vacíos -->
+				<div id="modalNombreUsado" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>Nombre de la sesion ya existe.</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>	
+
 				<div id="modalCamposVacios" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

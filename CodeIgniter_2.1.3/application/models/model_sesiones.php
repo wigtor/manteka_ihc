@@ -70,16 +70,23 @@ class Model_sesiones extends CI_Model {
 
     public function VerTodasLasSesiones()
 	{
-		$sql="SELECT * FROM sesion ORDER BY COD_SESION"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT * FROM sesion ORDER BY COD_SESION"; //código MySQL
+		$this->db->select('*');
+		$this->db->from('sesion');
+		$this->order_by("COD_SESION", "asc");
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista = array();
 		if (false != $datos) {
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador][0] = $row['COD_SESION'];
-			$lista[$contador][1] = $row['COD_MODULO_TEM'];
-			$lista[$contador][2] = $row['NOMBRE_SESION'];
-			$lista[$contador][3] = $row['DESCRIPCION_SESION'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista[$contador] = array();
+			$lista[$contador][0] = $row->COD_SESION;
+			$lista[$contador][1] = $row->COD_MODULO_TEM;
+			$lista[$contador][2] = $row->NOMBRE_SESION;
+			$lista[$contador][3] = $row->DESCRIPCION_SESION;
 			
 			$contador = $contador + 1;
 		}
@@ -140,6 +147,31 @@ class Model_sesiones extends CI_Model {
 		}
 		return 1;
 	}
+
+	public function nombreExisteEM($nombre, $codigo){
+		//$sql="SELECT * FROM sesion ORDER BY COD_SESION";
+		$this->db->select('*');
+		$this->db->from('sesion');
+		$this->db->order_by("COD_SESION", "asc"); 
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); 
+		$contador = 0;
+		$lista=array();
+		$var=0;
+		if (false != $datos) {
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			if($row->COD_SESION!=$codigo){
+				if( $row->NOMBRE_SESION==$nombre){
+				$var=1;
+				}
+			}
+			$contador = $contador + 1;
+		}}
+		return $var;
+	}
+
 }
 
 ?>

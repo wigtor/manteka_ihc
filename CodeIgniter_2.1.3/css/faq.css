@@ -3,3 +3,5 @@
 .faqs div p { text-align:justify; max-width: 100%; padding-bottom: 15px; margin-left: 30px; margin-right: 20px; line-height: 35px;}
 .faqs div {display: none;}
 #textAbout p {text-align:justify; max-width: 100%; padding-bottom: 15px; margin-left: 30px; margin-right: 20px; line-height: 35px;}
+#textAbout ul li {text-align:justify; max-width: 100%; padding-bottom: 15px; margin-left: 30px; margin-right: 20px; line-height: 35px;}
+.carousel-caption p {text-align:justify; max-width: 100%; padding-bottom: 5px;  margin-right: 20px;}

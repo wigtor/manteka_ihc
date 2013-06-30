@@ -74,7 +74,7 @@ class Secciones extends MasterManteka {
 		$letra_post = $this->input->post('letra_post');
 		$num_post = $this->input->post('num_post');
 		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->existeSeccion($letra_post."-".$num_post);
+		$resultado = $this->Model_secciones->existeSeccion($letra_post,$num_post);
 		echo json_encode($resultado);
 	}
 
@@ -481,6 +481,20 @@ class Secciones extends MasterManteka {
 		$resultado = $this->Model_secciones->verHorarioSegunSala($sala);
 		echo json_encode($resultado);
 	}
+
+	public function postDetalleUnaSeccion() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$cod_seccion = $this->input->post('seccion');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->getDetalleUnaSeccion($cod_seccion);
+		echo json_encode($resultado);
+	}
+
 
 	
 	

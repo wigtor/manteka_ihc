@@ -87,10 +87,10 @@ class Salas extends MasterManteka {
 		
 		
 		$this->load->model('Model_sala');
-        $num_sala = $this->input->get("num_sala");
-        $ubicacion = $this->input->get("ubicacion");
-        $capacidad = $this->input->get("capacidad");
-		$implementos = $this->input->get("cod_implemento");
+        $num_sala = $this->input->post("num_sala");
+        $ubicacion = $this->input->post("ubicacion");
+        $capacidad = $this->input->post("capacidad");
+		$implementos = $this->input->post("cod_implemento");
         $confirmacion = $this->Model_sala->InsertarSala($num_sala,$ubicacion,$capacidad,$implementos);
         
 		if ($confirmacion==1){
@@ -228,10 +228,14 @@ class Salas extends MasterManteka {
 	}
 
     /**
-    *	
-    *
-    *	@return json Resultado de la busqueda en forma de objeto json
-    */
+	* Obtener los datos de las salas que coincidan con la búsqueda del filtro seleccionado.
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le 
+	* Redirecciona al login. Siguiente a esto se capturan los tipos de filtros seleccionados, luego
+	* Se carga el model de sala, se carga el modelo de búsquedas, se realiza una nueva búsqueda dado
+	* el filtro básico, y una por cada filtro avanzado seleccionado. 
+	* Finalmente se retorna el resultado de la búsqueda, dados los filtros seleccionados.
+	* @return json Resultado de la busqueda en forma de objeto json
+	*/
     public function postBusquedaSalas(){
     	if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -255,7 +259,15 @@ class Salas extends MasterManteka {
 		echo json_encode($resultado);
 
     }
-
+	
+	/**
+	* Obtener el detalle de una sala determinada
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le 
+	* Redirecciona al login. Siguiente a esto se carga el model de sala, se captura el numero de 
+	* Sala a ya que el numero de sala es único en el sistema es equivalente a capturar el codigo.
+	* Finalmente se llama a la función getDetallesSala del modelo, que retorna el detalle de la sala.
+	* @return json Resultado de la busqueda en forma de objeto json
+	*/
     public function postDetallesSala(){
     	//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -268,7 +280,15 @@ class Salas extends MasterManteka {
 		$resultado = $this->Model_sala->getDetallesSala($num_sala);
 		echo json_encode($resultado);
     }
-
+	
+	/**
+	* Comprobar que el número de sala a ingresar no se encuentra en el sistema
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se 
+	* Le redirecciona al login, siguiente a esto se carga el model de salas, se captura el numero 
+	* De sala a ingresar.F inalmente se llama a la función numSala del modelo, que retorna 1 si el
+	* Numero de sala Existe en el sistema, y 0 en caso contrario.
+	* @return json Resultado de la busqueda en forma de objeto json
+	*/
 	public function numExiste() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -281,6 +301,16 @@ class Salas extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	
+	/**
+	* Comprobar que el número de sala a que se está editando no pertenezca a otra sala del sistema
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Siguiente a esto se carga el model de salas, se captura el numero de sala a ingresar y el código
+	* De la sala, para que cuando se haga la consulta de si existe una sala con el número consultado
+	* Se descarte la misma sala, y aquello se logra con el código.
+	* Finalmente se llama a la función numSala del modelo, que retorna 1 si el numero de sala
+	* Existe en el sistema, y 0 en caso contrario.
+	* @return json Resultado de la busqueda en forma de objeto json
+	*/
 	public function numExisteE() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';

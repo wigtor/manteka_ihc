@@ -3,7 +3,7 @@
 require_once APPPATH.'controllers/Master.php'; 
 
 class Alumnos extends MasterManteka {
-	 
+
 	/**
 	* Manda a la vista 'cuerpo_alumnos_ver' los datos necesarios para su funcionamiento
 	*
@@ -19,8 +19,8 @@ class Alumnos extends MasterManteka {
 		//cargo el modelo de estudiantes
 		$this->load->model('Model_estudiante');
 
-        $datos_vista = array('rs_estudiantes' => array());
-	     
+		$datos_vista = array('rs_estudiantes' => array());
+
 		$subMenuLateralAbierto = "verAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -45,8 +45,8 @@ class Alumnos extends MasterManteka {
 	{
 
 		$this->load->model('Model_estudiante');
-        $datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
-	    
+		$datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion' => 2,'secciones' => $this->Model_estudiante->VerSecciones());
+
 
 		//$datos_cuerpo["listado_de_algo"] = model->consultaSQL(); //Este es un ejemplo
 
@@ -76,7 +76,7 @@ class Alumnos extends MasterManteka {
 	{
 		$this->load->model('Model_estudiante');
 
-	    $datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion'=>2);
+		$datos_vista = array('rs_estudiantes' => array(),'mensaje_confirmacion'=>2);
 
 		$subMenuLateralAbierto = "borrarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -114,15 +114,15 @@ class Alumnos extends MasterManteka {
 		//$tipos_usuarios_permitidos = array();
 		//$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		//$this->cargarTodo("Alumnos", 'cuerpo_alumnos_borrar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
-	
+
 		// mostramos el mensaje de operacion realizada
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha borrado el alumno con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación en base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
@@ -154,7 +154,7 @@ class Alumnos extends MasterManteka {
 		$this->load->model('Model_estudiante');
 
 		$datos_vista = array('lista_rut' => $this->Model_estudiante->getAllRut(),'carreras' => $this->Model_estudiante->VerCarreras(),'secciones' => $this->Model_estudiante->VerSecciones(),'mensaje_confirmacion'=>2);
-		      
+
 		$subMenuLateralAbierto = "agregarAlumnos"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
@@ -184,16 +184,16 @@ class Alumnos extends MasterManteka {
 		$this->load->model('Model_estudiante');
 
 		$rut_estudiante = $this->input->post("rut_estudiante");
-        $nombre1_estudiante = $this->input->post("nombre1_estudiante");
-        $nombre2_estudiante = $this->input->post("nombre2_estudiante");;
-        $apellido_paterno = $this->input->post("apellido_paterno");
-        $apellido_materno = $this->input->post("apellido_materno");
-        $correo_estudiante = $this->input->post("correo_estudiante");
-        $cod_seccion = $this->input->post("seccion_seleccionada");
-        $cod_carrera = $this->input->post("cod_carrera");
+		$nombre1_estudiante = $this->input->post("nombre1_estudiante");
+		$nombre2_estudiante = $this->input->post("nombre2_estudiante");;
+		$apellido_paterno = $this->input->post("apellido_paterno");
+		$apellido_materno = $this->input->post("apellido_materno");
+		$correo_estudiante = $this->input->post("correo_estudiante");
+		$cod_seccion = $this->input->post("seccion_seleccionada");
+		$cod_carrera = $this->input->post("cod_carrera");
 		
-        $confirmacion = $this->Model_estudiante->InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera);
-	    
+		$confirmacion = $this->Model_estudiante->InsertarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion,$cod_carrera);
+
 		// mostramos el mensaje de operacion realizada
 		if ($confirmacion==1){
 			$datos_plantilla["titulo_msj"] = "Accion Realizada";
@@ -241,6 +241,15 @@ class Alumnos extends MasterManteka {
 		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_editar', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 	}
 
+	/**
+	*
+	* Obtiene para la vista los estudiantes de una sección determinada
+	*
+	* Se consulta el estado de logueado del usuario si lo esta se llama a la función
+	* en el modelo para obtener los datos de los estudianes que pertencenede a la sección $cod_seccion 
+	* obtenida de la vista.
+	**/
+
 	public function obtenerAlumnosSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -253,6 +262,17 @@ class Alumnos extends MasterManteka {
 		$resultado = $this->Model_estudiante->getEstudiantesSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
+
+	/**
+	*
+	* Se obtiene la información para editar un estudiante de la vista y se llama a la función en el modelo para 
+	* onsertarla en la base de datos.
+	*
+	* Se obtienen lo datos moddificados de la vista, se carga el modelo de estudiantes se llama ala función
+	* actualizar estudiante en el modelo  si la confimacion es positva se despliega el mensaje de exito si es negativa
+	* se depliega el mesaje de error
+	*
+	**/
 
 	public function postEditarEstudiante() {
 		$rut_estudiante = $this->input->post("rutEditar");
@@ -267,12 +287,12 @@ class Alumnos extends MasterManteka {
 		$confirmacion = $this->Model_estudiante->ActualizarEstudiante($rut_estudiante,$nombre1_estudiante,$nombre2_estudiante,$apellido_paterno,$apellido_materno,$correo_estudiante,$cod_seccion);
 		
 		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha actualizado el alumno con éxito";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Se ha editado el alumno con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la actualización de la base de datos";
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
@@ -286,6 +306,15 @@ class Alumnos extends MasterManteka {
 
 
 	}
+
+	/**
+	*
+	* Carga la vista para el cambio de sección. 
+	*
+	*Se cargan a través del modelo las seccines de estudiantes que serán mostradasn en pantalla.
+	*
+	*
+	**/
 	
 	public function cambiarSeccionAlumnos()
 	{
@@ -300,14 +329,14 @@ class Alumnos extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cambiarSeccion', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
-	
+
 	}
 	
 
 	/**
-	* Esta función cambia de foema masiva a los estudiantes selecionandos a una nueva secciion selecionada
+	* Esta función cambia de forma masiva a los estudiantes selecionandos a una nueva sección selecionada
 	* Primero se carga el modelo de estudiantes 
-	* Se determina desde que seccion y a cual seccion se cambiaran los alumnos
+	* Se determina desde que sección y a cual sección se cambiarán los alumnos
 	* Se obtiene la lista de selecionados que seránm cambiaados de sección
 	* Se cargan los datos a la vista
 	*
@@ -318,31 +347,32 @@ class Alumnos extends MasterManteka {
 		//@ViewBag.Test = data[0]; // Data will be set to P1
 		$this->load->model('Model_estudiante');
 		$seccion1 = $this->input->post('cod_seccion1');
+		$cambiarDesde = $this->input->post('direccion');
 		$seccion2 = $this->input->post('cod_seccion2');
 		
-		$cambiarDesde = $this->input->post('botonCambio');
 		
-		if($cambiarDesde=="1"){
-				$lista_seleccionados = $this->input->post('seleccionadosS1');
-				$seccionOUT = $this->input->post('cod_seccion2');
-				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
+		
+		if($cambiarDesde == 1){
+			$lista_seleccionados = $this->input->post('seleccionadosS1');
+			$seccionOUT = $this->input->post('cod_seccion2');
+			$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
 		}
 		else{
-				$lista_seleccionados = $this->input->post('seleccionadosS2');
-				$seccionOUT = $this->input->post('cod_seccion1');
-				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
+			$lista_seleccionados = $this->input->post('seleccionadosS2');
+			$seccionOUT = $this->input->post('cod_seccion1');
+			$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT,$lista_seleccionados);
 		}
 		//echo count($lista_seleccionados);
 		if($confirmacion != 1){
-			$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar cambiar de sección";
 			$datos_plantilla["tipo_msj"] = "alert-error";
 		}
 		else{
-			$datos_plantilla["titulo_msj"] = "Accion Realizada";
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha cambiado de sección correctamente";
 			$datos_plantilla["tipo_msj"] = "alert-success";
-	
+
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 		$datos_plantilla["redirecTo"] = "Alumnos/cambiarSeccionAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
@@ -353,6 +383,12 @@ class Alumnos extends MasterManteka {
 	}
 
 	
+	/**
+	*
+	* Carga la vista ver alumnos por defecto al entrar en la seccion alumnos
+	*
+	**/
+
 	public function index() //Esto hace que el index sea la vista que se desee
 	{
 		$this->verAlumnos();
@@ -404,6 +440,12 @@ class Alumnos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	*
+	* Se obtienen todas las secciones que hay ingresadas en manteka
+	*
+	**/
+
 	public function postGetSecciones() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -415,6 +457,17 @@ class Alumnos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	
+	/**
+	*
+	* Se comprueba si existe el rut
+	*
+	* Se obtiene un rut desde la vista y se comprueba si este
+	* existe en el sitema se deveulve el resultado de forma asincrona
+	*
+	*
+	**/
+
+
 	public function rutExisteC() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -433,7 +486,18 @@ class Alumnos extends MasterManteka {
 		$this->load->helper(array('form', 'url'));
 	}
 
-
+	/**
+	*
+	* Controla la carga masiva de estudiantes en el sistema
+	*
+	* Se realiza la configuración del archivo que esta permitido cargar en el sistema indicando la ruta, la extención y el tamaño
+	* si no se ha subido ningun archivo entonces se despliega la vista correspondiente a la carga masiva
+	* en caso contrario se evalua el resultado de la carga y se obtiene la ruta completa
+	* se carga el modelo de estudiantes y se inicia la carga masiva en la base de datos
+	* se carga la vista de exito con las filas erroneas si exitieran o en caso de falla critica se devuelve un error
+	*
+	*
+	**/
 
 	function cargaMasivaAlumnos()
 	{
@@ -457,7 +521,7 @@ class Alumnos extends MasterManteka {
 		{
 			$error = array('error' => $this->upload->display_errors());
 
-		 	$datos_vista = $error;
+			$datos_vista = $error;
 
 			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
@@ -465,25 +529,61 @@ class Alumnos extends MasterManteka {
 		{
 			$data = array('upload_data' => $this->upload->data());
 
-			$datos_vista = $data;
+			
 			$datos = $data['upload_data'];
 			$nombre_archivo = $datos['full_path'];
 
 			//falta valida aqui el archivo
 
 			$this->load->model('Model_estudiante');
+			$stack = array();
+			$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo);
+			
+			if ($stack !== FALSE) {
 
-			if(($this->Model_estudiante->cargaMasiva($nombre_archivo)) !== TRUE){
 
-					$datos_vista = array('error' => 'Los datos del archivo son erroneos');
 
-					$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+				if(count($stack) != 0) {
 
-				exit();
+					$datos_plantilla["titulo_msj"] = "Acción Realizada";
+					$datos_plantilla["cuerpo_msj"] = "El archivo se ha cargado, pero con errores.";
+					$datos_plantilla["tipo_msj"] = "alert-success";
+					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+					$datos_plantilla["redirecTo"] = "Alumnos/cargaMasivaAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+					//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+					$datos_plantilla["nombre_redirecTo"] = "Carga masiva de alumnos"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+					$tipos_usuarios_permitidos = array();
+					$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+					$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+					
+					
+				} else  {
+					$datos_plantilla["titulo_msj"] = "Acción Realizada";
+					$datos_plantilla["cuerpo_msj"] = "El archivo se ha cargado exitosamente.";
+					$datos_plantilla["tipo_msj"] = "alert-success";
+					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+					$datos_plantilla["redirecTo"] = "Alumnos/cargaMasivaAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+					//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+					$datos_plantilla["nombre_redirecTo"] = "Carga masiva de alumnos"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+					$tipos_usuarios_permitidos = array();
+					$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+					$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+				}
+			}else{
 
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "El archivo no tiene el formato correcto.";
+				$datos_plantilla["tipo_msj"] = "alert-error";
+				$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+				$datos_plantilla["redirecTo"] = "Alumnos/cargaMasivaAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+				//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+				$datos_plantilla["nombre_redirecTo"] = "Carga masiva de alumnos"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+				$tipos_usuarios_permitidos = array();
+				$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+				$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 			}
 
-			$this->cargarTodo("Alumnos", 'cuerpo_alumnos_cargaMasiva_success', "barra_lateral_alumnos", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
 		}
 	}
 

@@ -1,8 +1,18 @@
-
+<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
 <script>
-
+	
 	function comprobarRut() {
 		var rut = document.getElementById("rut_estudiante").value;
+		
+		dv = rut.charAt(rut.length-1);
+		rut = rut.substring(0,rut.length-1);
+		if(calculaDigitoVerificador(rut,dv) != 0){
+			$('#modalRutIncorrecto').modal();
+			document.getElementById("rut_estudiante").value = "";
+			return;
+		}
+		
+		
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
@@ -38,57 +48,35 @@
 
 
 	function agregarEstudiante(){
-
-		var rut = document.getElementById("rut_estudiante").value;
-		var nombreUno =	document.getElementById("nombre1_estudiante").value;
-		var nombreDos =	document.getElementById("nombre2_estudiante").value;
-		var apellidoPaterno = document.getElementById("apellido_paterno").value;
-		var apellidoMaterno = document.getElementById("apellido_materno").value;
-		var correo = document.getElementById("correo_estudiante").value;
-		var seccion = document.forms['FormEditar'].elements['seccion_seleccionada'].value;
-
-
-	
-		if(rut!="" && nombreUno!=""  && apellidoPaterno!="" && apellidoMaterno!="" && correo!=""){
-					return true;
-		}
-		else {
-				alert("Ingrese todos los datos");
-				return false;
-		}
+			var rut = document.getElementById("rut_estudiante").value;
+			document.getElementById("rut_estudiante").value = rut.substring(0,rut.length-1);
+			return true;
 	}
 
 function ordenarFiltro(){
 	var filtroLista = document.getElementById("filtroSeccion").value;
 	var arreglo = new Array();
-	var ocultarInput;
-	var ocultarTd;
+	var ocultarTr;
 	var cont;
 	
-	<?php
-	/*
-	$contadorE = 0;
-	while($contadorE<count($secciones)){
-		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
-		$contadorE = $contadorE + 1;
-	}
-	*/
-	?>
-	
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		desmarcar=document.getElementById(arreglo[cont]);
-		ocultarTd=document.getElementById("seccionTd_"+cont);
-		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			desmarcar.checked = false;
-			ocultarTd.style.display='none';
-		}
-		else
-		{
-			
-			ocultarTd.style.display='';
-		}
-    }
+	$.ajax({
+		type: "POST", /* Indico que es una petición POST al servidor */
+		url: "<?php echo site_url("Alumnos/postGetSecciones") ?>", /* Se setea la url del controlador que responderá */
+		data: { }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+
+		arreglo = jQuery.parseJSON(respuesta);
+			for(cont=0;cont < arreglo.length;cont++){
+				ocultarTr=document.getElementById("seccionTr"+cont);
+				if(0 > arreglo[cont].nombre.toLowerCase().indexOf(filtroLista.toLowerCase ())){
+					ocultarTr.style.display='none';
+				}
+				else
+				{		
+					ocultarTr.style.display='';
+				}
+			}
+		}});
 }
 
 
@@ -108,7 +96,7 @@ function ordenarFiltro(){
 					td = document.createElement('td');
 					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
 					td.appendChild(nodoTexto);
-					
+					tr.setAttribute("id", "seccionTr"+i);
 
 					td2 = document.createElement('td');
 					radioInput = document.createElement('input');
@@ -152,39 +140,38 @@ function ordenarFiltro(){
 				?>
 				<div class="span6">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">1-.<font color="red">*</font> RUT</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">1.- <font color="red">*</font> RUT</label>
 						<div class="controls">
-							<input id="rut_estudiante"  pattern="\d{8,9}" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su rut sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:177858741" required>
-						</div>
+						<input id="rut_estudiante"  pattern="^\d{7,8}[0-9kK]{1}$" onblur="comprobarRut()" class="span12" min="1" type="text" maxlength="9" title="Ingrese su RUN sin puntos ni guion"  name="rut_estudiante" placeholder="Ej:177858741" required>						</div>
 					</div>
 					<div class="control-group">
-						<label  class="control-label" for="inputInfo" style="cursor: default">2-.<font color="red">*</font> Primer nombre</label>
+						<label  class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Primer nombre</label>
 						<div class="controls">
 							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="nombre1_estudiante" name="nombre1_estudiante" maxlength="19" required >
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">3-. Segundo nombre</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">3.- Segundo nombre</label>
 						<div class="controls">
 							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo"  id="nombre2_estudiante" name="nombre2_estudiante" maxlength="19">
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">4-.<font color="red">*</font> Apellido Paterno</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">4.- <font color="red">*</font> Apellido paterno</label>
 						<div class="controls">
 							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido_paterno" name="apellido_paterno" maxlength="19" required>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">5-.<font color="red">*</font> Apellido Materno</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">5.- <font color="red">*</font> Apellido materno</label>
 						<div class="controls">
 							<input type="text" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" id="apellido_materno" name="apellido_materno" maxlength="19" required>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">6-.<font color="red">*</font> Correo</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">6.- <font color="red">*</font> Correo</label>
 						<div class="controls">
-							<input type="email" id="correo_estudiante" class="span12" name="correo_estudiante" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
+							<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correo_estudiante" class="span12" name="correo_estudiante" maxlength="199" placeholder="nombre_usuario@miemail.com" required>
 						</div>
 					</div>
 				</div> 
@@ -193,7 +180,7 @@ function ordenarFiltro(){
 				<!-- Segunda columna -->
 				<div class="span6" >
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">7-.<font color="red">*</font> Asignar Carrera</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">7.- <font color="red">*</font> Asignar carrera</label>
 						<div class="controls">
 							<select required id="cod_carrera" name="cod_carrera" class="span12" title="asigne carrera" >
 							<?php
@@ -209,7 +196,7 @@ function ordenarFiltro(){
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">8-.<font color="red">*</font> Asignar sección</label>
+						<label class="control-label" for="inputInfo" style="cursor: default">8.- <font color="red">*</font> Asignar sección</label>
 						<div class="controls">
 							<input type="text" onkeyup="ordenarFiltro()" class="span12" id="filtroSeccion" placeholder="Filtro de Sección">
 						</div>
@@ -231,7 +218,7 @@ function ordenarFiltro(){
 				
 					<div class="row">
 						<div class="controls pull-right">
-							<button class="btn" type="submit" >
+							<button class="btn" type="submit" style="margin-right: 10px" >
 								<div class="btn_with_icon_solo">Ã</div>
 								&nbsp Agregar
 							</button>
@@ -253,6 +240,20 @@ function ordenarFiltro(){
 						</div>
 						<div class="modal-body">
 							<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+					
+					<!-- Modal de modalRutIncorrecto -->
+					<div id="modalRutIncorrecto" class="modal hide fade">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>Dígito verificador incorrecto</h3>
+						</div>
+						<div class="modal-body">
+							<p>Por favor ingrese el rut nuevamente</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

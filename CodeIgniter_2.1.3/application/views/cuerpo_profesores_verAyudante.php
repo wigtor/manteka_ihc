@@ -91,10 +91,10 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado ayudantes
+			1.- Seleccione un ayudante para ver sus detalles:
 		</div>
 		<div class="span6" >
-			2.-Detalle ayudante:
+			2.- Detalle ayudante:
 		</div>
 	</div>
 	<div class="row-fluid">

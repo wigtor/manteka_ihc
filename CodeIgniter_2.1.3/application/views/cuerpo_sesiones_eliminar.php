@@ -121,10 +121,10 @@ function resetear(){
 	</div>
 	<div class="row-fluid">
 		<div class="span6" >
-			1.-Listado sesiones
+			1.- Seleccione la sesión que desea eliminar:
 		</div>
 		<div class="span6" >
-			2.-Detalle sesión:
+			2.- Detalle sesión:
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -146,12 +146,11 @@ function resetear(){
 			<pre style="padding: 2%; cursor:default">
 Nombre de la sesión: 	    <b id="nombreDetalle"></b>
 Nombre del módulo temático: <b id="mod_temDetalle"></b>
-Descripción: 		    <b id="descripcionDetalle"></b>
-			</pre>
+Descripción: 		    <b id="descripcionDetalle"></b></pre>
 			<input name="codEliminar" type="hidden" id="codEliminar">
 			<div class="control-group">
 				<div class="controls pull-right">
-					<button type="button" class="btn" onclick="eliminarSesion()">
+					<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarSesion()">
 						<i class= "icon-trash"></i>
 						&nbsp; Eliminar
 					</button>

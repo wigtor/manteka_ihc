@@ -23,6 +23,8 @@ class Model_modulo extends CI_Model {
 			$profes[$contador][4] = $row->APELLIDO1_PROFESOR;
 			$profes[$contador][5] = $row->APELLIDO2_PROFESOR;
 			$profes[$contador][6] = 0;
+			$profes[$contador][7] = -1;
+			$profes[$contador][8] = -1;
 			$contador = $contador + 1;
 		}
 		
@@ -44,11 +46,17 @@ class Model_modulo extends CI_Model {
 		$contador = 0;
 		$contador2 = 0;
 		while($contador < count($profes)){
+			$profes[$contador][9] = 0;
 			while($contador2 < count($lista)){
 				if($profes[$contador][1] == $lista[$contador2][1]){
-					$profes[$contador][0] = $lista[$contador2][0];
-					if($lista[$contador2][2] == 1){
-						$profes[$contador][6] = 1;
+					if($profes[$contador][9] == 0){
+						$profes[$contador][0] = $lista[$contador2][0];
+						$profes[$contador][6] = $lista[$contador2][2];
+						$profes[$contador][9]++;
+					}
+					else{
+						$profes[$contador][7] = $lista[$contador2][0];
+						$profes[$contador][8] = $lista[$contador2][2];					
 					}
 				}
 				$contador2++;
@@ -581,7 +589,7 @@ class Model_modulo extends CI_Model {
 	* Obtiene la lista de los profesores que no tienen equipo
 	*
 	*/
-	public function VerTodosLosProfesoresAddModulo(){
+	public function VerTodosLosProfesoresAddModulo($lider){
 		$this->db->select('*');
 		$this->db->from('profesor');
 		$query = $this->db->get();
@@ -597,6 +605,7 @@ class Model_modulo extends CI_Model {
 		}
 		
 		$this->db->select('RUT_USUARIO2');
+		$this->db->select('LIDER_PROFESOR');
 		$this->db->from('profe_equi_lider');
 		$query = $this->db->get();
 		$datos = $query->result();
@@ -605,6 +614,7 @@ class Model_modulo extends CI_Model {
 		$lista = array();
 		foreach ($datos as $row) {  
 			$lista[$contador] = array();
+			$lista[$contador][0] = $row->LIDER_PROFESOR;
 			$lista[$contador][1] = $row->RUT_USUARIO2;
 			$contador = $contador + 1;
 		}
@@ -616,8 +626,9 @@ class Model_modulo extends CI_Model {
 		$esta =false;
 		while($contador < count($profes)){
 			while($contador2 < count($lista)){
-				if($profes[$contador][0] == $lista[$contador2][1]){
+				if($profes[$contador][0] == $lista[$contador2][1] && $lista[$contador2][0] == $lider){
 					$esta=true;
+					$contador2 = count($lista);
 				}
 				$contador2++;
 			}
@@ -634,6 +645,69 @@ class Model_modulo extends CI_Model {
 		}
 		return $profes2;
 
+	}
+
+
+	/**
+	* Función que obtiene los modulos que coinciden con cierta búsqueda
+	*
+	* Esta función recibe un texto para realizar una búsqueda y un tipo de atributo por el cual filtrar.
+	* Se realiza una consulta a la base de datos y se obtiene la lista de ayudantes que coinciden con la búsqueda
+	* Esta búsqueda se realiza mediante la sentencia like de SQL.
+	*
+	* @param int $tipoFiltro Un valor entre 1 a 4 que indica el tipo de filtro a usar.
+	* @param string $texto Es el texto que se desea hacer coincidir en la búsqueda
+	* @return Se devuelve un array de objetos modulos
+	* @author Alex Ahumada
+	*/
+	public function getModulosByFilter($texto, $textoFiltrosAvanzados)
+	{
+		$this->db->select('NOMBRE_MODULO AS nombre');
+		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+		$this->db->select('COD_MODULO_TEM AS id');
+		$this->db->order_by('NOMBRE_MODULO', 'asc');
+
+		if (trim($texto) != "") {
+			$this->db->like("NOMBRE_MODULO", $texto);
+			$this->db->or_like("DESCRIPCION_MODULO", $texto);
+		}
+		else {
+			//Sólo para acordarse
+			define("BUSCAR_POR_NOMBRE", 0);
+			define("BUSCAR_POR_DESCRIPCION", 1);
+			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
+				$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
+			}
+			if ($textoFiltrosAvanzados[BUSCAR_POR_DESCRIPCION] != '') {
+				$this->db->like("DESCRIPCION_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_DESCRIPCION]);
+			}
+		}
+		$query = $this->db->get('modulo_tematico');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+   }
+
+   /**
+	*
+	* Obtiene los detalles de un módulo temático
+	*
+	*/
+	public function getDetallesModulo($cod)
+	{
+		$this->db->select('COD_MODULO_TEM AS cod_mod');
+		$this->db->select('COD_EQUIPO AS cod_equipo');
+		$this->db->select('NOMBRE_MODULO AS nombre_mod');
+		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+		$this->db->where('COD_MODULO_TEM', $cod);
+		$this->db->order_by('NOMBRE_MODULO','asc');
+		$query = $this->db->get('modulo_tematico');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->row();
 	}
 }
 ?>

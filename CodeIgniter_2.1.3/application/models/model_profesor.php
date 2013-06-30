@@ -79,26 +79,43 @@ class Model_profesor extends CI_Model {
 	*/
 	public function VerTodosLosProfesores()
 	{
-		$sql="SELECT * FROM profesor ORDER BY APELLIDO1_PROFESOR"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
-		echo mysql_error();
+		//$sql="SELECT * FROM profesor ORDER BY APELLIDO1_PROFESOR"; //código MySQL
+		$this->db->select('*');
+		$this->db->from('profesor');
+		$this->db->order_by("APELLIDO1_PROFESOR", "asc");
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); //enviar código MySQL
+		//echo mysql_error();
 		$contador = 0;
 		$lista=array();
-		while ($row = mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		
-           $lista[$contador][0] = $row['RUT_USUARIO2'];
-           $lista[$contador][1] = $row['NOMBRE1_PROFESOR'];
-           $lista[$contador][2] = $row['NOMBRE2_PROFESOR'];
-           $lista[$contador][3] = $row['APELLIDO1_PROFESOR'];
-           $lista[$contador][4] = $row['APELLIDO2_PROFESOR'];
-           $lista[$contador][5] = $row['TELEFONO_PROFESOR'];
-            $lista[$contador][6]= $row['TIPO_PROFESOR'];
+		//while ($row = mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+		   $lista[$contador]=array();
+           $lista[$contador][0] = $row->RUT_USUARIO2;
+           $lista[$contador][1] = $row->NOMBRE1_PROFESOR;
+           $lista[$contador][2] = $row->NOMBRE2_PROFESOR;
+           $lista[$contador][3] = $row->APELLIDO1_PROFESOR;
+           $lista[$contador][4] = $row->APELLIDO2_PROFESOR;
+           $lista[$contador][5] = $row->TELEFONO_PROFESOR;
+            $lista[$contador][6]= $row->TIPO_PROFESOR;
 			$contador = $contador + 1;
 		}
 		return $lista;
 		}
 
 
+
+
+	/**
+	* Obtiene los datos de todos los profesores de la base de datos
+	*
+	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada profesor y se va guardando en un arreglo de dos dimensiones
+	* Se hace el cruce también con la tabla usuario, verificando que los ruts sean iguales
+	* Finalmente se retorna la lista con los datos. 
+	*
+	* @return  Información de todos los profesores del sistema.
+	*/
 		public function getAllProfesores()
 	{
 		$this->db->select('RUT_USUARIO2 AS rut');
@@ -172,14 +189,20 @@ class Model_profesor extends CI_Model {
 	*/
    public function verModulo()
   {
-    $sql="SELECT * FROM MODULO_TEMATICO"; //código MySQL
-    $datos=mysql_query($sql); //enviar código MySQL
+    //$sql="SELECT * FROM MODULO_TEMATICO"; //código MySQL
+    $this->db->select('*');
+    $this->db->from('MODULO_TEMATICO');
+    $query=$this->db->get();
+    $datos=$query->result();
+    //$datos=mysql_query($sql); //enviar código MySQL
     $contador = 0;
     $lista=array();
-    while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-      $lista[$contador][0] = $row['cod_modulo_tem'];
-      $lista[$contador][3] = $row['nombre_modulo'];
-      $contador = $contador + 1;
+    //while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+    foreach ($datos as $row) {
+    	$lista[$contador]=array();
+      	$lista[$contador][0] = $row->COD_MODULO_TEM;
+      	$lista[$contador][3] = $row->NOMBRE_MODULO;
+      	$contador = $contador + 1;
     }
     
     return $lista;
@@ -194,18 +217,32 @@ class Model_profesor extends CI_Model {
 	* @return array $lista Contiene la información de todas las secciones del sistema
 	*/
 	public function verSeccion(){
-		$sql="SELECT cod_seccion FROM SECCION"; //código MySQL
-		$datos=mysql_query($sql); //enviar código MySQL
+		//$sql="SELECT cod_seccion FROM SECCION"; //código MySQL
+		$this->db->select('COD_SECCION');
+		$this->db->from('seccion');
+		$query=$this->db->get();
+		$datos=$query->result();
+		//$datos=mysql_query($sql); //enviar código MySQL
 		$contador = 0;
 		$lista=array();
-		while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-			$lista[$contador] = $row['cod_seccion'];
+		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
+		foreach ($datos as $row) {
+			$lista=array();
+			$lista[$contador] = $row->COD_SECCION;
 			$contador = $contador + 1;
 		}
 		
 		return $lista;
 	}
 
+	/**
+	*Obtiene todos los datos de un profesor en específico desde la base de datos
+	*
+	*Se genera una consulta en la cual se busca un  rut de un profesor determinado. Una vez que se encuentra, se guarda en un arreglo.
+	*
+	*@param string $rut corresponde al rut del profesor del cual se quieren obtener los datos
+	*@return se retorna la fila que contiene la información correspondiente al profesor buscato.
+	*/
 	public function getDetallesProfesor($rut) {
 		$this->db->select('profesor.RUT_USUARIO2 AS rut');
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1');
@@ -297,6 +334,21 @@ class Model_profesor extends CI_Model {
     {
 		$this->db->where('RUT_USUARIO2', $rut_profesor);
 		if($this->db->delete('profesor')) {
+			$retorno1=1;
+		}
+		else{
+			$retorno1=0;
+		}
+
+		$this->db->where('RUT_USUARIO', $rut_profesor);
+		if($this->db->delete('usuario')) {
+			$retorno2=1;
+		}
+		else{
+			$retorno2=0;
+		}
+
+		if(($retorno1==1) && ($retorno2==1)){
 			return 1;
 		}
 		else{

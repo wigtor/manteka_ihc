@@ -97,9 +97,17 @@ class Ayudantes extends MasterManteka {
 	    
 
 		//Debe estar en un if según lo que contenga $confirmacion
-		$datos_plantilla["titulo_msj"] = "Ayudante creado";
-		$datos_plantilla["cuerpo_msj"] = "El ayudante fue creado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		if ($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El ayudante fue ingresado con éxito.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar ingresar el ayudante";
+			$datos_plantilla["tipo_msj"] = "alert-error";
+		}
+
 		$datos_plantilla["redirecTo"] = 'Ayudantes/agregarAyudantes';
 		$datos_plantilla["nombre_redirecTo"] = "Agregar ayudante";
 		$datos_plantilla["redirectAuto"] = TRUE;
@@ -158,9 +166,19 @@ class Ayudantes extends MasterManteka {
 
 		$confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
 
-		$datos_plantilla["titulo_msj"] = "Ayudante editado";
-		$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		if($confirmacion==1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado con éxito.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar editar el ayudante";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		
+
+
 		$datos_plantilla["redirecTo"] = 'Ayudantes/editarAyudantes';
 		$datos_plantilla["nombre_redirecTo"] = "Editar ayudantes";
 		$datos_plantilla["redirectAuto"] = TRUE;
@@ -203,16 +221,36 @@ class Ayudantes extends MasterManteka {
 	*
 	* @param string $rut_estudiante
 	*/
+
+	/**
+	*Elimina la información de un ayudante del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_editarAyudante'
+	*
+	* 
+	* Se cargan los datos para las plantillas de la página de realización.
+	* Se carga el modelo de ayudantes, se llama a la función EliminarAyudante 
+	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
+	* El resultado de esta operacion se recibe en la variable 'confirmacion'
+	* la que de acuerdo el valor se envía el mensaje de error o realización correspondiente, dando la opción de volver a la vista Borrar Ayudantes
+	* 
+	*
+	*
+	*/
 	public function EliminarAyudante()
 	{
 		$this->load->model('Model_ayudante');
 		$rut_ayudante = $this->input->post('rutToDelete');
 		$confirmacion = $this->Model_ayudante->EliminarAyudante($rut_ayudante);
 		
-
-		$datos_plantilla["titulo_msj"] = "Ayudante eliminado";
-		$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
+		if ($confirmacion == 1){
+			$datos_plantilla["titulo_msj"] = "Acción Realizada";
+			$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado con éxito.";
+			$datos_plantilla["tipo_msj"] = "alert-success";
+		}
+		else{
+			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar eliminar el ayudante";
+			$datos_plantilla["tipo_msj"] = "alert-error";
+		}
 		$datos_plantilla["redirecTo"] = 'Ayudantes/borrarAyudantes';
 		$datos_plantilla["nombre_redirecTo"] = "Eliminar ayudantes";
 		$datos_plantilla["redirectAuto"] = TRUE;
@@ -241,6 +279,12 @@ class Ayudantes extends MasterManteka {
 		$resultado = $this->Model_ayudante->getDetallesAyudante($rut);
 		echo json_encode($resultado);
 	}
+
+	/**
+	* Método que responde a una busqueda de ayudantes a través de un filtro. Si esta búsqueda no se ha realizado antes, se guarda en el historial
+	* para una próxima oportunidad.
+	*
+	*/
 
 	public function postBusquedaAyudantes() {
 		if (!$this->isLogged()) {
