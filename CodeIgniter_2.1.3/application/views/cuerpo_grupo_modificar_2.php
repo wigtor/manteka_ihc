@@ -799,7 +799,10 @@ function revisarRut(rut){
 </script>
 		<!-- Este es el botón que está entremedio de los dos listados -->
 		<div class="span2 text-center">
+			<br /><br /><br />
 			<div class="btn" type="button" onclick="pasarContactos()">Agregar</div>
+			<br /><br /><br />
+			<div class="btn" type="button" onclick="quitarContactos()">Quitar</div>
 		</div>
 
 		<!-- Este es el listado de destinatarios seleccionados para el envío -->
@@ -880,7 +883,7 @@ function revisarRut(rut){
 			<li>
 			<?php
 					$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos','style'=>'margin-left:-300px;');
-					echo form_open('GrupoContactos/editarGrupoContacto',$attributes);
+					echo form_open('GruposContactos/editarGrupoContacto',$attributes);
 				?>
 				
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
@@ -903,6 +906,37 @@ function revisarRut(rut){
 			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 		</div>
 	</div>
+
+	<!-- modal de confirmacion para modificar -->
+	<div id="confirmacionModificar" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Se modificará el grupo de contactos, esta seguro?.</p>
+		</div>
+		<div class="modal-footer">
+			<button onclick="modificar()" class="btn" type="button" data-dismiss="modal">Confirmar</button>
+			<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+		</div>
+	</div>
+
+
+	<!-- modal de error 1 para modificar -->
+	<div id="error1" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Error</h3>
+		</div>
+		<div class="modal-body">
+			<p>Debe seleccionar al menos un destinatario para el grupo de contactos.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
 </fieldset>
 
 
@@ -910,16 +944,43 @@ function revisarRut(rut){
 
 
 <script type="text/javascript">
+	var string = "";
+	function quitarContactos(){
+ var tbody = document.getElementById('tbody2');
+ var tbody2 = document.getElementById('tbody1');
+ var cont = 0;
+ var total=tbody.getElementsByTagName('tr').length;
+	for (var x=0; x < total; x++) {		
+		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(revisarRutR(tbody.getElementsByTagName('tr')[x].getAttribute("rut"))){	
+				tbody2.appendChild(tbody.getElementsByTagName('tr')[x]);
+				total--;
+				x--;
+			}
+			else{
+				tbody.getElementsByTagName('tr')[x].remove();
+				total--;
+				x--;	
+			}
+		}
+	}
+}
+function revisarRutR(rut){
+	var tbody2 = document.getElementById('tbody1');
+	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
+		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
+			return false;
+		}
+	}
+	return true;	
+}
 
-
-function validar(form){
-	event.preventDefault();
-	var answer = confirm("¿Está seguro que desea guardar los cambios en este Grupo de Contactos?");
-	if (answer){
-		var string = "";
+	function validar(form){
+		event.preventDefault();
+		string = "";
 		var total=tbody2.getElementsByTagName('tr').length;
 		var help = 0;
-		for (var x=0; x < total; x++) {		
+		for (var x=0; x < total; x++) {
 			if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
 				if(help== 0){
 				string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
@@ -931,30 +992,22 @@ function validar(form){
 			}
 		}	
 		if(!string.length){
-			alert('Debe seleccionar un contacto de la tabla Destinatario')
+			//alert('Debe seleccionar un contacto de la tabla Destinatario')
+			$('#error1').modal();
 		}
 		else{
-			
-				$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
-		// Enviamos el formulario usando AJAX
-				$.ajax({
-				type: 'POST',
-				url: "<?php echo site_url("GruposContactos/editarGrupoContacto") ?>",
-				data: $('#form_contactos').serialize(),	
-				// Mostramos un mensaje con la respuesta de PHP
-				success: function(data){				
-				}
-				})	
-				alert('¡Grupo de Contactos exitosamente modificado!');
-			
-			
+			confirmacionModificar(string);
 		}	
-		return false;		
+		return false;
 	}
-	else{
-			
+	function confirmacionModificar(){
+		$('#confirmacionModificar').modal();
 	}
-	
-}
+	function modificar(){
+		$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
+		var form = document.getElementById("form_contactos");
+		form.submit();	
+	}
+
 
 </script>
