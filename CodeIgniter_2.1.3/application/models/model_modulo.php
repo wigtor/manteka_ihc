@@ -2,10 +2,11 @@
  
 class Model_modulo extends CI_Model {
  
-	/**
-	* 
-	*obtiene la lista de profesores indicando a que equipo pertenecen
+	/** 
+	* Obtiene la lista de profesores de un equipo determinado
 	*
+	* @param int $cod_equipo codigo del equipo de profesores que se quiere obtener
+	* @return $profes lista de profesores que peretencen al equipo
 	*/	
 	public function profesEditarModulo($cod_equipo){
 		$this->db->select('*');
@@ -71,6 +72,7 @@ class Model_modulo extends CI_Model {
 	*
 	* Obtiene la lista de los modulos con su información
 	*
+	* @return $lista contiene la lista de modulos tematicos con toda su información
 	*/
 	public function VerModulos(){
 		$query = $this->db->get('modulo_tematico');
@@ -94,6 +96,8 @@ class Model_modulo extends CI_Model {
 	/**
 	*
 	* Obtiene la lista de los profesores que pertenecen a algún equipo
+	*
+	* @return $lista lista con todos lo profes que pertencen a un equipo
 	*
 	*/
 	public function VerEquipoModulo(){
@@ -124,6 +128,7 @@ class Model_modulo extends CI_Model {
 	*
 	* Obtiene la lista de los requisitos que estén asociados a algún módulo
 	*
+	* @return $lista lista de todos los requisitos que estan asicioados con algun módulo
 	*/
 	public function VerRequisitoModulo(){
 		$this->db->select('*');
@@ -151,6 +156,8 @@ class Model_modulo extends CI_Model {
 	*
 	* Obtiene la lista de los nombres de todos los módulos
 	*
+	* @return $lista con todos los nombres de modulos temticos
+	*
 	*/
 	public function listaNombreModulos(){	
   		$query = $this->db->get('modulo_tematico');	
@@ -168,9 +175,9 @@ class Model_modulo extends CI_Model {
 	}
 	
 	/**
-	*
 	* Obtiene la lista de todas las sesiones de la bd
-	*
+	* 
+	* @return $lista todas la sesiones
 	*/
 	public function listaSesionesParaEditarModulo(){
 		$query = $this->db->get('sesion');	
@@ -192,8 +199,9 @@ class Model_modulo extends CI_Model {
 	}
 	
 	/**
-	*
 	* Obtiene de todas las sesiones que no tengan un módulo asignado
+	*
+	* @return $lista lista con todas las sesiones que no poseen modulo temático
 	*
 	*/
 	public function listaSesionesParaAddModulo(){
@@ -219,9 +227,9 @@ class Model_modulo extends CI_Model {
 	}
 	
 	/**
+	* Obtiene la lista de todos los requisitos de la base de datos
 	*
-	* Obtiene la lista de todos los requisitos de la bd
-	*
+	* @return $lista todos los requisitos que exiten en la base de datos
 	*/
 	public function listaRequisitosParaAddModulo(){
 		$query = $this->db->get('requisito');	
@@ -242,6 +250,8 @@ class Model_modulo extends CI_Model {
 	*
 	* obtiene la lista de todos los requisitos con su información e indicando si están asociados a un cierto código de módulo
 	*
+	* @param int $cod_mod codico del modulo tematico que se quiere editar
+	* @return $lista_r lista cpn los requisitos del modulo tematico que se quiere editar
 	*/
 	public function listaRequisitosParaEditarModulo($cod_mod){		
 		$this->db->select('*');
@@ -300,6 +310,17 @@ class Model_modulo extends CI_Model {
 	/**
 	*
 	* Inserta un nuevo módulo en la BD
+	* 
+	* Crea un nuevo modulo temático en la base de datos con los datos entregados como parametros
+	*
+	* @param string $nombre_modulo nombre del nuevo modulo
+	* @param $sesiones sesiones de nuevo modulo
+	* @param string $descripcion_modulo descripción del nuevo módulo
+	* @param $profesor_lider profesor lider del nuevo módulo
+	* @param $equipo_profesores equipo de profesores del nuevo modulo
+	* @param $requisitos requisitos del nuevo modulo
+	* @return 1 en caso de exito 
+	* @return -1 en caso de fallo
 	*
 	*/
 	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos){
@@ -395,7 +416,12 @@ class Model_modulo extends CI_Model {
 	*
 	* Elimina un módulo de la BD
 	*
-	*/
+	* 
+	* 
+	* @param int $cod_modulo codigo del moduo que se eliminará
+	* @return 1 en caso de eliminarse exitosamente
+	* @return -1 en caso de fallar la consulta 
+	**/
 	public function EliminarModulo($cod_modulo)
     {
 		$this->db->where('COD_MODULO_TEM', $cod_modulo);
@@ -410,6 +436,10 @@ class Model_modulo extends CI_Model {
 	/**
 	*
 	* Obtiene la lista de los modulos con su información
+	*
+	* 
+	* @return $query->result() en caso de encontrarse los modulos
+	* @return array() en caso de fallar la consulta
 	*
 	*/
 	public function getAllModulos()
@@ -429,6 +459,21 @@ class Model_modulo extends CI_Model {
 	/**
 	*
 	* Edita la información de un módulo en especifico
+	*
+	* Cambia la informacion de la base de datos de un modulo tematico determiando 
+	* en $cod_mod por la información entregada como parametro en $nombre_modulo,$sesiones,
+	* $descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo
+	* 
+	* @param string $nombre_modulo nuevo nombre del modulo temático
+	* @param $sesiones nuevas sesiones del modulo temático
+	* @param string $descripcion_modulo nueva descripción del modulo temático
+	* @param string $profesor_lider nuevo pfofesor lider del modulo temático
+	* @param $equipo_profesores nuevo equipo de profesores del modulo temático
+	* @param $requisitos nuevos requisitos del modulo temático
+	* @param int $cod_equipo nuevo codigo del equipo de profesores del modulo temático
+	* @param int $cod_mod codigo del modulo temático a editar
+	* @return 1 en caso de exito 
+	* @return -1 en caso de fallo
 	*
 	*/
 	public function EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod){
@@ -541,7 +586,13 @@ class Model_modulo extends CI_Model {
 	*
 	* Obtiene la lista de las sesiones asociadas a un cierto módulo
 	*
-	*/
+	* Se obtiene la lista de sesiones correspondientes a un módulo temático a traves de una consulta la base de datos
+	* utilizando avtive record
+	*
+	* @param int $cod_mod codigo del módulo temático 
+	* @return $query->result() en caso de encontrarse las sesiones
+	* @return array() en caso de fallar la consulta
+	*****/
 	public function listaSesionesParaVerModulo($cod_mod){
 		$query = $this->db->get_where('sesion', array('COD_MODULO_TEM' => $cod_mod));
 		if ($query == FALSE) {
@@ -554,7 +605,13 @@ class Model_modulo extends CI_Model {
 	*
 	* Obtiene la lista de los profesores que son parte de un equipo en especifico
 	*
-	*/
+	* Se consulta a la base de datos por medio de active record la lista de profesores que pertenecen al equipo
+	* que dicta dicho modulo
+	*
+	* @param int $cod_equipo codigo del equipo que dicta un modulo
+	* @return $query->result() en caso de encontrarse el equipo
+	* @return array() en caso de fallar la consulta
+	**********/
 	public function listaProfesoresVerModulo($cod_equipo){
 		$this->db->select('*');
 		$this->db->from('profesor');
@@ -571,6 +628,12 @@ class Model_modulo extends CI_Model {
 	*
 	* Obtiene la  lista de los requisitos de un cierto módulo
 	*
+	* Se consulta a la base de datos por los requisito del modulo cuyo codigo es el parametro $cod_mod
+	* de existir dichos requisito se retornan y de no existir se retorna un array vacío
+	*  
+	* @param int $cod_mod codigo del modulo para el que se obtiene sus requisistos 
+	* @return $query->result() en caso de encontrarse requisitos
+	* @return array() en caso de fallar la consulta
 	*/
 	public function listaRequisitosVerModulo($cod_mod){
 		$this->db->select('*');
@@ -585,10 +648,15 @@ class Model_modulo extends CI_Model {
 	}
 
 	/**
+	* Muestra todos los profes que no pertenecen al equipo de profesores que posee un modulo
 	*
-	* Obtiene la lista de los profesores que no tienen equipo
+	* Se obtienen todos los profesores desde la base de datos luego se obtienen los profesores que perotencen al equpio de $lider
+	* se realiza la diferenecia entre las dos listas de profesores y fienalmente se entregan los profes que no pertenencen al modulo tematico
 	*
-	*/
+	* @param string $lider corresponde al profesor lider del modulo seleccionado
+	* @return $profes2 lista de profesores
+	*
+	**/
 	public function VerTodosLosProfesoresAddModulo($lider){
 		$this->db->select('*');
 		$this->db->from('profesor');
@@ -691,10 +759,16 @@ class Model_modulo extends CI_Model {
    }
 
    /**
-	*
-	* Obtiene los detalles de un módulo temático
-	*
-	*/
+   * Obtiene el detalle de un modulo tematico
+   * 
+   * Realiza una consulta a la base de datos para obtener el detalle del modulo con el codigo contenido en $cod 
+   * luego si no se encuentra retorna un array vacio y si tiene exito la fila con el detalle
+   *
+   * @param int $cod codigo del modulo que se quiere obtener el detalle
+   * @return array() array vacío en caso de fallar
+   * @return $query->row() fila con los datos del detalle del modulo solicitado
+   *
+   **/
 	public function getDetallesModulo($cod)
 	{
 		$this->db->select('COD_MODULO_TEM AS cod_mod');
