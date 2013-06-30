@@ -532,27 +532,6 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-	/**
-	* Función llamada por una vista a través de una petición AJAX
-	* Esta función rescata, a través de la vista, la variable 'sala'
-	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
-	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
-	* y se le envía como un string a la vista
-	*/
-
-	public function postDetalleSala() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$sala = $this->input->post('sala');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->verHorarioSegunSala($sala);
-		echo json_encode($resultado);
-	}
-
 /**
 	* Función llamada por una vista a través de una petición AJAX
 	* Esta función rescata, a través de la vista, la variable 'sección'
