@@ -309,7 +309,7 @@ function evitarEnvioVacio() {
 					$("#seleccion").val(idCorreo);
 				}
 				else {
-					$("#seleccion").val($("#seleccion").val()+idCorreo+";");
+					$("#seleccion").val($("#seleccion").val()+";"+idCorreo);
 				}
 			}
 		}
