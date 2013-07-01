@@ -143,14 +143,17 @@ function eliminarAsignacion(){
 								<?php
 								$contador=0;
 								$comilla= "'";
-								
-								while ($contador<count($seccion)){
-									
-									echo '<tr>';
-									echo '<td   style="cursor: pointer"  onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
-									echo '</tr>';
-																
-									$contador = $contador + 1;
+								if(count($seccion)==0){
+									echo '<tr><td style="cursor: default">No existen secciones asignadas</td></tr>';
+								}else{
+									while ($contador<count($seccion)){
+										
+										echo '<tr>';
+										echo '<td   style="cursor: pointer"  onclick="detalleSeccion('.$comilla.$seccion[$contador][0].$comilla.')"> '.$seccion[$contador][1].' </td>';
+										echo '</tr>';
+																	
+										$contador = $contador + 1;
+									}
 								}
 								
 								?>

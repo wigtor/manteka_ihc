@@ -19,8 +19,11 @@
 	}
 
 	function detalleModulo(cod_mod,descripcion,cod_equipo,name_mod) {
-		document.getElementById("nombre_modulo").value = name_mod;
+		document.getElementById("nombre_modulo").value = name_mod;		
 		document.getElementById("descripcion").value = descripcion;
+		if(descripcion == "null"){ 
+			document.getElementById("descripcion").value = "No hay descripción";
+		}
 		document.getElementById("cod_modulo").value = cod_mod;
 		document.getElementById("nombre_modulo2").value = name_mod;
 		document.getElementById("cod_equipo2").value = cod_equipo;
@@ -53,7 +56,7 @@
 							input.setAttribute('checked', 'true');
 						}
 						td.setAttribute('title', arrayRespuesta[i][2]);
-						nodoTexto = document.createTextNode(arrayRespuesta[i][3]);
+						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][3]);
 						td.appendChild(input);
 						td.appendChild(nodoTexto);
 						tr.appendChild(td);
@@ -106,7 +109,7 @@
 						if( (arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6] != 1) || (arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8] != 1)){
 							input.setAttribute('checked', 'true');
 						}
-						nodoTexto = document.createTextNode(arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
+						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
 						td.appendChild(input);
 						td.appendChild(nodoTexto);
 						tr.appendChild(td);
@@ -149,7 +152,7 @@
 						){
 							input.setAttribute('checked', 'true');
 						}
-						nodoTexto = document.createTextNode(arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
+						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
 						td.appendChild(input);
 						td.appendChild(nodoTexto);
 						tr.appendChild(td);
@@ -189,9 +192,13 @@
 						input.setAttribute("name", "requisitos[]");
 						if(arrayRespuesta[i][3] == 1){
 							input.setAttribute('checked', 'true');
+						}						
+						if(arrayRespuesta[i][2]  == null){
+							td.setAttribute('title', "Sin descripción");
+						}else{
+							td.setAttribute('title', arrayRespuesta[i][2]);
 						}
-						td.setAttribute('title', arrayRespuesta[i][2]);
-						nodoTexto = document.createTextNode(arrayRespuesta[i][1]);
+						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][1]);
 						td.appendChild(input);
 						td.appendChild(nodoTexto);
 						tr.appendChild(td);
@@ -232,7 +239,7 @@
 					tr.setAttribute("style", "cursor: pointer");
 					tr.setAttribute("id", "modulo_"+arrayRespuesta[i].cod_mod);
 					tr.setAttribute("onClick", "detalleModulo('"+arrayRespuesta[i].cod_mod+"','"+arrayRespuesta[i].descripcion+"','"+arrayRespuesta[i].cod_equipo+"','"+arrayRespuesta[i].nombre_mod+"')");
-					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre_mod);
+					nodoTexto = document.createTextNode(" "+arrayRespuesta[i].nombre_mod);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
 					tablaResultados.appendChild(tr);
