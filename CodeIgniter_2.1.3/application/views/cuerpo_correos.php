@@ -53,6 +53,20 @@ function volverCorreosRecibidos()
 	$('#cuadroRecibidos').css({display:'block'});
 }
 
+//funcion que resalta el correo seleccionado
+
+function oscurecerFondo(i,codigo){
+	
+	if(document.getElementById("check"+codigo).checked==1){
+		document.getElementById("tr"+i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+else if(document.getElementById("tr"+i).getAttribute("noleido")=="true")
+		document.getElementById("tr"+i).setAttribute("bgcolor","#E0f8f7")
+	else
+		document.getElementById("tr"+i).removeAttribute("bgcolor","#e5e5e5");
+}
+
 /** 
 * Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
 * También se realiza una búsqueda
@@ -97,7 +111,7 @@ function cambiarCorreos(direccion,offsetL)
 				var noLeido=listaRecibidos[i].no_leido;
 
 				tr = document.createElement('tr');
-
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
@@ -107,9 +121,10 @@ function cambiarCorreos(direccion,offsetL)
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name", prefijo_tipoDato + listaRecibidos[i].codigo);
+				check.setAttribute("id", "check" + listaRecibidos[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaRecibidos[i].codigo+")");
 				var cuerpo = listaRecibidos[i].cuerpo_email;
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -122,6 +137,7 @@ function cambiarCorreos(direccion,offsetL)
 
 				if(noLeido==1){
 					tr.setAttribute("bgcolor","#E0f8f7");
+					tr.setAttribute("noLeido","true")
 					b=document.createElement("b");
 					b.appendChild(nodoTexto);
 					td.appendChild(b);

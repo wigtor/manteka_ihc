@@ -14,6 +14,18 @@ function irAEnviar(codigo)
 document.location = "enviarBorrador/"+codigo;
 	
 }
+
+//funcion que resalta el correo seleccionado
+
+function oscurecerFondo(i,codigo){
+	
+	if(document.getElementById("check"+codigo).checked==1){
+		document.getElementById("tr"+i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+else
+	document.getElementById("tr"+i).removeAttribute("bgcolor","#e5e5e5");
+}
 </script>
 
 
@@ -69,6 +81,7 @@ function cambiarCorreos(direccion,offset)
 			for (var i = 0; i < listaBorradores.length; i++) {
 				tr = document.createElement('tr');
 				tr.setAttribute("style","display:block;");
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;width:5%;display:inline-table;height:36px;margin:0px");
@@ -76,9 +89,10 @@ function cambiarCorreos(direccion,offset)
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name",listaBorradores[i].codigo);
+				check.setAttribute("id","check"+listaBorradores[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaBorradores[i].codigo+")");
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", i);

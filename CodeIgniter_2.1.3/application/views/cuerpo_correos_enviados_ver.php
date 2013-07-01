@@ -135,6 +135,7 @@ function cambiarCorreos(direccion,offset)
 			}
 			for (var i = 0; i < listaRecibidos.length; i++) {
 				tr = document.createElement('tr');
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
@@ -143,9 +144,10 @@ function cambiarCorreos(direccion,offset)
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name", prefijo_tipoDato + listaRecibidos[i].codigo);
+				check.setAttribute("id", "check" + listaRecibidos[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaRecibidos[i].codigo+")");
 				var cuerpo = listaRecibidos[i].cuerpo_email;
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -334,6 +336,7 @@ function cambiarCorreos2(direccion,offset)
 					
 				}
 				tr = document.createElement('tr');
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
@@ -342,9 +345,10 @@ function cambiarCorreos2(direccion,offset)
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name",listaEnviados[i][0].cod_correo);
+				check.setAttribute("id","check"+listaEnviados[i][0].cod_correo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaEnviados[i][0].cod_correo+")");
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "23%");
@@ -471,7 +475,17 @@ function eliminarCorreo()
 	}
 	$('#modalConfirmacion').modal();
 }
+//funcion que resalta el correo seleccionado
 
+function oscurecerFondo(i,codigo){
+	
+	if(document.getElementById("check"+codigo).checked==1){
+		document.getElementById("tr"+i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+else
+	document.getElementById("tr"+i).removeAttribute("bgcolor","#e5e5e5");
+}
 function limpiarFiltrosCorreo() {
 	var tam = valorFiltrosJson.length;
 	for (var i = 0; i < tam; i++) {

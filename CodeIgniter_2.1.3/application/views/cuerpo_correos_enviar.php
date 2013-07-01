@@ -1460,11 +1460,11 @@ if(isset($codigo))
 				<div class="txt2">
 					Para:
 				</div>
-				<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly ><br>
+				<input id="to" name="to" type="text" value="<?php set_value('to'); ?> "title="Destinatarios" readonly ><br>
 				<div class="txt2">
 					Asunto:
 				</div>
-				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
+				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>"title="Ingrese asunto aquí" placeholder="Ingrese asunto aquí">		
 				<div class="txt2">
 					Adjuntos: (30MB máximo)
 				</div>
