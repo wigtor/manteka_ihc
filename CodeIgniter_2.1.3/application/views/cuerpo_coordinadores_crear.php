@@ -74,25 +74,25 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">2-.<font color="red">*</font> Primer nombre</label>
 					<div class="controls">
-						<input type="text" id="nombreunoEditar" placeholder="Juan" class="span12" name="nombre1" maxlength="20" required>
+						<input type="text" id="nombreunoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" placeholder="Juan" class="span12" name="nombre1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">3-. Segundo nombre</label>
 					<div class="controls">
-						<input type="text" id="nombredosEditar" placeholder="Mario" class="span12" name="nombre2" maxlength="20" >
+						<input type="text" id="nombredosEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" placeholder="Mario" class="span12" name="nombre2" maxlength="20" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">4-.<font color="red">*</font> Apellido Paterno</label>
 					<div class="controls">
-						<input type="text" id="apellidopaternoEditar" placeholder="Perez" class="span12" name="apellido1" maxlength="20" required>
+						<input type="text" id="apellidopaternoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" placeholder="Perez" class="span12" name="apellido1" maxlength="20" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">5-.<font color="red">*</font> Apellido Materno</label>
 					<div class="controls">
-						<input type="text" id="apellidomaternoEditar" placeholder="Perez" class="span12" name="apellido2" maxlength="20" required>
+						<input type="text" id="apellidomaternoEditar" pattern="[a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" placeholder="Perez" class="span12" name="apellido2" maxlength="20" required>
 					</div>
 				</div>
 				
@@ -102,19 +102,19 @@
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">6-.<font color="red">*</font> Correo</label>
 					<div class="controls">
-						<input type="email" id="correoEditar" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
+						<input type="email" id="correoEditar" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" class="span12" name="correo1" maxlength="40" placeholder="nombre_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">7-. Correo secundario</label>
 					<div class="controls">
-						<input type="email" id="correoEditar2" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+						<input type="email" id="correoEditar2" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="inputInfo">7-. Teléfono</label>
 					<div class="controls">
-						<input type="text" id="fono" class="span12" name="fono" maxlength="10" placeholder="44556677" >
+						<input type="text" id="fono" class="span12" name="fono" maxlength="10" pattern="[0-9]+" placeholder="44556677" >
 					</div>
 				</div>
 
