@@ -215,10 +215,10 @@ function eliminarBorrador()
 			checked_ids.push(document.formulario[i].name);
 	}
 	if(checked_ids.length==0)
-		alert('Debes seleccionar al menos un correo para eliminar.');
+		alert('Debes seleccionar al menos un borrador para eliminar.');
 	else
 	{
-		if (confirm('Estás a punto de eliminar correos.\n¿Realmente deseas continuar?'))
+		if (confirm('Estás a punto de eliminar un borrador.\n¿Realmente deseas continuar?'))
 		{
 			if(checked_ids[0]=="marcar")
 				checked_ids.shift();

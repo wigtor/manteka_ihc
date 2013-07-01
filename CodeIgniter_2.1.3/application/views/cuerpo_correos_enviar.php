@@ -1147,7 +1147,7 @@ if(isset($codigo))
 		<div id="filtrosSelect">
 		
 			<!-- Búsqueda por nombre de destinatario. -->
-			<label class="control-label" for="filtroLista">
+			<label class="control-label txt3" for="filtroLista">
 				Ingrese el nombre de quien busca o parte de su nombre.
 			</label>
 			<div class="controls">
@@ -1158,7 +1158,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por tipo de destinatario. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorTipoDeDestinatario">
+					<label class="control-label txt3" for="filtroPorTipoDeDestinatario">
 						Filtrar por tipo de destinatario
 					</label>
 					<div class="controls">
@@ -1174,7 +1174,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por profesor encargado. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
+					<label class="control-label txt3" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 					<div class="controls">
 						<select id="filtroPorProfesorEncargado" title="Profesor encargado" class="filtro-primario" onChange="showDestinatarioByFiltro()">
 							<option  value="0">Todos</option>
@@ -1184,7 +1184,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por carrera. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
+					<label class="control-label txt3" for="filtroPorCarrera" >Filtrar por carrera</label>
 					<div class="controls">
 						<select id="filtroPorCarrera" title="Carrera" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1198,7 +1198,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por módulo temático. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
+					<label class="control-label txt3" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 					<div class="controls">
 						<select id="filtroPorModuloTematico" title="Módulo temático" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1208,7 +1208,7 @@ if(isset($codigo))
 
 				<!-- Filtro por sección. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
+					<label class="control-label txt3" for="filtroPorSeccion">Filtrar por sección</label>
 					<div class="controls">
 						<select id="filtroPorSeccion" title="Sección" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todas</option>
@@ -1218,7 +1218,7 @@ if(isset($codigo))
 
 				<!-- Filtro por bloque de horario. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
+					<label class="control-label txt3" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
 					<div class="controls">
 						<select id="filtroPorBloqueHorario" title="Bloque horario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>

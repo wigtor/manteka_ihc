@@ -744,7 +744,7 @@ if(isset($msj))
 
 
 <fieldset id="cuadroDetalleCorreo" style="display:none;">
-	<legend>Correos recibidos ::: detalles</legend>
+	<legend>Correos enviados ::: detalles</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			Detalles del correo seleccionado
