@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
+<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
 
 <script type="text/javascript">
 
@@ -228,6 +228,10 @@ function cambiarCorreos(direccion,offset)
 				if(offset==0)
 					document.getElementById("ant").removeAttribute('onClick');
 			}
+			if (listaRecibidos.length == 0) {
+				document.getElementById("mostrando").innerHTML="mostrando "+ (offset)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
+			}else
+
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
 
 			

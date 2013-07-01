@@ -1460,7 +1460,7 @@ if(isset($codigo))
 				<div class="txt2">
 					Para:
 				</div>
-				<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
+				<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly ><br>
 				<div class="txt2">
 					Asunto:
 				</div>
@@ -1471,8 +1471,8 @@ if(isset($codigo))
 				<div class="container " style="margin:0px; width:414px;">
 
 				    <!-- The fileinput-button span is used to style the file input field as button -->
-				    <span class="btn  fileinput-button">
-				       	<img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip" alt=":" >
+				    <span class="btn  fileinput-button btn_width_icon_solo">
+				       	<img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip" alt="Adjuntar" >
 				        <!-- The file input field used as target for the file upload widget -->
 				        <input id="fileupload" type="file" name="files[]" data-url="/<?php echo config_item('dir_alias') ?>/adjuntos/" multiple>
 				    </span>

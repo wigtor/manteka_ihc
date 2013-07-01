@@ -305,11 +305,11 @@ if(isset($msj))
 			<table  align="center"  class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;margin-top:4px; margin-bottom:0px">
 			<thead style="height:auto;width:100%;display:block;">
 			<tr class="info" style="display:table;width:100%">
-			<th style="width:5%;margin:0px;display:inline-table;height:36px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></th>
-			<th style="width:22%; margin:0px;display:inline-table;height:36px;"><b></b></th>
-			<th style="width:53%;margin:0px;display:inline-table;height:36px; "><b>Mensaje</b></th>
-			<th style="width:10%;margin:0px;display:inline-table;height:36px; "><b>Fecha</b></th>
-			<th style="width:10%; margin:0px;display:inline-table;height:36px"><b>Hora</b></th>
+			<th style="width:5%;margin:0px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></th>
+			<th style="width:22%; margin:0px;"><b></b></th>
+			<th style="width:53%;margin:0px; "><b>Mensaje</b></th>
+			<th style="width:10%;margin:0px;"><b>Fecha</b></th>
+			<th style="width:10%; margin:0px;"><b>Hora</b></th>
 			</tr>
 		</thead>
 			
