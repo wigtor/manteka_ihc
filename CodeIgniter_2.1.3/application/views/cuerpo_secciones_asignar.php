@@ -7,9 +7,8 @@
 
 	function profesDelModulo(elemTabla) {
 
-		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		/* Obtengo el nombre del modulo clickeado */
 		var nombre_clickeado = elemTabla;
-		//var rut_clickeado = elemTabla;
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
@@ -48,109 +47,27 @@
 		$(icono_cargando).show();
 	}
 
-	function horariosDeLaSala(elemTabla) {
+	function verificaHorario(){
+		var dia = document.getElementById("dia").value;
+		var bloque = document.getElementById("bloque").value;
 
-		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
-		var sala_clickeada = elemTabla;
+		var retorno = -1;
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Secciones/postDetalleSala") ?>", /* Se setea la url del controlador que responderá */
-			data: { sala: sala_clickeada }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-
-				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var dia = document.getElementById("dia");
-				var bloque = document.getElementById("bloque");
+			url: "<?php echo site_url("Secciones/postVerificaHorarios") ?>", /* Se setea la url del controlador que responderá */
+			data: { dia_post: dia,bloque_post: bloque }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			async: false,
+			success: function(respuesta){ /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
-				var datos = jQuery.parseJSON(respuesta);
-
-				var dias = '<option value="" disabled selected>Día</option>';
-				var bloques = '<option value="" disabled selected>Bloque</option>';
-
-				var validacion_dias = [0,0,0,0,0,0,0];
-				var validacion_horarios = [0,0,0,0,0,0,0,0,0]
-
-				if(datos.length!=0){
-					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-					for (var i = 0; i < datos.length; i++) {
-
-						//Se ve si el dia ya se encuentra ingresado como opcion
-						if(datos[i]['COD_ABREVIACION_DIA']=="L" && validacion_dias[0] == 0){
-							validacion_dias[0] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}else if(datos[i]['COD_ABREVIACION_DIA']=="M" && validacion_dias[1] == 0){
-							validacion_dias[1] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}else if(datos[i]['COD_ABREVIACION_DIA']=="W" && validacion_dias[2] == 0){
-							validacion_dias[2] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}else if(datos[i]['COD_ABREVIACION_DIA']=="J" && validacion_dias[3] == 0){
-							validacion_dias[3] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}else if(datos[i]['COD_ABREVIACION_DIA']=="V" && validacion_dias[4] == 0){
-							validacion_dias[4] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}else if(datos[i]['COD_ABREVIACION_DIA']=="S" && validacion_dias[5] == 0){
-							validacion_dias[5] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}else if(datos[i]['COD_ABREVIACION_DIA']=="D" && validacion_dias[6] == 0){
-							validacion_dias[6] = 1;
-							dias = dias+'<option>'+datos[i]['NOMBRE_DIA']+'</option>';
-						}
-
-						//Se ve si el modulo ya se encuentra ingresado como opcion
-						if(datos[i]['NUMERO_MODULO']=="08:00" && validacion_horarios[0] == 0){
-							validacion_horarios[0] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="09:40" && validacion_horarios[1] == 0){
-							validacion_horarios[1] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="11:20" && validacion_horarios[2] == 0){
-							validacion_horarios[2] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="13:50" && validacion_horarios[3] == 0){
-							validacion_horarios[3] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="15:30" && validacion_horarios[4] == 0){
-							validacion_horarios[4] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="17:10" && validacion_horarios[5] == 0){
-							validacion_horarios[5] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="19:00" && validacion_horarios[6] == 0){
-							validacion_horarios[6] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="20:20" && validacion_horarios[7] == 0){
-							validacion_horarios[7] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}else if(datos[i]['NUMERO_MODULO']=="22:00" && validacion_horarios[8] == 0){
-							validacion_horarios[8] = 1;
-							bloques = bloques+'<option>'+datos[i]['NUMERO_MODULO']+'</option>';
-						}
-
-					};
-				}else{
-					dias = dias+'<option disabled>La sala no tiene dias disponibles</option>';
-					bloques = bloques+'<option disabled>La sala no tiene bloques disponibles</option>';
-				}
-
-				$(dia).html(dias);
-				$(bloque).html(bloques);
-				
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-
+				var dato = jQuery.parseJSON(respuesta);
+				retorno=dato;
 			}
 		});
-		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+
+		return retorno;
 	}
 
 	function AsignarSeccion(){
@@ -186,11 +103,17 @@
 		if(document.getElementById("bloque").value != ""){
 			bloque = bloque + 1;
 		}
-		if(seccion == 0 || profesor == 0 || modulo == 0 || sala == 0 || dia == 0 || bloque == 0){
-			document.write('Deficiencia');
+		if(verificaHorario()==1){
+			// No se puede hacer la asignacion por el horario, mostrar el MODAL
+			$('#modalVerificaHorario').modal();
 			return false;
 		}else{
-			return;
+			if(seccion == 0 || profesor == 0 || modulo == 0 || sala == 0 || dia == 0 || bloque == 0){
+				// Caso en que no se eligen todos los campos obligatorios, no se deberia llegar hasta esté
+				return false;
+			}else{
+				return;
+			}
 		}
 	}
 
@@ -260,7 +183,7 @@
 					</div>
 					<div class="row-fluid">
 						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:1%">
-							<table required id="profesores" class="table table-hover">
+							<table id="profesores" class="table table-hover">
 								<thead>
 									<tr>
 										
@@ -344,7 +267,7 @@
 										while ($contador<count($salas)){
 											
 											echo '<tr>';
-											echo '<td style="width:26px;"><input required onclick="horariosDeLaSala('.$comilla.$salas[$contador]['NUM_SALA'].$comilla.')" type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$salas[$contador]['COD_SALA'].'"> '.$salas[$contador]['NUM_SALA'].'</td>';
+											echo '<td style="width:26px;"><input required type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$salas[$contador]['COD_SALA'].'"> '.$salas[$contador]['NUM_SALA'].'</td>';
 											echo '</tr>';
 																		
 											$contador = $contador + 1;
@@ -357,14 +280,28 @@
 						<div class="row-fluid">
 								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%" required>
 									<option value="" disabled selected>Día</option>
-									<option disabled>Elija una sala para ver sus dias disponibles</option>
+									<option>Lunes</option>
+									<option>Martes</option>
+									<option>Miercoles</option>
+									<option>Jueves</option>
+									<option>Viernes</option>
+									<option>Sabado</option>
+									<option>Domingo</option>
 								</select>
 							
 
 						
 								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%" required>
 									<option value="" disabled selected>Bloque</option>
-									<option disabled>Elija una sala para ver sus bloques disponibles</option>
+									<option>08:00</option>
+									<option>09:40</option>
+									<option>11:20</option>
+									<option>13:50</option>
+									<option>15:30</option>
+									<option>17:10</option>
+									<option>19:00</option>
+									<option>20:20</option>
+									<option>22:00</option>
 								</select>
 							
 						</div>
@@ -383,6 +320,21 @@
 								</button>
 							</div>
 						</div>
+
+						<!-- Modal para cuando un horario ya existe -->
+						<div id="modalVerificaHorario" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>El horario que se quiere ingresar ya existe</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor ingrese otro horario (dia y bloque) y vuelva a intentarlo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+						
 					</div>
 				</div>
 			</div>
