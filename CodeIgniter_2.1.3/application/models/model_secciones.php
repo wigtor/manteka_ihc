@@ -735,8 +735,12 @@ public function getDetalleUnaSeccion($cod_seccion)
 		$queryNotIn = $this->db->get();
 		$datosNotIn = $queryNotIn->result_array();
 		$where = "";
-		foreach($datosNotIn as $row){
-			$this->db->or_where('seccion.COD_SECCION',$row['COD_SECCION']);
+		if(count($datosNotIn)!=0){
+			foreach($datosNotIn as $row){
+				$this->db->or_where('seccion.COD_SECCION',$row['COD_SECCION']);
+			}
+		}else{
+			return array();
 		}
 		$this->db->select('seccion.COD_SECCION AS cod, seccion.NOMBRE_SECCION AS nombre');
 		$this->db->from('seccion');
