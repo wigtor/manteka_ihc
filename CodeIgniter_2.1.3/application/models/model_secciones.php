@@ -717,6 +717,51 @@ public function getDetalleUnaSeccion($cod_seccion)
 		}
 	}
 
+	/**
+	* Obtiene los datos de todos las secciones, de la base de datos, que estan asignadas.
+	*
+	* Se crea la consulta y luego se ejecuta ésta.
+	* Luego con un ciclo se va extrayendo la información de cada seccion y se va guardando en un arreglo de dos dimensiones.
+	* Finalmente se retorna la lista con los datos.
+	*
+	* @return array $lista Contiene la información de todas las secciones del sistema que estan asignadas
+	*/
+	public function VerSeccionesAsignadas()
+	{
+		$this->db->select('seccion.COD_SECCION');
+		$this->db->from('seccion, profe_seccion, seccion_mod_tem');
+		$condiciones = '(seccion.COD_SECCION = profe_seccion.COD_SECCION) AND (seccion.COD_SECCION = seccion_mod_tem.COD_SECCION)';
+		$this->db->where($condiciones);
+		$queryNotIn = $this->db->get();
+		$datosNotIn = $queryNotIn->result_array();
+		$where = "";
+		foreach($datosNotIn as $row){
+			$this->db->or_where('seccion.COD_SECCION',$row['COD_SECCION']);
+		}
+		$this->db->select('seccion.COD_SECCION AS cod, seccion.NOMBRE_SECCION AS nombre');
+		$this->db->from('seccion');
+		$this->db->order_by("NOMBRE_SECCION", "asc");
+		$query = $this->db->get();
+		if($query == FALSE){
+			return array();
+		}else{
+			$datos = $query->result();
+		}
+
+		$lista=array();
+
+		$contador=0;
+			if($datos != false){
+				foreach ($datos as $row) {
+					$lista[$contador]=array();
+					$lista[$contador][0]=$row->cod;
+					$lista[$contador][1]=$row->nombre;
+					$contador=$contador+1;
+				}
+			}
+		return $lista;
+	}
+
 }
 
 

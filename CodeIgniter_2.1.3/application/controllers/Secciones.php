@@ -416,7 +416,7 @@ class Secciones extends MasterManteka {
 		
 		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerSeccionesAsignadas());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
