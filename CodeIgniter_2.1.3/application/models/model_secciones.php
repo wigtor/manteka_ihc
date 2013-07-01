@@ -295,20 +295,25 @@ class Model_secciones extends CI_Model{
  	* Transforma la letra de la sección a mayuscula, por cosas de convención, y forma el nombre de la seccion con el formato estandar
  	* Revisa si existe la seccion, en la base de datos, y dependiendo si existe entrega un resultado al controlador
  	*
+ 	* @param string $cod_seccion código de la sección a editar
  	* @param string $nombre_seccion1 letra del nombre de la sección a editar
  	* @param string $nombre_seccion2 digitos del nombre de la sección a editar
  	* @return int $var 1 si la sección ya existe y 0 si la sección no existe
  	*/
-	public function existeSeccion($nombre_seccion1,$nombre_seccion2) {
+	public function existeSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2) {
 		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
-		$this->db->select('seccion.NOMBRE_SECCION');
+		$this->db->select('seccion.NOMBRE_SECCION, seccion.COD_SECCION');
 		$condicion = 'seccion.NOMBRE_SECCION = \''.$nombre.'\'';
 		$this->db->where($condicion);
 		$query=$this->db->get('seccion');
 		$datos=$query->result_array();
 		if(count($datos)>0){
-			return 1;
+			if($datos[0]['COD_SECCION']==$cod_seccion){
+				return 0;
+			}else{
+				return 1;
+			}
 		}else{
 			return 0;
 		}
