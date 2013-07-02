@@ -327,16 +327,26 @@ class Correo extends MasterManteka {
 		
 		/* Se obtiene la información del correo a enviar. */
 		$rutRecept=$this->input->post('rutRecept');
-		$asunto="[ManteKA] ".$this->input->post('asunto');
+		$asunto=$this->input->post('asunto');
+		$adjuntos = json_decode($this->input->post('adjuntos'));		
 		$codigoBorrador=$this->input->post('codigoBorrador');
 		$date=date("YmdHis");
 		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 		$mensaje=$this->input->post('editor');
+		$archivosElim = json_decode($this->input->post('archivosElim'));
 		
 		/* Se asigna un hipervínculo al correo con el fin de que el usuario pueda ver el correo directamente en el sistema Manteka. */
-		$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
-		$link2="<br><a href='/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
+		//$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
+		$link2="<br><a href='/".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
 		
+
+		if($archivosElim!="")
+		foreach ($archivosElim as $archivo) {
+			unlink("adjuntos/".$archivo);
+		}
+		foreach ($adjuntos as $adjunto) {
+			$this->email->attach("adjuntos/".$adjunto[1]);
+		}
 		/* Se realiza el reemplazo de aquellas variables predefinidas que NO cambian según el destinatario.
 		En este caso, dichas variables son %%hoy (fecha actual) y %%remitente (Nombre y apellido de quién envía el correo). */
 		$variableHoyAsunto=substr_count($asunto, '%%hoy');
@@ -537,12 +547,13 @@ class Correo extends MasterManteka {
 						$mensajePersonalizado=str_replace('%%rut', $rutAyudante, $mensajePersonalizado);
 					}
 					date_default_timezone_set("Chile/Continental");
-					$mensajeMail =$mensajePersonalizado.$link.$link2;
+					$mensajeMail =$mensajePersonalizado.$link2;
 					$config['mailtype'] = 'html';
 					$this->email->initialize($config);
 					$this->email->from('no-reply@manteka.cl', 'ManteKA');
 					$this->email->to($to);
-					$this->email->subject($asuntoPersonalizado);
+					$asuntoMail="[ManteKA] ".$asuntoPersonalizado;
+					$this->email->subject($asuntoMail);
 					$this->email->message($mensajeMail);
 					if($this->email->send())
 						$enviados+=1;
@@ -562,7 +573,7 @@ class Correo extends MasterManteka {
 			$mensajeAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%modulo_estudiante', '[Módulo estudiante destinatario]', $mensajeAux);
-			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador);
+			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 			
 			/* Se guarda la información que asocia el correo enviado con cada destinatario. */
 			foreach($receptores as $receptor)
@@ -591,17 +602,19 @@ class Correo extends MasterManteka {
 			try
 			{
 				$to=$this->input->post('to');
-				$mensajeMail=$mensaje.$link.$link2;
+				$mensajeMail=$mensaje.$link2;
 				date_default_timezone_set("Chile/Continental");
 				$config['mailtype'] = 'html';
 				$this->email->initialize($config);
 				$this->email->from('no-reply@manteka.cl', 'ManteKA');
 				$this->email->to($to);
-				$this->email->subject($asunto);
+				$asuntoMail="[ManteKA] ".$asunto;
+				$this->email->subject($asuntoMail);
 				$this->email->message($mensajeMail);
+
 				if(!$this->email->send())
 					throw new Exception("error en el envio");
-				$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
+				$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 				
 				/* Se guarda la información que asocia el correo enviado con cada destinatario. */
 				foreach($receptores as $receptor)
@@ -622,7 +635,7 @@ class Correo extends MasterManteka {
 			catch (Exception $e)
 			{
 				if($e->getMessage()=="error en el envio")
-					redirect("/Otros/sendMailError", "sendMailError");
+					redirect("/Otros/sendMailError/".$codigoBorrador, "sendMailError");
 				else
 					redirect("/Otros", "databaseError");
 			}
@@ -742,7 +755,7 @@ class Correo extends MasterManteka {
 	}
 
 /**
-	* Guarda borradores automaticamente
+	* Guarda borradores automaticamente o por el botón guardar
 	*
 	* @author: Byron Lanas (BL)
 	*
@@ -757,14 +770,22 @@ class Correo extends MasterManteka {
 		$to = $this->input->post('to');
 		$asunto =$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
+		$adjuntos = $this->input->post('adjuntos');
+		$archivosElim = $this->input->post('archivosElim');
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("YmdHis");
 		$this->load->model('model_correo');
 		$this->load->model('model_correo_e');
 		$this->load->model('model_correo_u');
 		$this->load->model('model_correo_a');
+		
+		if($archivosElim!="")
+		foreach ($archivosElim as $archivo) {
+			unlink("adjuntos/".$archivo);
+			
+		}
 
-		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
+		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 
 		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 
