@@ -160,7 +160,10 @@
 		</script>
 				<!-- Este es el botón que está entremedio de los dos listados -->
 				<div class="span2 text-center">
+					<br /><br /><br />
 					<div class="btn" type="button" onclick="pasarContactos()">Agregar</div>
+					<br /><br /><br />
+					<div class="btn" type="button" onclick="quitarContactos()">Quitar</div>
 				</div>
 
 				<!-- Este es el listado de destinatarios seleccionados para el envío -->
@@ -191,7 +194,7 @@
 			<div class="row-fluid">
 				<ul class="pager pull-right">
 					<li>
-						<button class ="btn" type="submit" title="Guardar Grupo de Contactos para reutilizarlos en un futuro" >Guardar Grupo</button>
+						<button class ="btn" type="submit" title="Guardar Grupo de Contactos." >Guardar Grupo</button>
 					</li>
 				</ul>
 			</div>
@@ -213,8 +216,64 @@
 			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 		</div>
 	</div>
-</fieldset>
 
+	<!-- modal de confirmacion para agregar -->
+	<div id="confirmacionAgregar" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Se guardará el grupo de contactos, esta seguro?.</p>
+		</div>
+		<div class="modal-footer">
+			<button onclick="agregar()" class="btn" type="button" data-dismiss="modal">Confirmar</button>
+			<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+		</div>
+	</div>
+
+	<!-- modal de exito para agregar -->
+	<div id="exitoAgregar" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Grupo de contactos exitosamente agregado!</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
+	<!-- modal de error 1 para agregar -->
+	<div id="error1" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Error</h3>
+		</div>
+		<div class="modal-body">
+			<p>Debe seleccionar al menos un destinatario para el nuevo grupo de contactos.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
+	<!-- modal de error 2 para agregar -->
+	<div id="error2" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Error</h3>
+		</div>
+		<div class="modal-body">
+			<p>Debe seleccionar un nombre para el nuevo grupo de contactos.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+</fieldset>
 
 
 
@@ -234,7 +293,6 @@ var arrayCarreras;
 */
 function validacionSeleccion()
 {
-
 	var rutRecept = document.getElementById("rutRecept").value;
 	
 	if (rutRecept!="")
@@ -489,6 +547,7 @@ var arrayOfRolloverClasses = new Array();
 var arrayOfClickClasses = new Array();
 var activeRow = false;
 var activeRowClickArray = new Array();
+var string = "";
 
 function seleccionar_todo(){ 	
 	
@@ -905,9 +964,37 @@ function pasarContactos(){
 		$('#repetido').modal();
 	}
 }
-
+function quitarContactos(){
+ var tbody = document.getElementById('tbody2');
+ var tbody2 = document.getElementById('tbody1');
+ var cont = 0;
+ var total=tbody.getElementsByTagName('tr').length;
+	for (var x=0; x < total; x++) {		
+		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(revisarRutR(tbody.getElementsByTagName('tr')[x].getAttribute("rut"))){	
+				tbody2.appendChild(tbody.getElementsByTagName('tr')[x]);
+				total--;
+				x--;
+			}
+			else{
+				tbody.getElementsByTagName('tr')[x].remove();
+				total--;
+				x--;	
+			}
+		}
+	}
+}
 function revisarRut(rut){
 	var tbody2 = document.getElementById('tbody2');
+	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
+		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
+			return false;
+		}
+	}
+	return true;	
+}
+function revisarRutR(rut){
+	var tbody2 = document.getElementById('tbody1');
 	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
 		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
 			return false;
@@ -924,55 +1011,54 @@ function revisarRut(rut){
 
 function validar(form){
 	event.preventDefault();
-	var answer = confirm("¿Está seguro que desea agregar este Grupo de Contactos?");
-	if (answer){
-		var string = "";
-		var total=tbody2.getElementsByTagName('tr').length;
-		var help = 0;
-		for (var x=0; x < total; x++) {
-			if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
-				if(help== 0){
-				string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
-				help = 1;
-				}
-				else{
-				string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
-				}			
-			}
-		}	
-		if(!string.length){
-			alert('Debe seleccionar un contacto de la tabla Destinatario')
-			
-		}
-		else{
-			if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
-				alert("Debe seleccionar un nombre para el grupo de contactos");
+	string = "";
+	var total=tbody2.getElementsByTagName('tr').length;
+	var help = 0;
+	for (var x=0; x < total; x++) {
+		if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(help== 0){
+			string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+			help = 1;
 			}
 			else{
-				$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
-		// Enviamos el formulario usando AJAX
-				$.ajax({
-				type: 'POST',
-				url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
-				data: $('#form_contactos').serialize(),	
-				// Mostramos un mensaje con la respuesta de PHP
-				success: function(data){				
-				}
-				})				
-			alert('¡Grupo de Contactos exitosamente agregado!')
-			}
-		
-		}	
-		
-		
-		
-		
-		return false;		
+			string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+			}			
+		}
+	}	
+	if(!string.length){
+		//alert('Debe seleccionar un contacto de la tabla Destinatario')
+		$('#error1').modal();
 	}
 	else{
-			
+		if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
+			//alert("Debe seleccionar un nombre para el grupo de contactos");
+			$('#error2').modal();
+		}
+		else{
+			confirmacionAgregar(string);
+		}
+	}	
+	return false;
+}
+function confirmacionAgregar(){
+	$('#confirmacionAgregar').modal();
+}
+function agregar(){
+	$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
+	var form = document.getElementById("form_contactos");
+	form.submit();
+	// Enviamos el formulario usando AJAX
+	/*$.ajax({
+	type: 'POST',
+	url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
+	data: $('#form_contactos').serialize(),	
+	// Mostramos un mensaje con la respuesta de PHP
+	success: function(data){
+		$('#exitoAgregar').modal();
 	}
+	})*/
 	
 }
+
 
 </script>

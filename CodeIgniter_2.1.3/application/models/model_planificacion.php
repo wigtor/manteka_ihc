@@ -37,6 +37,7 @@ class model_planificacion extends CI_Model {
 		$this->db->join('profesor','profe_seccion.RUT_USUARIO2=profesor.RUT_USUARIO2', 'LEFT OUTER');
 		$this->db->join('modulo','modulo.COD_MODULO=horario.COD_MODULO', 'LEFT OUTER');
 		$this->db->join('dia','dia.COD_DIA=horario.COD_DIA', 'LEFT OUTER');
+		$this->db->order_by("nombre_seccion", "asc");
 
 		
 		$query = $this->db->get();

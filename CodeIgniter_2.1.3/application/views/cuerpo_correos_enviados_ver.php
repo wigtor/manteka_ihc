@@ -592,7 +592,7 @@ function escribirHeadTableCorreos() {
 
 			if (tiposFiltro[i] != '') {
 				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
-				
+				th.appendChild(nodoTexto);
 
 				nodoBtnFiltroAvanzado = document.createElement('a');
 				nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-mini clickover");
@@ -604,8 +604,17 @@ function escribirHeadTableCorreos() {
 					//span.setAttribute('style', "vertical-align:middle;");
 				nodoBtnFiltroAvanzado.appendChild(span);
 
-			th.appendChild(nodoTexto);
-			th.appendChild(nodoBtnFiltroAvanzado);
+				th.appendChild(nodoBtnFiltroAvanzado);
+
+				// Se comprueba que existe un elemento para dicha posición del Array inputAllowedFiltro. En caso de que no, se setea en string vacío
+				inputAllowedFiltro[i] = typeof(inputAllowedFiltro[i]) == 'undefined' ? "" : inputAllowedFiltro[i];
+				/// Se asigna el valor del atributo pattern que tendrá el input.
+				var inputPattern = inputAllowedFiltro[i] != "" ? 'pattern="'+inputAllowedFiltro[i]+'"' : "";
+
+				var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
+				
+				var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" '+inputPattern+' id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltroCorreos(this)" ><button class="btn" onClick="cambioTipoFiltroCorreos(this.parentNode.firstChild)" type="button"><i class="icon-search"></i></button></div>';
+			
 			}
 			else { //Esto es para el caso de los checkbox que marcan toda la tabla
 				nodoCheckeable = document.createElement('input');
@@ -615,16 +624,7 @@ function escribirHeadTableCorreos() {
 				nodoCheckeable.setAttribute('title', "Seleccionar todos");
 				th.appendChild(nodoCheckeable);
 			}
-			
-
-			var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
-			
-			var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltroCorreos(this)" ><button class="btn" onClick="cambioTipoFiltroCorreos(this)" type="button"><i class="icon-search"></i></button></div>';
-			
-
-			$(nodoBtnFiltroAvanzado).clickover({html:true, content: divs, placement:'top', onShown: despuesDeMostrarPopOver, title:"Búsqueda sólo por " + tiposFiltro[i], rel:"clickover", indice: i});
-
-			
+						
 		tr.appendChild(th);
 	}
 	thead.appendChild(tr);
@@ -637,6 +637,7 @@ function escribirHeadTableCorreos() {
 <script>
 	var tiposFiltro = ["", "Para", "Mensaje", "Fecha", "Hora"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""]; //Esta es variable global que almacena el valor de los input de búsqueda en específico
+	var inputAllowedFiltro = ["[A-Za-z]+", "[A-Za-z]+", "[A-Za-z]+","([1-9][0-9]{3}-(0\\d|1[0-2])-([0-2]\\d|3[0-1])|[1-9][0-9]{3}-(0\\d|1[0-2])|[1-9][0-9]{3}|(0\\d|1[0-2])|([0-2]\\d|3[0-1]))","(^(0{0,1}\\d|1\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$|([0-5]\\d):([0-5]\\d)$|([0-5]\\d)$)"];
 	var prefijo_tipoDato = "correo_rec_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Correos/postEnviados") ?>";

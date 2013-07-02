@@ -27,17 +27,20 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
+					<th></th>
 					<th>Nombre del reporte</th>
 					<th>Descripcion</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><a href="#myModal" onClick="MostrarReporte('Estudiantes')" data-toggle="modal">Reporte Estudiantes</a></td>
+					<td><a href="#myModal" onClick="MostrarReporte('Estudiantes')" data-toggle="modal"><div class="btn_with_icon_solo" style="height: 13px;">F</div>&nbsp;Abrir</a></td>
+					<td>Reporte Estudiantes</td>
 					<td>Este reporte entrega los datos personales de los estudiantes</td>
 				</tr>
 				<tr>
-					<td><a href="#myModal" onClick="MostrarReporte('Estudiantes por Seccion')" data-toggle="modal">Reporte Estudiantes por Seccion</a></td>
+					<td><a href="#myModal" onClick="MostrarReporte('Estudiantes por Seccion')" data-toggle="modal"><div class="btn_with_icon_solo" style="height: 13px;">F</div>&nbsp;Abrir</a></td>
+					<td>Reporte Estudiantes por Seccion</td>
 					<td>Este reporte entrega la información relacionada con las secciones</td>
 				</tr>
 			</tbody>

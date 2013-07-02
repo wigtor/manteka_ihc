@@ -276,7 +276,7 @@ class model_correo extends CI_Model
 			}
 			else {
 				if ($textoFiltrosAvanzados[BUSCAR_POR_REMITENTE] != '') {
-					$consultasLikes = "(nombre1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
+					$consultasLikes = "(nombre LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
 						OR apellido1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
 						OR apellido2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')";
 				}

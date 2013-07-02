@@ -7,9 +7,9 @@
  *	
 */
 
-define('DEVELOPMENT-ID','412900046548.apps.googleusercontent.com');
-define('DEVELOPMENT-PASS','RN_R-d6BDT2XYwQdVHB5S9tO');
-define('PRODUCTION-ID','412900046548-5g232a3t4898bdntsrbkn6f2tk1t1962.apps.googleusercontent.com');
-define('PRODUCTION-CLASS','SCyRUzLfrPe5_kAlF8dgS3B3');
+define('DEVELOPMENT-ID','731353056438-1nel9u3n8on05kjuj52lc43as1rro9n0.apps.googleusercontent.com');
+define('DEVELOPMENT-PASS','84QoyvKuPA4LeKAK2gsWtRhj');
+define('PRODUCTION-ID','731353056438.apps.googleusercontent.com');
+define('PRODUCTION-CLASS','Dmlg9vh_ANztY9t7omHT4CY4');
 
 ?>

@@ -50,6 +50,17 @@ class GruposContactos extends MasterManteka {
 		$this->load->model('model_grupos_contacto');
 		//Este sirve para el modificar
 		$this->model_grupos_contacto->modificarGrupo($_POST['ID_GRUPO'], $_POST['QUERY_FILTRO_CONTACTO']);
+
+		$datos_plantilla["titulo_msj"] = "Grupo modificado";
+		$datos_plantilla["cuerpo_msj"] = "El Grupo de Contactos fue modificado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'GruposContactos/editarGrupos';
+		$datos_plantilla["nombre_redirecTo"] = "Editar Grupo de Contactos";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); 
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);		
 	}
 	public function agregarGrupo(){
 		$this->load->model('model_grupos_contacto');
@@ -63,6 +74,17 @@ class GruposContactos extends MasterManteka {
 		//$arreglo_de_ruts=explode(",",$rut_filtro);
 		
 		$this->model_grupos_contacto->insertarGrupo($rut_usuario,$rut_filtro,$nombre_filtro);
+
+		$datos_plantilla["titulo_msj"] = "Grupo agregado";
+		$datos_plantilla["cuerpo_msj"] = "El nuevo Grupo de Contactos fue agregado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'GruposContactos/agregarGrupos';
+		$datos_plantilla["nombre_redirecTo"] = "Agregar Grupo de Contactos";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); 
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	
 	
@@ -183,6 +205,34 @@ class GruposContactos extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
 		$this->cargarTodo("Correos", "cuerpo_grupos_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	}
+	public function grupoAgregado(){
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == FALSE) {
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+		}
+		$datos_plantilla["titulo_msj"] = "Grupo agregado";
+		$datos_plantilla["cuerpo_msj"] = "El nuevo Grupo de Contactos fue agregado correctamente.";
+		$datos_plantilla["tipo_msj"] = "alert-success";
+		$datos_plantilla["redirecTo"] = 'GruposContactos/agregarGrupos';
+		$datos_plantilla["nombre_redirecTo"] = "Agregar Grupo de Contactos";
+		$datos_plantilla["redirectAuto"] = TRUE;
+		$tipos_usuarios_permitidos = array(); 
+		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+	}
+    public function getGrupos(){
+		//
+		$this->load->model('model_grupos_contacto');
+		$rut = $this->session->userdata['rut'];
+		$respuesta = $this->model_grupos_contacto->VerGrupos($rut);
+		echo json_encode($respuesta);
+
+	}
+	public function getContactosGrupoFlacoPiterStyle(){
+
+		//implementar para terminar con vista de enviar correo.
 	}
 
 }

@@ -1021,91 +1021,64 @@ function showDestinatarioByFiltro()
  *
  * @author
  **/
-function pasarContactos()
-{
-	var tbody = document.getElementById('tbody1');
-	var tbody2 = document.getElementById('tbody2');
-	var cont = 0;
-	var total=tbody.getElementsByTagName('tr').length;
-	
-	for (var x=0; x < total; x++)
-	{		
-		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked)
-		{
-			if(revisarRut(tbody.getElementsByTagName('tr')[x].getAttribute("rut")))
-			{
+function pasarContactos(){
+
+ var tbody = document.getElementById('tbody1');
+ var tbody2 = document.getElementById('tbody2');
+ var cont = 0;
+ var total=tbody.getElementsByTagName('tr').length;
+ var flag=false;
+	for (var x=0; x < total; x++) {		
+		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(revisarRut(tbody.getElementsByTagName('tr')[x].getAttribute("rut"))){	
 				tbody2.appendChild(tbody.getElementsByTagName('tr')[x]);
 				total--;
 				x--;
 			}
-			else
-				tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked=false;				
+			else{
+				tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked=false;
+				flag = true;
+			}
 		}
 	}
+	if(flag){
+		$('#repetido').modal();
+	}
 }
-</script>
-
-<script type="text/javascript">
-/**
- *
- * @author
- **/
-function quitarContactos()
-{
-	var tbody = document.getElementById('tbody1');
-	var tbody2 = document.getElementById('tbody2');
-	var cont = 0;
-	var total=tbody2.getElementsByTagName('tr').length;
-	
-	for (var x=0; x < total; x++)
-	{		
-		if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked)
-		{
-			if(revisarRut2(tbody2.getElementsByTagName('tr')[x].getAttribute("rut")))
-			{
-				tbody.appendChild(tbody2.getElementsByTagName('tr')[x]);
+function quitarContactos(){
+ var tbody = document.getElementById('tbody2');
+ var tbody2 = document.getElementById('tbody1');
+ var cont = 0;
+ var total=tbody.getElementsByTagName('tr').length;
+	for (var x=0; x < total; x++) {		
+		if (tbody.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(revisarRutR(tbody.getElementsByTagName('tr')[x].getAttribute("rut"))){	
+				tbody2.appendChild(tbody.getElementsByTagName('tr')[x]);
 				total--;
 				x--;
 			}
-			else
-				tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked=false;				
+			else{
+				tbody.getElementsByTagName('tr')[x].remove();
+				total--;
+				x--;	
+			}
 		}
 	}
 }
-</script>
-
-<script type="text/javascript">
-/**
- *
- * @author
- **/
-function revisarRut(rut)
-{
+function revisarRut(rut){
 	var tbody2 = document.getElementById('tbody2');
-	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++)
-	{
-		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut )
-		{
-			return false;	
+	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
+		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
+			return false;
 		}
 	}
 	return true;	
 }
-</script>
-
-<script type="text/javascript">
-/**
- *
- * @author
- **/
-function revisarRut2(rut)
-{
-	var tbody = document.getElementById('tbody');
-	for(var i=0; i < tbody.getElementsByTagName('tr').length; i++)
-	{
-		if(tbody.getElementsByTagName('tr')[i].getAttribute("rut")== rut )
-		{
-			return false;	
+function revisarRutR(rut){
+	var tbody2 = document.getElementById('tbody1');
+	for(var i=0; i < tbody2.getElementsByTagName('tr').length; i++){
+		if(tbody2.getElementsByTagName('tr')[i].getAttribute("rut")== rut ){
+			return false;
 		}
 	}
 	return true;	
@@ -1169,8 +1142,18 @@ if(isset($codigo))
 				<input id="filtroLista" maxlength="80" name="filtroLista" onkeyup="ordenarFiltro(this.value)" type="text" placeholder="Máximo 80 caracteres">
 			</div>
 			
+            <div class="row-fluid">
+				<div class="control-group span4">
+					<label class="control-label" for="filtroPorTipoDeDestinatario">Usar Grupo de Contactos</label>
+					<div class="controls">
+						<select class="" id="filtroGrupoContacto" title="Grupo de Contactos"  onChange="showFiltro()">
+							<option value="~">NO usar</option>
+						</select>
+					</div>
+				</div>
+			</div>
+            
 			<div class="row-fluid">
-			
 				<!-- Filtro por tipo de destinatario. -->
 				<div class="control-group span4">
 					<label class="control-label txt3" for="filtroPorTipoDeDestinatario">
@@ -1284,13 +1267,13 @@ if(isset($codigo))
 		<!-- Formulario para crear grupo de contactos. -->
 		<div id="group">
 			<?php
-			$attributes = array('onSubmit' => 'return validar(this)', 'id'=>'form_contactos');
+			$attributes = array('id'=>'form_contactos');
 			echo form_open('Grupo/agregarGrupo',$attributes);
 			?>
 			<input type="hidden" name="QUERY_FILTRO_CONTACTO">
 			<div id="btnGrupo">
 				<input type="text" name="NOMBRE_FILTRO_CONTACTO" placeholder="Nombre grupo contactos">
-				<button class ="btn btnX grupo" type="submit" title="Guardar grupo de contactos para reutilizarlos en el futuro." >Guardar grupo</button>
+				<button class ="btn btnX grupo" onclick="validar()" title="Guardar grupo de contactos para reutilizarlos en el futuro." >Guardar grupo</button>
 			</div>
 			<?php echo form_close(""); ?>
 		</div>
@@ -1303,6 +1286,82 @@ if(isset($codigo))
 	</div>
 	
 </fieldset>
+<!-- Modal -->
+
+<!-- modal de aviso existe uno repetido -->
+	<div id="repetido" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Uno o mas de los contactos no fue agregado debido a que ya se encontraba en la lista destino.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
+	<!-- modal de confirmacion para agregar -->
+	<div id="confirmacionAgregar" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Se guardará el grupo de contactos, esta seguro?.</p>
+		</div>
+		<div class="modal-footer">
+			<button onclick="agregar()" class="btn" type="button" data-dismiss="modal">Confirmar</button>
+			<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+		</div>
+	</div>
+
+	<!-- modal de exito para agregar -->
+	<div id="exitoAgregar" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Aviso</h3>
+		</div>
+		<div class="modal-body">
+			<p>Grupo de contactos exitosamente agregado!</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
+	<!-- modal de error 1 para agregar -->
+	<div id="error1" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Error</h3>
+		</div>
+		<div class="modal-body">
+			<p>Debe seleccionar al menos un destinatario para el nuevo grupo de contactos.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
+	<!-- modal de error 2 para agregar -->
+	<div id="error2" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Error</h3>
+		</div>
+		<div class="modal-body">
+			<p>Debe seleccionar un nombre para el nuevo grupo de contactos.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+		</div>
+	</div>
+
+
+<!-- /Modal -->
+
 
 <!-- Paso 2 del envío de correos: Ingreso del mensaje. -->
 <fieldset id="cuadroEnvio">
@@ -1685,59 +1744,110 @@ if(isset($codigo))
  *
  * @author
  **/
-function validar(form)
-{
+<script type="text/javascript">
+/**
+ *
+ * @author
+ **/
+var string="";
+function validar(){
 	event.preventDefault();
-	var answer = confirm("¿Está seguro que desea agregar este grupo de contactos?");
-	if (answer)
-	{
-		var string = "";
-		var total=tbody2.getElementsByTagName('tr').length;
-		var help = 0;
-		for (var x=0; x < total; x++)
-		{
-			if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked)
-			{
-				if(help== 0)
-				{
-					string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
-					help = 1;
-				}
-				else
-				{
-					string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
-				}			
+	string = "";
+	var total=tbody2.getElementsByTagName('tr').length;
+	var help = 0;
+	for (var x=0; x < total; x++) {
+		if (tbody2.getElementsByTagName('tr')[x].getElementsByTagName('input')[0].checked) {
+			if(help== 0){
+			string=tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+			help = 1;
 			}
+			else{
+			string=string+","+tbody2.getElementsByTagName('tr')[x].getAttribute("rut");
+			}			
 		}
-		if(!string.length)
-		{
-			alert('Debe seleccionar al menos un destinatario de la tabla de destinatarios disponibles.')
-		}
-		else
-		{
-			if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 )
-			{
-				alert("Debe ingresar un nombre para el grupo de contactos");
-			}
-			else
-			{
-				$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
-				
-				/* Se envía el formulario usando AJAX. */
-				$.ajax({
-					type: 'POST',
-					url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
-					data: $('#form_contactos').serialize(),	
-					
-					/* Se muestra un mensaje con la respuesta de PHP. */
-					success: function(data)
-					{
-					}
-				})	
-				alert('Grupo de contactos agregado satisfactoriamente.');
-			}
-		}	
-		return false;		
+	}	
+	if(!string.length){
+		//alert('Debe seleccionar un contacto de la tabla Destinatario')
+		$('#error1').modal();
 	}
+	else{
+		if($('input[name=NOMBRE_FILTRO_CONTACTO]').val().length == 0 ){
+			//alert("Debe seleccionar un nombre para el grupo de contactos");
+			$('#error2').modal();
+		}
+		else{
+			confirmacionAgregar(string);
+		}
+	}	
+	return false;
+}
+function confirmacionAgregar(){
+	$('#confirmacionAgregar').modal();
+}
+function agregar(){
+	$('input[name=QUERY_FILTRO_CONTACTO]').val(string);
+	/* Se envía el formulario usando AJAX. */
+	$.ajax({
+		type: 'POST',
+		url: "<?php echo site_url("Grupo/agregarGrupo") ?>",
+		data: $('#form_contactos').serialize(),	
+		
+		/* Se muestra un mensaje con la respuesta de PHP. */
+		success: function(data){
+			$('#exitoAgregar').modal();
+		}
+	})
 }
 </script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.ajax({
+				type: 'POST',
+				url: "<?php echo site_url("GruposContactos/getGrupos") ?>",				
+				success: function(respuesta){
+					var datos = JSON.parse(respuesta);
+					for(var i = 0; i< datos.length ; i++){
+						$('#filtroGrupoContacto').append($('<option>', {
+						    value: datos[i]['ID_FILTRO_CONTACTO'],
+						    text: datos[i]['NOMBRE_FILTRO_CONTACTO'],
+						}));
+					}
+					
+				}
+			});
+	});
+	function showFiltro(){
+		var aaa = document.getElementById('filtroGrupoContacto').value;
+		if(aaa != "~"){
+			document.getElementById("filtroPorTipoDeDestinatario").selectedIndex=0;
+			document.getElementById("filtroPorTipoDeDestinatario").disabled = true;
+			document.getElementById('filtroPorModuloTematico').selectedIndex=0;
+			document.getElementById('filtroPorModuloTematico').disabled=true;
+			document.getElementById('filtroPorBloqueHorario').selectedIndex=0;
+			document.getElementById('filtroPorBloqueHorario').disabled=true;
+			document.getElementById('filtroPorProfesorEncargado').selectedIndex=0;
+			document.getElementById('filtroPorProfesorEncargado').disabled=true;
+			document.getElementById('filtroPorCarrera').selectedIndex=0;
+			document.getElementById('filtroPorCarrera').disabled=true;
+			document.getElementById('filtroPorSeccion').selectedIndex=0;
+			document.getElementById('filtroPorSeccion').disabled=true;
+			$.ajax({
+				type: 'POST',
+				url: "<?php echo site_url("Grupo/getContactosGrupoFlacoPiterStyle") ?>",
+				data: {id: aaa},	
+				
+				success: function(respuesta){
+					muestraTabla(respuesta);
+				}
+			});
+
+
+		}else{
+			document.getElementById("filtroPorTipoDeDestinatario").selectedIndex=0;
+			document.getElementById("filtroPorTipoDeDestinatario").disabled = false;
+			document.getElementById("filtroPorTipoDeDestinatario").onchange();
+		}	
+	}
+</script>
+

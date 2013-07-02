@@ -361,4 +361,8 @@ $config['proxy_ips'] = '';
 /* End of file config.php */
 /* Location: ./application/config/config.php */
 
-$config['dir_alias'] = "manteka";
+$config['dir_alias'] = "manteka"; //Cambiar esto si se instala en otra URL, dejarla en blanco en caso de que se instale en la raiz de un servidor
+
+$config['mail_manteka'] = "manteka.usach@gmail.com";
+$config['password_mail_manteka'] = "manteka2013";
+$config['php_path'] = "C:\\wamp\\bin\\php\\php5.4.3\\php"; //Cambiar esto según donde se encuentre el ejecutable de php
