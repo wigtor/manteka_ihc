@@ -230,13 +230,13 @@
 				<div class="control-group">
 					<label class="control-label" style="cursor: default" for="correo2">7.- <font color="red">*</font> Correo secundario</label>
 					<div class="controls">
-						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar2" onblur = "correo()" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" >
+						<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" id="correoEditar2" onblur = "correo()" class="span12" name="correo2" maxlength="40" placeholder="nombre_usuario2@miemail.com" required >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" style="cursor: default" for="telefono_profe">8.- <font color="red">*</font> Teléfono</label>
 					<div class="controls">
-						<input type="text" id="fono" class="span12" name="telefono_profe" maxlength="10" placeholder="44556677" >
+						<input type="text" id="fono" title="Ingrese teléfono solo con números " class="span12" name="telefono_profe" maxlength="10" placeholder="44556677" required >
 					</div>
 				</div>
 				
