@@ -369,7 +369,7 @@ function ordenarFiltro(){ //No funcional
 								<h3>No ha seleccionado ningun estudiante</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione un estudiante y vuelva a intentarlo</p>
+								<p>Por favor seleccione un estudiante y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
