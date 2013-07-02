@@ -888,7 +888,8 @@ function revisarRut(rut){
 				
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
 				<input type="hidden" name="ID_GRUPO" value="<?php echo $rutes['ID_FILTRO_CONTACTO']; ?>">
-				<button class ="btn" type="submit" title="Modificar" style="margin-right:-150px">Guardar Grupo</button>
+				<a class ="btn" title="Volver" href="<?php echo site_url('GruposContactos/editarGrupos') ?>" style="margin-left:40px">Anterior</a>
++				<button class ="btn btn-primary" type="submit" title="Modificar" style="margin-left:20px">Guardar Grupo</button>
 				<?php echo form_close(""); ?>
 			</li>
 		</ul>
