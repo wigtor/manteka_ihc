@@ -124,7 +124,7 @@ class Model_estudiante extends CI_Model {
 		$this->db->order_by("APELLIDO2_ESTUDIANTE", "asc"); 
 		$query = $this->db->get('estudiante'); //Acá va el nombre de la tabla
 		// Se obtiene la fila del resultado de la consulta a la base de datos
-				
+
 		
 		
 
@@ -467,7 +467,7 @@ class Model_estudiante extends CI_Model {
 		}
 		$contador = 0;
 		while($contador < count($lista)){
-			if(strtolower($lista[$contador]) == strtolower($rut)){
+			if(strtolower($lista[$contador]) == strtolower($rut)){				
 				return -1;
 			}
 			$contador = $contador + 1;
@@ -496,10 +496,10 @@ class Model_estudiante extends CI_Model {
 			$RUT = explode("-", trim($rut));
 		}
 		$elRut = str_replace(".", "", trim($RUT[0]));
-		$factor = 2;
+		$ffactor = 2;
 		for($i = strlen($elRut)-1; $i >= 0; $i--):
-			$factor = $factor > 7 ? 2 : $factor;
-		$suma += $elRut{$i}*$factor++;
+			$ffactor = $ffactor > 7 ? 2 : $ffactor;
+		$suma += $elRut{$i}*$ffactor++;
 		endfor;
 		$dv = 11 - ($suma % 11); 
 		if($dv == 11){
@@ -612,109 +612,151 @@ class Model_estudiante extends CI_Model {
 		if(!file_exists($archivo) || !is_readable($archivo))
 			return FALSE;
 
-		$f = fopen($archivo, "r");
+		$ff = fopen($archivo, "r") or exit();
 
-		$header = NULL;
+		$header = array();
 		$data = array();		
 		$splitArray = array();
-
 		$stack  = array();
 		$c = 1;
-		while(($linea = fgetcsv($f, 201, ';','"','\\')) !== FALSE)
-		{			
+		$flag = FALSE;
+		while(($linea = fgets($ff)) !== FALSE)
+		{
 
 			if(!$header){
-				$header = $linea; 
-				if(strcmp($header[0], 'RUT_ESTUDIANTE') != 0){
-					fclose($f);
+				$header = explode(';',trim($linea));
+				if((strcmp($header[0], 'RUT_ESTUDIANTE') != 0)||(count($header)!=8)){
+					fclose($ff);
 					unlink($archivo);
 					return FALSE;
-				} 
-				$c++;
+				}				
 			}
-			else{
-
-				if(($data = array_combine($header, $linea)) == FALSE) {					
-					fclose($f);
+			else
+			{
+				$linea =  explode(';',$linea);
+				if(($data = array_combine($header, $linea)) == FALSE) {
+					$linea[] = "</br>El numero de argumentos en la linea es incorrecto</br>";
+					$stack[$c] = $linea;
+					fclose($ff);
 					unlink($archivo);
-					return FALSE;					
+					return $stack;
 				}
-
-				try{					
+				$validador = $this->validarDatos($data['RUT_ESTUDIANTE'],"rut");
+				if(!$validador){
+					$linea[] = "</br>El rut del estudiante tiene caracteres no válidos</br>";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				try{
 					if(($this->validaRut($data['RUT_ESTUDIANTE'])) == FALSE){
-						$stack[$c] = $linea;
-						$c++;
-						continue;
+						$linea[] = "</br>El rut del estudiante no es valido</br>";
+					$stack[$c] = $linea;
+						fclose($ff);
+						unlink($archivo);
+						return $stack;
 					}
 				}catch(Exception $e){
+					$linea[] = "</br>El rut del estudiante no es valido</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
 				}
-
-				$validador = $this->validarDatos($data['RUT_ESTUDIANTE'],"rut");				
-				if(!$validador){
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
+				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);				
+				$validador = $this->rutExisteM($data['RUT_ESTUDIANTE']);
+				if($validador == -1){
+					$linea[] = "</br>El rut de estudiante ya existe en manteka</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
-				}
+					fclose($ff);
+					unlink($archivo);
+					return $stack;		
+				}				
 				$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
 				if(!$validador){
+					$linea[] = "</br>La carrera del estudiante es erronea, solo se admiten numeros.</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
-				}				
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
 				$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
 				if(!$validador){
+					$linea[] = "</br>EL nombre de la seccion no existe en manteka</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
 				}
-				$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);
+				$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);				
 				$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
 				if(!$validador){
+					$linea[] = "</br>El correo del estudiante no tiene un formato válido</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
 				}
 				$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
 				if(!$validador){
+					$linea[] = "</br>El nombre del estudiante tiene caracteres no nválidos</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
 				}
-
 				if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
+					$linea[] = "</br>La sección no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
 				}
 				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
+					$linea[] = "</br>La carrera no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
-					$c++;
-					continue;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}				
+				$flag = TRUE;
+
+			}
+			$c++;						
+		}	
+		fclose($ff);
+		$ffa = fopen($archivo, "r");	
+		if ($flag) {			
+			while(($linea = fgets($ffa)) !== FALSE)
+			{
+				if(!$header){
+					$header = explode(';',trim($linea));
+				}
+				else
+				{
+					$linea =  explode(';',$linea);
+					$data = array_combine($header, $linea);				
+					$data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION']);
+					$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
+					$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
+					$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);	
+
+					$this->db->insert('estudiante',$data);
+
 				}
 
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);
-
-
-
-				if($this->rutExisteM($data['RUT_ESTUDIANTE']) != -1){                	
-					$this->db->insert('estudiante',$data);
-				} else{
-					$stack[$c] = $linea;
-					$c++;
-					continue;
-				}	
-
-			}            
+			}
+		}else{
+			fclose($ffa);
+			unlink($archivo);
+			return FALSE;
 		}
-
-		fclose($f);
+		fclose($ffa);
 		unlink($archivo);
-		return $stack;
+		return $stack;		
 	}
 
 }
