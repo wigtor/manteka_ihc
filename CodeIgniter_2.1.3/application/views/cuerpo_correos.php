@@ -19,8 +19,8 @@ function DetalleCorreo(hora,fecha,asunto,id,de,codigo)
 	document.getElementById("asuntoDetalle").innerHTML=asunto;
 	document.getElementById("de").innerHTML=de;
 	document.getElementById("cuerpoMail").innerHTML=document.getElementById("c"+id).value;
-
-
+	obtenerAdjunto(codigo);
+	
 	$.ajax({
 		type: "POST",
 		url: "<?php echo site_url("Correo/postLeido") ?>",
@@ -272,6 +272,53 @@ function cambiarCorreos(direccion,offsetL)
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).show();
 	
+}
+
+/** 
+* Esta función obtiene los archivos adjuntos de un correo.
+*/
+function obtenerAdjunto(codigo)
+{
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		data: { codigo: codigo},
+		success: function(respuesta){
+			listaAdjuntos = JSON.parse(respuesta);
+			if(listaAdjuntos.length>0)
+			{
+				$('#destinosAdjuntos').css({display:'none'});
+				$('#xxx').css({float:'left'});
+				$('#xxx').css({display:'block'});
+				var fisicos = "";
+				var logicos = "";
+				for (var i = 0; i < listaAdjuntos.length; i++)
+				{
+					if(i==0)
+					{
+						fisicos = fisicos + listaAdjuntos[i].fisico;
+						logicos = logicos + listaAdjuntos[i].logico;
+					}
+					else
+					{
+						fisicos = fisicos + "???" + listaAdjuntos[i].fisico;
+						logicos = logicos + "???" + listaAdjuntos[i].logico;
+					}
+				}
+				document.getElementById("adjuntosEmailFisico").value = fisicos;
+				document.getElementById("adjuntosEmailLogico").value = logicos;
+			}
+			else
+			{
+				$('#xxx').css({display:'none'});
+				$('#destinosAdjuntos').css({float:'left'});
+				$('#destinosAdjuntos').css({display:'block'});
+			}
+		}
+	});
+	/* Muestro el div que indica que se está cargando... */
+	var iconoCargado = document.getElementById("icono_cargando");
+	$(icono_cargando).show();
 }
 
 /** 
@@ -585,6 +632,8 @@ if(isset($msj))
 			
 		</div>
 		<div class="span6" >
+			<input type="hidden" id="adjuntosEmailFisico" name="adjuntosEmailFisico" value="">
+			<input type="hidden" id="adjuntosEmailLogico" name="adjuntosEmailLogico" value="">
 			<ul id="pager" class="pager" style="text-align:right; margin:0px" >
 				<span id="mostrando">  mostrando <?php echo ($offset+1)."-".$limite. " de: ".$cantidadCorreos; ?></span>
 				<li id="ant" class="disabled" ><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
@@ -673,5 +722,44 @@ if(isset($msj))
 <div class="pull-right">Fecha: <b  id="fecha"> </b>  <b class="pull-right" id="hora"></b></div>
   De:     <b id="de"></b>
   Asunto: <b id="asuntoDetalle"></b>
+  <div id="adjx" style="float:left; margin-left:15px;margin-right:10px;">Adjuntos:</div> <b  class="txt"  style="display:none;" id="destinosAdjuntos">Sin archivos adjuntos</b> <div id="xxx" href="#" rel="details2"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip.png" alt=":" ></div>
 	<fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset></pre>
 </fieldset>
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$("[rel=details]").tooltip({
+  		placement : 'bottom', 
+  		html: 'true', 
+  		title : '<div style="text-color:white;"><strong>Muestra archivos adjuntos</strong></div>',
+  		trigger:'hover',
+  	});
+  	
+  });
+  
+    $(window).load(function() {
+  	  $("[rel=details]").popover({
+	placement : 'bottom', 
+    content: get_popover_content,
+    html: true,
+    trigger: 'click'
+});
+  	
+  });
+  
+function get_popover_content() {
+	var fisicos = document.getElementById("adjuntosEmailFisico").value;
+	var logicos = document.getElementById("adjuntosEmailLogico").value;
+	var fisicos2 = new Array();
+	var logicos2 = new Array();
+	fisicos2 = fisicos.split("???");
+	logicos2 = fisicos.split("???");
+	content = '<table id="tablaX">'
+	content2 = '';
+	for (var i = 0; i < fisicos2.length; i++)
+	{
+		content2= content2 + '<a href="/manteka/adjuntos/' + fisicos2[i] + '">' + logicos2[i] + '</a><br>';
+	}
+	content = content2 + '</table>'
+	return content;
+}
+</script>

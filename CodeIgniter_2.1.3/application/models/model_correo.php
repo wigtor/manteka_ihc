@@ -846,7 +846,29 @@ class model_correo extends CI_Model
 			return -1;
 		}
     }
-
+	
+	public function getAdjuntos($codigo)
+	{
+		try
+		{
+			$this->db->select('COD_ADJUNTO AS codAdjunto');
+			$this->db->select('COD_CORREO');
+			$this->db->select('NOMBRE_LOGICO_ADJUNTO AS logico');
+			$this->db->select('NOMBRE_FISICO_ADJUNTO AS fisico');
+			$this->db->from('adjunto');
+			$this->db->where('COD_CORREO',$codigo);
+			$query = $this->db->get();
+			if ($query == FALSE) {
+				return array();
+			}
+			return $query->result();
+		}
+		catch(Exception $e)
+		{
+			return array();
+		}
+	}
+	
     /**
 	* devuelve el asunto, cuerpo y correos y rut de los destinatarios del borrador seleccionado
 	*
