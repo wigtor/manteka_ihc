@@ -703,7 +703,13 @@ public function getDetalleUnaSeccion($cod_seccion)
 		$this->db->select($columnas);
 		$this->db->where($condiciones);
 		$query = $this->db->get($desde);
-		$cod_horario = $query->result_array()[0]['COD_HORARIO'];
+		$resultado = $query->result_array();
+		if(count($resultado)>0){
+			$cod_horario = $resultado[0]->COD_HORARIO;
+		}else{
+			return 0; //No existe el horario
+		}
+		//$cod_horario = $query->result_array()[0]['COD_HORARIO'];
 
 		/*Se revisa si el horario ya le pertenece a otra sala*/
 		$this->db->select('sala_horario.ID_HORARIO_SALA');
