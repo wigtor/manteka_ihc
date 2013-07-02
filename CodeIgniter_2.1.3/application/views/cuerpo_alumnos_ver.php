@@ -1,6 +1,7 @@
 <script>
 	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Carrera", "Seccion"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""];
+	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+", "[A-Za-z]+", "([A-Za-z]+-{1}[0-9]+|[0-9]+|[A-Za-z]+)"];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>";
