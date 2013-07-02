@@ -265,7 +265,7 @@ Bloque:  <b id="modulo"></b></pre>
 						<h3>No ha seleccionado ninguna sección</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+						<p>Por favor seleccione una sección y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
