@@ -306,7 +306,7 @@ class MasterManteka extends CI_Controller {
 		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
 		try {
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
-				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', 'diego.gomez.lira@gmail.com', 'aA205243'); 
+				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', 'manteka.usach@gmail.com', 'manteka2013'); 
 
 				//Busca los mails según el asunto especificado y si no ha sido visto aún
 				$emails = imap_search($inbox, 'SUBJECT "Delivery Status Notification (Failure)" UNSEEN'); 
