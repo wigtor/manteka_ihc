@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
+
 
 <script type="text/javascript">
 /** 
@@ -13,6 +13,18 @@ function irAEnviar(codigo)
 {		
 document.location = "enviarBorrador/"+codigo;
 	
+}
+
+//funcion que resalta el correo seleccionado
+
+function oscurecerFondo(i,codigo){
+	
+	if(document.getElementById("check"+codigo).checked==1){
+		document.getElementById("tr"+i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+else
+	document.getElementById("tr"+i).removeAttribute("bgcolor","#e5e5e5");
 }
 </script>
 
@@ -48,11 +60,11 @@ function cambiarCorreos(direccion,offset)
 {
 	
 	if (direccion=="ant") {
-		offset=offset-5;
+		offset=offset-20;
 
 		
 	}else if(direccion=="sig"){
-		offset=offset+5;
+		offset=offset+20;
 		
 
 	}
@@ -68,22 +80,23 @@ function cambiarCorreos(direccion,offset)
 			
 			for (var i = 0; i < listaBorradores.length; i++) {
 				tr = document.createElement('tr');
+				tr.setAttribute("style","display:block;");
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
-				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","padding-top:4px;padding-bottom:8px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:5%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("align","center");				
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name",listaBorradores[i].codigo);
+				check.setAttribute("id","check"+listaBorradores[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaBorradores[i].codigo+")");
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "23%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:22%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				span=document.createElement('span');
 				span.setAttribute('style','color:#DF0101');
@@ -93,8 +106,7 @@ function cambiarCorreos(direccion,offset)
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", "m"+i);
-				td.setAttribute("width", "27%");
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:53%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				bold =document.createElement('b');
 				nodoTexto = document.createTextNode(listaBorradores[i].asunto);
@@ -105,17 +117,15 @@ function cambiarCorreos(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:10%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				nodoTexto=document.createTextNode(listaBorradores[i].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
-				td.setAttribute("style","text-align:left;padding-left:7px;");
+				td.setAttribute("style","text-align:left;padding-left:7px;width:10%;display:inline-table;height:36px;margin:0px");
 				td.setAttribute("onclick","irAEnviar('"+listaBorradores[i].codigo+"')");
 				
 				nodoTexto=document.createTextNode(listaBorradores[i].hora);
@@ -127,16 +137,28 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
 				var cuerpo=listaBorradores[i].cuerpo_email;
-				document.getElementById("m"+i).innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo).substr(0,40-listaBorradores[i].asunto.length)+"......";
+				var largoAsunto=listaBorradores[i].asunto.length; 
+				if(listaBorradores[i].asunto.length>30){
+					var asuntoTmp = listaBorradores[i].asunto.substr(0,30)+".....";	
+					largoAsunto=30;
+				}
+				else
+					var asuntoTmp = listaBorradores[i].asunto;	
+				if(strip(cuerpo+"<a>").length>40-largoAsunto)
+					var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+				else
+					var cuerpoTmp = strip(cuerpo+"<a>");	
+				document.getElementById("m"+i).innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+				innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaBorradores[i].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				
 			}
 			var limite;
-			if(<?php echo $cantidadBorradores;?><offset+5)
+			if(<?php echo $cantidadBorradores;?><offset+20)
 				limite=<?php echo $cantidadBorradores;?>;
 			else
-				limite=offset+5;
+				limite=offset+20;
 
 			
 			
@@ -151,14 +173,14 @@ function cambiarCorreos(direccion,offset)
 					document.getElementById("sig").removeAttribute('class');
 			}else if(direccion=="sig"){
 				
-				if(offset+5>=<?php echo $cantidadBorradores;?>){
+				if(offset+20>=<?php echo $cantidadBorradores;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
 				document.getElementById("ant").removeAttribute('class');
 
 			}else{
-				if(offset+5>=<?php echo $cantidadBorradores;?>){
+				if(offset+20>=<?php echo $cantidadBorradores;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
@@ -205,12 +227,12 @@ function eliminarBorrador()
 			checked_ids.push(document.formulario[i].name);
 	}
 	if(checked_ids.length==0)
-		alert('Debes seleccionar al menos un correo para eliminar.');
+		alert('Debes seleccionar al menos un borrador para eliminar.');
 	else
 	{
-		if (confirm('Estás a punto de eliminar correos.\n¿Realmente deseas continuar?'))
+		if (confirm('Estás a punto de eliminar un borrador.\n¿Realmente deseas continuar?'))
 		{
-			if(checked_ids[0]=="marcar")
+			if(checked_ids[0]=="marcar")	
 				checked_ids.shift();
 			document.getElementById('seleccion').value=checked_ids.join(";");			
 			$('#cuadroRecibidos').css({display:'none'});
@@ -258,10 +280,10 @@ if(isset($msj))
 	$contador=0;
 	$offset=0;
 
-	if($cantidadBorradores<$offset+5)
+	if($cantidadBorradores<$offset+20)
 		$limite=$cantidadBorradores;
 	else
-		$limite=$offset+5;
+		$limite=$offset+20;
 
 	$comilla= "'";
 	$estado=1;
@@ -306,20 +328,20 @@ if(isset($msj))
 			</ul>
 			<form name="formulario" id="formu" method="post">
 
-			<table width="98%" align="center" height="30px" class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
-				
-			<tr class="info">
-			<td width="5%"  style="padding-top:4px;padding-bottom:8px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></td>
-			<td width="23%" ><b></b></td>
-			<td width="27%" ><b>Mensaje</b></td>
-			<td width="8%" ><b>Fecha</b></td>
-			<td width="8%" ><b>Hora</b></td>
+			<table  align="center"  class="table table-hover " style=" width:100%; display:block; height:331px; cursor:pointer;margin-top:4px; margin-bottom:0px">
+			<thead style="height:auto;width:100%;display:block;">
+			<tr class="info" style="display:table;width:100%">
+			<th style="width:5%;margin:0px;" align="center"><input type="checkbox" NAME="marcar" onClick="selectall(formulario)"/></th>
+			<th style="width:22%; margin:0px;"><b></b></th>
+			<th style="width:53%;margin:0px; "><b>Mensaje</b></th>
+			<th style="width:10%;margin:0px;"><b>Fecha</b></th>
+			<th style="width:10%; margin:0px;"><b>Hora</b></th>
 			</tr>
-
+		</thead>
 			
 
 			
-			<tbody id="tabla">
+			<tbody id="tabla" style=";overflow-y:scroll; height:295px;display:block;">
 				<script type="text/javascript">cambiarCorreos("inicio",0);</script>
 			<?php		
 			

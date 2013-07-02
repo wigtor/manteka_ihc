@@ -14,17 +14,17 @@
 	</li>
 </ul>
 	<form name="formulario" id="formul" method="post">
-			<table   class="table table-hover " style="cursor:pointer;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
+			<table   class="table table-hover " style="cursor:default;overflow-y:scroll;margin-top:4px; margin-bottom:0px">
 			<thead>	
 			<tr class="info">
 			<th width="5%" ></th>
-			<th width="27%" >Nombre</th>
+			<th width="27%" >Eliminado por</th>
 			<th width="27%" >Mensaje</th>
 			<th width="8%" >Fecha</th>
 			<th width="8%" >Hora</th>
 			</tr>
 		</thead>
-			<tbody id="tabla">
+			<tbody id="tabla" style="cursor:default">
 				<tr>
 				<td colspan="5"> No se encontraron resultados </td>
 			</tr>
@@ -90,6 +90,7 @@ function logEnviados(){
  			if (listaLog.length == 0) {
  				$(tablaResultados).empty();
 				tr = document.createElement('tr');
+				$(tr).attr('style','cursor:default');
 				td = document.createElement('td');
 				$(td).html("No se encontraron resultados");
 				$(td).attr('colspan',5);
@@ -101,6 +102,7 @@ function logEnviados(){
  			var nodoTexto;
  			for(var i = 0; i<listaLog.length;i++){
  				var tr = document.createElement('tr');
+ 				$(tr).attr('style','cursor:default');
  				td = document.createElement('td');
  				tr.appendChild(td);
  				td = document.createElement('td');
