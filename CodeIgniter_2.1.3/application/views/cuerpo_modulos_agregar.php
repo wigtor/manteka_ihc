@@ -377,10 +377,10 @@ function ordenarFiltro(numeroLista){
 						<div id="EscojaEquipo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado algún profesor para el equipo</h3>
+								<h3>No ha seleccionado ningún profesor</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+								<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -391,10 +391,10 @@ function ordenarFiltro(numeroLista){
 						<div id="EscojaSesion" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado una sesión para el módulo</h3>
+								<h3>No ha seleccionado ninguna sesión</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione por lo menos una sesión</p>
+								<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -405,10 +405,10 @@ function ordenarFiltro(numeroLista){
 						<div id="LiderDelEquipo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No puede seleccionar el lider como parte del equipo</h3>
+								<h3>No puede seleccionar el líder como parte del equipo</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor no seleccione al lider como parte del equipo</p>
+								<p>Por favor no seleccione a otro profesor como parte del equipo</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
