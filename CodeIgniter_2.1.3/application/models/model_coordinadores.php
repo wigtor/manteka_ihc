@@ -294,6 +294,7 @@ class model_coordinadores extends CI_Model{
       function modificarCoordinador($rutActual,$nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono){
          //tabla coordinador
          $this->db->where('RUT_USUARIO3',$rutActual);
+		 
          $informacion = array(
                         'NOMBRE1_COORDINADOR' => $nombre1,
                         'NOMBRE2_COORDINADOR' => $nombre2,
