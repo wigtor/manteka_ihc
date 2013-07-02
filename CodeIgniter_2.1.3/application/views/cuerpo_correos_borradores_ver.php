@@ -144,15 +144,18 @@ function cambiarCorreos(direccion,offset)
 				}
 				else
 					var asuntoTmp = listaBorradores[i].asunto;	
-				if(strip(cuerpo+"<a>").length>40-largoAsunto)
-					var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+				if(strip(cuerpo+".").length>40-largoAsunto)
+					var cuerpoTmp = strip(cuerpo+".").substr(0,40-largoAsunto)+".....";	
 				else
-					var cuerpoTmp = strip(cuerpo+"<a>");	
-				document.getElementById("m"+i).innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
-				innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaBorradores[i].asunto.length)+"......";
+					var cuerpoTmp = strip(cuerpo+".").substr(0,strip(cuerpo+".").length-1);	
+				var span;
+				span="<span  style='width: 15px; height: 15px; float:right; margin-right:8px;'><img src='/manteka/img/icons/glyphicons_062_paperclip' alt=':' ></span>";
+				if (listaBorradores[i].adjuntos!=null)
+					document.getElementById("m"+i).innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>"+span;
+				else
+					document.getElementById("m"+i).innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+				
 				document.getElementById("c"+i).value=cuerpo;
-				
-				
 			}
 			var limite;
 			if(<?php echo $cantidadBorradores;?><offset+20)
