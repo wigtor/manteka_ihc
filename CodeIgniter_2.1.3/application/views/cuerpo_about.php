@@ -40,8 +40,9 @@
       <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpvwpePOPM.jpg">
         <div class="carousel-caption" align="left">
          <h4>Grupo 3</h4>
-         <p>....</p>
-         <p style="font-size:xx-small;">(En la fotografía de izquierda a derecha: Diego García, Byron Lanas, Miguel Jara, Diego Gómez, Carolina Orrego)</p>
+         <p>Encargados de la realización de la sección enfocada al envío y recepción de correos, la cual permite la comunicación entre los participantes del Curso Comunicación Efectiva, dando la facilidad a los usuarios de enviar correos de forma rápida y masiva gracias a los filtros y plantillas, asimismo admite compartir archivo por medio de adjuntos y la 
+          visualización de los mensajes tanto en el correo personal como en el sistema MANTEKA.</p>
+         <p style="font-size:xx-small;">(En la fotografía de izquierda a derecha: Diego García, Byron Lanas, Miguel Jara, Diego Gómez, Carolina Orrego. No esta en la fotografía: Claudio Rojas)</p>
         </div> 
     </div>
 

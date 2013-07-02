@@ -327,16 +327,26 @@ class Correo extends MasterManteka {
 		
 		/* Se obtiene la información del correo a enviar. */
 		$rutRecept=$this->input->post('rutRecept');
-		$asunto="[ManteKA] ".$this->input->post('asunto');
+		$asunto=$this->input->post('asunto');
+		$adjuntos = json_decode($this->input->post('adjuntos'));		
 		$codigoBorrador=$this->input->post('codigoBorrador');
 		$date=date("YmdHis");
 		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 		$mensaje=$this->input->post('editor');
+		$archivosElim = json_decode($this->input->post('archivosElim'));
 		
 		/* Se asigna un hipervínculo al correo con el fin de que el usuario pueda ver el correo directamente en el sistema Manteka. */
-		$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
-		$link2="<br><a href='/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto</a>";
+		//$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
+		$link2="<br><a href='/".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
 		
+
+		if($archivosElim!="")
+		foreach ($archivosElim as $archivo) {
+			unlink("adjuntos/".$archivo);
+		}
+		foreach ($adjuntos as $adjunto) {
+			$this->email->attach("adjuntos/".$adjunto[1]);
+		}
 		/* Se realiza el reemplazo de aquellas variables predefinidas que NO cambian según el destinatario.
 		En este caso, dichas variables son %%hoy (fecha actual) y %%remitente (Nombre y apellido de quién envía el correo). */
 		$variableHoyAsunto=substr_count($asunto, '%%hoy');
@@ -353,9 +363,9 @@ class Correo extends MasterManteka {
 		}
 		if($variableRemitente > 0)
 		{
-			$this->load->model('Model_usuario');
+			$this->load->model('model_usuario');
 			$modeloUsuarioCargado=true;
-			$remitente=$this->Model_usuario->datos_usuario($rut);
+			$remitente=$this->model_usuario->datos_usuario($rut);
 			$remitente=trim($remitente->nombre1).' '.trim($remitente->apellido1);
 			$asunto=str_replace('%%remitente', $remitente, $asunto);
 			$mensaje=str_replace('%%remitente', $remitente, $mensaje);
@@ -369,7 +379,7 @@ class Correo extends MasterManteka {
 		$receptores=explode(",",$rutRecept);
 		
 		/* Se valida si las variables predefinidas cuyo valor cambia según el destinatario, son coherentes con la lista de destinatarios especificada.
-		Es decir las variables predefinidas %%carrera_estudiante, %%seccion_estudiante y %%modulo_estudiante sólo pueden ser utilizadas si todos los destinatarios son del tipo estudiante. */
+		Es decir las variables predefinidas %%carrera_estudiante y %%seccion_estudiante sólo pueden ser utilizadas si todos los destinatarios son del tipo estudiante. */
 		
 		/* Primero se verifica si existen variables predefinidas propias de los estudiantes. */
 		$variableModuloAsunto=substr_count($asunto, '%%modulo_estudiante');
@@ -378,7 +388,7 @@ class Correo extends MasterManteka {
 		$variableCarreraCuerpo=substr_count($mensaje, '%%carrera_estudiante');
 		$variableSeccionAsunto=substr_count($asunto, '%%seccion_estudiante');
 		$variableSeccionCuerpo=substr_count($mensaje, '%%seccion_estudiante');
-		$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;  
+		$variableModulo=$variableModuloAsunto + $variableModuloCuerpo;
 		$variableCarrera=$variableCarreraAsunto + $variableCarreraCuerpo;
 		$variableSeccion=$variableSeccionAsunto + $variableSeccionCuerpo;
 		$variablesEstudiante=$variableModulo + $variableCarrera + $variableSeccion;
@@ -392,6 +402,8 @@ class Correo extends MasterManteka {
 			$hayCoordinadores=false;
 			$hayAyudantes=false;
 			$hayOtroTipoDestinatario=false;
+			if(!$modeloUsuarioCargado)
+				$this->load->model('model_usuario');
 			foreach($receptores as $receptor)
 			{
 				$estudiante=$this->model_correo->getRutEst($receptor);
@@ -401,7 +413,7 @@ class Correo extends MasterManteka {
 					$hayEstudiantes=true;
 				else if($user != 0)
 				{
-					$usuario=$this->Model_usuario->datos_usuario($receptor);
+					$usuario=$this->model_usuario->datos_usuario($receptor);
 					if($usuario->ID_TIPO == 1)
 						$hayProfesores=true;
 					else
@@ -477,6 +489,10 @@ class Correo extends MasterManteka {
 					if($estudiante != 0)
 					{
 						$datosEstudiante=$this->model_estudiante->getDetallesEstudiante($receptor);
+						$seccionEstudiante=$datosEstudiante->seccion;
+						$this->load->model('model_secciones');
+						$moduloEstudiante=$this->model_secciones->getDetallesSeccion($seccionEstudiante);
+						$moduloEstudiante=trim($moduloEstudiante[1]);
 						$to=$datosEstudiante->correo;
 						$nombreEstudiante=trim($datosEstudiante->nombre1).' '.trim($datosEstudiante->apellido1);
 						$rutEstudiante=trim($datosEstudiante->rut);
@@ -491,14 +507,16 @@ class Correo extends MasterManteka {
 						$asuntoPersonalizado=str_replace('%%rut', $rutEstudiante, $asuntoPersonalizado);
 						$asuntoPersonalizado=str_replace('%%carrera_estudiante', $carreraEstudiante, $asuntoPersonalizado);
 						$asuntoPersonalizado=str_replace('%%seccion_estudiante', $seccionEstudiante, $asuntoPersonalizado);
+						$asuntoPersonalizado=str_replace('%%modulo_estudiante', $moduloEstudiante, $asuntoPersonalizado);
 						$mensajePersonalizado=str_replace('%%nombre', $nombreEstudiante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%rut', $rutEstudiante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%carrera_estudiante', $carreraEstudiante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%seccion_estudiante', $seccionEstudiante, $mensajePersonalizado);
+						$mensajePersonalizado=str_replace('%%modulo_estudiante', $moduloEstudiante, $mensajePersonalizado);
 					}
 					else if($user != 0)
 					{
-						$datosUsuario=$this->Model_usuario->datos_usuario($receptor);
+						$datosUsuario=$this->model_usuario->datos_usuario($receptor);
 						$to=$datosUsuario->email1;
 						$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
 						$rutUsuario=trim($datosUsuario->rut);
@@ -529,12 +547,13 @@ class Correo extends MasterManteka {
 						$mensajePersonalizado=str_replace('%%rut', $rutAyudante, $mensajePersonalizado);
 					}
 					date_default_timezone_set("Chile/Continental");
-					$mensajeMail =$mensajePersonalizado.$link.$link2;
+					$mensajeMail =$mensajePersonalizado.$link2;
 					$config['mailtype'] = 'html';
 					$this->email->initialize($config);
 					$this->email->from('no-reply@manteka.cl', 'ManteKA');
 					$this->email->to($to);
-					$this->email->subject($asuntoPersonalizado);
+					$asuntoMail="[ManteKA] ".$asuntoPersonalizado;
+					$this->email->subject($asuntoMail);
 					$this->email->message($mensajeMail);
 					if($this->email->send())
 						$enviados+=1;
@@ -548,11 +567,13 @@ class Correo extends MasterManteka {
 			$asuntoAux=str_replace('%%rut', '[Rut destinatario]', $asuntoAux);
 			$asuntoAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $asuntoAux);
 			$asuntoAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $asuntoAux);
+			$asuntoAux=str_replace('%%modulo_estudiante', '[Módulo estudiante destinatario]', $asuntoAux);
 			$mensajeAux=str_replace('%%nombre', '[Nombre destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%rut', '[Rut destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $mensajeAux);
-			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador);
+			$mensajeAux=str_replace('%%modulo_estudiante', '[Módulo estudiante destinatario]', $mensajeAux);
+			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 			
 			/* Se guarda la información que asocia el correo enviado con cada destinatario. */
 			foreach($receptores as $receptor)
@@ -581,17 +602,19 @@ class Correo extends MasterManteka {
 			try
 			{
 				$to=$this->input->post('to');
-				$mensajeMail=$mensaje.$link.$link2;
+				$mensajeMail=$mensaje.$link2;
 				date_default_timezone_set("Chile/Continental");
 				$config['mailtype'] = 'html';
 				$this->email->initialize($config);
 				$this->email->from('no-reply@manteka.cl', 'ManteKA');
 				$this->email->to($to);
-				$this->email->subject($asunto);
+				$asuntoMail="[ManteKA] ".$asunto;
+				$this->email->subject($asuntoMail);
 				$this->email->message($mensajeMail);
+
 				if(!$this->email->send())
 					throw new Exception("error en el envio");
-				$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
+				$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 				
 				/* Se guarda la información que asocia el correo enviado con cada destinatario. */
 				foreach($receptores as $receptor)
@@ -612,7 +635,7 @@ class Correo extends MasterManteka {
 			catch (Exception $e)
 			{
 				if($e->getMessage()=="error en el envio")
-					redirect("/Otros/sendMailError", "sendMailError");
+					redirect("/Otros/sendMailError/".$codigoBorrador, "sendMailError");
 				else
 					redirect("/Otros", "databaseError");
 			}
@@ -637,12 +660,50 @@ class Correo extends MasterManteka {
 		$tipoUsuario = $this->session->userdata('id_tipo_usuario');
 		$textoFiltro = $this->input->post('textoBusqueda');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
-
+		
+		function digitoVerificador($rut)
+		{
+			$invertir=strrev($rut); 
+			$multiplicar = 2; 
+			$suma=0;
+			for ($i = 0; $i <= strlen($invertir); $i++)
+			{  
+				if ($multiplicar > 7) $multiplicar = 2;  
+				$suma = $multiplicar * substr($invertir, $i, 1) + $suma; 
+				$multiplicar = $multiplicar + 1; 
+			} 
+			$valor = 11 - ($suma % 11); 
+			if ($valor == 11)
+				$verificador = "0"; 
+			elseif ($valor == 10)
+				$verificador = "k"; 
+			else
+				$verificador = $valor; 
+			return $verificador; 
+		}
+		$this->load->model('model_usuario');
+		$datosUsuario=$this->model_usuario->datos_usuario($rut);
+		$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
+		$rutUsuario=trim($datosUsuario->rut);
+		$largoRut=strlen($rutUsuario);
+		$cientosRut=substr($rutUsuario,$largoRut-3,3);
+		$milesRut=substr($rutUsuario,$largoRut-6,3);
+		$millonesRut=substr($rutUsuario,0,$largoRut-6);
+		$rutUsuario=$millonesRut.'.'.$milesRut.'.'.$cientosRut.'-'.digitoVerificador($rutUsuario);
 		$this->load->model('model_correo');
-
 		$resultado =$this->model_correo->VerCorreosRecibidos($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
-
-		if (count($resultado) > 0) {
+		
+		$resultadoAux=array();
+		
+		foreach ($resultado as $temp)
+		{
+			$temp=str_replace('[Rut destinatario]', $rutUsuario, $temp);
+			$temp=str_replace('[Nombre destinatario]', $nombreUsuario, $temp);
+			array_push($resultadoAux, $temp);
+		}
+		$resultado=$resultadoAux;
+		
+		if (count($resultado) > 0) {			
 			$this->load->model('model_busquedas');
 			//Se debe insertar sólo si se encontraron resultados
 			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'correos', $this->session->userdata('rut'));
@@ -694,7 +755,7 @@ class Correo extends MasterManteka {
 	}
 
 /**
-	* Guarda borradores automaticamente
+	* Guarda borradores automaticamente o por el botón guardar
 	*
 	* @author: Byron Lanas (BL)
 	*
@@ -709,14 +770,22 @@ class Correo extends MasterManteka {
 		$to = $this->input->post('to');
 		$asunto =$this->input->post('asunto');
 		$mensaje =$this->input->post('editor');
+		$adjuntos = $this->input->post('adjuntos');
+		$archivosElim = $this->input->post('archivosElim');
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("YmdHis");
 		$this->load->model('model_correo');
 		$this->load->model('model_correo_e');
 		$this->load->model('model_correo_u');
 		$this->load->model('model_correo_a');
+		
+		if($archivosElim!="")
+		foreach ($archivosElim as $archivo) {
+			unlink("adjuntos/".$archivo);
+			
+		}
 
-		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador);
+		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 
 		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 
@@ -1033,6 +1102,22 @@ class Correo extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->cargarTodo("Correos", "cuerpo_log_eliminados", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	}
+
+
+	/**
+	* Función que retorna la cantidad de correos no leidos por el usuario
+	* @author: Víctor flores
+	* @return: int La cantidad de correos no leidos
+	*/
+	public function postCantidadCorreosNoLeidos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$rut = $this->session->userdata('rut');
+		$this->load->model('model_correo');
+		$resultado = $this->model_correo->cantidadRecibidosNoLeidos($rut);
+		echo $resultado;
 	}
 
 }

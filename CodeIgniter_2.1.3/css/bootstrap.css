@@ -2026,6 +2026,10 @@ table {
   font-weight: bold;
 }
 
+.table tbody {
+  overflow-y:scroll;
+}
+
 .table thead th {
   vertical-align: bottom;
   background-color: lightblue;

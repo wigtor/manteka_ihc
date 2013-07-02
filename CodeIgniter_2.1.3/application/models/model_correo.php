@@ -126,7 +126,7 @@ class model_correo extends CI_Model
 
 			GROUP BY T.COD_CORREO
 			ORDER BY T.COD2_CORREO DESC
-			LIMIT $offset, 5"; //NIKAGANDO LA HAGO EN ACTIVERECORD!!!
+			LIMIT $offset, 20"; //NIKAGANDO LA HAGO EN ACTIVERECORD!!!
 
 
 			$query = $this->db->query($queryHorrible);
@@ -275,7 +275,7 @@ class model_correo extends CI_Model
 			}
 			else {
 				if ($textoFiltrosAvanzados[BUSCAR_POR_REMITENTE] != '') {
-					$consultasLikes = "(nombre1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
+					$consultasLikes = "(nombre LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
 						OR apellido1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
 						OR apellido2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')";
 				}
@@ -320,10 +320,10 @@ class model_correo extends CI_Model
 				WHERE $consultasLikes
 
 				ORDER BY T.COD2_CORREO DESC
-				LIMIT $offset, 5";
+				LIMIT $offset, 20";
 			$query = $this->db->query($queryDeMierda);
 			//echo $this->db->last_query().'   ';return;
-			return $query->result();
+			return $query->result_array();
 		}
 		catch(Exception $e)
 		{
@@ -350,7 +350,7 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-	public function InsertarCorreo($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador)
+	public function InsertarCorreo($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador,$adjuntos)
 	{
 		try
 		{  
@@ -367,8 +367,34 @@ class model_correo extends CI_Model
 				$this->FECHA = date("Y-m-d");
 				$this->CUERPO_EMAIL = $mensaje;
 				$this->ASUNTO=$asunto;
+				$this->db->select('COD_CORREO');
+				$this->db->where('COD2_CORREO', $codCorreo); 
+				//$this->db->order_by("COD2_CORREO", "desc"); 
+				$this->db->limit(1);
+				$query = $this->db->get('carta');
+				 $e = $this->db->_error_message(); 
+				
+				foreach ($query->result() as $row)
+				{
+				    $cod= $row->COD_CORREO;
+				}
 				$this->db->insert('carta', $this);
-				$this->db->_error_message();  
+
+				$this->db->delete('adjunto', array('COD_CORREO' => $cod));
+
+				if($adjuntos!="")
+				foreach ($adjuntos as $adjunto) {
+					$data = array(
+				   
+					   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
+					   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
+					   	'COD_CORREO' => $cod,
+					);
+
+					$this->db->insert('adjunto', $data);
+				}
+
+				$this->db->_error_message(); 
 				return 1;
 			}else
 			{
@@ -384,6 +410,21 @@ class model_correo extends CI_Model
 				{
 				   $cod= $row->COD_CORREO;
 				}
+
+				$this->db->delete('adjunto', array('COD_CORREO' => $cod)); 				
+
+				if($adjuntos!="")
+				foreach ($adjuntos as $adjunto) {
+					$data = array(
+				   
+					   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
+					   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
+					   	'COD_CORREO' => $cod,
+					);
+
+					$this->db->insert('adjunto', $data);
+				}
+
 				$this->db->delete('cartar_ayudante', array('COD_CORREO' => $cod)); 
 				$this->db->delete('cartar_estudiante', array('COD_CORREO' => $cod)); 
 				$this->db->delete('cartar_user', array('COD_CORREO' => $cod)); 
@@ -413,7 +454,7 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-	public function insertarBorrador($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador)
+	public function insertarBorrador($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador,$adjuntos)
 	{
 
 		try
@@ -466,6 +507,23 @@ class model_correo extends CI_Model
 			    
 			}
 			
+
+				$this->db->delete('adjunto', array('COD_CORREO' => $cod)); 				
+				if($adjuntos!=""){
+					$this->db->delete('adjunto', array('COD_CORREO' => $cod));
+					foreach ($adjuntos as $adjunto) {
+						$data = array(
+					   
+						   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
+						   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
+						   	'COD_CORREO' => $cod,
+						);
+
+					$this->db->insert('adjunto', $data);
+				} 	
+				}
+
+				
 			}else
 			{
 
@@ -497,8 +555,19 @@ class model_correo extends CI_Model
 				$this->db->set('ASUNTO', $asunto);
 				$this->db->where('COD_BORRADOR',$codigoBorrador);
 				$this->db->update('carta');
+				$this->db->delete('adjunto', array('COD_CORREO' => $cod)); 				
 
+				if($adjuntos!="")
+				foreach ($adjuntos as $adjunto) {
+					$data = array(
+				   
+					   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
+					   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
+					   	'COD_CORREO' => $cod,
+					);
 
+					$this->db->insert('adjunto', $data);
+				}
 			}
 
 			
@@ -677,9 +746,6 @@ class model_correo extends CI_Model
 			$this->db->from('carta');
 			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
 			return $this->db->count_all_results();
-			
-
-
 		}
 		catch(Exception $e)
 		{
@@ -687,7 +753,31 @@ class model_correo extends CI_Model
 		}
     }
 
-
+    /**
+	* Obtiene la cantidad de correos recibidos por el usuario y que no han sido leidos
+	*
+	* @param int $rut
+	* @return int
+	* @author Víctor Flores
+	*
+	*/
+    public function cantidadRecibidosNoLeidos($rut)
+	{
+		try
+		{
+			$this->db->from('carta');
+			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
+			$this->db->where('cartar_user.RUT_USUARIO', $rut);
+			$this->db->where('COD_BORRADOR IS NULL');
+			$this->db->where('RECIBIDO_CARTA_USER',1);
+			$this->db->where('NO_LEIDO_CARTA_USER', 1);
+			return $this->db->count_all_results();
+		}
+		catch(Exception $e)
+		{
+			return -1;
+		}
+    }
 
     /**
 	* Obtiene la cantidad de borradores correspondientes al usuario
@@ -739,7 +829,7 @@ class model_correo extends CI_Model
 			$this->db->join('borrador','carta.COD_BORRADOR = borrador.COD_BORRADOR');
 			$this->db->where('RUT_USUARIO',$rut);
 			$this->db->order_by("borrador.COD_BORRADOR", "desc"); 
-			$this->db->limit( 5,$offset);
+			$this->db->limit( 20,$offset);
 			$query = $this->db->get();
 			
 			if ($query == FALSE) {
@@ -869,7 +959,17 @@ class model_correo extends CI_Model
 			$correoRecept=array_merge($correoEst,$correoAyu,$correoUser);
 			array_push($resultado, $correoRecept);
 
-
+			$adjuntos=array();
+			$this->db->select('NOMBRE_LOGICO_ADJUNTO as logico');
+			$this->db->select('NOMBRE_FISICO_ADJUNTO as fisico');
+			$this->db->from('adjunto');
+			$this->db->where('COD_CORREO',$cod);
+			$query = $this->db->get();
+			if ($query == FALSE) {
+				return array();
+			}
+			$adjuntos=$query->result();
+			array_push($resultado, $adjuntos);
 			return $resultado;
 
 		}
@@ -912,7 +1012,11 @@ class model_correo extends CI_Model
 			}
 			$detalles= $query->result();
 			foreach ($query->result() as $row)
-			{
+			{	
+				$this->db->where('RUT_USUARIO',$rut);
+				$this->db->where('COD_CORREO',$codigo);
+				$this->db->update('cartar_user',array('NO_LEIDO_CARTA_USER' => 0));
+
 				$this->db->select('NOMBRE1_COORDINADOR AS nombre');
 				$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
 				$this->db->select('APELLIDO2_COORDINADOR AS apellido2');

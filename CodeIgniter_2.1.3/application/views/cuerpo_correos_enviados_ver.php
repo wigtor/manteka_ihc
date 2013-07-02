@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
+<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" />
 
 <script type="text/javascript">
 
@@ -103,10 +103,10 @@ function cambiarCorreos(direccion,offset)
 {
 	
 	if (direccion=="ant") {
-		offset=offset-5;
+		offset=offset-20;
 	}
 	else if(direccion=="sig") {
-		offset=offset+5;
+		offset=offset+20;
 	}
 	
 	var filtroBusqueda = document.getElementById("filtroLista");
@@ -124,6 +124,7 @@ function cambiarCorreos(direccion,offset)
 
 			
 			tbody = document.createElement('tbody');
+			tbody.setAttribute("style","overflow-y:scroll; height:295px;display:block;");
 			if (listaRecibidos.length == 0) {
 				tr = document.createElement('tr');
 				td = document.createElement('td');
@@ -134,6 +135,7 @@ function cambiarCorreos(direccion,offset)
 			}
 			for (var i = 0; i < listaRecibidos.length; i++) {
 				tr = document.createElement('tr');
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
@@ -142,9 +144,10 @@ function cambiarCorreos(direccion,offset)
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name", prefijo_tipoDato + listaRecibidos[i].codigo);
+				check.setAttribute("id", "check" + listaRecibidos[i].codigo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaRecibidos[i].codigo+")");
 				var cuerpo = listaRecibidos[i].cuerpo_email;
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -153,7 +156,10 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				var de=listaRecibidos[i].nombre_destinatario;
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				nodoTexto=document.createTextNode(de.replace(/,/g,", "));
+				if(de.replace(/,/g,", ").length>40)
+					nodoTexto=document.createTextNode(de.replace(/,/g,", ").substr(0,40)+".....");
+				else
+					nodoTexto=document.createTextNode(de.replace(/,/g,", ").substr(0,40));	
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -161,8 +167,19 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				var textoTemp = "<b>"+listaRecibidos[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......";
-				td.innerHTML = textoTemp;
+				var largoAsunto=listaRecibidos[i].asunto.length; 
+				if(listaRecibidos[i].asunto.length>30){
+					var asuntoTmp = listaRecibidos[i].asunto.substr(0,30)+".....";	
+					largoAsunto=30;
+				}
+				else
+					var asuntoTmp = listaRecibidos[i].asunto;	
+				if(strip(cuerpo+"<a>").length>40-largoAsunto)
+					var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+				else
+					var cuerpoTmp = strip(cuerpo+"<a>");	
+				td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+			
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
@@ -194,10 +211,10 @@ function cambiarCorreos(direccion,offset)
 			tablaResultados.appendChild(tbody);
 
 			var limite;
-			if(<?php echo $cantidadCorreos;?><offset+5)
+			if(<?php echo $cantidadCorreos;?><offset+20)
 				limite=<?php echo $cantidadCorreos;?>;
 			else
-				limite=offset+5;
+				limite=offset+20;
 
 			
 			
@@ -212,20 +229,24 @@ function cambiarCorreos(direccion,offset)
 					document.getElementById("sig").removeAttribute('class');
 			}else if(direccion=="sig"){
 				
-				if(offset+5>=<?php echo $cantidadCorreos;?>){
+				if(offset+20>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
 				document.getElementById("ant").removeAttribute('class');
 
 			}else{
-				if(offset+5>=<?php echo $cantidadCorreos;?>){
+				if(offset+20>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
 				if(offset==0)
 					document.getElementById("ant").removeAttribute('onClick');
 			}
+			if (listaRecibidos.length == 0) {
+				document.getElementById("mostrando").innerHTML="mostrando "+ (offset)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
+			}else
+
 			document.getElementById("mostrando").innerHTML="mostrando "+ (offset+1)+"-"+limite+ " de: "+<?php echo $cantidadCorreos;?>;
 
 			
@@ -247,11 +268,11 @@ function cambiarCorreos2(direccion,offset)
 {
 	
 	if (direccion=="ant") {
-		offset=offset-5;
+		offset=offset-20;
 
 		
 	}else if (direccion=="sig"){
-		offset=offset+5;
+		offset=offset+20;
 		
 
 	}
@@ -328,6 +349,7 @@ function cambiarCorreos2(direccion,offset)
 					
 				}
 				tr = document.createElement('tr');
+				tr.setAttribute("id","tr"+i);
 				td = document.createElement('td');
 				td.setAttribute("width", "5%");
 				td.setAttribute("id", i);
@@ -336,12 +358,13 @@ function cambiarCorreos2(direccion,offset)
 				check = document.createElement('input');
 				check.type='checkbox';
 				check.setAttribute("name",listaEnviados[i][0].cod_correo);
+				check.setAttribute("id","check"+listaEnviados[i][0].cod_correo);
 				check.checked=false;
 				td.appendChild(check);
-				//td.setAttribute(onclick,);
+				td.setAttribute("onclick","oscurecerFondo("+i+","+listaEnviados[i][0].cod_correo+")");
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "23%");
+				td.setAttribute("width", "22%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
@@ -350,7 +373,7 @@ function cambiarCorreos2(direccion,offset)
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", "m"+i);
-				td.setAttribute("width", "27%");
+				td.setAttribute("width", "53%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
 				bold =document.createElement('b');
@@ -362,7 +385,7 @@ function cambiarCorreos2(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
+				td.setAttribute("width", "10%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
@@ -370,7 +393,7 @@ function cambiarCorreos2(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
+				td.setAttribute("width", "10%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
@@ -390,10 +413,10 @@ function cambiarCorreos2(direccion,offset)
 				
 			}
 			var limite;
-			if(<?php echo $cantidadCorreos;?><offset+5)
+			if(<?php echo $cantidadCorreos;?><offset+20)
 				limite=<?php echo $cantidadCorreos;?>;
 			else
-				limite=offset+5;
+				limite=offset+20;
 
 			
 			
@@ -408,13 +431,13 @@ function cambiarCorreos2(direccion,offset)
 					document.getElementById("sig").removeAttribute('class');
 			}else if(direccion=="sig"){
 				
-				if(offset+5>=<?php echo $cantidadCorreos;?>){
+				if(offset+20>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
 				document.getElementById("ant").removeAttribute('class');
 
-			}else if(offset+5>=<?php echo $cantidadCorreos;?>){
+			}else if(offset+20>=<?php echo $cantidadCorreos;?>){
 					document.getElementById("sig").className="disabled";
 					document.getElementById("sig").removeAttribute('onClick');
 				}
@@ -465,7 +488,17 @@ function eliminarCorreo()
 	}
 	$('#modalConfirmacion').modal();
 }
+//funcion que resalta el correo seleccionado
 
+function oscurecerFondo(i,codigo){
+	
+	if(document.getElementById("check"+codigo).checked==1){
+		document.getElementById("tr"+i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+else
+	document.getElementById("tr"+i).removeAttribute("bgcolor","#e5e5e5");
+}
 function limpiarFiltrosCorreo() {
 	var tam = valorFiltrosJson.length;
 	for (var i = 0; i < tam; i++) {
@@ -500,7 +533,7 @@ function evitarEnvioVacio() {
 					$("#seleccion").val(idCorreo);
 				}
 				else {
-					$("#seleccion").val($("#seleccion").val()+idCorreo+";");
+					$("#seleccion").val($("#seleccion").val()+";"+idCorreo);
 				}
 			}
 		}
@@ -518,28 +551,56 @@ function escribirHeadTableCorreos() {
 	$(tablaResultados).find('tbody').remove();
 	var tr, td, th, thead, nodoTexto, nodoBtnFiltroAvanzado;
 	thead = document.createElement('thead');
-	thead.setAttribute('style', "cursor:default;");
+	thead.setAttribute('style', "cursor:default;width:100%;display:block;");
 	tr = document.createElement('tr');
-
+	tr.setAttribute("style","display:table;width:100%");
 	//SE CREA LA CABECERA DE LA TABLA
 	for (var i = 0; i < tiposFiltro.length; i++) {
 			th = document.createElement('th');
+			switch (i){
+				case 0:
+					th.setAttribute("style","width:7%");
+					break;
+				case 1:
+					th.setAttribute("style","width:32%");
+					break;
+				case 2:
+					th.setAttribute("style","width:37%");
+					break;	
+				case 3:
+					th.setAttribute("style","width:12%");
+					break;
+				case 4:
+					th.setAttribute("style","width:12%");
+					break;							
+			}
+
+
 			if (tiposFiltro[i] != '') {
 				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
-				
+				th.appendChild(nodoTexto);
 
 				nodoBtnFiltroAvanzado = document.createElement('a');
 				nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-mini clickover");
 				nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
 				//$(nodoBtnFiltroAvanzado).attr('title', "Buscar por "+tiposFiltro[i]);
-				nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;");
+				nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;widht");
 					span = document.createElement('i');
 					span.setAttribute('class', "icon-filter clickover");
 					//span.setAttribute('style', "vertical-align:middle;");
 				nodoBtnFiltroAvanzado.appendChild(span);
 
-			th.appendChild(nodoTexto);
-			th.appendChild(nodoBtnFiltroAvanzado);
+				th.appendChild(nodoBtnFiltroAvanzado);
+
+				// Se comprueba que existe un elemento para dicha posición del Array inputAllowedFiltro. En caso de que no, se setea en string vacío
+				inputAllowedFiltro[i] = typeof(inputAllowedFiltro[i]) == 'undefined' ? "" : inputAllowedFiltro[i];
+				/// Se asigna el valor del atributo pattern que tendrá el input.
+				var inputPattern = inputAllowedFiltro[i] != "" ? 'pattern="'+inputAllowedFiltro[i]+'"' : "";
+
+				var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
+				
+				var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" '+inputPattern+' id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltroCorreos(this)" ><button class="btn" onClick="cambioTipoFiltroCorreos(this.parentNode.firstChild)" type="button"><i class="icon-search"></i></button></div>';
+			
 			}
 			else { //Esto es para el caso de los checkbox que marcan toda la tabla
 				nodoCheckeable = document.createElement('input');
@@ -549,16 +610,7 @@ function escribirHeadTableCorreos() {
 				nodoCheckeable.setAttribute('title', "Seleccionar todos");
 				th.appendChild(nodoCheckeable);
 			}
-			
-
-			var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
-			
-			var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltroCorreos(this)" ><button class="btn" onClick="cambioTipoFiltroCorreos(this)" type="button"><i class="icon-search"></i></button></div>';
-			
-
-			$(nodoBtnFiltroAvanzado).clickover({html:true, content: divs, placement:'top', onShown: despuesDeMostrarPopOver, title:"Búsqueda sólo por " + tiposFiltro[i], rel:"clickover", indice: i});
-
-			
+						
 		tr.appendChild(th);
 	}
 	thead.appendChild(tr);
@@ -571,6 +623,7 @@ function escribirHeadTableCorreos() {
 <script>
 	var tiposFiltro = ["", "Para", "Mensaje", "Fecha", "Hora"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""]; //Esta es variable global que almacena el valor de los input de búsqueda en específico
+	var inputAllowedFiltro = ["[A-Za-z]+", "[A-Za-z]+", "[A-Za-z]+","([1-9][0-9]{3}-(0\\d|1[0-2])-([0-2]\\d|3[0-1])|[1-9][0-9]{3}-(0\\d|1[0-2])|[1-9][0-9]{3}|(0\\d|1[0-2])|([0-2]\\d|3[0-1]))","(^(0{0,1}\\d|1\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$|([0-5]\\d):([0-5]\\d)$|([0-5]\\d)$)"];
 	var prefijo_tipoDato = "correo_rec_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Correos/postEnviados") ?>";
@@ -625,10 +678,10 @@ if(isset($msj))
 		$contador=0;
 		$offset=0;
 
-		if($cantidadCorreos<$offset+5)
+		if($cantidadCorreos<$offset+20)
 			$limite=$cantidadCorreos;
 		else
-			$limite=$offset+5;
+			$limite=$offset+20;
 
 		$comilla= "'";
 
@@ -679,8 +732,8 @@ if(isset($msj))
 		
 	?>
 		<div class="row-fluid">
-			<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-				<table id="listadoResultados" class="table table-hover">
+			<div class="span12" style="border:#cccccc 1px solid;  height:400px; -webkit-border-radius: 4px;">
+				<table id="listadoResultados" class="table table-hover" style="height:400px;width:100%; display:block;">
 					
 					<!-- Acá va el tbody cargado por ajax -->
 
@@ -724,7 +777,7 @@ if(isset($msj))
 
 
 <fieldset id="cuadroDetalleCorreo" style="display:none;">
-	<legend>Correos recibidos ::: detalles</legend>
+	<legend>Correos enviados ::: detalles</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			Detalles del correo seleccionado

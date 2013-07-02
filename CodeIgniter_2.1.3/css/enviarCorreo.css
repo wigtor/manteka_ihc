@@ -1,19 +1,135 @@
-fieldset
-{
-	clear:both;
-	border-color:lightblue;
-	margin-bottom:15px;
-	margin-top:-10px;
+.icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+    background: url('../img/icons/iconos_upload/txt-icon.gif');
+    
+}
+
+/*WORD*/
+.icon-application-msword,
+.icon-application-vnd-openxmlformats-officedocument-wordprocessingml-document {
+	background: url('../img/icons/iconos_upload/doc-icon.gif');
+}
+
+/*TXT*/
+.icon-text-plain {
+	background: url('../img/icons/iconos_upload/txt.jpg');
+}
+
+
+/*PDF*/
+
+.icon-application-pdf {
+	background: url('../img/icons/iconos_upload/pdf_icon.gif');
+}
+
+
+/*EXCEL*/
+.icon-application-vnd-ms-excel,
+.icon-application-vnd-openxmlformats-officedocument-spreadsheetml-sheet {
+	background: url('../img/icons/iconos_upload/icon_excel.jpg');
+}
+
+
+/*PPT*/
+.icon-application-vnd-ms-powerpoint,
+.icon-application-vnd-openxmlformats-officedocument-presentationml-presentation {
+	background: url('../img/icons/iconos_upload/ppt.png');
+}
+
+/*Project*/
+
+.icon-application-vnd-ms-project{
+	background: url('../img/icons/iconos_upload/MS-Project.png');
+}
+
+/*audio*/
+
+.icon-audio-mp3,
+.icon-audio-x-ms-wma,
+.icon-audio-mid  {
+	background: url('../img/icons/iconos_upload/icon-itunes.png');
+}
+
+
+/*video*/
+
+.icon-video-mpeg,
+.icon-video-x-ms-wmv,
+.icon-video-avi {
+	background: url('../img/icons/iconos_upload/icon_video16.gif');
+}
+
+
+/*TAR*/
+.icon-application-x-gzip,
+.icon-application-gzip {
+	background: url('../img/icons/iconos_upload/rar.gif');
+}
+
+/*IMAGENES*/
+
+.icon-image-jpeg,
+.icon-image-gif,
+.icon-image-png,
+.icon-image-x-icon {
+	background: url('../img/icons/iconos_upload/img_icon.gif');
+}
+
+/*HTML*/
+
+.icon-text-html{
+	background: url('../img/icons/iconos_upload/html.jpg');
+}
+
+/*CSS*/
+
+.icon-text-css{
+	background: url('../img/icons/iconos_upload/css-icon-md.png');
+}
+
+/*Javascrip*/
+
+.icon-application-x-javascript{
+	background: url('../img/icons/iconos_upload/javascript.png');
+}
+
+/*EXE*/
+
+.icon-application-x-msdownload{
+	background: url('../img/icons/iconos_upload/button_exe.png');
 }
 
 
 
-fieldset #lista
-{
-	clear:both;
-	border-color:#f0f0f0;
-	margin-bottom:15px;
-	margin-top:-10px;
+#dropzone {
+    background: #E0f8f7;
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    font-weight: bold;
+
+}
+#dropzone.in {
+    width: 600px;
+    height: 200px;
+    line-height: 200px;
+    font-size: larger;
+}
+#dropzone.hover {
+    background: #0088CC;
+}
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
 }
 
 #contenedorFiltro1
@@ -340,7 +456,6 @@ fieldset #lista
 {
 	clear:both;
 	font-size:10pt;
-	color:#0088CC;
 	line-height:35px;
 	font-weight:bold;
 }
@@ -348,7 +463,7 @@ fieldset #lista
 .txt5
 {
 	font-size:10pt;
-	color:#0088CC;
+
 	line-height:50px;
 	font-weight:bold;
 	float:left;
@@ -360,7 +475,7 @@ fieldset #lista
 {
 	clear:both;
 	font-size:10pt;
-	color:#0088CC;
+
 	line-height:35px;
 	font-weight:bold;
 	margin-bottom:12px;
@@ -370,7 +485,6 @@ fieldset #lista
 {
 	clear:both;
 	font-size:10pt;
-	color:#0088CC;
 	font-weight:bold;
 	cursor:pointer;
 }

@@ -11,7 +11,8 @@
 ?>
 
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
-
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/css/jquery.fileupload-ui.css" type="text/css" media="all" />
 <script type='text/javascript'>
 /**
  * Función que se encarga de evitar el envío de emails sin destinatario(s) o sin asunto ni cuerpo del mensaje.
@@ -28,7 +29,9 @@ var arrayRespuesta;
 var arrayCarreras;
 var myVar;
 var codigoBorrador=-1;
-
+var adjuntos= new Array();
+var archivosElim=new Array();
+var num=0;
 function validacionSeleccion()
 {
 	var rutRecept = $.trim(document.getElementById("rutRecept").value);
@@ -78,6 +81,8 @@ function CargarPlantilla(asunto, cuerpo, id)
 	{
 		document.getElementById('idPlantilla').value=id;
 		document.getElementById('asunto').value=asunto;
+		cuerpo=cuerpo.replace('&#39;','\'');
+		cuerpo=cuerpo.replace('&#34;','"');
 		CKEDITOR.instances.editor.setData (cuerpo);
 	}
 }
@@ -96,6 +101,8 @@ function CargarPlantilla(asunto, cuerpo, id)
  **/
 function enviarCorreo()
 {
+	document.getElementById("adjuntos").value=JSON.stringify(adjuntos);
+	document.getElementById("archivosElim").value=JSON.stringify(archivosElim);
 	if(validacionSeleccion())
 	{
 		$('#contenedorEnvio').css({display:'none'});
@@ -208,25 +215,73 @@ function cargarBorrador(codigo)
 			CKEDITOR.instances.editor.setData(""+borrador[0][0].cuerpo_email);
 			var rutRecept=[];
 			
-			for(var i=0;i<borrador[1].length;i++)
+			for(var j=0;j<borrador[1].length;j++)
 			{
-				rutRecept.push(borrador[1][i].rutRecept);
+				rutRecept.push(borrador[1][j].rutRecept);
 			}
 				
 			document.getElementById("rutRecept").value=rutRecept;
 			document.getElementById("codigoBorrador").value=codigoBorrador;
 			var correoRecept=[];
 
-			for(var i=0;i<borrador[2].length;i++)
+			for(var j=0;j<borrador[2].length;j++)
 			{
-				correoRecept.push(borrador[2][i].correo);
+				correoRecept.push(borrador[2][j].correo);
 			}
 			var to="";
 			to=correoRecept.join(", ");
 			document.getElementById("to").value=to;
 
-			myVar=setInterval(function(){timerBorradores()},20*1000);
-			timerBorradores();
+			
+			
+
+			var iconClass='icon icon-';
+			
+			var tablaResultados=document.getElementById("files");
+			$(tablaResultados).find('tbody').remove();
+
+			tbody = document.createElement('tbody');
+			tbody.setAttribute("style","height:auto;width:100%;");
+			for(num=0;num<borrador[3].length;num++){
+
+				document.getElementById("attach").setAttribute("style","display:'';");
+				var tr= document.createElement('tr'); 
+				tr.setAttribute("id","f"+num);
+				tr.setAttribute("style","margin-left:0px;display:block;");
+				var td=document.createElement("td");
+				td.setAttribute("style","width:95%;display:inline-table;font-size:10px;");
+				var span=document.createElement("span");
+				span.setAttribute("class",iconClass);
+				td.appendChild(span);
+
+				var nodoTexto=document.createTextNode(borrador[3][num].logico+" - ");
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td=document.createElement("td");
+				td.setAttribute("style",'width:5%;display:inline-table;vertical-align:middle;');
+
+				var button=document.createElement("button");
+				button.setAttribute("type","button");
+				button.setAttribute("class","close");
+				button.setAttribute("onclick","eliminarAdjunto('"+num+"')");
+				button.setAttribute("style","text-align:center");
+				button.innerHTML="&times;";
+				
+				td.appendChild(button);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+				tr=document.createElement("tr");
+				tr.setAttribute("id",'b'+num);
+				tr.setAttribute("style","display:none");
+				tbody.appendChild(tr);
+
+				adjuntos[num]=new Array();
+				adjuntos[num][0]=borrador[3][num].logico;
+				adjuntos[num][1]=borrador[3][num].fisico;
+			}
+			tablaResultados.appendChild(tbody);
+			//myVar=setInterval(function(){timerBorradores()},20*1000);
+			//timerBorradores();
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).hide();
 		}
@@ -257,17 +312,19 @@ function timerBorradores()
 	to=document.getElementById("to").value;
 	rutRecept= document.getElementById("rutRecept").value;
 	
+	
 	$.ajax({
 		type: "POST",
 		url: "<?php echo site_url("Correo/postGuardarBorradores") ?>",
 			
-		data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
+		data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto,adjuntos:adjuntos,archivosElim:archivosElim},
 		success: function(respuesta)
 		{
 			codigoBorrador = JSON.parse(respuesta);
 			document.getElementById("codigoBorrador").value=codigoBorrador;					
 			document.getElementById("guardado").innerHTML="Se ha guardado un borrador a las: "+t;
 			var iconoCargado = document.getElementById("icono_cargando");
+			archivosElim=new Array();
 			$(icono_cargando).hide();
 		}
 	});
@@ -1090,7 +1147,7 @@ if(isset($codigo))
 		<div id="filtrosSelect">
 		
 			<!-- Búsqueda por nombre de destinatario. -->
-			<label class="control-label" for="filtroLista">
+			<label class="control-label txt3" for="filtroLista">
 				Ingrese el nombre de quien busca o parte de su nombre.
 			</label>
 			<div class="controls">
@@ -1101,7 +1158,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por tipo de destinatario. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorTipoDeDestinatario">
+					<label class="control-label txt3" for="filtroPorTipoDeDestinatario">
 						Filtrar por tipo de destinatario
 					</label>
 					<div class="controls">
@@ -1117,7 +1174,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por profesor encargado. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
+					<label class="control-label txt3" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 					<div class="controls">
 						<select id="filtroPorProfesorEncargado" title="Profesor encargado" class="filtro-primario" onChange="showDestinatarioByFiltro()">
 							<option  value="0">Todos</option>
@@ -1127,7 +1184,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por carrera. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
+					<label class="control-label txt3" for="filtroPorCarrera" >Filtrar por carrera</label>
 					<div class="controls">
 						<select id="filtroPorCarrera" title="Carrera" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1141,7 +1198,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por módulo temático. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
+					<label class="control-label txt3" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 					<div class="controls">
 						<select id="filtroPorModuloTematico" title="Módulo temático" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1151,7 +1208,7 @@ if(isset($codigo))
 
 				<!-- Filtro por sección. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
+					<label class="control-label txt3" for="filtroPorSeccion">Filtrar por sección</label>
 					<div class="controls">
 						<select id="filtroPorSeccion" title="Sección" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todas</option>
@@ -1161,7 +1218,7 @@ if(isset($codigo))
 
 				<!-- Filtro por bloque de horario. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
+					<label class="control-label txt3" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
 					<div class="controls">
 						<select id="filtroPorBloqueHorario" title="Bloque horario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1325,7 +1382,7 @@ if(isset($codigo))
 								foreach($plantillas as $plantilla)
 								{
 									echo '<tr>';
-									echo '<td id="p'.$plantilla->ID_PLANTILLA.'" onclick="javascript:CargarPlantilla('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.htmlentities($plantilla->CUERPO_PLANTILLA).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
+									echo '<td id="p'.$plantilla->ID_PLANTILLA.'" onclick="javascript:CargarPlantilla('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.str_replace('"','&#34;', str_replace('\'','&#39;', $plantilla->CUERPO_PLANTILLA)).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
 									echo '</tr>';
 								}
 							}
@@ -1403,19 +1460,155 @@ if(isset($codigo))
 				<div class="txt2">
 					Para:
 				</div>
-				<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
+				<input id="to" name="to" type="text" value="<?php set_value('to'); ?> "title="Destinatarios" readonly ><br>
 				<div class="txt2">
 					Asunto:
 				</div>
-				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
+				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>"title="Ingrese asunto aquí" placeholder="Ingrese asunto aquí">		
 				<div class="txt2">
-					Adjunto:
+					Adjuntos: (30MB máximo)
 				</div>
-				<div class="fileupload fileupload-new" data-provides="fileupload">
-					<div class="input-append">
-						<div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Seleccionar archivo</span><span class="fileupload-exists">Cambiar</span><input type="file" name = "userfile"/></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Eliminar</a>
-					</div>
+				<div class="container " style="margin:0px; width:414px;">
+
+				    <!-- The fileinput-button span is used to style the file input field as button -->
+				    <span class="btn  fileinput-button btn_width_icon_solo">
+				       	<img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip" alt="Adjuntar" >
+				        <!-- The file input field used as target for the file upload widget -->
+				        <input id="fileupload" type="file" name="files[]" data-url="/<?php echo config_item('dir_alias') ?>/adjuntos/" multiple>
+				    </span>
+				    <div id="dropzone" class="fade well" style="margin-bottom: 8px;margin-top:8px">Arrastre sus archivos aquí</div>
+				    
+				    <!-- The container for the uploaded files -->
+				    <fieldset id="attach" style="display:none">
+				    <table id="files" class="files" style="height:auto;width:100%;"><tbody  style="height:auto;width:100%;"></tbody></table>
+				    </fieldset>
+				    
+
+				    
+
 				</div>
+			
+				<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+
+				<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+				<!-- The basic File Upload plugin -->
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.fileupload-ui.js"></script>
+				<script src="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/js/jquery.fileupload-process.js"></script>
+				<script>
+
+				function eliminarAdjunto(index){
+					tabla=document.getElementById('b'+index).parentNode;
+					tabla.removeChild(document.getElementById('b'+index));
+					tabla.removeChild(document.getElementById('f'+index));
+					archivosElim.push(adjuntos[index][1]);
+					adjuntos.splice(index,1);
+					if(adjuntos.length==0){
+						document.getElementById("attach").setAttribute("style","display:none");
+					}
+					
+				}
+
+
+				$(document).bind('dragover', function (e) {
+				    var dropZone = $('#dropzone'),
+				        timeout = window.dropZoneTimeout;
+				    if (!timeout) {
+				        dropZone.addClass('in');
+				    } else {
+				        clearTimeout(timeout);
+				    }
+				    var found = false,
+				      	node = e.target;
+				    do {
+				        if (node === dropZone[0]) {
+				       		found = true;
+				       		break;
+				       	}
+				       	node = node.parentNode;
+				    } while (node != null);
+				    if (found) {
+				        dropZone.addClass('hover');
+				    } else {
+				        dropZone.removeClass('hover');
+				    }
+				    window.dropZoneTimeout = setTimeout(function () {
+				        window.dropZoneTimeout = null;
+				        dropZone.removeClass('in hover');
+				    }, 100);
+				});
+				/*jslint unparam: true */
+				/*global window, $ */
+
+				
+				
+
+				$(function () {
+				    'use strict';
+
+				    $('#fileupload').fileupload({
+				        dropZone: $('#dropzone'),
+				        dataType: 'json',
+				        autoUpload:'false',
+				        maxChunkSize:0,
+				        singleFileUploads: false,
+				        maxNumberOfFiles:5,
+				        maxFileSize: 30*1024*1024
+				    })
+				    .bind('fileuploadadd', function (e, data) {
+				    		var j=0;
+				    		var cancelFileUploadIndexes = new Array();
+				    		document.getElementById("attach").setAttribute("style","display:'';");
+    						$.each(data.files, function (index, file) {
+    							if(file.size>(30*1024*1024)){
+    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 30MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
+    								cancelFileUploadIndexes[j] = index;
+    								j++;
+    							}else{	
+	    							adjuntos[num]=new Array();
+	    							adjuntos[num][0]=(file.name);
+	    							var iconClass='icon icon-' + file.type.replace(/\W/g, '-');
+	    							$('#files').append("<tr id='f"+(num)+"' style='margin-left:0px;display:block;'><td style='width:95%;display:inline-table;font-size:10px;'>"+
+	  								"<span class='"+iconClass+"'></span> "
+	    								+file.name+
+	    								" - "+(file.size/1024).toFixed(1)+"KB</td>"+
+	    								"<td  style='width:5%;display:inline-table;vertical-align:middle;'>"+"<button type='button' class='close' onclick='eliminarAdjunto("+num+")' style='text-align:center'>&times;</button></td></tr>"+
+										"<tr id='b"+(num)+"' style='margin-left:0px;display:block;'>"+
+	    								"<td style='width:95%; display:inline-table;height:10px'><div id='progress' class='progress progress-info progress-striped' style=' margin-bottom:0;height:8px'><div class='bar' ></div></div></td></tr>"    								
+	    								);
+        						    num++;
+    							}   
+						    });
+
+						    for(var k=0; k<cancelFileUploadIndexes.length; k++) {
+				                data.files.splice(cancelFileUploadIndexes[k]-k,1);
+				            }
+				            if (data.files.length > 0) {
+				                data.submit();
+				            }
+						    
+						    
+						})
+				    .bind('fileuploaddone', function (e, data) {
+				            $.each(data.result.files, function (index, file) {
+				                //$('<p/>').text(file.name+" - "+(index+i-data.files.length)).appendTo('#files');
+				                adjuntos[index+num-data.files.length][1]=file.name;
+				                
+		                	});
+				        })
+				    .bind('fileuploadprogress', function (e, data) {
+				    	var progress = parseInt(data.loaded / data.total * 100, 10);
+				    	$('#progress .bar').css(
+			                'width',
+			                progress + '%'
+			            );
+
+				    })
+				    
+				});
+				</script>
 			</div>
 		</div>
 		
@@ -1453,6 +1646,8 @@ if(isset($codigo))
 				<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
 				<input type="hidden" name="codigoBorrador" id="codigoBorrador" value="<?php set_value('codigoBorrador');?>"/>
 				<input name="idPlantilla" type="hidden" id="idPlantilla" maxlength="6">
+				<input type="hidden" name="adjuntos" id="adjuntos" />
+				<input type="hidden" name="archivosElim" id="archivosElim" />
 			</div>
 		</div>
 		

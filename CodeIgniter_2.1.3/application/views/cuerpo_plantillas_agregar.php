@@ -154,7 +154,6 @@
 		<div id="salto">Las variables predefinidas que puede utilizar son:</div>
 		<div class="txtLabel">%%nombre</div><div class="txtDescripcion">Asigna el nombre y apellido del receptor del correo electrónico.</div>
 		<div class="txtLabel">%%rut</div><div class="txtDescripcion">Asigna el rut del receptor del correo electrónico.</div>
-		<div class="txtLabel">%%modulo_estudiante</div><div class="txtDescripcion">Asigna el módulo al que pertenece el estudiante receptor del correo electrónico.</div>
 		<div class="txtLabel">%%carrera_estudiante</div><div class="txtDescripcion">Asigna la carrera a la que pertenece el estudiante receptor del correo electrónico.</div>
 		<div class="txtLabel">%%seccion_estudiante</div><div class="txtDescripcion">Asigna la sección a la que pertenece el estudiante receptor del correo electrónico.</div>
 		<div class="txtLabel">%%hoy</div><div class="txtDescripcion">Asigna la fecha actual al momento de realizar el envío.</div>
@@ -247,7 +246,7 @@
 			}
 			else
 			{
-				$ejemplo='<p><span style="color:#FF0000"><strong><u>Ejemplo de plantilla:</u></strong></span><br /><br />Estimado %%nombre<br /><br />Te informamos que hoy %%fecha se han suspendido las clases del profesor %%profesor, <span style="color:#666666;font-size:12pt"><strong>debido a motivos de fuerza mayor.</strong></span><br /><br /><span style="color:lightblue">Cordialmente<br />Coordinador %%remitente </span></p>';
+				$ejemplo='<p><span style="color:#FF0000"><strong><u>Ejemplo de plantilla:</u></strong></span><br /><br />Estimado %%nombre<br /><br />Te informamos que hoy %%hoy se han suspendido las clases dictadas por el profesor %%profesor, <span style="color:#666666;font-size:12pt"><strong>debido a motivos de fuerza mayor.</strong></span><br /><br /><span style="color:lightblue">Cordialmente<br />Coordinador %%remitente </span></p>';
 			}
 			unset($msj);
 		}
@@ -256,7 +255,7 @@
 			/* Si el formulario no ha sido enviado, entonces al cargar la página se muestra un ejemplo de plantilla. */
 			$nombrePrevio='';
 			$asuntoPrevio='';
-			$ejemplo='<p><span style="color:#FF0000"><strong><u>Ejemplo de plantilla:</u></strong></span><br /><br />Estimado %%nombre<br /><br />Te informamos que hoy %%hoy se ha suspendido las clases del módulo %%modulo_estudiante, dictadas por el profesor Edmundo Leiva, <span style="color:#666666;font-size:12pt"><strong>debido a motivos de fuerza mayor.</strong></span><br /><br /><span style="color:lightblue">Cordialmente<br />Coordinador %%remitente </span></p>';
+			$ejemplo='<p><span style="color:#FF0000"><strong><u>Ejemplo de plantilla:</u></strong></span><br /><br />Estimado %%nombre<br /><br />Te informamos que hoy %%hoy se han suspendido las clases dictadas por el profesor Edmundo Leiva, <span style="color:#666666;font-size:12pt"><strong>debido a motivos de fuerza mayor.</strong></span><br /><br /><span style="color:lightblue">Cordialmente<br />Coordinador %%remitente </span></p>';
 		}
 		$inicio=true;
 		
