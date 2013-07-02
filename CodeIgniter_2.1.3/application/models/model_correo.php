@@ -824,6 +824,7 @@ class model_correo extends CI_Model
 			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
 			$this->db->select('FECHA_BORRADOR AS fecha');
 			$this->db->select('HORA_BORRADOR AS hora');
+			$this->db->select('(select COD_ADJUNTO from adjunto where borrador.COD_CORREO=adjunto.COD_CORREO limit 1)AS adjuntos');
 			
 			$this->db->from('carta');
 			$this->db->join('borrador','carta.COD_BORRADOR = borrador.COD_BORRADOR');

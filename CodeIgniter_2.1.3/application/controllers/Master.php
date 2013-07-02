@@ -306,6 +306,34 @@ class MasterManteka extends CI_Controller {
 		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
 		try {
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
+				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', 'diego.gomez.lira@gmail.com', 'aA205243'); 
+
+				//Busca los mails según el asunto especificado y si no ha sido visto aún
+				$emails = imap_search($inbox, 'SUBJECT "Delivery Status Notification (Failure)" UNSEEN'); 
+
+
+				if($emails == ''){
+				
+				}else{
+					//Se revisa cada mail seleccionado
+				    foreach($emails as $email_number) {
+				    	//Se consigue el código del mail rebotado
+				  		$message = imap_body($inbox, $email_number);
+				  		$str = strstr($message,'Ver mensaje en su contexto:');
+				  		$str = substr($str, 27);
+				
+				    	$this->load->model('model_rebotes');
+				    	$resultado = $this->model_rebotes->eliminarRebote($str);
+				    	$this->model_rebotes->notificacionRebote($resultado['cuerpo'],$resultado['rut']);
+					}
+				}
+				imap_close($inbox);
+								//exec("c:\\".$ruta);
+								//shell_exec($ruta . "> /dev/null 2>/dev/null &");
+								//echo ' Ejecutando '.$ruta;
+			}
+			/*con antiguo
+			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
 				$ruta = $cronJobs[$i]->rutaPhp;
 				if (PHP_OS == 'WINNT' || PHP_OS == 'WIN32') {
 					//echo 'Es windows ';
@@ -319,7 +347,7 @@ class MasterManteka extends CI_Controller {
 				//exec("c:\\".$ruta);
 				//shell_exec($ruta . "> /dev/null 2>/dev/null &");
 				//echo ' Ejecutando '.$ruta;
-			}
+			}*/
 		}
 		catch (Exception $e) {
 			echo '<!-- Ha ocurrido un error al ejecutar un cronjob, revise que la ruta sea correcta -->';
