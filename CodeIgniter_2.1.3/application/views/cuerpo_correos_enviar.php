@@ -88,6 +88,20 @@ function CargarPlantilla(asunto, cuerpo, id)
 }
 </script>
 
+<script>
+//funcion que resalta el destinatario seleccionado
+
+function oscurecerFondo(i){
+	
+	if(document.getElementById("check"+i).checked==1){
+		document.getElementById(i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+	else
+		document.getElementById(i).removeAttribute("bgcolor","#e5e5e5");
+}
+</script>
+
 <script type="text/javascript">
 /**
  * Inicia el envío de un correo electrónico.
@@ -664,6 +678,7 @@ function muestraTabla(respuesta)
 
 		$('#todos').click(seleccionar_todo);
 		td.appendChild(check);
+		td.setAttribute("onclick","oscurecerFondo("+i+")");
 		tr.appendChild(td);
 		td = document.createElement('td');
 		td.id='opcion';
