@@ -1,4 +1,4 @@
-<!-- <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" /> -->
+ <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/correosEnviados.css" type="text/css" media="all" /> 
 
 <script type="text/javascript">
 /** 
@@ -19,8 +19,8 @@ function DetalleCorreo(hora,fecha,asunto,id,de,codigo)
 	document.getElementById("asuntoDetalle").innerHTML=asunto;
 	document.getElementById("de").innerHTML=de;
 	document.getElementById("cuerpoMail").innerHTML=document.getElementById("c"+id).value;
-
-
+	obtenerAdjunto(codigo);
+	
 	$.ajax({
 		type: "POST",
 		url: "<?php echo site_url("Correo/postLeido") ?>",
@@ -150,7 +150,10 @@ function cambiarCorreos(direccion,offsetL)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
 				
-
+				var span="";
+				
+				if (listaRecibidos[i].adjuntos!="")
+					span="<span  style='width: 15px; height: 15px; float:right; margin-right:8px;'><img src='/manteka/img/icons/glyphicons_062_paperclip' alt=':' ></span>";	
 				if(noLeido==1){
 					
 					var largoAsunto=listaRecibidos[i].asunto.length; 
@@ -164,7 +167,7 @@ function cambiarCorreos(direccion,offsetL)
 						var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
 					else
 						var cuerpoTmp = strip(cuerpo+"<a>");	
-					td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+					td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>"+span;
 				}else{
 					var largoAsunto=listaRecibidos[i].asunto.length; 
 					if(listaRecibidos[i].asunto.length>30){
@@ -177,7 +180,7 @@ function cambiarCorreos(direccion,offsetL)
 						var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
 					else
 						var cuerpoTmp = strip(cuerpo+"<a>");	
-					td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+					td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>"+span;
 						
 				}
 				//
@@ -272,6 +275,105 @@ function cambiarCorreos(direccion,offsetL)
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).show();
 	
+}
+/** 
+* Esta función obtiene los archivos adjuntos de un correo.
+*/
+function obtenerAdjunto(codigo)
+{
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		data: { codigo: codigo},
+		success: function(respuesta){
+			listaAdjuntos = JSON.parse(respuesta);
+			if(listaAdjuntos.length>0)
+			{
+				$('#destinosAdjuntos').css({display:'none'});
+				var tablaResultados=document.getElementById("files");
+				$(tablaResultados).find('tbody').remove();
+
+				tbody = document.createElement('tbody');
+				tbody.setAttribute("style","height:auto;width:100%;");
+				for(num=0;num<listaAdjuntos.length;num++){
+
+					document.getElementById("attach").setAttribute("style","display:'';");
+					var tr= document.createElement('tr'); 
+					tr.setAttribute("id","f"+num);
+					tr.setAttribute("style","margin-left:0px;display:block;");
+					var td=document.createElement("td");
+					td.setAttribute("style","width:95%;display:inline-table;font-size:10px;");
+					var span;
+					var iconClass='icon icon-'+listaAdjuntos[num].logico.substring(listaAdjuntos[num].logico.lastIndexOf(".")+1);
+					span="<span  class='"+iconClass+"''></span>";	
+					var link="<a href='"+listaAdjuntos[num].fisico+"' download='"+listaAdjuntos[num].logico+"'>"+listaAdjuntos[num].logico+"</a>";
+					td.innerHTML=span+" "+link;
+					tr.appendChild(td);
+					tbody.appendChild(tr);
+					tr=document.createElement("tr");
+					tr.setAttribute("id",'b'+num);
+					tr.setAttribute("style","display:none");
+					tbody.appendChild(tr);
+
+				}
+				tablaResultados.appendChild(tbody);
+			}
+			else
+			{
+
+				$('#destinosAdjuntos').css({display:'inline-block'});
+			}
+		}
+	});
+	/* Muestro el div que indica que se está cargando... */
+	var iconoCargado = document.getElementById("icono_cargando");
+	$(icono_cargando).show();
+}
+/** 
+* Esta función obtiene los archivos adjuntos de un correo.
+*/
+function obtenerAdjuntoOld(codigo)
+{
+	$.ajax({
+		type: "POST",
+		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		data: { codigo: codigo},
+		success: function(respuesta){
+			listaAdjuntos = JSON.parse(respuesta);
+			if(listaAdjuntos.length>0)
+			{
+				$('#destinosAdjuntos').css({display:'none'});
+				$('#xxx').css({float:'left'});
+				$('#xxx').css({display:'block'});
+				var fisicos = "";
+				var logicos = "";
+				for (var i = 0; i < listaAdjuntos.length; i++)
+				{
+					if(i==0)
+					{
+						fisicos = fisicos + listaAdjuntos[i].fisico;
+						logicos = logicos + listaAdjuntos[i].logico;
+					}
+					else
+					{
+						fisicos = fisicos + "???" + listaAdjuntos[i].fisico;
+						logicos = logicos + "???" + listaAdjuntos[i].logico;
+					}
+				}
+				document.getElementById("adjuntosEmailFisico").value = fisicos;
+				document.getElementById("adjuntosEmailLogico").value = logicos;
+			}
+			else
+			{
+				$('#xxx').css({display:'none'});
+				$('#destinosAdjuntos').css({float:'left'});
+				$('#destinosAdjuntos').css({display:'block'});
+			}
+		}
+	});
+	/* Muestro el div que indica que se está cargando... */
+	var iconoCargado = document.getElementById("icono_cargando");
+	$(icono_cargando).show();
 }
 
 /** 
@@ -483,7 +585,7 @@ function cargarCorreo(codigo)
 				tablaResultados.appendChild(textarea);
 				document.getElementById("cc").value=cuerpo;
 				var de=detalles[1].nombre+" "+detalles[1].apellido1+" "+detalles[1].apellido2;
-				DetalleCorreo(detalles[0].hora,detalles[0].fecha,detalles[0].asunto,'c',de);
+				DetalleCorreo(detalles[0].hora,detalles[0].fecha,detalles[0].asunto,'c',de,codigo);
 			}
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).hide();
@@ -603,6 +705,8 @@ if(isset($msj))
 			
 		</div>
 		<div class="span6" >
+			<input type="hidden" id="adjuntosEmailFisico" name="adjuntosEmailFisico" value="">
+			<input type="hidden" id="adjuntosEmailLogico" name="adjuntosEmailLogico" value="">
 			<ul id="pager" class="pager" style="text-align:right; margin:0px" >
 				<span id="mostrando">  mostrando <?php echo ($offset+1)."-".$limite. " de: ".$cantidadCorreos; ?></span>
 				<li id="ant" class="disabled" ><a href="#"><div class="btn_with_icon_solo"><</div></a></li>
@@ -689,7 +793,48 @@ if(isset($msj))
 	</br>
 	<pre class="detallesEmail">
 <div class="pull-right">Fecha: <b  id="fecha"> </b>  <b class="pull-right" id="hora"></b></div>
-  De:     <b id="de"></b>
-  Asunto: <b id="asuntoDetalle"></b>
-	<fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset></pre>
+  De:       <b id="de"></b>
+  Asunto:   <b id="asuntoDetalle"></b>
+  Adjuntos: <b  class="txt"  style="display:none;" id="destinosAdjuntos">Sin archivos adjuntos</b> <!--<div id="xxx" href="#" rel="details2"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip.png" alt=":" ></div>-->
+<fieldset id="attach" style="display:none"><table id="files" class="files" style="height:auto;width:100%;"><tbody  style="height:auto;width:100%;"></tbody></table></fieldset>
+  Cuerpo:<fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset></pre>
 </fieldset>
+<script type="text/javascript">
+/*
+  $(document).ready(function() {
+  	$("[rel=details]").tooltip({
+  		placement : 'bottom', 
+  		html: 'true', 
+  		title : '<div style="text-color:white;"><strong>Muestra archivos adjuntos</strong></div>',
+  		trigger:'hover',
+  	});
+  	
+  });
+  
+    $(window).load(function() {
+  	  $("[rel=details]").popover({
+	placement : 'bottom', 
+    content: get_popover_content,
+    html: true,
+    trigger: 'click'
+});
+  	
+  });
+  
+function get_popover_content() {
+	var fisicos = document.getElementById("adjuntosEmailFisico").value;
+	var logicos = document.getElementById("adjuntosEmailLogico").value;
+	var fisicos2 = new Array();
+	var logicos2 = new Array();
+	fisicos2 = fisicos.split("???");
+	logicos2 = fisicos.split("???");
+	content = '<table id="tablaX">'
+	content2 = '';
+	for (var i = 0; i < fisicos2.length; i++)
+	{
+		content2= content2 + '<a href="/manteka/adjuntos/' + fisicos2[i] + '">' + logicos2[i] + '</a><br>';
+	}
+	content = content2 + '</table>'
+	return content;
+}*/
+</script>
