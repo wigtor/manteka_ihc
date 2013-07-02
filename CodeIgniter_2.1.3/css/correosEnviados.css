@@ -1,4 +1,136 @@
+.icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+    background: url('../img/icons/iconos_upload/txt-icon.gif');
+    
+}
 
+/*WORD*/
+.icon-application-msword,
+.icon-application-vnd-openxmlformats-officedocument-wordprocessingml-document,
+.icon-docx,
+.icon-doc {
+  background: url('../img/icons/iconos_upload/doc-icon.gif');
+}
+
+/*TXT*/
+.icon-text-plain,
+.icon-txt {
+  background: url('../img/icons/iconos_upload/txt.jpg');
+}
+
+
+/*PDF*/
+
+.icon-application-pdf,
+.icon-pdf {
+  background: url('../img/icons/iconos_upload/pdf_icon.gif');
+}
+
+
+/*EXCEL*/
+.icon-application-vnd-ms-excel,
+.icon-application-vnd-openxmlformats-officedocument-spreadsheetml-sheet,
+.icon-xls,
+.icon-xlsx {
+  background: url('../img/icons/iconos_upload/icon_excel.jpg');
+}
+
+
+/*PPT*/
+.icon-application-vnd-ms-powerpoint,
+.icon-application-vnd-openxmlformats-officedocument-presentationml-presentation,
+.icon-ppt,
+.icon-pptx {
+  background: url('../img/icons/iconos_upload/ppt.png');
+}
+
+/*Project*/
+
+.icon-application-vnd-ms-project,
+.icon-mpp{
+  background: url('../img/icons/iconos_upload/MS-Project.png');
+}
+
+/*audio*/
+
+.icon-audio-mp3,
+.icon-audio-x-ms-wma,
+.icon-audio-mid,
+.icon-mid,
+.icon-mp3,
+.icon-wma  {
+  background: url('../img/icons/iconos_upload/icon-itunes.png');
+}
+
+
+/*video*/
+
+.icon-video-mpeg,
+.icon-video-x-ms-wmv,
+.icon-video-avi,
+.icon-avi,
+.icon-mp4,
+.icon-wmv,
+.icon-mpeg {
+  background: url('../img/icons/iconos_upload/icon_video16.gif');
+}
+
+
+/*TAR*/
+.icon-application-x-gzip,
+.icon-application-gzip,
+.icon-rar,
+.icon-zip,
+.icon-gz,
+.icon-tar {
+  background: url('../img/icons/iconos_upload/rar.gif');
+}
+
+/*IMAGENES*/
+
+.icon-image-jpeg,
+.icon-image-gif,
+.icon-image-png,
+.icon-image-x-icon,
+.icon-ico,
+.icon-png,
+.icon-jpg,
+.icon-gif {
+  background: url('../img/icons/iconos_upload/img_icon.gif');
+}
+
+/*HTML*/
+
+.icon-text-html,
+.icon-html{
+  background: url('../img/icons/iconos_upload/html.jpg');
+}
+
+/*CSS*/
+
+.icon-text-css,
+.icon-css{
+  background: url('../img/icons/iconos_upload/css-icon-md.png');
+}
+
+/*Javascrip*/
+
+.icon-application-x-javascript,
+.icon-js{
+  background: url('../img/icons/iconos_upload/javascript.png');
+}
+
+/*EXE*/
+
+.icon-application-x-msdownload,
+.icon-exe{
+  background: url('../img/icons/iconos_upload/button_exe.png');
+}
 .tooltip-inner {
 	background-color: blue; color: #fff;
 }

@@ -716,8 +716,24 @@ class Correo extends MasterManteka {
 		}
 		echo json_encode($resultado);
 	}
+	
+	/**
+	* Obtiene los archivos adjuntos de un correo.
+	*
+	* @author: Diego García (DGM)
+	*
+	*/
+	public function obtenerAdjuntos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$codigo = $this->input->post('codigo');
+		$this->load->model('model_correo');
+		$resultado =$this->model_correo->getAdjuntos($codigo);
+		echo json_encode($resultado);
+	}
 
-/**
+	/**
 	* Recarga la tabla de borradores segun los botones de < y > 
 	* según sean clickeados
 	*
