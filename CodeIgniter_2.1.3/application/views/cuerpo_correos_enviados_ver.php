@@ -156,8 +156,10 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				var de=listaRecibidos[i].nombre_destinatario;
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				
-				nodoTexto=document.createTextNode(de.replace(/,/g,", "));
+				if(de.replace(/,/g,", ").length>40)
+					nodoTexto=document.createTextNode(de.replace(/,/g,", ").substr(0,40)+".....");
+				else
+					nodoTexto=document.createTextNode(de.replace(/,/g,", ").substr(0,40));	
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
@@ -165,8 +167,19 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				var textoTemp = "<b>"+listaRecibidos[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......";
-				td.innerHTML = textoTemp;
+				var largoAsunto=listaRecibidos[i].asunto.length; 
+				if(listaRecibidos[i].asunto.length>30){
+					var asuntoTmp = listaRecibidos[i].asunto.substr(0,30)+".....";	
+					largoAsunto=30;
+				}
+				else
+					var asuntoTmp = listaRecibidos[i].asunto;	
+				if(strip(cuerpo+"<a>").length>40-largoAsunto)
+					var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+				else
+					var cuerpoTmp = strip(cuerpo+"<a>");	
+				td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+			
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
@@ -351,7 +364,7 @@ function cambiarCorreos2(direccion,offset)
 				td.setAttribute("onclick","oscurecerFondo("+i+","+listaEnviados[i][0].cod_correo+")");
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "23%");
+				td.setAttribute("width", "22%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
@@ -360,7 +373,7 @@ function cambiarCorreos2(direccion,offset)
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("id", "m"+i);
-				td.setAttribute("width", "27%");
+				td.setAttribute("width", "53%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
 				bold =document.createElement('b');
@@ -372,7 +385,7 @@ function cambiarCorreos2(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
+				td.setAttribute("width", "10%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
@@ -380,7 +393,7 @@ function cambiarCorreos2(direccion,offset)
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
 				td = document.createElement('td');
-				td.setAttribute("width", "8%");
+				td.setAttribute("width", "10%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				td.setAttribute("onclick","DetalleCorreo('"+listaEnviados[i][0].hora+"','"+listaEnviados[i][0].fecha+"','"+listaEnviados[i][0].asunto+"',"+i+",'"+destino+"')");
@@ -544,6 +557,25 @@ function escribirHeadTableCorreos() {
 	//SE CREA LA CABECERA DE LA TABLA
 	for (var i = 0; i < tiposFiltro.length; i++) {
 			th = document.createElement('th');
+			switch (i){
+				case 0:
+					th.setAttribute("style","width:7%");
+					break;
+				case 1:
+					th.setAttribute("style","width:32%");
+					break;
+				case 2:
+					th.setAttribute("style","width:37%");
+					break;	
+				case 3:
+					th.setAttribute("style","width:12%");
+					break;
+				case 4:
+					th.setAttribute("style","width:12%");
+					break;							
+			}
+
+
 			if (tiposFiltro[i] != '') {
 				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
 				
@@ -552,7 +584,7 @@ function escribirHeadTableCorreos() {
 				nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-mini clickover");
 				nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
 				//$(nodoBtnFiltroAvanzado).attr('title', "Buscar por "+tiposFiltro[i]);
-				nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;");
+				nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;widht");
 					span = document.createElement('i');
 					span.setAttribute('class', "icon-filter clickover");
 					//span.setAttribute('style', "vertical-align:middle;");

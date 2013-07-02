@@ -137,7 +137,19 @@ function cambiarCorreos(direccion,offset)
 				textarea.setAttribute("style","display:none");
 				tablaResultados.appendChild(textarea);
 				var cuerpo=listaBorradores[i].cuerpo_email;
-				document.getElementById("m"+i).innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaBorradores[i].asunto.length)+"......";
+				var largoAsunto=listaBorradores[i].asunto.length; 
+				if(listaBorradores[i].asunto.length>30){
+					var asuntoTmp = listaBorradores[i].asunto.substr(0,30)+".....";	
+					largoAsunto=30;
+				}
+				else
+					var asuntoTmp = listaBorradores[i].asunto;	
+				if(strip(cuerpo+"<a>").length>40-largoAsunto)
+					var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+				else
+					var cuerpoTmp = strip(cuerpo+"<a>");	
+				document.getElementById("m"+i).innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+				innerHTML="<b>"+listaBorradores[i].asunto+"</b> - "+strip(cuerpo+".").substr(0,40-listaBorradores[i].asunto.length)+"......";
 				document.getElementById("c"+i).value=cuerpo;
 				
 				
@@ -220,7 +232,7 @@ function eliminarBorrador()
 	{
 		if (confirm('Estás a punto de eliminar un borrador.\n¿Realmente deseas continuar?'))
 		{
-			if(checked_ids[0]=="marcar")
+			if(checked_ids[0]=="marcar")	
 				checked_ids.shift();
 			document.getElementById('seleccion').value=checked_ids.join(";");			
 			$('#cuadroRecibidos').css({display:'none'});

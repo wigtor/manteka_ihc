@@ -152,10 +152,35 @@ function cambiarCorreos(direccion,offsetL)
 				
 
 				if(noLeido==1){
-					var textoTemp = "<b>"+listaRecibidos[i].asunto+"</b> - <font color='#999999'>"+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......</font>";
-				}else
-					var textoTemp = listaRecibidos[i].asunto+" - <font color='#999999'>"+strip(cuerpo+".").substr(0,40-listaRecibidos[i].asunto.length)+"......</font>";				
-				td.innerHTML = textoTemp;
+					
+					var largoAsunto=listaRecibidos[i].asunto.length; 
+					if(listaRecibidos[i].asunto.length>30){
+						var asuntoTmp = "<b>"+listaRecibidos[i].asunto.substr(0,30)+"</b>.....";	
+						largoAsunto=30;
+					}
+					else
+						var asuntoTmp = "<b>"+listaRecibidos[i].asunto+"</b>";	
+					if(strip(cuerpo+"<a>").length>40-largoAsunto)
+						var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+					else
+						var cuerpoTmp = strip(cuerpo+"<a>");	
+					td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+				}else{
+					var largoAsunto=listaRecibidos[i].asunto.length; 
+					if(listaRecibidos[i].asunto.length>30){
+						var asuntoTmp = listaRecibidos[i].asunto.substr(0,30)+".....";	
+						largoAsunto=30;
+					}
+					else
+						var asuntoTmp = listaRecibidos[i].asunto;	
+					if(strip(cuerpo+"<a>").length>40-largoAsunto)
+						var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
+					else
+						var cuerpoTmp = strip(cuerpo+"<a>");	
+					td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+						
+				}
+				//
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
@@ -350,6 +375,25 @@ function escribirHeadTableCorreos() {
 	//SE CREA LA CABECERA DE LA TABLA
 	for (var i = 0; i < tiposFiltro.length; i++) {
 			th = document.createElement('th');
+
+			switch (i){
+				case 0:
+					th.setAttribute("style","width:7%");
+					break;
+				case 1:
+					th.setAttribute("style","width:32%");
+					break;
+				case 2:
+					th.setAttribute("style","width:37%");
+					break;	
+				case 3:
+					th.setAttribute("style","width:12%");
+					break;
+				case 4:
+					th.setAttribute("style","width:12%");
+					break;							
+			}
+
 			if (tiposFiltro[i] != '') {
 				nodoTexto = document.createTextNode(tiposFiltro[i]+" ");
 				
