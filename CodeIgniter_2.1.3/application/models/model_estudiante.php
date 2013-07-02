@@ -702,7 +702,7 @@ class Model_estudiante extends CI_Model {
 				}
 				$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
 				if(!$validador){
-					$linea[] = "</br>El nombre del estudiante tiene caracteres no nválidos</br>";
+					$linea[] = "</br>El nombre del estudiante tiene caracteres no válidos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
