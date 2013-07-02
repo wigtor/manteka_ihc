@@ -486,7 +486,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span8">
-								6.- Descripción del módulo 
+								6.- <font color="red">*</font> Descripción del módulo 
 							</div>					
 					</div>
 					<div class="row-fluid" >
