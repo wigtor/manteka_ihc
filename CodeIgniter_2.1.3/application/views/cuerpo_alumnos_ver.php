@@ -94,7 +94,7 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
+				<div class="span6" style="border:#cccccc 1px solid; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
 					<table id="listadoResultados" class="table table-hover" style="width:600px !important; max-width:600px;">
 					</table>
 				</div>
