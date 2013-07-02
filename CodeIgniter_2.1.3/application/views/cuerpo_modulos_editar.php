@@ -552,10 +552,10 @@ function editarMod(){
 				<div id="EscojaEquipo" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado algún profesor para el equipo</h3>
+						<h3>No ha seleccionado ningún profesor</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+						<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -566,10 +566,10 @@ function editarMod(){
 				<div id="EscojaSesion" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado una sesión para el módulo</h3>
+						<h3>No ha seleccionado ninguna sesión</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione por lo menos una sesión</p>
+						<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
