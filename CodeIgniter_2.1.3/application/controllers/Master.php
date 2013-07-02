@@ -304,9 +304,14 @@ class MasterManteka extends CI_Controller {
 		$cronJobs = $this->Model_cronJobs->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
 		$cantidadCronJobs = count($cronJobs);
 		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
+
+
 		try {
+			$this->config->load('config');
+			$mail_manteka = $this->config->item('mail_manteka');
+			$password_mail_manteka = $this->config->item('password_mail_manteka');
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
-				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', 'manteka.usach@gmail.com', 'manteka2013'); 
+				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', $mail_manteka, $password_mail_manteka); 
 
 				//Busca los mails según el asunto especificado y si no ha sido visto aún
 				$emails = imap_search($inbox, 'SUBJECT "Delivery Status Notification (Failure)" UNSEEN'); 
@@ -333,11 +338,12 @@ class MasterManteka extends CI_Controller {
 								//echo ' Ejecutando '.$ruta;
 			}
 			/*con antiguo
+			$ejecutable_php = C:\\wamp\\bin\\php\\php5.4.3\\php
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
 				$ruta = $cronJobs[$i]->rutaPhp;
 				if (PHP_OS == 'WINNT' || PHP_OS == 'WIN32') {
 					//echo 'Es windows ';
-					$toExec = 'start /b C:\\wamp\\bin\\php\\php5.4.3\\php c:\\wamp\\scripts\\'.$ruta;
+					$toExec = 'start /b $ejecutable_php c:\\wamp\\scripts\\'.$ruta;
 					//echo $toExec;
 					$ppointer = popen($toExec, 'r');
 				} else {
