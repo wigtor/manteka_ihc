@@ -541,13 +541,18 @@ class Alumnos extends MasterManteka {
 			
 			if ($stack !== FALSE) {
 
-
-
 				if(count($stack) != 0) {
 
-					$datos_plantilla["titulo_msj"] = "Acción Realizada";
-					$datos_plantilla["cuerpo_msj"] = "El archivo se ha cargado, pero con errores.";
-					$datos_plantilla["tipo_msj"] = "alert-success";
+					$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+					$linea = '';
+					foreach ($stack as $key => $value) {
+						foreach ($value as $cadena) {
+							$linea = $linea.";".$cadena;
+						}
+							$datos_plantilla["cuerpo_msj"] = "Se encontró un error en la siguiente linea:</br>".$key.".-".$linea."</br> Vuelva intentarlo luego de arreglar el errror";
+							break;
+					}				
+					$datos_plantilla["tipo_msj"] = "alert-error";
 					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 					$datos_plantilla["redirecTo"] = "Alumnos/cargaMasivaAlumnos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 					//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva

@@ -38,6 +38,7 @@
 
 	var tiposFiltro = ["Numero", "Capacidad", "Implementos"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", ""];
+	var inputAllowedFiltro= ["[0-9]{3}", "[0-9]+", ""];
 	var prefijo_tipoDato = "sala_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Salas/postBusquedaSalas") ?>";

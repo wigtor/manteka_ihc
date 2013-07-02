@@ -1,6 +1,7 @@
 <script>
 	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Carrera", "Seccion"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""];
+	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+", "[A-Za-z]+", "([A-Za-z]+-{1}[0-9]+|[0-9]+|[A-Za-z]+)"];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Alumnos/postBusquedaAlumnos") ?>";
@@ -94,7 +95,7 @@
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
+				<div class="span6" style="border:#cccccc 1px solid; overflow-x:scroll; height:400px; -webkit-border-radius: 4px;">
 					<table id="listadoResultados" class="table table-hover" style="width:600px !important; max-width:600px;">
 					</table>
 				</div>

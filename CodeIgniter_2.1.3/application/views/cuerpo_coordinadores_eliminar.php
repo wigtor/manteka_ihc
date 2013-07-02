@@ -12,6 +12,7 @@
 <script>
 	var tiposFiltro = ["Rut", "Nombre", "Apellido"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", ""];
+	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+"];
 	var prefijo_tipoDato = "coordinador_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Coordinadores/postBusquedaCoordinadoresEliminar") ?>";

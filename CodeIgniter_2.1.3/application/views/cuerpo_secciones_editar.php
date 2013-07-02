@@ -62,11 +62,11 @@
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
 			url: "<?php echo site_url("Secciones/secExiste") ?>", /* Se setea la url del controlador que responderá */
-			data: { letra_post:letra,num_post: num},
+			data: { letra_post:letra,num_post: num, cod_post:cod},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				//var tablaResultados = document.getElementById("modulos");
 				//$(tablaResultados).empty();
-				var existe = jQuery.parseJSON(respuesta); 
+				var existe = jQuery.parseJSON(respuesta);
 				if(cod!=""){
 				if(existe == 1){		
 					$('#modalSeccionExiste').modal();

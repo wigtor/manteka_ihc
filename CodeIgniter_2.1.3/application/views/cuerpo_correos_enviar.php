@@ -30,7 +30,8 @@ var arrayCarreras;
 var myVar;
 var codigoBorrador=-1;
 var adjuntos= new Array();
-
+var archivosElim=new Array();
+var num=0;
 function validacionSeleccion()
 {
 	var rutRecept = $.trim(document.getElementById("rutRecept").value);
@@ -87,6 +88,20 @@ function CargarPlantilla(asunto, cuerpo, id)
 }
 </script>
 
+<script>
+//funcion que resalta el destinatario seleccionado
+
+function oscurecerFondo(i){
+	
+	if(document.getElementById("check"+i).checked==1){
+		document.getElementById(i).setAttribute("bgcolor","#e5e5e5");	
+	}
+	
+	else
+		document.getElementById(i).removeAttribute("bgcolor","#e5e5e5");
+}
+</script>
+
 <script type="text/javascript">
 /**
  * Inicia el envío de un correo electrónico.
@@ -101,6 +116,7 @@ function CargarPlantilla(asunto, cuerpo, id)
 function enviarCorreo()
 {
 	document.getElementById("adjuntos").value=JSON.stringify(adjuntos);
+	document.getElementById("archivosElim").value=JSON.stringify(archivosElim);
 	if(validacionSeleccion())
 	{
 		$('#contenedorEnvio').css({display:'none'});
@@ -213,25 +229,73 @@ function cargarBorrador(codigo)
 			CKEDITOR.instances.editor.setData(""+borrador[0][0].cuerpo_email);
 			var rutRecept=[];
 			
-			for(var i=0;i<borrador[1].length;i++)
+			for(var j=0;j<borrador[1].length;j++)
 			{
-				rutRecept.push(borrador[1][i].rutRecept);
+				rutRecept.push(borrador[1][j].rutRecept);
 			}
 				
 			document.getElementById("rutRecept").value=rutRecept;
 			document.getElementById("codigoBorrador").value=codigoBorrador;
 			var correoRecept=[];
 
-			for(var i=0;i<borrador[2].length;i++)
+			for(var j=0;j<borrador[2].length;j++)
 			{
-				correoRecept.push(borrador[2][i].correo);
+				correoRecept.push(borrador[2][j].correo);
 			}
 			var to="";
 			to=correoRecept.join(", ");
 			document.getElementById("to").value=to;
 
-			myVar=setInterval(function(){timerBorradores()},20*1000);
-			timerBorradores();
+			
+			
+
+			var iconClass='icon icon-';
+			
+			var tablaResultados=document.getElementById("files");
+			$(tablaResultados).find('tbody').remove();
+
+			tbody = document.createElement('tbody');
+			tbody.setAttribute("style","height:auto;width:100%;");
+			for(num=0;num<borrador[3].length;num++){
+
+				document.getElementById("attach").setAttribute("style","display:'';");
+				var tr= document.createElement('tr'); 
+				tr.setAttribute("id","f"+num);
+				tr.setAttribute("style","margin-left:0px;display:block;");
+				var td=document.createElement("td");
+				td.setAttribute("style","width:95%;display:inline-table;font-size:10px;");
+				var span=document.createElement("span");
+				span.setAttribute("class",iconClass);
+				td.appendChild(span);
+
+				var nodoTexto=document.createTextNode(borrador[3][num].logico+" - ");
+				td.appendChild(nodoTexto);
+				tr.appendChild(td);
+				td=document.createElement("td");
+				td.setAttribute("style",'width:5%;display:inline-table;vertical-align:middle;');
+
+				var button=document.createElement("button");
+				button.setAttribute("type","button");
+				button.setAttribute("class","close");
+				button.setAttribute("onclick","eliminarAdjunto('"+num+"')");
+				button.setAttribute("style","text-align:center");
+				button.innerHTML="&times;";
+				
+				td.appendChild(button);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+				tr=document.createElement("tr");
+				tr.setAttribute("id",'b'+num);
+				tr.setAttribute("style","display:none");
+				tbody.appendChild(tr);
+
+				adjuntos[num]=new Array();
+				adjuntos[num][0]=borrador[3][num].logico;
+				adjuntos[num][1]=borrador[3][num].fisico;
+			}
+			tablaResultados.appendChild(tbody);
+			//myVar=setInterval(function(){timerBorradores()},20*1000);
+			//timerBorradores();
 			var iconoCargado = document.getElementById("icono_cargando");
 			$(icono_cargando).hide();
 		}
@@ -262,17 +326,19 @@ function timerBorradores()
 	to=document.getElementById("to").value;
 	rutRecept= document.getElementById("rutRecept").value;
 	
+	
 	$.ajax({
 		type: "POST",
 		url: "<?php echo site_url("Correo/postGuardarBorradores") ?>",
 			
-		data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto},
+		data: {codigoBorrador:codigoBorrador,to:to,rutRecept:rutRecept,editor:editor,asunto:asunto,adjuntos:adjuntos,archivosElim:archivosElim},
 		success: function(respuesta)
 		{
 			codigoBorrador = JSON.parse(respuesta);
 			document.getElementById("codigoBorrador").value=codigoBorrador;					
 			document.getElementById("guardado").innerHTML="Se ha guardado un borrador a las: "+t;
 			var iconoCargado = document.getElementById("icono_cargando");
+			archivosElim=new Array();
 			$(icono_cargando).hide();
 		}
 	});
@@ -612,6 +678,7 @@ function muestraTabla(respuesta)
 
 		$('#todos').click(seleccionar_todo);
 		td.appendChild(check);
+		td.setAttribute("onclick","oscurecerFondo("+i+")");
 		tr.appendChild(td);
 		td = document.createElement('td');
 		td.id='opcion';
@@ -1095,7 +1162,7 @@ if(isset($codigo))
 		<div id="filtrosSelect">
 		
 			<!-- Búsqueda por nombre de destinatario. -->
-			<label class="control-label" for="filtroLista">
+			<label class="control-label txt3" for="filtroLista">
 				Ingrese el nombre de quien busca o parte de su nombre.
 			</label>
 			<div class="controls">
@@ -1106,7 +1173,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por tipo de destinatario. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorTipoDeDestinatario">
+					<label class="control-label txt3" for="filtroPorTipoDeDestinatario">
 						Filtrar por tipo de destinatario
 					</label>
 					<div class="controls">
@@ -1122,7 +1189,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por profesor encargado. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
+					<label class="control-label txt3" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 					<div class="controls">
 						<select id="filtroPorProfesorEncargado" title="Profesor encargado" class="filtro-primario" onChange="showDestinatarioByFiltro()">
 							<option  value="0">Todos</option>
@@ -1132,7 +1199,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por carrera. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorCarrera" >Filtrar por carrera</label>
+					<label class="control-label txt3" for="filtroPorCarrera" >Filtrar por carrera</label>
 					<div class="controls">
 						<select id="filtroPorCarrera" title="Carrera" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1146,7 +1213,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por módulo temático. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
+					<label class="control-label txt3" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 					<div class="controls">
 						<select id="filtroPorModuloTematico" title="Módulo temático" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1156,7 +1223,7 @@ if(isset($codigo))
 
 				<!-- Filtro por sección. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorSeccion">Filtrar por sección</label>
+					<label class="control-label txt3" for="filtroPorSeccion">Filtrar por sección</label>
 					<div class="controls">
 						<select id="filtroPorSeccion" title="Sección" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todas</option>
@@ -1166,7 +1233,7 @@ if(isset($codigo))
 
 				<!-- Filtro por bloque de horario. -->
 				<div class="control-group span4">
-					<label class="control-label" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
+					<label class="control-label txt3" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
 					<div class="controls">
 						<select id="filtroPorBloqueHorario" title="Bloque horario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1408,28 +1475,28 @@ if(isset($codigo))
 				<div class="txt2">
 					Para:
 				</div>
-				<input id="to" name="to" type="text" value="<?php set_value('to'); ?>" readonly><br>
+				<input id="to" name="to" type="text" value="<?php set_value('to'); ?> "title="Destinatarios" readonly ><br>
 				<div class="txt2">
 					Asunto:
 				</div>
-				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>">		
+				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>"title="Ingrese asunto aquí" placeholder="Ingrese asunto aquí">		
 				<div class="txt2">
-					Adjuntos: (25MB máximo)
+					Adjuntos: (30MB máximo)
 				</div>
 				<div class="container " style="margin:0px; width:414px;">
 
 				    <!-- The fileinput-button span is used to style the file input field as button -->
-				    <span class="btn  fileinput-button">
-				       	<img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip" alt=":" >
+				    <span class="btn  fileinput-button btn_width_icon_solo">
+				       	<img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip" alt="Adjuntar" >
 				        <!-- The file input field used as target for the file upload widget -->
 				        <input id="fileupload" type="file" name="files[]" data-url="/<?php echo config_item('dir_alias') ?>/adjuntos/" multiple>
 				    </span>
 				    <div id="dropzone" class="fade well" style="margin-bottom: 8px;margin-top:8px">Arrastre sus archivos aquí</div>
 				    
 				    <!-- The container for the uploaded files -->
-				    
+				    <fieldset id="attach" style="display:none">
 				    <table id="files" class="files" style="height:auto;width:100%;"><tbody  style="height:auto;width:100%;"></tbody></table>
-				    
+				    </fieldset>
 				    
 
 				    
@@ -1451,8 +1518,12 @@ if(isset($codigo))
 					tabla=document.getElementById('b'+index).parentNode;
 					tabla.removeChild(document.getElementById('b'+index));
 					tabla.removeChild(document.getElementById('f'+index));
-					adjuntos[index][1]="";
-					adjuntos[index][0]="";
+					archivosElim.push(adjuntos[index][1]);
+					adjuntos.splice(index,1);
+					if(adjuntos.length==0){
+						document.getElementById("attach").setAttribute("style","display:none");
+					}
+					
 				}
 
 
@@ -1486,7 +1557,7 @@ if(isset($codigo))
 				/*jslint unparam: true */
 				/*global window, $ */
 
-				var i=0;
+				
 				
 
 				$(function () {
@@ -1499,30 +1570,30 @@ if(isset($codigo))
 				        maxChunkSize:0,
 				        singleFileUploads: false,
 				        maxNumberOfFiles:5,
-				        maxFileSize: 25*1024*1024
+				        maxFileSize: 30*1024*1024
 				    })
 				    .bind('fileuploadadd', function (e, data) {
 				    		var j=0;
 				    		var cancelFileUploadIndexes = new Array();
-
+				    		document.getElementById("attach").setAttribute("style","display:'';");
     						$.each(data.files, function (index, file) {
     							if(file.size>(30*1024*1024)){
-    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 25MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
+    								alert("El archivo \""+file.name+"\" tiene un peso mayor a 30MB ("+(file.size/(1024*1024)).toFixed(1)+"MB)");
     								cancelFileUploadIndexes[j] = index;
     								j++;
     							}else{	
-	    							adjuntos[i]=new Array();
-	    							adjuntos[i][0]=(file.name);
+	    							adjuntos[num]=new Array();
+	    							adjuntos[num][0]=(file.name);
 	    							var iconClass='icon icon-' + file.type.replace(/\W/g, '-');
-	    							$('#files').append("<tr id='f"+(i)+"' style='margin-left:0px;display:block;'><td style='width:95%;display:inline-table;font-size:10px;'>"+
+	    							$('#files').append("<tr id='f"+(num)+"' style='margin-left:0px;display:block;'><td style='width:95%;display:inline-table;font-size:10px;'>"+
 	  								"<span class='"+iconClass+"'></span> "
 	    								+file.name+
 	    								" - "+(file.size/1024).toFixed(1)+"KB</td>"+
-	    								"<td  style='width:5%;display:inline-table;vertical-align:middle;'>"+"<button type='button' class='close' onclick='eliminarAdjunto("+i+")' style='text-align:center'>&times;</button></td></tr>"+
-										"<tr id='b"+(i)+"' style='margin-left:0px;display:block;'>"+
+	    								"<td  style='width:5%;display:inline-table;vertical-align:middle;'>"+"<button type='button' class='close' onclick='eliminarAdjunto("+num+")' style='text-align:center'>&times;</button></td></tr>"+
+										"<tr id='b"+(num)+"' style='margin-left:0px;display:block;'>"+
 	    								"<td style='width:95%; display:inline-table;height:10px'><div id='progress' class='progress progress-info progress-striped' style=' margin-bottom:0;height:8px'><div class='bar' ></div></div></td></tr>"    								
 	    								);
-        						    i++;
+        						    num++;
     							}   
 						    });
 
@@ -1538,7 +1609,7 @@ if(isset($codigo))
 				    .bind('fileuploaddone', function (e, data) {
 				            $.each(data.result.files, function (index, file) {
 				                //$('<p/>').text(file.name+" - "+(index+i-data.files.length)).appendTo('#files');
-				                adjuntos[index+i-data.files.length][1]=file.name;
+				                adjuntos[index+num-data.files.length][1]=file.name;
 				                
 		                	});
 				        })
@@ -1590,7 +1661,8 @@ if(isset($codigo))
 				<input type="hidden" name="rutRecept" id="rutRecept" value="<?php set_value('rutRecept');?>"/>
 				<input type="hidden" name="codigoBorrador" id="codigoBorrador" value="<?php set_value('codigoBorrador');?>"/>
 				<input name="idPlantilla" type="hidden" id="idPlantilla" maxlength="6">
-				<input type="hidden" name="adjuntos" id="adjuntos" value="asd"/>
+				<input type="hidden" name="adjuntos" id="adjuntos" />
+				<input type="hidden" name="archivosElim" id="archivosElim" />
 			</div>
 		</div>
 		

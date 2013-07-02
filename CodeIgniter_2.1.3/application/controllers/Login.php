@@ -149,7 +149,7 @@ class Login extends MasterManteka {
 			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
 		}
 
-		$datos_plantilla = array();
+		
 		$datos_plantilla["datos"] = $datos;
 		$subMenuLateralAbierto = '';
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -343,13 +343,18 @@ class Login extends MasterManteka {
 		// Se carga el modelo de usuarios
 		$this->load->model('model_usuario');
 
+		$this->form_validation->set_rules('correo1', 'Correo', 'required|max_length[100]|valid_email|xss_clean');
+		$this->form_validation->set_rules('correo2', 'Correo alternativo', 'max_length[100]|valid_email|xss_clean');
+		$this->form_validation->set_rules('telefono', 'Teléfono', 'min_length[7]|max_length[100]|is_natural_no_zero|xss_clean');
+		$this->form_validation->set_error_delimiters('<div class="error alert alert-error">', '</div>');
+
 		// Si existe contraseña actual
 		if ($this->input->post('contrasegna_actual')) {
 			// Se identifican las validaciones que deben realizarse para el cambio de contraseña
 			$this->form_validation->set_rules('contrasegna_actual', 'Contraseña actual', "required|xss_clean|callback_check_user_and_password[$rut]");
 			$this->form_validation->set_rules('nva_contrasegna_rep', 'Confirmación de contraseña', 'required|min_length[5]|max_length[100]|matches[nva_contrasegna]|xss_clean');
 			$this->form_validation->set_rules('nva_contrasegna', 'Contraseña nueva', 'required|min_length[5]|max_length[100]|xss_clean');
-			$this->form_validation->set_error_delimiters('<div class="error alert alert-error">', '</div>');
+			
 
 			// Si la validación es incorrecta
 			if ($this->form_validation->run() == FALSE)
@@ -373,11 +378,19 @@ class Login extends MasterManteka {
 			$resultado = $this->model_usuario->cambiarContrasegna($rut ,md5($this->input->post('nva_contrasegna')));
 		}
 		
-		//Falta implementar función que actualiza los datos del usuario como los mails y el teléfono
+		if ($this->form_validation->run() == FALSE)
+		{
+			$mensaje_alert["titulo_msj"] = "Hay un problema para cambiar los datos del usuario";
+			$mensaje_alert["cuerpo_msj"] = "Revise los campos señalados más abajo e intente nuevamente";
+			$mensaje_alert['tipo_msj'] = "alert-error";
+			$this->cambiarContrasegna($mensaje_alert); //	Vuelvo a llamar el cambio de contraseña si hubo un error con el mensaje apropiado
+			return;
+		}
 		$tipo = $this->session->userdata('id_tipo_usuario');
 		$mail1 = $this->input->post("correo1");
 		$mail2 = $this->input->post("correo2");
 		$telefono = $this->input->post("telefono");
+
 		$resultado = $this->model_usuario->cambiarDatosUsuario($rut, $tipo, $telefono, $mail1, $mail2);
 
 

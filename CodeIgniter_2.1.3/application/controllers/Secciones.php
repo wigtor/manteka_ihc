@@ -1,5 +1,3 @@
-
-
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once APPPATH.'controllers/Master.php'; 
@@ -51,6 +49,14 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+	/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, la variable 'sección'
+	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
+
 	public function postVerSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -64,6 +70,15 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a traves de la vista, las variables que corresponden a
+	* la letra de la seccion y a los dos digitos que acompañan la letra de la sección
+	* Estas variables se utilizan como parametro para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le conveierte en su representación JSON
+	* y se le envía como un string a la vista
+	*/
+
 	public function secExiste() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
@@ -73,10 +88,19 @@ class Secciones extends MasterManteka {
 
 		$letra_post = $this->input->post('letra_post');
 		$num_post = $this->input->post('num_post');
+		$cod_post = $this->input->post('cod_post');
 		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->existeSeccion($letra_post,$num_post);
+		$resultado = $this->Model_secciones->existeSeccion($cod_post,$letra_post,$num_post);
 		echo json_encode($resultado);
 	}
+
+	/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, la variable 'sección'
+	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
 
 	public function AlumnosSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
@@ -114,6 +138,14 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	}
+
+	/**
+	* Función que se ejecuta al presionar el botón "Agregar" en la vista "Agregar secciones"
+	* Esta funcion recibe las entradas escritas correspondientes a la letra y a los dos dígitos,
+	* escritos como el nombre de la sección, y los utiliza como parametros de la función del modelo
+	* Se analiza el resultado de la función del modelo y dependiendo del resultado se muestra la
+	* vista de confirmación "Acción Realizada" o "Acción No Realizada"
+	*/
 
 	public function ingresarSecciones()
 	{	
@@ -175,6 +207,14 @@ class Secciones extends MasterManteka {
     
     }
 
+    /**
+    * Función que se ejecuta al presionar el botón "Guardar" de la vista "Editar secciones"
+    * Se reciben las entradas correspondientes al codigo de la sección y al nombre de la sección,
+    * separadas en la letra y en los dos digitos de ella, para utilizarlos en la función del modelo.
+    * Se analiza el resultado de la función del modelo y dependiendo del resultado se muestra la
+	* vista de confirmación "Acción Realizada" o "Acción No Realizada"
+    */
+
     public function modificarSecciones()
     {
 	
@@ -234,6 +274,13 @@ class Secciones extends MasterManteka {
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_borrar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
+	/**
+	* Función que se ejecuta al presionar el botón "Eliminar" en la vista "Borrar secciones"
+	* Esta funcion recibe la entrada correspondientes al codigo de la seccion 
+	* y los utiliza como parametros de la función del modelo
+	* Se analiza el resultado de la función del modelo y dependiendo del resultado se muestra la
+	* vista de confirmación "Acción Realizada" o "Acción No Realizada"
+	*/
 
 	public function eliminarSecciones()
     {
@@ -287,7 +334,7 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar());
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerSeccionesNoAsignadas(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
@@ -367,7 +414,7 @@ class Secciones extends MasterManteka {
 		
 		$this->load->model('Model_secciones');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
+        $datos_vista = array('seccion' =>$this->Model_secciones->VerSeccionesAsignadas());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
@@ -376,11 +423,12 @@ class Secciones extends MasterManteka {
 
 
 	/**
-	* Funciaón que realiza un pos de los detalle de la fincion desde el
-	* modelo a la vista utilizando json para la comunicación asincrona
-	*
-	*
-	**/
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, la variable 'sección'
+	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
 
 	public function postDetallesSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
@@ -395,6 +443,14 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+	/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, la variable 'textoFiltroBasico'
+	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
+	* Luego, se almacena la busqueda realizada para obtenerla, en caso de que el usuario desee repetirla
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
 
 	public function postBusquedaSecciones() {
 		if (!$this->isLogged()) {
@@ -455,32 +511,33 @@ class Secciones extends MasterManteka {
 
 	}
 
-	
+	/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, la variable 'nombre_modulo'
+	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
+
 	public function postDetalleModulos() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
-
 		$nombre_modulo = $this->input->post('nombre_modulo');
 		$this->load->model('Model_secciones');
 		$resultado = $this->Model_secciones->verProfeSegunModulo($nombre_modulo);
 		echo json_encode($resultado);
 	}
 
-	public function postDetalleSala() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$sala = $this->input->post('sala');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->verHorarioSegunSala($sala);
-		echo json_encode($resultado);
-	}
+/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, la variable 'sección'
+	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
 
 	public function postDetalleUnaSeccion() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
@@ -495,8 +552,25 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+/**
+	* Función llamada por una vista a través de una petición AJAX
+	* Esta función rescata, a través de la vista, las variable 'dia_post' y 'bloque_post'
+	* Dichas variables se guardan en otras de tipo local para llamar a otra función, en el modelo
+	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
+	* y se le envía como un string a la vista
+	*/
 
-	
-	
-	
+	public function postVerificaHorarios() {
+		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$dia = $this->input->post('dia_post');
+		$bloque = $this->input->post('bloque_post');
+		$this->load->model('Model_secciones');
+		$resultado = $this->Model_secciones->getVerificaHorarios($dia, $bloque);
+		echo json_encode($resultado);
+	}
+		
 }

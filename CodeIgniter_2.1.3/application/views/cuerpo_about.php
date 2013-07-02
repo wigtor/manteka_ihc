@@ -65,6 +65,16 @@
           <p style="font-size:xx-small;">(En la fotografía: Aldo César Navarrete Muñoz)</p>
         </div> 
     </div>
+
+    <div class="item">
+      <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpbD3je6PM.jpg">
+        <div class="carousel-caption" align="left">
+         <h4>Co-Jefe del Proyecto</h4>
+         <p>Encargado de asistir al Jefe de Proyecto en tareas específicas relacionadas con el respaldo del proyecto en el controlador de versiones del Departamento de Ingeniería Informática, realizar el Testing del trabajo de los grupos, reportar errores presentes en MANTEKA, documentar el proyecto 
+          según la metodología OMT++, generar informes de trabajo y controles de calidad. </p>
+          <p style="font-size:xx-small;">(En la fotografía: Yanina Elizabeth Ovando Guerrero.)</p>
+        </div> 
+    </div>
    
     <div class="item">
       <img src="/<?php echo config_item('dir_alias') ?>/img/about_img/phpnnc31sPM.jpg">

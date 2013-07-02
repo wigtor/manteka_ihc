@@ -95,7 +95,7 @@ class Otros extends MasterManteka {
 		}
 		
 	}
-	public function sendMailError()
+	public function sendMailError($codigoBorrador)
 	{
 		$datos_plantilla["titulo_msj"] = "Error en la conexión";
 		$datos_plantilla["cuerpo_msj"] = "No se pudo enviar el correo deseado, revise su conexión a internet o vuleva a intentarlo mas tarde.";
@@ -134,7 +134,7 @@ class Otros extends MasterManteka {
 			
 			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 			$datos_plantilla["redirecTo"] = "Correo/correosRecibidos"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-			$datos_plantilla["redirecFrom"] = "Correo/enviarCorreo"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["redirecFrom"] = "Correo/enviarCorreo/".$codigoBorrador; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 			$datos_plantilla["nombre_redirecTo"] = "inbox"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 			$datos_plantilla["cuerpo_central"] = $this->load->view('templates/big_msj_logueado', $datos_plantilla, true); //Esta es la linea que cambia por cada controlador
 			$this->load->view('templates/template_general', $datos_plantilla);
