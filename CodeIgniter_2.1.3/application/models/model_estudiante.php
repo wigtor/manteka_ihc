@@ -535,8 +535,8 @@ class Model_estudiante extends CI_Model {
 			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
 			break;
 			case "nombre":
-			$reg = array("options"=>array("regexp"=>"/^[a-zA-Z\-]+$/"));
-			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+			$reg = array("options"=>array("regexp"=>"/^[a-zA-ZäáàëéèíìöóòúùñçÄÁÀËÉÈÍÌÖÓÒÚÙÑÇ \-]+$/"));			
+			return filter_var(trim($campo), FILTER_VALIDATE_REGEXP,$reg);
 			break;
 			case "rut":
 			$reg = array("options"=>array("regexp"=>"/^[k0-9\-\.]+$/"));
@@ -612,7 +612,7 @@ class Model_estudiante extends CI_Model {
 		if(!file_exists($archivo) || !is_readable($archivo))
 			return FALSE;
 
-		$ff = fopen($archivo, "r") or exit();
+		$ff = fopen($archivo, "r");
 
 		$header = array();
 		$data = array();		
