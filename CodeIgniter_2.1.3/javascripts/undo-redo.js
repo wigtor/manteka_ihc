@@ -46,10 +46,14 @@ $(document).ready(function() {
    
     // On change se agrega un estado a cada elemento
    $(state_elements+","+select_elements).on('change', function() {
-        saveState();
+        if($(this).val() != $(this).attr('data-previous').split(",")[current_state]){
+            saveState();
+        }
     });
-    $(text_elements).keyup(function() {
-        saveState();
+    $(text_elements+","+select_elements).keyup(function() {
+        if($(this).val() != $(this).attr('data-previous').split(",")[current_state]){
+            saveState();
+        }            
     });
    
     $('.undo, .redo').on('click', function() {
