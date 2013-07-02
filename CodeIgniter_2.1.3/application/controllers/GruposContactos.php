@@ -222,6 +222,18 @@ class GruposContactos extends MasterManteka {
 		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
+    public function getGrupos(){
+		//
+		$this->load->model('model_grupos_contacto');
+		$rut = $this->session->userdata['rut'];
+		$respuesta = $this->model_grupos_contacto->VerGrupos($rut);
+		echo json_encode($respuesta);
+
+	}
+	public function getContactosGrupoFlacoPiterStyle(){
+
+		//implementar para terminar con vista de enviar correo.
+	}
 
 }
 /* End of file Grupo.php */
