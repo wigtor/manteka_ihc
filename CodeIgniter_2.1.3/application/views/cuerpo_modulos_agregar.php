@@ -120,7 +120,7 @@ function ordenarFiltro(numeroLista){
 </script>
 
 
-		<fieldset>
+		<fieldset style="min-width:1000px">
 			<legend>Agregar Módulo</legend>
 
 			<form   id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
@@ -195,7 +195,7 @@ function ordenarFiltro(numeroLista){
 						<div class="span12">
 								<div class="span7">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">3.- <font color="red">*</font> Ingrese una descripción del módulo</label>
+										<label  class="control-label" for="inputInfo" style="min-width: 300px;">3.- <font color="red">*</font> Ingrese una descripción del módulo</label>
 									</div>
 								</div>
 								
@@ -308,7 +308,7 @@ function ordenarFiltro(numeroLista){
 			<div class="row-fluid"> 
 				<div class="span5">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo">6.- <font color="red">*</font> Asignar equipo profesores</label>
+						<label class="control-label" for="inputInfo" style="min-width: 300px;">6.- <font color="red">*</font> Asignar equipo profesores</label>
 					</div>
 				</div>
 				<div  class="span6" style="margin-top:6%" >	

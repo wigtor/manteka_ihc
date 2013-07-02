@@ -366,7 +366,7 @@ function editarMod(){
 
 </script>
 
-	<fieldset>
+	<fieldset style="min-width: 1000px;">
 			<legend>Editar Módulo</legend>
 			<div class="row-fluid" style="margin-bottom:5px">
 				<font color="red">* Campos Obligatorios</font>
@@ -376,7 +376,7 @@ function editarMod(){
 				
 				<div class="span6">
 					<div class="row-fluid">
-						<div class="span7">
+						<div class="span7" style="min-width:300px">
 							1.- Seleccione el módulo temático a editar:
 						</div>
 					</div>
@@ -402,7 +402,7 @@ function editarMod(){
 
 					
 					<div class="row-fluid" style="margin-top:2%">
-							<div class="span7">
+							<div class="span7" style="min-width:300px">
 								2.- <font color="red">*</font> Sesiones del módulo temático
 							</div>
 					</div>
