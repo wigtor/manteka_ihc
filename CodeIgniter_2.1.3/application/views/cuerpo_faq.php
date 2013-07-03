@@ -61,6 +61,14 @@
 		<div>
 			<p>Si, para agilizar el ingreso de nuevos estudiantes de manera rápida y segura existe la carga masiva de datos, la cual se realiza en la seccion de alumnos, donde solamente es necesario importar un archivo con los datos a ingresar. Para saber más sobre la carga masiva puede consultar al manual de usuario.</p>
 		</div>	
+	<h4>16. ¿Puedo ver los mails que he eliminado?</h4>
+		<div>
+			<p>Si, en la sección de correos existe la opción de "Log de eliminados" donde se encuentran aquellos correos que han sido eliminados en MANTEKA, el usuario podrá consultar por correos electronicos enviados, recibidos y borradores que hayan sido eliminados.</p>
+		</div>	
+	<h4>17. ¿Qué tipo de reportes puedo obtener de MANTEKA?</h4>
+		<div>
+			<p>Existen dos tipos de reportes, el primero trata sobre información relacionada con los alumnos de una sección en particular, asistencias, notas, registro de entradas, etc. Son los reportes de usuario. El segundo trata sobre datos relacionados con el sistema MANTEKA, vale decir, datos personales de estudiantes e información de secciones.</p>
+		</div>	
 	</div>
 
 </fieldset>
