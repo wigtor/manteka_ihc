@@ -486,7 +486,7 @@ function editarMod(){
 
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span8">
-								6.- Descripción del módulo 
+								6.- <font color="red">*</font> Descripción del módulo 
 							</div>					
 					</div>
 					<div class="row-fluid" >
@@ -540,7 +540,7 @@ function editarMod(){
 						<h3>Confirmación</h3>
 					</div>
 					<div class="modal-body">
-						<p>Se van a guardar los cambios del módulo ¿Está seguro?</p>
+						<p>Se van a guardar los cambios del módulo seleccionado ¿Está seguro?</p>
 					</div>
 					<div class="modal-footer">
 						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
@@ -552,10 +552,10 @@ function editarMod(){
 				<div id="EscojaEquipo" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado algún profesor para el equipo</h3>
+						<h3>No ha seleccionado ningún profesor</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+						<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -566,29 +566,29 @@ function editarMod(){
 				<div id="EscojaSesion" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado una sesión para el módulo</h3>
+						<h3>No ha seleccionado ninguna sesión</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione por lo menos una sesión</p>
+						<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
 				
-			<!-- Modal -->
-				<div id="LiderDelEquipo" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No seleccione un profesor como lider y como parte del equipo</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor haga su selección nuevamente</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>
+									<!-- Modal -->
+						<div id="LiderDelEquipo" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>No puede seleccionar el líder como parte del equipo</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor no seleccione a otro profesor como parte del equipo</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
 				
 			<!-- Modal -->
 				<div id="NombreEnUso" class="modal hide fade">
@@ -597,7 +597,7 @@ function editarMod(){
 						<h3>El nombre del módulo está en uso</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para el nuevo módulo</p>
+						<p>Por favor ingrese otro nombre para el nuevo módulo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -611,7 +611,7 @@ function editarMod(){
 						<h3>El profesor ya pertenece a otro equipo con este cargo</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione otro profesor para este cargo</p>
+						<p>Por favor seleccione otro profesor para este cargo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
