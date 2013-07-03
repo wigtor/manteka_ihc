@@ -351,20 +351,18 @@ function ordenarFiltro(numeroLista){
 				</div>
 			</div>
 			<!---->
-			<div class="row-fluid" style="margin-top: 5%">
-	
-				<div class= "span4" style="margin-left:43%">
-					<button class ="btn" type="submit" style="width: 102px" >
-						<div class="btn_with_icon_solo">Ã</div>
-						&nbsp Agregar
-					</button>
-				</div>
-				<div class= "span3" style="margin-left:0%">
-					<button class ="btn" type="reset" style="width:105px">
-						<div class="btn_with_icon_solo">Â</div>
-						&nbsp Cancelar
-					</button>
-				</div>
+		</br>
+			<div class="row">
+					<div class="controls pull-right">
+						<button class ="btn" type="submit" style="margin-right: 10px" >
+							<div class="btn_with_icon_solo">Ã</div>
+							&nbsp Agregar
+						</button>
+						<button class ="btn" type="reset" style="width:105px">
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp Cancelar
+						</button>
+					</div>
 			</div>
 			
 		</div>

@@ -101,7 +101,7 @@
 		correoDetalle2 = $("#correoEditar2").val();
 		fonoDetalle = $("#fono").val();
 
-		if ((rutAEliminar == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "") || (correoDetalle2 == "")) {
+		if ((rutAEliminar == "") || (nombre1Detalle == "") || (apellido1Detalle == "") || (apellido2Detalle == "") || (correoDetalle == "") || (correoDetalle2 == "") || (fonoDetalle == "")) {
 			$('#modalFaltanCampos').modal();
 		}
 		else{
