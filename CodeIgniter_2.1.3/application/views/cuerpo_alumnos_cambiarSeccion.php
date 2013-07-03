@@ -298,7 +298,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 						<h3>Se han seleccionado dos secciones iguales</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione dos secciones distintas para hacer el cambio</p>
+						<p>Por favor seleccione dos secciones distintas para hacer el cambio.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

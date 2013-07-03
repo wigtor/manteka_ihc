@@ -2,7 +2,10 @@
 
 <script>
 	function comprobarRut() {
-		var rut = document.getElementById("rut_profesor").value;	
+		var rut = document.getElementById("rut_profesor").value;
+		if( rut== ""){
+			return null;
+		}
 		dv = rut.charAt(rut.length-1);
 		rut = rut.substring(0,rut.length-1);
 		if(calculaDigitoVerificador(rut,dv) != 0){
@@ -159,7 +162,7 @@
 								<h3>RUT ingresado está en uso</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+								<p>Por favor ingrese otro rut y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -171,7 +174,7 @@
 								<h3>El correo secundario y principal son iguales</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor ingrese correos distintos y vuelva a intentarlo</p>
+								<p>Por favor ingrese correos distintos y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -184,7 +187,7 @@
 							<h3>Dígito verificador incorrecto</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor ingrese el rut nuevamente</p>
+							<p>Por favor ingrese el rut nuevamente.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

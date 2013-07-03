@@ -120,7 +120,7 @@ function ordenarFiltro(numeroLista){
 </script>
 
 
-		<fieldset>
+		<fieldset style="min-width:1000px">
 			<legend>Agregar Módulo</legend>
 
 			<form   id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
@@ -195,7 +195,7 @@ function ordenarFiltro(numeroLista){
 						<div class="span12">
 								<div class="span7">
 									<div class="control-group">
-										<label  class="control-label" for="inputInfo">3.- <font color="red">*</font> Ingrese una descripción del módulo</label>
+										<label  class="control-label" for="inputInfo" style="min-width: 300px;">3.- <font color="red">*</font> Ingrese una descripción del módulo</label>
 									</div>
 								</div>
 								
@@ -308,7 +308,7 @@ function ordenarFiltro(numeroLista){
 			<div class="row-fluid"> 
 				<div class="span5">
 					<div class="control-group">
-						<label class="control-label" for="inputInfo">6.- <font color="red">*</font> Asignar equipo profesores</label>
+						<label class="control-label" for="inputInfo" style="min-width: 300px;">6.- <font color="red">*</font> Asignar equipo profesores</label>
 					</div>
 				</div>
 				<div  class="span6" style="margin-top:6%" >	
@@ -351,20 +351,18 @@ function ordenarFiltro(numeroLista){
 				</div>
 			</div>
 			<!---->
-			<div class="row-fluid" style="margin-top: 5%">
-	
-				<div class= "span4" style="margin-left:43%">
-					<button class ="btn" type="submit" style="width: 102px" >
-						<div class="btn_with_icon_solo">Ã</div>
-						&nbsp Agregar
-					</button>
-				</div>
-				<div class= "span3" style="margin-left:0%">
-					<button class ="btn" type="reset" style="width:105px">
-						<div class="btn_with_icon_solo">Â</div>
-						&nbsp Cancelar
-					</button>
-				</div>
+		</br>
+			<div class="row">
+					<div class="controls pull-right">
+						<button class ="btn" type="submit" style="margin-right: 10px" >
+							<div class="btn_with_icon_solo">Ã</div>
+							&nbsp Agregar
+						</button>
+						<button class ="btn" type="reset" style="width:105px">
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp Cancelar
+						</button>
+					</div>
 			</div>
 			
 		</div>
@@ -377,10 +375,10 @@ function ordenarFiltro(numeroLista){
 						<div id="EscojaEquipo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado algún profesor para el equipo</h3>
+								<h3>No ha seleccionado ningún profesor</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+								<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -391,10 +389,10 @@ function ordenarFiltro(numeroLista){
 						<div id="EscojaSesion" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado una sesión para el módulo</h3>
+								<h3>No ha seleccionado ninguna sesión</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione por lo menos una sesión</p>
+								<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -405,10 +403,10 @@ function ordenarFiltro(numeroLista){
 						<div id="LiderDelEquipo" class="modal hide fade">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No puede seleccionar el lider como parte del equipo</h3>
+								<h3>No puede seleccionar el líder como parte del equipo</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor no seleccione al lider como parte del equipo</p>
+								<p>Por favor no seleccione a otro profesor como parte del equipo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -422,7 +420,7 @@ function ordenarFiltro(numeroLista){
 								<h3>El nombre del módulo está en uso</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor ingrese otro nombre para el nuevo módulo</p>
+								<p>Por favor ingrese otro nombre para el nuevo módulo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

@@ -192,7 +192,7 @@
 								<h3>No ha seleccionado ninguna sección</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+								<p>Por favor seleccione una sección y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -204,7 +204,7 @@
 								<h3>Campos Obligatorios no completados</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -217,7 +217,7 @@
 							<h3>La sección ingresada ya existe</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor ingrese otro nombre de sección y vuelva a intentarlo</p>
+							<p>Por favor ingrese otro nombre de sección y vuelva a intentarlo.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

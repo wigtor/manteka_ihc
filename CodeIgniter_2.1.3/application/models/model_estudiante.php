@@ -337,7 +337,9 @@ class Model_estudiante extends CI_Model {
 	* @return array $lista Contiene la información de todas las secciones del sistema
 	*/	
 	public function VerSecciones(){
+		$this->db->order_by("NOMBRE_SECCION", "asc");
 		$query = $this->db->get('seccion');	
+
 		$datos = $query->result(); 
 		$contador = 0;
 		$lista = array();
