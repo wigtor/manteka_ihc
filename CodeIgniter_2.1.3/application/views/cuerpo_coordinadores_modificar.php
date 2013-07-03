@@ -219,6 +219,7 @@
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
+				saveState();
 			}
 		});
 	}
