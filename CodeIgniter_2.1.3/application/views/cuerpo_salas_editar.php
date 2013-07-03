@@ -272,10 +272,10 @@
 					<div id="modalSeleccioneAlgo" class="modal hide fade">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>No ha seleccionado una sala</h3>
+							<h3>No ha seleccionado ninguna sala</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor seleccione una sala y vuelva a intentarlo</p>
+							<p>Por favor seleccione una sala y vuelva a intentarlo.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -288,7 +288,7 @@
 							<h3>Número de sala ingresado está en uso</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor ingrese otro número y vuelva a intentarlo</p>
+							<p>Por favor ingrese otro número y vuelva a intentarlo.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -301,7 +301,7 @@
 								<h3>Campos Obligatorios no completados</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

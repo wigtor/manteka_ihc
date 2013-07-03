@@ -107,7 +107,7 @@
 							<h3>Nombre de la sesion ya existe.</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo</p>
+						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

@@ -82,11 +82,11 @@ Como ejemplo de estas funcionalidades están: Loguin a través de Gmail, envío 
 
 Habilitar 'ssl_module' de Apache:
 En el ícono de WAMP del área de notificación, hacer click sobre este e ir a las opciones:
-Apache->Módulos de apache   y luego marcar la extensión 'ssl_module'.
+Apache->Módulos de apache y luego marcar la extensión 'ssl_module'.
 
-Habilitar 'php_sockets' y 'php_openssl':
+Habilitar 'php_sockets', 'php_openssl' y 'php_imap':
 En el ícono de WAMP del área de notificación, hacer click sobre este e ir a las opciones:
-PHP->Extensiones de php    y luego marcar las extensiones 'php_sockets' y 'php_openssl'.
+PHP->Extensiones de php y luego marcar las extensiones 'php_sockets', 'php_openssl' y 'php_imap'.
 
 Configurar un servidor SMTP:
 Es necesario crear el directorio 'sendmail' en 'C:\wamp\' (o el directorio que elijió como instalación de wamp)
