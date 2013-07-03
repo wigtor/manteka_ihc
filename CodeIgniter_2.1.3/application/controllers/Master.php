@@ -308,10 +308,8 @@ class MasterManteka extends CI_Controller {
 
 		try {
 			$this->config->load('config');
-			$mail_manteka = $this->config->item('mail_manteka');
-			$password_mail_manteka = $this->config->item('password_mail_manteka');
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
-				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', $mail_manteka, $password_mail_manteka); 
+				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', 'manteka.usach@gmail.com', '451752645'); 
 
 				//Busca los mails según el asunto especificado y si no ha sido visto aún
 				$emails = imap_search($inbox, 'SUBJECT "Delivery Status Notification (Failure)" UNSEEN'); 
