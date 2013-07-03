@@ -15,7 +15,7 @@
 		</script>
 		
 		<div class="wrapp row-fluid">
-			<div class="span4 offset3"> 
+			<div class="span6 offset2"> 
   		    	<div class="alert alert-block <?php echo $tipo_msj ?>">
   		    		<h4><?php echo $titulo_msj ?></h4>
 		   		 	<?php echo $cuerpo_msj ?>
