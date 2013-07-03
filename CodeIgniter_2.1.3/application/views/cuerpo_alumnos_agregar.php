@@ -3,7 +3,7 @@
 	
 	function comprobarRut() {
 		var rut = document.getElementById("rut_estudiante").value;
-		
+		if(rut == ""){return null}
 		dv = rut.charAt(rut.length-1);
 		rut = rut.substring(0,rut.length-1);
 		if(calculaDigitoVerificador(rut,dv) != 0){
