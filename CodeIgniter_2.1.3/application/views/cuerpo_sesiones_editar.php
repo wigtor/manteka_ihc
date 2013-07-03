@@ -209,10 +209,10 @@ function verDetalle(elemTabla) {
 				<div id="modalSeleccioneAlgo" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado una sesión</h3>
+						<h3>No ha seleccionado ninguna sesión</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione una sesión y vuelva a intentarlo</p>
+						<p>Por favor seleccione una sesión y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -226,25 +226,26 @@ function verDetalle(elemTabla) {
 							<h3>Nombre de la sesion ya existe.</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo</p>
+						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>	
-
-				<div id="modalCamposVacios" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>Campos Obligatorios Vacíos</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor  complete todos los campos obligatorios y vuelva a intentarlo</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>
+				<!-- Modal de faltan campos -->
+							<div id="modalCamposVacios" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
+				
 		
 		<?php echo form_close(""); ?>
 

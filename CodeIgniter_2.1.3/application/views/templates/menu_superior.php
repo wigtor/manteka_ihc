@@ -9,7 +9,9 @@
 		if (!isset($menuSuperiorAbierto)) {
 			$menuSuperiorAbierto = "Correos";
 		}
-		$id_tipo_usuario = TIPO_USR_COORDINADOR; //Se debe borrar cuando todo se porte a MasterManteka
+		if (!isset($id_tipo_usuario)) {
+			$id_tipo_usuario = TIPO_USR_COORDINADOR; //Se debe borrar cuando todo se porte a MasterManteka
+		}
 		// Las operaciones por defecto no poseen clases
 		$Correos = "";
 		$Docentes = "";

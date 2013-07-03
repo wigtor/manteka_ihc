@@ -547,13 +547,24 @@ public function AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,
 	}else{
 		$dia_abreviado = 'W';
 	}
-	$columnas = 'horario.COD_HORARIO';
+	$columnas = 'horario.COD_HORARIO as cod';
 	$condiciones = '(dia.COD_ABREVIACION_DIA = \''.$dia_abreviado.'\') AND (modulo.NUMERO_MODULO = \''.$numero_modulo.'\') AND (dia.COD_DIA = horario.COD_DIA) AND (modulo.COD_MODULO = horario.COD_MODULO)';
 	$desde = 'dia, modulo, horario';
 	$this->db->select($columnas);
 	$this->db->where($condiciones);
 	$query = $this->db->get($desde);
 	//$cod_horario = $query->result_array()[0]['COD_HORARIO'];
+	$datos1=$query->result();
+	$lista1=array();
+	$contador=0;
+
+	foreach ($datos1 as $row) {
+		$lista1[$contador]=array();
+		$lista1[$contador][0]=$row->cod;
+		$contador=$contador+1;
+	}
+
+	$cod_horario= $lista1[0][0];
 
 	/*Se asocian la sala con el horario, para luego ser asociados a la sección*/
 	$sala_horario = array(
@@ -570,11 +581,24 @@ public function AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,
 	$this->db->insert('profe_seccion',$profe_seccion);
 
 	/*Se asocia el módulo, el horario y la sala a la sección*/
-	$this->db->select('ID_HORARIO_SALA');
+	$this->db->select('ID_HORARIO_SALA as cod_sala');
 	$condiciones = '(sala_horario.COD_SALA = \''.$cod_sala.'\') AND (sala_horario.COD_HORARIO = \''.$cod_horario.'\')';
 	$this->db->where($condiciones);
 	$query2 = $this->db->get('sala_horario');
 	//$id_horario_sala = $query2->result_array()[0]['ID_HORARIO_SALA'];
+	$datos2=$query2->result();
+
+	$lista2=array();
+	$contador1=0;
+
+	foreach ($datos2 as $row1) {
+		$lista2[$contador1]=array();
+		$lista2[$contador1][0]=$row1->cod_sala;
+		$contador1=$contador1+1;
+	}
+
+	$id_horario_sala=$lista2[0][0];
+
 	$seccion_mod_tem = array(
 			'COD_SECCION' => $cod_seccion,
 			'COD_MODULO_TEM' => $cod_modulo,

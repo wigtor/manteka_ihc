@@ -337,13 +337,15 @@ class Correo extends MasterManteka {
 		
 		/* Se asigna un hipervínculo al correo con el fin de que el usuario pueda ver el correo directamente en el sistema Manteka. */
 		//$link="<br><a href='localhost/".config_item('dir_alias')."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
-		$link2="<br><a href='/".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
+		$link2="<br><a href='".$_SERVER['HTTP_HOST']."/manteka/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
 		
 
 		if($archivosElim!="")
 		foreach ($archivosElim as $archivo) {
 			unlink("adjuntos/".$archivo);
 		}
+		
+		if($adjuntos!="")
 		foreach ($adjuntos as $adjunto) {
 			$this->email->attach("adjuntos/".$adjunto[1]);
 		}
@@ -716,8 +718,24 @@ class Correo extends MasterManteka {
 		}
 		echo json_encode($resultado);
 	}
+	
+	/**
+	* Obtiene los archivos adjuntos de un correo.
+	*
+	* @author: Diego García (DGM)
+	*
+	*/
+	public function obtenerAdjuntos(){
+		if(!$this->isLogged()){
+			return;
+		}
+		$codigo = $this->input->post('codigo');
+		$this->load->model('model_correo');
+		$resultado =$this->model_correo->getAdjuntos($codigo);
+		echo json_encode($resultado);
+	}
 
-/**
+	/**
 	* Recarga la tabla de borradores segun los botones de < y > 
 	* según sean clickeados
 	*

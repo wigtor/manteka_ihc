@@ -14,7 +14,7 @@ var destinoaux;
 * deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
 * Para ver como se configura esto se debe ver en el evento onclick() en donde están contenidos los correos (bandeja) .
 */
-function DetalleCorreo(hora,fecha,asunto,id,destino)
+function DetalleCorreo(hora,fecha,asunto,id,destino,codigo)
 {		
 	document.getElementById("fecha").innerHTML=fecha;
 	document.getElementById("hora").innerHTML=hora;
@@ -28,7 +28,7 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 
 	
 
-	
+	obtenerAdjunto(codigo);
 	$('#cuadroEnviados').css({display:'none'});
 	$('#cuadroDetalleCorreo').css({display:'block'});
 }
@@ -39,7 +39,7 @@ function DetalleCorreo(hora,fecha,asunto,id,destino)
 * Para ver como se configura esto se debe ver en el evento onclick() del botón que se encuentra en el Detalle de Correo.
 */
 function volverCorreosEnviados()
-{		
+{	$("[rel=details]").popover('hide');
 	$('#cuadroDetalleCorreo').css({display:'none'});
 	$('#cuadroEnviados').css({display:'block'});
 }
@@ -54,47 +54,58 @@ function strip(html)
    tmp.innerHTML = html;
    return tmp.textContent||tmp.innerText;
 }
-
-/**
- * Carga la información del correo a ver en su contexto.
- * 
- * @author Byron Lanas (BL)
- * @param int codigo Corresponde al código identificador del borrador.
- **/
-function cargarCorreo(codigo)
+function obtenerAdjunto(codigo)
 {
-	
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postCargarCorreo") ?>",	
-		data: {codigo:codigo},
-		success: function(respuesta)
-		{
-			detalles = JSON.parse(respuesta);
-			
-			
-			if(detalles==""){
-				alert("El mensaje que intenta ver fue eliminado o no posee los permisos para verlo");
-			}else{
-				var tablaResultados = document.getElementById('tabla');
-				var cuerpo=detalles[0].cuerpo_email;
-				textarea=document.createElement('textarea');
-				textarea.setAttribute("id","cc");
-				textarea.setAttribute("style","display:none");
-				tablaResultados.appendChild(textarea);
-				document.getElementById("cc").value=cuerpo;
-				var de=detalles[1].nombre+" "+detalles[1].apellido1+" "+detalles[1].apellido2;
-				DetalleCorreo(detalles[0].hora,detalles[0].fecha,detalles[0].asunto,'c',de);
+		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		data: { codigo: codigo},
+		success: function(respuesta){
+			listaAdjuntos = JSON.parse(respuesta);
+			if(listaAdjuntos.length>0)
+			{
+				$('#destinosAdjuntos').css({display:'none'});
+				var tablaResultados=document.getElementById("files");
+				$(tablaResultados).find('tbody').remove();
+
+				tbody = document.createElement('tbody');
+				tbody.setAttribute("style","height:auto;width:100%;");
+				for(num=0;num<listaAdjuntos.length;num++){
+
+					document.getElementById("attach").setAttribute("style","display:'';");
+					var tr= document.createElement('tr'); 
+					tr.setAttribute("id","f"+num);
+					tr.setAttribute("style","margin-left:0px;display:block;");
+					var td=document.createElement("td");
+					td.setAttribute("style","width:95%;display:inline-table;font-size:10px;");
+					var span;
+					var iconClass='icon icon-'+listaAdjuntos[num].logico.substring(listaAdjuntos[num].logico.lastIndexOf(".")+1);
+					span="<span  class='"+iconClass+"''></span>";	
+					var link="<a href='"+listaAdjuntos[num].fisico+"' download='"+listaAdjuntos[num].logico+"'>"+listaAdjuntos[num].logico+"</a>";
+					td.innerHTML=span+" "+link;
+					tr.appendChild(td);
+					tbody.appendChild(tr);
+					tr=document.createElement("tr");
+					tr.setAttribute("id",'b'+num);
+					tr.setAttribute("style","display:none");
+					tbody.appendChild(tr);
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+				}
+				tablaResultados.appendChild(tbody);
 			}
-			var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).hide();
+			else
+			{
+
+				$('#destinosAdjuntos').css({display:'inline-block'});
+			}
 		}
 	});
-	
-	/* Muestra el "div" que indica que se está cargando... */
+	/* Muestro el div que indica que se está cargando... */
 	var iconoCargado = document.getElementById("icono_cargando");
 	$(icono_cargando).show();
 }
+
 
 /** 
 * Esta función se llama al hacer click en los botones < y > para cambiar los correos mostrados
@@ -155,8 +166,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
 				var de=listaRecibidos[i].nombre_destinatario;
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
-				if(de.replace(/,/g,", ").length>40)
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");				if(de.replace(/,/g,", ").length>40)
 					nodoTexto=document.createTextNode(de.replace(/,/g,", ").substr(0,40)+".....");
 				else
 					nodoTexto=document.createTextNode(de.replace(/,/g,", ").substr(0,40));	
@@ -166,7 +176,11 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("id", "m"+i);
 				td.setAttribute("width", "27%");
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
+				var span="";
+				
+				if (listaRecibidos[i].adjuntos!=null)
+					span="<span  style='width: 15px; height: 15px; float:right; margin-right:8px;'><img src='/manteka/img/icons/glyphicons_062_paperclip' alt=':' ></span>";	
 				var largoAsunto=listaRecibidos[i].asunto.length; 
 				if(listaRecibidos[i].asunto.length>30){
 					var asuntoTmp = listaRecibidos[i].asunto.substr(0,30)+".....";	
@@ -178,14 +192,14 @@ function cambiarCorreos(direccion,offset)
 					var cuerpoTmp = strip(cuerpo+"<a>").substr(0,40-largoAsunto)+".....";	
 				else
 					var cuerpoTmp = strip(cuerpo+"<a>");	
-				td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>";
+				td.innerHTML = asuntoTmp+" - <font color='#999999'>"+cuerpoTmp+"</font>"+span;
 			
 				tr.appendChild(td);
 				td = document.createElement('td');
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
 				nodoTexto=document.createTextNode(listaRecibidos[i].fecha);
 				td.appendChild(nodoTexto);
 				tr.appendChild(td);
@@ -193,7 +207,7 @@ function cambiarCorreos(direccion,offset)
 				td.setAttribute("width", "8%");
 				td.setAttribute("id", i);
 				td.setAttribute("style","text-align:left;padding-left:7px;");
-				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"')");
+				td.setAttribute("onclick","DetalleCorreo('"+listaRecibidos[i].hora+"','"+listaRecibidos[i].fecha+"','"+listaRecibidos[i].asunto+"',"+i+",'"+de+"',"+listaRecibidos[i].codigo+")");
 				
 				nodoTexto=document.createTextNode(listaRecibidos[i].hora);
 				td.appendChild(nodoTexto);
@@ -790,12 +804,13 @@ if(isset($msj))
 	</br>
 	<pre class="detallesEmail">
 <div style="text-align:right; margin-bottom:0px;">Fecha: <b  id="fecha"> </b>  <b style="text-align:right;" id="hora"></b></div>
- Para:   <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div>
- Asunto: <b  id="asuntoDetalle"></b>
-  <fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset>
-	</pre>
+  Para:     <b  class="txt"  id="destinos"></b> <div href="#" rel="details"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_367_expand.png" alt=":" ></div>
+  Asunto:   <b  id="asuntoDetalle"></b>
+  Adjuntos: <b  class="txt"  style="display:none;" id="destinosAdjuntos">Sin archivos adjuntos</b> <!--<div id="xxx" href="#" rel="details2"  class="btn btn_with_icon_solo" style="width: 15px; height: 15px; align:left;"><img src="/<?php echo config_item('dir_alias') ?>/img/icons/glyphicons_062_paperclip.png" alt=":" ></div>-->
+<fieldset id="attach" style="display:none"><table id="files" class="files" style="height:auto;width:100%;"><tbody  style="height:auto;width:100%;"></tbody></table></fieldset>
+  Cuerpo:<fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset></pre>
 </fieldset>
- <script type="text/javascript">
+<script type="text/javascript">
   $(document).ready(function() {
   	$("[rel=details]").tooltip({
   		placement : 'bottom', 

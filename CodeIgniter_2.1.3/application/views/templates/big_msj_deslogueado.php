@@ -23,7 +23,7 @@
 		?>
 		<!--	Mensaje modificando que no se está autentificado	-->
 		<div class="wrapp row-fluid">
-			<div class="span4 offset4"> 
+			<div class="span6 offset3"> 
   		    	<div class="alert alert-block <?php echo $tipo_msj ?>">
   		    		<h4><?php echo $titulo_msj ?></h4>
 		   		 	<?php echo $cuerpo_msj ?>

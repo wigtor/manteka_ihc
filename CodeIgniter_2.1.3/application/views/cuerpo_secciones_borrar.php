@@ -78,7 +78,14 @@
 			
 			//CARGO EL CUERPO DE LA TABLA
 			tbody = document.createElement('tbody');
-			
+			if (arrayRespuesta.length == 0) {
+				tr = document.createElement('tr');
+				td = document.createElement('td');
+				$(td).html("No se encontraron resultados");
+				$(td).attr('colspan',tiposFiltro.length);
+				tr.appendChild(td);
+				tbody.appendChild(tr);
+			}
 
 			for (var i = 0; i < arrayRespuesta.length; i++) {
 				tr = document.createElement('tr');
@@ -221,12 +228,9 @@ Bloque:  <b id="modulo"></b></pre>
 						</tr>
 					</thead>
 					
-					<tbody>
 					
-					</tbody>
 				</table>
 			</div>
-
 			<div class="control-group">
 				<div class="controls pull-right">
 					<button class ="btn" type="button" onclick="eliminarSeccion()" >
@@ -261,7 +265,7 @@ Bloque:  <b id="modulo"></b></pre>
 						<h3>No ha seleccionado ninguna sección</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione una sección y vuelva a intentarlo</p>
+						<p>Por favor seleccione una sección y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -275,7 +279,7 @@ Bloque:  <b id="modulo"></b></pre>
 						<h3>No se pudo eliminar</h3>
 					</div>
 					<div class="modal-body">
-						<p>La sección tiene alumnos asignados. Por favor seleccione una sección y vuelva a intentarlo</p>
+						<p>La sección tiene alumnos asignados y no se puede eliminar. Por favor seleccione una sección sin alumnos y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

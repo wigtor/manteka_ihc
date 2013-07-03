@@ -230,7 +230,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 
 					<div class="row-fluid">
 						<div class="row-fluid" style="margin-top:2%">
-							<div class="span7">
+							<div class="span8" style="min-width:400px">
 								4.- Profesores del módulo temático
 							</div>
 						</div>
@@ -255,7 +255,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 					
 					<div class="row-fluid">
 						<div class="row-fluid" style="margin-top:2%">
-							<div class="span7">
+							<div class="span8" style="min-width:300px">
 								5.- Requisitos del módulo temático
 							</div>
 						</div>
@@ -311,7 +311,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 							<h3>No ha seleccionado ningun módulo</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor seleccione un módulo y vuelva a intentarlo</p>
+							<p>Por favor seleccione un módulo y vuelva a intentarlo.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

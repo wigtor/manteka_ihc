@@ -304,13 +304,20 @@ class MasterManteka extends CI_Controller {
 		$cronJobs = $this->Model_cronJobs->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
 		$cantidadCronJobs = count($cronJobs);
 		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
+
+
 		try {
+			$this->config->load('config');
+			$direccion = $this->config->item('mail_manteka');
+			$pass = $this->config->item('password_mail_manteka');
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
-				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', 'manteka.usach@gmail.com', 'manteka2013'); 
+				$inbox = imap_open('{imap.gmail.com:993/imap/ssl}INBOX', $direccion, $pass); 
 
 				//Busca los mails según el asunto especificado y si no ha sido visto aún
-				$emails = imap_search($inbox, 'SUBJECT "Delivery Status Notification (Failure)" UNSEEN'); 
-
+				$emails = '';
+				if ($inbox) { //Evita que si hay un fail, salgan más fails
+					$emails = imap_search($inbox, 'SUBJECT "Delivery Status Notification (Failure)" UNSEEN');
+				}
 
 				if($emails == ''){
 				
@@ -321,23 +328,26 @@ class MasterManteka extends CI_Controller {
 				  		$message = imap_body($inbox, $email_number);
 				  		$str = strstr($message,'Ver mensaje en su contexto:');
 				  		$str = substr($str, 27);
-				
+						echo '<!-- BORRADOS CORRECTAMENTE LOS MAILS REBOTADOS -->'; //Esto saldrá como un comentario html
 				    	$this->load->model('model_rebotes');
 				    	$resultado = $this->model_rebotes->eliminarRebote($str);
 				    	$this->model_rebotes->notificacionRebote($resultado['cuerpo'],$resultado['rut']);
 					}
 				}
-				imap_close($inbox);
+				if ($inbox) { //Evita que si hay un fail, salgan más fails
+					imap_close($inbox);
+				}
 								//exec("c:\\".$ruta);
 								//shell_exec($ruta . "> /dev/null 2>/dev/null &");
 								//echo ' Ejecutando '.$ruta;
 			}
 			/*con antiguo
+			$ejecutable_php = C:\\wamp\\bin\\php\\php5.4.3\\php
 			for ($i = 0; $i < $cantidadCronJobs; $i=$i+1) {
 				$ruta = $cronJobs[$i]->rutaPhp;
 				if (PHP_OS == 'WINNT' || PHP_OS == 'WIN32') {
 					//echo 'Es windows ';
-					$toExec = 'start /b C:\\wamp\\bin\\php\\php5.4.3\\php c:\\wamp\\scripts\\'.$ruta;
+					$toExec = 'start /b $ejecutable_php c:\\wamp\\scripts\\'.$ruta;
 					//echo $toExec;
 					$ppointer = popen($toExec, 'r');
 				} else {

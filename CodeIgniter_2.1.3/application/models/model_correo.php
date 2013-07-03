@@ -76,7 +76,8 @@ class model_correo extends CI_Model
 				}
 			}
 
-			$queryHorrible = "SELECT T.COD_CORREO AS codigo, GROUP_CONCAT(T.nombre_destinatario) AS nombre_destinatario, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora FROM 
+			$queryHorrible = "SELECT T.COD_CORREO AS codigo, GROUP_CONCAT(T.nombre_destinatario) AS nombre_destinatario, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora,(select COD_ADJUNTO from adjunto where T.COD_CORREO=adjunto.COD_CORREO limit 1)AS adjuntos
+			 FROM 
 			(
 			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_COORDINADOR, \" \", APELLIDO1_COORDINADOR, \" \", APELLIDO2_COORDINADOR)) AS nombre_destinatario
 			FROM carta
@@ -292,7 +293,7 @@ class model_correo extends CI_Model
 				}
 			}
 
-			$queryDeMierda = "SELECT T.COD_CORREO AS codigo, T.nombre, T.apellido1, T.apellido2, T.no_leido,ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora 
+			$queryDeMierda = "SELECT T.COD_CORREO AS codigo, T.nombre, T.apellido1, T.apellido2, T.no_leido,ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora ,(select COD_ADJUNTO from adjunto where T.COD_CORREO=adjunto.COD_CORREO limit 1)AS adjuntos
 				FROM 
 				(
 				(SELECT carta.*, NOMBRE1_COORDINADOR AS nombre, APELLIDO1_COORDINADOR AS apellido1, APELLIDO2_COORDINADOR AS apellido2, NO_LEIDO_CARTA_USER AS no_leido
@@ -846,7 +847,29 @@ class model_correo extends CI_Model
 			return -1;
 		}
     }
-
+	
+	public function getAdjuntos($codigo)
+	{
+		try
+		{
+			$this->db->select('COD_ADJUNTO AS codAdjunto');
+			$this->db->select('COD_CORREO');
+			$this->db->select('NOMBRE_LOGICO_ADJUNTO AS logico');
+			$this->db->select('NOMBRE_FISICO_ADJUNTO AS fisico');
+			$this->db->from('adjunto');
+			$this->db->where('COD_CORREO',$codigo);
+			$query = $this->db->get();
+			if ($query == FALSE) {
+				return array();
+			}
+			return $query->result();
+		}
+		catch(Exception $e)
+		{
+			return array();
+		}
+	}
+	
     /**
 	* devuelve el asunto, cuerpo y correos y rut de los destinatarios del borrador seleccionado
 	*

@@ -245,11 +245,6 @@ function cargarBorrador(codigo)
 			var to="";
 			to=correoRecept.join(", ");
 			document.getElementById("to").value=to;
-
-			
-			
-
-			var iconClass='icon icon-';
 			
 			var tablaResultados=document.getElementById("files");
 			$(tablaResultados).find('tbody').remove();
@@ -264,6 +259,7 @@ function cargarBorrador(codigo)
 				tr.setAttribute("style","margin-left:0px;display:block;");
 				var td=document.createElement("td");
 				td.setAttribute("style","width:95%;display:inline-table;font-size:10px;");
+				var iconClass='icon icon-'+borrador[3][num].logico.substring(borrador[3][num].logico.lastIndexOf(".")+1);
 				var span=document.createElement("span");
 				span.setAttribute("class",iconClass);
 				td.appendChild(span);
@@ -1536,9 +1532,9 @@ if(isset($codigo))
 				</div>
 				<input id="to" name="to" type="text" value="<?php set_value('to'); ?> "title="Destinatarios" readonly ><br>
 				<div class="txt2">
-					Asunto:
+					Asunto (Máximo 40 caracteres):
 				</div>
-				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>"title="Ingrese asunto aquí" placeholder="Ingrese asunto aquí">		
+				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>"title="Ingrese asunto aquí" placeholder="Ingrese asunto aquí" maxlength="40">		
 				<div class="txt2">
 					Adjuntos: (30MB máximo)
 				</div>

@@ -1,4 +1,11 @@
 <script>
+	var tiposFiltro = ["Nombre", "Descripción"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", ""];
+	var prefijo_tipoDato = "modulo_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+	var url_post_busquedas = "<?php echo site_url("Modulos/postBusquedaModulos") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/modulos") ?>";
+
 	function Cancelar(){
 		document.getElementById("nombre_modulo").value = "";
 		document.getElementById("descripcion").value = "";
@@ -18,15 +25,37 @@
 		return false;
 	}
 
-	function detalleModulo(cod_mod,descripcion,cod_equipo,name_mod) {
-		document.getElementById("nombre_modulo").value = name_mod;		
-		document.getElementById("descripcion").value = descripcion;
-		if(descripcion == "null"){ 
-			document.getElementById("descripcion").value = "No hay descripción";
+	function verDetalle(elemTabla) {
+		/* Obtengo el código del módulo clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		var cod_mod = idElem.substring(prefijo_tipoDato.length, idElem.length);
+
+		var descripcion, cod_equipo, name_mod; //Se setean en el primer ajax
+
+		$.ajax({//AJAX PARA OBTENER LOS DETALLES DEL MÓDULO
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Modulos/postDetallesModulo") ?>", /* Se setea la url del controlador que responderá */
+			async: false, //con esto se hace que el ajax sea sincrono con la función javascript
+			data: { cod_modulo: cod_mod},
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var moduloRespuesta = jQuery.parseJSON(respuesta);
+				cod_equipo = $.trim(moduloRespuesta.cod_equipo);
+				descripcion = $.trim(moduloRespuesta.descripcion);
+				name_mod = $.trim(moduloRespuesta.nombre_mod);
+				if($.trim(moduloRespuesta.descripcion) ==""){
+					moduloRespuesta.descripcion = "No tiene descripcion";
+				}
+			}
+		});
+
+		$('#nombre_modulo').val(name_mod);
+		$('#cod_modulo').val(cod_mod);
+		$('#nombre_modulo2').val(name_mod);
+		$('#cod_equipo2').val(cod_equipo);
+		if(descripcion == "null"){
+			descripcion = "No hay descripción";
 		}
-		document.getElementById("cod_modulo").value = cod_mod;
-		document.getElementById("nombre_modulo2").value = name_mod;
-		document.getElementById("cod_equipo2").value = cod_equipo;
+		$('#descripcion').val(descripcion);
 		
 		$.ajax({//AJAX PARA SESIONES
 			type: "POST", /* Indico que es una petición POST al servidor */
@@ -47,6 +76,7 @@
 				for (var i = 0; i < arrayRespuesta.length; i++) {
 					if(arrayRespuesta[i][1]==cod_mod || arrayRespuesta[i][1] == null){
 						tr = document.createElement('tr');
+						tr.setAttribute("style", "cursor:default");
 						td = document.createElement('td');
 						input = document.createElement('input');
 						input.setAttribute('type','checkbox');
@@ -93,6 +123,7 @@
 						|| (arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==1)
 					){
 						tr = document.createElement('tr');
+						tr.setAttribute("style", "cursor:default");
 						td = document.createElement('td');
 						input = document.createElement('input');
 						input.setAttribute('type','checkbox');
@@ -134,6 +165,7 @@
 					)			
 					{
 						tr = document.createElement('tr');
+						tr.setAttribute("style", "cursor:default");
 						td = document.createElement('td');
 						input = document.createElement('input');
 						input.setAttribute('type','radio');
@@ -185,6 +217,7 @@
 				for (var i = 0; i < arrayRespuesta.length; i++) {
 					
 						tr = document.createElement('tr');
+						tr.setAttribute("style", "cursor:default");
 						td = document.createElement('td');
 						input = document.createElement('input');
 						input.setAttribute('type','checkbox');
@@ -214,49 +247,12 @@
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 	}
-
-	function cargarModulos() {
-		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Modulos/verModulosEditar") ?>", /* Se setea la url del controlador que responderá */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var tablaResultados = document.getElementById("listadoResultados");
-				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre módulo");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				
-				for (var i = 0; i < arrayRespuesta.length; i++){
-					tr = document.createElement('tr');
-					td = document.createElement('td');
-					tr.setAttribute("style", "cursor: pointer");
-					tr.setAttribute("id", "modulo_"+arrayRespuesta[i].cod_mod);
-					tr.setAttribute("onClick", "detalleModulo('"+arrayRespuesta[i].cod_mod+"','"+arrayRespuesta[i].descripcion+"','"+arrayRespuesta[i].cod_equipo+"','"+arrayRespuesta[i].nombre_mod+"')");
-					nodoTexto = document.createTextNode(" "+arrayRespuesta[i].nombre_mod);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
-					tablaResultados.appendChild(tr);
-				}
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
-		});
-
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
-	}
 		
-	$(document).ready(cargarModulos);
+	//Se cargan por ajax
+	$(document).ready(function() {
+		escribirHeadTable();
+		cambioTipoFiltro(undefined);
+	});
 </script>
 
 <script type="text/javascript">
@@ -338,6 +334,10 @@ function noPuedeEstar(rut,num_lista,nopuede){
 function editarMod(){
 		var sesion = document.getElementsByName("sesion[]");
 		var equipo = document.getElementsByName("profesores[]");
+		var cod=document.getElementById("cod_modulo").value;
+		var nombre=document.getElementById("nombre_modulo").value;
+		var des=document.getElementById("descripcion").value;
+
 		var cont;
 		var numS = 0;
 		var numE = 0;
@@ -346,70 +346,117 @@ function editarMod(){
 				numS = numS + 1;
 			}
 		}
-		if(numS == 0){
-			$('#EscojaSesion').modal();
-			return false;
-		}
+		
 		for(cont=0;cont < equipo.length;cont++){
 			if(equipo[cont].checked == true){
 				numE = numE + 1;
 			}
+		}if(numS == 0 &&cod!=""){
+			$('#EscojaSesion').modal();
+			return false;
 		}
-		if(numE == 0){
+		if(numE == 0 && cod!=""){
 			$('#EscojaEquipo').modal();
 			return false;
 		}
-		$('#modalConfirmacion').modal();
+		
+		if(cod==""){
+			$('#EscojaModulo').modal();
+			return false;
+		}
+		if(nombre!="" && des!=""){
+			$('#modalConfirmacion').modal();
+		}
+		else{
+			$('#modalFaltanCampos').modal();
+			return false;
+		}
+
 }
-
-
 
 </script>
 
-	<fieldset>
+	<fieldset style="min-width: 1000px;">
 			<legend>Editar Módulo</legend>
-			<div class="row-fluid" style="margin-bottom:5px">
-				<font color="red">* Campos Obligatorios</font>
+			<div class="row-fluid">
+				<div class="span6">
+					<font color="red">* Campos Obligatorios</font>
+					<div class="controls controls-row">
+						<div class="input-append span7">
+							<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda" title="no implementado aun, pega de G1" >
+							<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+						</div>
+					</div>
+				</div>
 			</div>
 	  		<div class="row-fluid">
-	  			<form id="formEditar" type="post" method="post"  action="<?php echo site_url("Modulos/HacerEditarModulo/")?>">
-				
 				<div class="span6">
-					<div class="row-fluid">
-						<div class="span7">
-							1.- Seleccione el módulo temático a editar:
-						</div>
+					1.- Seleccione el módulo temático a editar:
+				</div>
+				<div class="span6">
+					4.- <font color="red">*</font> Profesores del módulo temático
+				</div>
+			</div>
+
+	  		<div class="row-fluid">
+	  			<form id="formEditar" type="post" method="post"  action="<?php echo site_url("Modulos/HacerEditarModulo/")?>">
+
+				<div class="span6">
+					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" ><!--  para el scroll-->
+						<table id="listadoResultados" class="table table-hover">
+
+						</table>
 					</div>
-
-
-					<div class="row-fluid" style="margin-left: 0%;margin-top:2%">			
-						<div style="border:#cccccc  1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" ><!--  para el scroll-->
-							<table id="listadoResultados" class="table table-hover">
-								<thead>
-									<tr>
-				
-									</tr>
-								</thead>
-								<tbody>
-								
-									
-															
-								</tbody>
-							</table>
-						</div>
-					</div>
-
-
 					
-					<div class="row-fluid" style="margin-top:2%">
-							<div class="span7">
-								2.- <font color="red">*</font> Sesiones del módulo temático
-							</div>
+
+					<div class="row-fluid" style="margin-top:20px;">
+						2.- <font color="red">*</font> Nombre del módulo
+					</div>
+					<div class="row-fluid">
+						<div class="span8">
+								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
+								<input id="cod_modulo" type="hidden" name="cod_modulo">
+								<input id="nombre_modulo2" type="hidden" name="nombre_modulo2">
+								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49" placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
+						</div>
+					</div>
+					
+
+					<div class="row-fluid" style="margin-top:20px;">
+						3.- <font color="red">*</font> Profesor líder
+					</div>
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px; margin-top:2%" >
+						<table id="prof_lider" class="table table-hover">
+							<thead>
+
+							</thead>
+							<tbody>									
+										
+												
+							</tbody>
+						</table>
 					</div>
 
+
+
+				</div>
+		
+				<div class="span6" style="margin-left: 20px;">
 					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-										
-										
+						<table id="equipo" class="table table-hover">
+							<thead>
+
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+				
+					<div class="row-fluid" style="margin-top:20px;">
+						5.- <font color="red">*</font> Sesiones del módulo temático
+					</div>
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 						<table id="sesiones" class="table table-hover">
 							<thead>
 
@@ -423,109 +470,39 @@ function editarMod(){
 
 
 
-					<div class="row-fluid" style="margin-top:2%">
-							<div class="span8">
-								3.- <font color="red">*</font> Profesores del módulo temático
-							</div>
-					</div>
 
-					<div class="row-fluid">
-						<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-											
-											
-							<table id="equipo" class="table table-hover">
-								<thead>
-
-								</thead>
-								<tbody>									
-											
-													
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-		
-				<div class="span6" style="margin-left: 2%; padding: 0%; ">
-					<div class="row-fluid">
-						<div class="span6">
-							4.- <font color="red">*</font> Nombre del módulo
-						</div>
-					</div>
-
-					<div class="row-fluid" style="margin-top:2%">
-						<div class="span8">
-								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
-								<input id="cod_modulo" type="hidden" name="cod_modulo">
-								<input id="nombre_modulo2" type="hidden" name="nombre_modulo2">
-								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49" placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
-						</div>
-					</div>
-
-					<div class="row-fluid" style="margin-top:2%">
-							<div class="span6">
-								5.- <font color="red">*</font> Profesor lider 
-							</div>
-
-					</div>
-
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px; margin-top:2%" >
-										
-										
-						<table id="prof_lider" class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>									
-										
-												
-							</tbody>
-						</table>
-					</div>
-
-
-					<div class="row-fluid" style="margin-top:2%">
-							<div class="span8">
-								6.- Descripción del módulo 
-							</div>					
+					<div class="row-fluid" style="margin-top:20px;">
+						6.- <font color="red">*</font> Descripción del módulo
 					</div>
 					<div class="row-fluid" >
-								
-								<!--<div class="controls">-->
-										<textarea id="descripcion" required name="descripcion_modulo" maxlength="99" rows="5" cols="100" style="width:97%; height: 142px"></textarea>
-								<!--</div>-->
-							
-						
+						<!--<div class="controls">-->
+						<textarea id="descripcion" name="descripcion_modulo" maxlength="99" rows="3" cols="100" style="width:97%; max-width:97%;"></textarea>
+						<!--</div>-->
 					</div>
 
-					<div class="row-fluid" >
-							<div class="span6">
-								7.- Requisitos del módulo
-							</div>
+					<div class="row-fluid" style="margin-top:20px;">
+						7.- Requisitos del módulo
 					</div>
-
 					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-										
-										
 						<table id="requisitos" class="table table-hover">
 							<thead>
 
 							</thead>
-							<tbody>									
-										
-												
+							<tbody>
+
 							</tbody>
 						</table>
 					</div>
-					<div class="row-fluid" style="margin-top: 2%">
+
+					<div class="row-fluid" style="margin-top: 20px;">
 						<div class="controls pull-right" >
-							<button type="button" class ="btn" onclick="editarMod();return false" style="width: 111px">
+							<button type="button" class ="btn" onclick="editarMod();">
 								<i class= "icon-pencil"></i>
 								&nbsp Guardar
 							</button>
 						
 						
-							<button class ="btn" onclick="Cancelar();return false" style="width:105px">
+							<button type="button" class ="btn" onclick="Cancelar();">
 								<div class="btn_with_icon_solo">Â</div>
 								&nbsp Cancelar
 							</button>
@@ -540,22 +517,34 @@ function editarMod(){
 						<h3>Confirmación</h3>
 					</div>
 					<div class="modal-body">
-						<p>Se van a guardar los cambios del módulo ¿Está seguro?</p>
+						<p>Se van a guardar los cambios del módulo seleccionado ¿Está seguro?</p>
 					</div>
 					<div class="modal-footer">
 						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
 						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
 					</div>
 				</div>
-
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 				<!-- Modal -->
 				<div id="EscojaEquipo" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado algún profesor para el equipo</h3>
+						<h3>No ha seleccionado ningún profesor</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione por lo menos un profesor para el equipo</p>
+						<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -566,24 +555,36 @@ function editarMod(){
 				<div id="EscojaSesion" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado una sesión para el módulo</h3>
+						<h3>No ha seleccionado ninguna sesión</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione por lo menos una sesión</p>
+						<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
-				
+				<!-- Modal -->
+				<div id="EscojaModulo" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No ha seleccionado ningún módulo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione un módulo y vuelva a intentarlo.</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>		
 			<!-- Modal -->
 				<div id="LiderDelEquipo" class="modal hide fade">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No seleccione un profesor como lider y como parte del equipo</h3>
+						<h3>No seleccione un profesor como líder y como parte del equipo</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor haga su selección nuevamente</p>
+						<p>Por favor haga su selección nuevamente.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -597,7 +598,7 @@ function editarMod(){
 						<h3>El nombre del módulo está en uso</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para el nuevo módulo</p>
+						<p>Por favor ingrese otro nombre para el nuevo módulo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -611,7 +612,7 @@ function editarMod(){
 						<h3>El profesor ya pertenece a otro equipo con este cargo</h3>
 					</div>
 					<div class="modal-body">
-						<p>Por favor seleccione otro profesor para este cargo</p>
+						<p>Por favor seleccione otro profesor para este cargo.</p>
 					</div>
 					<div class="modal-footer">
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

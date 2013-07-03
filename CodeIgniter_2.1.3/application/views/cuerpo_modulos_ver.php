@@ -24,11 +24,15 @@
 				cod_equipo = $.trim(moduloRespuesta.cod_equipo);
 				descripcion = $.trim(moduloRespuesta.descripcion);
 				nombre_modulo = $.trim(moduloRespuesta.nombre_mod);
+				if ($.trim(moduloRespuesta.descripcion) =="") {
+					moduloRespuesta.descripcion = "No tiene descripcion";
+				}
 			}
 		});
 
 		$("#nombre_modulo").html(nombre_modulo);
 		$("#descripcion_modulo").html(descripcion);
+
 		profesor_lider = document.getElementById("profesor_lider");
 	
 			$.ajax({//AJAX PARA SESIONES
