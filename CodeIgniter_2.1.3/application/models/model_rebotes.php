@@ -52,11 +52,13 @@ public function notificacionRebote($cuerpo,$rut){
 	foreach ($query->result_array() as $row) {
 		$codigo=$row['cod'];
 	}
+	if (isset($codigo)) {
 	$data=array('RUT_USUARIO' => $rut,
 				'COD_CORREO' => $codigo,
 				'RECIBIDO_CARTA_USER' => 1,
 				'NO_LEIDO_CARTA_USER' => 1);
 	$this->db->insert('cartar_user',$data);
+	}
 }
 }
 
