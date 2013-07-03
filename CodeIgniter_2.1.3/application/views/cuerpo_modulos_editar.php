@@ -413,18 +413,34 @@ function editarMod(){
 						</div>
 					</div>
 
-
-					
 					<div class="row-fluid" style="margin-top:2%">
-							<div class="span7" style="min-width:300px">
-								2.- <font color="red">*</font> Sesiones del módulo temático
-							</div>
+						<div class="span6">
+						
+							2.- <font color="red">*</font> Nombre del módulo
+						</div>
 					</div>
 
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
+					<div class="row-fluid" style="margin-top:2%">
+						<div class="span8">
+								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
+								<input id="cod_modulo" type="hidden" name="cod_modulo">
+								<input id="nombre_modulo2" type="hidden" name="nombre_modulo2">
+								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49" placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
+						</div>
+					</div>
+					
+
+					<div class="row-fluid" style="margin-top:2%">
+							<div class="span6">
+								3.- <font color="red">*</font> Profesor lider 
+							</div>
+
+					</div>
+
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px; margin-top:2%" >
 										
 										
-						<table id="sesiones" class="table table-hover">
+						<table id="prof_lider" class="table table-hover">
 							<thead>
 
 							</thead>
@@ -437,9 +453,12 @@ function editarMod(){
 
 
 
+				</div>
+		
+				<div class="span6" style="margin-left: 2%; padding: 0%; ">
 					<div class="row-fluid" style="margin-top:2%">
 							<div class="span8">
-								3.- <font color="red">*</font> Profesores del módulo temático
+								4.- <font color="red">*</font> Profesores del módulo temático
 							</div>
 					</div>
 
@@ -458,35 +477,17 @@ function editarMod(){
 							</table>
 						</div>
 					</div>
-				</div>
-		
-				<div class="span6" style="margin-left: 2%; padding: 0%; ">
-					<div class="row-fluid">
-						<div class="span6">
-							4.- <font color="red">*</font> Nombre del módulo
-						</div>
-					</div>
-
+				
 					<div class="row-fluid" style="margin-top:2%">
-						<div class="span8">
-								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
-								<input id="cod_modulo" type="hidden" name="cod_modulo">
-								<input id="nombre_modulo2" type="hidden" name="nombre_modulo2">
-								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49" placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
-						</div>
-					</div>
-
-					<div class="row-fluid" style="margin-top:2%">
-							<div class="span6">
-								5.- <font color="red">*</font> Profesor lider 
+							<div class="span7" style="min-width:300px">
+								5.- <font color="red">*</font> Sesiones del módulo temático
 							</div>
-
 					</div>
 
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px; margin-top:2%" >
+					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
 										
 										
-						<table id="prof_lider" class="table table-hover">
+						<table id="sesiones" class="table table-hover">
 							<thead>
 
 							</thead>
@@ -496,6 +497,8 @@ function editarMod(){
 							</tbody>
 						</table>
 					</div>
+
+
 
 
 					<div class="row-fluid" style="margin-top:2%">
