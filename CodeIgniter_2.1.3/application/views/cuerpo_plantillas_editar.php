@@ -54,6 +54,7 @@
 			cuerpo=cuerpo.replace('&#39;','\'');
 			cuerpo=cuerpo.replace('&#34;','"');
 			CKEDITOR.instances.editor.setData(cuerpo);
+            saveState();
 		}
 		</script>
 		

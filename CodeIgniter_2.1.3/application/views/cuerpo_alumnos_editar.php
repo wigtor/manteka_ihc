@@ -1,5 +1,4 @@
 
-
 <script type="text/javascript">
 
 	function editarEstudiante(){
@@ -184,7 +183,7 @@ function ordenarFiltro(){ //No funcional
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
 				$(icono_cargando).hide();
-
+				saveState();
 			}
 		});
 		
