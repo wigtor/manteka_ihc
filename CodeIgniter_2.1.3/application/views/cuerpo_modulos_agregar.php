@@ -406,7 +406,7 @@ function ordenarFiltro(numeroLista){
 								<h3>No puede seleccionar el líder como parte del equipo</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor no seleccione a otro profesor como parte del equipo</p>
+								<p>Por favor no seleccione a otro profesor como parte del equipo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -420,7 +420,7 @@ function ordenarFiltro(numeroLista){
 								<h3>El nombre del módulo está en uso</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor ingrese otro nombre para el nuevo módulo</p>
+								<p>Por favor ingrese otro nombre para el nuevo módulo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

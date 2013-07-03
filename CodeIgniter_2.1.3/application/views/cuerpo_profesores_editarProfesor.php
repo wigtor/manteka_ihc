@@ -289,7 +289,7 @@
 								<h3>No ha seleccionado un profesor</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor seleccione un profesor y vuelva a intentarlo</p>
+								<p>Por favor seleccione un profesor y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -302,7 +302,7 @@
 								<h3>El correo secundario y principal son iguales</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor ingrese correos distintos y vuelva a intentarlo</p>
+								<p>Por favor ingrese correos distintos y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -316,7 +316,7 @@
 								<h3>Campos Obligatorios no completados</h3>
 							</div>
 							<div class="modal-body">
-								<p>Por favor complete el campo vacío y vuelva a intentarlo</p>
+								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
 							</div>
 							<div class="modal-footer">
 								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

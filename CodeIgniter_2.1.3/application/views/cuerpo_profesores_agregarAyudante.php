@@ -230,7 +230,7 @@ function ordenarFiltro(){
 		<h3>RUT ingresado está en uso</h3>
 	</div>
 	<div class="modal-body">
-		<p>Por favor ingrese otro rut y vuelva a intentarlo</p>
+		<p>Por favor ingrese otro rut y vuelva a intentarlo.</p>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
@@ -244,7 +244,7 @@ function ordenarFiltro(){
 		<h3>Dígito verificador incorrecto</h3>
 	</div>
 	<div class="modal-body">
-		<p>Por favor ingrese el rut nuevamente</p>
+		<p>Por favor ingrese el rut nuevamente.</p>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

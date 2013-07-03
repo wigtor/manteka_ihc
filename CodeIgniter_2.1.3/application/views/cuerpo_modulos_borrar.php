@@ -311,7 +311,7 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 							<h3>No ha seleccionado ningun módulo</h3>
 						</div>
 						<div class="modal-body">
-							<p>Por favor seleccione un módulo y vuelva a intentarlo</p>
+							<p>Por favor seleccione un módulo y vuelva a intentarlo.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

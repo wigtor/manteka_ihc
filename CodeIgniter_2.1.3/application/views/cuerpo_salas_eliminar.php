@@ -224,7 +224,7 @@ Implementos:    <div style="display: inline-block; vertical-align: top;" id="imp
 					<h3>No ha seleccionado ninguna sala</h3>
 				</div>
 				<div class="modal-body">
-					<p>Por favor seleccione una sala y vuelva a intentarlo</p>
+					<p>Por favor seleccione una sala y vuelva a intentarlo.</p>
 				</div>
 				<div class="modal-footer">
 					<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

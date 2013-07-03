@@ -338,6 +338,10 @@ function noPuedeEstar(rut,num_lista,nopuede){
 function editarMod(){
 		var sesion = document.getElementsByName("sesion[]");
 		var equipo = document.getElementsByName("profesores[]");
+		var cod=document.getElementById("cod_modulo").value;
+		var nombre=document.getElementById("nombre_modulo").value;
+		var des=document.getElementById("descripcion").value;
+
 		var cont;
 		var numS = 0;
 		var numE = 0;
@@ -346,23 +350,33 @@ function editarMod(){
 				numS = numS + 1;
 			}
 		}
-		if(numS == 0){
-			$('#EscojaSesion').modal();
-			return false;
-		}
+		
 		for(cont=0;cont < equipo.length;cont++){
 			if(equipo[cont].checked == true){
 				numE = numE + 1;
 			}
+		}if(numS == 0 &&cod!=""){
+			$('#EscojaSesion').modal();
+			return false;
 		}
-		if(numE == 0){
+		if(numE == 0 && cod!=""){
 			$('#EscojaEquipo').modal();
 			return false;
 		}
-		$('#modalConfirmacion').modal();
+		
+		if(cod==""){
+			$('#EscojaModulo').modal();
+			return false;
+		}
+		if(nombre!="" && des!=""){
+			$('#modalConfirmacion').modal();
+		}
+		else{
+			$('#modalFaltanCampos').modal();
+			return false;
+		}
+
 }
-
-
 
 </script>
 
@@ -547,7 +561,19 @@ function editarMod(){
 						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
 					</div>
 				</div>
-
+						<!-- Modal de faltan campos -->
+						<div id="modalFaltanCampos" class="modal hide fade">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Campos Obligatorios no completados</h3>
+							</div>
+							<div class="modal-body">
+								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>	
 				<!-- Modal -->
 				<div id="EscojaEquipo" class="modal hide fade">
 					<div class="modal-header">
@@ -575,20 +601,32 @@ function editarMod(){
 						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
 					</div>
 				</div>
-				
-									<!-- Modal -->
-						<div id="LiderDelEquipo" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No puede seleccionar el líder como parte del equipo</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor no seleccione a otro profesor como parte del equipo</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
+				<!-- Modal -->
+				<div id="EscojaModulo" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No ha seleccionado ningún módulo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor seleccione un módulo y vuelva a intentarlo.</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>		
+			<!-- Modal -->
+				<div id="LiderDelEquipo" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>No seleccione un profesor como líder y como parte del equipo</h3>
+					</div>
+					<div class="modal-body">
+						<p>Por favor haga su selección nuevamente.</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
 				
 			<!-- Modal -->
 				<div id="NombreEnUso" class="modal hide fade">
