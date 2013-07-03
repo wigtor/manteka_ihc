@@ -92,17 +92,17 @@ $(document).ready(function() {
             var prev   = $(this).attr('data-previous').split(',');
             var actual = $(this).val();
             $(this).val(prev[current_state]);
-            if(actual != $(this).val()){
+            /*if(actual != $(this).val()){
                 this.onchange();
-            }
+            }*/
         });
         $(state_elements).each(function() {
             var prev = $(this).attr('data-previous').split(',');
             var actual = $(this).prop('checked');
             $(this).prop('checked', bool(prev[current_state]));
-            if( actual != $(this).prop('checked') ){
+            /*if( actual != $(this).prop('checked') ){
                 this.onchange();
-            }
+            }*/
         });
        
         return true;
