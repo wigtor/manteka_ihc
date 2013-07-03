@@ -46,6 +46,13 @@
 		**/
 		function VistaPrevia(asunto, cuerpo, id)
 		{
+			var t=document.getElementById('tbl'); 
+			var f=t.getElementsByTagName('td'); 
+			for(var q=0;q<f.length;++q) 
+			{
+				$('#'+f[q].id).css("background-color","white"); 
+			}
+			$('#'+id).css("background-color","#F0F0F0");
 			document.getElementById('idPlantilla').value=id;
 			document.getElementById('inputAsunto').value=asunto;
 			cuerpo=cuerpo.replace('&#39;','\'');
@@ -128,6 +135,19 @@
 			}	
 		}
 		</script>
+		
+		<script type="text/javascript">
+	   /**
+	    * Reestablece el filtro de búsqueda.  
+		* 
+		* @author Diego García (DGM)
+		**/
+		function limpiar()
+		{
+			document.getElementById('busquedaPlantilla').value="";
+			filtrarPlantillas();
+		}
+		</script>
 	</head>
 	
 	<body>
@@ -167,6 +187,58 @@
 		unset($msj);
 	}
 	
+	$noVacio=true;
+	$comilla="'";
+	if( count($plantillas) === 0)
+	{
+		$noVacio=false;
+	}
+	else
+	{
+		/**
+		* Muestra los elementos necesarios para realizar la búsqueda de una plantilla y filtrar los resultados. 
+		* 
+		* Para la búsqueda de la plantilla el usuario puede ingresar cualquier texto.
+	    * La búsqueda puede ser filtrada por nombre, asunto o cuerpo de la plantilla.
+		* 
+		* @author Diego García (DGM) (Código extraido y modificado a partir de la vista para editar alumnos creada por el grupo 4)
+		**/
+		?>
+		<div id="contenedorBusquedaFiltro">
+		
+		<div id="filtro1">
+			<div class="txttt">
+			Búsqueda
+			</div>
+			
+			<div id="busqueda">
+			<div class="input-append span9">
+				<input id="busquedaPlantilla" size="40" maxlength="40" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+				<button class="btn" onClick="filtrarPlantillas()" title="Iniciar una búsqueda" type="button"><i class="icon-search"></i></button>
+			</div> 
+				<button class="btn" onClick="limpiar()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+			</div>
+		</div>
+		
+		<div id="filtro2">
+			<div class="txttt">
+			Filtrar resultados
+			</div>
+			
+			<div id="filtroBusqueda">
+			<select id="tipoBusqueda" style="height:30px;color:#999999;" size="1" onchange="limpiar()" title="Filtrar resultados" >
+			<option value="1" selected>Filtrar por nombre</option>
+			<option value="2"><b>Filtrar por asunto</b></option>
+			<option value="3">Filtrar por cuerpo</option>
+			</select>
+			</div>
+		</div>
+		
+		</div>
+		
+		<?php
+	}
+	
    /**
 	* Muestra la lista de plantillas existentes en el sistema. 
 	* 
@@ -177,19 +249,16 @@
 	?>
 	<div id="contenedorLista">
 	
-	<div class="txt">
+	<div class="txttt">
 	Plantillas
 	</div>
 	
 	<div id="lista">
-	<table class="table table-hover">
+	<table id="tbl" class="table table-hover">
 	<tbody>
 	<?php
-	$noVacio=true;
-	$comilla="'";
-	if( count($plantillas) === 0)
+	if( $noVacio === false)
 	{
-		$noVacio=false;
 		?>
 		<div id="sinPlantillas">
 		No existen plantillas guardadas.
@@ -217,43 +286,6 @@
 	if($noVacio===true)
 	{
 	   /**
-		* Muestra los elementos necesarios para realizar la búsqueda de una plantilla y filtrar los resultados. 
-		* 
-		* Para la búsqueda de la plantilla el usuario puede ingresar cualquier texto.
-	    * La búsqueda puede ser filtrada por nombre, asunto o cuerpo de la plantilla.
-		* 
-		* @author Diego García (DGM) (Código extraido y modificado a partir de la vista para editar alumnos creada por el grupo 4)
-		**/
-		?>
-		<div id="contenedorBusquedaFiltro">
-		
-		<div class="txt">
-		Búsqueda
-		</div>
-		
-		<div id="busqueda">
-		<input id="busquedaPlantilla" maxlength="40" onkeyup="filtrarPlantillas()" type="text" placeholder="Ingrese el texto a buscar">
-		</div>
-		
-		<div class="txt">
-		Filtrar resultados
-		</div>
-		
-		<div id="filtroBusqueda">
-		<select id="tipoBusqueda" size="1" onchange="filtrarPlantillas()" title="Filtrar resultados" >
-		<option value="1" selected>Filtrar por nombre</option>
-		<option value="2"><b>Filtrar por asunto</b></option>
-		<option value="3">Filtrar por cuerpo</option>
-		</select>
-		</div>
-		
-		</div>
-		
-		<div class="separador">
-		</div>
-		
-		<?php
-	   /**
 		* Muestra la vista previa de una plantilla seleccionada.
 		* 
 		* Esta vista previa no puede ser editada.
@@ -262,7 +294,7 @@
 		**/
 		?>
 		<div id="contenedorEditor">
-		<div class="txt2">
+		<div class="txttt2">
 		Vista previa
 		</div>
 		
