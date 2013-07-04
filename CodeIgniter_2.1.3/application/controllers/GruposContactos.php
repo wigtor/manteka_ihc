@@ -230,10 +230,6 @@ class GruposContactos extends MasterManteka {
 		echo json_encode($respuesta);
 
 	}
-	public function getContactosGrupoFlacoPiterStyle(){
-
-		//implementar para terminar con vista de enviar correo.
-	}
 
 }
 /* End of file Grupo.php */
