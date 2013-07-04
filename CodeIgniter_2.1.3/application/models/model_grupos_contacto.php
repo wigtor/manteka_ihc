@@ -161,6 +161,79 @@ class model_grupos_contacto extends CI_Model{
       }
       return $resultado;
    }
+    function getContactosGrupoFlacoPiterStyle($id_grupo){
+        //
+        $this->db->select('QUERY_FILTRO_CONTACTO');
+        $this->db->from('filtro_contacto');
+        $this->db->where('ID_FILTRO_CONTACTO', $id_grupo);
+        $query = $this->db->get();
+        $str_ruts = $query->result_array()[0]['QUERY_FILTRO_CONTACTO'];
+        $ruts = explode(",", $str_ruts);
+        $resultado = array();
+
+        //Get coordinadores
+        $this->db->select('RUT_USUARIO3 AS rut');
+        $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+        $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+        $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+        $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+        $this->db->select('CORREO1_USER AS correo');
+        $this->db->from('coordinador');
+        $this->db->join('usuario','coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+        $this->db->order_by("APELLIDO1_COORDINADOR", "asc");
+        $this->db->where_in("coordinador.RUT_USUARIO3",$ruts);
+        $query = $this->db->get();
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+
+        //get profesores
+        $this->db->select('RUT_USUARIO2 AS rut');
+        $this->db->select('NOMBRE1_PROFESOR AS nombre1');
+        $this->db->select('NOMBRE2_PROFESOR AS nombre2');
+        $this->db->select('APELLIDO1_PROFESOR AS apellido1');
+        $this->db->select('APELLIDO2_PROFESOR AS apellido2');
+        $this->db->select('CORREO1_USER AS correo');
+        $this->db->from('profesor');
+        $this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+        $this->db->where_in("profesor.RUT_USUARIO2",$ruts);
+        $this->db->order_by("NOMBRE1_PROFESOR", "asc");
+        $query = $this->db->get();
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+        
+
+        //get alumnos
+        $this->db->select('RUT_ESTUDIANTE AS rut');
+        $this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+        $this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+        $this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+        $this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+        $this->db->select('CORREO_ESTUDIANTE as correo');
+        $this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
+        $this->db->where_in("RUT_ESTUDIANTE",$ruts);
+        $query = $this->db->get('estudiante');
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+       
+
+        //get ayudantes
+        $this->db->select('RUT_AYUDANTE AS rut');
+        $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+        $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+        $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+        $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+        $this->db->select('CORREO_AYUDANTE as correo');
+        $this->db->where_in("RUT_AYUDANTE",$ruts);
+        $this->db->order_by("NOMBRE1_AYUDANTE", "asc");
+        $query = $this->db->get('ayudante');
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+        return $resultado;
+   }
    
 }
 ?>
