@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/jQuery-File-Upload/css/jquery.fileupload-ui.css" type="text/css" media="all" />
+<link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/ventanaModal.css" type="text/css" media="all"/>
 <script type='text/javascript'>
 /**
  * Función que se encarga de evitar el envío de emails sin destinatario(s) o sin asunto ni cuerpo del mensaje.
@@ -77,6 +78,13 @@ function validacionSeleccion()
  **/
 function CargarPlantilla(asunto, cuerpo, id)
 {
+	var t=document.getElementById('tbl'); 
+	var f=t.getElementsByTagName('td'); 
+	for(var q=0;q<f.length;++q) 
+	{
+		$('#'+f[q].id).css("background-color","white"); 
+	}
+	$('#p'+id).css("background-color","#F0F0F0");
 	if(confirm('Se sobreescribirá el contenido del mensaje actual.\n¿Realmente desea continuar?'))
 	{
 		document.getElementById('idPlantilla').value=id;
@@ -133,6 +141,49 @@ function enviarCorreo()
 	}
 }
 </script>
+
+<script type='text/javascript'>
+	   /**
+		* Permite mostrar y ocultar la ventana modal que informa sobre el uso
+		* de variables para la creación de plantillas.
+		* 
+		* Al hacer clic en el vínculo cuyo clase es "verVariables" se muestra
+		* la ventana modal. Y al hacer click en el botón cuyo identificador es
+		* "botonCerrar" se oculta dicha ventana.
+		* 
+		* @author Diego García (DGM)
+		**/
+		$(document).ready(function() {
+			$('.verVariables').click(function() {
+				type=$(this).attr('data-type');
+				$('.contenedor-principal').fadeIn(function() {
+				window.setTimeout(function(){
+					$('.contenedor-secundario.'+type).addClass('contenedor-secundario-visible');
+				}, 100);
+				});
+			});
+			$('#botonCerrar').click(function() {
+				document.documentElement.style.overflowY='auto';
+				$('.contenedor-principal').fadeOut().end().find('.contenedor-secundario').removeClass('contenedor-secundario-visible');
+			});
+		});
+		</script>
+		
+		<script type='text/javascript'>
+	   /**
+		* Oculta la barra de scroll vertical del navegador.
+		* 
+		* Se utiliza para ocultar el scroll vertical del navegador
+		* al momento de mostrar la ventana modal que informa sobre el uso
+		* de variables en la creación de plantillas.
+		* 
+		* @author Diego García (DGM)
+		**/
+		function ocultarScroll()
+		{
+			document.documentElement.style.overflowY='hidden';
+		}
+		</script>
 
 <script type="text/javascript">
 /**
@@ -1081,6 +1132,19 @@ function revisarRutR(rut){
 }
 </script>
 
+<script type="text/javascript">
+	   /**
+	    * Reestablece el filtro de búsqueda.  
+		* 
+		* @author Diego García (DGM)
+		**/
+		function limpiar()
+		{
+			document.getElementById('busquedaPlantilla').value="";
+			filtrarPlantillas();
+		}
+		</script>
+
 <script type='text/javascript'>
 /**
  * Muestra el paso 1 y oculta el paso 2 del proceso para enviar correos.
@@ -1131,7 +1195,7 @@ if(isset($codigo))
 		<div id="filtrosSelect">
 		
 			<!-- Búsqueda por nombre de destinatario. -->
-			<label class="control-label txt3" for="filtroLista">
+			<label class="control-label txttt3" for="filtroLista">
 				Ingrese el nombre de quien busca o parte de su nombre.
 			</label>
 			<div class="controls">
@@ -1152,7 +1216,7 @@ if(isset($codigo))
 			<div class="row-fluid">
 				<!-- Filtro por tipo de destinatario. -->
 				<div class="control-group span4">
-					<label class="control-label txt3" for="filtroPorTipoDeDestinatario">
+					<label class="control-label txttt3" for="filtroPorTipoDeDestinatario">
 						Filtrar por tipo de destinatario
 					</label>
 					<div class="controls">
@@ -1168,7 +1232,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por profesor encargado. -->
 				<div class="control-group span4">
-					<label class="control-label txt3" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
+					<label class="control-label txttt3" for="filtroPorProfesorEncargado">Filtrar por profesor encargado</label>
 					<div class="controls">
 						<select id="filtroPorProfesorEncargado" title="Profesor encargado" class="filtro-primario" onChange="showDestinatarioByFiltro()">
 							<option  value="0">Todos</option>
@@ -1178,7 +1242,7 @@ if(isset($codigo))
 				
 				<!-- Filtro por carrera. -->
 				<div class="control-group span4">
-					<label class="control-label txt3" for="filtroPorCarrera" >Filtrar por carrera</label>
+					<label class="control-label txttt3" for="filtroPorCarrera" >Filtrar por carrera</label>
 					<div class="controls">
 						<select id="filtroPorCarrera" title="Carrera" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1192,7 +1256,7 @@ if(isset($codigo))
 			
 				<!-- Filtro por módulo temático. -->
 				<div class="control-group span4">
-					<label class="control-label txt3" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
+					<label class="control-label txttt3" for="filtroPorModuloTematico">Filtrar por módulo temático</label>
 					<div class="controls">
 						<select id="filtroPorModuloTematico" title="Módulo temático" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1202,7 +1266,7 @@ if(isset($codigo))
 
 				<!-- Filtro por sección. -->
 				<div class="control-group span4">
-					<label class="control-label txt3" for="filtroPorSeccion">Filtrar por sección</label>
+					<label class="control-label txttt3" for="filtroPorSeccion">Filtrar por sección</label>
 					<div class="controls">
 						<select id="filtroPorSeccion" title="Sección" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todas</option>
@@ -1212,7 +1276,7 @@ if(isset($codigo))
 
 				<!-- Filtro por bloque de horario. -->
 				<div class="control-group span4">
-					<label class="control-label txt3" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
+					<label class="control-label txttt3" for="filtroPorBloqueHorario">Filtrar por bloque de horario</label>
 					<div class="controls">
 						<select id="filtroPorBloqueHorario" title="Bloque horario" class="filtro-secundario" onChange="showDestinatarioByFiltro()">
 							<option value="0">Todos</option>
@@ -1398,7 +1462,7 @@ if(isset($codigo))
 		</div>
 		
 		<!-- Al hacer clic muestra el selector de plantillas. -->
-		<div id="mostrarPlantillas" class="txt3">
+		<div id="mostrarPlantillas" class="txttt3">
 			<div class="letras">
 				Mostrar plantillas
 			</div>
@@ -1408,7 +1472,7 @@ if(isset($codigo))
 		</div>
 		
 		<!-- Al hacer clic oculta el selector de plantillas. -->
-		<div id="ocultarPlantillas" class="txt3">
+		<div id="ocultarPlantillas" class="txttt3">
 			<div class="letras">
 				Ocultar plantillas
 			</div>
@@ -1425,41 +1489,143 @@ if(isset($codigo))
 		- @author Diego García (DGM)
 		-->
 		<div id="seleccionPlantilla">
+			
+			<?php
+			/**
+			* Ventana modal sobre el uso de variables en la creación de plantillas.
+			* 
+			* Muestra información relevante al usuario, sobre como incluir
+			* variables en las plantillas.
+			*
+			* @author Diego García (DGM)
+			**/
+			?>
+				
+			<div class="contenedor-principal">	
+			<div class="contenedor-secundario zoomout">
+			<div class="tituloModal">
+			Estimado usuario
+			</div>
+			<div class="txtModal">
+			Las variables predefinidas permiten definir segmentos de texto dentro de una plantilla, que tomarán distintos valores según las características del mensaje o la lista de destinatarios a utilizar.
+			El valor de estas variables será asignado automáticamente al momento de realizar el envío de un correo electrónico.
+			</div>
+			<div class="txtModal">
+			Para definir una variable anteponga los caracteres  <font color="blue">%%</font>  antes del nombre de dicha variable.
+			</div>
+			<div class="txtModal">
+			<div id="salto">Las variables predefinidas que puede utilizar son:</div>
+			<div class="txtLabel">%%nombre</div><div class="txtDescripcion">Asigna el nombre y apellido del receptor del correo electrónico.</div>
+			<div class="txtLabel">%%rut</div><div class="txtDescripcion">Asigna el rut del receptor del correo electrónico.</div>
+			<div class="txtLabel">%%carrera_estudiante</div><div class="txtDescripcion">Asigna la carrera a la que pertenece el estudiante receptor del correo electrónico.</div>
+			<div class="txtLabel">%%seccion_estudiante</div><div class="txtDescripcion">Asigna la sección a la que pertenece el estudiante receptor del correo electrónico.</div>
+			<div class="txtLabel">%%modulo_estudiante</div><div class="txtDescripcion">Asigna el módulo temático al que pertenece el estudiante receptor del correo electrónico.</div>
+			<div class="txtLabel">%%hoy</div><div class="txtDescripcion">Asigna la fecha actual al momento de realizar el envío.</div>
+			<div class="txtLabel">%%remitente</div><div class="txtDescripcion">Asigna el nombre del usuario que realiza el envío del correo electrónico.</div>
+			</div>
+			<span id="botonCerrar" class="btn btn-primary">Cerrar</span>
+			</div>
+			</div>
+			
+			<div id="txtInformativo" class="txt100" style="margin-bottom:30px;">
+			<div id="txt1" style="text-align:justify;margin-right:2%;">
+			La utilización de plantillas permite definir variables cuyos valores serán asignados automáticamente por el sistema, al momento de enviar un correo.
+			</div>
+			<div id="txt2">
+			Para obtener más información sobre el uso de variables haga clic <a href="#" onclick="ocultarScroll()" class="verVariables" data-type="zoomout">acá</a>
+			<div id="boxes">
+			<div id="dialog" class="window"> 
+			</div>
+			<div id="mask">
+			</div>
+			</div>
+			</div>
+			</div>
+			<?php
+			$noVacio=true;
+			$comilla="'";
+			if( count($plantillas) === 0)
+			{
+				$noVacio=false;
+			}
+			else
+			{
+				?>
+				<!--
+				- Muestra los elementos necesarios para realizar la búsqueda de una plantilla y filtrar los resultados. 
+				- 
+				- Para la búsqueda de la plantilla el usuario puede ingresar cualquier texto.
+				- La búsqueda puede ser filtrada por nombre, asunto o cuerpo de la plantilla.
+				- 
+				- @author Diego García (DGM) (Código extraido y modificado a partir de la vista para editar alumnos creada por el grupo 4)
+				-->
+				<div id="contenedorBusquedaFiltro">
 		
+				<div id="filtro1">
+					<div class="txttt">
+					Búsqueda
+					</div>
+					
+					<div id="busqueda">
+					<div class="input-append span9">
+						<input id="busquedaPlantilla" size="40" maxlength="40" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+						<button class="btn" onClick="filtrarPlantillas()" title="Iniciar una búsqueda" type="button"><i class="icon-search"></i></button>
+					</div> 
+						<button class="btn" onClick="limpiar()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+					</div>
+				</div>
+				
+				<div id="filtro2">
+					<div class="txttt">
+					Filtrar resultados
+					</div>
+					
+					<div id="filtroBusqueda">
+					<select id="tipoBusqueda" style="height:30px;color:#999999;" size="1" onchange="limpiar()" title="Filtrar resultados" >
+					<option value="1" selected>Filtrar por nombre</option>
+					<option value="2"><b>Filtrar por asunto</b></option>
+					<option value="3">Filtrar por cuerpo</option>
+					</select>
+					</div>
+				</div>
+				
+				</div>
+				
+				<?php
+			}
+			?>
+			
 			<div id="contenedorLista">
 		
-				<div class="txt4">
-					Seleccione la plantilla a cargar
-				</div>
+			<div class="txttt4">
+				Seleccione la plantilla a cargar
+			</div>
 		
-				<div id="lista">
-					<table class="table table-hover">
-						<tbody>
-							<?php
-							$noVacio=true;
-							$comilla="'";
-							if(count($plantillas) === 0)
-							{
-								$noVacio=false;
-								?>
-								<div id="sinPlantillas">
-									No existen plantillas guardadas.
-								</div>
-								<?php
-							}
-							else
-							{
-								foreach($plantillas as $plantilla)
-								{
-									echo '<tr>';
-									echo '<td id="p'.$plantilla->ID_PLANTILLA.'" onclick="javascript:CargarPlantilla('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.str_replace('"','&#34;', str_replace('\'','&#39;', $plantilla->CUERPO_PLANTILLA)).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
-									echo '</tr>';
-								}
-							}
+			<div id="lista">
+				<table id="tbl" class="table-hover">
+					<tbody>
+						<?php
+						if( $noVacio === false)
+						{
 							?>
-						</tbody>
-					</table>
-				</div>
+							<div id="sinPlantillas">
+								No existen plantillas guardadas.
+							</div>
+							<?php
+						}
+						else
+						{
+							foreach($plantillas as $plantilla)
+							{
+								echo '<tr>';
+								echo '<td id="p'.$plantilla->ID_PLANTILLA.'" onclick="javascript:CargarPlantilla('.$comilla.$plantilla->ASUNTO_PLANTILLA.$comilla.', '.$comilla.str_replace('"','&#34;', str_replace('\'','&#39;', $plantilla->CUERPO_PLANTILLA)).$comilla.', '.$comilla.$plantilla->ID_PLANTILLA.$comilla.');" style="text-align:left;">'.$plantilla->NOMBRE_PLANTILLA.'</td>';
+								echo '</tr>';
+							}
+						}
+						?>
+					</tbody>
+				</table>
+			</div>
 				
 			</div>
 			
@@ -1469,39 +1635,8 @@ if(isset($codigo))
 			if($noVacio===true)
 			{
 				?>
-			   <!--
-				- Muestra los elementos necesarios para realizar la búsqueda de una plantilla y filtrar los resultados. 
-				- 
-				- Para la búsqueda de la plantilla el usuario puede ingresar cualquier texto.
-				- La búsqueda puede ser filtrada por nombre, asunto o cuerpo de la plantilla.
-				- 
-				- @author Diego García (DGM) (Código extraido y modificado a partir de la vista para editar alumnos creada por el grupo 4)
-				-->
-				<div id="contenedorBusquedaFiltro">
-				
-					<div class="txt">
-						Búsqueda
-					</div>
-				
-					<div id="busqueda">
-						<input id="busquedaPlantilla" maxlength="40" onkeyup="filtrarPlantillas()" type="text" placeholder="Ingrese el texto a buscar">
-					</div>
-				
-					<div class="txt">
-						Filtrar resultados
-					</div>
-				
-					<div id="filtroBusqueda">
-						<select id="tipoBusqueda" size="1" onchange="filtrarPlantillas()" title="Filtrar resultados" >
-							<option value="1" selected>Filtrar por nombre</option>
-							<option value="2"><b>Filtrar por asunto</b></option>
-							<option value="3">Filtrar por cuerpo</option>
-						</select>
-					</div>
-				
-				</div>
-				
-				<div class="separador">
+				<div class="separador" style="color:white;">
+				.
 				</div>
 				
 				<?php
@@ -1527,15 +1662,15 @@ if(isset($codigo))
 		<!-- Correos de los destinatarios seleccionados y asunto del correo a enviar. -->
 		<div class="row-fluid">
 			<div class="span12" > 
-				<div class="txt2">
+				<div class="txttt2">
 					Para:
 				</div>
 				<input id="to" name="to" type="text" value="<?php set_value('to'); ?> "title="Destinatarios" readonly ><br>
-				<div class="txt2">
+				<div class="txttt2">
 					Asunto (Máximo 40 caracteres):
 				</div>
 				<input id="asunto" name="asunto" type="text" value="<?php set_value('asunto'); ?>"title="Ingrese asunto aquí" placeholder="Ingrese asunto aquí" maxlength="40">		
-				<div class="txt2">
+				<div class="txttt2">
 					Adjuntos: (30MB máximo)
 				</div>
 				<div class="container " style="margin:0px; width:414px;">
@@ -1686,7 +1821,7 @@ if(isset($codigo))
 		<div class="row-fluid fila">
 			<div class="span12 control-group">
 			
-			<div class="txt5">
+			<div class="txttt5">
 				Cuerpo del mensaje:
 			</div>
 

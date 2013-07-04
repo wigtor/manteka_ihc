@@ -7,19 +7,22 @@ fieldset
 	padding:30px;
 }
 
-.txt
+.txttt
 {
 	font-size:10pt;
-	color:#0088CC;
 	line-height:35px;
 	font-weight:bold;
 }
 
-.txt2
+#filtro1
+{
+	float:left;
+}
+
+.txttt2
 {
 	clear:both;
 	font-size:10pt;
-	color:#0088CC;
 	line-height:35px;
 	font-weight:bold;
 	padding-top:40px;
@@ -34,44 +37,20 @@ fieldset legend
 
 #contenedorLista
 {
+	margin-top:20px;
 	margin-left:1%;
-	float:left;
+	clear:both;
 }
 
 #contenedorBusquedaFiltro
 {
-	margin-left:10%;
-	float:left;
-}
-
-#busquedaPlantilla 
-{
-	color:#666666;
-	font-size:9pt;
-	font-weight:bold;
-	margin-bottom:30px;
 	margin-left:1%;
-	clear:both;
 }
 
 #inputAsunto
 {
-	color:#666666;
-	font-size:9pt;
-	font-weight:bold;
 	clear:both;
 	width:400px;
-}
-
-#tipoBusqueda
-{
-	color:white;
-	font-size:9pt;
-	font-weight:bold;
-	margin-bottom:30px;
-	margin-left:1%;
-	clear:both;
-	background-color:lightblue;
 }
 
 #lista
@@ -79,7 +58,7 @@ fieldset legend
 	border: #CCCCCC 1px solid;
 	overflow-y:auto;
 	height:185px;
-	width:420px;
+	width:582px;
 	-webkit-border-radius:4px;
 	float:left;
 	background-color:#FCFCFC;
@@ -176,9 +155,6 @@ fieldset legend
 #txtAsunto
 {
 	width:300px;
-	color:#666666;
-	font-size:9pt;
-	font-weight:bold;
 }
 
 .espacio
