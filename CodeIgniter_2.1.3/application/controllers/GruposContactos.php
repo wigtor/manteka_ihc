@@ -231,8 +231,10 @@ class GruposContactos extends MasterManteka {
 
 	}
 	public function getContactosGrupoFlacoPiterStyle(){
-
-		//implementar para terminar con vista de enviar correo.
+		$id_grupo = $this->input->post('id');
+		$this->load->model('model_grupos_contacto');
+		$resultado = $this->model_grupos_contacto->getContactosGrupoFlacoPiterStyle($id_grupo);
+		echo json_encode($resultado);
 	}
 
 }
