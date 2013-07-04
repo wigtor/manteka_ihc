@@ -109,17 +109,20 @@ class model_grupos_contacto extends CI_Model{
       $this->db->select('*');
       $this->db->from('estudiante');
       $this->db->where_in('RUT_ESTUDIANTE', $ruts);
-      $estudiantes = $this->db->get()->result_array();
+      $query = $this->db->get();
+      $estudiantes = $query->result_array();
 
       $this->db->select('*');
       $this->db->from('usuario');
       $this->db->where_in('RUT_USUARIO', $ruts);
-      $usuario = $this->db->get()->result_array();
+      $query = $this->db->get();
+      $usuario = $query->result_array();
 
       $this->db->select('*');
       $this->db->from('ayudante');
       $this->db->where_in('RUT_AYUDANTE', $ruts);
-      $ayudantes = $this->db->get()->result_array();
+      $query = $this->db->get();
+      $ayudantes = $query->result_array();
 
       $contador=0;
       $resultado = array();
@@ -137,14 +140,16 @@ class model_grupos_contacto extends CI_Model{
               $this->db->select('*');
               $this->db->from('profesor');
               $this->db->where('RUT_USUARIO2', $usuario[$i]['RUT_USUARIO']);
-              $profe_completo = $this->db->get()->result_array();
+              $query = $this->db->get();
+              $profe_completo = $query->result_array();
               $nombre = $profe_completo[0]['NOMBRE1_PROFESOR']." ".$profe_completo[0]['NOMBRE2_PROFESOR']." ".$profe_completo[0]['APELLIDO1_PROFESOR']." ".$profe_completo[0]['APELLIDO2_PROFESOR'];
          }else{
               $tipo = "Coordinador";
               $this->db->select('*');
               $this->db->from('coordinador');
               $this->db->where('RUT_USUARIO3', $usuario[$i]['RUT_USUARIO']);
-              $profe_completo = $this->db->get()->result_array();
+              $query = $this->db->get();
+              $profe_completo = $query->result_array();
               $nombre = $profe_completo[0]['NOMBRE1_COORDINADOR']." ".$profe_completo[0]['NOMBRE2_COORDINADOR']." ".$profe_completo[0]['APELLIDO1_COORDINADOR']." ".$profe_completo[0]['APELLIDO2_COORDINADOR'];
          }
          $resultado[$contador] = [$usuario[$i]['RUT_USUARIO'] ,
