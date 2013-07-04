@@ -230,12 +230,6 @@ class GruposContactos extends MasterManteka {
 		echo json_encode($respuesta);
 
 	}
-	public function getContactosGrupoFlacoPiterStyle(){
-		$id_grupo = $this->input->post('id');
-		$this->load->model('model_grupos_contacto');
-		$resultado = $this->model_grupos_contacto->getContactosGrupoFlacoPiterStyle($id_grupo);
-		echo json_encode($resultado);
-	}
 
 }
 /* End of file Grupo.php */
