@@ -127,26 +127,26 @@
 		<input type="checkbox" name="CHECK_CARRERA" onclick = "CARRERA.disabled = !this.checked" title="Seleccione si desea filtrar por carrera" style="margin-top:-10px">
 			<select id="CARRERA" title="Seleccione una Carrera" name="CARRERA" disabled>
 				<option value ="0"></option>
-				<option value ="">Ingeniería Ambiental</option>
-				<option value ="">Ingeniería Civil en Electricidad</option>
-				<option value ="">Ingeniería Civil en Geografía</option>
-				<option value ="1363">Ingeniería Civil en Industria</option>
-				<option value ="1353">Ingeniería Civil en Informática</option>
-				<option value ="">Ingeniería Civil en Mecánica</option>
-				<option value ="1351">Ingeniería Civil en Metalurgia</option>
-				<option value ="">Ingeniería Civil en Minas</option>
-				<option value ="1361">Ingeniería Civil en Obras Civiles</option>
-				<option value ="">Ingeniería Civil en Química</option>
-				<option value ="">Ingeniería de Ejecución en Climatización</option>
-				<option value ="">Ingeniería de Ejecución en Computación e Informática</option>
-				<option value ="">Ingeniería de Ejecución en Electricidad</option>
-				<option value ="">Ingeniería de Ejecución en Geomensura</option>
-				<option value ="">Ingeniería de Ejecución en Industria</option>
-				<option value ="">Ingeniería de Ejecución en Mecánica</option>
-				<option value ="">Ingeniería de Ejecución en Metalurgia</option>
-				<option value ="">Ingeniería de Ejecución en Minas</option>
-				<option value ="">Ingeniería de Ejecución en Química</option>
-				<option value ="">Ingeniería en Biotecnología</option>
+				<option value ="1841">Ingeniería Ambiental</option>
+				<option value ="1861">Ingeniería Civil en Electricidad</option>
+				<option value ="1862">Ingeniería Civil en Geografía</option>
+				<option value ="1864">Ingeniería Civil en Industria</option>
+				<option value ="1863">Ingeniería Civil en Informática</option>
+				<option value ="1865">Ingeniería Civil en Mecánica</option>
+				<option value ="1866">Ingeniería Civil en Metalurgia</option>
+				<option value ="1867">Ingeniería Civil en Minas</option>
+				<option value ="1868">Ingeniería Civil en Obras Civiles</option>
+				<option value ="1869">Ingeniería Civil en Química</option>
+				<option value ="1849">Ingeniería de Ejecución en Climatización</option>
+				<option value ="1853">Ingeniería de Ejecución en Computación e Informática</option>
+				<option value ="1851">Ingeniería de Ejecución en Electricidad</option>
+				<option value ="1852">Ingeniería de Ejecución en Geomensura</option>
+				<option value ="1854">Ingeniería de Ejecución en Industria</option>
+				<option value ="1855">Ingeniería de Ejecución en Mecánica</option>
+				<option value ="1856">Ingeniería de Ejecución en Metalurgia</option>
+				<option value ="1857">Ingeniería de Ejecución en Minas</option>
+				<option value ="1859">Ingeniería de Ejecución en Química</option>
+				<!--<option value ="">Ingeniería en Biotecnología</option>-->
 			</select>		
 		</div>
 		</div>
