@@ -854,7 +854,7 @@ function revisarRut(rut){
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
 				<input type="hidden" name="ID_GRUPO" value="<?php echo $rutes['ID_FILTRO_CONTACTO']; ?>">
 				<a class ="btn" title="Volver" href="<?php echo site_url('GruposContactos/editarGrupos') ?>" style="margin-left:40px">Anterior</a>
-+				<button class ="btn btn-primary" type="submit" title="Modificar" style="margin-left:20px">Guardar Grupo</button>
+				<button class ="btn btn-primary" type="submit" title="Modificar" style="margin-left:20px">Guardar Grupo</button>
 				<?php echo form_close(""); ?>
 			</li>
 		</ul>
@@ -982,10 +982,11 @@ function revisarRutR(rut){
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$ajax({
-			type: 'post',
+		$.ajax({
+			type: 'POST',
 			url: "<?php echo site_url("Grupo/getContactosGrupoFlacoPiterStyle") ?>",
-			data: {id: <?php echo $id_grupo ?>},
+			data: {id: <?php echo $id_grupo; ?>},	
+			
 			success: function(respuesta){
 				muestraTabla2(respuesta);
 			}
@@ -996,14 +997,14 @@ function revisarRutR(rut){
 					var nodoTexto;
 					$(tablaResultados).empty();		
 					arrayRespuesta = JSON.parse(respuesta);
-					var thead = document.createElement('thead');
+					var thead = document.createElement('thead2');
 					thead.setAttribute("style","width:100%");
-					var tbody = document.createElement('tbody');
-					tbody.id="tbody1";
+					var tbody = document.createElement('tbody2');
+					tbody.id="tbody2";
 					var tr = document.createElement('tr');
 					var th = document.createElement('th');
 					var check = document.createElement('input');
-					check.id='todos';
+					check.id='todos';////////////
 					check.type='checkbox';
 					check.checked=false;					
 					th.appendChild(check);
@@ -1019,7 +1020,7 @@ function revisarRutR(rut){
 						td = document.createElement('td');
 						check = document.createElement('input');
 						check.type='checkbox';
-						check.checked=false;
+						check.checked=true;
 						check.id='todos';
 						$('#todos').click(seleccionar_todo);
 						td.appendChild(check);
