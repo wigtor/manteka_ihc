@@ -835,42 +835,7 @@ function revisarRut(rut){
 				
 				
 				<tbody id="tbody2">
-					<?php for ($i = 0; $i <count($rs_estudiantes); $i++) {  ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_estudiantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_estudiantes[$i]['0'] ?>" >
-							<td>
-								<input type="checkbox">
-							</td>
-							<td>
-								<?php echo $rs_estudiantes[$i][1]." ".$rs_estudiantes[$i][2]." ".$rs_estudiantes[$i][3]." ".$rs_estudiantes[$i][4]; ?>
-							</td>
-						</tr>
 					
-					<?php } } ?>
-					<?php for ($i = 0; $i <count($rs_profesores); $i++) {  ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_profesores[$i][0])){ ?>
-						<tr rut="<?php echo $rs_profesores[$i]['0'] ?>" >
-							<td>
-								<input type="checkbox">
-							</td>
-							<td>
-								<?php echo $rs_profesores[$i][1]." ".$rs_profesores[$i][2]." ".$rs_profesores[$i][3]." ".$rs_profesores[$i][4]; ?>
-							</td>
-						</tr>
-					
-					<?php } } ?>
-					<?php for ($i = 0; $i <count($rs_ayudantes); $i++) { ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_ayudantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_ayudantes[$i]['0'] ?>" >
-							<td>
-								<input type="checkbox">
-							</td>
-							<td>
-								<?php echo $rs_ayudantes[$i][1]." ".$rs_ayudantes[$i][2]." ".$rs_ayudantes[$i][3]." ".$rs_ayudantes[$i][4]; ?>
-							</td>
-						</tr>
-					<!--//rs_profesores rs_estudiates rs_ayudantes rutes-->
-					<?php } } ?>
 				</tbody>
 			</table>
 		</div>
@@ -1011,4 +976,19 @@ function revisarRutR(rut){
 	}
 
 
+</script>
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$ajax({
+			type: 'post',
+			url: "<?php echo site_url("Grupo/getContactosGrupoFlacoPiterStyle") ?>",
+			data: {id: <?php echo $id_grupo ?>},
+			success: function(respuesta){
+				muestraTabla2(respuesta);
+			}
+		});
+	});
 </script>
