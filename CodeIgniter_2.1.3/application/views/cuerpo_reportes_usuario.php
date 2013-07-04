@@ -1,7 +1,9 @@
 <!--
 <link rel="stylesheet" href="/<?php echo config_item('dir_alias') ?>/css/enviarCorreo.css" type="text/css" media="all" />
 -->
-
+<!--
+	OJO ES MUY IMPORTANTE PONER LOS CÓDIGOS CORRECTOS DE CARRERA EN LA LISTA YA QUE LOS QUE SE UTILIZARON SON SÓLO DE PRUEBAS
+-->
 <script>
 	
 	function mostrarTitulo(){
@@ -46,10 +48,6 @@
 			return 2;
 		}
 	}
-	
-	
-
-
 	function MostrarReporte(NombredelReporte) {
 			var titulo = $('input[id=TITULO]').val();	
 			var descripcion = $('#DESCRIPCION').val();
@@ -96,24 +94,19 @@
 		$attributes = array();
 		echo form_open('ReportesUsuario/detalleReportes',$attributes);		
 	?>
+		<div class="span4">
 		<div class="texto1" >Título del Reporte</div>
-		<div><input id="TITULO"type="text" name="TITULO" placeholder="Ingrese título para el reporte" title="Ingrese título para el reporte"></div>
+		<div><input id="TITULO"type="text" name="TITULO" maxlength="16" placeholder="Ingrese título para el reporte" title="Ingrese título para el reporte"></div>
 		<div class="texto1" >Descripción</div>
-		<div><textarea id="DESCRIPCION" type="text" name="DESCRIPCION" placeholder="Ingrese descripción del reporte"title="Ingrese descripción para el reporte" cols="20" rows="3" style="resize:none"></textarea></div>
+		<div><input id="DESCRIPCION" type="text" maxlength="34" name="DESCRIPCION" placeholder="Ingrese descripción del reporte"title="Ingrese descripción para el reporte" cols="20" rows="3" style="resize:none"></div>
 		<div class="texto1" >Horario</div>
-		<div><input id="HORARIO"type="text" name="HORARIO" placeholder="Ingrese el horario, Ej: 14:00 hrs" title="Ingrese el horario para el reporte"></div>
+		<div><input id="HORARIO"type="text" name="HORARIO" maxlength="5" placeholder="Ingrese el horario, Ej: 14:00 hrs" title="Ingrese el horario para el reporte"></div>
 		<div class="texto1" >Lugar</div>
-		<div><input id="LUGAR"type="text" name="LUGAR" placeholder="Ingrese el lugar, Ej: SALA 565" title="Ingrese el lugar para el reporte"></div>
-		<div class="seleccion" >
-		<div class="texto1" >Ingrese la cantidad de columnas que desea agregar al reporte</div>
+		<div><input id="LUGAR"type="text" name="LUGAR" maxlength="15" placeholder="Ingrese el lugar, Ej: SALA 565" title="Ingrese el lugar para el reporte"></div>
 		
-		<div class "seleccion">
-		<input type="radio" id="RADIO_1" name="COLUMNAS" value="0" onchange = "bloquear_input(0)" checked>No agregar Columnas	<br>
-		<input type="radio" id="RADIO_2" name="COLUMNAS" value="1" onchange = "bloquear_input(1)" ">Agregar 1 Columna<br>
-		<input type="radio" id="RADIO_3" name="COLUMNAS" value="2"  onchange = "bloquear_input(2)" >Agregar 2 Columnas
-		<div><input id="COLUMNA1"type="text" name="COLUMNA1" placeholder="Ingrese el título de la columna 1" title="Ingrese el título de la columna 1" disabled></div>
-		<div><input id="COLUMNA2"type="text" name="COLUMNA2" placeholder="Ingrese el título de la columna 2" title="Ingrese el título de la columna 2" disabled	></div>
+		
 		</div>
+		<div class="span4">
 		<div class="texto1">
 			Seleccione Seccion de Alumnos		
 		</div>
@@ -156,12 +149,25 @@
 				<option value ="">Ingeniería en Biotecnología</option>
 			</select>		
 		</div>
-			
+		</div>
+		<div class="span4">
+		<div class="texto1" >Ingrese la cantidad de columnas que desea agregar al reporte:</div>
+		<div class "seleccion">
+		<div><input type="radio" id="RADIO_1" name="COLUMNAS" value="0" onchange = "bloquear_input(0)" checked>  No agregar Columnas</div>
+		<div><input type="radio" id="RADIO_2" name="COLUMNAS" value="1" onchange = "bloquear_input(1)" >  Agregar 1 Columna </div>
+		<div><input type="radio" id="RADIO_3" name="COLUMNAS" value="2"  onchange = "bloquear_input(2)" >  Agregar 2 Columnas</div><br>
+		<div><input id="COLUMNA1"type="text" name="COLUMNA1" maxlength="12" placeholder="Ingrese el título de la columna 1" title="Ingrese el título de la columna 1" disabled></div>
+		<div><input id="COLUMNA2"type="text" name="COLUMNA2"  maxlength="12" placeholder="Ingrese el título de la columna 2" title="Ingrese el título de la columna 2" disabled	><BR></div>
+		
+		</div>
 		<div class="row-fluid">
 			<ul class="page pull-right">
+			<br><br>
 			<button class ="btn" type="submit" href="#myModal" title="Generar Reporte"  onClick="MostrarReporte('Estudiantes por Usuario')" data-toggle="modal">Generar Reporte</button>
 			</ul>
 		</div>
+		</div>
+		
 	<?php echo form_close(""); ?>
 	</div>
 	<div id="myModal" class="modal hide fade" style="width:70%;border-color: #e5e5e5; bottom:5%; left:35%; top:5%; background-color: rgb(248, 248, 248); box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset, rgba(82, 168, 236, 0.6) 0px 0px 8px; border: 1px solid #e5e5e5; " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

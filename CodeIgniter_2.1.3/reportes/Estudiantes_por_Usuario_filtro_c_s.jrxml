@@ -48,47 +48,55 @@ WHERE  estudiante.`COD_SECCION` = $P{seccion} AND estudiante.`COD_CARRERA` = $P{
 	<pageHeader>
 		<band height="114" splitType="Immediate">
 			<textField>
-				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="0" y="0" width="286" height="40"/>
+				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="52" y="25" width="230" height="40"/>
 				<textElement textAlignment="Left">
-					<font size="34"/>
+					<font size="25"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{titulo}]]></textFieldExpression>				
 			</textField>
 			<textField>
-				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="0" y="40" width="286" height="20"/>
+				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="52" y="55" width="230" height="20"/>
 				<textElement textAlignment="Left">
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{descripcion}]]></textFieldExpression>				
 			</textField>
 			<textField>
 				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="286" y="40" width="286" height="20"/>
 				<textElement textAlignment="Left">
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[Horario:  ]]></textFieldExpression>				
 			</textField>
 			<textField>
 				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="340" y="40" width="286" height="20"/>
 				<textElement textAlignment="Left">
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{horario}]]></textFieldExpression>				
 			</textField>
 			<textField>
-				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="286" y="20" width="286" height="20"/>
+				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="286" y="55" width="286" height="20"/>
 				<textElement textAlignment="Left">
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[Lugar:  ]]></textFieldExpression>				
 			</textField>
 			<textField>
-				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="340" y="20" width="286" height="20"/>
+				<reportElement uuid="57801c43-2bf0-471a-bf85-4f6b0e4071e7" x="340" y="55" width="286" height="20"/>
 				<textElement textAlignment="Left">
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{lugar}]]></textFieldExpression>				
 			</textField>
+			<image>
+				<reportElement x="0" y="-10" width="46" height="56"/>
+				<imageExpression class="java.lang.String"><![CDATA["img/logo_usach.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="480" y="-10" width="100" height="38"/>
+				<imageExpression class="java.lang.String"><![CDATA["img/logo_manteka.jpg"]]></imageExpression>
+			</image>
 			<staticText>
 				<reportElement uuid="7ce3e69a-0208-4938-9e85-c101eea64ff7" mode="Opaque" x="81" y="79" width="81" height="35" forecolor="#FFFFFF" backcolor="#000000"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
