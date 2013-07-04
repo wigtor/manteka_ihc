@@ -24,7 +24,7 @@
 				</div>
 				<div id="collapseOne" class="accordion-body collapse <?php echo $inReportes; ?>">
 					<div class="accordion-inner nav nav-list">
-						<li <?php echo $reportesUsuario; ?> ><a href="<?php echo site_url("ReportesU/reportesUsuario")?>">Reportes de usuario</a></li>
+						<li <?php echo $reportesUsuario; ?> ><a href="<?php echo site_url("ReportesUsuario/index")?>">Reportes de usuario</a></li>
 						<li <?php echo $reportesSistema; ?> ><a href="<?php echo site_url("ReportesSistema/index")?>">Reportes del sistema</a></li>
 						
 					</div>
