@@ -102,7 +102,7 @@ class model_grupos_contacto extends CI_Model{
       $this->db->from('filtro_contacto');
       $this->db->where('ID_FILTRO_CONTACTO', $id_grupo);
       $query = $this->db->get();
-      $str_ruts = $query->result_array()[0]['QUERY_FILTRO_CONTACTO'];
+      $str_ruts = $query->result_array()[0]->QUERY_FILTRO_CONTACTO;
       $ruts = explode(",", $str_ruts);
       
       $this->db->select('*');
@@ -167,7 +167,7 @@ class model_grupos_contacto extends CI_Model{
         $this->db->from('filtro_contacto');
         $this->db->where('ID_FILTRO_CONTACTO', $id_grupo);
         $query = $this->db->get();
-        $str_ruts = $query->result_array()[0]['QUERY_FILTRO_CONTACTO'];
+        $str_ruts = $query->result_array()[0]->QUERY_FILTRO_CONTACTO;
         $ruts = explode(",", $str_ruts);
         $resultado = array();
 
