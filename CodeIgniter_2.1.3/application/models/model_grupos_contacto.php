@@ -127,10 +127,10 @@ class model_grupos_contacto extends CI_Model{
       $contador=0;
       $resultado = array();
       for($i=0 ; $i < count($estudiantes) ; $i++){
-         $resultado[$contador] = [$estudiantes[$i]['RUT_ESTUDIANTE'] ,
+         $resultado[$contador] = array($estudiantes[$i]['RUT_ESTUDIANTE'] ,
                                   $estudiantes[$i]['NOMBRE1_ESTUDIANTE']." ".$estudiantes[$i]['NOMBRE2_ESTUDIANTE']." ".$estudiantes[$i]['APELLIDO1_ESTUDIANTE']." ".$estudiantes[$i]['APELLIDO2_ESTUDIANTE'],
                                   "Estudiante",
-                                  $estudiantes[$i]['CORREO_ESTUDIANTE'] ];
+                                  $estudiantes[$i]['CORREO_ESTUDIANTE'] );
          $contador++;
       }
       for($i=0;$i<count($usuario);$i++){
@@ -152,17 +152,17 @@ class model_grupos_contacto extends CI_Model{
               $profe_completo = $query->result_array();
               $nombre = $profe_completo[0]['NOMBRE1_COORDINADOR']." ".$profe_completo[0]['NOMBRE2_COORDINADOR']." ".$profe_completo[0]['APELLIDO1_COORDINADOR']." ".$profe_completo[0]['APELLIDO2_COORDINADOR'];
          }
-         $resultado[$contador] = [$usuario[$i]['RUT_USUARIO'] ,
+         $resultado[$contador] = array($usuario[$i]['RUT_USUARIO'] ,
                                   $nombre,
                                   $tipo,
-                                  $usuario[$i]['CORREO1_USER'] ];
+                                  $usuario[$i]['CORREO1_USER'] );
          $contador++;
       }
       for($i=0;$i<count($ayudantes);$i++){
-         $resultado[$contador] = [$ayudantes[$i]['RUT_AYUDANTE'] ,
+         $resultado[$contador] = array($ayudantes[$i]['RUT_AYUDANTE'] ,
                                   $ayudantes[$i]['NOMBRE1_AYUDANTE']." ".$ayudantes[$i]['NOMBRE2_AYUDANTE']." ".$ayudantes[$i]['APELLIDO1_AYUDANTE']." ".$ayudantes[$i]['APELLIDO2_AYUDANTE'],
                                   "Ayudante",
-                                  $ayudantes[$i]['CORREO_AYUDANTE'] ];
+                                  $ayudantes[$i]['CORREO_AYUDANTE'] );
          $contador++;
       }
       return $resultado;
