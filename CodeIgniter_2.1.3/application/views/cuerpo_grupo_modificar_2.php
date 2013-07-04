@@ -991,4 +991,54 @@ function revisarRutR(rut){
 			}
 		});
 	});
+	function muestraTabla2(respuesta){
+	var tablaResultados = document.getElementById('tabla2');
+					var nodoTexto;
+					$(tablaResultados).empty();		
+					arrayRespuesta = JSON.parse(respuesta);
+					var thead = document.createElement('thead');
+					thead.setAttribute("style","width:100%");
+					var tbody = document.createElement('tbody');
+					tbody.id="tbody1";
+					var tr = document.createElement('tr');
+					var th = document.createElement('th');
+					var check = document.createElement('input');
+					check.id='todos';
+					check.type='checkbox';
+					check.checked=false;					
+					th.appendChild(check);
+					thead.appendChild(th);
+					th = document.createElement('th');
+					nodoTexto =document.createTextNode('Nombre Completo');
+					th.appendChild(nodoTexto);
+					thead.appendChild(th);
+					tablaResultados.appendChild(thead);
+					tbody.setAttribute("style","width:100%");
+					for (var i = 0; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						check = document.createElement('input');
+						check.type='checkbox';
+						check.checked=false;
+						check.id='todos';
+						$('#todos').click(seleccionar_todo);
+						td.appendChild(check);
+						tr.appendChild(td);
+						td = document.createElement('td');
+						tr.setAttribute("id", i);
+						tr.setAttribute("style","width:100%");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						tr.setAttribute('rut',arrayRespuesta[i].rut);
+						tr.setAttribute('correo',arrayRespuesta[i].correo);
+						td.appendChild(nodoTexto);
+						td.setAttribute("style","width:100%");
+						tr.appendChild(td);
+						tbody.appendChild(tr);
+					}
+					tablaResultados.appendChild(tbody);
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+}
 </script>
