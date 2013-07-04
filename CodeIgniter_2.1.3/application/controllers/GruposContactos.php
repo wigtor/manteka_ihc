@@ -3,11 +3,11 @@
 require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
 
 /**
-* Controlador para la administración básica de correos electrónicos.
+* Controlador para la administraciï¿½n bï¿½sica de correos electrï¿½nicos.
 *
-* Permite ver y eliminar los correos recibidos, así como también
-* gestionar el envío de emails y otras operaciones relacionadas con la
-* administración de correos electrónicos. 
+* Permite ver y eliminar los correos recibidos, asï¿½ como tambiï¿½n
+* gestionar el envï¿½o de emails y otras operaciones relacionadas con la
+* administraciï¿½n de correos electrï¿½nicos. 
 *
 * @package Correo
 * @author Grupo 3
@@ -18,9 +18,9 @@ class GruposContactos extends MasterManteka {
 
 	public function agregarGrupos()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesiï¿½n iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesiï¿½n iniciada
 		}
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_profesor');
@@ -30,7 +30,7 @@ class GruposContactos extends MasterManteka {
 							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
  							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+		* se deben introducir en un array, para luego pasarlo como parï¿½metro al mï¿½todo cargarTodo()
 		*/
 		$subMenuLateralAbierto = 'agregarGrupos'; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -93,9 +93,9 @@ class GruposContactos extends MasterManteka {
 	
 	public function editarGrupos()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesiï¿½n iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesiï¿½n iniciada
 		}
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -112,7 +112,8 @@ class GruposContactos extends MasterManteka {
 				$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
 								 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
 	 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
-								 'rutes' => $grupo[0]
+								 'rutes' => $grupo[0],
+								 'id_grupo' => $idGrupo
 								 );
 				$cuerpo_to_charge = "cuerpo_grupo_modificar_2";
 			}
@@ -123,7 +124,7 @@ class GruposContactos extends MasterManteka {
 			
 							 
 			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+			* se deben introducir en un array, para luego pasarlo como parï¿½metro al mï¿½todo cargarTodo()
 			*/
 			//var_dump($datos_cuerpo['rs_profesores']);
 			$subMenuLateralAbierto = 'editarGrupos'; 
@@ -153,9 +154,9 @@ class GruposContactos extends MasterManteka {
 	}
 
 	public function getDatosGrupo(){
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+		//Se comprueba que quien hace esta peticiï¿½n de ajax estï¿½ logueado
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			//echo 'No estï¿½s logueado!!';
 			return;
 		}
 		
@@ -165,7 +166,7 @@ class GruposContactos extends MasterManteka {
 		echo json_encode($resultado);
 	}
 	public function eliminarGrupo(){
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+		//Se comprueba que quien hace esta peticiï¿½n de ajax estï¿½ logueado
 		if (!$this->isLogged()) {
 			return;
 		}
@@ -178,9 +179,9 @@ class GruposContactos extends MasterManteka {
 
 	public function verGrupos()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesiï¿½n iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesiï¿½n iniciada
 		}
 		$this->load->model('model_grupos_contacto');
 		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
@@ -193,9 +194,9 @@ class GruposContactos extends MasterManteka {
 	}
 	public function borrarGrupos()
 	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesiï¿½n iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesiï¿½n iniciada
 		}
 		$this->load->model('model_grupos_contacto');
 		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
@@ -207,9 +208,9 @@ class GruposContactos extends MasterManteka {
 		$this->cargarTodo("Correos", "cuerpo_grupos_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	public function grupoAgregado(){
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesiï¿½n iniciada
 		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesión iniciada
+			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesiï¿½n iniciada
 		}
 		$datos_plantilla["titulo_msj"] = "Grupo agregado";
 		$datos_plantilla["cuerpo_msj"] = "El nuevo Grupo de Contactos fue agregado correctamente.";
