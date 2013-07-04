@@ -74,9 +74,24 @@
 	}
 
 	function DescargarArchivo() {
+			var titulo = $('input[id=TITULO]').val();	
+			var descripcion = $('#DESCRIPCION').val();
+			var carrera = $('select[id=CARRERA]').val();			
+			var seccion = $('select[id=SECCION]').val();	
+			var lugar=$('#LUGAR').val();
+			var horario=$('#HORARIO').val();
+			var columnas=cantidad_columnas();
+			if(columnas == 1){
+				var columna_1 = $('#COLUMNA1').val(); 				
+			}
+			if(columnas == 2){
+				var columna_1 = $('#COLUMNA1').val(); 
+				var columna_2 = $('#COLUMNA2').val(); 
+			}
+			var parametros = "&titulo="+titulo+"&carrera="+carrera+"&seccion="+seccion+"&descripcion="+descripcion+"&horario="+horario+"&lugar="+lugar+"&columnas="+columnas+"&columna_1="+columna_1+"&columna_2="+columna_2;
 			var nombreReporte = $('#buttonDescarga').attr('name');
-			var myModal2 = document.getElementById("myModal2");
-			window.location = '/<?php echo config_item("dir_alias") ?>/report_view.php?nombreReporte='+nombreReporte+"&mode=D";
+			var myModal2 = document.getElementById("myModal2");		
+			window.location = '/<?php echo config_item("dir_alias") ?>/report_view_usuario.php?nombreReporte='+nombreReporte+"&mode=D"+parametros;
 	}
 
 	$(document).ready(function(){
@@ -172,7 +187,8 @@
 	</div>
 	<div id="myModal" class="modal hide fade" style="width:70%;border-color: #e5e5e5; bottom:5%; left:35%; top:5%; background-color: rgb(248, 248, 248); box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset, rgba(82, 168, 236, 0.6) 0px 0px 8px; border: 1px solid #e5e5e5; " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  	<div  class="modal-header">
-	    	<button onClick="DescargarArchivo()" id="buttonDescarga"type="button" class="close" style="height: 45px; width: 119px; margin: -11px 30px 0px 0px;" aria-hidden="true"><div class="btn_with_icon_solo" style="height: 13px;">c</div>&nbsp;Descargar</button>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+	    	<button onClick="DescargarArchivo()" id="buttonDescarga" type="button" class="close" style="height: 45px; width: 119px; margin: -11px 30px 0px 0px;" aria-hidden="true"><div class="btn_with_icon_solo" style="height: 13px;"></div>&nbsp;Descargar</button>
 	    	<h3 id="myModalLabel" style="color: #0088cc;">Reporte de Usuarios</h3>
 	  	</div>
 	  	<iframe class="modal-body" id="myModal2" style="width:100%; height:90%; max-height:90%; border:0px; padding: 1px 0px 0px 0px;"></iframe>
