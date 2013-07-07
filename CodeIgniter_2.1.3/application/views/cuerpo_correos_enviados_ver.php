@@ -90,7 +90,7 @@ function obtenerAdjunto(codigo)
 					tr.setAttribute("style","display:none");
 					tbody.appendChild(tr);
 					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
+					
 				}
 				tablaResultados.appendChild(tbody);
 			}
@@ -98,7 +98,7 @@ function obtenerAdjunto(codigo)
 			{
 
 				$('#destinosAdjuntos').css({display:'inline-block'});
-			}
+			}$(icono_cargando).hide();
 		}
 	});
 	/* Muestro el div que indica que se está cargando... */
