@@ -106,6 +106,7 @@
 			cuerpo=cuerpo.replace('&#39;','\'');
 			cuerpo=cuerpo.replace('&#34;','"');
 			CKEDITOR.instances.editor.setData(cuerpo);
+            saveState();
 			$('#'+id).css("background-color","#F0F0F0");
 		}
 		</script>

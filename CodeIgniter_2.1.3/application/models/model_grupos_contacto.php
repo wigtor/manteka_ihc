@@ -102,31 +102,35 @@ class model_grupos_contacto extends CI_Model{
       $this->db->from('filtro_contacto');
       $this->db->where('ID_FILTRO_CONTACTO', $id_grupo);
       $query = $this->db->get();
-      $str_ruts = $query->result_array()[0]['QUERY_FILTRO_CONTACTO'];
+      $aux = $query->result_array();
+      $str_ruts = $aux[0]['QUERY_FILTRO_CONTACTO'];
       $ruts = explode(",", $str_ruts);
       
       $this->db->select('*');
       $this->db->from('estudiante');
       $this->db->where_in('RUT_ESTUDIANTE', $ruts);
-      $estudiantes = $this->db->get()->result_array();
+      $query = $this->db->get();
+      $estudiantes = $query->result_array();
 
       $this->db->select('*');
       $this->db->from('usuario');
       $this->db->where_in('RUT_USUARIO', $ruts);
-      $usuario = $this->db->get()->result_array();
+      $query = $this->db->get();
+      $usuario = $query->result_array();
 
       $this->db->select('*');
       $this->db->from('ayudante');
       $this->db->where_in('RUT_AYUDANTE', $ruts);
-      $ayudantes = $this->db->get()->result_array();
+      $query = $this->db->get();
+      $ayudantes = $query->result_array();
 
       $contador=0;
       $resultado = array();
       for($i=0 ; $i < count($estudiantes) ; $i++){
-         $resultado[$contador] = [$estudiantes[$i]['RUT_ESTUDIANTE'] ,
+         $resultado[$contador] = array($estudiantes[$i]['RUT_ESTUDIANTE'] ,
                                   $estudiantes[$i]['NOMBRE1_ESTUDIANTE']." ".$estudiantes[$i]['NOMBRE2_ESTUDIANTE']." ".$estudiantes[$i]['APELLIDO1_ESTUDIANTE']." ".$estudiantes[$i]['APELLIDO2_ESTUDIANTE'],
                                   "Estudiante",
-                                  $estudiantes[$i]['CORREO_ESTUDIANTE'] ];
+                                  $estudiantes[$i]['CORREO_ESTUDIANTE'] );
          $contador++;
       }
       for($i=0;$i<count($usuario);$i++){
@@ -136,30 +140,106 @@ class model_grupos_contacto extends CI_Model{
               $this->db->select('*');
               $this->db->from('profesor');
               $this->db->where('RUT_USUARIO2', $usuario[$i]['RUT_USUARIO']);
-              $profe_completo = $this->db->get()->result_array();
+              $query = $this->db->get();
+              $profe_completo = $query->result_array();
               $nombre = $profe_completo[0]['NOMBRE1_PROFESOR']." ".$profe_completo[0]['NOMBRE2_PROFESOR']." ".$profe_completo[0]['APELLIDO1_PROFESOR']." ".$profe_completo[0]['APELLIDO2_PROFESOR'];
          }else{
               $tipo = "Coordinador";
               $this->db->select('*');
               $this->db->from('coordinador');
               $this->db->where('RUT_USUARIO3', $usuario[$i]['RUT_USUARIO']);
-              $profe_completo = $this->db->get()->result_array();
+              $query = $this->db->get();
+              $profe_completo = $query->result_array();
               $nombre = $profe_completo[0]['NOMBRE1_COORDINADOR']." ".$profe_completo[0]['NOMBRE2_COORDINADOR']." ".$profe_completo[0]['APELLIDO1_COORDINADOR']." ".$profe_completo[0]['APELLIDO2_COORDINADOR'];
          }
-         $resultado[$contador] = [$usuario[$i]['RUT_USUARIO'] ,
+         $resultado[$contador] = array($usuario[$i]['RUT_USUARIO'] ,
                                   $nombre,
                                   $tipo,
-                                  $usuario[$i]['CORREO1_USER'] ];
+                                  $usuario[$i]['CORREO1_USER'] );
          $contador++;
       }
       for($i=0;$i<count($ayudantes);$i++){
-         $resultado[$contador] = [$ayudantes[$i]['RUT_AYUDANTE'] ,
+         $resultado[$contador] = array($ayudantes[$i]['RUT_AYUDANTE'] ,
                                   $ayudantes[$i]['NOMBRE1_AYUDANTE']." ".$ayudantes[$i]['NOMBRE2_AYUDANTE']." ".$ayudantes[$i]['APELLIDO1_AYUDANTE']." ".$ayudantes[$i]['APELLIDO2_AYUDANTE'],
                                   "Ayudante",
-                                  $ayudantes[$i]['CORREO_AYUDANTE'] ];
+                                  $ayudantes[$i]['CORREO_AYUDANTE'] );
          $contador++;
       }
       return $resultado;
+   }
+    function getContactosGrupoFlacoPiterStyle($id_grupo){
+        //
+        $this->db->select('QUERY_FILTRO_CONTACTO');
+        $this->db->from('filtro_contacto');
+        $this->db->where('ID_FILTRO_CONTACTO', $id_grupo);
+        $query = $this->db->get();
+        $aux = $query->result_array();
+        $str_ruts = $aux[0]['QUERY_FILTRO_CONTACTO'];
+        $ruts = explode(",", $str_ruts);
+        $resultado = array();
+
+        //Get coordinadores
+        $this->db->select('RUT_USUARIO3 AS rut');
+        $this->db->select('NOMBRE1_COORDINADOR AS nombre1');
+        $this->db->select('NOMBRE2_COORDINADOR AS nombre2');
+        $this->db->select('APELLIDO1_COORDINADOR AS apellido1');
+        $this->db->select('APELLIDO2_COORDINADOR AS apellido2');
+        $this->db->select('CORREO1_USER AS correo');
+        $this->db->from('coordinador');
+        $this->db->join('usuario','coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+        $this->db->order_by("APELLIDO1_COORDINADOR", "asc");
+        $this->db->where_in("coordinador.RUT_USUARIO3",$ruts);
+        $query = $this->db->get();
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+
+        //get profesores
+        $this->db->select('RUT_USUARIO2 AS rut');
+        $this->db->select('NOMBRE1_PROFESOR AS nombre1');
+        $this->db->select('NOMBRE2_PROFESOR AS nombre2');
+        $this->db->select('APELLIDO1_PROFESOR AS apellido1');
+        $this->db->select('APELLIDO2_PROFESOR AS apellido2');
+        $this->db->select('CORREO1_USER AS correo');
+        $this->db->from('profesor');
+        $this->db->join('usuario','profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+        $this->db->where_in("profesor.RUT_USUARIO2",$ruts);
+        $this->db->order_by("NOMBRE1_PROFESOR", "asc");
+        $query = $this->db->get();
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+        
+
+        //get alumnos
+        $this->db->select('RUT_ESTUDIANTE AS rut');
+        $this->db->select('NOMBRE1_ESTUDIANTE AS nombre1');
+        $this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
+        $this->db->select('APELLIDO1_ESTUDIANTE AS apellido1');
+        $this->db->select('APELLIDO2_ESTUDIANTE AS apellido2');
+        $this->db->select('CORREO_ESTUDIANTE as correo');
+        $this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
+        $this->db->where_in("RUT_ESTUDIANTE",$ruts);
+        $query = $this->db->get('estudiante');
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+       
+
+        //get ayudantes
+        $this->db->select('RUT_AYUDANTE AS rut');
+        $this->db->select('NOMBRE1_AYUDANTE AS nombre1');
+        $this->db->select('NOMBRE2_AYUDANTE AS nombre2');
+        $this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+        $this->db->select('APELLIDO2_AYUDANTE AS apellido2');
+        $this->db->select('CORREO_AYUDANTE as correo');
+        $this->db->where_in("RUT_AYUDANTE",$ruts);
+        $this->db->order_by("NOMBRE1_AYUDANTE", "asc");
+        $query = $this->db->get('ayudante');
+        foreach ($query->result_array() as $row) {
+            array_push($resultado, $row);
+        }
+        return $resultado;
    }
    
 }

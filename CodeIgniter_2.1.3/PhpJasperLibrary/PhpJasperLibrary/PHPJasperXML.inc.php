@@ -2752,7 +2752,7 @@ foreach($this->arrayVariable as $name=>$value){
         
 					$this->global_pointer--;
         }else {
-            echo "No data found";
+            echo "No se han encontrado estudiantes con esos filtros ingrese uno nuevamente.";
             exit(0);
         }
  
@@ -2949,7 +2949,7 @@ foreach($this->arrayVariable as $name=>$value){
         
 					$this->global_pointer--;
         }else {
-            echo "No data found";
+            echo "No se han encontrado estudiantes con esos filtros ingrese uno nuevamente.";
             exit(0);
         }
  

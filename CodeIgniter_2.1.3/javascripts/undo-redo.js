@@ -93,7 +93,7 @@ $(document).ready(function() {
             var actual = $(this).val();
             $(this).val(prev[current_state]);
             if(actual != $(this).val()){
-                this.onchange();
+                $(this).trigger('onchange');
             }
         });
         $(state_elements).each(function() {
@@ -101,7 +101,8 @@ $(document).ready(function() {
             var actual = $(this).prop('checked');
             $(this).prop('checked', bool(prev[current_state]));
             if( actual != $(this).prop('checked') ){
-                this.onchange();
+                //this.onchange();
+                $(this).trigger('onchange');
             }
         });
        

@@ -24,7 +24,9 @@
 				cod_equipo = $.trim(moduloRespuesta.cod_equipo);
 				descripcion = $.trim(moduloRespuesta.descripcion);
 				nombre_modulo = $.trim(moduloRespuesta.nombre_mod);
-				if($.trim(moduloRespuesta.descripcion) ==""){$.trim(moduloRespuesta.descripcion) = "No tiene descripcion"}
+				if ($.trim(moduloRespuesta.descripcion) =="") {
+					moduloRespuesta.descripcion = "No tiene descripcion";
+				}
 			}
 		});
 

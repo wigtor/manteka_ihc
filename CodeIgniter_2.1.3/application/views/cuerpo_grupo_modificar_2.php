@@ -835,42 +835,7 @@ function revisarRut(rut){
 				
 				
 				<tbody id="tbody2">
-					<?php for ($i = 0; $i <count($rs_estudiantes); $i++) {  ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_estudiantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_estudiantes[$i]['0'] ?>" >
-							<td>
-								<input type="checkbox">
-							</td>
-							<td>
-								<?php echo $rs_estudiantes[$i][1]." ".$rs_estudiantes[$i][2]." ".$rs_estudiantes[$i][3]." ".$rs_estudiantes[$i][4]; ?>
-							</td>
-						</tr>
 					
-					<?php } } ?>
-					<?php for ($i = 0; $i <count($rs_profesores); $i++) {  ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_profesores[$i][0])){ ?>
-						<tr rut="<?php echo $rs_profesores[$i]['0'] ?>" >
-							<td>
-								<input type="checkbox">
-							</td>
-							<td>
-								<?php echo $rs_profesores[$i][1]." ".$rs_profesores[$i][2]." ".$rs_profesores[$i][3]." ".$rs_profesores[$i][4]; ?>
-							</td>
-						</tr>
-					
-					<?php } } ?>
-					<?php for ($i = 0; $i <count($rs_ayudantes); $i++) { ?>
-						<?php if(existe_palabra($rutes['QUERY_FILTRO_CONTACTO'],$rs_ayudantes[$i][0])){ ?>
-						<tr rut="<?php echo $rs_ayudantes[$i]['0'] ?>" >
-							<td>
-								<input type="checkbox">
-							</td>
-							<td>
-								<?php echo $rs_ayudantes[$i][1]." ".$rs_ayudantes[$i][2]." ".$rs_ayudantes[$i][3]." ".$rs_ayudantes[$i][4]; ?>
-							</td>
-						</tr>
-					<!--//rs_profesores rs_estudiates rs_ayudantes rutes-->
-					<?php } } ?>
 				</tbody>
 			</table>
 		</div>
@@ -889,7 +854,7 @@ function revisarRut(rut){
 				<input type="hidden" name="QUERY_FILTRO_CONTACTO">
 				<input type="hidden" name="ID_GRUPO" value="<?php echo $rutes['ID_FILTRO_CONTACTO']; ?>">
 				<a class ="btn" title="Volver" href="<?php echo site_url('GruposContactos/editarGrupos') ?>" style="margin-left:40px">Anterior</a>
-+				<button class ="btn btn-primary" type="submit" title="Modificar" style="margin-left:20px">Guardar Grupo</button>
+				<button class ="btn btn-primary" type="submit" title="Modificar" style="margin-left:20px">Guardar Grupo</button>
 				<?php echo form_close(""); ?>
 			</li>
 		</ul>
@@ -1011,4 +976,70 @@ function revisarRutR(rut){
 	}
 
 
+</script>
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.ajax({
+			type: 'POST',
+			url: "<?php echo site_url("Grupo/getContactosGrupoFlacoPiterStyle") ?>",
+			data: {id: <?php echo $id_grupo; ?>},	
+			
+			success: function(respuesta){
+				muestraTabla2(respuesta);
+			}
+		});
+	});
+	function muestraTabla2(respuesta){
+	var tablaResultados = document.getElementById('tabla2');
+					var nodoTexto;
+					$(tablaResultados).empty();		
+					arrayRespuesta = JSON.parse(respuesta);
+					var thead = document.createElement('thead2');
+					thead.setAttribute("style","width:100%");
+					var tbody = document.createElement('tbody2');
+					tbody.id="tbody2";
+					var tr = document.createElement('tr');
+					var th = document.createElement('th');
+					var check = document.createElement('input');
+					check.id='todos';////////////
+					check.type='checkbox';
+					check.checked=false;					
+					th.appendChild(check);
+					thead.appendChild(th);
+					th = document.createElement('th');
+					nodoTexto =document.createTextNode('Nombre Completo');
+					th.appendChild(nodoTexto);
+					thead.appendChild(th);
+					tablaResultados.appendChild(thead);
+					tbody.setAttribute("style","width:100%");
+					for (var i = 0; i < arrayRespuesta.length; i++) {
+						tr = document.createElement('tr');
+						td = document.createElement('td');
+						check = document.createElement('input');
+						check.type='checkbox';
+						check.checked=true;
+						check.id='todos';
+						$('#todos').click(seleccionar_todo);
+						td.appendChild(check);
+						tr.appendChild(td);
+						td = document.createElement('td');
+						tr.setAttribute("id", i);
+						tr.setAttribute("style","width:100%");
+						nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 +" "+ arrayRespuesta[i].nombre2 +" "+ arrayRespuesta[i].apellido1 +" "+arrayRespuesta[i].apellido2);
+						tr.setAttribute('rut',arrayRespuesta[i].rut);
+						tr.setAttribute('correo',arrayRespuesta[i].correo);
+						td.appendChild(nodoTexto);
+						td.setAttribute("style","width:100%");
+						tr.appendChild(td);
+						tbody.appendChild(tr);
+					}
+					tablaResultados.appendChild(tbody);
+
+					/* Quito el div que indica que se está cargando */
+					var iconoCargado = document.getElementById("icono_cargando");
+					$(icono_cargando).hide();
+}
 </script>
