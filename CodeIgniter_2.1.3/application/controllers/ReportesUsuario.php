@@ -32,10 +32,11 @@ class ReportesUsuario extends MasterManteka {
 			
 		}
 		else{
+		$this->load->model('model_carreras');
 		$this->load->model('model_grupos_contacto');
 		$this->load->model('Model_secciones');
 		$this->load->model('model_modulo');
-		$datos_cuerpo = array('seccion' =>$this->Model_secciones->VerTodasSecciones(),'modulos'=>$this->model_modulo->VerModulos());
+		$datos_cuerpo = array('seccion' =>$this->Model_secciones->VerTodasSecciones(),'carreras'=>$this->model_carreras->VerTodasCarreras());
 		$subMenuLateralAbierto = 'reportesUsuario'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		//var_dump($datos_cuerpo);

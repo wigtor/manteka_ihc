@@ -142,25 +142,9 @@
 		<input type="checkbox" name="CHECK_CARRERA" onclick = "CARRERA.disabled = !this.checked" title="Seleccione si desea filtrar por carrera" style="margin-top:-10px">
 			<select id="CARRERA" title="Seleccione una Carrera" name="CARRERA" disabled>
 				<option value ="0"></option>
-				<option value ="1841">Ingeniería Ambiental</option>
-				<option value ="1861">Ingeniería Civil en Electricidad</option>
-				<option value ="1862">Ingeniería Civil en Geografía</option>
-				<option value ="1864">Ingeniería Civil en Industria</option>
-				<option value ="1863">Ingeniería Civil en Informática</option>
-				<option value ="1865">Ingeniería Civil en Mecánica</option>
-				<option value ="1866">Ingeniería Civil en Metalurgia</option>
-				<option value ="1867">Ingeniería Civil en Minas</option>
-				<option value ="1868">Ingeniería Civil en Obras Civiles</option>
-				<option value ="1869">Ingeniería Civil en Química</option>
-				<option value ="1849">Ingeniería de Ejecución en Climatización</option>
-				<option value ="1853">Ingeniería de Ejecución en Computación e Informática</option>
-				<option value ="1851">Ingeniería de Ejecución en Electricidad</option>
-				<option value ="1852">Ingeniería de Ejecución en Geomensura</option>
-				<option value ="1854">Ingeniería de Ejecución en Industria</option>
-				<option value ="1855">Ingeniería de Ejecución en Mecánica</option>
-				<option value ="1856">Ingeniería de Ejecución en Metalurgia</option>
-				<option value ="1857">Ingeniería de Ejecución en Minas</option>
-				<option value ="1859">Ingeniería de Ejecución en Química</option>
+				<?php for ($i = 0; $i < count($carreras); $i++) { ?>
+					<option value ="<?php echo $carreras[$i][0]; ?>"><?php echo $carreras[$i][1]; ?></option>
+				<?php } ?>	
 				<!--<option value ="">Ingeniería en Biotecnología</option>-->
 			</select>		
 		</div>
