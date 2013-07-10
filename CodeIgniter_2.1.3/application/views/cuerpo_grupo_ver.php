@@ -93,7 +93,7 @@ function ordenarFiltro(){
 <div class="row-fluid">
 <div class="span10">
 <fieldset>
-	<legend>Ver Sala</legend>
+	<legend>Ver Grupos</legend>
 	<div class="row-fluid">
 		<div class="span4">
 			<div class="row-fluid">
