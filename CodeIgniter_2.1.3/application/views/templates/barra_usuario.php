@@ -23,7 +23,7 @@
 					<a href="/<?php echo config_item('dir_alias') ?>/index.php/About/acercaNosotros"> Acerca de Nosotros</a>
 				</li>
 				<li>
-					<a href="/<?php echo config_item('dir_alias') ?>/manual_usuario/manual_usuario.pdf" target="blank">Manual de Usuario</a>
+					<a href="/<?php echo config_item('dir_alias') ?>/manual_usuario.pdf" target="blank">Manual de Usuario</a>
 				</li>
 			</ul>
 		</div>
