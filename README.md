@@ -89,45 +89,25 @@ En el ícono de WAMP del área de notificación, hacer click sobre este e ir a l
 PHP->Extensiones de php y luego marcar las extensiones 'php_sockets', 'php_openssl' y 'php_imap'.
 
 Configurar un servidor SMTP:
-Es necesario crear el directorio 'sendmail' en 'C:\wamp\' (o el directorio que elijió como instalación de wamp)
-Dentro de este directorio se deben descomprimir los siguientes archivos: 'sendmail.exe', 'libeay32.dll', 'ssleay32.dll' and 'sendmail.ini'
-Estos archivos son descargables en un archivo comprimido desde http://www.glob.com.au/sendmail/sendmail.zip
-Editar el archivo 'sendmail.ini' y configurar las siguientes opciones:
 
-    smtp_server=smtp.gmail.com
-    smtp_port=465
-    smtp_ssl=ssl
-    default_domain=localhost
-    error_logfile=error.log
-    debug_logfile=debug.log
-    auth_username=[your_gmail_account_username]@gmail.com
-    auth_password=[your_gmail_account_password]
-    pop3_server=
-    pop3_username=
-    pop3_password=
-    force_sender=
-    force_recipient=
-    hostname=localhost
+Cuando ManteKA esté en producción se configurará con la cuenta de gmail destinada al uso de manteka que nos indicó el cliente.
+Por ahora configúrenlo con su propia cuenta de correo para realizar pruebas según el archivo config/config.php
 
-Cuando ManteKA esté en producción se configurará con la cuenta de gmail de Romina Rojas .T. que nos indicó el cliente.
-Por ahora configúrenlo con su propia cuenta de correo para realizar pruebas.
-
-Luego se debe configurar la ruta del archivo 'sendmail.exe' para que wamp sepa donde se encuentra:
 Editar el archivo 'php.ini' ubicado en el directorio: 'C:\wamp\bin\apache\Apache2.2.17\bin\' y dejar las siguientes opciones:
 
     [mail function]
     ; For Win32 only.
     ; http://php.net/smtp
-    ;SMTP =
+    SMTP = ssl://smtp.googlemail.com
     ; http://php.net/smtp-port
-    ;smtp_port = 25
+    smtp_port = 465
 
     ; For Win32 only.
     ; http://php.net/sendmail-from
     ;sendmail_from = you@domain.com
     ; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
     ; http://php.net/sendmail-path
-    sendmail_path = "C:\wamp\sendmail\sendmail.exe -t -i"
+    ;sendmail_path = "C:\wamp\sendmail\sendmail.exe -t -i"
 
 ================================
 

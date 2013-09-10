@@ -354,7 +354,7 @@ class model_correo extends CI_Model
 	public function InsertarCorreo($asunto,$mensaje,$rut,$codCorreo,$rutRecept,$codigoBorrador,$adjuntos)
 	{
 		try
-		{  
+		{  $cod = ""; //En caso que no se defina
 			date_default_timezone_set("Chile/Continental");
 			if($codigoBorrador==-1){
 				$this->COD2_CORREO=$codCorreo;
@@ -412,7 +412,7 @@ class model_correo extends CI_Model
 				   $cod= $row->COD_CORREO;
 				}
 
-				$this->db->delete('adjunto', array('COD_CORREO' => $cod)); 				
+				$this->db->delete('adjunto', array('COD_CORREO' => $cod));
 
 				if($adjuntos!="")
 				foreach ($adjuntos as $adjunto) {

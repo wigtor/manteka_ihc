@@ -330,6 +330,7 @@ class Correo extends MasterManteka {
 		$asunto=$this->input->post('asunto');
 		$adjuntos = json_decode($this->input->post('adjuntos'));		
 		$codigoBorrador=$this->input->post('codigoBorrador');
+		$this->setTimeZone();
 		$date=date("YmdHis");
 		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 		$mensaje=$this->input->post('editor');
@@ -340,15 +341,17 @@ class Correo extends MasterManteka {
 		$link2="<br><a href='".$_SERVER['HTTP_HOST']."/manteka/index.php/Correo/correosRecibidos/".$date.":".$cod."'>Ver mensaje en su contexto:".$cod."</a>";
 		
 
-		if($archivosElim!="")
+		if($archivosElim != "")
 		foreach ($archivosElim as $archivo) {
 			unlink("adjuntos/".$archivo);
 		}
 		
-		if($adjuntos!="")
-		foreach ($adjuntos as $adjunto) {
-			$this->email->attach("adjuntos/".$adjunto[1]);
-		}
+		$this->load->library('email', $this->getConfigMail());
+		
+		if($adjuntos != "")
+			foreach ($adjuntos as $adjunto) {
+				$this->email->attach("adjuntos/".$adjunto[1]);
+			}
 		/* Se realiza el reemplazo de aquellas variables predefinidas que NO cambian según el destinatario.
 		En este caso, dichas variables son %%hoy (fecha actual) y %%remitente (Nombre y apellido de quién envía el correo). */
 		$variableHoyAsunto=substr_count($asunto, '%%hoy');
@@ -548,10 +551,8 @@ class Correo extends MasterManteka {
 						$mensajePersonalizado=str_replace('%%nombre', $nombreAyudante, $mensajePersonalizado);
 						$mensajePersonalizado=str_replace('%%rut', $rutAyudante, $mensajePersonalizado);
 					}
-					date_default_timezone_set("Chile/Continental");
+					$this->setTimeZone();
 					$mensajeMail =$mensajePersonalizado.$link2;
-					$config['mailtype'] = 'html';
-					$this->email->initialize($config);
 					$this->email->from('no-reply@manteka.cl', 'ManteKA');
 					$this->email->to($to);
 					$asuntoMail="[ManteKA] ".$asuntoPersonalizado;
@@ -596,7 +597,7 @@ class Correo extends MasterManteka {
 				}
 			}
 			$estado="2";
-			redirect('/Correo/correosRecibidos/'.$estado);
+			redirect('/Correo/correosRecibidos/'.$estado, '');
 		}
 		/* Si no hay variables predefinidas que cambien según el destinatario, entonces se realiza un sólo envío con copia a todos los destinatarios. */
 		else
@@ -605,9 +606,8 @@ class Correo extends MasterManteka {
 			{
 				$to=$this->input->post('to');
 				$mensajeMail=$mensaje.$link2;
-				date_default_timezone_set("Chile/Continental");
-				$config['mailtype'] = 'html';
-				$this->email->initialize($config);
+				$this->setTimeZone();
+				$this->load->library('email', $this->getConfigMail());
 				$this->email->from('no-reply@manteka.cl', 'ManteKA');
 				$this->email->to($to);
 				$asuntoMail="[ManteKA] ".$asunto;
@@ -642,10 +642,25 @@ class Correo extends MasterManteka {
 					redirect("/Otros", "databaseError");
 			}
 			$estado="2";
-			redirect('/Correo/correosRecibidos/'.$estado);
+			redirect('/Correo', 'correosRecibidos/'.$estado);
 		}
 	}
 
+	
+	private function getConfigMail() {
+		$configuracion = array();
+		$configuracion['smtp_host'] = 'ssl://smtp.googlemail.com';
+		$this->config->load('config');
+		$configuracion['smtp_user'] = $this->config->item('mail_manteka');
+		$configuracion['smtp_pass'] = $this->config->item('password_mail_manteka');
+		$configuracion['smtp_port'] = '465';
+		$configuracion['starttls'] = true;
+		$configuracion['mailtype'] = 'html';
+		$configuracion['protocol'] = 'smtp';
+		$configuracion['newline']   = "\r\n";
+		return $configuracion;
+	}
+	
 	/**
 	* Recarga la tabla de correos recibidos segun los botones de < y > 
 	* según sean clickeados
@@ -863,7 +878,7 @@ class Correo extends MasterManteka {
 	*/
 	public function enviarBorrador($codigo)
 	{
-		redirect('/Correo/enviarCorreo/'.$codigo);	
+		redirect('/Correo/enviarCorreo/'.$codigo);
 	}
 
 /**

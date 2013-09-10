@@ -7,7 +7,7 @@
 <body>
 	 <link href="/<?php echo config_item('dir_alias') ?>/css/especial.css" rel="stylesheet" type="text/css">
 	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
-	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jQuery.js"></script>
+	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.js"></script>
      <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.bpopup.min.js"></script>
      <script src="/<?php echo config_item('dir_alias') ?>/javascripts/funcionAyuda.js"></script>
      

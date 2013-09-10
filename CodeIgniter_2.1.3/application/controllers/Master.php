@@ -364,4 +364,8 @@ class MasterManteka extends CI_Controller {
 		}
 
 	}
+	
+	protected function setTimeZone() {
+		date_default_timezone_set("Chile/Continental");
+	}
 }

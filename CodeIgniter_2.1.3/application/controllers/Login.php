@@ -176,6 +176,7 @@ class Login extends MasterManteka {
 	* En caso que el login resulte correcto, se setean las cookies con los datos del usuario logueado.
 	*/
 	public function LoginPost() {
+		$this->setTimeZone();
 		$rut = $this->input->post('inputRut');
 		$dv = $this->input->post('inputGuionRut');
 		$this->form_validation->set_rules('inputGuionRut', 'Dígito verificador', "required"); // Se verifica sólo para que reaparezca al cargar la vista

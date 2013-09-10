@@ -17,7 +17,8 @@
 		$borrarAlumnos = "";
 		$cambiarSeccionAlumnos = "";
 		$cargaMasivaAlumnos = "";
-
+		$asistencia = "";
+		$calificaciones = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
@@ -39,26 +40,36 @@
 		else if ($subVistaLateralAbierta == "cargaMasivaAlumnos") {
 			$cargaMasivaAlumnos = 'class="active"';
 		}
+		else if ($subVistaLateralAbierta == "asistencia") {
+			$asistencia = 'class="active"';
+		}
+		else if ($subVistaLateralAbierta == "calificaciones") {
+			$calificaciones = 'class="active"';
+		}
 	?>
 
 	<!--	Barra lateral de alumnos	-->
 	<div class="accordion" id="accordion2">
-    	<div class="accordion-group">
-		    <div class="accordion-heading">
+		<div class="accordion-group">
+			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
 				Alumnos</a>
-		    </div>
-		    <div id="collapseOne" class="accordion-body collapse in">
-		    	<div class="accordion-inner nav nav-list">
-		        	<li <?php echo $verAlumnos; ?> ><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
-		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+			</div>
+			<div id="collapseOne" class="accordion-body collapse in">
+				<div class="accordion-inner nav nav-list">
+					<li <?php echo $verAlumnos; ?> ><a href="<?php echo site_url("Alumnos/verAlumnos")?>">Ver alumnos</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 						<li <?php echo $agregarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/agregarAlumnos")?>">Agregar alumnos</a></li>
 						<li <?php echo $editarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/editarAlumnos")?>">Editar alumnos</a></li>
 						<li <?php echo $borrarAlumnos; ?> ><a href="<?php echo site_url("Alumnos/borrarAlumnos")?>">Borrar alumnos</a></li>
 						<li <?php echo $cambiarSeccionAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cambiarSeccionAlumnos")?>">Cambiar de sección</a></li>
 						<li <?php echo $cargaMasivaAlumnos; ?> ><a href="<?php echo site_url("Alumnos/cargaMasivaAlumnos")?>">Carga masiva</a></li>
-		     		<?php } ?>
-		     	</div>
-		    </div>
-	  	</div>
+					<?php } ?>
+					<?php if ($id_tipo_usuario == TIPO_USR_PROFESOR) { ?>
+						<li <?php echo $asistencia; ?> ><a href="<?php echo site_url("Alumnos/asistencia")?>">Asistencia</a></li>
+						<li <?php echo $calificaciones; ?> ><a href="<?php echo site_url("Alumnos/calificaciones")?>">Calificaciones</a></li>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
 	</div>
