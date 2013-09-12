@@ -10,7 +10,7 @@
 * @author Grupo 3
 *
 */
-class model_correo extends CI_Model
+class Model_correo extends CI_Model
 {
 	/**
 	* Obtiene los correos electr?nicos enviados por un usuario.
@@ -48,16 +48,14 @@ class model_correo extends CI_Model
 			//Constantes para facilitar saber que tipo de búsqueda se utiliza (El indice 0 no se usa en las búsquedas de correo, porque se usa para el checkbox)
 			define("BUSCAR_POR_DESTINATARIO", 1); //Para
 			define("BUSCAR_POR_MENSAJE", 2); //Mensaje
-			define("BUSCAR_POR_FECHA", 3);
-			define("BUSCAR_POR_HORA", 4);
+			define("BUSCAR_POR_FECHAHORA", 3);
 
 			$consultasLikes = '1';
 			if (trim($texto) != '') {
 				$consultasLikes = "(ASUNTO LIKE '%".$texto."%' 
 					OR CUERPO_EMAIL LIKE '%".$texto."%' 
 					OR nombre_destinatario LIKE '%".$texto."%' 
-					OR FECHA LIKE '%".$texto."%' 
-					OR HORA LIKE '%".$texto."%')";
+					OR FECHA_HORA_CORREO LIKE '%".$texto."%')";
 			}
 			else {
 				if ($textoFiltrosAvanzados[BUSCAR_POR_DESTINATARIO] != '') {
@@ -67,66 +65,28 @@ class model_correo extends CI_Model
 					$consultasLikes = "(ASUNTO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' 
 						OR CUERPO_EMAIL LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')";
 				}
-				if ($textoFiltrosAvanzados[BUSCAR_POR_FECHA] != '') {
-					$consultasLikes = "FECHA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%'";
+				if ($textoFiltrosAvanzados[BUSCAR_POR_FECHAHORA] != '') {
+					$consultasLikes = "FECHA_HORA_CORREO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHAHORA]."%'";
 
-				}
-				if ($textoFiltrosAvanzados[BUSCAR_POR_HORA] != '') {
-					$consultasLikes = "HORA LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_HORA]."%'";
 				}
 			}
 
-			$queryHorrible = "SELECT T.COD_CORREO AS codigo, GROUP_CONCAT(T.nombre_destinatario) AS nombre_destinatario, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora,(select COD_ADJUNTO from adjunto where T.COD_CORREO=adjunto.COD_CORREO limit 1)AS adjuntos
+			$queryHorrible = "SELECT T.ID_CORREO AS codigo, GROUP_CONCAT(T.nombre_destinatario) AS nombre_destinatario, ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA_HORA_CORREO AS fechaHora, (select ID_ADJUNTO from adjunto where T.ID_CORREO=adjunto.ID_CORREO limit 1) AS adjuntos
 			 FROM 
-			(
-			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_COORDINADOR, \" \", APELLIDO1_COORDINADOR, \" \", APELLIDO2_COORDINADOR)) AS nombre_destinatario
+			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1, \" \", APELLIDO1, \" \", APELLIDO2)) AS nombre_destinatario
 			FROM carta
-			LEFT JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
-			LEFT JOIN coordinador ON coordinador.RUT_USUARIO3 = cartar_user.RUT_USUARIO
+			LEFT JOIN carta_usuario ON carta_usuario.ID_CORREO = carta.ID_CORREO
+			LEFT JOIN usuario ON usuario.RUT_USUARIO = carta_usuario.RUT_USUARIO
 			WHERE carta.RUT_USUARIO = $rut
-			AND COD_BORRADOR IS NULL
-			AND ENVIADO_CARTA =1
-			GROUP BY carta.COD_CORREO )
-
-			UNION
-
-			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_PROFESOR, \" \", APELLIDO1_PROFESOR, \" \", APELLIDO2_PROFESOR)) AS nombre_destinatario
-			FROM carta
-			LEFT JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
-			LEFT JOIN profesor ON profesor.RUT_USUARIO2 = cartar_user.RUT_USUARIO
-			WHERE carta.RUT_USUARIO = $rut
-			AND COD_BORRADOR IS NULL
-			AND ENVIADO_CARTA =1
-			GROUP BY carta.COD_CORREO )
-
-			UNION
-
-			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_AYUDANTE, \" \", APELLIDO1_AYUDANTE, \" \", APELLIDO2_AYUDANTE)) AS nombre_destinatario
-			FROM carta
-			LEFT JOIN cartar_ayudante ON cartar_ayudante.COD_CORREO = carta.COD_CORREO
-			LEFT JOIN ayudante ON ayudante.RUT_AYUDANTE = cartar_ayudante.RUT_AYUDANTE
-			WHERE carta.RUT_USUARIO = $rut
-			AND COD_BORRADOR IS NULL
-			AND ENVIADO_CARTA =1
-			GROUP BY carta.COD_CORREO )
-
-			UNION
-
-			(SELECT carta.*, GROUP_CONCAT( CONCAT(NOMBRE1_ESTUDIANTE, \" \", APELLIDO1_ESTUDIANTE, \" \", APELLIDO2_ESTUDIANTE)) AS nombre_destinatario
-			FROM carta
-			LEFT JOIN cartar_estudiante ON cartar_estudiante.COD_CORREO = carta.COD_CORREO
-			LEFT JOIN estudiante ON estudiante.RUT_ESTUDIANTE = cartar_estudiante.RUT_ESTUDIANTE
-			WHERE carta.RUT_USUARIO = $rut
-			AND COD_BORRADOR IS NULL
-			AND ENVIADO_CARTA =1
-			GROUP BY carta.COD_CORREO )
-
-			) AS T
+			AND ID_BORRADOR IS NULL
+			AND ENVIADO_CARTA = TRUE
+			GROUP BY carta.ID_CORREO )
+			 AS T
 			
 			WHERE $consultasLikes
 
-			GROUP BY T.COD_CORREO
-			ORDER BY T.COD2_CORREO DESC
+			GROUP BY T.ID_CORREO
+			ORDER BY T.ID_CORREO DESC
 			LIMIT $offset, 20"; //NIKAGANDO LA HAGO EN ACTIVERECORD!!!
 
 
@@ -167,8 +127,8 @@ class model_correo extends CI_Model
 		foreach($correos as $correo)
 		{
 
-			$this->db->where('COD_CORREO',$correo);
-			$this->db->update('carta',array('ENVIADO_CARTA' => 0));
+			$this->db->where('ID_CORREO',$correo);
+			$this->db->update('carta', array('ENVIADO_CARTA' => 0));
 
 
 		}
@@ -193,9 +153,9 @@ class model_correo extends CI_Model
 		foreach($correos as $correo)
 		{	
 			echo $correo;
-			$this->db->where('COD_CORREO',$correo);
+			$this->db->where('ID_CORREO',$correo);
 			$this->db->where('RUT_USUARIO',$rut);
-			$this->db->update('cartar_user',array('RECIBIDO_CARTA_USER' => 0));
+			$this->db->update('carta_user',array('RECIBIDA_CARTA_USUARIO' => 0));
 			//echo $this->db->last_query();
 		}
 
@@ -221,8 +181,8 @@ class model_correo extends CI_Model
 		foreach($correos as $correo)
 		{	
 
-			$this->db->select('COD_CORREO');
-			$this->db->where('COD_BORRADOR', $correo); 
+			$this->db->select('ID_CORREO');
+			$this->db->where('ID_BORRADOR', $correo); 
 			//$this->db->order_by("COD2_CORREO", "desc"); 
 			$this->db->limit(1);
 			$query = $this->db->get('carta');
@@ -230,15 +190,13 @@ class model_correo extends CI_Model
 			
 			foreach ($query->result() as $row)
 			{
-			   $cod= $row->COD_CORREO;
+			   $cod= $row->ID_CORREO;
 			}
-			$this->db->where('COD_BORRADOR',$correo);
-			$this->db->update('carta',array('COD_BORRADOR' => NULL));
-			$this->db->delete('borrador', array('COD_BORRADOR' => $correo));
-			$this->db->delete('cartar_ayudante', array('COD_CORREO' => $cod)); 
-			$this->db->delete('cartar_estudiante', array('COD_CORREO' => $cod)); 
-			$this->db->delete('cartar_user', array('COD_CORREO' => $cod)); 
-			$this->db->delete('carta', array('COD_CORREO' => $cod)); 
+			$this->db->where('ID_BORRADOR',$correo);
+			$this->db->update('carta',array('ID_BORRADOR' => NULL));
+			$this->db->delete('borrador', array('ID_BORRADOR' => $correo));
+			$this->db->delete('carta_usuario', array('ID_CORREO' => $cod)); 
+			$this->db->delete('carta', array('ID_CORREO' => $cod)); 
 		}
 
 		return 1;
@@ -259,71 +217,50 @@ class model_correo extends CI_Model
 	{
 		try
 		{
-			$resultado=array();
-			$de=array();
-			$correos=array();
-			$correo=array();
-
 			//Constantes para facilitar saber que tipo de búsqueda se utiliza (El indice 0 no se usa en las búsquedas de correo, porque se usa para el checkbox)
 			define("BUSCAR_POR_REMITENTE", 1); //De
 			define("BUSCAR_POR_MENSAJE", 2); //Mensaje o asunto
-			define("BUSCAR_POR_FECHA", 3);
-			define("BUSCAR_POR_HORA", 4);
+			define("BUSCAR_POR_FECHAHORA", 3);
 
 			$consultasLikes = "1";
 			if (trim($texto) != '') {
-				$consultasLikes = "(asunto LIKE '%".$texto."%' OR cuerpo_email LIKE '%".$texto."%' OR nombre LIKE '%".$texto."%' OR apellido1 LIKE '%".$texto."%' OR apellido2 LIKE '%".$texto."%' OR fecha LIKE '%".$texto."%' OR hora LIKE '%".$texto."%')";
+				$consultasLikes = "(ASUNTO LIKE '%".$texto."%' OR CUERPO_EMAIL LIKE '%".$texto."%' OR NOMBRE1 LIKE '%".$texto."%' OR APELLIDO1 LIKE '%".$texto."%' OR APELLIDO2 LIKE '%".$texto."%' OR FECHA_HORA_CORREO LIKE '%".$texto."%')";
 			}
 			else {
 				if ($textoFiltrosAvanzados[BUSCAR_POR_REMITENTE] != '') {
-					$consultasLikes = "(nombre LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
-						OR apellido1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
-						OR apellido2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')";
+					$consultasLikes = "(NOMBRE1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
+						OR APELLIDO1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%'
+						OR APELLIDO2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_REMITENTE]."%')";
 				}
 				if ($textoFiltrosAvanzados[BUSCAR_POR_MENSAJE] != '') {
-					$consultasLikes = "(asunto LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' 
-						OR cuerpo_email LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')";
+					$consultasLikes = "(ASUNTO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%' 
+						OR CUERPO_EMAIL LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_MENSAJE]."%')";
 				}
-				if ($textoFiltrosAvanzados[BUSCAR_POR_FECHA] != '') {
-					$consultasLikes = "fecha LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%'";
+				if ($textoFiltrosAvanzados[BUSCAR_POR_FECHAHORA] != '') {
+					$consultasLikes = "FECHA_HORA_CORREO LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_FECHA]."%'";
 
-				}
-				if ($textoFiltrosAvanzados[BUSCAR_POR_HORA] != '') {
-					$consultasLikes = "hora LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_HORA]."%'";
 				}
 			}
 
-			$queryDeMierda = "SELECT T.COD_CORREO AS codigo, T.nombre, T.apellido1, T.apellido2, T.no_leido,ASUNTO AS asunto, CUERPO_EMAIL AS cuerpo_email, FECHA AS fecha, HORA AS hora ,(select COD_ADJUNTO from adjunto where T.COD_CORREO=adjunto.COD_CORREO limit 1)AS adjuntos
-				FROM 
-				(
-				(SELECT carta.*, NOMBRE1_COORDINADOR AS nombre, APELLIDO1_COORDINADOR AS apellido1, APELLIDO2_COORDINADOR AS apellido2, NO_LEIDO_CARTA_USER AS no_leido
-				FROM carta
-				JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
-				JOIN coordinador ON coordinador.RUT_USUARIO3 = cartar_user.RUT_USUARIO
-				WHERE cartar_user.RUT_USUARIO = $rut
-				AND COD_BORRADOR IS NULL
-				AND RECIBIDO_CARTA_USER =1
-				)
+			$queryDeMierda = "SELECT carta.ID_CORREO AS codigo, NOMBRE1 AS nombre, APELLIDO1 AS apellido1, 
+							APELLIDO2 AS apellido2, NO_LEIDA_CARTA_USUARIO AS no_leido, ASUNTO AS asunto, 
+							CUERPO_EMAIL AS cuerpo_email, FECHA_HORA_CORREO AS fechaHora , 
+							(select ID_ADJUNTO from adjunto where carta.ID_CORREO=adjunto.ID_CORREO limit 1) AS adjuntos
+							FROM carta
+							JOIN carta_usuario ON carta_usuario.ID_CORREO = carta.ID_CORREO
+							JOIN usuario ON usuario.RUT_USUARIO = carta_usuario.RUT_USUARIO
+							WHERE usuario.RUT_USUARIO = $rut
+							AND ID_BORRADOR IS NULL
+							AND RECIBIDA_CARTA_USUARIO = 1
+							AND $consultasLikes
 
-				UNION
-
-				(SELECT carta.*, NOMBRE1_PROFESOR AS nombre, APELLIDO1_PROFESOR AS apellido1, APELLIDO2_PROFESOR AS apellido2 , NO_LEIDO_CARTA_USER AS no_leido
-				FROM carta
-				JOIN cartar_user ON cartar_user.COD_CORREO = carta.COD_CORREO
-				JOIN profesor ON profesor.RUT_USUARIO2 = cartar_user.RUT_USUARIO
-				WHERE cartar_user.RUT_USUARIO = $rut
-				AND COD_BORRADOR IS NULL
-				AND RECIBIDO_CARTA_USER =1
-				)
-
-				) AS T
-
-				WHERE $consultasLikes
-
-				ORDER BY T.COD2_CORREO DESC
-				LIMIT $offset, 20";
+							ORDER BY T.ID_CORREO DESC
+							LIMIT $offset, 20";
 			$query = $this->db->query($queryDeMierda);
 			//echo $this->db->last_query().'   ';return;
+			if ($query == FALSE) {
+				return array();
+			}
 			return $query->result_array();
 		}
 		catch(Exception $e)
@@ -368,7 +305,7 @@ class model_correo extends CI_Model
 				$this->FECHA = date("Y-m-d");
 				$this->CUERPO_EMAIL = $mensaje;
 				$this->ASUNTO=$asunto;
-				$this->db->select('COD_CORREO');
+				$this->db->select('ID_CORREO');
 				$this->db->where('COD2_CORREO', $codCorreo); 
 				//$this->db->order_by("COD2_CORREO", "desc"); 
 				$this->db->limit(1);
@@ -377,11 +314,11 @@ class model_correo extends CI_Model
 				
 				foreach ($query->result() as $row)
 				{
-				    $cod= $row->COD_CORREO;
+				    $cod= $row->ID_CORREO;
 				}
 				$this->db->insert('carta', $this);
 
-				$this->db->delete('adjunto', array('COD_CORREO' => $cod));
+				$this->db->delete('adjunto', array('ID_CORREO' => $cod));
 
 				if($adjuntos!="")
 				foreach ($adjuntos as $adjunto) {
@@ -389,7 +326,7 @@ class model_correo extends CI_Model
 				   
 					   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
 					   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
-					   	'COD_CORREO' => $cod,
+					   	'ID_CORREO' => $cod,
 					);
 
 					$this->db->insert('adjunto', $data);
@@ -400,7 +337,7 @@ class model_correo extends CI_Model
 			}else
 			{
 
-				$this->db->select('COD_CORREO');
+				$this->db->select('ID_CORREO');
 				$this->db->where('COD_BORRADOR', $codigoBorrador); 
 				//$this->db->order_by("COD2_CORREO", "desc"); 
 				$this->db->limit(1);
@@ -409,10 +346,10 @@ class model_correo extends CI_Model
 				
 				foreach ($query->result() as $row)
 				{
-				   $cod= $row->COD_CORREO;
+				   $cod= $row->ID_CORREO;
 				}
 
-				$this->db->delete('adjunto', array('COD_CORREO' => $cod));
+				$this->db->delete('adjunto', array('ID_CORREO' => $cod));
 
 				if($adjuntos!="")
 				foreach ($adjuntos as $adjunto) {
@@ -420,15 +357,15 @@ class model_correo extends CI_Model
 				   
 					   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
 					   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
-					   	'COD_CORREO' => $cod,
+					   	'ID_CORREO' => $cod,
 					);
 
 					$this->db->insert('adjunto', $data);
 				}
 
-				$this->db->delete('cartar_ayudante', array('COD_CORREO' => $cod)); 
-				$this->db->delete('cartar_estudiante', array('COD_CORREO' => $cod)); 
-				$this->db->delete('cartar_user', array('COD_CORREO' => $cod)); 
+				$this->db->delete('cartar_ayudante', array('ID_CORREO' => $cod)); 
+				$this->db->delete('cartar_estudiante', array('ID_CORREO' => $cod)); 
+				$this->db->delete('cartar_user', array('ID_CORREO' => $cod)); 
 
 				$this->db->where('COD_BORRADOR',$codigoBorrador);
 				$this->db->update('carta',array('COD_BORRADOR' => NULL,'FECHA'=> date("Y-m-d"),'HORA'=>date("H:i:s"),'ASUNTO'=>$asunto,'CUERPO_EMAIL'=>$mensaje,'COD2_CORREO'=>$codCorreo));
@@ -475,7 +412,7 @@ class model_correo extends CI_Model
 			$this->CUERPO_EMAIL = $mensaje;
 			$this->ASUNTO=$asunto;
 			$this->db->insert('carta', $this);
-			$this->db->select('COD_CORREO');
+			$this->db->select('ID_CORREO');
 			$this->db->where('COD2_CORREO', $codCorreo); 
 			//$this->db->order_by("COD2_CORREO", "desc"); 
 			$this->db->limit(1);
@@ -484,11 +421,11 @@ class model_correo extends CI_Model
 			
 			foreach ($query->result() as $row)
 			{
-			   $cod= $row->COD_CORREO;
+			   $cod= $row->ID_CORREO;
 			}
 			$data = array(
 				   
-				   'COD_CORREO' => $cod ,
+				   'ID_CORREO' => $cod ,
 				   'FECHA_BORRADOR' => date("Y-m-d") ,
 				   'HORA_BORRADOR' => date("H:i:s"),
 				);
@@ -496,28 +433,28 @@ class model_correo extends CI_Model
 			$this->db->insert('borrador', $data);
 
 			$this->db->select('COD_BORRADOR');
-			$this->db->where('COD_CORREO', $cod);
+			$this->db->where('ID_CORREO', $cod);
 			$query2 = $this->db->get('borrador'); 
 			foreach ($query2->result() as $row)
 			{
 				
 				$this->db->set('COD_BORRADOR',$row->COD_BORRADOR);
-				$this->db->where('COD_CORREO', $cod);
+				$this->db->where('ID_CORREO', $cod);
 				$this->db->update('carta');
 				return $row->COD_BORRADOR;
 			    
 			}
 			
 
-				$this->db->delete('adjunto', array('COD_CORREO' => $cod)); 				
+				$this->db->delete('adjunto', array('ID_CORREO' => $cod)); 				
 				if($adjuntos!=""){
-					$this->db->delete('adjunto', array('COD_CORREO' => $cod));
+					$this->db->delete('adjunto', array('ID_CORREO' => $cod));
 					foreach ($adjuntos as $adjunto) {
 						$data = array(
 					   
 						   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
 						   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
-						   	'COD_CORREO' => $cod,
+						   	'ID_CORREO' => $cod,
 						);
 
 					$this->db->insert('adjunto', $data);
@@ -528,7 +465,7 @@ class model_correo extends CI_Model
 			}else
 			{
 
-				$this->db->select('COD_CORREO');
+				$this->db->select('ID_CORREO');
 				$this->db->where('COD_BORRADOR', $codigoBorrador); 
 				//$this->db->order_by("COD2_CORREO", "desc"); 
 				$this->db->limit(1);
@@ -537,11 +474,11 @@ class model_correo extends CI_Model
 				
 				foreach ($query->result() as $row)
 				{
-				   $cod= $row->COD_CORREO;
+				   $cod= $row->ID_CORREO;
 				}
-				$this->db->delete('cartar_ayudante', array('COD_CORREO' => $cod)); 
-				$this->db->delete('cartar_estudiante', array('COD_CORREO' => $cod)); 
-				$this->db->delete('cartar_user', array('COD_CORREO' => $cod)); 
+				$this->db->delete('cartar_ayudante', array('ID_CORREO' => $cod)); 
+				$this->db->delete('cartar_estudiante', array('ID_CORREO' => $cod)); 
+				$this->db->delete('cartar_user', array('ID_CORREO' => $cod)); 
 
 				$data2 = array(
 				   
@@ -556,7 +493,7 @@ class model_correo extends CI_Model
 				$this->db->set('ASUNTO', $asunto);
 				$this->db->where('COD_BORRADOR',$codigoBorrador);
 				$this->db->update('carta');
-				$this->db->delete('adjunto', array('COD_CORREO' => $cod)); 				
+				$this->db->delete('adjunto', array('ID_CORREO' => $cod)); 				
 
 				if($adjuntos!="")
 				foreach ($adjuntos as $adjunto) {
@@ -564,7 +501,7 @@ class model_correo extends CI_Model
 				   
 					   	'NOMBRE_LOGICO_ADJUNTO' => $adjunto[0] ,
 					   	'NOMBRE_FISICO_ADJUNTO' => $adjunto[1] ,
-					   	'COD_CORREO' => $cod,
+					   	'ID_CORREO' => $cod,
 					);
 
 					$this->db->insert('adjunto', $data);
@@ -598,29 +535,29 @@ class model_correo extends CI_Model
 		try
 		{	
 			if($codigoBorrador==-1){
-				$this->db->select('COD_CORREO');
-				$this->db->where('COD2_CORREO', $codCorreo); 
-				//$this->db->order_by("COD2_CORREO", "desc"); 
+				$this->db->select('ID_CORREO');
+				$this->db->where('ID2_CORREO', $codCorreo); 
+				//$this->db->order_by("ID2_CORREO", "desc"); 
 				$this->db->limit(1);
 				$query = $this->db->get('carta');
 				 $e = $this->db->_error_message(); 
 				
 				foreach ($query->result() as $row)
 				{
-				    return $row->COD_CORREO;
+				    return $row->ID_CORREO;
 				}
 			}
 			else{
-				$this->db->select('COD_CORREO');
-				$this->db->where('COD_BORRADOR', $codigoBorrador); 
-				//$this->db->order_by("COD2_CORREO", "desc"); 
+				$this->db->select('ID_CORREO');
+				$this->db->where('ID_BORRADOR', $codigoBorrador); 
+				//$this->db->order_by("ID2_CORREO", "desc"); 
 				$this->db->limit(1);
 				$query = $this->db->get('carta');
-				 $e = $this->db->_error_message(); 
+				$e = $this->db->_error_message(); 
 				
 				foreach ($query->result() as $row)
 				{
-				    return $row->COD_CORREO;
+				    return $row->ID_CORREO;
 				}
 			}
 
@@ -644,7 +581,7 @@ class model_correo extends CI_Model
 	{
 		try
 		{
-			$this->db->where('RUT_ESTUDIANTE', $rut);
+			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->from('estudiante');
 			return $this->db->count_all_results();
 
@@ -663,11 +600,11 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-    	public function getRutAyu($rut)
+	public function getRutAyu($rut)
 	{
 		try
 		{
-			$this->db->where('RUT_AYUDANTE', $rut);
+			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->from('ayudante');
 			return $this->db->count_all_results();
 
@@ -714,14 +651,13 @@ class model_correo extends CI_Model
 	{
 		try
 		{
+			$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
 			$this->db->where('RUT_USUARIO', $rut);
-			$this->db->where('COD_BORRADOR IS NULL');
-			$this->db->where('ENVIADO_CARTA',1);
-			$this->db->from('carta');
-			return $this->db->count_all_results();
-			
-
-
+			$this->db->where('ID_BORRADOR IS NULL');
+			$this->db->where('ENVIADO_CARTA', TRUE);
+			$query = $this->db->get('carta');
+			$res = $query->row();
+			return $res->resultado;
 		}
 		catch(Exception $e)
 		{
@@ -741,12 +677,14 @@ class model_correo extends CI_Model
 	{
 		try
 		{
-			$this->db->where('cartar_user.RUT_USUARIO', $rut);
-			$this->db->where('COD_BORRADOR IS NULL');
-			$this->db->where('RECIBIDO_CARTA_USER',1);
-			$this->db->from('carta');
-			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
-			return $this->db->count_all_results();
+			$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
+			$this->db->where('carta_usuario.RUT_USUARIO', $rut);
+			$this->db->where('ID_BORRADOR IS NULL');
+			$this->db->where('RECIBIDA_CARTA_USUARIO',1);
+			$this->db->join('carta_usuario','carta.ID_CORREO = carta_usuario.ID_CORREO');
+			$query = $this->db->get('carta');
+			$res = $query->row();
+			return $res->resultado;
 		}
 		catch(Exception $e)
 		{
@@ -766,13 +704,15 @@ class model_correo extends CI_Model
 	{
 		try
 		{
-			$this->db->from('carta');
-			$this->db->join('cartar_user','carta.COD_CORREO = cartar_user.COD_CORREO');
-			$this->db->where('cartar_user.RUT_USUARIO', $rut);
-			$this->db->where('COD_BORRADOR IS NULL');
-			$this->db->where('RECIBIDO_CARTA_USER',1);
-			$this->db->where('NO_LEIDO_CARTA_USER', 1);
-			return $this->db->count_all_results();
+			$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
+			$this->db->join('carta_usuario','carta.ID_CORREO = carta_usuario.ID_CORREO');
+			$this->db->where('carta_usuario.RUT_USUARIO', $rut);
+			$this->db->where('ID_BORRADOR IS NULL');
+			$this->db->where('RECIBIDA_CARTA_USUARIO', TRUE);
+			$this->db->where('NO_LEIDA_CARTA_USUARIO', TRUE);
+			$query = $this->db->get('carta');
+			$res = $query->row();
+			return $res->resultado;
 		}
 		catch(Exception $e)
 		{
@@ -792,14 +732,12 @@ class model_correo extends CI_Model
 	{
 		try
 		{
+			$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
 			$this->db->where('RUT_USUARIO', $rut);
-			$this->db->where('COD_BORRADOR IS NOT NULL');
-
-			$this->db->from('carta');
-			return $this->db->count_all_results();
-			
-
-
+			$this->db->where('ID_BORRADOR IS NOT NULL');
+			$query = $this->db->get('carta');
+			$res = $query->row();
+			return $res->resultado;
 		}
 		catch(Exception $e)
 		{
@@ -825,14 +763,13 @@ class model_correo extends CI_Model
 			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
 			$this->db->select('FECHA_BORRADOR AS fecha');
 			$this->db->select('HORA_BORRADOR AS hora');
-			$this->db->select('(select COD_ADJUNTO from adjunto where borrador.COD_CORREO=adjunto.COD_CORREO limit 1)AS adjuntos');
+			$this->db->select('(select COD_ADJUNTO from adjunto where borrador.ID_CORREO=adjunto.ID_CORREO limit 1)AS adjuntos');
 			
-			$this->db->from('carta');
 			$this->db->join('borrador','carta.COD_BORRADOR = borrador.COD_BORRADOR');
 			$this->db->where('RUT_USUARIO',$rut);
 			$this->db->order_by("borrador.COD_BORRADOR", "desc"); 
 			$this->db->limit( 20,$offset);
-			$query = $this->db->get();
+			$query = $this->db->get('carta');
 			
 			if ($query == FALSE) {
 				return array();
@@ -852,13 +789,12 @@ class model_correo extends CI_Model
 	{
 		try
 		{
-			$this->db->select('COD_ADJUNTO AS codAdjunto');
-			$this->db->select('COD_CORREO');
-			$this->db->select('NOMBRE_LOGICO_ADJUNTO AS logico');
-			$this->db->select('NOMBRE_FISICO_ADJUNTO AS fisico');
-			$this->db->from('adjunto');
-			$this->db->where('COD_CORREO',$codigo);
-			$query = $this->db->get();
+			$this->db->select('ID_ADJUNTO AS codAdjunto');
+			$this->db->select('ID_CORREO');
+			$this->db->select('NOMBRE_LOGICO_ADJ AS logico');
+			$this->db->select('NOMBRE_FISICO_ADJ AS fisico');
+			$this->db->where('ID_CORREO', $codigo);
+			$query = $this->db->get('adjunto');
 			if ($query == FALSE) {
 				return array();
 			}
@@ -899,7 +835,7 @@ class model_correo extends CI_Model
 			$rutRecept=array();
 			$rutEst=array();
 
-			$this->db->select('COD_CORREO');
+			$this->db->select('ID_CORREO');
 			$this->db->where('COD_BORRADOR', $codigo); 
 			//$this->db->order_by("COD2_CORREO", "desc"); 
 			$this->db->limit(1);
@@ -908,11 +844,11 @@ class model_correo extends CI_Model
 			
 			foreach ($query->result() as $row)
 			{
-			    $cod= $row->COD_CORREO;
+			    $cod= $row->ID_CORREO;
 			}
 			$this->db->select('RUT_ESTUDIANTE AS rutRecept');
 			$this->db->from('cartar_estudiante');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -922,7 +858,7 @@ class model_correo extends CI_Model
 			$rutAyu=array();
 			$this->db->select('RUT_AYUDANTE AS rutRecept');
 			$this->db->from('cartar_ayudante');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -932,7 +868,7 @@ class model_correo extends CI_Model
 			$rutUser=array();
 			$this->db->select('RUT_USUARIO AS rutRecept');
 			$this->db->from('cartar_user');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -948,7 +884,7 @@ class model_correo extends CI_Model
 			$this->db->select('CORREO_ESTUDIANTE AS correo');
 			$this->db->from('estudiante');
 			$this->db->join('cartar_estudiante','cartar_estudiante.RUT_ESTUDIANTE = estudiante.RUT_ESTUDIANTE');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -960,7 +896,7 @@ class model_correo extends CI_Model
 			$this->db->select('CORREO_AYUDANTE AS correo');
 			$this->db->from('ayudante');
 			$this->db->join('cartar_ayudante','cartar_ayudante.RUT_AYUDANTE = ayudante.RUT_AYUDANTE');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -974,7 +910,7 @@ class model_correo extends CI_Model
 			$this->db->select('CORREO1_USER AS correo');
 			$this->db->from('usuario');
 			$this->db->join('cartar_user','cartar_user.RUT_USUARIO = usuario.RUT_USUARIO');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -987,7 +923,7 @@ class model_correo extends CI_Model
 			$this->db->select('NOMBRE_LOGICO_ADJUNTO as logico');
 			$this->db->select('NOMBRE_FISICO_ADJUNTO as fisico');
 			$this->db->from('adjunto');
-			$this->db->where('COD_CORREO',$cod);
+			$this->db->where('ID_CORREO',$cod);
 			$query = $this->db->get();
 			if ($query == FALSE) {
 				return array();
@@ -1002,8 +938,10 @@ class model_correo extends CI_Model
 			return -1;
 		}
     }
+
+
     /**
-	* devuelve los datos del correo a ver en su contexto
+	* Devuelve los datos del correo a ver en su contexto
 	*
 	* @param int $codigo
 	* @param int $rut
@@ -1011,71 +949,33 @@ class model_correo extends CI_Model
 	* @author Byron Lanas (BL)
 	*
 	*/
-    public function cargarCorreo($codigo,$rut)
+    public function cargarCorreo($codigo, $rut)
 	{
 		try
 		{    
-			$detalles=array();
-			$de=array();
-			$resultado=array();
+			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->where('ID_CORREO', $codigo);
+			$this->db->update('carta_usuario', array('NO_LEIDO_CARTA_USER' => FALSE));
 
-			$this->db->select('carta.COD_CORREO AS codigo');
+
+			$this->db->select('carta.ID_CORREO AS codigo');
 			$this->db->select('ASUNTO AS asunto');
 			$this->db->select('CUERPO_EMAIL AS cuerpo_email');
-			$this->db->select('FECHA AS fecha');
-			$this->db->select('HORA AS hora');
+			$this->db->select('FECHA_HORA_CORREO AS fechaHora');
 			$this->db->select('carta.RUT_USUARIO AS de');
-			$this->db->from('carta');
-			$this->db->join('cartar_user','cartar_user.COD_CORREO = carta.COD_CORREO');
-			$this->db->where('carta.COD_CORREO',$codigo);
-			$this->db->where('cartar_user.RUT_USUARIO',$rut);
-			$query = $this->db->get();
+			$this->db->select('NOMBRE1 AS nombre');
+			$this->db->select('APELLIDO1 AS apellido1');
+			$this->db->select('APELLIDO2 AS apellido2');
+			$this->db->join('carta_usuario','carta_usuario.ID_CORREO = carta.ID_CORREO');
+			$this->db->join('usuario','usuario.RUT_USUARIO = carta_usuario.RUT_USUARIO');
+			$this->db->where('carta.ID_CORREO',$codigo);
+			$this->db->where('carta_usuario.RUT_USUARIO',$rut);
+			$query = $this->db->get('carta');
 			
 			if ($query == FALSE) {
 				return array();
 			}
-			$detalles= $query->result();
-			foreach ($query->result() as $row)
-			{	
-				$this->db->where('RUT_USUARIO',$rut);
-				$this->db->where('COD_CORREO',$codigo);
-				$this->db->update('cartar_user',array('NO_LEIDO_CARTA_USER' => 0));
-
-				$this->db->select('NOMBRE1_COORDINADOR AS nombre');
-				$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
-				$this->db->select('APELLIDO2_COORDINADOR AS apellido2');
-				$this->db->where('RUT_USUARIO3',$row->de);
-				$query1 = $this->db->get('coordinador');
-
-				$this->db->select('NOMBRE1_PROFESOR AS nombre');
-				$this->db->select('APELLIDO1_PROFESOR AS apellido1');
-				$this->db->select('APELLIDO2_PROFESOR AS apellido2');
-				$this->db->where('RUT_USUARIO2',$row->de);
-				$query2 = $this->db->get('profesor');
-
-				if($query1->num_rows() > 0)
-				{				
-					foreach ($query1->result() as $row1)
-					{
-						$de=array();
-					   	array_push($de, $row1);					   	
-					   	$resultado=  array_merge($detalles,$de); 
-					}	
-				}
-				else if($query2->num_rows() > 0)
-				{
-					foreach ($query2->result() as $row2)
-					{
-						$de=array();
-					   	array_push($de, $row2);
-					   	$resultado=  array_merge($detalles,$de);					   
-					}	
-				}
-				
-				
-			}
-			return $resultado;
-
+			return $query->result();
 		}
 		catch(Exception $e)
 		{
@@ -1096,13 +996,9 @@ class model_correo extends CI_Model
 	{
 		try
 		{    
-
-
-			$this->db->where('COD_CORREO',$codigo);
+			$this->db->where('ID_CORREO',$codigo);
 			$this->db->where('RUT_USUARIO',$rut);
-			$this->db->update('cartar_user',array('NO_LEIDO_CARTA_USER' => 0));
-			
-			
+			$this->db->update('carta_usuario',array('NO_LEIDA_CARTA_USUARIO' => 0));
 			return true;
 
 		}

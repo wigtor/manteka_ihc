@@ -23,7 +23,7 @@ function DetalleCorreo(hora,fecha,asunto,id,de,codigo)
 	
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postLeido") ?>",
+		url: "<?php echo site_url("Correo/marcarComoLeidoAjax") ?>",
 			
 		data: {codigo:codigo},
 		success: function(respuesta)
@@ -87,7 +87,7 @@ function cambiarCorreos(direccion,offsetL)
 
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postRecibidos") ?>",
+		url: "<?php echo site_url("Correo/getCorreosRecibidosAjax") ?>",
 		data: { offset: offset, textoBusqueda: textoBusqueda, textoFiltrosAvanzados: valorFiltrosJson},
 		success: function(respuesta){
 			var tablaResultados = document.getElementById('listadoResultados');
@@ -283,7 +283,7 @@ function obtenerAdjunto(codigo)
 {
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		url: "<?php echo site_url("Correo/getAdjuntosAjax") ?>",
 		data: { codigo: codigo},
 		success: function(respuesta){
 			listaAdjuntos = JSON.parse(respuesta);
@@ -336,7 +336,7 @@ function obtenerAdjuntoOld(codigo)
 {
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		url: "<?php echo site_url("Correo/getAdjuntosAjax") ?>",
 		data: { codigo: codigo},
 		success: function(respuesta){
 			listaAdjuntos = JSON.parse(respuesta);
@@ -381,7 +381,7 @@ function obtenerAdjuntoOld(codigo)
 */
 function strip(html)
 {
-   var tmp = document.createElement("DIV");
+   var tmp = document.createElement("div");
    tmp.innerHTML = html;
    return tmp.textContent||tmp.innerText;
 }
@@ -566,7 +566,7 @@ function cargarCorreo(codigo)
 	
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postCargarCorreo") ?>",	
+		url: "<?php echo site_url("Correo/getDetallesCorreoAjax") ?>",	
 		data: {codigo:codigo},
 		success: function(respuesta)
 		{
@@ -645,7 +645,7 @@ if(isset($msj))
 ?>
 
 <script>
-	var tiposFiltro = ["", "De", "Mensaje", "Fecha", "Hora"]; //Debe ser escrito con PHP
+	var tiposFiltro = ["", "De", "Mensaje", "Fecha y hora"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""]; //Esta es variable global que almacena el valor de los input de búsqueda en específico
 	var inputAllowedFiltro = ["[A-Za-z]+", "[A-Za-z]+", "[A-Za-z]+","([1-9][0-9]{3}-(0\\d|1[0-2])-([0-2]\\d|3[0-1])|[1-9][0-9]{3}-(0\\d|1[0-2])|[1-9][0-9]{3}|(0\\d|1[0-2])|([0-2]\\d|3[0-1]))","(^(0{0,1}\\d|1\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$|([0-5]\\d):([0-5]\\d)$|([0-5]\\d)$)"];
 	var prefijo_tipoDato = "correo_rec_";
@@ -800,41 +800,4 @@ if(isset($msj))
   Cuerpo:<fieldset id="cuerpoMail" style=" min-height:250px;"></fieldset></pre>
 </fieldset>
 <script type="text/javascript">
-/*
-  $(document).ready(function() {
-  	$("[rel=details]").tooltip({
-  		placement : 'bottom', 
-  		html: 'true', 
-  		title : '<div style="text-color:white;"><strong>Muestra archivos adjuntos</strong></div>',
-  		trigger:'hover',
-  	});
-  	
-  });
-  
-    $(window).load(function() {
-  	  $("[rel=details]").popover({
-	placement : 'bottom', 
-    content: get_popover_content,
-    html: true,
-    trigger: 'click'
-});
-  	
-  });
-  
-function get_popover_content() {
-	var fisicos = document.getElementById("adjuntosEmailFisico").value;
-	var logicos = document.getElementById("adjuntosEmailLogico").value;
-	var fisicos2 = new Array();
-	var logicos2 = new Array();
-	fisicos2 = fisicos.split("???");
-	logicos2 = fisicos.split("???");
-	content = '<table id="tablaX">'
-	content2 = '';
-	for (var i = 0; i < fisicos2.length; i++)
-	{
-		content2= content2 + '<a href="/manteka/adjuntos/' + fisicos2[i] + '">' + logicos2[i] + '</a><br>';
-	}
-	content = content2 + '</table>'
-	return content;
-}*/
 </script>

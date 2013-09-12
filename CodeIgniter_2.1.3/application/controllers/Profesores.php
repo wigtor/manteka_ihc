@@ -5,22 +5,6 @@ require_once APPPATH.'controllers/Master.php';
 class Profesores extends MasterManteka {
 	
 	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	
-	/**
 	* Manda a la vista 'cuerpo_profesores_verProfesor' los datos necesarios para su funcionamiento
 	*
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
@@ -35,21 +19,22 @@ class Profesores extends MasterManteka {
 		//cargo el modelo de profesores
 		$this->load->model('Model_profesor');
 
-		$datos_plantilla = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
+		//$datos_plantilla = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores());
 
 		$subMenuLateralAbierto = 'verProfesores'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 
 		$this->cargarTodo("Docentes", "cuerpo_profesores_verProfesor", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	
 	}
+
+
 	/**
 	* Método que responde a una solicitud de post para pedir los datos de un profesor
 	* Recibe como parámetro el rut del profesor
 	*/
-	public function postDetallesProfesor() {
+	public function getDetallesProfesorAjax() {
 		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
@@ -62,11 +47,12 @@ class Profesores extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+
 	/**
 	* Se buscan profesores de forma asincrona para mostrarlos en la vista
 	*
 	**/
-	public function postBusquedaProfesores() {
+	public function getProfesoresAjax() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -100,22 +86,35 @@ class Profesores extends MasterManteka {
 	* por primera ves la vista de agregar profesor. Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function agregarProfesores()
+	public function agregarProfesor()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
 		
-		$datos_vista=0;
-		$subMenuLateralAbierto = "agregarProfesores"; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Docentes", 'cuerpo_profesores_agregarProfesor', "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+		$this->load->model('Model_profesor');
+		$datos_vista['tipos_profesores'] = $this->Model_profesor->getTiposProfesores();
 
-		
+		$subMenuLateralAbierto = "agregarProfesor"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+		$this->cargarTodo("Docentes", 'cuerpo_profesores_agregarProfesor', "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 	}
+
+
+	public function rutExisteAjax() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_profesor');
+		$rut = $this->input->post('rut_post');
+
+		$resultado = $this->Model_profesor->rutExiste($rut);
+		echo json_encode($resultado);
+	}
+
 
 	/**
 	* Inserta un profesor al sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_agregarProfesor'
@@ -129,7 +128,7 @@ class Profesores extends MasterManteka {
 	* Finalmente se carga la vista nuevamente con todos los datos para permitir el ingreso de otro profesor.
 	*
 	*/
-	 public function insertarProfesor()
+	 public function postInsertarProfesor()
 	{
 		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
 		if ($rut == FALSE) {
@@ -147,9 +146,9 @@ class Profesores extends MasterManteka {
 		$correo_profesor1 = $this->input->post("correo_profesor1");
         $telefono_profesor = $this->input->post("telefono_profesor");
         $tipo_profesor = $this->input->post("tipo_profesor");
-        $confirmacion = $this->Model_profesor->InsertarProfesor($rut_profesor,$nombre1_profesor,$nombre2_profesor,$apellido1_profesor,$apellido2_profesor,$correo_profesor,$correo_profesor1,$telefono_profesor, $tipo_profesor);
+        $confirmacion = $this->Model_profesor->insertarProfesor($rut_profesor, $nombre1_profesor, $nombre2_profesor, $apellido1_profesor, $apellido2_profesor, $correo_profesor, $correo_profesor1,$telefono_profesor, $tipo_profesor);
 	    
-		if($confirmacion != 1){
+		if($confirmacion != TRUE){
 			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar insertar el profesor";
 			$datos_plantilla["tipo_msj"] = "alert-error";
@@ -161,10 +160,9 @@ class Profesores extends MasterManteka {
 	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Profesores/agregarProfesores"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		$datos_plantilla["nombre_redirecTo"] = "Agregar profesores"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$datos_plantilla["redirecTo"] = "Profesores/agregarProfesor"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["nombre_redirecTo"] = "Agregar profesor"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 
 	}
@@ -181,16 +179,15 @@ class Profesores extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function borrarProfesores(){
+	public function borrarProfesor(){
 		
 		$this->load->model('Model_profesor');
 
         $datos_vista = array('rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
 		
-		$subMenuLateralAbierto = "borrarProfesores"; //Para este ejemplo, los informes no tienen submenu lateral
+		$subMenuLateralAbierto = "borrarProfesor"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarTodo("Docentes", 'cuerpo_profesores_borrarProfesor', "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 
 
@@ -209,12 +206,12 @@ class Profesores extends MasterManteka {
 	*
 	* @param string $rut_profesor
 	*/
-	public function eliminarProfesores()
+	public function eliminarProfesor()
 	{
 		$rut_profesor = $this->input->post("rutEliminar");
 
 		$this->load->model('Model_profesor');
-		$confirmacion = $this->Model_profesor->EliminarProfesor($rut_profesor);
+		$confirmacion = $this->Model_profesor->eliminarProfesor($rut_profesor);
 		
 
 		if ($confirmacion==1){
@@ -248,7 +245,7 @@ class Profesores extends MasterManteka {
 	*/
 
 
-    public function EditarProfesores() // Modifica profesor
+    public function editarProfesor() // Modifica profesor
     {
 
 		//SE DEBE COMPROBAR RUT ANTES O HAY UN PROBLEMA DE SEGURIDAD
@@ -272,7 +269,7 @@ class Profesores extends MasterManteka {
 				$this->load->model('model_coordinadores');
 				$this->model_coordinadores->modificarPassword($run_profe, $run_profe);
 			}
-			$confirmacion = $this->Model_profesor->EditarProfesor($run_profe,$telefono_profe,$tipo_profe, $nombre_1, $nombre_2, $apellidoPaterno_profe,$apellidoMaterno_profe,$correo1,$correo2);
+			$confirmacion = $this->Model_profesor->editarProfesor($run_profe,$telefono_profe,$tipo_profe, $nombre_1, $nombre_2, $apellidoPaterno_profe,$apellidoMaterno_profe,$correo1,$correo2);
 			
 			
 			if ($confirmacion==1){
@@ -293,7 +290,7 @@ class Profesores extends MasterManteka {
 		}
 		else {
 			$datos_plantilla = array();
-			$subMenuLateralAbierto = 'editarProfesores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$subMenuLateralAbierto = 'editarProfesor'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array();
 			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;

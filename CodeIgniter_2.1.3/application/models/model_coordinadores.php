@@ -17,7 +17,7 @@
 * @subpackage Models
 * @author     Grupo 2 IHC 1-2013 Usach
 */
-class model_coordinadores extends CI_Model{
+class Model_coordinador extends CI_Model{
   /* function ValidarUsuario($rut,$password){         //   Consulta Mysql para buscar en la tabla Usuario aquellos usuarios que coincidan con el rut y password ingresados en pantalla de login
       $query = $this->db->where('RUT_USUARIO',$rut);   //   La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
       $query = $this->db->where('PASSWORD',md5($password));

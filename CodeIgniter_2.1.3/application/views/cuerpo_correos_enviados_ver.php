@@ -58,7 +58,7 @@ function obtenerAdjunto(codigo)
 {
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/obtenerAdjuntos") ?>",
+		url: "<?php echo site_url("Correo/getAdjuntosAjax") ?>",
 		data: { codigo: codigo},
 		success: function(respuesta){
 			listaAdjuntos = JSON.parse(respuesta);
@@ -125,7 +125,7 @@ function cambiarCorreos(direccion,offset)
 
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postEnviados") ?>",
+		url: "<?php echo site_url("Correo/getCorreosEnviadosAjax") ?>",
 		data: { offset: offset, textoBusqueda: textoBusqueda, textoFiltrosAvanzados: valorFiltrosJson},
 		success: function(respuesta){
 			var tablaResultados = document.getElementById('listadoResultados');
@@ -292,7 +292,7 @@ function cambiarCorreos2(direccion,offset)
 	}
 	$.ajax({
 		type: "POST",
-		url: "<?php echo site_url("Correo/postEnviados") ?>",
+		url: "<?php echo site_url("Correo/getCorreosEnviadosAjax") ?>",
 		data: { offset: offset},
 		success: function(respuesta){
 			var tablaResultados = document.getElementById('tabla');
@@ -635,12 +635,12 @@ function escribirHeadTableCorreos() {
 </script>
 
 <script>
-	var tiposFiltro = ["", "Para", "Mensaje", "Fecha", "Hora"]; //Debe ser escrito con PHP
+	var tiposFiltro = ["", "Para", "Mensaje", "Fecha y hora"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""]; //Esta es variable global que almacena el valor de los input de búsqueda en específico
 	var inputAllowedFiltro = ["[A-Za-z]+", "[A-Za-z]+", "[A-Za-z]+","([1-9][0-9]{3}-(0\\d|1[0-2])-([0-2]\\d|3[0-1])|[1-9][0-9]{3}-(0\\d|1[0-2])|[1-9][0-9]{3}|(0\\d|1[0-2])|([0-2]\\d|3[0-1]))","(^(0{0,1}\\d|1\\d|2[0-3]):([0-5]\\d):([0-5]\\d)$|([0-5]\\d):([0-5]\\d)$|([0-5]\\d)$)"];
 	var prefijo_tipoDato = "correo_rec_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Correos/postEnviados") ?>";
+	var url_post_busquedas = "<?php echo site_url("Correos/getCorreosEnviadosAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/correos") ?>";
 
 	//Se cargan por ajax

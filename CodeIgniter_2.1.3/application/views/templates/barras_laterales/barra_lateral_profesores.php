@@ -14,9 +14,9 @@
 		}
 		// Las operaciones por defecto no poseen clases
 		$verProfesores = "";
-		$agregarProfesores = "";
-		$editarProfesores = "";
-		$borrarProfesores = "";
+		$agregarProfesor = "";
+		$editarProfesor = "";
+		$borrarProfesor = "";
 		$verAyudantes = "";
 		$agregarAyudantes = "";
 		$editarAyudantes = "";
@@ -38,16 +38,16 @@
 			$verProfesores = 'class="active"';
 			$inProfesores = "in";
 		}
-		else if ($subVistaLateralAbierta == "agregarProfesores") {
-			$agregarProfesores = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarProfesor") {
+			$agregarProfesor = 'class="active"';
 			$inProfesores = "in";
 		}
-		else if ($subVistaLateralAbierta == "editarProfesores") {
-			$editarProfesores = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarProfesor") {
+			$editarProfesor = 'class="active"';
 			$inProfesores = "in";
 		}
-		else if ($subVistaLateralAbierta == "borrarProfesores") {
-			$borrarProfesores = 'class="active"';
+		else if ($subVistaLateralAbierta == "borrarProfesor") {
+			$borrarProfesor = 'class="active"';
 			$inProfesores = "in";
 		}
 		else if ($subVistaLateralAbierta == "verAyudantes") {
@@ -95,9 +95,9 @@
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verProfesores?>><a href="<?php echo site_url("Profesores/verProfesores")?>">Ver profesores</a></li>
 		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-		        		<li <?php echo $agregarProfesores; ?> ><a href="<?php echo site_url("Profesores/agregarProfesores")?>">Agregar profesores</a></li>
-						<li <?php echo $editarProfesores; ?> ><a href="<?php echo site_url("Profesores/editarProfesores")?>">Editar  profesores</a></li>
-						<li <?php echo $borrarProfesores; ?> ><a href="<?php echo site_url("Profesores/borrarProfesores")?>">Borrar profesores</a></li>
+		        		<li <?php echo $agregarProfesor; ?> ><a href="<?php echo site_url("Profesores/agregarProfesor")?>">Agregar profesores</a></li>
+						<li <?php echo $editarProfesor; ?> ><a href="<?php echo site_url("Profesores/editarProfesor")?>">Editar  profesores</a></li>
+						<li <?php echo $borrarProfesor; ?> ><a href="<?php echo site_url("Profesores/borrarProfesor")?>">Borrar profesores</a></li>
 		     		<?php } ?>
 		     	</div>
 		    </div>

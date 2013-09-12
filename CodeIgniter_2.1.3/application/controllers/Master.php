@@ -295,6 +295,60 @@ class MasterManteka extends CI_Controller {
 		$this->ejecutarCronjobs();
 	}
 
+
+	/**
+	*	Función que envía un correo hacia un destinatario desde el correo especificado.
+	* 
+	* 	@param string $destino Es el mail del destinatario del correo.
+	* 	@param string $subject Es el tema o título del correo.
+	* 	@param string $mensaje Es el texto que contiene el correo.
+	* 	@return bool indica si se envió correctamente el correo. 
+	*/
+	private function enviarCorreo($destino, $subject, $mensaje, $adjuntos) {
+
+		/*
+		*	Se intenta enviar el correo, capturando un error en caso
+		*	de que no se pueda realizar.
+		*/
+		try {
+			$this->setTimeZone();
+			$this->load->library('email', $this->getConfigMail());
+			$this->email->from('no-reply@manteka.cl', 'ManteKA');		// Envío del correo desde e-mail "no-reply@manteka.cl". Autor ManteKA
+			$this->email->to($destino);									// Destinatario del correo
+			$this->email->subject("[ManteKA] ".$subject);				// Asunto del correo
+			$this->email->message($mensaje);							// Mensaje del correo
+			if($adjuntos != "") {
+				foreach ($adjuntos as $adjunto) {
+					$this->email->attach("adjuntos/".$adjunto[1]);
+				}
+			}
+			if (!$this->email->send()) {								// Envío del correo
+				//echo $this->email->print_debugger();
+				return FALSE;
+			}
+			return TRUE;												// Retorna verdadero en caso de que se haya enviado satisfactoriamente
+		}
+		catch (Exception $e) {
+			return FALSE;												// Se captura el error, y se retorna Falso en caso de que haya habido problemas
+		}
+	}
+
+
+	private function getConfigMail() {
+		$configuracion = array();
+		$configuracion['smtp_host'] = 'ssl://smtp.googlemail.com';
+		$this->config->load('config');
+		$configuracion['smtp_user'] = $this->config->item('mail_manteka');
+		$configuracion['smtp_pass'] = $this->config->item('password_mail_manteka');
+		$configuracion['smtp_port'] = '465';
+		$configuracion['starttls'] = true;
+		$configuracion['mailtype'] = 'html';
+		$configuracion['protocol'] = 'smtp';
+		$configuracion['newline']   = "\r\n";
+		return $configuracion;
+	}
+
+
 	/**
 	* Método que ejecuta los cronjobs que se encuentren en la base de datos
 	* 

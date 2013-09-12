@@ -7,7 +7,7 @@
  * y para setear nueva información
  * @author Grupo 1
  */
-class model_usuario extends CI_Model{
+class Model_usuario extends CI_Model{
 
 	/**
 	*  Identifica si en la base de datos existe un usuario con una contraseña identica a la ingresada como parámetro.
@@ -22,6 +22,7 @@ class model_usuario extends CI_Model{
 		// La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
 		$query = $this->db->where('RUT_USUARIO',$rut);
 		$query = $this->db->where('PASSWORD_PRIMARIA',md5($password));
+		$query = $this->db->where('LOGUEABLE', TRUE);
 		$query = $this->db->get('usuario'); //Acá va el nombre de la tabla
 
 		// Se obtiene la fila del resultado de la consulta a la base de datos
@@ -37,6 +38,7 @@ class model_usuario extends CI_Model{
 			// Consulta a la base de datos
 			$query = $this->db->where('RUT_USUARIO',$rut);
 			$query = $this->db->where('PASSWORD_TEMPORAL',md5($password));
+			$query = $this->db->where('LOGUEABLE', TRUE);
 			$query = $this->db->where('VALIDEZ >', date('Y-m-d H:i:s')); //compruebo que esté dentro del periodo de validez
 			$query = $this->db->get('usuario');
 			//echo $this->db->last_query(); //Para hacer debug de la query
@@ -50,7 +52,7 @@ class model_usuario extends CI_Model{
 			return FALSE;                    // retornar FALSE
 		}
 
-		// Cao contrario, retornar losd atos del usuario mediante la función datos->usuario
+		// Caso contrario, retornar los datos del usuario mediante la función datos->usuario
 		return $this->datos_usuario($filaResultado->RUT_USUARIO);
 	}
 
@@ -69,9 +71,7 @@ class model_usuario extends CI_Model{
 		$query = $this->db->get('usuario');
 
 		// Resultado de la consulta
-		$res = $query->row();
-		return $res; // Se retorna la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias)
-
+		return $query->row(); // Se retorna la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias)
 	}
 
 
@@ -177,7 +177,7 @@ class model_usuario extends CI_Model{
 			$query = $this->db->get('usuario');
 		}
 		catch(Exception $e){
-		// Si se captura un error de cualquier tipo, se devuelve falso.
+			// Si se captura un error de cualquier tipo, se devuelve falso.
 			return FALSE;
 		}
 		// Se retorna la fila resultante de la consulta a la Base de Datos
@@ -195,24 +195,24 @@ class model_usuario extends CI_Model{
 			$this->db->flush_cache();
 			$this->db->stop_cache();
 
-			$this->db->select('RUT_USUARIO AS rut');
+			$this->db->select('usuario.RUT_USUARIO AS rut');
 			$this->db->select('usuario.ID_TIPO');
 			$this->db->select('PASSWORD_PRIMARIA');
 			$this->db->select('PASSWORD_TEMPORAL');
 			$this->db->select('VALIDEZ');
-			$this->db->select('NOMBRE1_COORDINADOR AS nombre1');
-			$this->db->select('NOMBRE2_COORDINADOR AS nombre2');
-			$this->db->select('APELLIDO1_COORDINADOR AS apellido1');
-			$this->db->select('APELLIDO2_COORDINADOR AS apellido2');
-			$this->db->select('TELEFONO_COORDINADOR AS telefono');
+			$this->db->select('NOMBRE1 AS nombre1');
+			$this->db->select('NOMBRE2 AS nombre2');
+			$this->db->select('APELLIDO1 AS apellido1');
+			$this->db->select('APELLIDO2 AS apellido2');
+			$this->db->select('TELEFONO AS telefono');
 			$this->db->select('CORREO1_USER AS email1');
 			$this->db->select('CORREO2_USER AS email2');
 			$this->db->select('NOMBRE_TIPO AS tipo_usuario');
-			$this->db->join('coordinador', 'coordinador.RUT_USUARIO3 = usuario.RUT_USUARIO');
+			$this->db->join('coordinador', 'coordinador.RUT_USUARIO = usuario.RUT_USUARIO');
 			$this->db->join('tipo_user', 'usuario.ID_TIPO = tipo_user.ID_TIPO');
-			$query = $this->db->where('RUT_USUARIO',$rut);
+			$query = $this->db->where('usuario.RUT_USUARIO',$rut);
 			$query = $this->db->get('usuario');
-
+			//echo $this->db->last_query().'   ';return;
 			// Devolver las filas coincidentes, es decir, los datos del usuario
 			return $query->row();
 		}
@@ -224,22 +224,22 @@ class model_usuario extends CI_Model{
 			$this->db->flush_cache();
 			$this->db->stop_cache();
 
-			$this->db->select('RUT_USUARIO AS rut');
+			$this->db->select('usuario.RUT_USUARIO AS rut');
 			$this->db->select('usuario.ID_TIPO');
 			$this->db->select('PASSWORD_PRIMARIA');
 			$this->db->select('PASSWORD_TEMPORAL');
 			$this->db->select('VALIDEZ');
-			$this->db->select('NOMBRE1_PROFESOR AS nombre1');
-			$this->db->select('NOMBRE2_PROFESOR AS nombre2');
-			$this->db->select('APELLIDO1_PROFESOR AS apellido1');
-			$this->db->select('APELLIDO2_PROFESOR AS apellido2');
-			$this->db->select('TELEFONO_PROFESOR AS telefono');
+			$this->db->select('NOMBRE1 AS nombre1');
+			$this->db->select('NOMBRE2 AS nombre2');
+			$this->db->select('APELLIDO1 AS apellido1');
+			$this->db->select('APELLIDO2 AS apellido2');
+			$this->db->select('TELEFONO AS telefono');
 			$this->db->select('CORREO1_USER AS email1');
 			$this->db->select('CORREO2_USER AS email2');
 			$this->db->select('NOMBRE_TIPO AS tipo_usuario');
-			$this->db->join('profesor', 'profesor.RUT_USUARIO2 = usuario.RUT_USUARIO');
+			$this->db->join('profesor', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 			$this->db->join('tipo_user', 'usuario.ID_TIPO = tipo_user.ID_TIPO');
-			$query = $this->db->where('RUT_USUARIO',$rut);
+			$query = $this->db->where('usuario.RUT_USUARIO',$rut);
 			$query = $this->db->get('usuario');
 			// Devolver las filas coincidentes, es decir, los datos del usuario
 			return $query->row();
@@ -271,34 +271,12 @@ class model_usuario extends CI_Model{
 
 		// La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
 		$query = $this->db->where('RUT_USUARIO',$rut);
-		$query = $this->db->update('usuario', array('CORREO1_USER'=>$mail1, 'CORREO2_USER'=>$mail2)); //Acá va el nombre de la tabla
+		$query = $this->db->update('usuario', array('CORREO1_USER'=>$mail1, 'CORREO2_USER'=>$mail2, 'TELEFONO'=>$telefono)); //Acá va el nombre de la tabla
 
 		// Se limpia la caché de la consulta
 		$this->db->stop_cache();
 		$this->db->flush_cache();
 		$this->db->stop_cache();
-
-		// Si la cuenta del usuario es del tipo coordinador.
-		// Se debe actualizar sus datos en la tabla COORDINADOR
-		if ($tipo_usuario == 2) {
-
-			// La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
-			$query = $this->db->where('RUT_USUARIO3',$rut);
-			$query = $this->db->update('coordinador', array('TELEFONO_COORDINADOR'=>$telefono)); //Acá va el nombre de la tabla
-		}
-
-		// Si la cuenta del usuario es del tipo profesor.
-		// Se debe actualizar sus datos en la tabla PROFESOR
-		else if ($tipo_usuario == 1) {
-			// La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
-			$query = $this->db->where('RUT_USUARIO2',$rut);
-			$query = $this->db->update('profesor', array('TELEFONO_PROFESOR'=>$telefono)); //Acá va el nombre de la tabla
-		}
-
-		// Caso contrario, el tipo de cuenta es desconocido
-		else {
-			return FALSE;
-		}
 
 		// Finalmente. Se retorna el tipo de cuenta del usuario
 		return $tipo_usuario;

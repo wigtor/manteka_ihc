@@ -1,10 +1,10 @@
 <script>
-	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", "", ""];
-	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+",""];
-	var prefijo_tipoDato = "ayudante_";
+	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático", "Sección"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", "", ""];
+	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+", "", ""];
+	var prefijo_tipoDato = "profesor_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Profesores/postBusquedaProfesores") ?>";
+	var url_post_busquedas = "<?php echo site_url("Profesores/getProfesoresAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/profesores") ?>";
 
 	function verDetalle(elemTabla) {
@@ -18,7 +18,7 @@
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Profesores/postDetallesProfesor") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Profesores/getDetallesProfesorAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */

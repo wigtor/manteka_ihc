@@ -87,38 +87,6 @@ class Login extends MasterManteka {
 
 
 	/**
-	*	Función que envía un correo hacia un destinatario desde el correo especificado.
-	*	Esta función se usa sólo para enviar el correo de recuperación de contraseña
-	* 
-	* 	@param string $destino Es el mail del destinatario del correo.
-	* 	@param string $subject Es el tema o título del correo.
-	* 	@param string $mensaje Es el texto que contiene el correo.
-	* 	@return bool indica si se envió correctamente el correo. 
-	*/
-	private function enviarCorreo($destino, $subject, $mensaje) {
-
-		/*
-		*	Se intenta enviar el correo, capturando un error en caso
-		*	de que no se pueda realizar.
-		*/
-		try {
-			$this->email->from('no-reply@manteka.cl', 'ManteKA');		// Envío del correo desde e-mail "no-reply@manteka.cl". Autor ManteKA
-			$this->email->to($destino);									// Destinatario del correo
-			$this->email->subject($subject);							// Asunto del correo
-			$this->email->message($mensaje);							// Mensaje del correo
-			if (!$this->email->send()) {										// Envío del correo
-				//echo $this->email->print_debugger();
-				return FALSE;
-			}
-			return TRUE;												// Retorna verdadero en caso de que se haya enviado satisfactoriamente
-		}
-		catch (Exception $e) {
-			return FALSE;												// Se captura el error, y se retorna Falso en caso de que haya habido problemas
-		}
-	}
-
-
-	/**
 	*	Esta función muestra la vista para cambiar la contraseña
 	*	Lleva un argumento que se setea por defecto en un array vacio, 
 	*	de esta forma cuando el usuario abre esa vista por primera vez el array está vacio
@@ -138,11 +106,11 @@ class Login extends MasterManteka {
 		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');		// Tipo de cuenta del usuario
 
 		
-		$this->load->model('model_usuario');												// Se carga el Modelo para utilizar sus funciones
+		$this->load->model('Model_usuario');												// Se carga el Modelo para utilizar sus funciones
 
 		// Se busca al usuario con un rut específico
 		// En caso de encontrarlo se obtienen todos sus datos
-		$datos = $this->model_usuario->datos_usuario($rut_user);
+		$datos = $this->Model_usuario->datos_usuario($rut_user);
 		
 		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
 		if (count($mensajes_alert) > 0) {
@@ -153,8 +121,7 @@ class Login extends MasterManteka {
 		$datos_plantilla["datos"] = $datos;
 		$subMenuLateralAbierto = '';
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 		$this->cargarTodo("", "cuerpo_cambio_contrasegna", "", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	
 	}
@@ -188,10 +155,10 @@ class Login extends MasterManteka {
 		}
 		else {
 			try {
-				$this->load->model('model_usuario');
+				$this->load->model('Model_usuario');
 				$inputPass = $this->input->post('inputPassword');
 				//  Se coprueba que el usuario exista en la base de datos y la password ingresada sea correcta
-	            $ExisteUsuarioyPassoword=$this->model_usuario->ValidarUsuario($rut, $inputPass);
+	            $ExisteUsuarioyPassoword=$this->Model_usuario->ValidarUsuario($rut, $inputPass);
 
 	            //	La variable $ExisteUsuarioyPassoword recibe valor TRUE si el usuario existe y FALSE en caso que no. Este valor lo determina el modelo.
 	            if($ExisteUsuarioyPassoword) {
@@ -239,13 +206,7 @@ class Login extends MasterManteka {
 				// Si no se logró validar
 	            else {
 	            	// Borrar las coockies seteadas bajo el rut de dicho usuario
-			       	$this->session->unset_userdata('rut');
-			      	$this->session->unset_userdata('email');
-			      	$this->session->unset_userdata('loggued_in');
-			      	$this->session->unset_userdata('id_tipo_usuario');		// Se quita de las coockies la variable id_tipo_usuario
-    				$this->session->unset_userdata('tipo_usuario');			// Se quita de las coockies la variables tipo_usuario
-    				$this->session->unset_userdata('nombre_usuario');			// Se quita de las coockies la variables nombre_usuario
-			      	redirect('/Login/', '');							// Se regresa a la vista de autentificación
+			       	$this->logout();
 				}
 			}
 			/*
@@ -279,10 +240,10 @@ class Login extends MasterManteka {
 			$destino = $this->input->post('email');
 			$new_pass = $this->randomPassword();
 			/* Seteo la nueva contraseña en el modelo y le doy un tiempo de validez */
-			$this->load->model('model_usuario');
+			$this->load->model('Model_usuario');
 			$fechaValidez = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')."+86400 minutes"));//date("Y-m-d", strtotime(date("Y-m-d")." +1 day"));
 			//echo 'FECHA VALIDEZ: '.$fechaValidez;
-			$existeEmail = $this->model_usuario->setPassSecundaria($destino, $new_pass, $fechaValidez);
+			$existeEmail = $this->Model_usuario->setPassSecundaria($destino, $new_pass, $fechaValidez);
 			if ($existeEmail) {
 
 				// Se define el mensaje a ser enviado
@@ -293,7 +254,7 @@ class Login extends MasterManteka {
 				$mensaje = $mensaje."\n\nEl equipo de ManteKA.";
 
 				// Si hubo un error al enviar el mensaje, indicar al usuario
-				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje) == FALSE) {
+				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje, "") == FALSE) {
 					$datos_plantilla["titulo_msj"] = "No se pudo enviar el correo";
 					$datos_plantilla["cuerpo_msj"] = "Existe un problema con el servicio que envía correos electrónicos, comuniquese con el administrador.";
 					$datos_plantilla["tipo_msj"] = "alert-error";
@@ -342,7 +303,7 @@ class Login extends MasterManteka {
 		}
 
 		// Se carga el modelo de usuarios
-		$this->load->model('model_usuario');
+		$this->load->model('Model_usuario');
 
 		$this->form_validation->set_rules('correo1', 'Correo', 'required|max_length[100]|valid_email|xss_clean');
 		$this->form_validation->set_rules('correo2', 'Correo alternativo', 'max_length[100]|valid_email|xss_clean');
@@ -376,7 +337,7 @@ class Login extends MasterManteka {
 			}
 
 			// Caso contrario, cambiar la contraseña mediante el modelo
-			$resultado = $this->model_usuario->cambiarContrasegna($rut ,md5($this->input->post('nva_contrasegna')));
+			$resultado = $this->Model_usuario->cambiarContrasegna($rut ,md5($this->input->post('nva_contrasegna')));
 		}
 		
 		if ($this->form_validation->run() == FALSE)
@@ -392,7 +353,7 @@ class Login extends MasterManteka {
 		$mail2 = $this->input->post("correo2");
 		$telefono = $this->input->post("telefono");
 
-		$resultado = $this->model_usuario->cambiarDatosUsuario($rut, $tipo, $telefono, $mail1, $mail2);
+		$resultado = $this->Model_usuario->cambiarDatosUsuario($rut, $tipo, $telefono, $mail1, $mail2);
 
 
 		$datos_plantilla["titulo_msj"] = "Listo";
@@ -421,10 +382,10 @@ class Login extends MasterManteka {
 		try {
 
 			// Se carga el modelo de usuarios
-			$this->load->model('model_usuario');
+			$this->load->model('Model_usuario');
 
 			// Se intenta validar al usuario con su contraseña mediante el modelo
-			$logueo = $this->model_usuario->ValidarUsuario($rut ,$current_password);
+			$logueo = $this->Model_usuario->ValidarUsuario($rut ,$current_password);
 
 			// Si la autentificación es correcta, devolver TRUE
 			if ($logueo) {
@@ -457,10 +418,10 @@ class Login extends MasterManteka {
 		try {
 
 			// Se carga el modelo
-			$this->load->model('model_usuario');
+			$this->load->model('Model_usuario');
 
 			// Validar la existencia del RUT
-			$logueo = $this->model_usuario->ValidarRut($rut);
+			$logueo = $this->Model_usuario->ValidarRut($rut);
 
 			// Si existe, devolver TRUE
 			if ($logueo) {
@@ -492,12 +453,12 @@ class Login extends MasterManteka {
 		try {
 
 			// Se carga el modelo
-			$this->load->model('model_usuario');
+			$this->load->model('Model_usuario');
 			
 			// Validar la existencia del mail en la base de datos, mediante el modelo
 
 			// Si existe, retornar TRUE
-			if ($this->model_usuario->existe_mail($email)) {
+			if ($this->Model_usuario->existe_mail($email)) {
 				return TRUE;
 			}
 
@@ -545,173 +506,142 @@ class Login extends MasterManteka {
    	* 
    	*	@param string $provider Es el proveedor del login, por ahora sólo es válido utilizar "google".
    	*/
-   public function signInGoogle($provider){
-    $rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-    if ($rut == TRUE) {
-      redirect('/Correo/', '');         	// En dicho caso, se redirige a la interfaz principal
-    }
+	public function signInGoogle($provider){
+		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
+		if ($rut == TRUE) {
+			redirect('/Correo/', '');         	// En dicho caso, se redirige a la interfaz principal
+		}
 
-    /*
-    *	Se carga la herramienta OAuth 2.0.
-    *	Protocolo para la utilización de APIs de otros sistemas registrados
-    */
-    $this -> load -> spark('oauth2/0.4.0');
-
-    
-    // Si el proveedor pasado es Google
-    if($provider == 'google')
-    {
-    	require_once APPPATH.'config/keys.php';
-    	
-    	$keys_array;
-    	
-    	if(defined('ENVIRONMENT')){
-    		switch(ENVIRONMENT)
-    		{
-    			case 'development':
-    				$keys_array = array(
-    					'id' => constant('DEVELOPMENT-ID'),							// ID del cliente OAuth registrado con Google
-    					'secret' => constant('DEVELOPMENT-PASS')					// Clave secreta del client
-					);
-					break;
-				case 'production':
-					$keys_array = array(
-						'id' => constant('PRODUCTION-ID'),							// ID del cliente OAuth registrado con Google
-						'secret' => constant('PRODUCTION-CLASS')					// Clave secreta del client
-					);
-					break;
-				default:
-					exit('The application environment is not set correctly.');
-			}
-    	}
-    	else{
-    		redirect('Otros');
-
-    	}
-        $provider = $this -> oauth2 -> provider($provider, $keys_array);
-    }
-
-    if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
-		
-		$url = $provider -> authorize();
-		$url = $this->str_lreplace("approval_prompt=force", "approval_prompt=auto", $url);
-        redirect($url);													// Redirección a este mismo método
 		/*
-
-        //$this -> load -> spark('curl/1.2.1');
-		//$var = $this->proxy->site('http://facebook.com');
-
-		$datos_plantilla["title"] = "ManteKA";															// Título de la Vista
-		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);			// Cabecera a cargar
-		$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada','',true);			// Cabecera a cargar
-		
-		$this -> curl -> create($url);
-		$this->curl->option(CURLINFO_HEADER_OUT, FALSE);
-		$this->curl->option(CURLOPT_COOKIESESSION, FALSE);
-		$this->curl->option(CURLOPT_SSL_VERIFYPEER, FALSE);
-		$return = $this -> curl -> execute();
-		
-		if ($return== false) echo $this->curl->error_string;
-		$datos_plantilla["url_google"] = $url;
-		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', true);					// Footer del sitio
-
-		$this->load->view('templates/template_google',$datos_plantilla);
+		*	Se carga la herramienta OAuth 2.0.
+		*	Protocolo para la utilización de APIs de otros sistemas registrados
 		*/
+		$this -> load -> spark('oauth2/0.4.0');
 
-    } else {
-        try {
-            // Se posee de un Token exitoso enviado por google
-            $token = $provider -> access($this->input->get('code'));
 
-            // Se obtiene la información del usuario (Nombre, mail, dirección, foto)
-            $user = $provider->get_user_info($token); 
+		// Si el proveedor pasado es Google
+		if($provider == 'google')
+		{
+			require_once APPPATH.'config/keys.php';
 
-            // Correo del usuario ingresado
-            $mail = $user['email'];
-            
-            //Cargando modelo para validar correo del usuario ingresado con algún registro en la db
-            $this->load->model('model_usuario');
-            
-            /*
-              * Verificando si existe algún usuario con dicho correo electrónico. 
-              * Resultado de la consulta del modelo. Falso de no encontrar nada o
-              * Las filas correspondientes a los usuarios que posean dicho mail.
-            */
-            $usuario = $this->model_usuario->existe_mail($mail);
-            if ($usuario)
-            {
-            	// Se obtiene el tipo de cuenta que posee el usuario
-            	$redireccionarA = "index";
+			$keys_array;
 
-            	if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
-	            	$redireccionarA = "index";
-	            }
-				if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
-	            	$redireccionarA = "indexProfesor";
-	            }
+			if(defined('ENVIRONMENT')){
+				switch(ENVIRONMENT) {
+					case 'development':
+						$keys_array = array(
+							'id' => constant('DEVELOPMENT-ID'),							// ID del cliente OAuth registrado con Google
+							'secret' => constant('DEVELOPMENT-PASS')					// Clave secreta del client
+						);
+						break;
+					case 'production':
+						$keys_array = array(
+							'id' => constant('PRODUCTION-ID'),							// ID del cliente OAuth registrado con Google
+							'secret' => constant('PRODUCTION-CLASS')					// Clave secreta del client
+						);
+						break;
+					default:
+						exit('The application environment is not set correctly.');
+				}
+			}
+			else {
+				redirect('Otros');
 
-	            // Se asume "Recordarme desclickeado"
-	            $recordarme = FALSE;
-            	$rut_almacenado = "";
-            	$dv_almacenado = "";
+			}
+			$provider = $this -> oauth2 -> provider($provider, $keys_array);
+		}
 
-	            // Se crea un arreglo con los datos encontrados del usuario
-              	$newdata = array(
-					'rut'  => $usuario->rut,
-					'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
-					'dv_almacenado' => $dv_almacenado,
-					'email'     => $usuario->email1,
-					'recordarme' => $recordarme,
-					'tipo_usuario' => $usuario->tipo_usuario,
-					'id_tipo_usuario' => $usuario->ID_TIPO,
-					'nombre_usuario' => $usuario->nombre1
-              );
-              
-              // Carga los datos en las cookies
-              $this->session->set_userdata($newdata);
+		if (!$this -> input -> get('code')) {								// Solicitud del acceso a la API del proveedor
 
-              // Se redirige a la interfaz principal una vez que se ha autentificado
-              redirect('/Correo/'.$redireccionarA, "");
-            }
+			$url = $provider -> authorize();
+			$url = $this->str_lreplace("approval_prompt=force", "approval_prompt=auto", $url);
+			redirect($url);
 
-            // En caso de no existir ningún usuario con el correo ingresado
-            // Se indica al usuario mediante una vista, brindándole de dos opciones, volver a la autentificación mediane Google o 
-            // regresar al Login principal
-            else
-            {
-              $datos_plantilla["titulo_msj"] = "Error";
-              $datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA.";
-              $datos_plantilla["cuerpo_msj"] .= "<br>* Si presiona Volver, se deslogueará de sus cuentas de Google.";
-              $datos_plantilla["cuerpo_msj"] .= "<br>** Si no desea desloguearse de su cuenta de Google, presione ir a Inicio de sesión.";
-              $datos_plantilla["tipo_msj"] = "alert-error";
+		}
+		else {
+			try {
+				// Se posee de un Token exitoso enviado por google
+				$token = $provider -> access($this->input->get('code'));
 
-              /* Finalmente muestro la vista que indica que esto fue realizado correctamente */
-              $datos_plantilla["title"] = "ManteKA";
-              $datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
-              $datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
-              
-              $datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-              $datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-              $datos_plantilla["redirecFromFullUrl"] = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=".site_url("Login/index/"); //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-              $datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-              $this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
-            }
-        // En caso de que haya habido un error en la operación
-        } catch (OAuth2_Exception $e) {
-            show_error('No se pudo loguear mediante Google :(: ' . $e);
-        }
-    }
+				// Se obtiene la información del usuario (Nombre, mail, dirección, foto)
+				$user = $provider->get_user_info($token); 
 
-   }
-   
-   public function postLoguearse() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+				// Correo del usuario ingresado
+				$mail = $user['email'];
 
-		$rut = $this->input->post('rutEnvio');
-		$this->load->model('Model_estudiante');
-		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
-		echo json_encode($resultado);
+				//Cargando modelo para validar correo del usuario ingresado con algún registro en la db
+				$this->load->model('Model_usuario');
+
+				/*
+				  * Verificando si existe algún usuario con dicho correo electrónico. 
+				  * Resultado de la consulta del modelo. Falso de no encontrar nada o
+				  * Las filas correspondientes a los usuarios que posean dicho mail.
+				*/
+				$usuario = $this->Model_usuario->existe_mail($mail);
+				if ($usuario) {
+					// Se obtiene el tipo de cuenta que posee el usuario
+					$redireccionarA = "index";
+
+					if ($usuario->ID_TIPO == TIPO_USR_COORDINADOR) {
+						$redireccionarA = "index";
+					}
+					if ($usuario->ID_TIPO == TIPO_USR_PROFESOR) {
+						$redireccionarA = "indexProfesor";
+					}
+
+					// Se asume "Recordarme desclickeado"
+					$recordarme = FALSE;
+					$rut_almacenado = "";
+					$dv_almacenado = "";
+
+					// Se crea un arreglo con los datos encontrados del usuario
+						$newdata = array(
+						'rut'  => $usuario->rut,
+						'rut_almacenado' => $rut_almacenado, //Usado para el "recordarme"
+						'dv_almacenado' => $dv_almacenado,
+						'email'     => $usuario->email1,
+						'recordarme' => $recordarme,
+						'tipo_usuario' => $usuario->tipo_usuario,
+						'id_tipo_usuario' => $usuario->ID_TIPO,
+						'nombre_usuario' => $usuario->nombre1
+					);
+
+					// Carga los datos en las cookies
+					$this->session->set_userdata($newdata);
+
+					// Se redirige a la interfaz principal una vez que se ha autentificado
+					redirect('/Correo/'.$redireccionarA, "");
+				}
+
+				// En caso de no existir ningún usuario con el correo ingresado
+				// Se indica al usuario mediante una vista, brindándole de dos opciones, volver a la autentificación mediane Google o 
+				// regresar al Login principal
+				else {
+					$datos_plantilla["titulo_msj"] = "Error";
+					$datos_plantilla["cuerpo_msj"] = "El correo ingresado no se asocia a ningún usuario del sistema ManteKA.";
+					$datos_plantilla["cuerpo_msj"] .= "<br>* Si presiona Volver, se deslogueará de sus cuentas de Google.";
+					$datos_plantilla["cuerpo_msj"] .= "<br>** Si no desea desloguearse de su cuenta de Google, presione ir a Inicio de sesión.";
+					$datos_plantilla["tipo_msj"] = "alert-error";
+
+					/* Finalmente muestro la vista que indica que esto fue realizado correctamente */
+					$datos_plantilla["title"] = "ManteKA";
+					$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, true);
+					$datos_plantilla["banner_portada"] = $this->load->view('templates/banner_portada', '', true);
+
+					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+					$datos_plantilla["redirecTo"] = "Login/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+					$datos_plantilla["redirecFromFullUrl"] = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=".site_url("Login/index/"); //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+					$datos_plantilla["nombre_redirecTo"] = "Inicio de sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+					$this->load->view('templates/big_msj_deslogueado', $datos_plantilla);
+				}
+				// En caso de que haya habido un error en la operación
+			}
+			catch (OAuth2_Exception $e) {
+				show_error('No se pudo loguear mediante Google :(: ' . $e);
+			}
+		}
 	}
+
 
 	/**
 	*	Función privada para apoyar la labor de otras funciones.

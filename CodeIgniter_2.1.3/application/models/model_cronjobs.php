@@ -27,15 +27,6 @@ class Model_cronJobs extends CI_Model{
 			$query = $this->db->query($query3);
 			$query = $this->db->query($query4);
 
-			/*
-			$query = "UPDATE cron_jobs SET PROXIMA_EJECUCION = TIMESTAMPADD( MINUTE, PERIODICITY_MINUTES, NOW() ) WHERE PROXIMA_EJECUCION < NOW() AND @proxima := PROXIMA_EJECUCION AND @id :=ID_JOB;
-					SELECT PATH_PHP_TO_EXEC AS rutaPhp FROM cron_jobs WHERE @proxima < NOW() AND @id = ID_JOB;";
-			$query = $this->db->query($query);
-			if ($query == FALSE) {
-				return array();
-			}
-			return $query->result();
-			*/
 			return $resultados;
 		}
 		catch (Exception $e) {

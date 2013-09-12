@@ -13,15 +13,18 @@
 			document.getElementById("rut_profesor").value = "";
 			return;
 		}
+		
+		/* Muestro el div que indica que se está cargando... */
+		var iconoCargado = document.getElementById("icono_cargando");
+		$(icono_cargando).show();
+
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Alumnos/rutExisteC") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Profesores/rutExisteAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { rut_post: rut},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				//var tablaResultados = document.getElementById("modulos");
-				//$(tablaResultados).empty();
 				var existe = jQuery.parseJSON(respuesta);
-				if(existe == -1){
+				if(existe == true){
 
 					var mensaje = document.getElementById("mensaje");
 					$(mensaje).empty();
@@ -36,9 +39,7 @@
 				}
 		});
 
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		
 	}
 
 </script>
@@ -66,7 +67,7 @@
 		<div id="mensaje"></div>
 		<fieldset>		
 			<legend>Agregar Profesor</legend>	
-			<form  class="form-horizontal" id="formAgregar" onsubmit="agregarProfesor()" type="post" method="post" action="<?php echo site_url("Profesores/insertarProfesor/")?>">
+			<form  class="form-horizontal" id="formAgregar" onsubmit="agregarProfesor()" type="post" method="post" action="<?php echo site_url("Profesores/postInsertarProfesor/")?>">
 
 			
 			<div class="row-fluid">
@@ -122,9 +123,9 @@
 		  					</div>
 						</div>
 						<div class="control-group">
-  							<label class="control-label" for="inputInfo" style="cursor: default">7.- <font color="red">*</font> Correo secundario:</label>
+  							<label class="control-label" for="inputInfo" style="cursor: default">7.- Correo secundario:</label>
   							<div class="controls">
-    							<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" class="span12" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com" required>
+    							<input type="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" class="span12" name="correo_profesor1" maxlength="199" placeholder="nombre2_usuario@miemail.com">
   							</div>
 		  				</div>	
 						<div class="control-group">
@@ -137,8 +138,14 @@
 		  					<label class="control-label" for="inputInfo" style="cursor: default">9.- <font color="red">*</font> Tipo:</label>
 		  					<div class="controls">
 								<select id="tipoDeFiltro"  class="span12" title="Tipo de contrato" name="tipo_profesor">
-									<option value="Jornada Completa">Profesor Jornada Completa</option>
-									<option value="Por hora">Profesor Por hora</option>
+									<?php
+									foreach ($tipos_profesores as $valor) {
+										?>
+											<option value="<?php echo $valor->id?>"><?php echo $valor->nombre_tipo?></option>
+										<?php 
+									}
+									
+									?>
 								</select>
 							</div>
 						</div>
@@ -195,7 +202,6 @@
 					</div>
 					
 					</div>
-					<!--<?php echo form_close(''); ?>-->
-			</form>
+				<?php echo form_close(''); ?>
 			</div>
 		</fieldset>

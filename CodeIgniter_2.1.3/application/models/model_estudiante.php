@@ -429,7 +429,7 @@ class Model_estudiante extends CI_Model {
 	* Obtiene los rut de la base de datos y los compara con el entregado como parametro
 	*
 	* Consulta la base de datos por medio de active record para obtener los rut de usuarios y los agrega a $lista,
-	* luego realiza la misma operaciópara ayudantes y estudiantes, finalmente se compara $rut con cada elemento de $lista
+	* luego realiza la misma operación para ayudantes y estudiantes, finalmente se compara $rut con cada elemento de $lista
 	* de encontrarse coincidencia el rut ya existe en el sistema y se retorna -1 en caso contrario se retorna 1
 	*
 	* @param $rut el rut de cual se quiere comprobar su existencia en manteka
