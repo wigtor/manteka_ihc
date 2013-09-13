@@ -1,5 +1,5 @@
 <?php
-class model_log extends CI_Model
+class Model_log extends CI_Model
 {
 
 /**

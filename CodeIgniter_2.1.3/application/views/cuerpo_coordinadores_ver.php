@@ -14,7 +14,7 @@
 	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+"];
 	var prefijo_tipoDato = "coordinador_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Coordinadores/postBusquedaCoordinadores") ?>";
+	var url_post_busquedas = "<?php echo site_url("Coordinadores/busquedaCoordinadoresAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/coordinadores") ?>";
 
 
@@ -32,7 +32,7 @@
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Coordinadores/postDetallesCoordinador") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Coordinadores/detallesCoordinadorAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */

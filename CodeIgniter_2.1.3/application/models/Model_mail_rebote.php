@@ -5,7 +5,7 @@
 * @author Diego Gómez
 */
 
-class Model_Rebotes extends CI_Model {
+class Model_mail_rebote extends CI_Model {
 
 /** 
 * Función que retorna el rut del usuario que envió el mail rebotado y el cuerpo del mail que rebotó, además

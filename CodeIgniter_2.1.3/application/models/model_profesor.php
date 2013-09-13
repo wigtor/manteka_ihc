@@ -2,7 +2,33 @@
 
 class Model_profesor extends CI_Model {
 
-	
+	/**
+	* Obtiene una lista con todos los profesores y su informacion de usuario.
+	*
+	* Obtiene una listac con todos los profesores uniendo su informacion con la presente en la tabla usuarios.
+	*
+	* @param none
+	* @return array datos de los profesores
+	*/
+	function getAllProfesores() {
+		$this->db->select('profesor.RUT_USUARIO AS id');
+		$this->db->select('profesor.RUT_USUARIO AS rut');
+		$this->db->select('NOMBRE1 AS nombre1');
+		$this->db->select('NOMBRE1 AS nombre2');
+		$this->db->select('APELLIDO1 AS apellido1');
+		$this->db->select('APELLIDO2 AS apellido2');
+		$this->db->select('TELEFONO AS fono');
+		$this->db->select('CORREO1_USER AS email1');
+		$this->db->select('CORREO2_USER AS email2');
+		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
+		$query = $this->db->get('profesor');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
 	/**
 	* Inserta un profesor en la base de datos
 	*
@@ -21,23 +47,20 @@ class Model_profesor extends CI_Model {
 	* @param string $tipo_profesor Tipo del profesor a insertar
 	* @return boolean TRUE o FALSE en caso de éxito o fracaso en la operación
 	*/
-	public function insertarProfesor($rut_profesor, $nombre1_profesor, $nombre2_profesor, $apellido1_profesor, 
-		$apellido2_profesor, $correo_profesor, $correo_profesor1, $telefono_profesor, $tipo_profesor) {
-		$id_tipo = TIPO_USR_PROFESOR;
+	public function agregarProfesor($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $tipo_profesor) {
 		
-		$pass = $rut_profesor;
+		$pass = $rut;
 		$data1 = array(
-			'RUT_USUARIO' => $rut_profesor,
-			'ID_TIPO' => $id_tipo,
+			'RUT_USUARIO' => $rut,
+			'ID_TIPO' => TIPO_USR_PROFESOR,
 			'PASSWORD_PRIMARIA' => md5($pass),
-			'CORREO1_USER' => $correo_profesor,
-			'CORREO2_USER' => $correo_profesor1,
-			'NOMBRE1' => $nombre1_profesor ,
-			'NOMBRE2' => $nombre2_profesor ,
-			'APELLIDO1' => $apellido1_profesor ,
-			'APELLIDO2' => $apellido2_profesor,
-			'TELEFONO' =>  $telefono_profesor,
-			'LOGUEABLE' => TRUE
+			'CORREO1_USER' => $correo1,
+			'CORREO2_USER' => $correo2,
+			'NOMBRE1' => $nombre1 ,
+			'NOMBRE2' => $nombre2 ,
+			'APELLIDO1' => $apellido1 ,
+			'APELLIDO2' => $apellido2,
+			'TELEFONO' =>  $telefono
 		);
 		$data2 = array(
 			'RUT_USUARIO' => $rut_profesor ,
@@ -86,34 +109,6 @@ class Model_profesor extends CI_Model {
 
 
 	/**
-	* Obtiene los datos de todos los profesores de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada profesor y se va guardando en un arreglo de dos dimensiones
-	* Se hace el cruce también con la tabla usuario, verificando que los ruts sean iguales
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return  Información de todos los profesores del sistema.
-	*/
-		public function getAllProfesores()
-	{
-		$this->db->select('RUT_USUARIO AS rut');
-		$this->db->select('NOMBRE1 AS nombre1');
-		$this->db->select('NOMBRE2 AS nombre2');
-		$this->db->select('APELLIDO1 AS apellido1');
-		$this->db->select('APELLIDO2 AS apellido2');
-		$this->db->select('CORREO1_USER AS correo');
-		$this->db->from('profesor');
-		$this->db->join('usuario','profesor.RUT_USUARIO = usuario.RUT_USUARIO');
-		$this->db->order_by("APELLIDO1", "asc");
-		$query = $this->db->get();
-		if ($query == FALSE) {
-			return array();
-		}
-		return $query->result();
-	}
-
-
-	/**
 	* Edita la información de un profesor en la base de datos
 	*
 	* Guarda las variables a actualizar en el array data luego se llama a la función update y se guarda el resultado de la actualización
@@ -128,90 +123,22 @@ class Model_profesor extends CI_Model {
 	* @param string $ape2 Apellido mateno del profesor
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function editarProfesor($run_profe,$telefono_profe,$tipo_profe,$nom1, $nom2, $ape1,$ape2,$correo1,$correo2)
+    public function actualizarProfesor($rut, $telefono, $tipo_profe, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2)
     {
-		$data = array(					
-					'RUT_USUARIO2' => $run_profe ,
-					'NOMBRE1_PROFESOR' => $nom1 ,
-					'NOMBRE2_PROFESOR' => $nom2,
-					'APELLIDO1_PROFESOR' => $ape1 ,
-					'APELLIDO2_PROFESOR' => $ape2,
-					'TELEFONO_PROFESOR'=>$telefono_profe,
-					'TIPO_PROFESOR' => $tipo_profe,
-
-		);
-		$this->db->where('RUT_USUARIO2', $run_profe);
-        $datos = $this->db->update('profesor',$data);
-		
-	    $this->db->where('RUT_USUARIO',$run_profe);
-        $informacion_user = array(
-                        'CORREO1_USER' => $correo1,
-                        'CORREO2_USER' => $correo2,);
-        $datos2 = $this->db->update('usuario',$informacion_user);
-		
-		if($datos == true && $datos2==true){
-			return 1;
-		}
-		else{
-			return -1;
-		}	
+		$this->db->where('ID_TIPO', TIPO_USR_PROFESOR);
+		$this->db->where('RUT_USUARIO',$rut);
+		$informacion = array(
+				'NOMBRE1' => $nombre1,
+				'NOMBRE2' => $nombre2,
+				'APELLIDO1' => $apellido1,
+				'APELLIDO2' => $apellido2,
+				'TELEFONO' => $fono,
+				'CORREO1_USER' => $correo1,
+				'CORREO2_USER' => $correo2);
+		$res = $this->db->update('usuario', $informacion);
+		return $res;
     }
 
-	/**
-	* Obtiene los datos de todos los modulos de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada modulo y se va guardando en un arreglo de dos dimensiones
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return array $lista Contiene la información de todos los modulos del sistema
-	*/
-   	public function verModulo() {
-		//$sql="SELECT * FROM MODULO_TEMATICO"; //código MySQL
-		$this->db->select('*');
-		$this->db->from('MODULO_TEMATICO');
-		$query=$this->db->get();
-		$datos=$query->result();
-		//$datos=mysql_query($sql); //enviar código MySQL
-		$contador = 0;
-		$lista=array();
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-		$lista[$contador]=array();
-			$lista[$contador][0] = $row->ID_MODULO_TEM;
-			$lista[$contador][3] = $row->NOMBRE_MODULO;
-			$contador = $contador + 1;
-		}
-
-		return $lista;
-	}
-
-
-	/**
-	* Obtiene los datos de todas las secciones de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el código de cada sección y se va guardando en un arreglo
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return array $lista Contiene la información de todas las secciones del sistema
-	*/
-	public function verSeccion(){
-		//$sql="SELECT cod_seccion FROM SECCION"; //código MySQL
-		$this->db->select('ID_SECCION');
-		$this->db->from('seccion');
-		$query=$this->db->get();
-		$datos=$query->result();
-		//$datos=mysql_query($sql); //enviar código MySQL
-		$contador = 0;
-		$lista=array();
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			$lista=array();
-			$lista[$contador] = $row->ID_SECCION;
-			$contador = $contador + 1;
-		}
-		
-		return $lista;
-	}
 
 	/**
 	*Obtiene todos los datos de un profesor en específico desde la base de datos
@@ -326,20 +253,10 @@ class Model_profesor extends CI_Model {
 	*/
 	public function eliminarProfesor($rut_profesor)
     {
-		$this->db->where('RUT_USUARIO', $rut_profesor);
-		if($this->db->delete('usuario')) {
-			$retorno1 = 1;
-		}
-		else{
-			$retorno1 = 0;
-		}
-
-		if($retorno1 == 1){
-			return 1;
-		}
-		else{
-			return -1;
-		}
+		$this->db->where('RUT_USUARIO', $rut);
+		$this->db->where('ID_TIPO', TIPO_USR_PROFESOR);
+		$res = $this->db->delete('usuario');
+		return $res;
     }
 
 

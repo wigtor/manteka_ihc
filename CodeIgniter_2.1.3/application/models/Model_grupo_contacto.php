@@ -6,7 +6,7 @@
  * Posee métodos para obtener información de la base de datos
  * y para setear nueva información.
  */
-class model_grupos_contacto extends CI_Model{
+class Model_grupo_contacto extends CI_Model{
 
    /**
    *  Retorna todos los grupos de contacto pertenecientes

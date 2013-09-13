@@ -5,12 +5,6 @@
 * @author Grupo 4
 */
 class Model_ayudante extends CI_Model {
-   public $rut_ayudante = 0;
-    var $nombre1_ayudante = '';
-    var $nombre2_ayudante = '';
-    var $apellido1_ayudante='';
-    var $apellido2_ayudante='';    
-    var $correo_ayudante='';
 
 	/**
 	* Inserta un ayudante en la base de datos
@@ -27,32 +21,39 @@ class Model_ayudante extends CI_Model {
 	* @param string $cod_profesor Código del profesor asociado al ayudante
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/	
-	public function InsertarAyudante( $rut_ayudante, $nombre1_ayudante, $nombre2_ayudante, $apellido1_ayudante, $apellido2_ayudante, $correo_ayudante, $cod_profesor) {
-		$data1 = array(					
-					'RUT_AYUDANTE' => $rut_ayudante ,
-					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
-					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
-					'APELLIDO1_AYUDANTE' => $apellido1_ayudante ,
-					'APELLIDO2_AYUDANTE' => $apellido2_ayudante,
-					'CORREO_AYUDANTE' => $correo_ayudante 
+	public function agregarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $ruts_profesores) {
+		$data1 = array(
+			'RUT_USUARIO' => $rut,
+			'ID_TIPO' => TIPO_USR_AYUDANTE,
+			'PASSWORD_PRIMARIA' => md5($rut),
+			'CORREO1_USER' => $correo1,
+			'CORREO2_USER' => $correo2,
+			'NOMBRE1' => $nombre1,
+			'NOMBRE2' => $nombre2,
+			'APELLIDO1' => $apellido1,
+			'APELLIDO2' => $apellido2,
+			'TELEFONO' =>  $fono,
+			'LOGUEABLE' => FALSE
 		);
-        $datos1 = $this->db->insert('ayudante',$data1);
-		
-		$data2 = array(					
-					'RUT_USUARIO2' => $cod_profesor,
-					'RUT_AYUDANTE' => $rut_ayudante 
-		);
-        $datos2 = $this->db->insert('ayu_profe',$data2);
-		
-		
-		if($datos1 && $datos2){
-			return 1;
+		$data2 = array('RUT_USUARIO' => $rut);
+
+		$this->db->trans_start();
+		$datos2 = $this->db->insert('usuario', $data1);
+		$datos = $this->db->insert('ayudante', $data2);
+		foreach($ruts_profesores as $rut_profe) {
+			$data3 = array('RUT_USUARIO' => $rut, 'PRO_RUT_USUARIO' =>$rut_profe);
+			$datos = $this->db->insert('ayu_profe', $data3);
+		}
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
-		
     }
+
 
 	/**
 	* Eliminar un ayudante de la base de datos
@@ -63,61 +64,22 @@ class Model_ayudante extends CI_Model {
 	* @param string $rut_ayudante Rut del ayudante que se eliminará de la base de datos
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function EliminarAyudante($rut_ayudante)
-    {
-		//$sql="DELETE FROM ayudante WHERE RUT_AYUDANTE = '$rut_ayudante' "; //código MySQL
+	public function eliminarAyudante($rut_ayudante)
+	{
+		$this->db->trans_start();
+		$this->db->where('RUT_USUARIO', $rut_ayudante);
+		$this->db->where('ID_TIPO', TIPO_USR_AYUDANTE);
+		$datos= $this->db->delete('usuario');
+		$this->db->trans_complete();
 
-		$this->db->where('RUT_AYUDANTE', $rut_ayudante);
-		$datos= $this->db->delete('ayudante');
-		//$datos=mysql_query($sql); //enviar código MySQL
-		if($datos == true){
-			return 1;
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
-    }
-    
+	}
 
-
-	/**
-	* Obtiene los datos de todos los ayudantes de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada ayudante y se va guardando en un arreglo de dos dimensiones
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return array $lista Contiene la información de todos los ayudantes del sistema
-	*/
-	public function VerTodosLosAyudantes()
-	{
-		//$sql="SELECT * FROM ayudante ORDER BY APELLIDO1_AYUDANTE"; //código MySQL
-
-		$this->db->select('*');
-		$this->db->from('ayudante');
-		$this->db->order_by("APELLIDO1_AYUDANTE", "asc");
-		$query=$this->db->get();
-
-		//$datos=mysql_query($sql); //enviar código MySQL
-		$datos= $query->result();
-		$contador = 0;
-		$lista = array();
-		//echo mysql_error();
-
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			# code...
-			$lista[$contador]=array();
-			$lista[$contador][0] = $row->RUT_AYUDANTE;
-			$lista[$contador][1] = $row->NOMBRE1_AYUDANTE;
-			$lista[$contador][2] = $row->NOMBRE2_AYUDANTE;
-			$lista[$contador][3] = $row->APELLIDO1_AYUDANTE;
-			$lista[$contador][4] = $row->APELLIDO2_AYUDANTE;
-			$lista[$contador][5] = $row->CORREO_AYUDANTE;
-			$contador = $contador + 1;
-		}
-		
-		return $lista;
-		}
 
 	/**
 	* Obtiene los datos de todos los ayudantes de la base de datos
@@ -130,13 +92,17 @@ class Model_ayudante extends CI_Model {
 
 		public function getAllAyudantes()
 	{
-		$this->db->select('RUT_AYUDANTE AS rut');
-		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
-		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
-		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
-		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
-		$this->db->select('CORREO_AYUDANTE as correo');
-		$this->db->order_by("NOMBRE1_AYUDANTE", "asc");
+		$this->db->select('RUT_USUARIO AS id');
+		$this->db->select('RUT_USUARIO AS rut');
+		$this->db->select('NOMBRE1 AS nombre1');
+		$this->db->select('NOMBRE2 AS nombre2');
+		$this->db->select('APELLIDO1 AS apellido1');
+		$this->db->select('APELLIDO2 AS apellido2');
+		$this->db->select('TELEFONO AS fono');
+		$this->db->select('CORREO1_USER AS email1');
+		$this->db->select('CORREO2_USER AS email2');
+		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->order_by("APELLIDO1", "asc");
 		$query = $this->db->get('ayudante');
 		if ($query == FALSE) {
 			$query = array();
@@ -144,69 +110,8 @@ class Model_ayudante extends CI_Model {
 		}
 		return $query->result();
 	}
-		
-	/**
-	* Obtiene los datos de todos los profesores de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada profesor y se va guardando en un arreglo de dos dimensiones
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return array $lista Contiene la información de todos los profesores del sistema
-	*/
-		public function VerTodosLosProfesores()
-	{
-		//$sql="SELECT * FROM profesor ORDER BY NOMBRE1_PROFESOR"; //código MySQL
-		$this->db->select('*');
-		$this->db->from('profesor');
-		$this->db->order_by("NOMBRE1_PROFESOR", "asc");
-		$query=$this->db->get();
-		$datos=$query->result();
-		//$datos=mysql_query($sql); //enviar código MySQL
-		$contador = 0;
-		$lista=array();
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			$lista[$contador]=array();
-			$lista[$contador][0] = $row->RUT_USUARIO2;
-			$lista[$contador][1] = $row->NOMBRE1_PROFESOR;
-			$lista[$contador][2] = $row->APELLIDO1_PROFESOR;
-			$contador = $contador + 1;
-		}
-		
-		return $lista;
-		}
-
-	/**
-	* Obtiene los datos de todas las secciones de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo el código de cada sección y se va guardando en un arreglo
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @return array $lista Contiene la información de todas las secciones del sistema
-	*/
-	public function VerSecciones()
-	{
-		//$sql="SELECT COD_SECCION FROM seccion"; //código MySQL
-		$this->db->select('COD_SECCION');
-		$this->db->from('seccion');
-		$query=$this->db->get();
-		$datos=$query->result();
-
-		//$datos=mysql_query($sql); //enviar código MySQL
-		$contador = 0;
-		$lista=array();
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			$lista[$contador] = $row->COD_SECCION;
-			$contador = $contador + 1;
-		}
-		
-	return $lista;
-	}
 
 
-
-	
 	/**
 	* Edita la información de un ayudante en la base de datos
 	*
@@ -221,23 +126,40 @@ class Model_ayudante extends CI_Model {
 	* @param string $correo_ayudante Correo a editar del ayudante
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante)
+	public function actualizarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $ruts_profesores)
 	{
-		$data = array(					
-					'NOMBRE1_AYUDANTE' => $nombre1_ayudante ,
-					'NOMBRE2_AYUDANTE' => $nombre2_ayudante ,
-					'APELLIDO1_AYUDANTE' => $apellido_paterno ,
-					'APELLIDO2_AYUDANTE' => $apellido_materno ,
-					'CORREO_AYUDANTE' => $correo_ayudante
+		$data1 = array(
+			'RUT_USUARIO' => $rut,
+			'ID_TIPO' => TIPO_USR_AYUDANTE,
+			'PASSWORD_PRIMARIA' => md5($rut),
+			'CORREO1_USER' => $correo1,
+			'CORREO2_USER' => $correo2,
+			'NOMBRE1' => $nombre1,
+			'NOMBRE2' => $nombre2,
+			'APELLIDO1' => $apellido1,
+			'APELLIDO2' => $apellido2,
+			'TELEFONO' =>  $fono,
+			'LOGUEABLE' => FALSE
 		);
-		$this->db->where('RUT_AYUDANTE', $rut_ayudante);
-        $datos = $this->db->update('ayudante',$data);
-		if($datos == true){
-			return 1;
+
+		$this->db->trans_start();
+		$this->db->where('ID_TIPO', TIPO_USR_AYUDANTE);
+		$this->db->where('RUT_USUARIO', $rut);
+		$datos2 = $this->db->update('usuario', $data1);
+		/* //PENDIENTE
+		foreach($ruts_profesores as $rut_profe) {
+			$data3 = array('RUT_USUARIO' => $rut, 'PRO_RUT_USUARIO' =>$rut_profe);
+			$datos = $this->db->insert('ayu_profe', $data3);
+		}
+		*/
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
-		}		
+			return TRUE;
+		}
     }
 
 
@@ -255,20 +177,20 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function getAyudantesByFilter($texto, $textoFiltrosAvanzados)
 	{
-		$this->db->select('ayudante.RUT_AYUDANTE AS id');
-		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
-		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
+		$this->db->select('usuario.RUT_USUARIO AS id');
+		$this->db->select('NOMBRE1 AS nombre1');
+		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('NOMBRE_SECCION AS seccion');
-		$this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
-		$this->db->join('seccion', 'ayu_profe.COD_SECCION  = seccion.COD_SECCION ', 'LEFT OUTER');
+		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');
 		$this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
 
 		if (trim($texto) != "") {
-			$this->db->like("ayudante.RUT_AYUDANTE", $texto);
-			$this->db->or_like("NOMBRE1_AYUDANTE", $texto);
-			$this->db->or_like("NOMBRE2_AYUDANTE", $texto);
-			$this->db->or_like("APELLIDO1_AYUDANTE", $texto);
-			$this->db->or_like("APELLIDO2_AYUDANTE", $texto);
+			$this->db->like("usuario.RUT_USUARIO", $texto);
+			$this->db->or_like("NOMBRE1", $texto);
+			$this->db->or_like("NOMBRE2", $texto);
+			$this->db->or_like("APELLIDO1", $texto);
+			$this->db->or_like("APELLIDO2", $texto);
 			$this->db->or_like("NOMBRE_SECCION", $texto);
 		}
 		else {
@@ -277,14 +199,14 @@ class Model_ayudante extends CI_Model {
 			define("BUSCAR_POR_NOMBRE", 1);
 			define("BUSCAR_POR_APELLIDO", 2);
 			define("BUSCAR_POR_SECCION", 3);
-			$this->db->like("ayudante.RUT_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
+			$this->db->like("usuario.RUT_USUARIO", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
 			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
-				$this->db->where("(NOMBRE1_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
+				$this->db->where("(NOMBRE1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
 				//$this->db->like("(NOMBRE1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
 				//$this->db->or_like("NOMBRE2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]);
 			}
 			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
-				$this->db->where("(APELLIDO1_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2_AYUDANTE LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+				$this->db->where("(APELLIDO1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 				//$this->db->like("(APELLIDO1_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 			}
@@ -312,21 +234,27 @@ class Model_ayudante extends CI_Model {
 	* @return Se retorna un objeto cuyos atributos son los atributos del ayudante, FALSE si no se encontró
 	*/
 	public function getDetallesAyudante($rut) {
-		$this->db->select('ayudante.RUT_AYUDANTE AS rut');
-		$this->db->select('NOMBRE1_AYUDANTE AS nombre1');
-		$this->db->select('NOMBRE2_AYUDANTE AS nombre2');
-		$this->db->select('APELLIDO1_AYUDANTE AS apellido1');
-		$this->db->select('APELLIDO2_AYUDANTE AS apellido2');
-		$this->db->select('CORREO_AYUDANTE AS correo');
+		$this->db->select('ayudante.RUT_USUARIO AS id');
+		$this->db->select('ayudante.RUT_USUARIO AS rut');
+		$this->db->select('NOMBRE1 AS nombre1');
+		$this->db->select('NOMBRE2 AS nombre2');
+		$this->db->select('APELLIDO1 AS apellido1');
+		$this->db->select('APELLIDO2 AS apellido2');
+		$this->db->select('TELEFONO AS fono');
+		$this->db->select('CORREO1_USER AS correo');
+		$this->db->select('CORREO2_USER AS correo2');
+/* //PENDIENTE
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1_profe');
 		$this->db->select('NOMBRE2_PROFESOR AS nombre2_profe');
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
+*/
 		$this->db->select('NOMBRE_SECCION AS seccion');
-		$this->db->join('ayu_profe', 'ayudante.RUT_AYUDANTE = ayu_profe.RUT_AYUDANTE', 'LEFT OUTER');
-		$this->db->join('seccion', 'ayu_profe.COD_SECCION  = seccion.COD_SECCION ', 'LEFT OUTER');
-		$this->db->join('profesor', 'profesor.RUT_USUARIO2 = ayu_profe.RUT_USUARIO2', 'LEFT OUTER');
-		$this->db->where('ayudante.RUT_AYUDANTE', $rut);
+		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');
+		$this->db->join('profesor', 'profesor.RUT_USUARIO = ayu_profe.PRO_RUT_USUARIO', 'LEFT OUTER'); //QUIZÁ DEBA IR AL REVEZ
+		$this->db->where('ayudante.RUT_USUARIO', $rut);
 		$query = $this->db->get('ayudante');
 		if ($query == FALSE) {
 		 return array();

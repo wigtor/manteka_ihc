@@ -20,10 +20,8 @@ SET time_zone = "+00:00";
 -- Base de datos: `manteka_db`
 --
 
---
---
--- Volcado de datos para la tabla `tipo_user`
---
+INSERT INTO `manteka_db`.`seccion` (`ID_SECCION`, `ID_SESION`, `NOMBRE_SECCION`) VALUES (NULL, NULL, 'A-01'), (NULL, NULL, 'B-02');
+
 
 INSERT INTO `tipo_user` (`ID_TIPO`, `NOMBRE_TIPO`) VALUES
 (1, 'profesor'),

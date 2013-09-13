@@ -1,6 +1,6 @@
 <?php
 
-class Model_sesiones extends CI_Model {
+class Model_sesion extends CI_Model {
 
 
 /**

@@ -1,9 +1,5 @@
 <?php
 class Model_sala extends CI_Model {
-   public $cod_sala = 0;
-    var $num_sala = '';
-    var $capacidad = '';
-    var $ubicacion='';
 
 
 	/**

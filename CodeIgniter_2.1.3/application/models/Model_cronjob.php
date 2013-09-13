@@ -7,7 +7,7 @@
  * y para setear nueva información
  * @author Grupo 1
  */
-class Model_cronJobs extends CI_Model{
+class Model_cronJob extends CI_Model{
 
 	/**
 	*  Método que obtiene los cronjobs que pueden ser realizados según el timestamp actual

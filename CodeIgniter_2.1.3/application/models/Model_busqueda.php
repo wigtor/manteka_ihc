@@ -4,7 +4,7 @@
 * Clase que realiza las consultas a la base de datos relacionadas con los historiales de búsqueda
 * @author Grupo 1
 */
-class Model_busquedas extends CI_Model {
+class Model_busqueda extends CI_Model {
    
  	/**
  	* Función que retorna las palabras de las búsquedas realizadas anteriormente

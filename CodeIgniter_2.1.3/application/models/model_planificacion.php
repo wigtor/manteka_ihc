@@ -1,6 +1,6 @@
 <?php
  
-class model_planificacion extends CI_Model {
+class Model_planificacion extends CI_Model {
 
   
 

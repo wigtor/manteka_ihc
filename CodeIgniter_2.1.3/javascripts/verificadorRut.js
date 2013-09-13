@@ -44,3 +44,41 @@ function tiene_letras(texto){
    }
    return false;
 }
+
+function comprobarRutUsado(inputRut, actionPost) {
+	var rut = $(inputRut).val();
+	if(rut == "") {
+		return;
+	}
+
+	dv = rut.charAt(rut.length-1);
+	rut = rut.substring(0,rut.length-1);
+
+	if(calculaDigitoVerificador(rut, dv) != 0){
+		$('#tituloErrorDialog').html('Error en el rut');
+		$('#textoErrorDialog').html('El rut ingresado no es válido');
+		$('#modalError').modal();
+		return;
+	}
+	
+	/* Muestro el div que indica que se está cargando... */
+	$('#icono_cargando').show();
+	
+	$.ajax({
+		type: "POST",
+		url: actionPost,
+		data: { rut: rut},
+		success: function(respuesta) {
+			var existe = jQuery.parseJSON(respuesta);
+			if (existe == true){
+				$('#tituloErrorDialog').html('Error en el rut');
+				$('#textoErrorDialog').html('El rut ingresado ya está repetido en el sistema');
+				$('#modalError').modal();
+				$(inputRut).val('');
+			}
+
+			/* Quito el div que indica que se está cargando */
+			$('#icono_cargando').hide();
+		}
+	});
+}

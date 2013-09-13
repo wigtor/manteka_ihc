@@ -4,23 +4,12 @@ require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
 
 class Ayudantes extends MasterManteka {
 	
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	 
-	 	 
+	public function index() //Esto hace que el index sea la vista que se desee
+	{
+		$this->verAyudantes();
+	}
+
+
 	/**
 	* Manda a la vista 'cuerpo_profesores_verAyudante' los datos necesarios para su funcionamiento
 	*
@@ -35,15 +24,10 @@ class Ayudantes extends MasterManteka {
 		$datos_plantilla = array();
 		$subMenuLateralAbierto = 'verAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarTodo("Docentes", "cuerpo_profesores_verAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+		$this->cargarTodo("Docentes", "cuerpo_ayudantes_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
-	
-	public function index() //Esto hace que el index sea la vista que se desee
-	{
-		$this->verAyudantes();
-	}
+
 
 	/**
 	* Manda a la vista 'cuerpo_profesores_agregarAyudante' los datos necesarios para su funcionamiento
@@ -55,16 +39,18 @@ class Ayudantes extends MasterManteka {
 	* por primera ves la vista de agregar ayudante. Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function agregarAyudantes()
+	public function agregarAyudante()
 	{
-		$this->load->model('Model_ayudante');
-		$datos_plantilla = array('profesores' => $this->Model_ayudante->VerTodosLosProfesores(),'mensaje_confirmacion'=>2);
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_plantilla = array();
+			$this->load->model('Model_profesor');
+			$datos_plantilla['profesores'] = $this->Model_profesor->getAllProfesores();
 
-		$subMenuLateralAbierto = 'agregarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Docentes", "cuerpo_profesores_agregarAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$subMenuLateralAbierto = 'agregarAyudante'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Docentes", "cuerpo_ayudantes_agregar", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 	
 	
@@ -81,38 +67,45 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function insertarAyudante()
+	public function postAgregarAyudante()
 	{
-		$this->load->model('Model_ayudante');
-
-		$rut_ayudante = $this->input->post("rut_ayudante");
-		$nombre1_ayudante = $this->input->post("nombre1_ayudante");
-		$nombre2_ayudante = $this->input->post("nombre2_ayudante");;
-		$apellido_paterno = $this->input->post("apellido1_ayudante");
-		$apellido_materno = $this->input->post("apellido2_ayudante");
-		$correo_ayudante = $this->input->post("correo_ayudante");
-		$cod_profesores = $this->input->post("cod_profesores");
-
-		$confirmacion = $this->Model_ayudante->InsertarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante,$cod_profesores);
-	    
-
-		//Debe estar en un if según lo que contenga $confirmacion
-		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "El ayudante fue ingresado con éxito.";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar ingresar el ayudante";
-			$datos_plantilla["tipo_msj"] = "alert-error";
-		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_ayudante');
+			$rut = $this->input->post("rut");
+			$nombre1 = $this->input->post("nombre1");
+			$nombre2 = $this->input->post("nombre2");;
+			$apellido1 = $this->input->post("apellido1");
+			$apellido2 = $this->input->post("apellido2");
+			$correo1 = $this->input->post("correo1");
+			$correo2 = $this->input->post("correo2");
+			$telefono = $this->input->post("telefono");
+			$rut_profesores = $this->input->post("rut_profesores");
 
-		$datos_plantilla["redirecTo"] = 'Ayudantes/agregarAyudantes';
-		$datos_plantilla["nombre_redirecTo"] = "Agregar ayudante";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+			$confirmacion = $this->Model_ayudante->agregarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $rut_profesores);
+
+
+			//Debe estar en un if según lo que contenga $confirmacion
+			if ($confirmacion == TRUE){
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "El ayudante fue ingresado con éxito.";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar ingresar el ayudante";
+				$datos_plantilla["tipo_msj"] = "alert-error";
+			}
+
+			$datos_plantilla["redirecTo"] = 'Ayudantes/agregarAyudante';
+			$datos_plantilla["nombre_redirecTo"] = "Agregar ayudante";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+	}
 	}
 	
 	
@@ -127,16 +120,15 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function editarAyudantes()
+	public function editarAyudante()
 	{
-		$this->load->model('Model_ayudante');
-        $datos_plantilla = array('rs_ayudantes' => array(),'mensaje_confirmacion'=>2);
-
-		$subMenuLateralAbierto = 'editarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Docentes", "cuerpo_profesores_editarAyudante", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_plantilla = array();
+			$subMenuLateralAbierto = 'editarAyudante'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Docentes", "cuerpo_ayudantes_editar", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 	
 	/**
@@ -152,38 +144,43 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function EditarAyudante()
+	public function postEditarAyudante()
 	{
-		$this->load->model('Model_ayudante');
-
-		$rut_ayudante = $this->input->post("rutEditar");
-		$nombre1_ayudante = $this->input->post("nombre1_ayudante");
-		$nombre2_ayudante = $this->input->post("nombre2_ayudante");;
-		$apellido_paterno = $this->input->post("apellido_paterno");
-		$apellido_materno = $this->input->post("apellido_materno");
-		$correo_ayudante = $this->input->post("correo_ayudante");
-
-
-		$confirmacion = $this->Model_ayudante->ActualizarAyudante($rut_ayudante,$nombre1_ayudante,$nombre2_ayudante,$apellido_paterno,$apellido_materno,$correo_ayudante);
-
-		if($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado con éxito.";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar editar el ayudante";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_ayudante');
+			$rut = $this->input->post("rut");
+			$nombre1 = $this->input->post("nombre1");
+			$nombre2 = $this->input->post("nombre2");;
+			$apellido1 = $this->input->post("apellido1");
+			$apellido2 = $this->input->post("apellido2");
+			$correo1 = $this->input->post("correo1");
+			$correo2 = $this->input->post("correo1");
+			$telefono = $this->input->post("telefono");
+			$ruts_profesores = array(); //PENDIENTE
+
+			$confirmacion = $this->Model_ayudante->actualizarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $ruts_profesores);
+
+			if($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "El ayudante fue editado con éxito.";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else {
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar editar el ayudante";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+
+			$datos_plantilla["redirecTo"] = 'Ayudantes/editarAyudante';
+			$datos_plantilla["nombre_redirecTo"] = "Editar ayudantes";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
-		
-
-
-		$datos_plantilla["redirecTo"] = 'Ayudantes/editarAyudantes';
-		$datos_plantilla["nombre_redirecTo"] = "Editar ayudantes";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	
 	/**
@@ -196,17 +193,17 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function borrarAyudantes()
+	public function eliminarAyudante()
 	{
-		$this->load->model('Model_ayudante');
-        $datos_vista = array('rs_ayudantes' => array(),'mensaje_confirmacion'=>2);
-
-		$subMenuLateralAbierto = 'borrarAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Docentes", "cuerpo_profesores_borrarAyudante", "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_plantilla = array();
+			$subMenuLateralAbierto = 'eliminarAyudante'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Docentes", "cuerpo_ayudantes_eliminar", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
+
 
 	/**
 	* Elimina un ayudante del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_borrarAyudante'
@@ -221,54 +218,44 @@ class Ayudantes extends MasterManteka {
 	*
 	* @param string $rut_estudiante
 	*/
-
-	/**
-	*Elimina la información de un ayudante del sistema y luego carga los datos para volver a la vista 'cuerpo_profesores_editarAyudante'
-	*
-	* 
-	* Se cargan los datos para las plantillas de la página de realización.
-	* Se carga el modelo de ayudantes, se llama a la función EliminarAyudante 
-	* con los datos que se capturan un paso antes en el controlador desde la vista con el uso del POST.
-	* El resultado de esta operacion se recibe en la variable 'confirmacion'
-	* la que de acuerdo el valor se envía el mensaje de error o realización correspondiente, dando la opción de volver a la vista Borrar Ayudantes
-	* 
-	*
-	*
-	*/
-	public function EliminarAyudante()
+	public function postEliminarAyudante()
 	{
-		$this->load->model('Model_ayudante');
-		$rut_ayudante = $this->input->post('rutToDelete');
-		$confirmacion = $this->Model_ayudante->EliminarAyudante($rut_ayudante);
-		
-		if ($confirmacion == 1){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado con éxito.";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar eliminar el ayudante";
-			$datos_plantilla["tipo_msj"] = "alert-error";
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_ayudante');
+			$rut_ayudante = $this->input->post('rut');
+			$confirmacion = $this->Model_ayudante->eliminarAyudante($rut_ayudante);
+			
+			if ($confirmacion == TRUE){
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "El ayudante fue eliminado con éxito.";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intentar eliminar el ayudante";
+				$datos_plantilla["tipo_msj"] = "alert-error";
+			}
+			$datos_plantilla["redirecTo"] = 'Ayudantes/eliminarAyudante';
+			$datos_plantilla["nombre_redirecTo"] = "Eliminar ayudantes";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
-		$datos_plantilla["redirecTo"] = 'Ayudantes/borrarAyudantes';
-		$datos_plantilla["nombre_redirecTo"] = "Eliminar ayudantes";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); $tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-
-
-
 	}
-
 
 
 	/**
 	* Método que responde a una solicitud de post para pedir los datos de un ayudante
 	* Recibe como parámetro el rut del estudiante
 	*/
-	public function postDetallesAyudante() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+	public function getDetallesAyudanteAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -286,7 +273,10 @@ class Ayudantes extends MasterManteka {
 	*
 	*/
 
-	public function postBusquedaAyudantes() {
+	public function getAyudantesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -299,12 +289,12 @@ class Ayudantes extends MasterManteka {
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
-			$this->load->model('model_busquedas');
+			$this->load->model('Model_busqueda');
 			//Se debe insertar sólo si se encontraron resultados
-			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'ayudantes', $this->session->userdata('rut'));
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'ayudantes', $this->session->userdata('rut'));
 			$cantidad = count($textoFiltrosAvanzados);
 			for ($i = 0; $i < $cantidad; $i++) {
-				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'ayudantes', $this->session->userdata('rut'));
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'ayudantes', $this->session->userdata('rut'));
 			}
 		}
 		echo json_encode($resultado);

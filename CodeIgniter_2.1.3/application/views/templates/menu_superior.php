@@ -1,5 +1,5 @@
 <!--	Menú que contiene los distintos módulos que soporta el sistema ManteKA							-->
-<!--	Contiene las secciones Correos, Docentes, Secciones, Planificación, Salas, Alumnos, Informes	-->
+<!--	Contiene las secciones Correos, Docentes, Secciones, Planificación, Salas, Estudiantes, Informes	-->
 <!--	Para cada una de las secciones se determina si está seleccionada o no							-->
 <!--	Se recibe en la vista la variable $menuSuperiorAbierto desde el controlador						-->
 <!--	Determinando cuál es el módulo que está seleccionado											-->
@@ -18,7 +18,7 @@
 		$Secciones = "";
 		$Planificacion = "";
 		$Salas = "";
-		$Alumnos = "";
+		$Estudiantes = "";
 		$Reportes = "";
 
 		//	En caso de que tal operación específica este seleccionada.
@@ -38,8 +38,8 @@
 		else if ($menuSuperiorAbierto == "Salas") {
 			$Salas = 'class="active"';
 		}
-		else if ($menuSuperiorAbierto == "Alumnos") {
-			$Alumnos = 'class="active"';
+		else if ($menuSuperiorAbierto == "Estudiantes") {
+			$Estudiantes = 'class="active"';
 		}
 		else if ($menuSuperiorAbierto == "Reportes") {
 			$Reportes = 'class="active"';
@@ -72,8 +72,8 @@
 				<li <?php echo $Salas;?> >
 					<a class="btn_with_icon" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
 				</li>
-				<li <?php echo $Alumnos;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Alumnos/index") ?>">Ù Alumnos</a>
+				<li <?php echo $Estudiantes;?> >
+					<a class="btn_with_icon" href="<?php echo site_url("Estudiantes/index") ?>">Ù Estudiantes</a>
 				</li>
 				<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 				<li <?php echo $Reportes;?> >

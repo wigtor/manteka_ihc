@@ -1,78 +1,6 @@
 <?php
-class Model_secciones extends CI_Model{
-	public $cod_seccion = 0;
-	var $nombre_seccion= '';
 
-	
-		/**
-	* Obtiene los datos de todos lo estudiantes de la base de datos
-	*
-	* Se crea la consulta y luego se ejecuta ésta. Luego con un ciclo se va extrayendo la información de cada estudiante y se va guardando en un arreglo de dos dimensiones
-	* Finalmente se retorna la lista con los datos. 
-	*
-	* @param string $cod_seccion codigo de la sección a la cual se le quieren ver sus estudiantes
-	* @return array $lista Contiene la información de todos los estudiantes de la sección
-	*/
-	public function VerTodosLosEstudiantes($cod_seccion)
-	{
-		
-		$lista=array();
-		if ($cod_seccion!=''){
-			$this->db->select('estudiante.COD_CARRERA AS cod');
-			$this->db->select('estudiante.RUT_ESTUDIANTE AS rut');
-			$this->db->select('estudiante.APELLIDO1_ESTUDIANTE AS apellido1');
-			$this->db->select('estudiante.APELLIDO2_ESTUDIANTE AS apellido2');
-			$this->db->select('estudiante.NOMBRE1_ESTUDIANTE AS nombre1');
-			$this->db->select('estudiante.NOMBRE2_ESTUDIANTE AS nombre2');
-			$this->db->from('estudiante');
-			$this->db->where('estudiante.COD_SECCION', $cod_seccion);
-			$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
-			$query =$this->db->get();
-			$datos=$query->result();
-
-			$contador=0;
-			if($datos != false){
-				foreach ($datos as $row) {
-					$lista[$contador]=array();
-					$lista[$contador][0]=$row->cod;
-					$lista[$contador][1]=$row->rut;
-					$lista[$contador][2]=$row->apellido1;
-					$lista[$contador][3]=$row->apellido2;
-					$lista[$contador][4]=$row->nombre1;
-					$lista[$contador][5]=$row->nombre2;
-					$contador=$contador+1;
-				}
-			}
-		}
-		return $lista;
-	}
-
-	/**
-	* Se lista la toda información relacionada a los estudiantes, dado una sección
-	*
-	* Se seleccionan todos los datos de los estudiantes, dependiendo de la sección
-	* entregada a través del parámetro '$cod_seccion'
-	*
-	* @param string $cod_seccion codigo de la sección que se le quieren buscar sus estudiantes
-	* @return array $query->result() todos los datos de los estudiantes de la sección entregada
-	*/
-	public function verPorSeccion($cod_seccion){	
-		$this->db->select('estudiante.RUT_ESTUDIANTE AS rut');
-		$this->db->select('estudiante.NOMBRE1_ESTUDIANTE AS nombre1');
-		$this->db->select('estudiante.NOMBRE2_ESTUDIANTE AS nombre2');
-		$this->db->select('estudiante.APELLIDO1_ESTUDIANTE AS apellido1');
-		$this->db->select('estudiante.APELLIDO2_ESTUDIANTE AS apellido2');
-		$this->db->select('CORREO_ESTUDIANTE as correo');
-		$this->db->from('estudiante');
-		$this->db->join('carrera', 'carrera.COD_CARRERA=estudiante.COD_CARRERA');
-		$this->db->join('seccion', 'seccion.COD_SECCION=estudiante.COD_SECCION');
-		$this->db->where('seccion.COD_SECCION',$cod_seccion);
-		$this->db->order_by("APELLIDO1_ESTUDIANTE", "asc");
-		$query = $this->db->get('estudiante');
-		return $query->result();
-}
-
-
+class Model_seccion extends CI_Model{
 	
 	/**
 	* Obtiene los datos de todos las secciones de la base de datos
@@ -82,29 +10,9 @@ class Model_secciones extends CI_Model{
 	*
 	* @return array $lista Contiene la información de todas las secciones del sistema
 	*/
-	public function VerTodasSecciones()
+	public function getAllSecciones()
 	{
-		
-
-		$this->db->select('seccion.COD_SECCION AS cod');
-		$this->db->select('seccion.NOMBRE_SECCION AS nombre');
-		$this->db->from('seccion');
-		$this->db->order_by("NOMBRE_SECCION", "asc");
-		$query =$this->db->get();
-		$datos=$query->result();
-
-		$lista=array();
-
-		$contador=0;
-			if($datos != false){
-				foreach ($datos as $row) {
-					$lista[$contador]=array();
-					$lista[$contador][0]=$row->cod;
-					$lista[$contador][1]=$row->nombre;
-					$contador=$contador+1;
-				}
-			}
-		return $lista;
+		return $this->getSeccionesByFilter('');
 	}
 	
 				/**
@@ -116,16 +24,14 @@ class Model_secciones extends CI_Model{
 	* @param string $cod_seccion código de la sección a la cual se le quiere saber la información
 	* @return array $lista Contiene la información de una seccion del sistema
 	*/
-	public function VerSeccion($cod_seccion)
+	public function getSeccion($id_seccion)
 	{
 	//sala horario, horario, dia
-
-
 		$this->db->select('seccion.NOMBRE_SECCION AS nombre_seccion');
 		$this->db->select('dia.NOMBRE_DIA AS dia');
 		$this->db->select('modulo.COD_MODULO AS modulo');
 		$this->db->from('seccion');
-		$this->db->where('seccion.COD_SECCION', $cod_seccion);
+		$this->db->where('seccion.COD_SECCION', $id_seccion);
 		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.COD_SECCION=seccion.COD_SECCION', 'LEFT OUTER');
 		$this->db->join('sala_horario', 'sala_horario.ID_HORARIO_SALA=seccion_mod_tem.ID_HORARIO_SALA', 'LEFT OUTER');
 		$this->db->join('horario', 'horario.COD_HORARIO=sala_horario.COD_HORARIO', 'LEFT OUTER');
@@ -165,7 +71,7 @@ class Model_secciones extends CI_Model{
 	* @param string $cod_sección codigo de la seccion que se eliminará de la base de datos
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function EliminarSeccion($cod_seccion)
+    public function eliminarSeccion($cod_seccion)
     {
 		if($cod_seccion==""){ return 2;}
 		else{
@@ -212,7 +118,7 @@ class Model_secciones extends CI_Model{
 	* @param string $nombre_seccion2 número del nombre de la seccion a editar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function AgregarSeccion($nombre_seccion1,$nombre_seccion2)
+	public function agregarSeccion($nombre_seccion1,$nombre_seccion2)
 	{
 		if($nombre_seccion1=="" || $nombre_seccion2=="") return 2;
 		$nombre_seccion1=strtoupper($nombre_seccion1);
@@ -267,7 +173,7 @@ class Model_secciones extends CI_Model{
 	* @param string $nombre_seccion2 número del nombre de la seccion a agregar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
+	public function actualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
 	{
 		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
 		$nombre_seccion1=strtoupper($nombre_seccion1);
@@ -300,7 +206,7 @@ class Model_secciones extends CI_Model{
  	* @param string $nombre_seccion2 digitos del nombre de la sección a editar
  	* @return int $var 1 si la sección ya existe y 0 si la sección no existe
  	*/
-	public function existeSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2) {
+	public function existeSeccion($cod_seccion, $nombre_seccion1, $nombre_seccion2) {
 		$nombre_seccion1=strtoupper($nombre_seccion1);
 		$nombre=$nombre_seccion1."-".$nombre_seccion2;
 		$this->db->select('seccion.NOMBRE_SECCION, seccion.COD_SECCION');
@@ -333,7 +239,7 @@ class Model_secciones extends CI_Model{
 	public function getSeccionesByFilter($texto)
 	{
 		$this->db->select('NOMBRE_SECCION AS nombre');
-		$this->db->select('COD_SECCION AS id');
+		$this->db->select('ID_SECCION AS id');
 		$this->db->order_by('NOMBRE_SECCION', 'asc');
 
 		if ($texto != "") {

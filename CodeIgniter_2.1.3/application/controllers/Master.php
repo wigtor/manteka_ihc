@@ -13,8 +13,8 @@ class MasterManteka extends CI_Controller {
 		$rut = $this->session->userdata('rut');
 		if ($rut == FALSE)
 			return FALSE;
-		$this->load->model('model_usuario');
-		$resultado = $this->model_usuario->ValidarRut($rut);
+		$this->load->model('Model_usuario');
+		$resultado = $this->Model_usuario->ValidarRut($rut);
 		if ($resultado == FALSE) {
 			return FALSE;
 		}
@@ -51,8 +51,8 @@ class MasterManteka extends CI_Controller {
 		}
 
 		//Se carga la cantidad de correos sin leer
-		$this->load->model('model_correo');
-		$datos_plantilla["numNoLeidos"] = $this->model_correo->cantidadRecibidosNoLeidos($rut);
+		$this->load->model('Model_correo');
+		$datos_plantilla["numNoLeidos"] = $this->Model_correo->cantidadRecibidosNoLeidos($rut);
 		
 		/* Carga en el layout los menús, variables, configuraciones y elementos necesarios para ver las vistas */
 		//Se setea el título de la página.
@@ -85,6 +85,9 @@ class MasterManteka extends CI_Controller {
 		//Se carga el footer
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', TRUE);
 
+		//Se cargan los diálogos
+		$datos_cuerpo["dialogos"] = $this->load->view('templates/dialogos', '', TRUE);
+
 		//Se carga el cuerpo central indicado por los parámetros y con los datos que se entregan
 		$datos_plantilla["cuerpo_central"] = $this->load->view($cuerpo_a_cargar, $datos_cuerpo, TRUE);
 
@@ -92,12 +95,13 @@ class MasterManteka extends CI_Controller {
 		$datos_plantilla["subVistaLateralAbierta"] = $subMenuLateralAbierto;
 
 		//Se carga la barra lateral
-		if($barra_lateral != ''){
+		if($barra_lateral != '') {
 			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/'.$barra_lateral, $datos_plantilla, TRUE);
 		}
-		else{
+		else {
 			$datos_plantilla["barra_lateral"] = '';
 		}
+
 		//Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);
 
@@ -168,6 +172,9 @@ class MasterManteka extends CI_Controller {
 
 		//Se carga el footer
 		$datos_plantilla["footer"] = $this->load->view('templates/footer', '', TRUE);
+
+		//Se cargan los diálogos
+		$datos_cuerpo["dialogos"] = $this->load->view('templates/dialogos', '', TRUE);
 
 		//Se carga el cuerpo central indicado por los parámetros y con los datos que se entregan
 		$datos_plantilla["cuerpo_central"] = $this->load->view('templates/big_msj_logueado', $datos_cuerpo, TRUE);
@@ -274,6 +281,8 @@ class MasterManteka extends CI_Controller {
 		//Información que muestra la vista
 		$datos_cuerpo["ListaInformacion"] = $listaInfo;
 
+		//Se cargan los diálogos
+		$datos_cuerpo["dialogos"] = $this->load->view('templates/dialogos', '', TRUE);
 
 		//Se carga el cuerpo central indicado por los parámetros y con los datos que se entregan
 		$datos_plantilla["cuerpo_central"] = $this->load->view($cuerpo_a_cargar, $datos_cuerpo, TRUE);
@@ -354,8 +363,8 @@ class MasterManteka extends CI_Controller {
 	* 
 	*/
 	private function ejecutarCronjobs() {
-		$this->load->model('Model_cronJobs');
-		$cronJobs = $this->Model_cronJobs->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
+		$this->load->model('Model_cronJob');
+		$cronJobs = $this->Model_cronJob->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
 		$cantidadCronJobs = count($cronJobs);
 		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
 
@@ -383,9 +392,9 @@ class MasterManteka extends CI_Controller {
 				  		$str = strstr($message,'Ver mensaje en su contexto:');
 				  		$str = substr($str, 27);
 						echo '<!-- BORRADOS CORRECTAMENTE LOS MAILS REBOTADOS -->'; //Esto saldrá como un comentario html
-				    	$this->load->model('model_rebotes');
-				    	$resultado = $this->model_rebotes->eliminarRebote($str);
-				    	$this->model_rebotes->notificacionRebote($resultado['cuerpo'],$resultado['rut']);
+				    	$this->load->model('Model_mail_rebote');
+				    	$resultado = $this->Model_mail_rebote->eliminarRebote($str);
+				    	$this->Model_mail_rebote->notificacionRebote($resultado['cuerpo'],$resultado['rut']);
 					}
 				}
 				if ($inbox) { //Evita que si hay un fail, salgan más fails

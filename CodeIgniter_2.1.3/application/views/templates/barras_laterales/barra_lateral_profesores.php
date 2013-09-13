@@ -16,15 +16,15 @@
 		$verProfesores = "";
 		$agregarProfesor = "";
 		$editarProfesor = "";
-		$borrarProfesor = "";
+		$eliminarProfesor = "";
 		$verAyudantes = "";
-		$agregarAyudantes = "";
-		$editarAyudantes = "";
-		$borrarAyudantes = "";
+		$agregarAyudante = "";
+		$editarAyudante = "";
+		$eliminarAyudante = "";
 		$verCoordinadores = "";
-		$agregarCoordinadores = "";
-		$editarCoordinadores = "";
-		$borrarCoordinadores = "";
+		$agregarCoordinador = "";
+		$editarCoordinador = "";
+		$eliminarCoordinador = "";
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
 		$inProfesores = "";
@@ -46,40 +46,40 @@
 			$editarProfesor = 'class="active"';
 			$inProfesores = "in";
 		}
-		else if ($subVistaLateralAbierta == "borrarProfesor") {
-			$borrarProfesor = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarProfesor") {
+			$eliminarProfesor = 'class="active"';
 			$inProfesores = "in";
 		}
 		else if ($subVistaLateralAbierta == "verAyudantes") {
 			$verAyudantes = 'class="active"';
 			$inAyudantes = "in";
 		}
-		else if ($subVistaLateralAbierta == "agregarAyudantes") {
-			$agregarAyudantes = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarAyudante") {
+			$agregarAyudante = 'class="active"';
 			$inAyudantes = "in";
 		}
-		else if ($subVistaLateralAbierta == "editarAyudantes") {
-			$editarAyudantes = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarAyudante") {
+			$editarAyudante = 'class="active"';
 			$inAyudantes = "in";
 		}
-		else if ($subVistaLateralAbierta == "borrarAyudantes") {
-			$borrarAyudantes = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarAyudante") {
+			$eliminarAyudante = 'class="active"';
 			$inAyudantes = "in";
 		}
 		else if ($subVistaLateralAbierta == "verCoordinadores") {
 			$verCoordinadores = 'class="active"';
 			$inCoordinadores = "in";
 		}
-		else if ($subVistaLateralAbierta == "agregarCoordinadores") {
-			$agregarCoordinadores = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarCoordinador") {
+			$agregarCoordinador = 'class="active"';
 			$inCoordinadores = "in";
 		}
-		else if ($subVistaLateralAbierta == "editarCoordinadores") {
-			$editarCoordinadores = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarCoordinador") {
+			$editarCoordinador = 'class="active"';
 			$inCoordinadores = "in";
 		}
-		else if ($subVistaLateralAbierta == "borrarCoordinadores") {
-			$borrarCoordinadores = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarCoordinador") {
+			$eliminarCoordinador = 'class="active"';
 			$inCoordinadores = "in";
 		}
 	?>
@@ -97,7 +97,7 @@
 		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 		        		<li <?php echo $agregarProfesor; ?> ><a href="<?php echo site_url("Profesores/agregarProfesor")?>">Agregar profesores</a></li>
 						<li <?php echo $editarProfesor; ?> ><a href="<?php echo site_url("Profesores/editarProfesor")?>">Editar  profesores</a></li>
-						<li <?php echo $borrarProfesor; ?> ><a href="<?php echo site_url("Profesores/borrarProfesor")?>">Borrar profesores</a></li>
+						<li <?php echo $eliminarProfesor; ?> ><a href="<?php echo site_url("Profesores/eliminarProfesor")?>">Borrar profesores</a></li>
 		     		<?php } ?>
 		     	</div>
 		    </div>
@@ -111,9 +111,9 @@
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
 		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/agregarAyudantes")?>">Agregar ayudantes</a></li>
-						<li <?php echo $editarAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/editarAyudantes")?>">Editar ayudantes</a></li>
-						<li <?php echo $borrarAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/borrarAyudantes")?>">Borrar ayudantes</a></li>
+						<li <?php echo $agregarAyudante; ?> ><a href="<?php echo site_url("Ayudantes/agregarAyudante")?>">Agregar ayudantes</a></li>
+						<li <?php echo $editarAyudante; ?> ><a href="<?php echo site_url("Ayudantes/editarAyudante")?>">Editar ayudantes</a></li>
+						<li <?php echo $eliminarAyudante; ?> ><a href="<?php echo site_url("Ayudantes/eliminarAyudante")?>">Borrar ayudantes</a></li>
 					<?php } ?>
 		     	</div>
 		    </div>
@@ -127,9 +127,9 @@
 				<div id="collapseThree" class="accordion-body collapse <?php echo $inCoordinadores; ?>">
 					<div class="accordion-inner nav nav-list">
 						<li <?php echo $verCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/verCoordinadores")?>">Ver coordinadores</a></li>
-						<li <?php echo $agregarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/agregarCoordinadores")?>">Agregar coordinadores</a></li>
-						<li <?php echo $editarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/editarCoordinadores")?>">Editar coordinadores</a></li>
-						<li <?php echo $borrarCoordinadores; ?> ><a href="<?php echo site_url("Coordinadores/borrarCoordinadores")?>">Borrar coordinadores</a></li>
+						<li <?php echo $agregarCoordinador; ?> ><a href="<?php echo site_url("Coordinadores/agregarCoordinador")?>">Agregar coordinadores</a></li>
+						<li <?php echo $editarCoordinador; ?> ><a href="<?php echo site_url("Coordinadores/editarCoordinador")?>">Editar coordinadores</a></li>
+						<li <?php echo $eliminarCoordinador; ?> ><a href="<?php echo site_url("Coordinadores/eliminarCoordinador")?>">Borrar coordinadores</a></li>
 					</div>
 				</div>
 			</div>

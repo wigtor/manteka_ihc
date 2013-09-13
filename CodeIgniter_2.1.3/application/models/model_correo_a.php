@@ -1,6 +1,6 @@
 <?php
  
-class model_correo_a extends CI_Model {
+class Model_correo_a extends CI_Model {
 
       /**
       *  Identifica si en la base de datos existe un usuario con una contraseña identica a la ingresada como parámetro.
