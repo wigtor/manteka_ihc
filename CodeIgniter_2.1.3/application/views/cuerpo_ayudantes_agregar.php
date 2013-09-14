@@ -15,9 +15,18 @@
 	}
 
 	function agregarAyudante(){
-		$('#tituloConfirmacionDialog').html('Confirmación para agregar ayudante');
-		$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el ayudante al sistema?');
-		$('#modalConfirmacion').modal();
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar ayudante');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el ayudante al sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
+		
 	}
 	
 </script>
@@ -26,7 +35,7 @@
 <fieldset>
 	<legend>Agregar Ayudante</legend>
 	<?php
-		$attributes = array('class' => 'form-horizontal');
+		$attributes = array('id' => 'formAgregar', 'class' => 'form-horizontal');
 		echo form_open('Ayudantes/postAgregarAyudante', $attributes);
 	?>
 		<div class="row-fluid">

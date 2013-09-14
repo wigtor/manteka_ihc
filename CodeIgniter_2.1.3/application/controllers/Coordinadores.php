@@ -141,7 +141,7 @@ class Coordinadores extends MasterManteka {
 			$this->load->model('Model_coordinador');
 			$resetearPass = $this->input->post('resetContrasegna');
 			$rut = $this->input->post('rut');
-			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
+			//$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post('nombre1');
 			$nombre2 = $this->input->post('nombre2');
 			$apellido1 = $this->input->post('apellido1');

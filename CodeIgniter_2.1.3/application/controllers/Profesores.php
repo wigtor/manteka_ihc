@@ -198,7 +198,7 @@ class Profesores extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_profesor');
 			$rut = $this->input->post("rut");
-			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
+			//$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post("nombre1");
 			$nombre2 = $this->input->post("nombre2");
 			$apellido1 = $this->input->post("apellido1");

@@ -141,7 +141,7 @@
 				<div class="control-group">
 					<label class="control-label" for="rut">1-.<font color="red">*</font> RUT:</label>
 					<div class="controls">
-						<input type="text" id="rut" name="rut" class="span12" onblur="comprobarRutUsado(this, '<?php echo site_url('Profesores/rutExisteAjax') ?>')" maxlength="9" pattern="^\d{7,8}[0-9kK]{1}$" title="Ingrese su RUN sin puntos ni guion" min="8" placeholder="Ej:177858741" required>
+						<input type="text" id="rut" name="rut" class="span12" readonly>
 					</div>
 				</div>
 				<div class="control-group">

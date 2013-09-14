@@ -32,7 +32,7 @@ class Model_ayudante extends CI_Model {
 			'NOMBRE2' => $nombre2,
 			'APELLIDO1' => $apellido1,
 			'APELLIDO2' => $apellido2,
-			'TELEFONO' =>  $fono,
+			'TELEFONO' =>  $telefono,
 			'LOGUEABLE' => FALSE
 		);
 		$data2 = array('RUT_USUARIO' => $rut);

@@ -83,8 +83,8 @@ class Ayudantes extends MasterManteka {
 			$correo1 = $this->input->post("correo1");
 			$correo2 = $this->input->post("correo2");
 			$telefono = $this->input->post("telefono");
-			$rut_profesores = $this->input->post("rut_profesores");
-
+			$rut_profesores = $this->input->post("id_profesores");
+			echo $rut_profesores.'     ';return;
 			$confirmacion = $this->Model_ayudante->agregarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $rut_profesores);
 
 
