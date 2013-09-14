@@ -78,13 +78,14 @@ class Coordinadores extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_coordinador');
 			$rut = $this->input->post('rut');
+			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post('nombre1');
 			$nombre2 = $this->input->post('nombre2');
 			$apellido1 = $this->input->post('apellido1');
 			$apellido2 = $this->input->post('apellido2');
 			$correo1 = $this->input->post('correo1');
 			$correo2 = $this->input->post('correo2');
-			$fono = $this->input->post('fono');
+			$fono = $this->input->post('telefono');
 
 			$this->Model_coordinador->agregarCoordinador($rut, $nombre1 , $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono);
 
@@ -139,19 +140,20 @@ class Coordinadores extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_coordinador');
 			$resetearPass = $this->input->post('resetContrasegna');
-			$rutEditar = $this->input->post('rut');
+			$rut = $this->input->post('rut');
+			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post('nombre1');
 			$nombre2 = $this->input->post('nombre2');
 			$apellido1 = $this->input->post('apellido1');
 			$apellido2 = $this->input->post('apellido2');
 			$correo1 = $this->input->post('correo1');
 			$correo2 = $this->input->post('correo2');
-			$fono = $this->input->post('fono');
+			$fono = $this->input->post('telefono');
 
 			if($resetearPass) {
-				$this->Model_coordinador->modificarPassword($rutEditar, $rutEditar);
+				$this->Model_coordinador->modificarPassword($rut, $rut);
 			}
-			$this->Model_coordinador->actualizarCoordinador($rutEditar, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono);
+			$this->Model_coordinador->actualizarCoordinador($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono);
 
 			$datos_plantilla["titulo_msj"] = "Coordinador editado";
 			$datos_plantilla["cuerpo_msj"] = "El coordinador fue editado correctamente.";
@@ -195,7 +197,7 @@ class Coordinadores extends MasterManteka {
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
-			$rutEliminar = $this->input->post('rut');
+			$rutEliminar = $this->input->post('rutEliminar');
 			$respuesta = '';
 			$this->load->model('Model_coordinador');
 			$rutdeSesion = $this->session->userdata('rut');
@@ -240,7 +242,7 @@ class Coordinadores extends MasterManteka {
 	* Método que responde a una solicitud de post para pedir los datos de un estudiante
 	* Recibe como parámetro el rut del estudiante
 	*/
-	public function detallesCoordinadorAjax() {
+	public function getDetallesCoordinadorAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -256,7 +258,7 @@ class Coordinadores extends MasterManteka {
 	}
 
 
-	public function busquedaCoordinadoresAjax() {
+	public function getCoordinadoresAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -267,7 +269,7 @@ class Coordinadores extends MasterManteka {
 		$textoFiltro = $this->input->post('textoFiltroBasico');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
 		$this->load->model('Model_coordinador');
-		$resultado = $this->Model_coordinador->getCoordinadoresByFilter($textoFiltro, $textoFiltrosAvanzados);
+		$resultado = $this->Model_coordinador->getCoordinadoresByFilter($textoFiltro, $textoFiltrosAvanzados, NULL);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
@@ -282,7 +284,7 @@ class Coordinadores extends MasterManteka {
 	}
 	
 
-	public function busquedaCoordinadoresElimAjax() {
+	public function getCoordinadoresElimAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return ;
 		}
@@ -292,8 +294,9 @@ class Coordinadores extends MasterManteka {
 		}
 		$textoFiltro = $this->input->post('textoFiltroBasico');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		$rutExcepto = $this->session->userdata('rut');
 		$this->load->model('Model_coordinador');
-		$resultado = $this->Model_coordinador->getCoordinadoresByFilterE($textoFiltro, $textoFiltrosAvanzados);
+		$resultado = $this->Model_coordinador->getCoordinadoresByFilter($textoFiltro, $textoFiltrosAvanzados, $rutExcepto);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {

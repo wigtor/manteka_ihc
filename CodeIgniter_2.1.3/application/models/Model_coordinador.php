@@ -56,35 +56,6 @@ class Model_coordinador extends CI_Model {
 	}
 
 
-	function getAllCoordinadoresEliminar($rut) {
-		/* SUMARIO DE LA FUNCIÓN:
-		La función simplemente obtiene desde la base de datos
-		todos las coordinaciones disponibles en el
-		sistema.
-
-		El resultado es entregado al controlador en forma de
-		array de objetos, por tanto éste debe recorrer el
-		array y transformar los objetos en filas para
-		obtener la información correspondiente.
-		*/
-		$this->db->select('usuario.RUT_USUARIO AS id');
-		$this->db->select('usuario.RUT_USUARIO AS rut');
-		$this->db->select('NOMBRE1 AS nombre1');
-		$this->db->select('NOMBRE1 AS nombre2');
-		$this->db->select('APELLIDO1 AS apellido1');
-		$this->db->select('APELLIDO2 AS apellido2');
-		$this->db->select('TELEFONO AS fono');
-		$this->db->select('CORREO1_USER AS email1');
-		$this->db->join('usuario', 'coordinador.RUT_USUARIO = usuario.RUT_USUARIO');
-		$this->db->where('usuario.RUT_USUARIO !=', $rut); //Esta es la diferencia con la función anterior
-		$query = $this->db->get('coordinador');
-		if ($query == FALSE) {
-			return array();
-		}
-		return $query->result();
-	}
-
-
 	/**
 	* Elimina un coordinador segun su rut.
 	*
@@ -96,8 +67,17 @@ class Model_coordinador extends CI_Model {
 	function eliminarCoordinador($rut) {
 		$this->db->where('RUT_USUARIO', $rut);
 		$this->db->where('ID_TIPO', TIPO_USR_COORDINADOR);
+
+		$this->db->trans_start();
 		$res = $this->db->delete('usuario');
-		return $res;
+		$this->db->trans_complete();
+		
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 	}
 
 
@@ -143,8 +123,17 @@ class Model_coordinador extends CI_Model {
 				'TELEFONO' => $fono,
 				'CORREO1_USER' => $correo1,
 				'CORREO2_USER' => $correo2);
+
+		$this->db->trans_start();
 		$res = $this->db->update('usuario',$informacion);
-		return $res;
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 	}
 
 	/**
@@ -225,13 +214,16 @@ class Model_coordinador extends CI_Model {
 	* @return Se devuelve un array de objetos alumnos con sólo su nombre y rut
 	* @author Víctor Flores
 	*/
-	public function getCoordinadoresByFilter($texto, $textoFiltrosAvanzados) {
+	public function getCoordinadoresByFilter($texto, $textoFiltrosAvanzados, $rutExcepto) {
 		$this->db->select('usuario.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
 		$this->db->join('usuario', 'coordinador.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->order_by('APELLIDO1', 'asc');
+		if ($rutExcepto != NULL) {
+			$this->db->where('usuario.RUT_USUARIO !=', $rutExcepto);
+		}
 		$rut = $this->session->userdata['rut'];
 
 		if ($texto != "") {
@@ -261,41 +253,6 @@ class Model_coordinador extends CI_Model {
 	}
 
 
-	/* Version de getCoordinadoresByFilter para la vista de eliminar coordinador, no incluye al coordinador que realiza la busqueda */
-	public function getCoordinadoresByFilterE($texto, $textoFiltrosAvanzados) {
-		$this->db->select('usuario.RUT_USUARIO AS id');
-		$this->db->select('NOMBRE1 AS nombre1');
-		$this->db->select('APELLIDO1 AS apellido1');
-		$this->db->order_by('APELLIDO1', 'asc');
-		$rut = $this->session->userdata['rut']; //No es correcto acceder a esta variable desde acá
-		$this->db->where('usuario.RUT_USUARIO !=', $rut); //ESTA ES LA ÚNICA DIFERENCIA CON LA QUERY USADA PARA EL LISTAR Y NO ELIMINAR
-
-		if ($texto != "") {
-			$this->db->where("(RUT_USUARIO LIKE '%".$texto."%'  OR NOMBRE1 LIKE '%".$texto."%' OR NOMBRE2 LIKE '%".$texto."%' OR APELLIDO1 LIKE '%".$texto."%' OR APELLIDO2 LIKE '%".$texto."%')");
-		}
-		else {
-			//Sólo para acordarse
-			define("BUSCAR_POR_RUT", 0);
-			define("BUSCAR_POR_NOMBRE", 1);
-			define("BUSCAR_POR_APELLIDO", 2);
-			$this->db->like("RUT_USUARIO3", $textoFiltrosAvanzados[BUSCAR_POR_RUT]);
-			if ($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE] != '') {
-			$this->db->where("(NOMBRE1 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%' OR NOMBRE2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_NOMBRE]."%')");
-
-			}
-			if ($textoFiltrosAvanzados[BUSCAR_POR_APELLIDO] != '') {
-				$this->db->where("(APELLIDO1 = '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR APELLIDO2 LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
-
-			}
-		}
-		$query = $this->db->get('coordinador');
-		//echo $this->db->last_query();
-		if ($query == FALSE) {
-			return array();
-		}
-		return $query->result();
-	}
-
 	/**
 	* Obtiene los detalles de un coordinador
 	* 
@@ -313,8 +270,8 @@ class Model_coordinador extends CI_Model {
 		$this->db->select('NOMBRE2 AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
-		$this->db->select('TELEFONO AS fono');
-		$this->db->select('CORREO1_USER AS correo');
+		$this->db->select('TELEFONO AS telefono');
+		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
 		$this->db->join('usuario', 'coordinador.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->where('usuario.RUT_USUARIO', $rut);

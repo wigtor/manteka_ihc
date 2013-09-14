@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 
 	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático", "Sección"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""];

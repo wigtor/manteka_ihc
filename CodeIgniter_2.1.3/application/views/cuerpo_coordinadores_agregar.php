@@ -22,9 +22,17 @@
 	}
 
 	function agregarCoordinador(){
-		$('#tituloConfirmacionDialog').html('Confirmación para agregar coordinador');
-		$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el coordinador al sistema?');
-		$('#modalConfirmacion').modal();
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar coordinador');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el coordinador al sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
 	}
 
 </script>
