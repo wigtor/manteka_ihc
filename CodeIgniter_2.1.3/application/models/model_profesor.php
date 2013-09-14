@@ -56,21 +56,21 @@ class Model_profesor extends CI_Model {
 			'PASSWORD_PRIMARIA' => md5($pass),
 			'CORREO1_USER' => $correo1,
 			'CORREO2_USER' => $correo2,
-			'NOMBRE1' => $nombre1 ,
-			'NOMBRE2' => $nombre2 ,
-			'APELLIDO1' => $apellido1 ,
+			'NOMBRE1' => $nombre1,
+			'NOMBRE2' => $nombre2,
+			'APELLIDO1' => $apellido1,
 			'APELLIDO2' => $apellido2,
 			'TELEFONO' =>  $telefono
 		);
 		$data2 = array(
-			'RUT_USUARIO' => $rut_profesor ,
+			'RUT_USUARIO' => $rut,
 			'ID_TIPO_PROFESOR' => $tipo_profesor
 		);
 
 		$this->db->trans_start();
-		$datos2 = $this->db->insert('usuario',$data1);
+		$datos2 = $this->db->insert('usuario', $data1);
 
-		$datos = $this->db->insert('profesor',$data2);
+		$datos = $this->db->insert('profesor', $data2);
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE) {
@@ -123,20 +123,37 @@ class Model_profesor extends CI_Model {
 	* @param string $ape2 Apellido mateno del profesor
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-    public function actualizarProfesor($rut, $telefono, $tipo_profe, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2)
+    public function actualizarProfesor($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $tipo_profe, $resetPass)
     {
-		$this->db->where('ID_TIPO', TIPO_USR_PROFESOR);
-		$this->db->where('RUT_USUARIO',$rut);
-		$informacion = array(
+    	$datos1 = array(
 				'NOMBRE1' => $nombre1,
 				'NOMBRE2' => $nombre2,
 				'APELLIDO1' => $apellido1,
 				'APELLIDO2' => $apellido2,
-				'TELEFONO' => $fono,
+				'TELEFONO' => $telefono,
 				'CORREO1_USER' => $correo1,
 				'CORREO2_USER' => $correo2);
-		$res = $this->db->update('usuario', $informacion);
-		return $res;
+		if($resetPass){
+			$datos1['PASSWORD_PRIMARIA'] = md5($rut);
+		}
+
+		$this->db->trans_start();
+
+		$this->db->where('ID_TIPO', TIPO_USR_PROFESOR);
+		$this->db->where('RUT_USUARIO', $rut);
+		$res = $this->db->update('usuario', $datos1);
+
+		$this->db->where('RUT_USUARIO',$rut);
+		$res = $this->db->update('profesor', array('ID_TIPO_PROFESOR' => $tipo_profe));
+
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
     }
 
 
@@ -155,8 +172,9 @@ class Model_profesor extends CI_Model {
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
 		$this->db->select('TELEFONO AS telefono');
-		$this->db->select('TIPO_PROFESOR AS tipo');
-		$this->db->select('CORREO1_USER AS correo');
+		$this->db->select('profesor.ID_TIPO_PROFESOR AS id_tipo_profesor');
+		$this->db->select('TIPO_PROFESOR AS tipo_profesor');
+		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
 		//$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTem');
 		$this->db->select('NOMBRE_MODULO AS moduloTem');
@@ -253,7 +271,7 @@ class Model_profesor extends CI_Model {
 	*/
 	public function eliminarProfesor($rut_profesor)
     {
-		$this->db->where('RUT_USUARIO', $rut);
+		$this->db->where('RUT_USUARIO', $rut_profesor);
 		$this->db->where('ID_TIPO', TIPO_USR_PROFESOR);
 		$res = $this->db->delete('usuario');
 		return $res;

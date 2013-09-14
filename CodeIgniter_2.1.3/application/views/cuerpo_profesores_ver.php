@@ -1,4 +1,5 @@
 <script>
+
 	var tiposFiltro = ["Rut", "Nombre", "Apellido", "Módulo temático", "Sección"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", ""];
 	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+", "", ""];
@@ -11,9 +12,10 @@
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
-		//var rut_clickeado = elemTabla;
-
+		var rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
+		
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
@@ -21,53 +23,25 @@
 			url: "<?php echo site_url("Profesores/getDetallesProfesorAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var rutDetalle = document.getElementById("rutDetalle");
-				var nombre1Detalle = document.getElementById("nombre1Detalle");
-				var nombre2Detalle = document.getElementById("nombre2Detalle");
-				var apellido1Detalle = document.getElementById("apellido1Detalle");
-				var apellido2Detalle = document.getElementById("apellido2Detalle");
-				var telefonoDetalle = document.getElementById("telefonoDetalle");
-				var correoDetalle = document.getElementById("correoDetalle");
-				var correoDetalle2 = document.getElementById("correoDetalle2");
-				var tipoDetalle = document.getElementById("tipoDetalle");
-				var moduloTematicoDetalle = document.getElementById("moduloTematicoDetalle");
-				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
-				if (datos.nombre2 == null) {
-					datos.nombre2 = '';
-				}
-				if (datos.correo2 == null) {
-					datos.correo2 = '';
-				}
-				if (datos.moduloTem == null) {
-					datos.moduloTem = 'Sin asignación';
-				}
-
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(rutDetalle).html(datos.rut);
-				$(nombre1Detalle).html($.trim(datos.nombre1));
-				$(nombre2Detalle).html($.trim(datos.nombre2));
-				$(apellido1Detalle).html($.trim(datos.apellido1));
-				$(apellido2Detalle).html($.trim(datos.apellido2));
-				$(telefonoDetalle).html($.trim(datos.telefono));
-				$(correoDetalle).html($.trim(datos.correo));
-				$(correoDetalle2).html($.trim(datos.correo2));
-				$(tipoDetalle).html($.trim(datos.tipo));
-				$(moduloTematicoDetalle).html($.trim(datos.moduloTem));
+				$('#rut').html($.trim(datos.rut));
+				$('#nombre1').html($.trim(datos.nombre1));
+				$('#nombre2').html((datos.nombre2 == "" ? '' : $.trim(datos.nombre2)));
+				$('#apellido1').html($.trim(datos.apellido1));
+				$('#apellido2').html($.trim(datos.apellido2));
+				$('#correo1').html(datos.correo1 == "" ? '' : $.trim(datos.correo1));
+				$('#correo2').html(datos.correo2 == "" ? '' : $.trim(datos.correo2));
+				$('#telefono').html(datos.telefono == "" ? '' : $.trim(datos.telefono));
+				$('#tipo_profesor').html($.trim(datos.tipo_profesor));
+				$('#moduloTematico').html(datos.moduloTematico == "" ? '' : $.trim(datos.moduloTematico));
 
 				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-
+				$('#icono_cargando').hide();
 			}
 		});
-		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
 	}
 	
 	//Se cargan por ajax
@@ -114,16 +88,16 @@
 			</table>
 		</div>
 		<div class="span6">
-		<pre style="padding: 2%; cursor:default">
-Rut:              <b id="rutDetalle"></b>
-Nombres:          <b id="nombre1Detalle"></b> <b id="nombre2Detalle" ></b>
-Apellido paterno: <b id="apellido1Detalle" ></b>
-Apellido materno: <b id="apellido2Detalle"></b>
-Telefono:         <b id="telefonoDetalle" ></b>
-Correo:           <b id="correoDetalle" ></b>
-Correo secundario:<b id="correoDetalle2" ></b>
-Tipo:             <b id="tipoDetalle"></b>
-Módulo temático:  <b id="moduloTematicoDetalle"></pre>
+			<pre style="padding: 2%; cursor:default">
+Rut:              <b id="rut" ></b>
+Nombres:          <b id="nombre1" ></b> <b id="nombre2" ></b>
+Apellido paterno: <b id="apellido1" ></b>
+Apellido materno: <b id="apellido2" ></b>
+Telefono:         <b id="telefono" ></b>
+Correo:           <b id="correo1" ></b>
+Correo secundario:<b id="correo2" ></b>
+Tipo:             <b id="tipo_profesor"></b>
+Módulo temático:  <b id="moduloTematico"></pre>
 		</div>
 	</div>
 </fieldset>

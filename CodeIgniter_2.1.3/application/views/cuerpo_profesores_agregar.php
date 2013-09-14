@@ -13,20 +13,6 @@
 		$('#telefono').val("");
 	}
 
-	function correo() {
-		var correo1 = $('#correo1').val();
-		var correo2 = $('#correo2').val();
-		if(correo1==correo2){
-			if(correo1.trim() != '' && correo2.trim() != ''){
-				var mensaje = document.getElementById("mensaje");
-				$(mensaje).empty();
-				$('#modalError').modal();
-				$('#correo1').val("");
-				$('#correo2').val("");
-			}
-		}
-	}
-
 	function agregarProfesor(){
 		$('#tituloConfirmacionDialog').html('Confirmación para agregar profesor');
 		$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el profesor al sistema?');
@@ -88,27 +74,27 @@
 			<!-- Segunda columna -->
 			<div class="span6">
 				<div class="control-group">
-					<label class="control-label" for="correo1" style="cursor: default">6.- <font color="red">*</font> Correo:</label>
+					<label class="control-label" for="correo1">6.- <font color="red">*</font> Correo:</label>
 					<div class="controls">
-						<input type="email" id="correo1" name="correo1" class="span12" onblur="comprobarCorreos()" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
+						<input type="email" id="correo1" name="correo1" class="span12" onblur="comprobarCorreos(correo1, correo2)" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="correo2" style="cursor: default">7.- Correo secundario:</label>
+					<label class="control-label" for="correo2">7.- Correo secundario:</label>
 					<div class="controls">
-						<input type="email" id="correo2" name="correo2" class="span12" onblur="comprobarCorreos()" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" maxlength="199" placeholder="nombre2_usuario@miemail.com">
+						<input type="email" id="correo2" name="correo2" class="span12" onblur="comprobarCorreos(correo1, correo2)" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" maxlength="199" placeholder="nombre2_usuario@miemail.com">
 					</div>
 				</div>	
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">8.- <font color="red">*</font> Teléfono:</label>
+					<label class="control-label" for="telefono">8.- <font color="red">*</font> Teléfono:</label>
 					<div class="controls">
-						<input id="inputInfo"  class="span12" maxlength="10" minlength="7" type="text" pattern="[0-9]{8}" title="Ingrese sólo números" name="telefono_profesor" placeholder="Ingrese solo numeros" required>
+						<input type="text" id="telefono" name="telefono" class="span12" maxlength="10" minlength="7" pattern="[0-9]{8}" title="Ingrese sólo números" placeholder="Ingrese solo numeros" required>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputInfo" style="cursor: default">9.- <font color="red">*</font> Tipo:</label>
+					<label class="control-label" for="tipo_profesor">9.- <font color="red">*</font> Tipo:</label>
 					<div class="controls">
-						<select id="tipoDeFiltro"  class="span12" title="Tipo de contrato" name="tipo_profesor">
+						<select id="tipo_profesor" name="tipo_profesor" class="span12" title="Tipo de contrato">
 							<?php
 							foreach ($tipos_profesores as $valor) {
 								?>

@@ -82,3 +82,17 @@ function comprobarRutUsado(inputRut, actionPost) {
 		}
 	});
 }
+
+function comprobarCorreos(idInputCorreo1, idInputCorreo2) {
+		var correo1 = $(idInputCorreo1).val();
+		var correo2 = $(idInputCorreo2).val();
+		if(correo1.trim() == correo2.trim()){
+			if((correo1.trim() != '') && (correo2.trim() != '')) {
+				$('#tituloErrorDialog').html('Error en los mails');
+				$('#textoErrorDialog').html('Los mails ingresados no pueden ser iguales');
+				$('#modalError').modal();
+				$('#correo1').val("");
+				$('#correo2').val("");
+			}
+		}
+	}

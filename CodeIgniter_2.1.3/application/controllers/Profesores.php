@@ -41,6 +41,7 @@ class Profesores extends MasterManteka {
 	*/
 	public function agregarProfesor() {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
 			$this->load->model('Model_profesor');
 			$datos_vista['tipos_profesores'] = $this->Model_profesor->getTiposProfesores();
 
@@ -140,7 +141,7 @@ class Profesores extends MasterManteka {
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
-			$rut_profesor = $this->input->post("rut");
+			$rut_profesor = $this->input->post("rutEliminar");
 
 			$this->load->model('Model_profesor');
 			$confirmacion = $this->Model_profesor->eliminarProfesor($rut_profesor);
@@ -177,11 +178,13 @@ class Profesores extends MasterManteka {
 	*/
 	public function editarProfesor() {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
-			$datos_plantilla = array();
+			$datos_vista = array();
+			$this->load->model('Model_profesor');
+			$datos_vista['tipos_profesores'] = $this->Model_profesor->getTiposProfesores();
 			$subMenuLateralAbierto = 'editarProfesor'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-			$this->cargarTodo("Docentes", "cuerpo_profesores_editar", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$this->cargarTodo("Docentes", "cuerpo_profesores_editar", "barra_lateral_profesores", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 		}
 	}
@@ -202,18 +205,13 @@ class Profesores extends MasterManteka {
 			$correo2 = $this->input->post("correo2");
 			$telefono = $this->input->post("telefono");
      
-			$resetearPass = $this->input->post('resetContrasegna');
+			$resetPass = $this->input->post('resetContrasegna');
 			$tipo_profe = $this->input->post("tipo_profesor");
 			
-
-			if($resetearPass){
-				$this->load->model('Model_coordinador');
-				$this->Model_coordinador->modificarPassword($rut, $rut);
-			}
-			$confirmacion = $this->Model_profesor->actualizarProfesor($rut, $telefono, $tipo_profe, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2);
+			$confirmacion = $this->Model_profesor->actualizarProfesor($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $tipo_profe, $resetPass);
 			
 			
-			if ($confirmacion==1){
+			if ($confirmacion == TRUE){
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
 				$datos_plantilla["cuerpo_msj"] = "El profesor fue editado con éxito.";
 				$datos_plantilla["tipo_msj"] = "alert-success";
