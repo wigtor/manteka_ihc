@@ -14,9 +14,17 @@
 	}
 
 	function agregarProfesor(){
-		$('#tituloConfirmacionDialog').html('Confirmación para agregar profesor');
-		$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el profesor al sistema?');
-		$('#modalConfirmacion').modal();
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar profesor');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el profesor al sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
 	}
 
 </script>

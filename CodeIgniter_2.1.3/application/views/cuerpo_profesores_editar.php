@@ -69,17 +69,23 @@
 	}
 
 	function editarProfesor(){
+		var form = document.forms["formEditar"];
 		if ($('#rut').val().trim() == '') {
 			$('#tituloErrorDialog').html('Error, no ha seleccionado profesor');
 			$('#textoErrorDialog').html('No ha seleccionado un profesor para editar');
 			$('#modalError').modal();
 			return;
 		}
-
-
-		$('#tituloConfirmacionDialog').html('Confirmación para guardar cambios');
-		$('#textoConfirmacionDialog').html('¿Está seguro que desea guardar los cambios del profesor en el sistema?');
-		$('#modalConfirmacion').modal();
+		if (form.checkValidity()) {
+			$('#tituloConfirmacionDialog').html('Confirmación para guardar cambios');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea guardar los cambios del profesor en el sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
 	}
 
 </script>
