@@ -68,7 +68,7 @@ class Model_estudiante extends CI_Model {
 	* @param string $cod_seccion Código de la sección a editar del estudiante
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function actualizarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $seccion) {
+	public function actualizarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $carrera, $seccion) {
 		$data1 = array(
 			'RUT_USUARIO' => $rut,
 			'ID_TIPO' => TIPO_USR_AYUDANTE,
@@ -79,17 +79,19 @@ class Model_estudiante extends CI_Model {
 			'NOMBRE2' => $nombre2,
 			'APELLIDO1' => $apellido1,
 			'APELLIDO2' => $apellido2,
-			'TELEFONO' =>  $fono,
-			'LOGUEABLE' => FALSE
+			'TELEFONO' =>  $telefono
 		);
 		$data2 = array(
-			'ID_SECCION' => $seccion
+			'ID_SECCION' => $seccion,
+			'COD_CARRERA' => $carrera
 		);
 
 		$this->db->trans_start();
 		$this->db->where('ID_TIPO', TIPO_USR_ESTUDIANTE);
 		$this->db->where('RUT_USUARIO', $rut);
 		$datos2 = $this->db->update('usuario', $data1);
+
+		$this->db->where('RUT_USUARIO', $rut);
 		$datos2 = $this->db->update('estudiante', $data2);
 		$this->db->trans_complete();
 
@@ -110,16 +112,18 @@ class Model_estudiante extends CI_Model {
 	* @param string $rut_estudiante Rut del estudiante que se eliminará de la base de datos
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function eliminarEstudiante($rut) {
+	public function eliminarEstudiante($rut_estudiante) {
+		$this->db->trans_start();
 		$this->db->where('RUT_USUARIO', $rut_estudiante);
 		$this->db->where('ID_TIPO', TIPO_USR_ESTUDIANTE);
-		$datos = $this->db->delete('estudiante'); 
-		
-		if($datos == true){
-			return 1;
+		$datos = $this->db->delete('usuario'); 
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
 	}
 
@@ -266,7 +270,7 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('TELEFONO AS telefono');
 		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
-		$this->db->select('estudiante.COD_CARRERA AS id_carrera');
+		$this->db->select('estudiante.COD_CARRERA AS cod_carrera');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
 		$this->db->select('estudiante.ID_SECCION AS id_seccion');
 		$this->db->select('NOMBRE_SECCION AS seccion');

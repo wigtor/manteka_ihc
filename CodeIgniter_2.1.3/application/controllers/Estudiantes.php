@@ -46,6 +46,10 @@ class Estudiantes extends MasterManteka {
 	public function editarEstudiante() {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
+			$this->load->model('Model_carrera');
+			$this->load->model('Model_seccion');
+			$datos_vista['carreras'] = $this->Model_carrera->getAllCarreras();
+			$datos_vista['secciones'] = $this->Model_seccion->getAllSecciones();
 
 			$subMenuLateralAbierto = 'editarEstudiante'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -84,19 +88,16 @@ class Estudiantes extends MasterManteka {
 			if (trim($correo2) == '') {
 				$correo2 = NULL;
 			}
-			$fono = $this->input->post("telefono");
-			if (trim($fono) == '') {
-				$fono = NULL;
+			$telefono = $this->input->post("telefono");
+			if (trim($telefono) == '') {
+				$telefono = NULL;
 			}
 			$id_seccion = $this->input->post("id_seccion");
-			if (trim($id_seccion) == '') {
-				$id_seccion = NULL;
-			}
 			$cod_carrera = $this->input->post("cod_carrera");
 
 
 			$this->load->model('Model_estudiante');
-			$confirmacion = $this->Model_estudiante->actualizarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $id_seccion);
+			$confirmacion = $this->Model_estudiante->actualizarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $cod_carrera, $id_seccion);
 			
 			if ($confirmacion == TRUE){
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";

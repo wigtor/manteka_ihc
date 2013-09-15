@@ -14,9 +14,17 @@
 	}
 
 	function agregarEstudiante(){
-		$('#tituloConfirmacionDialog').html('Confirmación para agregar estudiante');
-		$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el estudiante al sistema?');
-		$('#modalConfirmacion').modal();
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar estudiante');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el estudiante al sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
 	}
 	
 </script>
@@ -89,13 +97,13 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="telefono">7-. Teléfono:</label>
+					<label class="control-label" for="telefono">8-. Teléfono:</label>
 					<div class="controls">
 						<input type="text" id="telefono" name="telefono" class="span12" maxlength="10" pattern="[0-9]+" placeholder="44556677" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="cod_carrera" style="cursor: default">7.- <font color="red">*</font> Asignar carrera:</label>
+					<label class="control-label" for="cod_carrera" style="cursor: default">9.- <font color="red">*</font> Asignar carrera:</label>
 					<div class="controls">
 						<select required id="cod_carrera" name="cod_carrera" class="span12" title="asigne carrera" size="5">
 						<?php
@@ -111,7 +119,7 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="id_seccion" style="cursor: default">8.- <font color="red">*</font> Asignar sección:</label>
+					<label class="control-label" for="id_seccion" style="cursor: default">10.- <font color="red">*</font> Asignar sección:</label>
 					<div class="controls">
 						<select required id="id_seccion" name="id_seccion" class="span12" title="Seleccione una sección" size="5" >
 						<?php
@@ -125,7 +133,7 @@
 						?>
 						</select>
 					</div>
-				</div>		
+				</div>
 			
 				<div class="control-group">
 					<div class="controls">

@@ -9,9 +9,15 @@
 
 	function editarAyudante(){
 		var form = document.forms["formEditar"];
-		if (form.checkValidity() ) {
-			$('#tituloConfirmacionDialog').html('Confirmación para agregar ayudante');
-			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el ayudante al sistema?');
+		if ($('#rut').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado ayudante');
+			$('#textoErrorDialog').html('No ha seleccionado un ayudante para editar');
+			$('#modalError').modal();
+			return;
+		}
+		if (form.checkValidity()) {
+			$('#tituloConfirmacionDialog').html('Confirmación para guardar cambios');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea guardar los cambios del ayudante en el sistema?');
 			$('#modalConfirmacion').modal();
 		}
 		else {
@@ -19,7 +25,6 @@
 			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
 			$('#modalError').modal();
 		}
-		
 	}
 	
 	function verDetalle(elemTabla) {

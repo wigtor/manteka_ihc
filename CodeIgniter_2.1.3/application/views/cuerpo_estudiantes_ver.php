@@ -5,10 +5,9 @@
 	var prefijo_tipoDato = "estudiante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
 	var url_post_busquedas = "<?php echo site_url("Estudiantes/getEstudiantesAjax") ?>";
-	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/alumnos") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/estudiantes") ?>";
 
 	function verDetalle(elemTabla) {
-
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);

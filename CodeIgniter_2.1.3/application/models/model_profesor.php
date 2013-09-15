@@ -60,7 +60,8 @@ class Model_profesor extends CI_Model {
 			'NOMBRE2' => $nombre2,
 			'APELLIDO1' => $apellido1,
 			'APELLIDO2' => $apellido2,
-			'TELEFONO' =>  $telefono
+			'TELEFONO' =>  $telefono,
+			'LOGUEABLE' => TRUE
 		);
 		$data2 = array(
 			'RUT_USUARIO' => $rut,
