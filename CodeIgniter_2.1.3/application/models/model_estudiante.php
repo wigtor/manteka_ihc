@@ -133,15 +133,15 @@ class Model_estudiante extends CI_Model {
 	* @return array $lista Contiene la información de todos los estudiantes del sistema
 	*/
 	public function getAllEstudiantes() {
-		$this->db->select('usuario.RUT_USUARIO AS id');
-		$this->db->select('usuario.RUT_USUARIO AS rut');
+		$this->db->select('estudiante.RUT_USUARIO AS id');
+		$this->db->select('estudiante.RUT_USUARIO AS rut');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('NOMBRE1 AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
 		$this->db->select('TELEFONO AS telefono');
-		$this->db->select('CORREO1_USER AS email1');
-		$this->db->select('CORREO2_USER AS email2');
+		$this->db->select('CORREO1_USER AS correo1');
+		$this->db->select('CORREO2_USER AS correo2');
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->order_by('APELLIDO1', 'asc');
 		$query = $this->db->get('estudiante');
@@ -153,15 +153,15 @@ class Model_estudiante extends CI_Model {
 
 
 	public function	getEstudiantesBySeccion($id_seccion){
-		$this->db->select('usuario.RUT_USUARIO AS id');
-		$this->db->select('usuario.RUT_USUARIO AS rut');
+		$this->db->select('estudiante.RUT_USUARIO AS id');
+		$this->db->select('estudiante.RUT_USUARIO AS rut');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('NOMBRE1 AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
 		$this->db->select('TELEFONO AS telefono');
-		$this->db->select('CORREO1_USER AS email1');
-		$this->db->select('CORREO2_USER AS email2');
+		$this->db->select('CORREO1_USER AS correo1');
+		$this->db->select('CORREO2_USER AS correo2');
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);
 		$this->db->order_by('APELLIDO1', 'asc');
@@ -193,8 +193,9 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
 		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->join('usuario', 'usuario.RUT_USUARIO = estudiante.RUT_USUARIO');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
-		$this->db->join('seccion', 'seccion.COD_SECCION = estudiante.COD_SECCION');
+		$this->db->join('seccion', 'seccion.ID_SECCION = estudiante.ID_SECCION', 'LEFT OUTER');
 		$this->db->order_by('APELLIDO1', 'asc');
 
 		if ($texto != "") {
@@ -262,18 +263,19 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('NOMBRE2 AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
-		$this->db->select('TELEFONO AS fono');
-		$this->db->select('CORREO1_USER AS correo');
+		$this->db->select('TELEFONO AS telefono');
+		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
-		$this->db->select('COD_CARRERA AS id_carrera');
+		$this->db->select('estudiante.COD_CARRERA AS id_carrera');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
-		$this->db->select('estudiante.COD_SECCION AS id_seccion');
+		$this->db->select('estudiante.ID_SECCION AS id_seccion');
 		$this->db->select('NOMBRE_SECCION AS seccion');
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->join('seccion', 'seccion.ID_SECCION = estudiante.ID_SECCION', 'LEFT OUTER');
 		$this->db->where('usuario.RUT_USUARIO', $rut);
 		$query = $this->db->get('estudiante');
+		//echo $this->db->last_query();
 		if ($query == FALSE) {
 			return array();
 		}

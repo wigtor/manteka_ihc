@@ -39,10 +39,13 @@ class Model_ayudante extends CI_Model {
 
 		$this->db->trans_start();
 		$datos2 = $this->db->insert('usuario', $data1);
+		//echo $this->db->last_query().'    ';
 		$datos = $this->db->insert('ayudante', $data2);
+		//echo $this->db->last_query().'    ';
 		foreach($ruts_profesores as $rut_profe) {
 			$data3 = array('RUT_USUARIO' => $rut, 'PRO_RUT_USUARIO' =>$rut_profe);
 			$datos = $this->db->insert('ayu_profe', $data3);
+			//echo $this->db->last_query().'    ';
 		}
 		$this->db->trans_complete();
 
@@ -177,13 +180,15 @@ class Model_ayudante extends CI_Model {
 	*/
 	public function getAyudantesByFilter($texto, $textoFiltrosAvanzados)
 	{
-		$this->db->select('usuario.RUT_USUARIO AS id');
+		$this->db->select('ayudante.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');
-		$this->db->order_by('APELLIDO1_AYUDANTE', 'asc');
+		$this->db->group_by('ayudante.RUT_USUARIO', 'asc');
+		$this->db->order_by('APELLIDO1', 'asc');
 
 		if (trim($texto) != "") {
 			$this->db->like("usuario.RUT_USUARIO", $texto);
@@ -240,8 +245,8 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('NOMBRE2 AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
-		$this->db->select('TELEFONO AS fono');
-		$this->db->select('CORREO1_USER AS correo');
+		$this->db->select('TELEFONO AS telefono');
+		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
 /* //PENDIENTE
 		$this->db->select('NOMBRE1_PROFESOR AS nombre1_profe');

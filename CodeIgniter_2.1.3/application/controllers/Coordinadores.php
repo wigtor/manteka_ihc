@@ -80,12 +80,21 @@ class Coordinadores extends MasterManteka {
 			$rut = $this->input->post('rut');
 			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post('nombre1');
-			$nombre2 = $this->input->post('nombre2');
-			$apellido1 = $this->input->post('apellido1');
-			$apellido2 = $this->input->post('apellido2');
-			$correo1 = $this->input->post('correo1');
-			$correo2 = $this->input->post('correo2');
-			$fono = $this->input->post('telefono');
+			$nombre2 = $this->input->post("nombre2");
+			if (trim($nombre2) == '') {
+				$nombre2 = NULL;
+			}
+			$apellido1 = $this->input->post("apellido1");
+			$apellido2 = $this->input->post("apellido2");
+			$correo1 = $this->input->post("correo1");
+			$correo2 = $this->input->post("correo2");
+			if (trim($correo2) == '') {
+				$correo2 = NULL;
+			}
+			$fono = $this->input->post("telefono");
+			if (trim($fono) == '') {
+				$fono = NULL;
+			}
 
 			$this->Model_coordinador->agregarCoordinador($rut, $nombre1 , $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono);
 
@@ -143,12 +152,21 @@ class Coordinadores extends MasterManteka {
 			$rut = $this->input->post('rut');
 			//$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post('nombre1');
-			$nombre2 = $this->input->post('nombre2');
-			$apellido1 = $this->input->post('apellido1');
-			$apellido2 = $this->input->post('apellido2');
-			$correo1 = $this->input->post('correo1');
-			$correo2 = $this->input->post('correo2');
-			$fono = $this->input->post('telefono');
+			$nombre2 = $this->input->post("nombre2");
+			if (trim($nombre2) == '') {
+				$nombre2 = NULL;
+			}
+			$apellido1 = $this->input->post("apellido1");
+			$apellido2 = $this->input->post("apellido2");
+			$correo1 = $this->input->post("correo1");
+			$correo2 = $this->input->post("correo2");
+			if (trim($correo2) == '') {
+				$correo2 = NULL;
+			}
+			$fono = $this->input->post("telefono");
+			if (trim($fono) == '') {
+				$fono = NULL;
+			}
 
 			if($resetearPass) {
 				$this->Model_coordinador->modificarPassword($rut, $rut);

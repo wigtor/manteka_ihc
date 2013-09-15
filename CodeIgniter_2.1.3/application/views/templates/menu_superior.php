@@ -55,7 +55,7 @@
 ?>
 
 	<div class="navbar pull-right">
-		<div class="navbar-inner" style="margin-left:0px;">
+		<div class="navbar-inner" style="width:815px;">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >
 					<a class="btn_with_icon" style="width:100px;" href="<?php echo site_url("Correo/index") ?>">M Correos<span id="botonCorreosSuperior"><?php echo $mensajesNoLeidos ?></span></a>

@@ -4,116 +4,72 @@
 	var inputAllowedFiltro = ["[0-9]+", "[A-Za-z]+", "[A-Za-z]+",""];
 	var prefijo_tipoDato = "ayudante_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Ayudantes/postBusquedaAyudantes") ?>";
+	var url_post_busquedas = "<?php echo site_url("Ayudantes/getAyudantesAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/ayudantes") ?>";
 
 
 	function verDetalle(elemTabla) {
-
-		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		rut_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		
 		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		$('#icono_cargando').show();
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Ayudantes/postDetallesAyudante") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Ayudantes/getDetallesAyudanteAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { rut: rut_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var rutDetalle = document.getElementById("rutDetalle");
-				var rut_ayudante = document.getElementById("rut_ayudante");
-				var nombre1Detalle = document.getElementById("nombreunoDetalle");
-				var nombre2Detalle = document.getElementById("nombredosDetalle");
-				var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
-				var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
-				var correoDetalle = document.getElementById("correoDetalle");
-				var profesorDetalle = document.getElementById("profesorDetalle");
-				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
+				$('#rutEliminar').val($.trim(datos.rut));
+
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				if (datos.nombre2 == null) {
-					datos.nombre2 = '';
-				}
-				if (datos.seccion == null) {
-					datos.seccion = '';
-				}
-				var nombre_completo_profe;
-				if (datos.nombre1_profe == null) {
-					nombre_completo_profe = '';
-				}
-				else {
-					nombre_completo_profe = datos.nombre1_profe+ " " +datos.nombre2_profe+  " " +datos.apellido1_profe+ " " +datos.apellido2_profe;
-				}
-
-				var rutToDelete = document.getElementById('rutToDelete');
-				$(rutToDelete).val(datos.rut);
-
-				$(rutDetalle).html($.trim(datos.rut));
-				$(rut_ayudante).val($.trim(datos.rut));
-				$(nombre1Detalle).html(datos.nombre1);
-				$(nombre2Detalle).html(datos.nombre2);
-				$(apellido1Detalle).html(datos.apellido1);
-				$(apellido2Detalle).html(datos.apellido2);
-				$(correoDetalle).html($.trim(datos.correo));
-				$(profesorDetalle).html(nombre_completo_profe);
-				var secciones = document.getElementById('seccionesDetalle');
-				$(secciones).html($.trim(datos.seccion));
-				/* Esto no se implementa puesto no hay forma de relacionar un ayudante con una sección aún
-				for (var i = 0; i < datos.secciones.length; i++) {
-					secciones = secciones + ", " + datos.secciones[i];
-				}
-				*/
+				$('#rut').html($.trim(datos.rut));
+				$('#nombre1').html($.trim(datos.nombre1));
+				$('#nombre2').html((datos.nombre2 == "" ? '' : $.trim(datos.nombre2)));
+				$('#apellido1').html($.trim(datos.apellido1));
+				$('#apellido2').html($.trim(datos.apellido2));
+				$('#correo1').html(datos.correo1 == "" ? '' : $.trim(datos.correo1));
+				$('#correo2').html(datos.correo2 == "" ? '' : $.trim(datos.correo2));
+				$('#telefono').html(datos.telefono == "" ? '' : $.trim(datos.telefono));
+				$('#profesores').html($.trim(datos.tipo_profesor));
+				$('#secciones').html(datos.moduloTematico == "" ? '' : $.trim(datos.moduloTematico));
 
 				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-
+				$('#icono_cargando').hide();
 			}
 		});
 }
 
 	function resetearAyudante() {
-		var rutDetalle = document.getElementById("rutDetalle");
-		var rutEliminar = document.getElementById("rutEliminar");
-		var nombre1Detalle = document.getElementById("nombreunoDetalle");
-		var nombre2Detalle = document.getElementById("nombredosDetalle");
-		var apellido1Detalle = document.getElementById("apellidopaternoDetalle");
-		var apellido2Detalle = document.getElementById("apellidomaternoDetalle");
-		var correoDetalle = document.getElementById("correoDetalle");
-		var profesorDetalle = document.getElementById("profesorDetalle");
-		var secciones = document.getElementById('seccionesDetalle');
-		
-		$(secciones).html("");
-		$(rutDetalle).html("");
-		$(rutEliminar).val("");
-		$(nombre1Detalle).html("");
-		$(nombre2Detalle).html("");
-		$(apellido1Detalle).html("");
-		$(apellido2Detalle).html("");
-		$(correoDetalle).html("");
-		$(profesorDetalle).html("");
+		$('#rutEliminar').val("");
 
-		var rutEliminar = document.getElementById("rutToDelete");
-		$(rutEliminar).val("");
+		$('#rut').html("");
+		$('#nombre1').html("");
+		$('#nombre2').html("");
+		$('#apellido1').html("");
+		$('#apellido2').html("");
+		$('#correo1').html("");
+		$('#correo2').html("");
+		$('#telefono').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
 		$('tbody tr').removeClass('highlight');
 }
 
 	function eliminarAyudante(){
-		rutAEliminar = $("#rutDetalle").html();
-		if(rutAEliminar == ""){
-			$('#modalSeleccioneAlgo').modal();
+		if ($('#rutEliminar').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado ayudante');
+			$('#textoErrorDialog').html('No ha seleccionado un ayudante para eliminar');
+			$('#modalError').modal();
 			return;
 		}
+		$('#tituloConfirmacionDialog').html('Confirmación para eliminar ayudante');
+		$('#textoConfirmacionDialog').html('¿Está seguro que desea eliminar permanentemente el ayudante del sistema?');
 		$('#modalConfirmacion').modal();
 	}
 
@@ -158,60 +114,36 @@
 		</div>
 		<div class="span6">
 			<?php
-				$attributes = array('id' => 'formBorrar');
-				echo form_open('Ayudantes/EliminarAyudante', $attributes);
+				$attributes = array('id' => 'formEliminar');
+				echo form_open('Ayudantes/postEliminarAyudante', $attributes);
 			?>
 				<pre style="padding: 2%; cursor:default">
-Rut:              <b id="rutDetalle"></b>
-Nombres:          <b id="nombreunoDetalle" ></b> <b id="nombredosDetalle" ></b>
-Apellido paterno: <b id="apellidopaternoDetalle" ></b>
-Apellido materno: <b id="apellidomaternoDetalle" ></b>
-Correo:           <b id="correoDetalle" ></b>
-Profesor guía:    <b id="profesorDetalle" ></b>
-Secciones:        <b id="seccionesDetalle" ></b></pre>
-				<input type="hidden" id="rutToDelete" name="rutToDelete" value="">
+Rut:              <b id="rut" ></b>
+Nombres:          <b id="nombre1" ></b> <b id="nombre2" ></b>
+Apellido paterno: <b id="apellido1" ></b>
+Apellido materno: <b id="apellido2" ></b>
+Telefono:         <b id="telefono" ></b>
+Correo:           <b id="correo1" ></b>
+Correo secundario:<b id="correo2" ></b>
+Profesor guía:    <b id="profesores"></b>
+Secciones:        <b id="secciones"></b></pre>
+				<input type="hidden" id="rutEliminar" name="rutEliminar" value="">
 				<div class="control-group">
 					<div class="controls pull-right">
-						<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarAyudante()">
+						<button type="button" class="btn" onclick="eliminarAyudante()">
 							<i class= "icon-trash"></i>
 							&nbsp; Eliminar
 						</button>
 						<button class="btn" type="button" onclick="resetearAyudante()" >
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
-						</button>&nbsp;
-
-
-						<!-- Modal de confirmación -->
-						<div id="modalConfirmacion" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>Confirmación</h3>
-							</div>
-							<div class="modal-body">
-								<p>Se va a eliminar el ayudante ¿Está seguro?</p>
-							</div>
-							<div class="modal-footer">
-								<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-								<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-							</div>
-						</div>
-
-						<!-- Modal de confirmación -->
-						<div id="modalSeleccioneAlgo" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado ningún ayudante</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor seleccione un ayudante y vuelva a intentarlo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
-
+						</button>
 					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
 				</div>
 			<?php echo form_close(""); ?>
 		</div>

@@ -93,8 +93,8 @@ Apellido materno: <b id="apellido2" ></b>
 Telefono:         <b id="telefono" ></b>
 Correo:           <b id="correo1" ></b>
 Correo secundario:<b id="correo2" ></b>
-Profesor guía:      <b id="profesores"></b>
-Secciones:          <b id="secciones"></b></pre>
+Profesor guía:    <b id="profesores"></b>
+Secciones:        <b id="secciones"></b></pre>
 		</div>
 	</div>
 </fieldset>

@@ -4,23 +4,6 @@ require_once APPPATH.'controllers/Master.php';
 
 class Secciones extends MasterManteka {
 
-
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-
 	public function index() //Esto hace que el index sea la vista que se desee
 	{
 
@@ -36,17 +19,12 @@ class Secciones extends MasterManteka {
 	*/
 	public function verSecciones()
 	{
-		
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = 0;		
+		$datos_vista = array();		
 		$subMenuLateralAbierto = "verSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->load->model('Model_secciones');
-		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones(),'rs_estudiantes'=>$this->Model_secciones->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_secciones->VerSeccion($cod_seccion));
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+        $this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
 	/**
@@ -65,8 +43,8 @@ class Secciones extends MasterManteka {
 		}
 
 		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->VerSeccion($cod_seccion);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->VerSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
 
@@ -89,8 +67,8 @@ class Secciones extends MasterManteka {
 		$letra_post = $this->input->post('letra_post');
 		$num_post = $this->input->post('num_post');
 		$cod_post = $this->input->post('cod_post');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->existeSeccion($cod_post,$letra_post,$num_post);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->existeSeccion($cod_post,$letra_post,$num_post);
 		echo json_encode($resultado);
 	}
 
@@ -110,8 +88,8 @@ class Secciones extends MasterManteka {
 		}
 
 		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->VerTodosLosEstudiantes($cod_seccion);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->VerTodosLosEstudiantes($cod_seccion);
 		echo json_encode($resultado);
 	}
 
@@ -134,7 +112,7 @@ class Secciones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	}
@@ -151,10 +129,10 @@ class Secciones extends MasterManteka {
 	{	
 		
 		
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$nombre_seccion1 = $this->input->post("rs_seccion");
 		$nombre_seccion2 = $this->input->post("rs_seccion2");
-		$confirmacion = $this->Model_secciones->AgregarSeccion($nombre_seccion1,$nombre_seccion2);
+		$confirmacion = $this->Model_seccion->AgregarSeccion($nombre_seccion1,$nombre_seccion2);
         
 		if ($confirmacion==1){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -201,8 +179,8 @@ class Secciones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->load->model('Model_secciones');
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones());
+		$this->load->model('Model_seccion');
+        $datos_vista = array('seccion' =>$this->Model_seccion->VerTodasSecciones());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
     
     }
@@ -219,11 +197,11 @@ class Secciones extends MasterManteka {
     {
 	
 		
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$cod_seccion = $this->input->post("cod_seccion");
 		$nombre_seccion1 = $this->input->post("rs_seccion");
 		$nombre_seccion2 = $this->input->post("rs_seccion2");
-		$confirmacion = $this->Model_secciones->ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2);
+		$confirmacion = $this->Model_seccion->ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2);
         
         // se muestra mensaje de operación realizada
     	if ($confirmacion==1){
@@ -266,11 +244,11 @@ class Secciones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		//$cod_seccion = $this->input->post("cod_seccion");
 		//$cod_seccion1 = $this->input->post("rs_seccion");
-		//$confirmacion = $this->Model_secciones->EliminarSeccion($cod_seccion1);
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerTodasSecciones()/*,'rs_estudiantes'=>$this->Model_secciones->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_secciones->VerSeccion($cod_seccion),'mensaje_confirmacion'=>$confirmacion*/);
+		//$confirmacion = $this->Model_seccion->EliminarSeccion($cod_seccion1);
+        $datos_vista = array('seccion' =>$this->Model_seccion->VerTodasSecciones()/*,'rs_estudiantes'=>$this->Model_seccion->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_seccion->VerSeccion($cod_seccion),'mensaje_confirmacion'=>$confirmacion*/);
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_borrar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
@@ -285,9 +263,9 @@ class Secciones extends MasterManteka {
 	public function eliminarSecciones()
     {
 		
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$cod_seccion = $this->input->post("cod_seccion");
-		$confirmacion = $this->Model_secciones->EliminarSeccion($cod_seccion);
+		$confirmacion = $this->Model_seccion->EliminarSeccion($cod_seccion);
         
 		if ($confirmacion==1){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -332,9 +310,9 @@ class Secciones extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerSeccionesNoAsignadas(), 'modulos' => $this->Model_secciones->verModulosPorAsignar(), 'salas' => $this->Model_secciones->verSalasPorAsignar());
+        $datos_vista = array('seccion' =>$this->Model_seccion->VerSeccionesNoAsignadas(), 'modulos' => $this->Model_seccion->verModulosPorAsignar(), 'salas' => $this->Model_seccion->verSalasPorAsignar());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
@@ -359,7 +337,7 @@ class Secciones extends MasterManteka {
 			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
 		}
 
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 
 		$cod_seccion = $this->input->post('seccion_seleccionada');
 		$cod_profesor = $this->input->post('profesor_seleccionado');
@@ -368,7 +346,7 @@ class Secciones extends MasterManteka {
 		$nombre_dia = $this->input->post('dia_seleccionado');
 		$numero_modulo = $this->input->post('bloque_seleccionado');
 
-		$confirmacion = $this->Model_secciones->AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo);
+		$confirmacion = $this->Model_seccion->AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo);
 
         if ($confirmacion==1){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -412,9 +390,9 @@ class Secciones extends MasterManteka {
 		$tipos_usuarios_permitidos = array();
 		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
 		
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$cod_seccion = $this->input->post("cod_seccion");
-        $datos_vista = array('seccion' =>$this->Model_secciones->VerSeccionesAsignadas());
+        $datos_vista = array('seccion' =>$this->Model_seccion->VerSeccionesAsignadas());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 
@@ -438,8 +416,8 @@ class Secciones extends MasterManteka {
 		}
 
 		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->getDetallesSeccion($cod_seccion);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->getDetallesSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
 
@@ -458,14 +436,14 @@ class Secciones extends MasterManteka {
 			return;
 		}
 		$textoFiltro = $this->input->post('textoFiltroBasico');
-		$this->load->model('model_secciones');
-		$resultado = $this->model_secciones->getSeccionesByFilter($textoFiltro);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->getSeccionesByFilter($textoFiltro);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
-			$this->load->model('model_busquedas');
+			$this->load->model('Model_busqueda');
 			//Se debe insertar sólo si se encontraron resultados
-			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'secciones', $this->session->userdata('rut'));
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'secciones', $this->session->userdata('rut'));
 		}
 		echo json_encode($resultado);
 	}
@@ -483,10 +461,10 @@ class Secciones extends MasterManteka {
 	public function eliminarAsignacion()
 	{
 
-		$this->load->model('Model_secciones');
+		$this->load->model('Model_seccion');
 		$cod_seccion = $this->input->post('cod_seccion');
 
-		$confirmacion = $this->Model_secciones->EliminarAsignacion($cod_seccion);
+		$confirmacion = $this->Model_seccion->EliminarAsignacion($cod_seccion);
 
 		if ($confirmacion==1){
 			// mostramos el mensaje de operacion realizada
@@ -526,8 +504,8 @@ class Secciones extends MasterManteka {
 			return;
 		}
 		$nombre_modulo = $this->input->post('nombre_modulo');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->verProfeSegunModulo($nombre_modulo);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->verProfeSegunModulo($nombre_modulo);
 		echo json_encode($resultado);
 	}
 
@@ -547,8 +525,8 @@ class Secciones extends MasterManteka {
 		}
 
 		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->getDetalleUnaSeccion($cod_seccion);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->getDetalleUnaSeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
 
@@ -568,8 +546,8 @@ class Secciones extends MasterManteka {
 		}
 		$dia = $this->input->post('dia_post');
 		$bloque = $this->input->post('bloque_post');
-		$this->load->model('Model_secciones');
-		$resultado = $this->Model_secciones->getVerificaHorarios($dia, $bloque);
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->getVerificaHorarios($dia, $bloque);
 		echo json_encode($resultado);
 	}
 		

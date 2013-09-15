@@ -46,6 +46,7 @@ class Estudiantes extends MasterManteka {
 	public function editarEstudiante() {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
+
 			$subMenuLateralAbierto = 'editarEstudiante'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -73,12 +74,26 @@ class Estudiantes extends MasterManteka {
 			$rut = $this->input->post("rut");
 			$nombre1 = $this->input->post("nombre1");
 			$nombre2 = $this->input->post("nombre2");
+			if (trim($nombre2) == '') {
+				$nombre2 = NULL;
+			}
 			$apellido1 = $this->input->post("apellido1");
 			$apellido2 = $this->input->post("apellido2");
 			$correo1 = $this->input->post("correo1");
 			$correo2 = $this->input->post("correo2");
-			$telefono = $this->input->post("telefono");
+			if (trim($correo2) == '') {
+				$correo2 = NULL;
+			}
+			$fono = $this->input->post("telefono");
+			if (trim($fono) == '') {
+				$fono = NULL;
+			}
 			$id_seccion = $this->input->post("id_seccion");
+			if (trim($id_seccion) == '') {
+				$id_seccion = NULL;
+			}
+			$cod_carrera = $this->input->post("cod_carrera");
+
 
 			$this->load->model('Model_estudiante');
 			$confirmacion = $this->Model_estudiante->actualizarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $id_seccion);
@@ -147,11 +162,11 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_estudiante');
-			$rut_estudiante = $this->input->post('rut');
+			$rut_estudiante = $this->input->post('rutEliminar');
 
 			$confirmacion = $this->Model_estudiante->eliminarEstudiante($rut_estudiante);
 			// mostramos el mensaje de operacion realizada
-			if ($confirmacion == TRUE){
+			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha borrado el estudiante con éxito";
 				$datos_plantilla["tipo_msj"] = "alert-success";
@@ -217,14 +232,27 @@ class Estudiantes extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_estudiante');
 			$rut = $this->input->post("rut");
+			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post("nombre1");
 			$nombre2 = $this->input->post("nombre2");
+			if (trim($nombre2) == '') {
+				$nombre2 = NULL;
+			}
 			$apellido1 = $this->input->post("apellido1");
 			$apellido2 = $this->input->post("apellido2");
 			$correo1 = $this->input->post("correo1");
 			$correo2 = $this->input->post("correo2");
+			if (trim($correo2) == '') {
+				$correo2 = NULL;
+			}
 			$fono = $this->input->post("telefono");
+			if (trim($fono) == '') {
+				$fono = NULL;
+			}
 			$id_seccion = $this->input->post("id_seccion");
+			if (trim($id_seccion) == '') {
+				$id_seccion = NULL;
+			}
 			$cod_carrera = $this->input->post("cod_carrera");
 			
 			$confirmacion = $this->Model_estudiante->agregarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono, $id_seccion, $cod_carrera);
@@ -389,12 +417,12 @@ class Estudiantes extends MasterManteka {
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
-			$this->load->model('model_busquedas');
+			$this->load->model('Model_busqueda');
 			//Se debe insertar sólo si se encontraron resultados
-			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'estudiantes', $this->session->userdata('rut'));
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'estudiantes', $this->session->userdata('rut'));
 			$cantidad = count($textoFiltrosAvanzados);
 			for ($i = 0; $i < $cantidad; $i++) {
-				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'estudiantes', $this->session->userdata('rut'));
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'estudiantes', $this->session->userdata('rut'));
 			}
 		}
 		echo json_encode($resultado);

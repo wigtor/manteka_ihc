@@ -102,7 +102,7 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="telefono">7-. Teléfono:</label>
+					<label class="control-label" for="telefono">8-. Teléfono:</label>
 					<div class="controls">
 						<input type="text" id="telefono" name="telefono" class="span12" maxlength="10" pattern="[0-9]+" placeholder="44556677" >
 					</div>

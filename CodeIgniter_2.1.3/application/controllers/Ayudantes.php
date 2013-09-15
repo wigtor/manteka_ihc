@@ -76,16 +76,25 @@ class Ayudantes extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_ayudante');
 			$rut = $this->input->post("rut");
+			$rut =  substr($rut, 0, -1); //Quito el dígito verificador del rut
 			$nombre1 = $this->input->post("nombre1");
-			$nombre2 = $this->input->post("nombre2");;
+			$nombre2 = $this->input->post("nombre2");
+			if (trim($nombre2) == '') {
+				$nombre2 = NULL;
+			}
 			$apellido1 = $this->input->post("apellido1");
 			$apellido2 = $this->input->post("apellido2");
 			$correo1 = $this->input->post("correo1");
 			$correo2 = $this->input->post("correo2");
-			$telefono = $this->input->post("telefono");
+			if (trim($correo2) == '') {
+				$correo2 = NULL;
+			}
+			$fono = $this->input->post("telefono");
+			if (trim($fono) == '') {
+				$fono = NULL;
+			}
 			$rut_profesores = $this->input->post("id_profesores");
-			echo $rut_profesores.'     ';return;
-			$confirmacion = $this->Model_ayudante->agregarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $rut_profesores);
+			$confirmacion = $this->Model_ayudante->agregarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono, $rut_profesores);
 
 
 			//Debe estar en un if según lo que contenga $confirmacion
@@ -124,6 +133,9 @@ class Ayudantes extends MasterManteka {
 	{
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_plantilla = array();
+			$this->load->model('Model_profesor');
+			$datos_plantilla['profesores'] = $this->Model_profesor->getAllProfesores();
+
 			$subMenuLateralAbierto = 'editarAyudante'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -154,15 +166,24 @@ class Ayudantes extends MasterManteka {
 			$this->load->model('Model_ayudante');
 			$rut = $this->input->post("rut");
 			$nombre1 = $this->input->post("nombre1");
-			$nombre2 = $this->input->post("nombre2");;
+			$nombre2 = $this->input->post("nombre2");
+			if (trim($nombre2) == '') {
+				$nombre2 = NULL;
+			}
 			$apellido1 = $this->input->post("apellido1");
 			$apellido2 = $this->input->post("apellido2");
 			$correo1 = $this->input->post("correo1");
-			$correo2 = $this->input->post("correo1");
-			$telefono = $this->input->post("telefono");
+			$correo2 = $this->input->post("correo2");
+			if (trim($correo2) == '') {
+				$correo2 = NULL;
+			}
+			$fono = $this->input->post("telefono");
+			if (trim($fono) == '') {
+				$fono = NULL;
+			}
 			$ruts_profesores = array(); //PENDIENTE
 
-			$confirmacion = $this->Model_ayudante->actualizarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $ruts_profesores);
+			$confirmacion = $this->Model_ayudante->actualizarAyudante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $fono, $ruts_profesores);
 
 			if($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -226,7 +247,7 @@ class Ayudantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_ayudante');
-			$rut_ayudante = $this->input->post('rut');
+			$rut_ayudante = $this->input->post('rutEliminar');
 			$confirmacion = $this->Model_ayudante->eliminarAyudante($rut_ayudante);
 			
 			if ($confirmacion == TRUE){

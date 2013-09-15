@@ -48,7 +48,6 @@
 
 				/* Quito el div que indica que se está cargando */
 				$('#icono_cargando').hide();
-
 			}
 		});
 	}

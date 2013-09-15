@@ -97,15 +97,15 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="telefono">7-. Teléfono:</label>
+					<label class="control-label" for="telefono">8-. Teléfono:</label>
 					<div class="controls">
 						<input type="text" id="telefono" name="telefono" class="span12" maxlength="10" pattern="[0-9]+" placeholder="44556677" >
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="id_profesores" style="cursor: default">7.- <font color="red">*</font> Asignar profesores:</label>
+					<label class="control-label" for="id_profesores" style="cursor: default">9.- <font color="red">*</font> Asignar profesores:</label>
 					<div class="controls">
-						<select required id="id_profesores" name="id_profesores" class="span12" title="asigne carrera" multiple>
+						<select required id="id_profesores" name="id_profesores[]" class="span12" title="asigne profesor" multiple="multiple">
 						<?php
 						if (isset($profesores)) {
 							foreach ($profesores as $profe) {
