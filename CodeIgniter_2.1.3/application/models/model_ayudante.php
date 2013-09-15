@@ -183,7 +183,7 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('ayudante.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('APELLIDO1 AS apellido1');
-		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');
@@ -196,7 +196,8 @@ class Model_ayudante extends CI_Model {
 			$this->db->or_like("NOMBRE2", $texto);
 			$this->db->or_like("APELLIDO1", $texto);
 			$this->db->or_like("APELLIDO2", $texto);
-			$this->db->or_like("NOMBRE_SECCION", $texto);
+			$this->db->or_where("(LETRA_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR NUMERO_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+			
 		}
 		else {
 			//Sólo para acordarse
@@ -216,7 +217,7 @@ class Model_ayudante extends CI_Model {
 				//$this->db->or_like("APELLIDO2_AYUDANTE", $textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]);
 			}
 			if ($textoFiltrosAvanzados[BUSCAR_POR_SECCION] != '') {
-				$this->db->like("NOMBRE_SECCION", $textoFiltrosAvanzados[BUSCAR_POR_SECCION]);
+				$this->db->where("(LETRA_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR NUMERO_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 			}
 		}
 		$query = $this->db->get('ayudante');
@@ -254,7 +255,7 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
 */
-		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');

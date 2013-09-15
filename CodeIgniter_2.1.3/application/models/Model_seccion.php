@@ -236,14 +236,14 @@ class Model_seccion extends CI_Model{
 	* @return array conjunto de secciones que coinciden con el filtro entregado
 	*/
 
-	public function getSeccionesByFilter($texto)
-	{
-		$this->db->select('NOMBRE_SECCION AS nombre');
+	public function getSeccionesByFilter($texto) {
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
 		$this->db->select('ID_SECCION AS id');
-		$this->db->order_by('NOMBRE_SECCION', 'asc');
+		$this->db->order_by('LETRA_SECCION', 'asc');
+		//$this->db->order_by('NUMERO_SECCION', 'asc');
 
 		if ($texto != "") {
-			$this->db->like("NOMBRE_SECCION", $texto);
+			$this->db->where("(LETRA_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR NUMERO_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 		}
 		$query = $this->db->get('seccion');
 		//echo $this->db->last_query();
@@ -265,7 +265,8 @@ class Model_seccion extends CI_Model{
 	public function getDetallesSeccion($cod_seccion)
 	{
 		$this->db->select('seccion.COD_SECCION as cod_seccion');
-		$this->db->select('seccion.NOMBRE_SECCION AS nombre_seccion');
+		$this->db->select('seccion.LETRA_SECCION AS letra_seccion');
+		$this->db->select('seccion.NUMERO_SECCION AS numero_seccion');
 		$this->db->select('NOMBRE_MODULO AS modulo');
 		$this->db->select('sala.NUM_SALA AS sala');
 		$this->db->select('profesor.NOMBRE1_PROFESOR as nombre1');

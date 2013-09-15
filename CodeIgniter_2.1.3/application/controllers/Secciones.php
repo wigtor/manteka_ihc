@@ -27,26 +27,6 @@ class Secciones extends MasterManteka {
         $this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
-	/**
-	* Función llamada por una vista a través de una petición AJAX
-	* Esta función rescata, a través de la vista, la variable 'sección'
-	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
-	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
-	* y se le envía como un string a la vista
-	*/
-
-	public function postVerSeccion() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_seccion');
-		$resultado = $this->Model_seccion->VerSeccion($cod_seccion);
-		echo json_encode($resultado);
-	}
 
 	/**
 	* Función llamada por una vista a través de una petición AJAX
@@ -103,18 +83,15 @@ class Secciones extends MasterManteka {
 	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
 	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra seccion.
 	*/
-	public function agregarSecciones()
-	{	
-		
-		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = 0;		
-		$subMenuLateralAbierto = "agregarSecciones"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->load->model('Model_seccion');
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
+	public function agregarSecciones() {	
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "agregarSecciones"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->load->model('Model_seccion');
+			$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 	/**
@@ -125,32 +102,34 @@ class Secciones extends MasterManteka {
 	* vista de confirmación "Acción Realizada" o "Acción No Realizada"
 	*/
 
-	public function ingresarSecciones()
-	{	
-		
-		
-		$this->load->model('Model_seccion');
-		$nombre_seccion1 = $this->input->post("rs_seccion");
-		$nombre_seccion2 = $this->input->post("rs_seccion2");
-		$confirmacion = $this->Model_seccion->AgregarSeccion($nombre_seccion1,$nombre_seccion2);
-        
-		if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha ingresado la sección con éxito";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+	public function postAgregarSecciones() {	
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en el ingreso en base de datos";
-			$datos_plantilla["tipo_msj"] = "alert-error";	
-		}
-		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Secciones/agregarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		$datos_plantilla["nombre_redirecTo"] = "Agregar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_seccion');
+			$letra_seccion = $this->input->post("letra_seccion");
+			$num_seccion = $this->input->post("num_seccion");
+			$confirmacion = $this->Model_seccion->agregarSeccion($letra_seccion, $num_seccion);
 
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ingresado la sección con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else {
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en el ingreso en base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Secciones/agregarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["nombre_redirecTo"] = "Agregar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array();
+			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
 	}
 
 	
@@ -166,23 +145,15 @@ class Secciones extends MasterManteka {
 	* Finalmente se carga la vista nuevamente con todos los datos para permitir la edición de otra seccion.
 	*
 	*/
-    public function editarSecciones()
-    {
-	//Se comprueba que quien hace esta petición este logueado
-    	$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = 0;		
-		$subMenuLateralAbierto = "editarSecciones"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->load->model('Model_seccion');
-        $datos_vista = array('seccion' =>$this->Model_seccion->VerTodasSecciones());
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-    
+    public function editarSecciones() {
+    	if ($this->input->server('REQUEST_METHOD') == 'GET') {
+    		$datos_vista = array();
+			$this->load->model('Model_seccion');
+			$subMenuLateralAbierto = "editarSecciones"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Secciones", 'cuerpo_secciones_editar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+    	}
     }
 
     /**
@@ -193,33 +164,35 @@ class Secciones extends MasterManteka {
 	* vista de confirmación "Acción Realizada" o "Acción No Realizada"
     */
 
-    public function modificarSecciones()
-    {
-	
-		
-		$this->load->model('Model_seccion');
-		$cod_seccion = $this->input->post("cod_seccion");
-		$nombre_seccion1 = $this->input->post("rs_seccion");
-		$nombre_seccion2 = $this->input->post("rs_seccion2");
-		$confirmacion = $this->Model_seccion->ActualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2);
-        
-        // se muestra mensaje de operación realizada
-    	if ($confirmacion==1){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha modificado la sección con éxito";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+    public function postEditarSecciones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la edición en base de datos";
-			$datos_plantilla["tipo_msj"] = "alert-error";	
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_seccion');
+			$cod_seccion = $this->input->post("cod_seccion");
+			$nombre_seccion1 = $this->input->post("rs_seccion");
+			$nombre_seccion2 = $this->input->post("rs_seccion2");
+			$confirmacion = $this->Model_seccion->actualizarSeccion($cod_seccion, $nombre_seccion1, $nombre_seccion2);
+
+			// se muestra mensaje de operación realizada
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha modificado la sección con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else {
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la edición en base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Secciones/editarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["nombre_redirecTo"] = "Editar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
-		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Secciones/editarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		$datos_plantilla["nombre_redirecTo"] = "Editar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
     }
 
 
@@ -239,16 +212,15 @@ class Secciones extends MasterManteka {
     {
 		
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = 0;		
+		$datos_vista = array();		
 		$subMenuLateralAbierto = "borrarSecciones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->load->model('Model_seccion');
 		//$cod_seccion = $this->input->post("cod_seccion");
 		//$cod_seccion1 = $this->input->post("rs_seccion");
 		//$confirmacion = $this->Model_seccion->EliminarSeccion($cod_seccion1);
-        $datos_vista = array('seccion' =>$this->Model_seccion->VerTodasSecciones()/*,'rs_estudiantes'=>$this->Model_seccion->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_seccion->VerSeccion($cod_seccion),'mensaje_confirmacion'=>$confirmacion*/);
+        //$datos_vista = array('seccion' =>$this->Model_seccion->VerTodasSecciones()/*,'rs_estudiantes'=>$this->Model_seccion->VerTodosLosEstudiantes($cod_seccion),'secc' =>$this->Model_seccion->VerSeccion($cod_seccion),'mensaje_confirmacion'=>$confirmacion*/);
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_borrar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 
@@ -384,11 +356,10 @@ class Secciones extends MasterManteka {
 	public function borrarAsignacion()
 	{
 		
-		$datos_vista = 0;		
+		$datos_vista = array();		
 		$subMenuLateralAbierto = "borrarAsignar"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		
 		$this->load->model('Model_seccion');
 		$cod_seccion = $this->input->post("cod_seccion");
@@ -408,8 +379,10 @@ class Secciones extends MasterManteka {
 	* y se le envía como un string a la vista
 	*/
 
-	public function postDetallesSeccion() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+	public function getDetallesSeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -421,6 +394,7 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
+
 	/**
 	* Función llamada por una vista a través de una petición AJAX
 	* Esta función rescata, a través de la vista, la variable 'textoFiltroBasico'
@@ -430,7 +404,10 @@ class Secciones extends MasterManteka {
 	* y se le envía como un string a la vista
 	*/
 
-	public function postBusquedaSecciones() {
+	public function getSeccionesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -482,12 +459,12 @@ class Secciones extends MasterManteka {
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 		$datos_plantilla["redirecTo"] = "Secciones/borrarAsignacion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		$datos_plantilla["nombre_redirecTo"] = "Eliminar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 
 
 	}
+
 
 	/**
 	* Función llamada por una vista a través de una petición AJAX
@@ -509,28 +486,8 @@ class Secciones extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-/**
-	* Función llamada por una vista a través de una petición AJAX
-	* Esta función rescata, a través de la vista, la variable 'sección'
-	* Dicha variable se guarda en otra de tipo local para llamar a otra función, en el modelo
-	* Finalmente, el resultado de la función en el modelo se le convierte en su representacion JSON
-	* y se le envía como un string a la vista
-	*/
 
-	public function postDetalleUnaSeccion() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_seccion');
-		$resultado = $this->Model_seccion->getDetalleUnaSeccion($cod_seccion);
-		echo json_encode($resultado);
-	}
-
-/**
+	/**
 	* Función llamada por una vista a través de una petición AJAX
 	* Esta función rescata, a través de la vista, las variable 'dia_post' y 'bloque_post'
 	* Dichas variables se guardan en otras de tipo local para llamar a otra función, en el modelo

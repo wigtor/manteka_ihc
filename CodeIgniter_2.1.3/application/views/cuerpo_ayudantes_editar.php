@@ -173,7 +173,7 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="id_profesores" style="cursor: default">9.- <font color="red">*</font> Asignar profesores:</label>
+					<label class="control-label" for="id_profesores">9.- <font color="red">*</font> Asignar profesores:</label>
 					<div class="controls">
 						<select required id="id_profesores" name="id_profesores[]" class="span12" title="asigne profesor" multiple="multiple">
 						<?php

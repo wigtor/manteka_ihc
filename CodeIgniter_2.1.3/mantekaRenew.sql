@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     12-09-2013 2:19:24                           */
+/* Created on:     15-09-2013 18:26:39                          */
 /*==============================================================*/
 
 
@@ -9,6 +9,8 @@ drop table if exists ACTIVIDAD_MASIVA;
 drop table if exists ACT_ESTUDIANTE;
 
 drop table if exists ADJUNTO;
+
+drop table if exists ASISTENCIA;
 
 drop table if exists AUDITORIA;
 
@@ -118,6 +120,18 @@ create table ADJUNTO
    NOMBRE_LOGICO_ADJ    varchar(255),
    NOMBRE_FISICO_ADJ    varchar(255),
    primary key (ID_ADJUNTO)
+);
+
+/*==============================================================*/
+/* Table: ASISTENCIA                                            */
+/*==============================================================*/
+create table ASISTENCIA
+(
+   ID_SESION            int not null,
+   RUT_USUARIO          int not null,
+   PRESENTE             bool,
+   COMENTARIO           varchar(100),
+   JUSTIFICADO          bool
 );
 
 /*==============================================================*/
@@ -321,7 +335,7 @@ create table HISTORIALES_BUSQUEDA
 (
    ID_HISTORIAL_BUSQ    int not null auto_increment,
    RUT_USUARIO          int not null,
-   PALABRA              varchar(255),
+   PALABRA_BUSQ         varchar(255),
    TIMESTAMP_BUSQ       timestamp,
    TIPO_BUSQ            int,
    primary key (ID_HISTORIAL_BUSQ)
@@ -373,7 +387,6 @@ create table MODULO_TEMATICO
 (
    ID_MODULO_TEM        int not null auto_increment,
    ID_EQUIPO            int,
-   RUT_USUARIO          int,
    NOMBRE_MODULO        varchar(50),
    DESCRIPCION_MODULO   varchar(100),
    primary key (ID_MODULO_TEM)
@@ -386,9 +399,10 @@ alter table MODULO_TEMATICO comment 'Es la unidad temática que se le pasará a lo
 /*==============================================================*/
 create table NOTA
 (
-   ID_EVALUACION        int,
-   RUT_USUARIO          int,
-   VALOR_NOTA           float
+   ID_EVALUACION        int not null,
+   RUT_USUARIO          int not null,
+   VALOR_NOTA           decimal(2,2),
+   COMENTARIO           varchar(100)
 );
 
 /*==============================================================*/
@@ -518,7 +532,8 @@ create table SECCION
 (
    ID_SECCION           int not null auto_increment,
    ID_SESION            int,
-   NOMBRE_SECCION       varchar(10),
+   LETRA_SECCION        varchar(2),
+   NUMERO_SECCION       int,
    primary key (ID_SECCION)
 );
 
@@ -594,6 +609,12 @@ alter table ACT_ESTUDIANTE add constraint FK_RELATIONSHIP_34 foreign key (RUT_US
 alter table ADJUNTO add constraint FK_RELATIONSHIP_51 foreign key (ID_CORREO)
       references CARTA (ID_CORREO) on delete cascade on update cascade;
 
+alter table ASISTENCIA add constraint FK_RELATIONSHIP_57 foreign key (RUT_USUARIO)
+      references ESTUDIANTE (RUT_USUARIO) on delete cascade on update cascade;
+
+alter table ASISTENCIA add constraint FK_RELATIONSHIP_58 foreign key (ID_SESION)
+      references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
+
 alter table AUDITORIA add constraint FK_RELATIONSHIP_35 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
@@ -662,9 +683,6 @@ alter table HORARIO add constraint FK_RELATIONSHIP_8 foreign key (ID_DIA)
 
 alter table HORARIO add constraint FK_RELATIONSHIP_9 foreign key (ID_MODULO)
       references MODULO_HORARIO (ID_MODULO) on delete cascade on update cascade;
-
-alter table MODULO_TEMATICO add constraint FK_RELATIONSHIP_15 foreign key (RUT_USUARIO)
-      references PROFESOR (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table MODULO_TEMATICO add constraint FK_RELATIONSHIP_28 foreign key (ID_EQUIPO)
       references EQUIPO_PROFESOR (ID_EQUIPO) on delete cascade on update cascade;

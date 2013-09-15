@@ -196,7 +196,7 @@ class Model_estudiante extends CI_Model {
 		//$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
-		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->join('usuario', 'usuario.RUT_USUARIO = estudiante.RUT_USUARIO');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->join('seccion', 'seccion.ID_SECCION = estudiante.ID_SECCION', 'LEFT OUTER');
@@ -237,7 +237,7 @@ class Model_estudiante extends CI_Model {
 				$this->db->like("NOMBRE_CARRERA", $textoFiltrosAvanzados[BUSCAR_POR_CARRERA]);
 			}
 			if ($textoFiltrosAvanzados[BUSCAR_POR_SECCION] != '') {
-				$this->db->like("NOMBRE_SECCION", $textoFiltrosAvanzados[BUSCAR_POR_SECCION]);
+				$this->db->where("(LETRA_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR NUMERO_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 			}
 		}
 		$query = $this->db->get('estudiante');
@@ -273,7 +273,7 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('estudiante.COD_CARRERA AS cod_carrera');
 		$this->db->select('NOMBRE_CARRERA AS carrera');
 		$this->db->select('estudiante.ID_SECCION AS id_seccion');
-		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->join('seccion', 'seccion.ID_SECCION = estudiante.ID_SECCION', 'LEFT OUTER');
@@ -309,7 +309,7 @@ class Model_estudiante extends CI_Model {
 		$confirmacion = 1;
 		while ($contador<count($listaRut)){
 			$data = array(
-				'COD_SECCION' => $seccionOUT
+				'ID_SECCION' => $seccionOUT
 				);
 			$this->db->where('RUT_ESTUDIANTE', $listaRut[$contador]);
 			$datos = $this->db->update('estudiante',$data);
@@ -402,11 +402,11 @@ class Model_estudiante extends CI_Model {
 	* Se obtiene el el codigo de sección que corresponde al nombre entregado como parametro
 	*
 	* @param $seccion es el nombre de la sección que se evaluará
-	* @return $sec->COD_SECCION es el codigo de la sección que corresponde al nombre ingresado en $seccion
+	* @return $sec->ID_SECCION es el codigo de la sección que corresponde al nombre ingresado en $seccion
 	*/	
 	function validarSeccion($seccion){
 		
-		$query = $this->db->select('seccion.COD_SECCION');
+		$query = $this->db->select('seccion.ID_SECCION');
 		$query = $this->db->from('seccion');
 		$query = $this->db->where('NOMBRE_SECCION',$seccion);
 		$query = $this->db->get();
@@ -415,7 +415,7 @@ class Model_estudiante extends CI_Model {
 			return FALSE;
 		}	
 
-		return $sec->COD_SECCION;
+		return $sec->ID_SECCION;
 	}
 
 	/**
@@ -530,7 +530,7 @@ class Model_estudiante extends CI_Model {
 					unlink($archivo);
 					return $stack;
 				}
-				$validador = $this->validarDatos($data['COD_SECCION'],"seccion");
+				$validador = $this->validarDatos($data['ID_SECCION'],"seccion");
 				if(!$validador){
 					$linea[] = "</br>EL nombre de la seccion no existe en manteka</br>";
 					$stack[$c] = $linea;
@@ -555,7 +555,7 @@ class Model_estudiante extends CI_Model {
 					unlink($archivo);
 					return $stack;
 				}
-				if(($data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION'])) == FALSE){
+				if(($data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION'])) == FALSE){
 					$linea[] = "</br>La sección no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
@@ -586,7 +586,7 @@ class Model_estudiante extends CI_Model {
 				{
 					$linea =  explode(';',$linea);
 					$data = array_combine($header, $linea);				
-					$data['COD_SECCION'] = $this->validarSeccion($data['COD_SECCION']);
+					$data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION']);
 					$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
 					$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
 					$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);	

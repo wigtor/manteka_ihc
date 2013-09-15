@@ -180,7 +180,7 @@ class Model_profesor extends CI_Model {
 		//$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTem');
 		$this->db->select('NOMBRE_MODULO AS moduloTem');
 		//$this->db->select('GROUP_CONCAT( NOMBRE_SECCION) AS seccion');
-		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('tipo_profesor', 'profesor.ID_TIPO_PROFESOR = tipo_profesor.ID_TIPO_PROFESOR');
 		$this->db->join('profesor_seccion', 'profesor.RUT_USUARIO = profesor_seccion.RUT_USUARIO', 'LEFT OUTER');
@@ -204,7 +204,7 @@ class Model_profesor extends CI_Model {
 		//$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTem');
 		$this->db->select('NOMBRE_MODULO AS moduloTem');
 		//$this->db->select('GROUP_CONCAT( NOMBRE_SECCION) AS seccion');
-		$this->db->select('NOMBRE_SECCION AS seccion');
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('tipo_profesor', 'profesor.ID_TIPO_PROFESOR = tipo_profesor.ID_TIPO_PROFESOR');
 		$this->db->join('profesor_seccion', 'profesor.RUT_USUARIO = profesor_seccion.RUT_USUARIO', 'LEFT OUTER');
@@ -249,7 +249,7 @@ class Model_profesor extends CI_Model {
 				$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_MOD_TEM]);
 			}
 			if($textoFiltrosAvanzados[BUSCAR_POR_SECCION] != '') {
-				$this->db->like("NOMBRE_SECCION", $textoFiltrosAvanzados[BUSCAR_POR_SECCION]);
+				$this->db->where("(LETRA_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR NUMERO_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
 			}
 		}
 		$query = $this->db->get('profesor');

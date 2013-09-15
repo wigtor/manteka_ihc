@@ -3,7 +3,7 @@
 	var valorFiltrosJson = [""];
 	var prefijo_tipoDato = "seccion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Secciones/postBusquedaSecciones") ?>";
+	var url_post_busquedas = "<?php echo site_url("Secciones/getSeccionesAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/secciones") ?>";
 
 	function verDetalle(elemTabla){
@@ -11,108 +11,83 @@
 		var idElem = elemTabla.id;
 		var cod_seccion = idElem.substring(prefijo_tipoDato.length, idElem.length);
 
-			/* Defino el ajax que hará la petición al servidor */
-			$.ajax({
-				type: "POST", /* Indico que es una petición POST al servidor */
-				url: "<?php echo site_url("Secciones/postVerSeccion") ?>", /* Se setea la url del controlador que responderá */
-				data: { seccion: cod_seccion }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
 
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Secciones/getDetallesSeccionAjax") ?>",
+			data: { seccion: cod_seccion },
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
 
-				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-					//console.log (respuesta);
-					/* Obtengo los objetos HTML donde serán escritos los resultados */
-					var seccion = document.getElementById("nombre_seccion");
-					var modulo = document.getElementById("modulo");
-					var dia = document.getElementById("dia");
-					
-					document.getElementById("codSeccion").value = cod_seccion;
-					
-					/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
-					var datos = jQuery.parseJSON(respuesta);
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$('#nombre_seccion').html($.trim(datos.rut));
+				$('#dia').html((datos.nombre2 == "" ? 'Sin asignación' : $.trim(datos.nombre2)));
+				$('#modulo').html((datos.nombre2 == "" ? 'Sin asignación' : $.trim(datos.nombre2)));
 
-					/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-					seccion.innerHTML = datos[0];
-					modulo.innerHTML = datos[1];
-					dia.innerHTML = datos[2];
-					
-
-					if (datos[1] == null){
-						modulo.innerHTML= "sin asignación";
-					}
-					if(datos[2]==null){
-						dia.innerHTML = "sin asignación";
-						
-					}
-
-					/* Quito el div que indica que se está cargando */
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
-
-				}
-		}
-		);
+				/* Quito el div que indica que se está cargando */
+				$('#icono_cargando').hide();
+			}
+		});
 
 		$.ajax({
-		type: "POST", /* Indico que es una petición POST al servidor */
-		url: "<?php echo site_url("Secciones/AlumnosSeccion") ?>", // Se setea la url del controlador que responderá */
-		data: { seccion: cod_seccion}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-			var tablaResultados = document.getElementById("listadoResultadosAlumnos");
-			$(tablaResultados).find('tbody').remove();
-			var arrayRespuesta = jQuery.parseJSON(respuesta);
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Secciones/AlumnosSeccion") ?>", // Se setea la url del controlador que responderá */
+			data: { seccion: cod_seccion}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				var tablaResultados = document.getElementById("listadoResultadosAlumnos");
+				$(tablaResultados).find('tbody').remove();
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
 
-			
-			//CARGO EL CUERPO DE LA TABLA
-			tbody = document.createElement('tbody');
-			if (arrayRespuesta.length == 0) {
-				tr = document.createElement('tr');
-				td = document.createElement('td');
-				$(td).html("No se encontraron resultados");
-				$(td).attr('colspan',tiposFiltro.length);
-				tr.appendChild(td);
-				tbody.appendChild(tr);
-			}
-
-			for (var i = 0; i < arrayRespuesta.length; i++) {
-				tr = document.createElement('tr');
-				tr.setAttribute('style', "cursor:default"); //No es clickeable
-				for (var j = 0; j < 5; j++) {
+				
+				//CARGO EL CUERPO DE LA TABLA
+				tbody = document.createElement('tbody');
+				if (arrayRespuesta.length == 0) {
+					tr = document.createElement('tr');
 					td = document.createElement('td');
-					//tr.setAttribute("onClick", "verDetalle(this)");
-					if(j==4){
-						nodoTexto = document.createTextNode(arrayRespuesta[i][j]+" "+arrayRespuesta[i][j+1]);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-						j=j+6;
-					}
-					else{
-
-						nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-					}
+					$(td).html("No se encontraron resultados");
+					$(td).attr('colspan',tiposFiltro.length);
+					tr.appendChild(td);
+					tbody.appendChild(tr);
 				}
-		
 
-				tbody.appendChild(tr);
-			}
-			tablaResultados.appendChild(tbody);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					tr = document.createElement('tr');
+					tr.setAttribute('style', "cursor:default"); //No es clickeable
+					for (var j = 0; j < 5; j++) {
+						td = document.createElement('td');
+						//tr.setAttribute("onClick", "verDetalle(this)");
+						if(j==4){
+							nodoTexto = document.createTextNode(arrayRespuesta[i][j]+" "+arrayRespuesta[i][j+1]);
+							td.appendChild(nodoTexto);
+							tr.appendChild(td);
+							j=j+6;
+						}
+						else{
 
-			/* Quito el div que indica que se está cargando */
-			var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).hide();
-
+							nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
+							td.appendChild(nodoTexto);
+							tr.appendChild(td);
+						}
+					}
 			
-			$('tbody tr').on('click', function(event) {
-				$(this).addClass('highlight').siblings().removeClass('highlight');
-			});
-		}
-		});
-		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
 
+					tbody.appendChild(tr);
+				}
+				tablaResultados.appendChild(tbody);
+
+				/* Quito el div que indica que se está cargando */
+				$('#icono_cargando').hide();
+
+				
+				$('tbody tr').on('click', function(event) {
+					$(this).addClass('highlight').siblings().removeClass('highlight');
+				});
+			}
+		});
 	}
 
 	//Se cargan por ajax
@@ -120,6 +95,7 @@
 		escribirHeadTable();
 		cambioTipoFiltro(undefined);
 	});
+	
 </script>
 
 <fieldset>
