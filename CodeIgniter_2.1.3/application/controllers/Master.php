@@ -313,7 +313,7 @@ class MasterManteka extends CI_Controller {
 	* 	@param string $mensaje Es el texto que contiene el correo.
 	* 	@return bool indica si se envió correctamente el correo. 
 	*/
-	private function enviarCorreo($destino, $subject, $mensaje, $adjuntos) {
+	private function enviarMail($destino, $subject, $mensaje, $adjuntos) {
 
 		/*
 		*	Se intenta enviar el correo, capturando un error en caso

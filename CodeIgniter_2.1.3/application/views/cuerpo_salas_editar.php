@@ -41,7 +41,7 @@
 	var inputAllowedFiltro= ["[0-9]{3}", "[0-9]+", ""];
 	var prefijo_tipoDato = "sala_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Salas/postBusquedaSalas") ?>";
+	var url_post_busquedas = "<?php echo site_url("Salas/getSalasAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/salas") ?>";
 
 	function verDetalle(elemTabla) {
@@ -57,7 +57,7 @@
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Salas/postDetallesSala") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Salas/getDetallesSalaAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { num_sala: sala_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Obtengo los objetos HTML donde serán escritos los resultados */

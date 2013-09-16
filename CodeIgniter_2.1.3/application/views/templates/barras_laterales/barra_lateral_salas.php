@@ -12,23 +12,23 @@
 
 		// Las operaciones por defecto no poseen clases
 		$verSalas = "";
-		$agregarSalas = "";
-		$editarSalas = "";
-		$borrarSalas = "";
+		$agregarSala = "";
+		$editarSala = "";
+		$eliminarSala = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
 		if ($subVistaLateralAbierta == "verSalas") {
 			$verSalas = 'class="active"';
 		}
-		else if ($subVistaLateralAbierta == "agregarSalas") {
-			$agregarSalas = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarSala") {
+			$agregarSala = 'class="active"';
 		}
-		else if ($subVistaLateralAbierta == "editarSalas") {
-			$editarSalas = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarSala") {
+			$editarSala = 'class="active"';
 		}
-		else if ($subVistaLateralAbierta == "borrarSalas") {
-			$borrarSalas = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarSala") {
+			$eliminarSala = 'class="active"';
 		}
 	?>
 
@@ -43,9 +43,9 @@
 		    	<div class="accordion-inner nav nav-list">
 		        	<li <?php echo $verSalas; ?> ><a href="<?php echo site_url("Salas/verSalas")?>">Ver salas</a></li>
 		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarSalas; ?> ><a href="<?php echo site_url("Salas/agregarSalas")?>">Agregar salas</a></li>
-						<li <?php echo $editarSalas; ?> ><a href="<?php echo site_url("Salas/editarSalas")?>">Editar salas</a></li>
-						<li <?php echo $borrarSalas; ?> ><a href="<?php echo site_url("Salas/borrarSalas")?>">Borrar salas</a></li>
+						<li <?php echo $agregarSala; ?> ><a href="<?php echo site_url("Salas/agregarSala")?>">Agregar salas</a></li>
+						<li <?php echo $editarSala; ?> ><a href="<?php echo site_url("Salas/editarSala")?>">Editar salas</a></li>
+						<li <?php echo $eliminarSala; ?> ><a href="<?php echo site_url("Salas/eliminarSala")?>">Borrar salas</a></li>
 					<?php } ?>
 		     	</div>
 		    </div>

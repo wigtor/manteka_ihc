@@ -1,38 +1,11 @@
-<?php
-if(isset($mensaje_confirmacion))
-{
-	if($mensaje_confirmacion==1)
-	{
-		?>
-		    <div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Listo</h4>
-				 Sala eliminada correctamente
-    		</div>	
-		<?php
-	}
-	else if($mensaje_confirmacion==-1)
-	{
-		?>
-		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			 <h4>Error</h4>
-				 Error al eliminar sala
-    		</div>		
-
-		<?php
-	}
-	unset($mensaje_confirmacion);
-}
-?>
 
 <script type="text/javascript">
-	var tiposFiltro = ["Numero", "Capacidad", "Implementos"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", "", ""];
-	var inputAllowedFiltro= ["[0-9]{3}", "[0-9]+", ""];
+	var tiposFiltro = ["Numero", "Capacidad", "Ubicación", "Implementos"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", "", ""];
+	var inputAllowedFiltro= ["[0-9]{3}", "[0-9]+", "", ""];
 	var prefijo_tipoDato = "sala_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Salas/postBusquedaSalas") ?>";
+	var url_post_busquedas = "<?php echo site_url("Salas/getSalasAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/salas") ?>";
 
 	function verDetalle(elemTabla) {
@@ -46,46 +19,22 @@ if(isset($mensaje_confirmacion))
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Salas/postDetallesSala") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Salas/getDetallesSalaAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { num_sala: sala_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var codSala = document.getElementById("cod_sala");
-				var numSala = document.getElementById("num_sala");
-				var capacidad = document.getElementById("capacidad");
-				var ubicacion = document.getElementById("ubicacion");
-				var impl = document.getElementById("impDetalle");
-				
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
-				if (datos.capacidad == null) {
-					datos.capacidad = '';
-				}
+				$('#idSalaEliminar').val((datos.id_sala == "" ? '' : $.trim(datos.id_sala)));
 
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(codSala).val(datos.codigo_sala);
-				$(numSala).html(datos.num_sala);
-				$(capacidad).html($.trim(datos.capacidad));
-				$(ubicacion).html($.trim(datos.ubicacion));
-
-				/*	Setear los Implementos	*/
-				var length = datos.implementos.length,
-					elemento = null, salidaImp = "";
-				if (length == 0)
-					salidaImp = "<b>No posee</b>";
-				for(var i=0; i<length; i++){
-					imp = datos.implementos[i];
-					salidaImp += '<b title=\"'+imp["descr_implemento"]+'\">'+imp["nombre_implemento"] + "\n</b>"; 
-				}
-				
-				$(impl).html(salidaImp);
-				
+				$('#num_sala').html((datos.num_sala == "" ? '' : $.trim(datos.num_sala)));
+				$('#capacidad').html((datos.capacidad == "No especificada" ? '' : $.trim(datos.capacidad)));
+				$('#ubicacion').html((datos.ubicacion == "No especificada" ? '' : $.trim(datos.ubicacion)));
+				$('#implementos').html((datos.implementos == "No especificados" ? '' : $.trim(datos.implementos)));
 
 				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-
+				$('#icono_cargando').hide();
 			}
 		});
 		
@@ -100,43 +49,27 @@ if(isset($mensaje_confirmacion))
 		cambioTipoFiltro(undefined);
 	});
 
-</script>
-
-<script type="text/javascript">
 	function eliminarSala(){
-		
-		var cod = document.getElementById("cod_sala").value;
-		
-
-		if(cod==""){
-			$('#modalSeleccioneAlgo').modal();
+		if ($('#idSalaEliminar').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado sala');
+			$('#textoErrorDialog').html('No ha seleccionado una sala para eliminar');
+			$('#modalError').modal();
 			return;
 		}
-		else{
-			
-			$('#modalConfirmacion').modal();
-		}
-		
+		$('#tituloConfirmacionDialog').html('Confirmación para eliminar sala');
+		$('#textoConfirmacionDialog').html('¿Está seguro que desea eliminar permanentemente la sala del sistema?');
+		$('#modalConfirmacion').modal();
 	}
 
-	function resetearSala(){
-		// Limpiando el checklist de implementos		
-		$('input[id^=implemento_]').prop('checked',false);
-
-		/* Obtengo los objetos HTML donde serán escritos los resultados */
-		var codSala = document.getElementById("cod_sala");
-		var numSala = document.getElementById("num_sala");
-		var capacidad = document.getElementById("capacidad");
-		var ubicacion = document.getElementById("ubicacion");
-		var impl = document.getElementById("impDetalle");
-		
+	function resetearSala() {
+		// Limpiando el checklist de implementos
 
 		/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-		$(codSala).html("");
-		$(numSala).html("");
-		$(capacidad).html("");
-		$(ubicacion).html("");
-		$(impl).html("");
+		$('#idSalaEliminar').val("");
+		$('#num_sala').html("");
+		$('#capacidad').html("");
+		$('#ubicacion').html("");
+		$('#implementos').html("");
 
 		//Se limpia lo que está seleccionado en la tabla
 		$('tbody tr').removeClass('highlight');
@@ -145,7 +78,7 @@ if(isset($mensaje_confirmacion))
 						
 
 <fieldset>
-	<legend>Borrar Sala</legend>
+	<legend>Eliminar Sala</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
@@ -179,58 +112,33 @@ if(isset($mensaje_confirmacion))
 		
 		<div class="span6">
 			<?php
-				$attributes = array('id' => 'formDetalle', 'class' => 'form-horizontal', 'onsubmit' => 'eliminarSala()');
-				echo form_open('Salas/eliminarSalas', $attributes);
+				$attributes = array('id' => 'formEliminar', 'class' => 'form-horizontal');
+				echo form_open('Salas/postEliminarSala', $attributes);
 			?>
-			<input type="hidden" id="cod_sala" name="cod_sala" maxlength="3" min="1" readonly>
 	  		<pre style="padding: 2%; cursor:default">
 Número sala:    <b id="num_sala"></b>
 Capacidad:      <b id="capacidad" ></b>
 Ubicación:      <b id="ubicacion"></b>
-Implementos:    <div style="display: inline-block; vertical-align: top;" id="impDetalle"></div></pre>
-			
-			<div class="control-group" >
-				<div class="controls pull-right">
-					<button type="button" class="btn" style= "margin-right: 7px" onclick="eliminarSala()">
-						<i class= "icon-trash"></i>
-						&nbsp; Eliminar
-					</button>
-					<button class="btn" type="button" onclick="resetearSala()" >
-						<div class="btn_with_icon_solo">Â</div>
-						&nbsp; Cancelar
-					</button>&nbsp;
+Implementos:    <div style="display: inline-block; vertical-align: top;" id="implementos"></div></pre>
+				<input type="hidden" id="idSalaEliminar" name="idSalaEliminar" maxlength="3" min="1" readonly>
+				<div class="control-group" >
+					<div class="controls">
+						<button type="button" class="btn" onclick="eliminarSala()">
+							<i class= "icon-trash"></i>
+							&nbsp; Eliminar
+						</button>
+						<button class="btn" type="button" onclick="resetearSala()" >
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>
+					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
 				</div>
-					
-			<!-- Modal Confirmación -->
-			<div id="modalConfirmacion" class="modal hide fade">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>Confirmación</h3>
-				</div>
-				<div class="modal-body">
-					<p>Se va a eliminar la sala seleccionada ¿Está seguro?</p>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-					<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-					
-				</div>
-			</div>
-
-			<!-- Modal de seleccionaAlgo -->
-			<div id="modalSeleccioneAlgo" class="modal hide fade">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>No ha seleccionado ninguna sala</h3>
-				</div>
-				<div class="modal-body">
-					<p>Por favor seleccione una sala y vuelva a intentarlo.</p>
-				</div>
-				<div class="modal-footer">
-					<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</form>
+			<?php echo form_close(""); ?>
 		</div>
 	</div>
 </fieldset>

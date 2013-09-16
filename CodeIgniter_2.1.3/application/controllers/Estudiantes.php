@@ -23,6 +23,10 @@ class Estudiantes extends MasterManteka {
 	*
 	*/
 	public function verEstudiantes() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 		$datos_vista = array();
 		$subMenuLateralAbierto = "verEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -44,6 +48,10 @@ class Estudiantes extends MasterManteka {
 	*
 	*/
 	public function editarEstudiante() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$this->load->model('Model_carrera');
@@ -132,6 +140,10 @@ class Estudiantes extends MasterManteka {
 	*
 	*/
 	public function eliminarEstudiante() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$subMenuLateralAbierto = "eliminarEstudiante"; //Para este ejemplo, los informes no tienen submenu lateral
@@ -198,6 +210,10 @@ class Estudiantes extends MasterManteka {
 	*
 	*/
 	public function agregarEstudiante() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$this->load->model('Model_carrera');
@@ -289,6 +305,10 @@ class Estudiantes extends MasterManteka {
 	**/
 	
 	public function cambiarSeccionEstudiantes() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$this->load->model('Model_seccion');
@@ -436,6 +456,9 @@ class Estudiantes extends MasterManteka {
 	*
 	**/
 	public function getAllSeccionesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;

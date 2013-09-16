@@ -31,7 +31,7 @@ class Correo extends MasterManteka {
 		$this->correosRecibidos();	
 	}
 
-	
+
 	/**
 	* Permite visualizar la bandeja de entrada de correos.
 	*
@@ -259,30 +259,19 @@ class Correo extends MasterManteka {
 	*
 	* @author: Byron Lanas (BL)
 	*/
-	public function enviarCorreoView($codigo=null, $msj=null) {
-		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
-
-		/*
-		$this->load->model('Model_estudiante');
-		$this->load->model('Model_profesor');
-		$this->load->model('Model_ayudante');
-		$this->load->model('Model_usuario');
-		$this->load->model('model_plantilla');
-		$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
-							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
- 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
- 							 'rut'=>  $this->session->userdata('rut'),
- 							 'codigo'=>$codigo,
-							 'plantillas'=>$this->model_plantilla->ObtenerListaPlantillas(),
-							 'msj'=>$msj);
- 		*/
-		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
-		*/
-		$subMenuLateralAbierto = 'enviarCorreo'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-		$this->cargarTodo("Correos", "cuerpo_correos_enviar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	public function enviarCorreo($codigo=null, $msj=null) {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			/* Verifica si el usuario que intenta acceder esta autentificado o no. */
+			$datos_cuerpo = array();
+			$subMenuLateralAbierto = 'enviarCorreo'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_correos_enviar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 	
 	
@@ -557,7 +546,7 @@ class Correo extends MasterManteka {
 						$mensajePersonalizado=str_replace('%%rut', $rutAyudante, $mensajePersonalizado);
 					}
 					$mensajeMail =$mensajePersonalizado.$link2;
-					if($this->enviarCorreo($to, $asuntoPersonalizado, $mensajeMail, $adjuntos) == TRUE) {
+					if($this->enviarMail($to, $asuntoPersonalizado, $mensajeMail, $adjuntos) == TRUE) {
 						$enviados+=1;
 					}
 				}
@@ -602,7 +591,7 @@ class Correo extends MasterManteka {
 				$to=$this->input->post('to');
 				$mensajeMail=$mensaje.$link2;
 
-				if ($this->enviarCorreo($to, $asunto, $mensajeMail, $adjuntos) == FALSE)
+				if ($this->enviarMail($to, $asunto, $mensajeMail, $adjuntos) == FALSE)
 					throw new Exception("Error en el envio");
 
 				$this->Model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
@@ -919,14 +908,14 @@ class Correo extends MasterManteka {
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_profesor');
 		$this->load->model('Model_ayudante');
-		$this->load->model('Model_coordinadores');
+		$this->load->model('Model_coordinador');
 
 		switch ($destinatario) {
 			case 0:
 				$resultado = $this->Model_filtro->getAll();
 				break;
 			case 1:
-				$resultado = $this->Model_estudiante->getAllAlumnos();
+				$resultado = $this->Model_estudiante->getAllEstudiantes();
 				break;
 			case 2:
 				$resultado = $this->Model_profesor->getAllProfesores();
@@ -935,7 +924,7 @@ class Correo extends MasterManteka {
 				$resultado = $this->Model_ayudante->getAllAyudantes();
 				break;
 			case 4:
-				$resultado = $this->Model_coordinadores->getAllCoordinadores();
+				$resultado = $this->Model_coordinador->getAllCoordinadores();
 			default:
 				# code...
 				break;

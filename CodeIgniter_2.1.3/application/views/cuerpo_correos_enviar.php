@@ -1443,7 +1443,7 @@ if(isset($codigo))
 		</div>
 
 		<?php
-		if($msj==='1')
+		if($msj === '1')
 		{
 			?>
 			<!-- Muestra al usuario un mensaje indicando que existen variables no permitidas. -->

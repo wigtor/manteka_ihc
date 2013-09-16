@@ -254,7 +254,7 @@ class Login extends MasterManteka {
 				$mensaje = $mensaje."\n\nEl equipo de ManteKA.";
 
 				// Si hubo un error al enviar el mensaje, indicar al usuario
-				if ($this->enviarCorreo($destino, 'Recuperación de contraseña ManteKA', $mensaje, "") == FALSE) {
+				if ($this->enviarMail($destino, 'Recuperación de contraseña ManteKA', $mensaje, "") == FALSE) {
 					$datos_plantilla["titulo_msj"] = "No se pudo enviar el correo";
 					$datos_plantilla["cuerpo_msj"] = "Existe un problema con el servicio que envía correos electrónicos, comuniquese con el administrador.";
 					$datos_plantilla["tipo_msj"] = "alert-error";
