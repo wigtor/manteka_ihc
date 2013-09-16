@@ -14,38 +14,34 @@ class Model_sala extends CI_Model {
 	* @param string $ubicacion ubicacion de la sala a insertar
 	*/
 	public function agregarSala($num_sala, $ubicacion, $capacidad, $implementos) {
-		if($num_sala=="") return 2;
-
+		
 		// se convierte todo el texto de la ubicación en minúscula
 		$ubicacion = strtolower($ubicacion);
 		$data1 = array(	
-					'NUM_SALA' => $num_sala ,
-					'UBICACION' => $ubicacion ,
+					'NUM_SALA' => $num_sala,
+					'UBICACION' => $ubicacion,
 					'CAPACIDAD' => $capacidad
 					
 		);
-		if($num_sala !="" && $ubicacion!="" && $capacidad!=""){
-		$this->db->insert('sala',$data1);}
-	   $cod_sala=$this->db->insert_id();
-	   $contador = 0;
-   	   while ($contador <count($implementos)) {
-		 $data2 = array(					
-					'ID_SALA' => $cod_sala,
-					'ID_IMPLEMENTO' => $implementos[$contador]
-		);
-				if($implementos[$contador]!=null){
-				$datos2 = $this->db->insert('sala_implemento',$data2);}
-				$contador++;
-         }
 
-	
-		if($data1){
-			return 1;
+		$this->db->trans_start();
+		$datos2 = $this->db->insert('sala', $data1);
+
+		$id_sala = $this->db->insert_id();
+		if (is_array($implementos)) {
+			foreach($implementos as $impl) {
+				$data3 = array('ID_SALA' => $id_sala, 'ID_IMPLEMENTO' =>$impl);
+				$datos = $this->db->insert('sala_implemento', $data3);
+			}
+		}
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
-		
     }
 
 	/**
@@ -64,7 +60,7 @@ class Model_sala extends CI_Model {
 		$datos=$this->db->delete('sala_implemento');
 		$this->db->where('ID_SALA', $idSalaEliminar);
 		$datos1=$this->db->delete('sala');
-		
+
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE) {
@@ -89,26 +85,15 @@ class Model_sala extends CI_Model {
 	* @return array $lista Contiene la información de todos los implementos del sistema
 	*/
 	public function getAllImplementos() {
-		//$sql="SELECT * FROM implemento ORDER BY NOMBRE_IMPLEMENTO"; //código MySQL
-		$this->db->select('*');
-		$this->db->from('implemento');
+		$this->db->select('ID_IMPLEMENTO AS id');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descripcion');
 		$this->db->order_by("NOMBRE_IMPLEMENTO", "asc");
-		$query=$this->db->get();
-		$datos=$query->result();
-		//$datos=mysql_query($sql); //enviar código MySQL
-		$contador = 0;
-		$lista = array();
-		if (false != $datos) {
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			$lista[$contador]=array();
-			$lista[$contador][0] = $row->ID_IMPLEMENTO;
-			$lista[$contador][1] = $row->NOMBRE_IMPLEMENTO;
-			$lista[$contador][2] = $row->DESCRIPCION_IMPLEMENTO;
-			$contador = $contador + 1;
-		}}
-
-		return $lista;
+		$query = $this->db->get('implemento');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
 	}
 	
 		/**
@@ -263,7 +248,6 @@ class Model_sala extends CI_Model {
 		$this->db->from('sala');
 		$this->db->order_by("sala.NUM_SALA", "asc");
 		$query = $this->db->get();
-		//$datos=mysql_query($sql); //enviar código MySQL
 		if ($query == FALSE) {
 			return array();
 		}
@@ -462,27 +446,17 @@ class Model_sala extends CI_Model {
 	* @param $num_sala es el numero de la sala entregado por el usuario
 	* @return $var es 1 es el valor de existencia del número de la sala, siendo si 1 y no 2
 	*/
-	public function numSala($num_sala)
-	{
-		//$sql="SELECT * FROM sala ORDER BY ID_SALA"; 
-		$this->db->select('*');
-		$this->db->from('sala');
-		$this->db->order_by("ID_SALA", "asc");
-		$query=$this->db->get();
-		$datos=$query->result();
-		//$datos=mysql_query($sql); 
-		$contador = 0;
-		$lista=array();
-		$var=0;
-		if (false != $datos) {
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			if( $row->NUM_SALA==$num_sala){
-			$var=1;
-			}
-			$contador = $contador + 1;
-		}}
-		return $var;
+	public function numSalaExiste($num_sala) {
+		$this->db->select('COUNT(ID_SALA) AS resultado');
+		$query = $this->db->where('NUM_SALA', $num_sala);
+		$query = $this->db->get('sala');
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->row()->resultado > 0) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 	/**
 	* Dado un número de sala y un código se comprueba si este ya existe
@@ -496,29 +470,18 @@ class Model_sala extends CI_Model {
 	* @return $var es 1 es el valor de existencia del número de la sala, siendo si 1 y no 2
 	*/
 	
-	public function numSalaE($num_sala,$cod_sala)
-	{
-		//$sql="SELECT * FROM sala ORDER BY ID_SALA";
-		$this->db->select('*');
-		$this->db->from('sala');
-		$this->db->order_by("ID_SALA", "asc");
-		$query=$this->db->get();
-		$datos=$query->result(); 
-		//$datos=mysql_query($sql); 
-		$contador = 0;
-		$lista=array();
-		$var=0;
-		if (false != $datos) {
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-		foreach ($datos as $row) {
-			if($row->ID_SALA!=$cod_sala){
-				if( $row->NUM_SALA==$num_sala){
-				$var=1;
-				}
-			}
-			$contador = $contador + 1;
-		}}
-		return $var;
+	public function numSalaExceptoExiste($num_sala, $id_sala) {
+		$this->db->select('COUNT(ID_SALA) AS resultado');
+		$query = $this->db->where('ID_SALA !=', $id_sala);
+		$query = $this->db->where('NUM_SALA', $num_sala);
+		$query = $this->db->get('sala');
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->row()->resultado > 0) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 }
 

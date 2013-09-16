@@ -42,10 +42,12 @@ class Model_ayudante extends CI_Model {
 		//echo $this->db->last_query().'    ';
 		$datos = $this->db->insert('ayudante', $data2);
 		//echo $this->db->last_query().'    ';
-		foreach($ruts_profesores as $rut_profe) {
-			$data3 = array('RUT_USUARIO' => $rut, 'PRO_RUT_USUARIO' =>$rut_profe);
-			$datos = $this->db->insert('ayu_profe', $data3);
-			//echo $this->db->last_query().'    ';
+		if (is_array($ruts_profesores)) {
+			foreach($ruts_profesores as $rut_profe) {
+				$data3 = array('RUT_USUARIO' => $rut, 'PRO_RUT_USUARIO' =>$rut_profe);
+				$datos = $this->db->insert('ayu_profe', $data3);
+				//echo $this->db->last_query().'    ';
+			}
 		}
 		$this->db->trans_complete();
 

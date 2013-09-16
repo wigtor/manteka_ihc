@@ -59,7 +59,7 @@ class Salas extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$this->load->model('Model_sala');
-			$datos_vista['implemento'] = $this->Model_sala->getAllImplementos();
+			$datos_vista['implementos'] = $this->Model_sala->getAllImplementos();
 
 			$subMenuLateralAbierto = "agregarSala"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -89,7 +89,7 @@ class Salas extends MasterManteka {
 			$num_sala = $this->input->post("num_sala");
 			$ubicacion = $this->input->post("ubicacion");
 			$capacidad = $this->input->post("capacidad");
-			$implementos = $this->input->post("cod_implemento");
+			$implementos = $this->input->post("id_implementos");
 			$confirmacion = $this->Model_sala->agregarSala($num_sala, $ubicacion, $capacidad, $implementos);
 
 			if ($confirmacion == TRUE){
@@ -326,7 +326,7 @@ class Salas extends MasterManteka {
 		$this->load->model('Model_sala');
 		$num = $this->input->post('num_post');
 
-		$resultado = $this->Model_sala->numSala($num);
+		$resultado = $this->Model_sala->numSalaExiste($num);
 		echo json_encode($resultado);
 	}
 
@@ -342,7 +342,7 @@ class Salas extends MasterManteka {
 	* @return json Resultado de la busqueda en forma de objeto json
 	*
 	*/
-	public function numSalaExisteElimAjax() {
+	public function numSalaExisteEditarAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -353,7 +353,7 @@ class Salas extends MasterManteka {
 		$this->load->model('Model_sala');
 		$num = $this->input->post('num_post');
 		$cod = $this->input->post('cod_post');
-		$resultado = $this->Model_sala->numSalaE($num,$cod);
+		$resultado = $this->Model_sala->numSalaExceptoExiste($num, $cod);
 		echo json_encode($resultado);
 	}
 }
