@@ -17,28 +17,33 @@
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
 			type: "POST",
+			async: false,
 			url: "<?php echo site_url("Secciones/getDetallesSeccionAjax") ?>",
 			data: { seccion: cod_seccion },
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
+				$('#id_seccion').val($.trim(datos.id_seccion));
+
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$('#nombre_seccion').html($.trim(datos.rut));
-				$('#dia').html((datos.nombre2 == "" ? 'Sin asignación' : $.trim(datos.nombre2)));
-				$('#modulo').html((datos.nombre2 == "" ? 'Sin asignación' : $.trim(datos.nombre2)));
+				$('#nombre_seccion').html($.trim(datos.seccion));
+				$('#modulo_tematico').html($.trim(datos.modulo));
+				$('#dia').html((datos.dia == "" ? 'Sin asignación' : $.trim(datos.dia)));
+				$('#modulo').html((datos.modulo_horario == "" ? 'Sin asignación' : $.trim(datos.modulo_horario)));
 
 				/* Quito el div que indica que se está cargando */
-				$('#icono_cargando').hide();
+				//$('#icono_cargando').hide();
 			}
 		});
 
 		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Secciones/AlumnosSeccion") ?>", // Se setea la url del controlador que responderá */
-			data: { seccion: cod_seccion}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Secciones/getEstudiantesBySeccionAjax") ?>",
+			data: { seccion: cod_seccion},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var tablaResultados = document.getElementById("listadoResultadosAlumnos");
+				var tablaResultados = document.getElementById("listadoResultadosEstudiantes");
 				$(tablaResultados).find('tbody').remove();
 				var arrayRespuesta = jQuery.parseJSON(respuesta);
 
@@ -57,22 +62,36 @@
 				for (var i = 0; i < arrayRespuesta.length; i++) {
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:default"); //No es clickeable
-					for (var j = 0; j < 5; j++) {
-						td = document.createElement('td');
-						//tr.setAttribute("onClick", "verDetalle(this)");
-						if(j==4){
-							nodoTexto = document.createTextNode(arrayRespuesta[i][j]+" "+arrayRespuesta[i][j+1]);
-							td.appendChild(nodoTexto);
-							tr.appendChild(td);
-							j=j+6;
-						}
-						else{
 
-							nodoTexto = document.createTextNode(arrayRespuesta[i][j]);
-							td.appendChild(nodoTexto);
-							tr.appendChild(td);
-						}
-					}
+					//Primera columna
+					td = document.createElement('td');
+					nodoTexto = document.createTextNode(arrayRespuesta[i].carrera);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+
+					//Segunda columna
+					td = document.createElement('td');
+					nodoTexto = document.createTextNode(arrayRespuesta[i].rut);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+
+					//Tercera columna
+					td = document.createElement('td');
+					nodoTexto = document.createTextNode(arrayRespuesta[i].apellido1);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+
+					//Cuarta columna
+					td = document.createElement('td');
+					nodoTexto = document.createTextNode(arrayRespuesta[i].apellido2);
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
+
+					//Quinta columna
+					td = document.createElement('td');
+					nodoTexto = document.createTextNode(arrayRespuesta[i].nombre1 + " " +(arrayRespuesta[i].nombre2 == null ? '' : arrayRespuesta[i].nombre2));
+					td.appendChild(nodoTexto);
+					tr.appendChild(td);
 			
 
 					tbody.appendChild(tr);
@@ -95,7 +114,7 @@
 		escribirHeadTable();
 		cambioTipoFiltro(undefined);
 	});
-	
+
 </script>
 
 <fieldset>
@@ -128,14 +147,15 @@
 
 		<div class="span7">
 			<pre style="margin-top: 0%; margin-left: 0%;">
-Sección: <b id="nombre_seccion"></b>
-Día:     <b id="dia"></b>
-Bloque:  <b id="modulo"></b></pre>
+Sección:         <b id="nombre_seccion"></b>
+Módulo temático: <b id="modulo_tematico"></b>
+Día:             <b id="dia"></b>
+Bloque:          <b id="modulo_horario"></b></pre>
 		
-			<input name="cod_seccion" type="hidden" id="codSeccion" value="">
+			<input name="id_seccion" type="hidden" id="id_seccion" value="">
 		
 			<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px; -webkit-border-radius: 4px" >
-				<table id="listadoResultadosAlumnos" class="table table-bordered">
+				<table id="listadoResultadosEstudiantes" class="table table-bordered">
 					<thead  bgcolor="#e6e6e6"  style="position:block">
 						<tr>
 							<th class="span2">Carrera</th>

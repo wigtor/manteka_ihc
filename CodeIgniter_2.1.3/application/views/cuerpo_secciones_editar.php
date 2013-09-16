@@ -3,7 +3,7 @@
 	var valorFiltrosJson = [""];
 	var prefijo_tipoDato = "seccion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Secciones/postBusquedaSecciones") ?>";
+	var url_post_busquedas = "<?php echo site_url("Secciones/getSeccionesAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/secciones") ?>";
 
 
@@ -11,18 +11,18 @@
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		var cod_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
-		//var rut_clickeado = elemTabla;
+		
 
 		/* Muestro el div que indica que se está cargando... */
 		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
+		$('#icono_cargando').show();
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Secciones/postDetalleUnaSeccion") ?>", /* Se setea la url del controlador que responderá */
-			data: { seccion: cod_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+			type: "POST",
+			url: "<?php echo site_url("Secciones/getDetallesSeccionAjax") ?>",
+			data: { seccion: cod_clickeado },
+			success: function(respuesta) {
 				/* Obtengo los objetos HTML donde serán escritos los resultados */
 				var letraDetalle = document.getElementById("rs_seccion");
 				var numeroDetalle = document.getElementById("rs_seccion2");
@@ -52,55 +52,47 @@
 		cambioTipoFiltro(undefined);
 	});
 
-</script>
-
-<script type="text/javascript">
-	function EditarSeccion(){
+	function editarSeccion(){
 		var cod=document.getElementById("cod_seccion").value;
 		var letra = document.getElementById("rs_seccion").value;
 		var num = document.getElementById("rs_seccion2").value;
 		var resultadoAjax =false;
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Secciones/secExiste") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Secciones/secExisteAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { letra_post:letra,num_post: num, cod_post:cod},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				//var tablaResultados = document.getElementById("modulos");
 				//$(tablaResultados).empty();
 				var existe = jQuery.parseJSON(respuesta);
 				if(cod!=""){
-				if(existe == 1){		
-					$('#modalSeccionExiste').modal();
-					document.getElementById("rs_seccion").value = "";
-					document.getElementById("rs_seccion2").value = "";
-					
+					if(existe == 1) {
+						$('#modalSeccionExiste').modal();
+						document.getElementById("rs_seccion").value = "";
+						document.getElementById("rs_seccion2").value = "";
+						
+					}
+					else{
+						if(letra!="" && num!=""){
+						//alert(document.getElementById("cod_seccion").value+" y "+document.getElementById("rs_seccion").value+"y "+document.getElementById("rs_seccion2").value);
+						$('#modalConfirmacion').modal();
+						// en caso de que se presione cancelar se quita el icono de cargando
+						var iconoCargado = document.getElementById("icono_cargando");
+						$(icono_cargando).hide();
+						return;				
+					}
+						else{$('#modalFaltanCampos').modal();}
+					}
 				}
-				else{
-					if(letra!="" && num!=""){
-					//alert(document.getElementById("cod_seccion").value+" y "+document.getElementById("rs_seccion").value+"y "+document.getElementById("rs_seccion2").value);
-					$('#modalConfirmacion').modal();
-					// en caso de que se presione cancelar se quita el icono de cargando
-					var iconoCargado = document.getElementById("icono_cargando");
-					$(icono_cargando).hide();
-					return;				
-				}
-					else{$('#modalFaltanCampos').modal();}
-				}
-				}
-				else {$('#modalSeleccioneAlgo').modal();}
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
+				else {
+					$('#modalSeleccioneAlgo').modal();}
+					/* Quito el div que indica que se está cargando */
+					$('#icono_cargando').hide();
 				}
 		});
 
 		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
-		
-		
-			
-		
+		$('#icono_cargando').show();
 		
 	}
 </script>

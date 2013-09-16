@@ -34,17 +34,11 @@ class Salas extends MasterManteka {
 	*/
 	public function verSalas()
 	{
-		//Se comprueba que quien hace esta petición este logueado
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = 0;		
+		$datos_vista = array();		
 		$subMenuLateralAbierto = "verSalas"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 		$this->load->model('Model_sala');
 		$this->cargarTodo("Salas", 'cuerpo_salas_ver', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
@@ -56,20 +50,13 @@ class Salas extends MasterManteka {
 	* Finalmente se cargan todos los datos.
 	*
 	*/
-	public function agregarSalas()
-    {
-		//Se comprueba que quien hace esta petición este logueado
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
+	public function agregarSala() {
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = 0;		
+		$datos_vista = array();
 		$subMenuLateralAbierto = "agregarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->load->model('Model_sala');
 		$datos_vista = array('implemento' => $this->Model_sala->VerTodosLosImplementos());
 		$this->cargarTodo("Salas", 'cuerpo_salas_agregar', "barra_lateral_salas", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
@@ -86,10 +73,8 @@ class Salas extends MasterManteka {
 	* Éxito, si no un mensaje con el error, en ambos casos se muestra un enlace para volver a agregar salas.
 	*
 	*/
-	public function ingresarSalas()
-	{	
-		
-		
+	public function postAgregarSala() {
+
 		$this->load->model('Model_sala');
         $num_sala = $this->input->post("num_sala");
         $ubicacion = $this->input->post("ubicacion");
@@ -125,19 +110,12 @@ class Salas extends MasterManteka {
 	* Finalmente se cargan todos los datos.
 	*
 	*/
-    public function editarSalas()
-    {
-		//Se comprueba que quien hace esta petición este logueado
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
+    public function editarSala() {
 		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-    	$datos_vista = 0;		
+    	$datos_vista = array();		
 		$subMenuLateralAbierto = "editarSalas"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->load->model('Model_sala');
 		$datos_vista = array('implementos' => $this->Model_sala->VerTodosLosImplementosSimple());
 	
@@ -157,7 +135,7 @@ class Salas extends MasterManteka {
 	* Éxito, si no un mensaje con el error, en ambos casos se muestra un enlace para volver a editar salas.
 	*
 	*/
-	public function modificarSalas()
+	public function postEditarSala()
 	{
 		$this->load->model('Model_sala');
 		$cod_sala = $this->input->post("codEditar");
@@ -169,7 +147,7 @@ class Salas extends MasterManteka {
         $confirmacion = $this->Model_sala->ActualizarSala($cod_salaF,$num_sala,$ubicacion,$capacidad,$implementos);  
 		
         // se muestra mensaje de operación realizada
-    	if ($confirmacion==1){
+    	if ($confirmacion == TRUE){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha modificado la sala con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";

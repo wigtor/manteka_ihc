@@ -80,8 +80,7 @@ class Model_profesor extends CI_Model {
 		else{
 			return TRUE;
 		}
-    
-    }
+	}
 
 
     public function rutExiste($rut) {

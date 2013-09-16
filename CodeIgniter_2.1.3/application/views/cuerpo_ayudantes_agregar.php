@@ -26,7 +26,6 @@
 			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
 			$('#modalError').modal();
 		}
-		
 	}
 	
 </script>

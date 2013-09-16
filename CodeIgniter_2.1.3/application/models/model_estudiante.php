@@ -160,13 +160,16 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('estudiante.RUT_USUARIO AS id');
 		$this->db->select('estudiante.RUT_USUARIO AS rut');
 		$this->db->select('NOMBRE1 AS nombre1');
-		$this->db->select('NOMBRE1 AS nombre2');
+		$this->db->select('NOMBRE2 AS nombre2');
 		$this->db->select('APELLIDO1 AS apellido1');
 		$this->db->select('APELLIDO2 AS apellido2');
 		$this->db->select('TELEFONO AS telefono');
 		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
+		$this->db->select('carrera.COD_CARRERA AS cod_carrera');
+		$this->db->select('carrera.NOMBRE_CARRERA AS carrera');
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->join('carrera', 'estudiante.COD_CARRERA = carrera.COD_CARRERA');
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);
 		$this->db->order_by('APELLIDO1', 'asc');
 		$query = $this->db->get('estudiante');

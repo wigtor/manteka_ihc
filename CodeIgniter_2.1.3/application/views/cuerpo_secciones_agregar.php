@@ -2,44 +2,54 @@
 <script type="text/javascript">
 	function comprobarSeccion() {
 		//POR ALGUNA RAZÓN NO FUNCIONA
-		var letra = document.getElementById("rs_seccion").value;
-		var num = document.getElementById("rs_seccion2").value;
-		var resultadoAjax =false;
-		if(letra !="" &num!=""){
-		$('button[type="submit"]').attr('disabled','disabled');
-		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Secciones/secExiste") ?>", /* Se setea la url del controlador que responderá */
-			data: { letra_post:letra,num_post: num},
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				//var tablaResultados = document.getElementById("modulos");
-				//$(tablaResultados).empty();
-				var existe = jQuery.parseJSON(respuesta);
-				
-				if(existe == 1){
-					document.getElementById("rs_seccion").value = "";
-					document.getElementById("rs_seccion2").value = "";
-					$('button[type="submit"]').removeAttr('disabled');
-					var mensaje = document.getElementById("mensaje");
-					$(mensaje).empty();
-			
-					$('#modalSeccionExiste').modal();
-					
+		var letra = $.trim($("#letra_seccion").val());
+		var num = $.trim($("#numero_seccion").val());
 
-				}else {
-					$('button[type="submit"]').removeAttr('disabled');
+		if((letra != "") & (num != "")) {
+
+			/* Muestro el div que indica que se está cargando... */
+			$('#icono_cargando').show();
+
+			$.ajax({
+				type: "POST",
+				url: "<?php echo site_url("Secciones/secExisteAjax") ?>",
+				data: { letra_post:letra, num_post: num},
+				success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+					var existe = jQuery.parseJSON(respuesta);
+					
+					if(existe == true) {
+						$('#tituloErrorDialog').html('Error en el nombre de la sección');
+						$('#textoErrorDialog').html('La sección '+letra+'-'+num+' que ha ingresado ya se encuentra en el sistema');
+						$('#modalError').modal();
+						$('#letra_seccion').val("");
+						$('#numero_seccion').val("");
 					}
 				
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
+					/* Quito el div que indica que se está cargando */
+					$('#icono_cargando').hide();
 				}
-		});
+			});
+		}
+	}
 
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
-	}}
+	function resetearSeccion() {
+		$('#letra_seccion').val("");
+		$('#numero_seccion').val("");
+	}
+
+	function agregarSeccion(){
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar sección');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar la sección al sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
+	}
 </script>
 
 <div class="row-fluid">
@@ -48,7 +58,7 @@
 		<legend>Agregar Sección</legend>
 		<?php
 				$attributes = array('id' => 'formAgregar', 'class' => 'form-horizontal');
-				echo form_open('Secciones/ingresarSecciones', $attributes);
+				echo form_open('Secciones/postAgregarSecciones', $attributes);
 			?>
 			<div class="row-fluid">
 				<div class="span6">
@@ -69,40 +79,27 @@
 					</label>
 					
 					<div class="controls">
-					<input id="res"  value="" type="hidden">
-					
-						<input id="rs_seccion" name="rs_seccion"  onblur="comprobarSeccion()" maxlength="1" title=" Ingrese sólo una letra" pattern="^([A-Z]{1}|[a-z]{1})$" type="text" class="span1" required>
-						-<input id="rs_seccion2" name="rs_seccion2"  onblur="comprobarSeccion()" maxlength="2"  title=" Ingrese sólo dos dígitos" pattern="[0-9]{2}" type="text" class="span2" required>
+						<input id="letra_seccion" name="letra_seccion" onblur="comprobarSeccion(letra_seccion, numero_seccion)" maxlength="1" title=" Ingrese sólo una letra" pattern="^([A-Z]{1}|[a-z]{1})$" type="text" class="span1" required>
+						-<input id="numero_seccion" name="numero_seccion"  onblur="comprobarSeccion(letra_seccion, numero_seccion)" maxlength="2"  title=" Ingrese sólo dos dígitos" pattern="[0-9]" type="text" class="span2" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<div class="controls ">
-						<button class="btn" type="submit" >
+						<button type="button" class="btn" onclick="agregarSeccion()">
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Agregar
 						</button>
-						<button class="btn" type="reset" >
+						<button class="btn" type="button" onclick="resetearSeccion()" >
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
-						</button>&nbsp;
-						
+						</button>
 					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
 				</div>
-					<!-- Modal de modalRutUsado -->
-					<div id="modalSeccionExiste" class="modal hide fade">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>La sección ingresada ya existe</h3>
-						</div>
-						<div class="modal-body">
-							<p>Por favor ingrese otro nombre de sección y vuelva a intentarlo.</p>
-						</div>
-						<div class="modal-footer">
-							<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-						</div>
-					</div>
-					
-				
 			</div>
 			<?php echo form_close(''); ?>
 		</fieldset>

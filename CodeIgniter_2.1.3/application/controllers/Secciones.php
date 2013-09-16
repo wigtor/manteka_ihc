@@ -37,8 +37,10 @@ class Secciones extends MasterManteka {
 	* y se le envía como un string a la vista
 	*/
 
-	public function secExiste() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+	public function secExisteAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -46,9 +48,8 @@ class Secciones extends MasterManteka {
 
 		$letra_post = $this->input->post('letra_post');
 		$num_post = $this->input->post('num_post');
-		$cod_post = $this->input->post('cod_post');
 		$this->load->model('Model_seccion');
-		$resultado = $this->Model_seccion->existeSeccion($cod_post,$letra_post,$num_post);
+		$resultado = $this->Model_seccion->existeSeccion($letra_post, $num_post);
 		echo json_encode($resultado);
 	}
 
@@ -60,16 +61,18 @@ class Secciones extends MasterManteka {
 	* y se le envía como un string a la vista
 	*/
 
-	public function AlumnosSeccion() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+	public function getEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
 
 		$cod_seccion = $this->input->post('seccion');
-		$this->load->model('Model_seccion');
-		$resultado = $this->Model_seccion->VerTodosLosEstudiantes($cod_seccion);
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getEstudiantesBySeccion($cod_seccion);
 		echo json_encode($resultado);
 	}
 
@@ -89,7 +92,6 @@ class Secciones extends MasterManteka {
 			$subMenuLateralAbierto = "agregarSecciones"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-			$this->load->model('Model_seccion');
 			$this->cargarTodo("Secciones", 'cuerpo_secciones_agregar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
@@ -110,7 +112,7 @@ class Secciones extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_seccion');
 			$letra_seccion = $this->input->post("letra_seccion");
-			$num_seccion = $this->input->post("num_seccion");
+			$num_seccion = $this->input->post("numero_seccion");
 			$confirmacion = $this->Model_seccion->agregarSeccion($letra_seccion, $num_seccion);
 
 			if ($confirmacion == TRUE) {
@@ -126,8 +128,7 @@ class Secciones extends MasterManteka {
 			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 			$datos_plantilla["redirecTo"] = "Secciones/agregarSecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 			$datos_plantilla["nombre_redirecTo"] = "Agregar Secciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
 	}
@@ -148,7 +149,6 @@ class Secciones extends MasterManteka {
     public function editarSecciones() {
     	if ($this->input->server('REQUEST_METHOD') == 'GET') {
     		$datos_vista = array();
-			$this->load->model('Model_seccion');
 			$subMenuLateralAbierto = "editarSecciones"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
