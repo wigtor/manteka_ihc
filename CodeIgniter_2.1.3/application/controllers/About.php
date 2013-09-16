@@ -16,9 +16,7 @@ class About extends MasterManteka {
 		*/
 		$subMenuLateralAbierto = ''; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR, TIPO_USR_ANONYMOUS);
 		$this->cargarTodo('', "cuerpo_about", '', $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	

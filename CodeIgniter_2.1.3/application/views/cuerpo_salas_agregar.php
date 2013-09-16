@@ -12,18 +12,16 @@
 			url: "<?php echo site_url("Salas/numSalaExisteAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { num_post: num},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				//var tablaResultados = document.getElementById("modulos");
-				//$(tablaResultados).empty();
+				/* Quito el div que indica que se está cargando */
+				$('#icono_cargando').hide();
+
 				var existe = jQuery.parseJSON(respuesta);
 				if(existe == true){
 					$('#tituloErrorDialog').html('Error en el número de sala');
 					$('#textoErrorDialog').html('El N° de sala ingresado ya existe en el sistema');
 					$('#modalError').modal();
-					$(inputRut).val('');
+					$('#num_sala').val('');
 				}
-
-				/* Quito el div que indica que se está cargando */
-				$('#icono_cargando').hide();
 			}
 		});
 	}
@@ -117,11 +115,11 @@
 							&nbsp; Cancelar
 						</button>
 					</div>
-				<?php
-					if (isset($dialogos)) {
-						echo $dialogos;
-					}
-				?>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
 				</div>
 		</div>
 	<?php echo form_close(""); ?>

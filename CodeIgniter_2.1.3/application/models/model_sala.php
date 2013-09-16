@@ -267,45 +267,41 @@ class Model_sala extends CI_Model {
 	* @param string $ubicacion ubicaciona  editar de la sala
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function actualizarSala($cod_sala,$num_sala,$ubicacion,$capacidad,$implementos)
-	{
-		if($cod_sala=="" || $num_sala=="" || $ubicacion=="" || $capacidad=="") return 2;
-		
-		
+	public function actualizarSala($id_sala, $num_sala, $ubicacion, $capacidad, $implementos) {
+		$this->db->trans_start();
+
 		// se convierte todo el texto de la ubicación en minúscula
 		$ubicacion = strtolower($ubicacion);
-		$data = array(	
-					'ID_SALA' => $cod_sala,
+		$data = array(
 					'NUM_SALA' => $num_sala,					
 					'UBICACION' => $ubicacion,			
 					'CAPACIDAD' => $capacidad 
 		);
-		$this->db->where('ID_SALA', $cod_sala);
-		$this->db->update('sala',$data); 
-		$contador = 0;
-		//$sql="DELETE FROM sala_implemento WHERE ID_SALA = '$cod_sala' "; //código MySQL
-		$this->db->where('ID_SALA', $cod_sala);
+		$this->db->where('ID_SALA', $id_sala);
+		$this->db->update('sala',$data);
+
+		$this->db->where('ID_SALA', $id_sala);
 		$datos=$this->db->delete('sala_implemento');
-		//$datos=mysql_query($sql); //enviar código MySQL
+		
 
 		if(is_array($implementos)){
 
 			foreach ($implementos as $imp){
 				$data2 = array(
-					'ID_SALA' => $cod_sala,
+					'ID_SALA' => $id_sala,
 					'ID_IMPLEMENTO' => $imp
 					);
 				$datos = $this->db->insert('sala_implemento', $data2);
 			}
 		}
-         
-		if($data == true){
-			return 1;
+        $this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
-		
     }
 
 
@@ -367,17 +363,16 @@ class Model_sala extends CI_Model {
 	* @return $query->result() que contiene la información de todos los implementos de la sala.
 	*/
 
-	private function getImpFromSala($cod_sala)
+	public function getImplementosSala($id_sala)
 	{
-		$this->db->select('implemento.ID_IMPLEMENTO AS codigo_implemento');
-		$this->db->select('NOMBRE_IMPLEMENTO AS nombre_implemento');
-		$this->db->select('DESCRIPCION_IMPLEMENTO AS descr_implemento');
-		$this->db->from('sala');
+		$this->db->select('implemento.ID_IMPLEMENTO AS id');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descripcion');
 		$this->db->join('sala_implemento','sala.ID_SALA = sala_implemento.ID_SALA');
 		$this->db->join('implemento','sala_implemento.ID_IMPLEMENTO = implemento.ID_IMPLEMENTO');
-		$this->db->where('sala.ID_SALA',$cod_sala);
+		$this->db->where('sala.ID_SALA',$id_sala);
 
-		$query = $this->db->get();
+		$query = $this->db->get('sala');
 
 		if ($query == FALSE){
 			return array();
@@ -470,7 +465,7 @@ class Model_sala extends CI_Model {
 	* @return $var es 1 es el valor de existencia del número de la sala, siendo si 1 y no 2
 	*/
 	
-	public function numSalaExceptoExiste($num_sala, $id_sala) {
+	public function numSalaExceptoExiste($id_sala, $num_sala) {
 		$this->db->select('COUNT(ID_SALA) AS resultado');
 		$query = $this->db->where('ID_SALA !=', $id_sala);
 		$query = $this->db->where('NUM_SALA', $num_sala);

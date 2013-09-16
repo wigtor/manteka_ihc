@@ -15,13 +15,13 @@
 		// Las operaciones por defecto no poseen clases
 		$verPlanificacion = "";
 		$verModulos = "";
-		$agregarModulos = "";
-		$editarModulos = "";
-		$borrarModulos = "";
+		$agregarModulo = "";
+		$editarModulo = "";
+		$eliminarModulo = "";
 		$verSesiones = "";
-		$agregarSesiones = "";
-		$editarSesiones = "";
-		$borrarSesiones = "";
+		$agregarSesion = "";
+		$editarSesion = "";
+		$eliminarSesion = "";
 
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
@@ -39,32 +39,32 @@
 			$verModulos = 'class="active"';
 			$inModulos = 'in';
 		}
-		else if ($subVistaLateralAbierta == "agregarModulos") {
-			$agregarModulos = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarModulo") {
+			$agregarModulo = 'class="active"';
 			$inModulos = 'in';
 		}
-		else if ($subVistaLateralAbierta == "editarModulos") {
-			$editarModulos = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarModulo") {
+			$editarModulo = 'class="active"';
 			$inModulos = 'in';
 		}
-		else if ($subVistaLateralAbierta == "borrarModulos") {
-			$borrarModulos = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarModulo") {
+			$eliminarModulo = 'class="active"';
 			$inModulos = 'in';
 		}
 		else if ($subVistaLateralAbierta == "verSesiones") {
 			$verSesiones = 'class="active"';
 			$inSesiones = 'in';
 		}
-		else if ($subVistaLateralAbierta == "agregarSesiones") {
-			$agregarSesiones = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarSesion") {
+			$agregarSesion = 'class="active"';
 			$inSesiones = 'in';
 		}
-		else if ($subVistaLateralAbierta == "editarSesiones") {
-			$editarSesiones = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarSesion") {
+			$editarSesion = 'class="active"';
 			$inSesiones = 'in';
 		}
-		else if ($subVistaLateralAbierta == "borrarSesiones") {
-			$borrarSesiones = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarSesion") {
+			$eliminarSesion = 'class="active"';
 			$inSesiones = 'in';
 		}
 	?>
@@ -92,9 +92,9 @@
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verModulos; ?> ><a href="<?php echo site_url("Modulos/verModulos")?>">Ver módulos</a></li>
 					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarModulos; ?> ><a href="<?php echo site_url("Modulos/agregarModulos")?>">Agregar módulos</a></li>
-						<li <?php echo $editarModulos; ?> ><a href="<?php echo site_url("Modulos/editarModulos")?>">Editar módulos</a></li>
-						<li <?php echo $borrarModulos; ?> ><a href="<?php echo site_url("Modulos/borrarModulos")?>">Borrar módulos</a></li>
+						<li <?php echo $agregarModulo; ?> ><a href="<?php echo site_url("Modulos/agregarModulo")?>">Agregar módulos</a></li>
+						<li <?php echo $editarModulo; ?> ><a href="<?php echo site_url("Modulos/editarModulo")?>">Editar módulos</a></li>
+						<li <?php echo $eliminarModulo; ?> ><a href="<?php echo site_url("Modulos/eliminarModulo")?>">Eliminar módulos</a></li>
 					<?php } ?>
 				</div>
 			</div>
@@ -108,9 +108,9 @@
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verSesiones; ?> ><a href="<?php echo site_url("Sesiones/verSesiones")?>">Ver sesiones</a></li>
 					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarSesiones; ?> ><a href="<?php echo site_url("Sesiones/ingresarSesiones")?>">Agregar sesiones</a></li>
-						<li <?php echo $editarSesiones; ?> ><a href="<?php echo site_url("Sesiones/editarSesiones")?>">Editar sesiones</a></li>
-						<li <?php echo $borrarSesiones; ?> ><a href="<?php echo site_url("Sesiones/borrarSesiones")?>">Borrar sesiones</a></li>
+						<li <?php echo $agregarSesion; ?> ><a href="<?php echo site_url("Sesiones/ingresarSesiones")?>">Agregar sesiones</a></li>
+						<li <?php echo $editarSesion; ?> ><a href="<?php echo site_url("Sesiones/editarSesion")?>">Editar sesiones</a></li>
+						<li <?php echo $eliminarSesion; ?> ><a href="<?php echo site_url("Sesiones/eliminarSesion")?>">Eliminar sesiones</a></li>
 					<?php } ?>
 				</div>
 			</div>

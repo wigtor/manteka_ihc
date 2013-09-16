@@ -39,6 +39,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 #Constantes de usuario
 #Acá se define el tipo de usuario de la aplicación
+define('TIPO_USR_ANONYMOUS', 0);
 define('TIPO_USR_PROFESOR', 1);
 define('TIPO_USR_COORDINADOR', 2);
 define('TIPO_USR_ESTUDIANTE', 3);

@@ -155,13 +155,12 @@ class Salas extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_sala');
-			$cod_sala = $this->input->post("codEditar");
-			$cod_salaF=$this->input->post("cod_sala");
+			$cod_sala = $this->input->post("id_sala");
 			$num_sala = $this->input->post("num_sala");
 			$ubicacion = $this->input->post("ubicacion");
 			$capacidad = $this->input->post("capacidad");
-			$implementos = $this->input->post("implementos");
-			$confirmacion = $this->Model_sala->actualizarSala($cod_salaF, $num_sala, $ubicacion, $capacidad, $implementos);  
+			$implementos = $this->input->post("id_implementos");
+			$confirmacion = $this->Model_sala->actualizarSala($cod_sala, $num_sala, $ubicacion, $capacidad, $implementos);  
 
 			// se muestra mensaje de operación realizada
 			if ($confirmacion == TRUE){
@@ -290,8 +289,8 @@ class Salas extends MasterManteka {
 	* @return json Resultado de la busqueda en forma de objeto json
 	*
 	*/
-    public function getDetallesSalaAjax(){
-    	if (!$this->input->is_ajax_request()) {
+	public function getDetallesSalaAjax() {
+		if (!$this->input->is_ajax_request()) {
 			return;
 		}
 		if (!$this->isLogged()) {
@@ -302,6 +301,22 @@ class Salas extends MasterManteka {
 		$num_sala = $this->input->post('num_sala');
 		$this->load->model('Model_sala');
 		$resultado = $this->Model_sala->getDetallesSala($num_sala);
+		echo json_encode($resultado);
+    }
+
+
+    public function getImplementosBySalaAjax() {
+    	if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_sala = $this->input->post('id_sala');
+		$this->load->model('Model_sala');
+		$resultado = $this->Model_sala->getImplementosSala($id_sala);
 		echo json_encode($resultado);
     }
 
@@ -351,9 +366,9 @@ class Salas extends MasterManteka {
 			return;
 		}
 		$this->load->model('Model_sala');
+		$cod = $this->input->post('id_sala_post');
 		$num = $this->input->post('num_post');
-		$cod = $this->input->post('cod_post');
-		$resultado = $this->Model_sala->numSalaExceptoExiste($num, $cod);
+		$resultado = $this->Model_sala->numSalaExceptoExiste($cod, $num);
 		echo json_encode($resultado);
 	}
 }

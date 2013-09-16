@@ -1,6 +1,6 @@
 <?php
  
-class Model_modulo extends CI_Model {
+class Model_modulo_tematico extends CI_Model {
  
 	/** 
 	* Obtiene la lista de profesores de un equipo determinado
@@ -8,7 +8,7 @@ class Model_modulo extends CI_Model {
 	* @param int $cod_equipo codigo del equipo de profesores que se quiere obtener
 	* @return $profes lista de profesores que peretencen al equipo
 	*/	
-	public function profesEditarModulo($cod_equipo){
+	public function getProfesEquipo($id_equipo){
 		$this->db->select('*');
 		$this->db->from('profesor');
 		$query = $this->db->get();	
@@ -74,23 +74,13 @@ class Model_modulo extends CI_Model {
 	*
 	* @return $lista contiene la lista de modulos tematicos con toda su información
 	*/
-	public function VerModulos(){
+	public function getAllModulosTematicos() {
 		$query = $this->db->get('modulo_tematico');
 		if ($query == FALSE) {
 			return array();
 		}
 		$datos = $query->result();
-		$contador = 0;
-		$lista = array();
-		foreach ($datos as $row) {  
-			$lista[$contador] = array();
-			$lista[$contador][0] = $row->COD_MODULO_TEM;
-			$lista[$contador][2] = $row->COD_EQUIPO;
-			$lista[$contador][3] = $row->NOMBRE_MODULO;
-			$lista[$contador][4] = $row->DESCRIPCION_MODULO;
-			$contador = $contador + 1;
-		}
-		return $lista;
+		return $datos;
 	}
 	
 	/**
@@ -100,7 +90,7 @@ class Model_modulo extends CI_Model {
 	* @return $lista lista con todos lo profes que pertencen a un equipo
 	*
 	*/
-	public function VerEquipoModulo(){
+	public function getEquipoModuloTematico(){
 		$this->db->select('*');
 		$this->db->from('profesor');
 		$this->db->join('profe_equi_lider', 'profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2');
@@ -130,7 +120,7 @@ class Model_modulo extends CI_Model {
 	*
 	* @return $lista lista de todos los requisitos que estan asicioados con algun módulo
 	*/
-	public function VerRequisitoModulo(){
+	public function getRequisitosModuloTematico(){
 		$this->db->select('*');
 		$this->db->from('requisito_modulo');
 		$this->db->join('requisito', 'requisito.COD_REQUISITO = requisito_modulo.COD_REQUISITO');
@@ -152,100 +142,7 @@ class Model_modulo extends CI_Model {
 		return $lista;
 	}
 
-	/**
-	*
-	* Obtiene la lista de los nombres de todos los módulos
-	*
-	* @return $lista con todos los nombres de modulos temticos
-	*
-	*/
-	public function listaNombreModulos(){	
-  		$query = $this->db->get('modulo_tematico');	
-		if ($query == FALSE) {
-			return array();
-		}
-		$datos = $query->result();
-   		$lista = array();
-   		$contador = 0;
-   		foreach ($datos as $row) {
-   			$lista[$contador] = $row->NOMBRE_MODULO;
-            $contador++;
-   		}
-   		return $lista;  	
-	}
 	
-	/**
-	* Obtiene la lista de todas las sesiones de la bd
-	* 
-	* @return $lista todas la sesiones
-	*/
-	public function listaSesionesParaEditarModulo(){
-		$query = $this->db->get('sesion');	
-		if ($query == FALSE) {
-			return array();
-		}
-		$datos = $query->result(); 
-		$contador = 0;
-		$lista = array();
-		foreach ($datos as $row) { 
-			$lista[$contador] = array();
-			$lista[$contador][0] = $row->COD_SESION;
-			$lista[$contador][1] = $row->COD_MODULO_TEM;
-			$lista[$contador][2] = $row->DESCRIPCION_SESION;
-			$lista[$contador][3] = $row->NOMBRE_SESION;
-			$contador = $contador + 1;
-		}
-		return $lista;
-	}
-	
-	/**
-	* Obtiene de todas las sesiones que no tengan un módulo asignado
-	*
-	* @return $lista lista con todas las sesiones que no poseen modulo temático
-	*
-	*/
-	public function listaSesionesParaAddModulo(){
-		$this->db->select('*');
-		$this->db->from('sesion');
-		$this->db->where('COD_MODULO_TEM',null); 
-		$query = $this->db->get();
-		if ($query == FALSE) {
-			return array();
-		}
-		$datos = $query->result(); 
-		$contador = 0;
-		$lista = array();
-		foreach ($datos as $row) { 
-			$lista[$contador] = array();
-			$lista[$contador][0] = $row->COD_SESION;
-			$lista[$contador][1] = "";
-			$lista[$contador][2] = $row->DESCRIPCION_SESION;
-			$lista[$contador][3] = $row->NOMBRE_SESION;
-			$contador = $contador + 1;
-		}
-		return $lista;
-	}
-	
-	/**
-	* Obtiene la lista de todos los requisitos de la base de datos
-	*
-	* @return $lista todos los requisitos que exiten en la base de datos
-	*/
-	public function listaRequisitosParaAddModulo(){
-		$query = $this->db->get('requisito');	
-		$datos = $query->result(); 
-		$contador = 0;
-		$lista = array();
-		foreach ($datos as $row) { 
-			$lista[$contador] = array();
-			$lista[$contador][0] = $row->COD_REQUISITO;
-			$lista[$contador][1] = $row->NOMBRE_REQUISITO;
-			$lista[$contador][2] = $row->DESCRIPCION_REQUISITO;
-			$contador = $contador + 1;
-		}
-		return $lista;
-	}
-
 	/**
 	*
 	* obtiene la lista de todos los requisitos con su información e indicando si están asociados a un cierto código de módulo
@@ -323,7 +220,7 @@ class Model_modulo extends CI_Model {
 	* @return -1 en caso de fallo
 	*
 	*/
-	public function InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos){
+	public function agregarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos){
 			//0 insertar modulo
 			$data = array(					
 					'NOMBRE_MODULO' => $nombre_modulo ,
@@ -422,7 +319,7 @@ class Model_modulo extends CI_Model {
 	* @return 1 en caso de eliminarse exitosamente
 	* @return -1 en caso de fallar la consulta 
 	**/
-	public function EliminarModulo($cod_modulo)
+	public function eliminarModulo($cod_modulo)
     {
 		$this->db->where('COD_MODULO_TEM', $cod_modulo);
 		$datos = $this->db->delete('modulo_tematico'); 		
@@ -476,7 +373,7 @@ class Model_modulo extends CI_Model {
 	* @return -1 en caso de fallo
 	*
 	*/
-	public function EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod){
+	public function editarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod){
 		//0 insertar modulo
 		$data = array(					
 				'NOMBRE_MODULO' => $nombre_modulo ,
@@ -593,7 +490,7 @@ class Model_modulo extends CI_Model {
 	* @return $query->result() en caso de encontrarse las sesiones
 	* @return array() en caso de fallar la consulta
 	*****/
-	public function listaSesionesParaVerModulo($cod_mod){
+	public function getSesionesByModuloTematico($cod_mod){
 		$query = $this->db->get_where('sesion', array('COD_MODULO_TEM' => $cod_mod));
 		if ($query == FALSE) {
 			return array();
@@ -657,7 +554,7 @@ class Model_modulo extends CI_Model {
 	* @return $profes2 lista de profesores
 	*
 	**/
-	public function VerTodosLosProfesoresAddModulo($lider){
+	public function getAllProfesoresLibres($lider){
 		$this->db->select('*');
 		$this->db->from('profesor');
 		$query = $this->db->get();
