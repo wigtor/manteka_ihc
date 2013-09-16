@@ -16,6 +16,23 @@ require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
 class Correo extends MasterManteka {
 
 	/**
+	* Establece como función principal a la función que renderiza la vista
+	* de correos recibidos. 
+	*
+	* Cuando se hace una llamada al controlador, sin especificar una función
+	* en particular, entonces se utiliza la función "correosRecibidos". Es
+	* decir acá se establece cual será la función por defecto del controlador.
+	*
+	* @author: Byron Lanas (BL)
+	*
+	*/
+	public function index()
+	{
+		$this->correosRecibidos();	
+	}
+
+	
+	/**
 	* Permite visualizar la bandeja de entrada de correos.
 	*
 	* Permite cargar el layout y la vista correspondiente a la bandeja
@@ -26,20 +43,25 @@ class Correo extends MasterManteka {
 	*
 	* @author: Byron Lanas (BL)
 	*/
-	public function correosRecibidos($msj=null)
-	{
-		$rut = $this->session->userdata('rut');
-		$this->load->model('Model_correo');
+	public function correosRecibidos($msj=null) {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$rut = $this->session->userdata('rut');
+			$this->load->model('Model_correo');
 
-		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadRecibidos($rut));
+			$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadRecibidos($rut));
 
-		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
-		*/
-		$subMenuLateralAbierto = 'correosRecibidos'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-		$this->cargarTodo("Correos", "cuerpo_correos", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
+			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+			*/
+			$subMenuLateralAbierto = 'correosRecibidos'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_correos", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 	
 
@@ -55,26 +77,28 @@ class Correo extends MasterManteka {
 	* @author: Claudio Rojas (CR)
 	*
 	*/
-	public function correosEnviados($msj=null)
-	{
-		
-		$rut = $this->session->userdata('rut');
+	public function correosEnviados($msj=null) {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 
+			$rut = $this->session->userdata('rut');
+			/* Carga el modelo del correo y obtiene un array con todos los correos enviados y sus
+			respectivos destinatarios. */
+			$this->load->model('Model_correo');
+
+			$datos_cuerpo = array( 'msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
 			
-		/* Carga el modelo del correo y obtiene un array con todos los correos enviados y sus
-		respectivos destinatarios. */
-		$this->load->model('Model_correo');
-
-		$datos_cuerpo = array( 'msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
-		
-		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
-		*/
-		$subMenuLateralAbierto = 'correosEnviados'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-		$this->cargarTodo("Correos", "cuerpo_correos_enviados_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
+			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
+			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
+			*/
+			$subMenuLateralAbierto = 'correosEnviados'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_correos_enviados_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 	
 
@@ -94,32 +118,39 @@ class Correo extends MasterManteka {
 	* @author: Diego García (DGM) y Claudio Rojas (CR)
 	*
 	*/
-	public function eliminarCorreo()
-	{
-		$rut = $this->session->userdata('rut');
-
-		/* Sólo se eliminan correos si la variable post que contiene los correos a eliminar está definida*/
-		if(isset($_POST['seleccion']))
-		{
-			$temp=$_POST['seleccion'];
-			$correos = explode(";",$temp);
-			$this->load->model('model_log');
-			$date = date("YmdHis");
-			$this->model_log->LogEnviados($correos,$rut,$date);
-			$this->load->model('Model_correo');
-			$this->Model_correo->EliminarCorreo($correos);
-			if(isset($estado))
-				unset($estado);
-			$estado="1";
-			redirect('/Correo/correosEnviados/'.$estado);
+	public function eliminarCorreo() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else
-		{
-			if(isset($estado))
-				unset($estado);
-			$estado="0";
-			redirect('/Correo/correosEnviados/'.$estado);
-		}	
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+
+
+			$rut = $this->session->userdata('rut');
+
+			/* Sólo se eliminan correos si la variable post que contiene los correos a eliminar está definida*/
+			if(isset($_POST['seleccion']))
+			{
+				$temp=$_POST['seleccion'];
+				$correos = explode(";",$temp);
+				$this->load->model('model_log');
+				$date = date("YmdHis");
+				$this->model_log->LogEnviados($correos,$rut,$date);
+				$this->load->model('Model_correo');
+				$this->Model_correo->EliminarCorreo($correos);
+				if(isset($estado))
+					unset($estado);
+				$estado="1";
+				redirect('/Correo/correosEnviados/'.$estado);
+			}
+			else
+			{
+				if(isset($estado))
+					unset($estado);
+				$estado="0";
+				redirect('/Correo/correosEnviados/'.$estado);
+			}
+		}
 	}
 
 
@@ -613,6 +644,9 @@ class Correo extends MasterManteka {
 	*
 	*/
 	public function getCorreosRecibidosAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if(!$this->isLogged()){
 			return;
 		}
@@ -666,6 +700,9 @@ class Correo extends MasterManteka {
 	*
 	*/
 	public function getAdjuntosAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if(!$this->isLogged()){
 			return;
 		}
@@ -850,23 +887,6 @@ class Correo extends MasterManteka {
 
 		$resultado =$this->Model_correo->cargarCorreo($codigo, $rut);
 		echo json_encode($resultado);
-	}
-
-
-	/**
-	* Establece como función principal a la función que renderiza la vista
-	* de correos recibidos. 
-	*
-	* Cuando se hace una llamada al controlador, sin especificar una función
-	* en particular, entonces se utiliza la función "correosRecibidos". Es
-	* decir acá se establece cual será la función por defecto del controlador.
-	*
-	* @author: Byron Lanas (BL)
-	*
-	*/
-	public function index()
-	{
-		$this->correosRecibidos();	
 	}
 	
 

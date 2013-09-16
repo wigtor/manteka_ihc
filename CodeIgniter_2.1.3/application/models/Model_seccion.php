@@ -27,35 +27,22 @@ class Model_seccion extends CI_Model {
 	*/
     public function eliminarSeccion($cod_seccion) {
 
-		/* se comprueba si la seccion tiene estudiantes*/	
-
-		$this->db->select('estudiante.RUT_ESTUDIANTE AS rut');
-		$this->db->from('estudiante');
+		/* se comprueba si la seccion tiene estudiantes*/
+		$this->db->trans_start();
 		$this->db->where('estudiante.ID_SECCION', $cod_seccion);
-		$query=$this->db->get();
-		$datos1=$query->result();
+		$query = $this->db->update('estudiante', array('ID_SECCION' => NULL));
 
-		$contador = 0;
-		if (false != $datos1) {
-			foreach ($datos1 as $row) {
-				$contador = $contador + 1;
-			}
+		
+		$this->db->where('seccion.ID_SECCION', $cod_seccion);
+		$query=$this->db->delete('seccion');
+
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
-		if($contador==0){
-			$this->db->where('seccion.ID_SECCION', $cod_seccion);
-			$query=$this->db->delete('seccion');
-			$datos=$query;
-		}
-		else {
-			return 3;
-		}
-		if($datos == true && $contador==0){
-			return 1;
-		}
-		else {
-			if($datos==false){
-				return -1;
-			}
+		else{
+			return TRUE;
 		}
     }
 	
@@ -113,25 +100,25 @@ class Model_seccion extends CI_Model {
 	* @param string $nombre_seccion2 número del nombre de la seccion a agregar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function actualizarSeccion($cod_seccion,$nombre_seccion1,$nombre_seccion2)
-	{
-		if($cod_seccion=="" || $nombre_seccion1=="" || $nombre_seccion2=="") return 2;
-		$nombre_seccion1=strtoupper($nombre_seccion1);
-		$nombre=$nombre_seccion1."-".$nombre_seccion2;
+	public function actualizarSeccion($cod_seccion, $letra_seccion, $numero_seccion) {
 
-		
 		$data = array(	
-					'ID_SECCION' => $cod_seccion,
-					'NOMBRE_SECCION' => $nombre	
+					'LETRA_SECCION' => $letra_seccion,
+					'NUMERO_SECCION' => $numero_seccion	
 		);
-		$this->db->where('ID_SECCION', $cod_seccion);
-		$confirmacion0 = $this->db->update('seccion',$data);
+		
+		$this->db->trans_start();
 
-		if($confirmacion0 == true){
-			return 1;
+		$this->db->where('ID_SECCION', $cod_seccion);
+		$confirmacion0 = $this->db->update('seccion', $data);
+
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
     }
  
@@ -161,6 +148,25 @@ class Model_seccion extends CI_Model {
 		}
 		return FALSE;
 	}
+
+
+	public function existeSeccionExcepto($excepto_id, $letra, $numero) {
+		$letra = strtoupper($letra);
+
+		$this->db->select('COUNT(seccion.ID_SECCION) AS resultado');
+		$this->db->where('LETRA_SECCION', $letra);
+		$this->db->where('NUMERO_SECCION', $numero);
+		$this->db->where('ID_SECCION !=', $excepto_id);
+		$query = $this->db->get('seccion');
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->row()->resultado > 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 
 	/**
 	* Entrega las secciones, correspondiente a un filtro
@@ -203,6 +209,8 @@ class Model_seccion extends CI_Model {
 	{
 		$this->db->select('seccion.ID_SECCION as id_seccion');
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
+		$this->db->select('LETRA_SECCION AS letra_seccion');
+		$this->db->select('NUMERO_SECCION AS numero_seccion');
 		$this->db->select('NOMBRE_MODULO AS modulo');
 		//$this->db->select('sala.NUM_SALA AS sala');
 		$this->db->select('usuario.NOMBRE1 as nombre1');
@@ -353,134 +361,94 @@ public function verSalasPorAsignar(){
 
 }
 
-/**
-* Asigna una sección a sus correspondientes parametros
-* Estos parametros son: módulo tematico, profesor, sala y horario
-* Primero se obtiene el horario para hacer la relacion entre este y la sala
-* Luego, se asocian la sección con el profesor
-* Finalmente, se obtiene el código del horario_sala recien ingresado, para hacer la
-* asociacion de la sección con el módulo temático, el horario y la sala
-* 
-* @param $cod_seccion el código de la sección que será asignada
-* @param $cod_profesor el código del profesor al que se le asigna la sección
-* @param $cod_modulo el código del módulo tematico al que se le asigna la sección
-* @param $cod_sala el código de la sala a la que se le asigna la sección
-* @param $nombre_dia el nombre del dia al que se le asigna la sección
-* @param $numero_modulo el número del bloque al que se le asigna la sección
-* @return 1 si la operación se realizó con éxito y - 1 si la operación falló
-**/
-
-public function AsignarSeccion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo){
-	/*Se busca el código del horario correspondiente al dia y al bloque*/
-	if(strcmp($nombre_dia,"Miercoles")!=0){
-		$dia_abreviado = substr($nombre_dia,0,1);
-	}else{
-		$dia_abreviado = 'W';
-	}
-	$columnas = 'horario.COD_HORARIO as cod';
-	$condiciones = '(dia.COD_ABREVIACION_DIA = \''.$dia_abreviado.'\') AND (modulo.NUMERO_MODULO = \''.$numero_modulo.'\') AND (dia.COD_DIA = horario.COD_DIA) AND (modulo.COD_MODULO = horario.COD_MODULO)';
-	$desde = 'dia, modulo, horario';
-	$this->db->select($columnas);
-	$this->db->where($condiciones);
-	$query = $this->db->get($desde);
-	//$cod_horario = $query->result_array()[0]['COD_HORARIO'];
-	$datos1=$query->result();
-	$lista1=array();
-	$contador=0;
-
-	foreach ($datos1 as $row) {
-		$lista1[$contador]=array();
-		$lista1[$contador][0]=$row->cod;
-		$contador=$contador+1;
-	}
-
-	$cod_horario= $lista1[0][0];
-
-	/*Se asocian la sala con el horario, para luego ser asociados a la sección*/
-	$sala_horario = array(
-			'COD_SALA' => $cod_sala,
-			'COD_HORARIO' => $cod_horario
-		);
-	$this->db->insert('sala_horario',$sala_horario);
-
-	/*Se asocia el profesor a la sección*/
-	$profe_seccion = array(
-			'ID_SECCION' => $cod_seccion,
-			'RUT_USUARIO2' => $cod_profesor
-		);
-	$this->db->insert('profe_seccion',$profe_seccion);
-
-	/*Se asocia el módulo, el horario y la sala a la sección*/
-	$this->db->select('ID_HORARIO_SALA as cod_sala');
-	$condiciones = '(sala_horario.COD_SALA = \''.$cod_sala.'\') AND (sala_horario.COD_HORARIO = \''.$cod_horario.'\')';
-	$this->db->where($condiciones);
-	$query2 = $this->db->get('sala_horario');
-	//$id_horario_sala = $query2->result_array()[0]['ID_HORARIO_SALA'];
-	$datos2=$query2->result();
-
-	$lista2=array();
-	$contador1=0;
-
-	foreach ($datos2 as $row1) {
-		$lista2[$contador1]=array();
-		$lista2[$contador1][0]=$row1->cod_sala;
-		$contador1=$contador1+1;
-	}
-
-	$id_horario_sala=$lista2[0][0];
-
-	$seccion_mod_tem = array(
-			'ID_SECCION' => $cod_seccion,
-			'COD_MODULO_TEM' => $cod_modulo,
-			'ID_HORARIO_SALA' => $id_horario_sala
-		);
-	$this->db->insert('seccion_mod_tem',$seccion_mod_tem);
-
-	if($sala_horario == true && $profe_seccion == true && $seccion_mod_tem == true){
-		return 1;
-	}else{
-		return -1;
-	}
-}
-
 	/**
-	* Entrega toda la información de una sección dada
-	*
-	* Se buscan todos los elementos asociados a una sección, dado el
-	* parametro '$cod_seccion'
-	*
-	* @param string $cod_seccion codigo de la sección a ver
-	* @return array $query->row() todos los datos de la sección elegida
-	*/
-
-public function getDetalleUnaSeccion($cod_seccion)
-	{
-		$this->db->select('seccion.ID_SECCION as cod_seccion');
-		$this->db->select('seccion.NOMBRE_SECCION AS nombre_seccion');
-		$this->db->select('NOMBRE_MODULO AS modulo');
-		$this->db->select('NUM_SALA AS sala');
-		$this->db->select('NOMBRE1_PROFESOR as nombre1');
-		$this->db->select('APELLIDO1_PROFESOR as apellido1');
-		$this->db->select('APELLIDO2_PROFESOR as apellido2');
-		$this->db->select('NOMBRE_HORARIO as horario');
-		$this->db->where('seccion.ID_SECCION', $cod_seccion);
-		$this->db->join('seccion_mod_tem', 'seccion_mod_tem.ID_SECCION=seccion.ID_SECCION', 'LEFT OUTER');
-		$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM=seccion_mod_tem.COD_MODULO_TEM', 'LEFT OUTER');
-		$this->db->join('sala_horario', 'seccion_mod_tem.ID_HORARIO_SALA=sala_horario.ID_HORARIO_SALA', 'LEFT OUTER');
-		$this->db->join('sala','sala_horario.COD_SALA=sala.COD_SALA' , 'LEFT OUTER');
-		$this->db->join('horario','sala_horario.COD_HORARIO=horario.COD_HORARIO', 'LEFT OUTER');
-		$this->db->join('equipo_profesor', 'modulo_tematico.COD_EQUIPO=equipo_profesor.COD_EQUIPO', 'LEFT OUTER');
-		$this->db->join('profe_seccion','profe_seccion.ID_SECCION= seccion.ID_SECCION', 'LEFT OUTER');
-		$this->db->join('profesor','profe_seccion.RUT_USUARIO2=profesor.RUT_USUARIO2', 'LEFT OUTER');
-		$query = $this->db->get('seccion');
-
-		if ($query == FALSE) {
-			return array();
+	* Asigna una sección a sus correspondientes parametros
+	* Estos parametros son: módulo tematico, profesor, sala y horario
+	* Primero se obtiene el horario para hacer la relacion entre este y la sala
+	* Luego, se asocian la sección con el profesor
+	* Finalmente, se obtiene el código del horario_sala recien ingresado, para hacer la
+	* asociacion de la sección con el módulo temático, el horario y la sala
+	* 
+	* @param $cod_seccion el código de la sección que será asignada
+	* @param $cod_profesor el código del profesor al que se le asigna la sección
+	* @param $cod_modulo el código del módulo tematico al que se le asigna la sección
+	* @param $cod_sala el código de la sala a la que se le asigna la sección
+	* @param $nombre_dia el nombre del dia al que se le asigna la sección
+	* @param $numero_modulo el número del bloque al que se le asigna la sección
+	* @return 1 si la operación se realizó con éxito y - 1 si la operación falló
+	**/
+	public function AsignarSeccion($cod_seccion, $cod_profesor, $cod_modulo, $cod_sala, $nombre_dia, $numero_modulo){
+		/*Se busca el código del horario correspondiente al dia y al bloque*/
+		if(strcmp($nombre_dia,"Miercoles") != 0) {
+			$dia_abreviado = substr($nombre_dia, 0, 1);
+		}else{
+			$dia_abreviado = 'W';
 		}
-		
-		
-		return $query->row();
-}
+		$columnas = 'horario.COD_HORARIO as cod';
+		$condiciones = '(dia.COD_ABREVIACION_DIA = \''.$dia_abreviado.'\') AND (modulo.NUMERO_MODULO = \''.$numero_modulo.'\') AND (dia.COD_DIA = horario.COD_DIA) AND (modulo.COD_MODULO = horario.COD_MODULO)';
+		$desde = 'dia, modulo, horario';
+		$this->db->select($columnas);
+		$this->db->where($condiciones);
+		$query = $this->db->get($desde);
+		//$cod_horario = $query->result_array()[0]['COD_HORARIO'];
+		$datos1=$query->result();
+		$lista1=array();
+		$contador=0;
+
+		foreach ($datos1 as $row) {
+			$lista1[$contador]=array();
+			$lista1[$contador][0]=$row->cod;
+			$contador=$contador+1;
+		}
+
+		$cod_horario= $lista1[0][0];
+
+		/*Se asocian la sala con el horario, para luego ser asociados a la sección*/
+		$sala_horario = array(
+				'COD_SALA' => $cod_sala,
+				'COD_HORARIO' => $cod_horario
+			);
+		$this->db->insert('sala_horario',$sala_horario);
+
+		/*Se asocia el profesor a la sección*/
+		$profe_seccion = array(
+				'ID_SECCION' => $cod_seccion,
+				'RUT_USUARIO2' => $cod_profesor
+			);
+		$this->db->insert('profe_seccion',$profe_seccion);
+
+		/*Se asocia el módulo, el horario y la sala a la sección*/
+		$this->db->select('ID_HORARIO_SALA as cod_sala');
+		$condiciones = '(sala_horario.COD_SALA = \''.$cod_sala.'\') AND (sala_horario.COD_HORARIO = \''.$cod_horario.'\')';
+		$this->db->where($condiciones);
+		$query2 = $this->db->get('sala_horario');
+		//$id_horario_sala = $query2->result_array()[0]['ID_HORARIO_SALA'];
+		$datos2=$query2->result();
+
+		$lista2=array();
+		$contador1=0;
+
+		foreach ($datos2 as $row1) {
+			$lista2[$contador1]=array();
+			$lista2[$contador1][0]=$row1->cod_sala;
+			$contador1=$contador1+1;
+		}
+
+		$id_horario_sala=$lista2[0][0];
+
+		$seccion_mod_tem = array(
+				'ID_SECCION' => $cod_seccion,
+				'COD_MODULO_TEM' => $cod_modulo,
+				'ID_HORARIO_SALA' => $id_horario_sala
+			);
+		$this->db->insert('seccion_mod_tem',$seccion_mod_tem);
+
+		if($sala_horario == true && $profe_seccion == true && $seccion_mod_tem == true){
+			return 1;
+		}else{
+			return -1;
+		}
+	}
 
 	/**
 	* Obtiene los datos de todos las secciones, de la base de datos, que no estan asignadas.

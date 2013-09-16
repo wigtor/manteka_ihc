@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     15-09-2013 18:26:39                          */
+/* Created on:     16-09-2013 0:31:01                           */
 /*==============================================================*/
 
 
@@ -296,7 +296,7 @@ create table ESTUDIANTE
 (
    RUT_USUARIO          int not null,
    COD_CARRERA          int not null,
-   ID_SECCION           int not null,
+   ID_SECCION           int,
    ID_ESTUDIANTE        int not null auto_increment,
    primary key (RUT_USUARIO),
    key AK_IDENTIFIER_1 (ID_ESTUDIANTE)
@@ -492,7 +492,7 @@ alter table REQUISITO_MODULO comment 'Es utilizada para tratar la relación n a n
 create table SALA
 (
    ID_SALA              int not null auto_increment,
-   NUM_SALA             varchar(10),
+   NUM_SALA             int,
    UBICACION            varchar(100),
    CAPACIDAD            int,
    primary key (ID_SALA)
