@@ -50,10 +50,9 @@ class Modulos extends MasterManteka {
 			$this->load->model("Model_modulo_tematico");
 			$datos_vista = array();
 
-			//$datos_vista['profesoresLibres'] = $this->Model_modulo_tematico->getAllProfesoresLibres();
-			//$datos_vista['profesores'] = $this->Model_modulo_tematico->getAllProfesoresOcupados();
-			//$datos_vista['sesiones'] = $this->Model_modulo_tematico->getSesionesByModuloTematico();
-			//$datos_vista['requisitos'] = $this->Model_modulo_tematico->listaRequisitosParaAddModulo();
+			$datos_vista['posiblesProfesoresLider'] = $this->Model_modulo_tematico->getAllProfesoresWhitoutEquipo();
+			$datos_vista['posiblesProfesoresEquipo'] = $this->Model_modulo_tematico->getAllProfesoresWhitoutEquipo();
+			$datos_vista['requisitosModulo'] = $this->Model_modulo_tematico->getAllRequisitos();
 
 	 		$subMenuLateralAbierto = "agregarModulo"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -82,30 +81,21 @@ class Modulos extends MasterManteka {
 			$this->load->model("Model_modulo_tematico");
 
 			
-			$nombre_modulo = $this->input->post('nombre_modulo');
-			$sesiones = $this->input->post('cod_sesion');
-			$descripcion_modulo = $this->input->post('descripcion_modulo');
-			$profesor_lider = $this->input->post('cod_profesor_lider');
-			$equipo_profesores = $this->input->post('cod_profesor_equipo');
-			$requisitos = $this->input->post('cod_requisito');
+			$nombre = $this->input->post('nombre');
+			$descripcion = $this->input->post('descripcion');
+			$profesor_lider = $this->input->post('id_profesorLider');
+			$equipo_profesores = $this->input->post('id_profesoresEquipo');
+			$requisitos = $this->input->post('id_requisitos');
 			
-			$confirmacion = $this->Model_modulo_tematico->InsertarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos);
-			
-			/*$datos_vista = array('nombre_modulos' => $this->Model_modulo_tematico->listaNombreModulos(),'profesoresL' => $this->Model_modulo_tematico->VerTodosLosProfesoresAddModulo(1),'profesores' => $this->Model_modulo_tematico->VerTodosLosProfesoresAddModulo(0),'sesiones' => $this->Model_modulo_tematico->listaSesionesParaAddModulo(),'mensaje_confirmacion'=>2,'requisitos' => $this->Model_modulo_tematico->listaRequisitosParaAddModulo());
-	      
-			$subMenuLateralAbierto = "agregarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$this->cargarTodo("Planificacion", 'cuerpo_modulos_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-			*/
-					// mostramos el mensaje de operacion realizada
-			if ($confirmacion==1){
+			$confirmacion = $this->Model_modulo_tematico->agregarModulo($nombre, $descripcion, $profesor_lider, $equipo_profesores, $requisitos);
+
+			// mostramos el mensaje de operacion realizada
+			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Accion Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el módulo con éxito";
 				$datos_plantilla["tipo_msj"] = "alert-success";
 			}
-			else{
+			else {
 				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
 				$datos_plantilla["tipo_msj"] = "alert-error";	
@@ -134,6 +124,11 @@ class Modulos extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$this->load->model("Model_modulo_tematico");
 			$datos_vista = array();
+
+			$datos_vista['posiblesProfesoresLider'] = $this->Model_modulo_tematico->getAllProfesoresForLider();
+			$datos_vista['posiblesProfesoresEquipo'] = $this->Model_modulo_tematico->getAllProfesoresForEquipo();
+			$datos_vista['requisitosModulo'] = $this->Model_modulo_tematico->getAllRequisitos();
+
 			$subMenuLateralAbierto = "editarModulo"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -159,22 +154,22 @@ class Modulos extends MasterManteka {
 			$this->load->model("Model_modulo_tematico");
 
 			
-			$nombre_modulo = $this->input->post('nombre_modulo');
-			$sesiones = $this->input->post('sesion');
-			$descripcion_modulo = $this->input->post('descripcion_modulo');
-			$profesor_lider = $this->input->post('cod_profesor_lider');
-			$equipo_profesores = $this->input->post('profesores');
-			$requisitos = $this->input->post('requisitos');
-			$cod_equipo = $this->input->post('cod_equipo2');
-			$cod_mod = $this->input->post('cod_modulo');
+			$nombre = $this->input->post('nombre');
+			$descripcion = $this->input->post('descripcion');
+			$profesor_lider = $this->input->post('id_profesorLider');
+			$equipo_profesores = $this->input->post('id_profesoresEquipo');
+			$requisitos = $this->input->post('id_requisitos');
 
-			$confirmacion = $this->Model_modulo_tematico->EditarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod);
-			if ($confirmacion==1){
+			$id_equipo = $this->input->post('id_equipo');
+			$id_modulo = $this->input->post('id_modulo');
+
+			$confirmacion = $this->Model_modulo_tematico->actualizarModulo($nombre, $descripcion, $profesor_lider, $equipo_profesores ,$requisitos, $id_equipo,$id_modulo);
+			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Accion Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha editado el módulo con éxito";
 				$datos_plantilla["tipo_msj"] = "alert-success";
 			}
-			else{
+			else {
 				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
 				$datos_plantilla["tipo_msj"] = "alert-error";	
@@ -199,12 +194,12 @@ class Modulos extends MasterManteka {
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
-			$datos_vista = array('mensaje_confirmacion'=>2);
+			$datos_vista = array();
 
 			$subMenuLateralAbierto = "eliminarModulo"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-			$this->cargarTodo("Planificacion", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
+			$this->cargarTodo("Planificacion", 'cuerpo_modulos_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
 		}
     }
 	/**
@@ -224,24 +219,15 @@ class Modulos extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model("Model_modulo_tematico");
-			$cod_modulo_eliminar = $this->input->post('cod_modulo_eliminar');
-			$confirmacion = $this->Model_modulo_tematico->EliminarModulo($cod_modulo_eliminar);
-		
-			/*$datos_vista = array('mensaje_confirmacion'=>$confirmacion);
-	     
-			$subMenuLateralAbierto = "borrarModulos"; //Para este ejemplo, los informes no tienen submenu lateral
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$this->cargarTodo("Planificacion", 'cuerpo_modulos_borrar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);		
-			*/
+			$id_modulo_eliminar = $this->input->post('id_moduloEliminar');
+			$confirmacion = $this->Model_modulo_tematico->eliminarModulo($id_modulo_eliminar);
 
-			if ($confirmacion==1){
+			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha eliminado el módulo con éxito";
 				$datos_plantilla["tipo_msj"] = "alert-success";
 			}
-			else{
+			else {
 				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación con la base de datos";
 				$datos_plantilla["tipo_msj"] = "alert-error";	
@@ -260,7 +246,7 @@ class Modulos extends MasterManteka {
 	* Método que responde a una solicitud de post enviando la información de todos los múdulos
 	*
 	*/
-	public function getAllModulosTematicos(){
+	public function getAllModulosTematicosAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -292,7 +278,7 @@ class Modulos extends MasterManteka {
 
 		$this->load->model('Model_modulo_tematico');
 
-		$resultado = $this->Model_modulo_tematico->listaSesionesParaEditarModulo();
+		$resultado = $this->Model_modulo_tematico->getAllSesiones();
 		echo json_encode($resultado);
 	}
 
@@ -312,8 +298,10 @@ class Modulos extends MasterManteka {
 		}
 
 		$this->load->model('Model_modulo_tematico');
-		$cod_mod = $this->input->post('cod_mod_post');
-		$resultado = $this->Model_modulo_tematico->listaSesionesParaVerModulo($cod_mod);
+		$id_mod = $this->input->post('id_mod_post');
+		echo 'caca';
+		return;
+		$resultado = $this->Model_modulo_tematico->getSesionesByModuloTematico($id_mod);
 		echo json_encode($resultado);
 	}
 
@@ -342,7 +330,7 @@ class Modulos extends MasterManteka {
 	* Método que responde a una solicitud de post enviando la información de todos los profesores que pertenecen a un equipo en particular
 	*
 	*/
-	public function obtenerProfesVer() {
+	public function getProfesoresByModuloTematicoAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -350,37 +338,18 @@ class Modulos extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		$cod_equipo = $this->input->post('cod_equipo_post');
+		$id_mod = $this->input->post('id_mod_post');
 		$this->load->model('Model_modulo_tematico');
-		$resultado = $this->Model_modulo_tematico->listaProfesoresVerModulo($cod_equipo);
+		$resultado = $this->Model_modulo_tematico->getProfesoresByModuloTematico($id_mod);
 		echo json_encode($resultado);
 	}
-	
-	/**
-	*
-	* Método que responde a una solicitud de post enviando la información de todos los requisitos e diferenciando si estos están asociados a un módulo en particular
-	*
-	*/
-	public function obtenerRequisitos() {
-		if (!$this->input->is_ajax_request()) {
-			return;
-		}
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-		$this->load->model('Model_modulo_tematico');
-		$cod_mod = $this->input->post('cod_mod_post');
-	
-		$resultado = $this->Model_modulo_tematico->listaRequisitosParaEditarModulo($cod_mod);
-		echo json_encode($resultado);
-	}
+
 	/**
 	*
 	* Método que responde a una solicitud de post enviando la información de todos los requisitos asociados a un módulo en particular
 	*
 	*/
-	public function obtenerRequisitosVer() {
+	public function getRequisitosByModuloTematicoAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -389,17 +358,18 @@ class Modulos extends MasterManteka {
 			return;
 		}
 		$this->load->model('Model_modulo_tematico');
-		$cod_mod = $this->input->post('cod_mod_post');
+		$id_mod = $this->input->post('id_mod_post');
 	
-		$resultado = $this->Model_modulo_tematico->listaRequisitosVerModulo($cod_mod);
+		$resultado = $this->Model_modulo_tematico->getRequisitosByModulo($id_mod);
 		echo json_encode($resultado);
 	}
-	
+
+
 	/**
 	* Se buscan módulos de forma asincrona para mostrarlos en la vista
 	*
 	**/
-	public function postBusquedaModulos() {
+	public function getModulosTematicosAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -415,13 +385,13 @@ class Modulos extends MasterManteka {
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
-			$this->load->model('model_busquedas');
+			$this->load->model('Model_busqueda');
 			//Se debe insertar sólo si se encontraron resultados
-			$this->model_busquedas->insertarNuevaBusqueda($textoFiltro, 'modulos', $this->session->userdata('rut'));
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'modulos', $this->session->userdata('rut'));
 			
 			$cantidad = count($textoFiltrosAvanzados);
 			for ($i = 0; $i < $cantidad; $i++) {
-				$this->model_busquedas->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'modulos', $this->session->userdata('rut'));
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'modulos', $this->session->userdata('rut'));
 			}
 			
 		}
@@ -432,13 +402,14 @@ class Modulos extends MasterManteka {
 	* Método que responde a una solicitud de post para pedir los datos de un módulo temático
 	* Recibe como parámetro el código del módulo temático
 	*/
-	public function postDetallesModulo() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+	public function getDetallesModuloTematicoAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
-
 		$cod = $this->input->post('cod_modulo');
 		$this->load->model('Model_modulo_tematico');
 		$resultado = $this->Model_modulo_tematico->getDetallesModulo($cod);

@@ -59,7 +59,7 @@
 
 		//Se limpia lo que está seleccionado en la tabla
 		$('tbody tr').removeClass('highlight');
-}
+	}
 
 	function eliminarAyudante(){
 		if ($('#rutEliminar').val().trim() == '') {

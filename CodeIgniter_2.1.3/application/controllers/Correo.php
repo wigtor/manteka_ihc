@@ -338,12 +338,9 @@ class Correo extends MasterManteka {
 	*
 	* @author: Byron Lanas (BL) y Diego García (DGM)
 	*/
-	public function enviarPost()
-	{
-		/* Verifica si el usuario que intenta acceder está autentificado o no. */
-		$rut=$this->session->userdata('rut');
-		if($rut == false) {
-			redirect('/Login/', '');
+	public function enviarPost() {
+		if(!$this->isLogged()){
+			return;
 		}
 
 		/* Se cargan los modelos necesarios para guardar los correos enviados, con el

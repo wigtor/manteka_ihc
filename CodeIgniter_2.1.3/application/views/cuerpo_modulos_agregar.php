@@ -1,428 +1,146 @@
-<script type="text/javascript">
-function ordenarFiltro(numeroLista){
-	var filtroLista = document.getElementById(numeroLista+"filtroLista").value;
-	var tipoDeFiltro = document.getElementById(numeroLista+"tipoDeFiltro").value;
 
-	
-	var arreglo = new Array();
-	var alumno;
-	var ocultar;
-	var cont;
-	if(numeroLista == 1){
-		<?php
-		$contadorE = 0;
-		while($contadorE<count($profesoresL)){
-			echo 'arreglo['.$contadorE.']=new Array();';
-			echo 'arreglo['.$contadorE.'][0] = "'.$profesoresL[$contadorE][0].'";';//rut
-			echo 'arreglo['.$contadorE.'][1] = "'.$profesoresL[$contadorE][1].'";';//nombre
-			echo 'arreglo['.$contadorE.'][2] = "'.$profesoresL[$contadorE][2].'";';//apellido
-			$contadorE = $contadorE + 1;
-		}?>
+<script type="text/javascript">
+	function nombreEnUso() {
+		
 	}
-	else{
-		<?php
-		$contadorE = 0;
-		while($contadorE<count($profesores)){
-			echo 'arreglo['.$contadorE.']=new Array();';
-			echo 'arreglo['.$contadorE.'][0] = "'.$profesores[$contadorE][0].'";';//rut
-			echo 'arreglo['.$contadorE.'][1] = "'.$profesores[$contadorE][1].'";';//nombre
-			echo 'arreglo['.$contadorE.'][2] = "'.$profesores[$contadorE][2].'";';//apellido
-			$contadorE = $contadorE + 1;
-		}?>
+
+	function agregarModulo() {
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar módulo temático');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el módulo temático al sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
 	}
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultarTd=document.getElementById(numeroLista+"profesores_"+cont);
-		//ocultar =document.getElementById(arreglo[cont][0]);
-		if(0 > arreglo[cont][Number(tipoDeFiltro)].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			//ocultar.style.display='none';
-			ocultarTd.style.display='none';
-		}
-		else
-		{
-			//ocultar.style.display='';
-			ocultarTd.style.display='';
-		}
-    }
-}
+
+	function resetearModulo() {
+		$('#nombre').val("");
+		$('#descripcion').val("");
+		$('#id_requisitos').val("");
+		$('#id_profesorLider').val("");
+		$('#id_profesoresEquipo').val("");
+	}
+
 </script>
 
 
-<script type="text/javascript">
-	function nombreEnUso(){
-	nombre_tentativo = document.getElementById("nombre_modulo_in");
-	
-
-	var arreglo = new Array();
-	var cont = 0;
+<fieldset style="min-width:1000px">
+	<legend>Agregar Módulo temático</legend>
 	<?php
-	$contadorE = 0;
-	while($contadorE<count($nombre_modulos)){
-		echo 'arreglo['.$contadorE.'] = "'.$nombre_modulos[$contadorE].'";';
-		$contadorE = $contadorE + 1;
-	}
+		$attributes = array('id' => 'formAgregar', 'class' => 'form-horizontal');
+		echo form_open('Modulos/postAgregarModulo', $attributes);
 	?>
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		if(arreglo[cont].toLowerCase () == nombre_tentativo.value.toLowerCase ()){
-				$('#NombreEnUso').modal();
-				nombre_tentativo.value="";
-				return;
-		}
-
-    }
-
-}
-	function validarMod(){
-		var sesion = document.getElementsByName("cod_sesion[]");
-		var lider = document.getElementsByName("cod_profesor_lider");
-		var rutLider;
-		var equipo = document.getElementsByName("cod_profesor_equipo[]");
-		var cont;
-		var numS = 0;
-		var numE = 0;
-		for(cont=0;cont < sesion.length;cont++){
-			if(sesion[cont].checked == true){
-				numS = numS + 1;
-			}
-		}
-		if(numS == 0){
-			$('#EscojaSesion').modal();
-			return false;
-		}
-		
-		for(cont=0;cont < lider.length;cont++){
-			if(lider[cont].checked == true){
-				rutLider = lider[cont].value;
-				cont = lider.length +1 ;
-			}
-		}
-		
-		for(cont=0;cont < equipo.length;cont++){
-			if(equipo[cont].checked == true){
-				numE = numE + 1;
-				if(equipo[cont].value == rutLider){
-					$('#LiderDelEquipo').modal();
-					return false;
-				}
-			}
-		}
-		if(numE == 0){
-			$('#EscojaEquipo').modal();
-			return false;
-		}
-		
-		var agregar = document.getElementById("formAgregar");
-		agregar.action ="<?php echo site_url("Modulos/HacerAgregarModulo/")?>";
-		agregar.submit();
-}
-
-</script>
-
-
-		<fieldset style="min-width:1000px">
-			<legend>Agregar Módulo</legend>
-
-			<form   id="formAgregar" type="post" method="post" onsubmit="validarMod();return false">
-			<div class="row-fluid">
-				<div class="span6">
-					<font color="red">* Campos Obligatorios</font>
+		<div class="row-fluid">
+			<div class="span6">
+				<font color="red">* Campos Obligatorios</font>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class= "span6" >
+				<p>Complete los datos del formulario para ingresar un módulo temático</p>
+			</div>
+		</div>	
+  		<div class="row-fluid">
+			<div class="span6">
+				<!-- nombre modulo -->
+				<!-- descripción módulo temático -->
+				<div class="control-group">
+					<label class="control-label" for="nombre">1.- <font color="red">*</font> Nombre módulo:</label>
+					<div class="controls">
+						<input class="span12" id="nombre" required type="text" name="nombre" maxlength="49"  placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
+					</div>
 				</div>
-			</div>	
-	  		<div class="row-fluid">
-				<div class="span6">
-					
-					
-					<div class="row-fluid"> <!-- nombre modulo-->
-						<div class="span12">
-								<div class="span4">
-									<div class="control-group">
-										<label  class="control-label" for="inputInfo">1.- <font color="red">*</font> Nombre módulo</label>
-									</div>
-								</div>
-								<!--<div class="span7">-->	
-									<div class="control-group" id="groupNombreMod">											
-											<input class="span7" id="nombre_modulo_in" required type="text" name="nombre_modulo" maxlength="49"  placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
-											<span id="spanInputNombreModError" class="help-inline"></span>
-									</div>
-								<!--</div>-->
-						</div>
+				<br>
+
+				<!-- descripción módulo temático -->
+				<div class="control-group">
+					<label class="control-label" for="descripcion">2.- <font color="red">*</font> Ingrese una descripción del módulo:</label>
+					<div class="controls">
+						<textarea required id="descripcion" name="descripcion" maxlength="99" rows="5" cols="20"></textarea>
 					</div>
-
-					
-					<div class="row-fluid" style="margin-top:7%">
-						<div class= "row-fluid">
-							<div class="span10" style="margin-top:2%">
-								<div class="control-group">
-									<label  class="control-label" for="inputInfo">2.- <font color="red">*</font> Agregar sesiones existentes</label>
-								</div>
-							</div>
-						</div>
-						<div class= "row-fluid">
-							<div class="span11">
-										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-										<!--sesiones-->					
-										<table class="table table-hover">
-										<thead>
-
-										</thead>
-											<tbody>									
-							
-					
-											<?php
-											$contador=0;
-											while ($contador<count($sesiones)){
-												
-													echo '<tr>';
-													echo '<td id="sesion_'.$sesiones[$contador][0].'" title="'.$sesiones[$contador][2].'"><input value="'.$sesiones[$contador][0].'" name="cod_sesion[]" type="checkbox" ></input> '.$sesiones[$contador][3].'</td>';
-													echo '</tr>';
-												
-												$contador = $contador + 1;
-											}
-											?>
-											</tbody>
-										</table>
-
-			
-										<!---->
-
-								</div>
-							</div>
-						</div>
-					</div>
-					<br>
-					<div class="row-fluid"> <!-- descripción modulo-->
-						<div class="span12">
-								<div class="span7">
-									<div class="control-group">
-										<label  class="control-label" for="inputInfo" style="min-width: 300px;">3.- <font color="red">*</font> Ingrese una descripción del módulo</label>
-									</div>
-								</div>
-								
-
-						</div>
-						<div class="span12">		
-								<div class="controls">
-										<textarea required name="descripcion_modulo"  style ="margin-left:0%; width: 86%; "maxlength="99" rows="5" cols="100"></textarea>
-								</div>
-						</div>
-						
-					</div>
-					
-										
-					<div class="row-fluid" >
-						<div class= "row-fluid">
-							<div class="span10" style="margin-top:2%">
-								<div class="control-group">
-									<label  class="control-label" for="inputInfo">4.- Agregar requisitos existentes</label>
-								</div>
-							</div>
-						</div>
-						<div class= "row-fluid">
-							<div class="span11">
-										<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-														
-										<table class="table table-hover">
-										<thead>
-
-										</thead>
-											<tbody>									
-							
-					
-											<?php
-											$contador=0;
-											while ($contador<count($requisitos)){
-												
-													echo '<tr>';
-													echo '<td id="requisito_'.$requisitos[$contador][0].'" title="'.$requisitos[$contador][2].'"><input value="'.$requisitos[$contador][0].'" name="cod_requisito[]" type="checkbox" > '.$requisitos[$contador][1].'</td>';
-													echo '</tr>';
-												$contador = $contador + 1;
-											}
-											?>
-											</tbody>
-										</table>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-
+				</div>
 				
-			
-		</div>
+				<!-- Requisitos módulo temático -->
+				<div class="control-group">
+					<label class="control-label" for="id_requisitos">3.- Agregar requisitos existentes:</label>
+					<div class="controls">
+						<select id="id_requisitos" name="id_requisitos[]" class="span12" title="asigne profesor" multiple="multiple">
+						<?php
+						if (isset($requisitosModulo)) {
+							foreach ($requisitosModulo as $req) {
+								?>
+									<option value="<?php echo $req->id; ?>"><?php echo $req->nombre; ?></option>
+								<?php 
+							}
+						}
+						?>
+						</select> 
+					</div>
+				</div>
+			</div>
 		
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
-			<!--profesor lider-->
-			<div class="row-fluid"> 
-				<div class="span5">
-					<div class="control-group">
-						<label class="control-label" for="inputInfo">5.- <font color="red">*</font> Asignar profesor lider</label>
-					</div>
-				</div>
-				<div  class="span6" >	
-					<fieldset>
-						<div class="span12">					
-							<input id="1filtroLista"  onkeyup="ordenarFiltro('1')" type="text" placeholder="Filtro búsqueda">
-
-								<select id="1tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por nombre</option>
-								<option value="2">Filtrar por apellido paterno</option>
-								<option value="0">Filtrar por RUT</option>
-								</select> 
-							
-						
-						</div>
-					</fieldset>
-				</div>
-			</div>
-
-			<div class="row-fluid" style="margin-top:2%">
-				<div class="span7 offset5">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-					
-					
-						<table class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>									
-							<?php
-							$contador=0;
-							$comilla= "'";
-							while ($contador<count($profesoresL)){
-								echo '<tr>';
-								echo '<td id="1profesores_'.$contador.'" ><input required value="'.$profesoresL[$contador][0].'" name="cod_profesor_lider" type="radio" ></input> '.$profesoresL[$contador][1].'  '.$profesoresL[$contador][2].'</td>';
-								echo '</tr>';
-								$contador = $contador + 1;
+			<div class="span6">
+				<!--profesor lider-->
+				<div class="control-group">
+					<label class="control-label" for="id_profesorLider" style="cursor: default">4.- <font color="red">*</font> Asignar profesor lider:</label>
+					<div class="controls">
+						<select required id="id_profesorLider" name="id_profesorLider" class="span12" title="asigne profesor lider">
+						<?php
+						if (isset($posiblesProfesoresLider)) {
+							foreach ($posiblesProfesoresLider as $profe) {
+								?>
+									<option value="<?php echo $profe->id; ?>"><?php echo $profe->id.' - '.$profe->nombre1.' '.$profe->apellido1; ?></option>
+								<?php 
 							}
-							?>
-
-							</tbody>
-						</table>
+						}
+						?>
+						</select> 
 					</div>
 				</div>
-			</div>
-			<!---->
-			<br>
-			<!--equipo profesores-->
-			<div class="row-fluid"> 
-				<div class="span5">
-					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="min-width: 300px;">6.- <font color="red">*</font> Asignar equipo profesores</label>
-					</div>
-				</div>
-				<div  class="span6" style="margin-top:6%" >	
-					<fieldset>
-						<div class="span12">					
-							<input id="2filtroLista"  onkeyup="ordenarFiltro('2')" type="text" placeholder="Filtro búsqueda">
-
-								<select id="2tipoDeFiltro" title="Tipo de filtro" name="Filtro a usar">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="2">Filtrar por Apellido paterno</option>
-								<option value="0">Filtrar por RUT</option>
-								</select> 
-						</div>
-					</fieldset>
-				</div>
-			</div>
-
-			<div class="row-fluid" style="margin-top:2%">
-				<div class="span7 offset5">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-					
-						<table class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>									
-					
-							<?php
-							$contador=0;
-							while ($contador<count($profesores)){
-								echo '<tr>';
-								echo '<td id="2profesores_'.$contador.'" ><input  id="cb_2profesores_'.$contador.'"  value="'.$profesores[$contador][0].'" name="cod_profesor_equipo[]" type="checkbox" ></input> '.$profesores[$contador][1].'  '.$profesores[$contador][2].'</td>';
-								echo '</tr>';
-								$contador = $contador + 1;
+				<br>
+				
+				<!--equipo profesores-->
+				<div class="control-group">
+					<label class="control-label" for="id_profesoresEquipo" style="cursor: default">5.- <font color="red">*</font> Profesores del equipo:</label>
+					<div class="controls">
+						<select required id="id_profesoresEquipo" name="id_profesoresEquipo[]" class="span12" title="Escoja los profesores del equipo" multiple="multiple">
+						<?php
+						if (isset($posiblesProfesoresEquipo)) {
+							foreach ($posiblesProfesoresEquipo as $profe) {
+								?>
+									<option value="<?php echo $profe->id; ?>"><?php echo $profe->id.' - '.$profe->nombre1.' '.$profe->apellido1; ?></option>
+								<?php 
 							}
-							?>
-							</tbody>
-						</table>
+						}
+						?>
+						</select> 
 					</div>
 				</div>
-			</div>
-			<!---->
-		</br>
-			<div class="row">
-					<div class="controls pull-right">
-						<button class ="btn" type="submit" style="margin-right: 10px" >
+
+				</br>
+				<div class="control-group">
+					<div class="controls">
+						<button type="button" class="btn" onclick="agregarModulo()">
 							<div class="btn_with_icon_solo">Ã</div>
-							&nbsp Agregar
+							&nbsp; Agregar
 						</button>
-						<button class ="btn" type="reset" style="width:105px">
+						<button class="btn" type="button" onclick="resetearModulo()" >
 							<div class="btn_with_icon_solo">Â</div>
-							&nbsp Cancelar
+							&nbsp; Cancelar
 						</button>
 					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
+				</div>
 			</div>
-			
 		</div>
-	  </div>
-
-	</form>
-	</fieldset>
-	
-							<!-- Modal -->
-						<div id="EscojaEquipo" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado ningún profesor</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
-						
-					<!-- Modal -->
-						<div id="EscojaSesion" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No ha seleccionado ninguna sesión</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
-						
-					<!-- Modal -->
-						<div id="LiderDelEquipo" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>No puede seleccionar el líder como parte del equipo</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor no seleccione a otro profesor como parte del equipo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
-						
-					<!-- Modal -->
-						<div id="NombreEnUso" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>El nombre del módulo está en uso</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor ingrese otro nombre para el nuevo módulo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>
+	<?php echo form_close(""); ?>
+</fieldset>

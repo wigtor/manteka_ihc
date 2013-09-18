@@ -21,6 +21,8 @@
 			data: { cod_modulo: codigo_modulo},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
 				var datos = jQuery.parseJSON(respuesta);
+
+				$('#id_moduloEliminar').val(datos.id_mod); //Se setea el inputo que almacena el módulo que se tiene seleccionado
 				$("#nombre_modulo").html(datos.nombre_modulo);
 				$('#descripcion_modulo').html(datos.descripcion_modulo == '' ? 'Sin descripción' : $.trim(datos.descripcion_modulo));
 				$('#profesor_lider').html(datos.rut_profe_lider == '' ? '' : $.trim(datos.rut_profe_lider)+' - '+$.trim(datos.nombre1_profe_lider)+' '+$.trim(datos.apellido1_profe_lider)+' '+$.trim(datos.apellido2_profe_lider));
@@ -118,6 +120,33 @@
 		});
 	}
 
+	function resetearModulo() {
+		$('#id_moduloEliminar').val("");
+
+		$("#nombre_modulo").html("");
+		$('#descripcion_modulo').html("");
+		$('#profesor_lider').html("");
+
+		$('#equipo').find('tbody').remove();
+		$('#sesiones').find('tbody').remove();
+		$('#requisitos').find('tbody').remove();
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
+	}
+
+	function eliminarModulo(){
+		if ($('#id_moduloEliminar').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado módulo temático');
+			$('#textoErrorDialog').html('No ha seleccionado un módulo temático para eliminar');
+			$('#modalError').modal();
+			return;
+		}
+		$('#tituloConfirmacionDialog').html('Confirmación para eliminar módulo temático');
+		$('#textoConfirmacionDialog').html('¿Está seguro que desea eliminar permanentemente el módulo temático del sistema?');
+		$('#modalConfirmacion').modal();
+	}
+
 	//Se carga todo por ajax
 	$(document).ready(function() {
 		escribirHeadTable();
@@ -154,6 +183,10 @@
 		</div>
 				
 		<div class="span6">
+			<?php
+				$atributos= array('id' => 'formEliminar');
+				echo form_open('Modulos/postEliminarModulo/', $atributos);
+			?>
 			<div class ="row-fluid">
 				<pre style="padding: 2%;">
 Nombre del módulo:  <b id="nombre_modulo"></b>
@@ -230,6 +263,26 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 					</table>
 				</div>
 			</div>
+
+			<input type="hidden" id="id_moduloEliminar" name="id_moduloEliminar" value="">
+				<div class="control-group">
+					<div class="controls pull-right">
+						<button type="button" class="btn" onclick="eliminarModulo()">
+							<i class= "icon-trash"></i>
+							&nbsp; Eliminar
+						</button>
+						<button class="btn" type="button" onclick="resetearModulo()" >
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>
+					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
+				</div>
+			<?php echo form_close(''); ?>
 		</div>
 	</div>
 </fieldset>

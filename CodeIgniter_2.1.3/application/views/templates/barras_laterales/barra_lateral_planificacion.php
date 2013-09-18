@@ -108,7 +108,7 @@
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verSesiones; ?> ><a href="<?php echo site_url("Sesiones/verSesiones")?>">Ver sesiones</a></li>
 					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarSesion; ?> ><a href="<?php echo site_url("Sesiones/ingresarSesiones")?>">Agregar sesiones</a></li>
+						<li <?php echo $agregarSesion; ?> ><a href="<?php echo site_url("Sesiones/agregarSesion")?>">Agregar sesiones</a></li>
 						<li <?php echo $editarSesion; ?> ><a href="<?php echo site_url("Sesiones/editarSesion")?>">Editar sesiones</a></li>
 						<li <?php echo $eliminarSesion; ?> ><a href="<?php echo site_url("Sesiones/eliminarSesion")?>">Eliminar sesiones</a></li>
 					<?php } ?>

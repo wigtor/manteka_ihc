@@ -36,17 +36,15 @@ class Sesiones extends MasterManteka {
 	* Posteriormente, se comprueba que el usuario tenga la sesión iniciada y que sea coordinador, en caso que no sea así se le redirecciona al login
 	* Finalmente se carga la vista con todos los datos como parámetros en la funcion cargarTodo.
 	*/
-	public function verSesiones()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+	public function verSesiones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		$datos_vista = 0;		
+		$datos_vista = array();
 		$subMenuLateralAbierto = "verSesiones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR; $tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 	}
 	
@@ -59,18 +57,15 @@ class Sesiones extends MasterManteka {
 	* A continuacion, se indica que la vista no tendra la barra de progreso.
 	* Finalmente se carga la vista con todos los datos como parámetros en la funcion cargarTodo.
 	*/
-	public function ingresarSesiones()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+	public function agregarSesion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		
-		$datos_vista = 0;		
-		$subMenuLateralAbierto = "agregarSesiones"; 
+		$datos_vista = array();
+		$subMenuLateralAbierto = "agregarSesion"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 
 	}
@@ -87,8 +82,13 @@ class Sesiones extends MasterManteka {
 	* se determina el tipo de usuario y se llama a la funcion cargarMsjLogueado con los datos anteriores.
 	*
 	*/
-	public function agregarSesiones()
-	{
+	public function postAgregarSesion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+
 		$this->load->model('Model_sesiones');
 		$nombre_sesion = $this->input->post("nombre_sesion");
 		$descripcion_sesion = $this->input->post("descripcion_sesion");
@@ -106,12 +106,11 @@ class Sesiones extends MasterManteka {
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Sesiones/ingresarSesiones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["redirecTo"] = "Sesiones/agregarSesion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "Ingresar Sesión"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$subMenuLateralAbierto = "ingresarSesiones"; 
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+		$subMenuLateralAbierto = "ingresarSesiones";
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 
@@ -144,7 +143,6 @@ class Sesiones extends MasterManteka {
 	* @return json Resultado de la busqueda en forma de objeto json
 	*/
     public function postDetallesSesion() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -178,7 +176,30 @@ class Sesiones extends MasterManteka {
 		
 		echo json_encode($resultado);
 	}
-    
+
+
+	/**
+	* Manda a la vista 'cuerpo_sesiones_eliminar' los datos necesarios para su funcionamiento
+	*
+	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
+	* Seguido a esto, se carga los datos de la vista, en este caso con 0 poeque no se recibe ningun dato del modelo.
+	* Luego, se determina el menu lateral correspondiente a borrarSesiones, para que quede seleccionado en el menu.
+	* A continuacion, se indica que la vista no tendra la barra de progreso.
+	* Finalmente se carga la vista con todos los datos como parámetros en la funcion cargarTodo.
+	*/
+    public function eliminarSesion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$datos_vista = array();
+		$subMenuLateralAbierto = "eliminarSesion"; //Para este ejemplo, los informes no tienen submenu lateral
+		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+	}
+
+
     /**
 	* Elimina una sesion del sistema y luego carga los datos para volver a la vista 'cuerpo_sesiones_eliminar'
 	*
@@ -192,16 +213,19 @@ class Sesiones extends MasterManteka {
 	* Se determina el tipo de usuario y se llama a la funcion cargarMsjLogueado con los datos anteriores.
 	*
 	*/
-    public function eliminarSesion()// alimina un alumno y de ahí carga la vista para seguir eliminando 
-	{
+    public function postEliminarSesion() {
+    	if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 
 		$this->load->model('Model_sesiones');
 		$codEliminar = $this->input->post('codEliminar');
 
-		$confirmacion = $this->Model_sesiones->EliminarSesion($codEliminar);
+		$confirmacion = $this->Model_sesiones->eliminarSesion($codEliminar);
 		
 		
-		if ($confirmacion==1){
+		if ($confirmacion == TRUE){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sesión con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
@@ -212,37 +236,39 @@ class Sesiones extends MasterManteka {
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Sesiones/borrarSesiones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["redirecTo"] = "Sesiones/eliminarSesion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "Borrar Sesiones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
-    
-    /**
-	* Manda a la vista 'cuerpo_sesiones_eliminar' los datos necesarios para su funcionamiento
+
+
+	/**
+	* Manda a la vista 'cuerpo_sesiones_editar' los datos necesarios para su funcionamiento
 	*
 	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
 	* Seguido a esto, se carga los datos de la vista, en este caso con 0 poeque no se recibe ningun dato del modelo.
-	* Luego, se determina el menu lateral correspondiente a borrarSesiones, para que quede seleccionado en el menu.
+	* Luego, se determina el menu lateral correspondiente a editarSesiones, para que quede seleccionado en el menu.
 	* A continuacion, se indica que la vista no tendra la barra de progreso.
 	* Finalmente se carga la vista con todos los datos como parámetros en la funcion cargarTodo.
 	*/
-    public function borrarSesiones()//carga la vista para borrar alumnos
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
+	public function editarSesion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		$datos_vista = 0;
-		$subMenuLateralAbierto = "borrarSesiones"; //Para este ejemplo, los informes no tienen submenu lateral
+
+		
+		$datos_vista = array();		
+		$subMenuLateralAbierto = "editarSesiones"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+
 	}
-	
+
+
 	/**
 	* Edita una sesion del sistema y luego carga los datos para volver a la vista 'cuerpo_sesiones_editar'
 	*
@@ -256,15 +282,20 @@ class Sesiones extends MasterManteka {
 	* Se determina el tipo de usuario y se llama a la funcion cargarMsjLogueado con los datos anteriores.
 	*
 	*/
-	public function cambiarSesiones()//carga la vista para borrar alumnos
-	{
+	public function postEditarSesion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+
 		$this->load->model('Model_sesiones');
 		$nombre_sesion = $this->input->post('nombre_sesion');
 		$descripcion_sesion = $this->input->post('descripcion_sesion');
 		$codigo_sesion = $this->input->post('codigo_sesion');
 		
 		$confirmacion = $this->Model_sesiones->EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion);
-        if ($confirmacion==1){
+        if ($confirmacion == TRUE){
 			$datos_plantilla["titulo_msj"] = "Acción Realizada";
 			$datos_plantilla["cuerpo_msj"] = "Se ha editado la sesión con éxito";
 			$datos_plantilla["tipo_msj"] = "alert-success";
@@ -275,38 +306,13 @@ class Sesiones extends MasterManteka {
 			$datos_plantilla["tipo_msj"] = "alert-error";	
 		}
 		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Sesiones/editarSesiones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+		$datos_plantilla["redirecTo"] = "Sesiones/editarSesion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "Editar Sesiones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 
-	/**
-	* Manda a la vista 'cuerpo_sesiones_editar' los datos necesarios para su funcionamiento
-	*
-	* Primero se comprueba que el usuario tenga la sesión iniciada, en caso que no sea así se le redirecciona al login
-	* Seguido a esto, se carga los datos de la vista, en este caso con 0 poeque no se recibe ningun dato del modelo.
-	* Luego, se determina el menu lateral correspondiente a editarSesiones, para que quede seleccionado en el menu.
-	* A continuacion, se indica que la vista no tendra la barra de progreso.
-	* Finalmente se carga la vista con todos los datos como parámetros en la funcion cargarTodo.
-	*/
-	public function editarSesiones()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi?n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi?n iniciada
-		}
-		
-		$datos_vista = 0;		
-		$subMenuLateralAbierto = "editarSesiones"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$this->cargarTodo("Planificacion", 'cuerpo_sesiones_editar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-	}
 
 	/**
 	* Comprobar que el nombre de la sesion que se está editando no pertenezca a otra sesion ingresada en el sistema
