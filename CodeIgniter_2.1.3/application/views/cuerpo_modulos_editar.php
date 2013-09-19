@@ -3,7 +3,7 @@
 	var valorFiltrosJson = ["", ""];
 	var prefijo_tipoDato = "modulo_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Modulos/postBusquedaModulos") ?>";
+	var url_post_busquedas = "<?php echo site_url("Modulos/getModulosTematicosAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/modulos") ?>";
 
 	function Cancelar(){
@@ -376,249 +376,132 @@ function editarMod(){
 
 </script>
 
-	<fieldset style="min-width: 1000px;">
-			<legend>Editar Módulo</legend>
-			<div class="row-fluid">
-				<div class="span6">
-					<font color="red">* Campos Obligatorios</font>
-					<div class="controls controls-row">
-						<div class="input-append span7">
-							<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda" title="no implementado aun, pega de G1" >
-							<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
-						</div>
-					</div>
+<fieldset style="min-width: 1000px;">
+	<legend>Editar Módulo</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			<font color="red">* Campos Obligatorios</font>
+			<div class="controls controls-row">
+				<div class="input-append span7">
+					<input id="filtroLista" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 				</div>
+				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
 			</div>
-	  		<div class="row-fluid">
-				<div class="span6">
-					1.- Seleccione el módulo temático a editar:
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span6">
+			<p>1.- Seleccione el módulo temático a editar:</p>
+		</div>
+		<div class="span6">
+			<p>2.- Complete los datos del formulario para modificar el módulo temático:</p>
+		</div>
+	</div>
+	<div class="row-fluid" >
+		<div class="span6" style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" ><!--  para el scroll-->
+			<table id="listadoResultados" class="table table-hover">
+
+			</table>
+		</div>
+
+
+		<div class="span6">
+			<?php
+				$attributes = array('id' => 'formEditar', 'class' => 'form-horizontal');
+				echo form_open('Modulos/postEditarModulo', $attributes);
+			?>
+				<!-- nombre modulo -->
+				<div class="control-group">
+					<label class="control-label" for="nombre">1.- <font color="red">*</font> Nombre módulo:</label>
+					<div class="controls">
+						<input class="span12" id="nombre" required type="text" name="nombre" maxlength="49"  placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
+					</div>
 				</div>
-				<div class="span6">
-					4.- <font color="red">*</font> Profesores del módulo temático
-				</div>
-			</div>
+				<br>
 
-	  		<div class="row-fluid">
-	  			<form id="formEditar" type="post" method="post"  action="<?php echo site_url("Modulos/HacerEditarModulo/")?>">
-
-				<div class="span6">
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:30%; -webkit-border-radius: 4px" ><!--  para el scroll-->
-						<table id="listadoResultados" class="table table-hover">
-
-						</table>
-					</div>
-					
-
-					<div class="row-fluid" style="margin-top:20px;">
-						2.- <font color="red">*</font> Nombre del módulo
-					</div>
-					<div class="row-fluid">
-						<div class="span8">
-								<input id="cod_equipo2" type="hidden" name="cod_equipo2">
-								<input id="cod_modulo" type="hidden" name="cod_modulo">
-								<input id="nombre_modulo2" type="hidden" name="nombre_modulo2">
-								<input required id="nombre_modulo" type="text" name="nombre_modulo" style="width:90%" maxlength="49" placeholder="Ej: Comunicación no verbal" onblur="nombreEnUso()">
-						</div>
-					</div>
-					
-
-					<div class="row-fluid" style="margin-top:20px;">
-						3.- <font color="red">*</font> Profesor líder
-					</div>
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px; margin-top:2%" >
-						<table id="prof_lider" class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>									
-										
-												
-							</tbody>
-						</table>
-					</div>
-
-
-
-				</div>
-		
-				<div class="span6" style="margin-left: 20px;">
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-						<table id="equipo" class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>
-
-							</tbody>
-						</table>
-					</div>
-				
-					<div class="row-fluid" style="margin-top:20px;">
-						5.- <font color="red">*</font> Sesiones del módulo temático
-					</div>
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-						<table id="sesiones" class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>									
-										
-												
-							</tbody>
-						</table>
-					</div>
-
-
-
-
-					<div class="row-fluid" style="margin-top:20px;">
-						6.- <font color="red">*</font> Descripción del módulo
-					</div>
-					<div class="row-fluid" >
-						<!--<div class="controls">-->
-						<textarea id="descripcion" name="descripcion_modulo" maxlength="99" rows="3" cols="100" style="width:97%; max-width:97%;"></textarea>
-						<!--</div>-->
-					</div>
-
-					<div class="row-fluid" style="margin-top:20px;">
-						7.- Requisitos del módulo
-					</div>
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:150px; -webkit-border-radius: 4px" >
-						<table id="requisitos" class="table table-hover">
-							<thead>
-
-							</thead>
-							<tbody>
-
-							</tbody>
-						</table>
-					</div>
-
-					<div class="row-fluid" style="margin-top: 20px;">
-						<div class="controls pull-right" >
-							<button type="button" class ="btn" onclick="editarMod();">
-								<i class= "icon-pencil"></i>
-								&nbsp Guardar
-							</button>
-						
-						
-							<button type="button" class ="btn" onclick="Cancelar();">
-								<div class="btn_with_icon_solo">Â</div>
-								&nbsp Cancelar
-							</button>
-						</div>
+				<!-- descripción módulo temático -->
+				<div class="control-group">
+					<label class="control-label" for="descripcion">2.- <font color="red">*</font> Ingrese una descripción del módulo:</label>
+					<div class="controls">
+						<textarea required id="descripcion" name="descripcion" placeholder="Ingrese una descripción para el módulo temático" maxlength="99" rows="5" style="resize: none;" class="span12"></textarea>
 					</div>
 				</div>
 				
-				<!-- Modal de confirmación -->
-				<div id="modalConfirmacion" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>Confirmación</h3>
-					</div>
-					<div class="modal-body">
-						<p>Se van a guardar los cambios del módulo seleccionado ¿Está seguro?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-					</div>
-				</div>
-						<!-- Modal de faltan campos -->
-						<div id="modalFaltanCampos" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>Campos Obligatorios no completados</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>	
-				<!-- Modal -->
-				<div id="EscojaEquipo" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado ningún profesor</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor seleccione al menos un profesor para el equipo y vuelva a intentarlo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+				<!-- Requisitos módulo temático -->
+				<div class="control-group">
+					<label class="control-label" for="id_requisitos">3.- Agregar requisitos existentes:</label>
+					<div class="controls">
+						<select id="id_requisitos" name="id_requisitos[]" class="span12" title="asigne profesor" multiple="multiple">
+						<?php
+						if (isset($requisitosModulo)) {
+							foreach ($requisitosModulo as $req) {
+								?>
+									<option value="<?php echo $req->id; ?>"><?php echo $req->nombre; ?></option>
+								<?php 
+							}
+						}
+						?>
+						</select> 
 					</div>
 				</div>
+
+				<!--profesor lider-->
+				<div class="control-group">
+					<label class="control-label" for="id_profesorLider" >4.- <font color="red">*</font> Asignar profesor lider:</label>
+					<div class="controls">
+						<select required id="id_profesorLider" name="id_profesorLider" class="span12" title="asigne profesor lider">
+						<?php
+						if (isset($posiblesProfesoresLider)) {
+							foreach ($posiblesProfesoresLider as $profe) {
+								?>
+									<option value="<?php echo $profe->id; ?>"><?php echo $profe->id.' - '.$profe->nombre1.' '.$profe->apellido1; ?></option>
+								<?php 
+							}
+						}
+						?>
+						</select> 
+					</div>
+				</div>
+				<br>
 				
-			<!-- Modal -->
-				<div id="EscojaSesion" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado ninguna sesión</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor seleccione al menos una sesión y vuelva a intentarlo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>
-				<!-- Modal -->
-				<div id="EscojaModulo" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado ningún módulo</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor seleccione un módulo y vuelva a intentarlo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>		
-			<!-- Modal -->
-				<div id="LiderDelEquipo" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No seleccione un profesor como líder y como parte del equipo</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor haga su selección nuevamente.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+				<!--equipo profesores-->
+				<div class="control-group">
+					<label class="control-label" for="id_profesoresEquipo" >5.- <font color="red">*</font> Profesores del equipo:</label>
+					<div class="controls">
+						<select required id="id_profesoresEquipo" name="id_profesoresEquipo[]" class="span12" title="Escoja los profesores del equipo" multiple="multiple">
+						<?php
+						if (isset($posiblesProfesoresEquipo)) {
+							foreach ($posiblesProfesoresEquipo as $profe) {
+								?>
+									<option value="<?php echo $profe->id; ?>"><?php echo $profe->id.' - '.$profe->nombre1.' '.$profe->apellido1; ?></option>
+								<?php 
+							}
+						}
+						?>
+						</select> 
 					</div>
 				</div>
-				
-			<!-- Modal -->
-				<div id="NombreEnUso" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>El nombre del módulo está en uso</h3>
+
+				</br>
+				<div class="control-group">
+					<div class="controls">
+						<button type="button" class="btn" onclick="agregarModulo()">
+							<div class="btn_with_icon_solo">Ã</div>
+							&nbsp; Agregar
+						</button>
+						<button class="btn" type="button" onclick="resetearModulo()" >
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>
 					</div>
-					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para el nuevo módulo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
 				</div>
-				
-			<!-- Modal -->
-				<div id="noDosequipos" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>El profesor ya pertenece a otro equipo con este cargo</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor seleccione otro profesor para este cargo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>
-		
-				</form>
-			</div>	
-	</fieldset>
+			<?php echo form_close(""); ?>
+		</div>
+	</div>
+</fieldset>

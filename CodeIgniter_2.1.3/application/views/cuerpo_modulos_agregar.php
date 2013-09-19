@@ -48,7 +48,6 @@
   		<div class="row-fluid">
 			<div class="span6">
 				<!-- nombre modulo -->
-				<!-- descripción módulo temático -->
 				<div class="control-group">
 					<label class="control-label" for="nombre">1.- <font color="red">*</font> Nombre módulo:</label>
 					<div class="controls">
@@ -61,7 +60,7 @@
 				<div class="control-group">
 					<label class="control-label" for="descripcion">2.- <font color="red">*</font> Ingrese una descripción del módulo:</label>
 					<div class="controls">
-						<textarea required id="descripcion" name="descripcion" maxlength="99" rows="5" cols="20"></textarea>
+						<textarea required id="descripcion" name="descripcion" placeholder="Ingrese una descripción para el módulo temático" maxlength="99" rows="5" style="resize: none;" class="span12"></textarea>
 					</div>
 				</div>
 				
@@ -87,7 +86,7 @@
 			<div class="span6">
 				<!--profesor lider-->
 				<div class="control-group">
-					<label class="control-label" for="id_profesorLider" style="cursor: default">4.- <font color="red">*</font> Asignar profesor lider:</label>
+					<label class="control-label" for="id_profesorLider" >4.- <font color="red">*</font> Asignar profesor lider:</label>
 					<div class="controls">
 						<select required id="id_profesorLider" name="id_profesorLider" class="span12" title="asigne profesor lider">
 						<?php
@@ -106,7 +105,7 @@
 				
 				<!--equipo profesores-->
 				<div class="control-group">
-					<label class="control-label" for="id_profesoresEquipo" style="cursor: default">5.- <font color="red">*</font> Profesores del equipo:</label>
+					<label class="control-label" for="id_profesoresEquipo" >5.- <font color="red">*</font> Profesores del equipo:</label>
 					<div class="controls">
 						<select required id="id_profesoresEquipo" name="id_profesoresEquipo[]" class="span12" title="Escoja los profesores del equipo" multiple="multiple">
 						<?php

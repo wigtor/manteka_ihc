@@ -43,6 +43,9 @@
 								tr = document.createElement('tr');
 								tr.setAttribute("style", "cursor:default");
 								td = document.createElement('td');
+								if ((arrayRespuesta[i].descripcion == null) || $.trim(arrayRespuesta[i].descripcion) == '') {
+									arrayRespuesta[i].descripcion = 'Sin descripción';
+								}
 								td.setAttribute('title', arrayRespuesta[i].descripcion);
 								nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
 								td.appendChild(nodoTexto);
@@ -91,7 +94,7 @@
 				$.ajax({//AJAX PARA requisitos
 					type: "POST",
 					url: "<?php echo site_url("Modulos/getRequisitosByModuloTematicoAjax") ?>",
-					data: { cod_mod_post: codigo_modulo},
+					data: { id_mod_post: codigo_modulo},
 					success: function(respuesta) {
 						var tablaResultados = document.getElementById("requisitos");
 						$(tablaResultados).find('tbody').remove();
@@ -103,6 +106,9 @@
 								tr = document.createElement('tr');
 								tr.setAttribute("style", "cursor:default");
 								td = document.createElement('td');
+								if ((arrayRespuesta[i].descripcion == null) || $.trim(arrayRespuesta[i].descripcion) == '') {
+									arrayRespuesta[i].descripcion = 'Sin descripción';
+								}
 								td.setAttribute('title', arrayRespuesta[i].descripcion);
 								nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
 								td.appendChild(nodoTexto);
