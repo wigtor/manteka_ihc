@@ -152,43 +152,43 @@
 			</div>
 		</div>
 
-			<?php
-			/**
-			* Ventana modal sobre el uso de variables en la creación de plantillas.
-			* 
-			* Muestra información relevante al usuario, sobre como incluir
-			* variables en las plantillas.
-			*
-			* @author Diego García (DGM)
-			**/
-			?>
-			<div id="modalConsejosPlantilla" class="modal hide fade">
-			    <div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>Consejos para realizar plantillas</h3>
+		<?php
+		/**
+		* Ventana modal sobre el uso de variables en la creación de plantillas.
+		* 
+		* Muestra información relevante al usuario, sobre como incluir
+		* variables en las plantillas.
+		*
+		* @author Diego García (DGM)
+		**/
+		?>
+		<div id="modalConsejosPlantilla" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Consejos para realizar plantillas</h3>
+			</div>
+			<div class="modal-body">
+				<div class="txtModal">
+					Las variables predefinidas permiten definir segmentos de texto dentro de una plantilla, que tomarán distintos valores según las características del mensaje o la lista de destinatarios a utilizar.
+					El valor de estas variables será asignado automáticamente al momento de realizar el envío de un correo electrónico.
 				</div>
-				<div class="modal-body">
-					<div class="txtModal">
-						Las variables predefinidas permiten definir segmentos de texto dentro de una plantilla, que tomarán distintos valores según las características del mensaje o la lista de destinatarios a utilizar.
-						El valor de estas variables será asignado automáticamente al momento de realizar el envío de un correo electrónico.
-					</div>
-					<div class="txtModal">
-						Para definir una variable anteponga los caracteres  <font color="blue">%%</font>  antes del nombre de dicha variable.
-					</div>
-					<div class="txtModal">
-						<div id="salto">Las variables predefinidas que puede utilizar son:</div>
-						<div class="txtLabel">%%nombre</div><div class="txtDescripcion">Asigna el nombre y apellido del receptor del correo electrónico.</div>
-						<div class="txtLabel">%%rut</div><div class="txtDescripcion">Asigna el rut del receptor del correo electrónico.</div>
-						<div class="txtLabel">%%carrera_estudiante</div><div class="txtDescripcion">Asigna la carrera a la que pertenece el estudiante receptor del correo electrónico.</div>
-						<div class="txtLabel">%%seccion_estudiante</div><div class="txtDescripcion">Asigna la sección a la que pertenece el estudiante receptor del correo electrónico.</div>
-						<div class="txtLabel">%%modulo_estudiante</div><div class="txtDescripcion">Asigna el módulo temático al que pertenece el estudiante receptor del correo electrónico.</div>
-						<div class="txtLabel">%%hoy</div><div class="txtDescripcion">Asigna la fecha actual al momento de realizar el envío.</div>
-						<div class="txtLabel">%%remitente</div><div class="txtDescripcion">Asigna el nombre del usuario que realiza el envío del correo electrónico.</div>
-					</div>
+				<div class="txtModal">
+					Para definir una variable anteponga los caracteres  <font color="blue">%%</font>  antes del nombre de dicha variable.
 				</div>
-				<div class="modal-footer">
-					<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+				<div class="txtModal">
+					<div id="salto">Las variables predefinidas que puede utilizar son:</div>
+					<div class="txtLabel">%%nombre</div><div class="txtDescripcion">Asigna el nombre y apellido del receptor del correo electrónico.</div>
+					<div class="txtLabel">%%rut</div><div class="txtDescripcion">Asigna el rut del receptor del correo electrónico.</div>
+					<div class="txtLabel">%%carrera_estudiante</div><div class="txtDescripcion">Asigna la carrera a la que pertenece el estudiante receptor del correo electrónico.</div>
+					<div class="txtLabel">%%seccion_estudiante</div><div class="txtDescripcion">Asigna la sección a la que pertenece el estudiante receptor del correo electrónico.</div>
+					<div class="txtLabel">%%modulo_estudiante</div><div class="txtDescripcion">Asigna el módulo temático al que pertenece el estudiante receptor del correo electrónico.</div>
+					<div class="txtLabel">%%hoy</div><div class="txtDescripcion">Asigna la fecha actual al momento de realizar el envío.</div>
+					<div class="txtLabel">%%remitente</div><div class="txtDescripcion">Asigna el nombre del usuario que realiza el envío del correo electrónico.</div>
 				</div>
 			</div>
-		<?php echo form_close(""); ?>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+			</div>
+		</div>
+	<?php echo form_close(""); ?>
 </fieldset>

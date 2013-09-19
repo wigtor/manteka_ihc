@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     19-09-2013 0:49:22                           */
+/* Created on:     19-09-2013 4:21:09                           */
 /*==============================================================*/
 
 
@@ -129,9 +129,9 @@ create table ASISTENCIA
 (
    ID_SESION            int not null,
    RUT_USUARIO          int not null,
-   PRESENTE             bool,
-   COMENTARIO           varchar(100),
-   JUSTIFICADO          bool
+   PRESENTE_ASISTENCIA  bool,
+   JUSTIFICADO_ASISTENCIA bool,
+   COMENTARIO_ASISTENCIA varchar(100)
 );
 
 /*==============================================================*/
@@ -271,7 +271,8 @@ create table CRON_JOBS
 create table DIA_HORARIO
 (
    ID_DIA               int not null auto_increment,
-   NOMBRE_DIA           varchar(10),
+   NOMBRE_DIA           varchar(10) not null,
+   ABREVIATURA_DIA      varchar(2) not null,
    primary key (ID_DIA)
 );
 
@@ -375,7 +376,8 @@ alter table IMPLEMENTO comment 'Es utilizada con el fin de indicar los artefacto
 create table MODULO_HORARIO
 (
    ID_MODULO            int not null auto_increment,
-   NUMERO_MODULO        varchar(10),
+   HORA_INI             time not null,
+   HORA_FIN             time not null,
    primary key (ID_MODULO)
 );
 
@@ -404,7 +406,7 @@ create table NOTA
    ID_EVALUACION        int not null,
    RUT_USUARIO          int not null,
    VALOR_NOTA           decimal(2,2),
-   COMENTARIO           varchar(100)
+   COMENTARIO_NOTA      varchar(100)
 );
 
 /*==============================================================*/
@@ -429,8 +431,7 @@ create table PLANTILLA
    CUERPO_PLANTILLA     text,
    NOMBRE_PLANTILLA     varchar(40) not null,
    ASUNTO_PLANTILLA     varchar(40),
-   primary key (ID_PLANTILLA),
-   key AK_IDENTIFIER_2 (NOMBRE_PLANTILLA)
+   primary key (ID_PLANTILLA)
 );
 
 alter table PLANTILLA comment 'Se refiere a las plantillas que se podrán adjuntar en la car';
