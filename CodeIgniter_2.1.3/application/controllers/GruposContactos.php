@@ -15,143 +15,165 @@ require_once APPPATH.'controllers/Master.php'; //Carga el controlador master
 */
 class GruposContactos extends MasterManteka {
 	
-
-	public function agregarGrupos()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi�n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi�n iniciada
-		}
-		$this->load->model('Model_estudiante');
-		$this->load->model('Model_profesor');
-		$this->load->model('Model_ayudante');
-		$this->load->model('Model_usuario');
-		$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
-							 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
- 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes());
-		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-		* se deben introducir en un array, para luego pasarlo como par�metro al m�todo cargarTodo()
-		*/
-		$subMenuLateralAbierto = 'agregarGrupos'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarTodo("Correos", "cuerpo_grupos_agregar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-
-	}
-	public function index() //Esto hace que el index sea la vista que se desee
-	{
+	public function index() {
 		$this->verGrupoContactos();
 	}
-	
-	public function editarGrupoContacto(){
-		$this->load->model('model_grupos_contacto');
-		//Este sirve para el modificar
-		$this->model_grupos_contacto->modificarGrupo($_POST['ID_GRUPO'], $_POST['QUERY_FILTRO_CONTACTO']);
 
-		$datos_plantilla["titulo_msj"] = "Grupo modificado";
-		$datos_plantilla["cuerpo_msj"] = "El Grupo de Contactos fue modificado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
-		$datos_plantilla["redirecTo"] = 'GruposContactos/editarGrupos';
-		$datos_plantilla["nombre_redirecTo"] = "Editar Grupo de Contactos";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); 
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);		
-	}
-	public function agregarGrupo(){
-		$this->load->model('model_grupos_contacto');
-		$rut = $this->session->userdata('rut');
-		$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'];
-		$nombre_filtro = $_POST['NOMBRE_FILTRO_CONTACTO'];
-		$rut_filtro = $_POST['QUERY_FILTRO_CONTACTO'];
-		$rut_usuario = $rut;
-		
-		//Este sirve para el modificar
-		//$arreglo_de_ruts=explode(",",$rut_filtro);
-		
-		$this->model_grupos_contacto->insertarGrupo($rut_usuario,$rut_filtro,$nombre_filtro);
 
-		$datos_plantilla["titulo_msj"] = "Grupo agregado";
-		$datos_plantilla["cuerpo_msj"] = "El nuevo Grupo de Contactos fue agregado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
-		$datos_plantilla["redirecTo"] = 'GruposContactos/agregarGrupos';
-		$datos_plantilla["nombre_redirecTo"] = "Agregar Grupo de Contactos";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); 
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-	}
-	
-	
-	
-	
-	
-	public function editarGrupos()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi�n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi�n iniciada
+	public function verGrupos() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-			$this->load->model('Model_estudiante');
-			$this->load->model('Model_profesor');
-			$this->load->model('Model_ayudante');
-			$this->load->model('Model_usuario');
-			$this->load->model('model_grupos_contacto');
-			$idGrupo = $this->input->post('id_grupo');;
-			if ($idGrupo) {
-				$grupo = $this->model_grupos_contacto->getGrupo($idGrupo);
-				//var_dump($grupo[0]['ID_FILTRO_CONTACTO']);	
-				
-				$datos_cuerpo = array('rs_estudiantes' => $this->Model_estudiante->VerTodosLosEstudiantes(),
-								 'rs_profesores' => $this->Model_profesor->VerTodosLosProfesores(),
-	 							 'rs_ayudantes' => $this->Model_ayudante->VerTodosLosAyudantes(),
-								 'rutes' => $grupo[0],
-								 'id_grupo' => $idGrupo
-								 );
-				$cuerpo_to_charge = "cuerpo_grupo_modificar_2";
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_cuerpo = array();
+			$subMenuLateralAbierto = 'verGrupos'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_grupo_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function agregarGrupoContacto() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_cuerpo = array();
+			$subMenuLateralAbierto = 'agregarGrupoContacto'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_grupos_agregar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function postAgregarGrupoContacto() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_grupo_contacto');
+			$rut = $this->session->userdata('rut');
+			$str = $_POST['NOMBRE_FILTRO_CONTACTO'].$_POST['QUERY_FILTRO_CONTACTO'];
+			$nombre_filtro = $_POST['NOMBRE_FILTRO_CONTACTO'];
+			$rut_filtro = $_POST['QUERY_FILTRO_CONTACTO'];
+			$rut_usuario = $rut;
+			
+			$confirmacion = $this->Model_grupo_contacto->agregarGrupoContacto($rut_usuario, $rut_filtro, $nombre_filtro);
+			// mostramos el mensaje de operacion realizada
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Accion Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ingresado el grupo de contacto con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
 			}
 			else {
-				$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
-				$cuerpo_to_charge = "cuerpo_grupo_modificar";
+				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
 			}
-			
-							 
-			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
-			* se deben introducir en un array, para luego pasarlo como par�metro al m�todo cargarTodo()
-			*/
-			//var_dump($datos_cuerpo['rs_profesores']);
-			$subMenuLateralAbierto = 'editarGrupos'; 
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-			$this->cargarTodo("Correos", $cuerpo_to_charge, "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$datos_plantilla["redirecTo"] = 'GruposContactos/agregarGrupoContacto';
+			$datos_plantilla["nombre_redirecTo"] = "Agregar Grupo de Contactos";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
-		else{
-	
-		$this->load->model('model_grupos_contacto');
-		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
-		$subMenuLateralAbierto = 'editarGrupos'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-			$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-			$this->cargarTodo("Correos", "cuerpo_grupo_modificar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-		
-		
-		
-		
-		}
-
-
 	}
+
+
+	public function editarGrupoContacto() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_cuerpo = array();
+			$subMenuLateralAbierto = 'editarGrupoContacto'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_grupo_modificar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function postEditarGrupoContacto() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_grupo_contacto');
+			$id_grupo = $this->input->post('id_grupo');
+			$query_filtro = $this->input->post('query_filtro');
+			$rut_usuario = $this->session->userdata('rut');
+			$confirmacion = $this->Model_grupo_contacto->editarGrupoContacto($rut_usuario, $id_grupo, $query_filtro);
+			// mostramos el mensaje de operacion realizada
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Accion Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha modificado el grupo de contacto con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else {
+				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirecTo"] = 'GruposContactos/editarGrupoContacto';
+			$datos_plantilla["nombre_redirecTo"] = "Editar Grupo de Contactos";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
+	}
+
+
+	public function eliminarGrupoContacto() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_cuerpo = array();
+			$subMenuLateralAbierto = 'eliminarGrupoContacto'; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Correos", "cuerpo_grupos_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function postEliminarGrupoContacto() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_grupo_contacto');
+			$rut_usuario = $this->session->userdata('rut');
+			$id_grupo = $this->input->post('id_grupo');
+			$confirmacion = $this->Model_grupo_contacto->eliminarGrupo($rut_usuario, $id_grupo);
+			// mostramos el mensaje de operacion realizada
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Accion Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha eliminado el grupo de contacto con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else {
+				$datos_plantilla["titulo_msj"] = "Accion No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en el ingreso a la base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirecTo"] = 'GruposContactos/editarGrupoContacto';
+			$datos_plantilla["nombre_redirecTo"] = "Editar Grupo de Contactos";
+			$datos_plantilla["redirectAuto"] = TRUE;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
+	}
+
 
 	public function getDatosGrupo(){
 		//Se comprueba que quien hace esta petici�n de ajax est� logueado
@@ -161,73 +183,17 @@ class GruposContactos extends MasterManteka {
 		}
 		
 		$id_grupo = $this->input->post('id');
-		$this->load->model('model_grupos_contacto');
-		$resultado = $this->model_grupos_contacto->getDatosGrupo($id_grupo);
+		$this->load->model('Model_grupo_contacto');
+		$resultado = $this->Model_grupo_contacto->getDatosGrupo($id_grupo);
 		echo json_encode($resultado);
 	}
-	public function eliminarGrupo(){
-		//Se comprueba que quien hace esta petici�n de ajax est� logueado
-		if (!$this->isLogged()) {
-			return;
-		}
-		$id_grupo = $this->input->post('id');
-		$this->load->model('model_grupos_contacto');
-		$resultado = $this->model_grupos_contacto->eliminarGrupo($id_grupo);
-		echo json_encode($resultado);
-	}
-	
 
-	public function verGrupos()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi�n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi�n iniciada
-		}
-		$this->load->model('model_grupos_contacto');
-		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
-		$subMenuLateralAbierto = 'verGrupos'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarTodo("Correos", "cuerpo_grupo_ver", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-	}
-	public function borrarGrupos()
-	{
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi�n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi�n iniciada
-		}
-		$this->load->model('model_grupos_contacto');
-		$datos_cuerpo = array('rs_nombres_contacto' =>$this->model_grupos_contacto->VerGrupos($rut));
-		$subMenuLateralAbierto = 'borrarGrupos'; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarTodo("Correos", "cuerpo_grupos_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-	}
-	public function grupoAgregado(){
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesi�n iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); //Se redirecciona a login si no tiene sesi�n iniciada
-		}
-		$datos_plantilla["titulo_msj"] = "Grupo agregado";
-		$datos_plantilla["cuerpo_msj"] = "El nuevo Grupo de Contactos fue agregado correctamente.";
-		$datos_plantilla["tipo_msj"] = "alert-success";
-		$datos_plantilla["redirecTo"] = 'GruposContactos/agregarGrupos';
-		$datos_plantilla["nombre_redirecTo"] = "Agregar Grupo de Contactos";
-		$datos_plantilla["redirectAuto"] = TRUE;
-		$tipos_usuarios_permitidos = array(); 
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
-		$tipos_usuarios_permitidos[1] = TIPO_USR_PROFESOR;
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-	}
+
     public function getGrupos(){
 		//
-		$this->load->model('model_grupos_contacto');
+		$this->load->model('Model_grupo_contacto');
 		$rut = $this->session->userdata['rut'];
-		$respuesta = $this->model_grupos_contacto->VerGrupos($rut);
+		$respuesta = $this->Model_grupo_contacto->VerGrupos($rut);
 		echo json_encode($respuesta);
 
 	}

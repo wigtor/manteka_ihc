@@ -97,7 +97,7 @@ class Plantillas extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 			$subMenuLateralAbierto = 'editarPlantilla';
 			$muestraBarraProgreso = FALSE;
-			$this->cargarTodo("Plantillas", "cuerpo_plantillas_editar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+			$this->cargarTodo("Correos", "cuerpo_plantillas_editar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 		}
 	}
 
@@ -175,7 +175,7 @@ class Plantillas extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 			$subMenuLateralAbierto = 'eliminarPlantilla';
 			$muestraBarraProgreso = FALSE;
-			$this->cargarTodo("Plantillas", "cuerpo_plantillas_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
+			$this->cargarTodo("Correos", "cuerpo_plantillas_eliminar", "barra_lateral_correos", $datos_cuerpo, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 		}
 	}
 
