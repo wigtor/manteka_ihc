@@ -125,9 +125,9 @@ class Modulos extends MasterManteka {
 			$this->load->model("Model_modulo_tematico");
 			$datos_vista = array();
 
-			$datos_vista['posiblesProfesoresLider'] = $this->Model_modulo_tematico->getAllProfesoresForLider();
-			$datos_vista['posiblesProfesoresEquipo'] = $this->Model_modulo_tematico->getAllProfesoresForEquipo();
-			$datos_vista['requisitosModulo'] = $this->Model_modulo_tematico->getAllRequisitos();
+			//$datos_vista['posiblesProfesoresLider'] = $this->Model_modulo_tematico->getAllProfesoresForLider();
+			//$datos_vista['posiblesProfesoresEquipo'] = $this->Model_modulo_tematico->getAllProfesoresForEquipo();
+			//$datos_vista['requisitosModulo'] = $this->Model_modulo_tematico->getAllRequisitos();
 
 			$subMenuLateralAbierto = "editarModulo"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente

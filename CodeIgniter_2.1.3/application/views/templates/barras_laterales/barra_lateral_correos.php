@@ -15,13 +15,13 @@
 		$correosEnviados = "";
 		$enviarCorreo = "";
 		$verBorradores = "";
-		$agregarPlantillas = "";
-		$editarPlantillas = "";
-		$borrarPlantillas = "";
+		$agregarPlantilla = "";
+		$editarPlantilla = "";
+		$eliminarPlantilla = "";
 		$verGrupos = "";
-		$agregarGrupos = "";
-		$editarGrupos = "";
-		$borrarGrupos = "";
+		$agregarGrupoContacto = "";
+		$editarGrupoContacto = "";
+		$eliminarGrupoContacto = "";
 		$logEliminados = "";
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
@@ -48,32 +48,32 @@
 			$verBorradores = 'class="active"';
 			$inCorreos = "in";
 		}
-		else if ($subVistaLateralAbierta == "agregarPlantillas") {
-			$agregarPlantillas = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarPlantilla") {
+			$agregarPlantilla = 'class="active"';
 			$inPlantillas = "in";
 		}
-		else if ($subVistaLateralAbierta == "editarPlantillas") {
-			$editarPlantillas = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarPlantilla") {
+			$editarPlantilla = 'class="active"';
 			$inPlantillas = "in";
 		}
-		else if ($subVistaLateralAbierta == "borrarPlantillas") {
-			$borrarPlantillas = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarPlantilla") {
+			$eliminarPlantilla = 'class="active"';
 			$inPlantillas = "in";
 		}
 		else if ($subVistaLateralAbierta == "verGrupos") {
 			$verGrupos = 'class="active"';
 			$inGrupos = "in";
 		}
-		else if ($subVistaLateralAbierta == "agregarGrupos") {
-			$agregarGrupos = 'class="active"';
+		else if ($subVistaLateralAbierta == "agregarGrupoContacto") {
+			$agregarGrupoContacto = 'class="active"';
 			$inGrupos = "in";
 		}
-		else if ($subVistaLateralAbierta == "editarGrupos") {
-			$editarGrupos = 'class="active"';
+		else if ($subVistaLateralAbierta == "editarGrupoContacto") {
+			$editarGrupoContacto = 'class="active"';
 			$inGrupos = "in";
 		}
-		else if ($subVistaLateralAbierta == "borrarGrupos") {
-			$borrarGrupos = 'class="active"';
+		else if ($subVistaLateralAbierta == "eliminarGrupoContacto") {
+			$eliminarGrupoContacto = 'class="active"';
 			$inGrupos = "in";
 		}
 		else if ($subVistaLateralAbierta == "logEliminados") {
@@ -113,9 +113,9 @@
 				</div>
 				<div id="collapseTwo" class="accordion-body collapse <?php echo $inPlantillas; ?>">
 					<div class="accordion-inner nav nav-list">
-						<li <?php echo $agregarPlantillas; ?> ><a href="<?php echo site_url("Plantillas/agregarPlantillas")?>">Agregar plantillas</a></li>
-						<li <?php echo $editarPlantillas; ?> ><a href="<?php echo site_url("Plantillas/editarPlantillas")?>">Editar plantillas</a></li>
-						<li <?php echo $borrarPlantillas; ?> ><a href="<?php echo site_url("Plantillas/borrarPlantillas")?>">Borrar plantillas</a></li>
+						<li <?php echo $agregarPlantilla; ?> ><a href="<?php echo site_url("Plantillas/agregarPlantilla")?>">Agregar plantillas</a></li>
+						<li <?php echo $editarPlantilla; ?> ><a href="<?php echo site_url("Plantillas/editarPlantilla")?>">Editar plantillas</a></li>
+						<li <?php echo $eliminarPlantilla; ?> ><a href="<?php echo site_url("Plantillas/eliminarPlantilla")?>">Eliminar plantillas</a></li>
 					</div>
 				</div>
 			</div>
@@ -127,9 +127,9 @@
 				<div id="collapseThree" class="accordion-body collapse <?php echo $inGrupos; ?>">
 					<div class="accordion-inner nav nav-list">
 						<li <?php echo $verGrupos; ?> ><a href="<?php echo site_url("GruposContactos/verGrupos")?>">Ver grupos</a></li>
-						<li <?php echo $agregarGrupos; ?> ><a href="<?php echo site_url("GruposContactos/agregarGrupos")?>">Agregar grupos</a></li>
-						<li <?php echo $editarGrupos; ?> ><a href="<?php echo site_url("GruposContactos/editarGrupos")?>">Editar grupos</a></li>
-						<li <?php echo $borrarGrupos; ?> ><a href="<?php echo site_url("GruposContactos/borrarGrupos")?>">Borrar grupos</a></li>
+						<li <?php echo $agregarGrupoContacto; ?> ><a href="<?php echo site_url("GruposContactos/agregarGrupoContacto")?>">Agregar grupos</a></li>
+						<li <?php echo $editarGrupoContacto; ?> ><a href="<?php echo site_url("GruposContactos/editarGrupoContacto")?>">Editar grupos</a></li>
+						<li <?php echo $eliminarGrupoContacto; ?> ><a href="<?php echo site_url("GruposContactos/eliminarGrupoContacto")?>">Eliminar grupos</a></li>
 					</div>
 				</div>
 			</div>

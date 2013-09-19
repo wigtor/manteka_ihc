@@ -2,7 +2,6 @@
 	<!-- Acá poner el título, las importaciones de los css y javascript -->
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="UTF-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="icon" type="image/png" href="/<?php echo config_item('dir_alias') ?>/img/icons/icon_manteka.png">
 	<?php
 		$mensajesNoLeidos = "";

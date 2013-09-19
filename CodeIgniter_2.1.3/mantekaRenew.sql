@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     16-09-2013 0:31:01                           */
+/* Created on:     19-09-2013 0:49:22                           */
 /*==============================================================*/
 
 
@@ -192,7 +192,7 @@ create table BORRADOR
 create table CARRERA
 (
    COD_CARRERA          int not null,
-   NOMBRE_CARRERA       varchar(100),
+   NOMBRE_CARRERA       varchar(100) not null,
    DESCRIPCION_CARRERA  varchar(500),
    primary key (COD_CARRERA)
 );
@@ -361,9 +361,10 @@ alter table HORARIO comment 'Se usa para representar los horarios en los que se 
 create table IMPLEMENTO
 (
    ID_IMPLEMENTO        int not null auto_increment,
-   NOMBRE_IMPLEMENTO    varchar(20),
+   NOMBRE_IMPLEMENTO    varchar(20) not null,
    DESCRIPCION_IMPLEMENTO varchar(50),
-   primary key (ID_IMPLEMENTO)
+   primary key (ID_IMPLEMENTO),
+   key AK_IDENTIFIER_2 (NOMBRE_IMPLEMENTO)
 );
 
 alter table IMPLEMENTO comment 'Es utilizada con el fin de indicar los artefactos que posee ';
@@ -387,9 +388,10 @@ create table MODULO_TEMATICO
 (
    ID_MODULO_TEM        int not null auto_increment,
    ID_EQUIPO            int,
-   NOMBRE_MODULO        varchar(50),
+   NOMBRE_MODULO        varchar(50) not null,
    DESCRIPCION_MODULO   varchar(100),
-   primary key (ID_MODULO_TEM)
+   primary key (ID_MODULO_TEM),
+   key AK_IDENTIFIER_2 (NOMBRE_MODULO)
 );
 
 alter table MODULO_TEMATICO comment 'Es la unidad temática que se le pasará a los alumnos durante';
@@ -423,8 +425,12 @@ alter table PERSONA comment 'corresponde a cualquier persona, de la que no se ne
 create table PLANTILLA
 (
    ID_PLANTILLA         int not null auto_increment,
+   RUT_USUARIO          int,
    CUERPO_PLANTILLA     text,
-   primary key (ID_PLANTILLA)
+   NOMBRE_PLANTILLA     varchar(40) not null,
+   ASUNTO_PLANTILLA     varchar(40),
+   primary key (ID_PLANTILLA),
+   key AK_IDENTIFIER_2 (NOMBRE_PLANTILLA)
 );
 
 alter table PLANTILLA comment 'Se refiere a las plantillas que se podrán adjuntar en la car';
@@ -468,9 +474,10 @@ create table PROFE_EQUI_LIDER
 create table REQUISITO
 (
    ID_REQUISITO         int not null auto_increment,
-   NOMBRE_REQUISITO     varchar(20),
+   NOMBRE_REQUISITO     varchar(20) not null,
    DESCRIPCION_REQUISITO varchar(50),
-   primary key (ID_REQUISITO)
+   primary key (ID_REQUISITO),
+   key AK_IDENTIFIER_2 (NOMBRE_REQUISITO)
 );
 
 alter table REQUISITO comment 'Cada modulo temático tiene sus requisitos para que se pueda ';
@@ -492,7 +499,7 @@ alter table REQUISITO_MODULO comment 'Es utilizada para tratar la relación n a n
 create table SALA
 (
    ID_SALA              int not null auto_increment,
-   NUM_SALA             int,
+   NUM_SALA             int not null,
    UBICACION            varchar(100),
    CAPACIDAD            int,
    primary key (ID_SALA)
@@ -532,9 +539,10 @@ create table SECCION
 (
    ID_SECCION           int not null auto_increment,
    ID_SESION            int,
-   LETRA_SECCION        varchar(2),
-   NUMERO_SECCION       int,
-   primary key (ID_SECCION)
+   LETRA_SECCION        varchar(2) not null,
+   NUMERO_SECCION       int not null,
+   primary key (ID_SECCION),
+   key AK_IDENTIFIER_2 (LETRA_SECCION, NUMERO_SECCION)
 );
 
 alter table SECCION comment 'Las secciones son la forma en que se organizarán los más de ';
@@ -572,7 +580,8 @@ create table TIPO_USER
 (
    ID_TIPO              int not null,
    NOMBRE_TIPO          varchar(11) not null comment 'Debe tener el mismo nombre que la tabla con la que hacer JOIN',
-   primary key (ID_TIPO)
+   primary key (ID_TIPO),
+   key AK_IDENTIFIER_2 (NOMBRE_TIPO)
 );
 
 alter table TIPO_USER comment 'Existen distintos usuarios, con diferentes permisos dentro d';
@@ -692,6 +701,9 @@ alter table NOTA add constraint FK_RELATIONSHIP_36 foreign key (RUT_USUARIO)
 
 alter table NOTA add constraint FK_RELATIONSHIP_42 foreign key (ID_EVALUACION)
       references EVALUACION (ID_EVALUACION) on delete cascade on update cascade;
+
+alter table PLANTILLA add constraint FK_RELATIONSHIP_59 foreign key (RUT_USUARIO)
+      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table PROFESOR add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;

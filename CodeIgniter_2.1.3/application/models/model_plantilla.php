@@ -16,8 +16,7 @@
  * @subpackage Modelos
  * @author Diego García (DGM)
  **/
-class Model_plantilla extends CI_Model
-{ 
+class Model_plantilla extends CI_Model { 
 
    /**
     * Obtiene las plantillas existentes en el sistema.
@@ -31,14 +30,19 @@ class Model_plantilla extends CI_Model
 	* 		  		los elementos de los arrays secundarios corresponden a los atributos de las plantillas.
 	*		  		Si no existen plantillas en el sistema, la función retorna un array vacío.
     **/
-	public function ObtenerListaPlantillas()
-	{
-		$plantillas = array();
+	public function getPlantillasByUsuario($rut_usuario) {
+		$this->db->select('plantilla.ID_PLANTILLA AS id');
+		$this->db->select('ASUNTO_PLANTILLA AS asunto');
+		$this->db->select('NOMBRE_PLANTILLA AS nombre');
+		$this->db->select('CUERPO_PLANTILLA AS cuerpo');
+		$this->db->where('RUT_USUARIO', $rut_usuario);
 		$this->db->order_by('NOMBRE_PLANTILLA', 'DESC');
-		$query=$this->db->get('plantilla');
-		foreach($query->result() as $registro)
-			array_push($plantillas, $registro); 
-		return $plantillas;
+		$query = $this->db->get('plantilla');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
 	}
 		
    /**
@@ -54,14 +58,23 @@ class Model_plantilla extends CI_Model
 	* @param string $cuerpo Corresponde al mensaje propiamente tal de la plantilla a guardar.
     * @return int Retorna 1 cuando la inserción es exitosa, y un valor distinto de 1 en caso contrario.
     **/
-	public function InsertarPlantilla($nombre, $asunto, $cuerpo)
-	{
+	public function agregarPlantilla($rut_usuario, $nombre, $asunto, $cuerpo) {
 		$data=array(
 			'CUERPO_PLANTILLA' => $cuerpo,
 			'NOMBRE_PLANTILLA' => $nombre,
-			'ASUNTO_PLANTILLA' => $asunto
+			'ASUNTO_PLANTILLA' => $asunto,
+			'RUT_USUARIO' => $rut_usuario,
 		);
-		return $this->db->insert('plantilla',$data);
+		$this->db->trans_start();
+		$this->db->insert('plantilla',$data);
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 	}
 	
    /**
@@ -75,9 +88,20 @@ class Model_plantilla extends CI_Model
 	* @param int $plantilla Corresponde al número identificador (clave primaria) de la plantilla a eliminar.
     * @return int Retorna 1 cuando la eliminación es exitosa, y un valor distinto de 1 en caso contrario.
     **/
-	public function EliminarPlantilla($plantilla)
-    {
-		return $this->db->delete('plantilla', array('ID_PLANTILLA'=>$plantilla));
+	public function eliminarPlantilla($rut_usuario, $id_plantilla) {
+		$this->db->trans_start();
+		$this->db->where('ID_PLANTILLA', $id_plantilla);
+		$this->db->where('RUT_USUARIO', $rut_usuario); //Esto permite que no pueda eliminarse la plantilla de otro
+		$this->db->delete('plantilla');
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+
     }
 		
    /**
@@ -93,15 +117,24 @@ class Model_plantilla extends CI_Model
 	* @param string $cuerpo Corresponde al nuevo cuerpo del mensaje que se asignará a la plantilla que se va a actualizar.
     * @return int Retorna 1 cuando la actualización es exitosa, y un valor distinto de 1 en caso contrario.
     **/
-	public function EditarPlantilla($idPlantilla, $nombre, $asunto, $cuerpo)
-	{
-		$data=array(
+	public function editarPlantilla($rut_usuario, $idPlantilla, $nombre, $asunto, $cuerpo) {
+		$data = array(
 			'CUERPO_PLANTILLA' => $cuerpo,
 			'NOMBRE_PLANTILLA' => $nombre,
 			'ASUNTO_PLANTILLA' => $asunto
 		);
-		$this->db->where('ID_PLANTILLA', $idPlantilla);
-		return $this->db->update('plantilla', $data);
+		$this->db->trans_start();
+		$this->db->where('ID_PLANTILLA', $id_plantilla);
+		$this->db->where('RUT_USUARIO', $rut_usuario); //Esto permite que no pueda editarse la plantilla de otro
+		$this->db->update('plantilla', $data);
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 	}
 	
    /**
