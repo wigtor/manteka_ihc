@@ -87,19 +87,21 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 	* @return -1 en caso de que falle la inserción en la base de datos
 	**/
 
-	public function AgregarSesion($nombre_sesion,$descripcion_sesion)
-	{	
-		$data = array(	
+	public function agregarSesion($nombre_sesion, $descripcion_sesion, $id_moduloTem) {	 
+		$this->db->trans_start();
+		$data = array(
 			'NOMBRE_SESION' => $nombre_sesion,
-			'DESCRIPCION_SESION' => $descripcion_sesion
+			'DESCRIPCION_SESION' => $descripcion_sesion,
+			'ID_MODULO_TEM' => $id_moduloTem
 			);
-		$datos = $this->db->insert('sesion',$data); 
-		
-		if($datos == true){
-			return 1;
+		$datos = $this->db->insert('sesion_de_clase',$data);
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
 		}
 		else{
-			return -1;
+			return TRUE;
 		}
 	}
 
@@ -112,7 +114,7 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     *
     * @return list $lista contiene los datos de todas la sesiones en la base de datos de manteka
     **/
-    public function VerTodasLasSesiones()
+    public function getAllSesiones()
     {
 		//$sql="SELECT * FROM sesion ORDER BY COD_SESION"; //código MySQL
     	$this->db->select('*');
@@ -149,10 +151,10 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     * @return -1 en caso de que no se pueda realizar la operación correctamente
     **/
 
-    public function EliminarSesion($codEliminar)
+    public function eliminarSesion($codEliminar)
     {
     	$this->db->where('COD_SESION', $codEliminar);
-    	$datos = $this->db->delete('sesion'); 
+    	$datos = $this->db->delete('sesion_de_clase'); 
 
     	if($datos == true){
     		return 1;
@@ -176,14 +178,14 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     * @return -1 en caso de que la operacion no se realice correctamente
     **/
 
-    public function EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion)
+    public function editarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion)
     {
     	$data = array(					
     		'NOMBRE_SESION' => $nombre_sesion ,
     		'DESCRIPCION_SESION' => $descripcion_sesion
     		);
     	$this->db->where('COD_SESION', $codigo_sesion);
-    	$datos = $this->db->update('sesion',$data);
+    	$datos = $this->db->update('sesion_de_clase',$data);
 
     	if($datos == true){
     		return 1;
@@ -205,28 +207,17 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     * @return -1 en caso de que si se encuentra el nombre en la base de datos
     **/
 
-    public function nombreExisteM($nombre){
-	//return $rut;
-    	$lista = array();
-    	$contador = 0;
-
-		//lista usuarios
-    	$this->db->select('NOMBRE_SESION');
-    	$this->db->from('sesion');
-    	$query = $this->db->get();
-    	$datos = $query->result();
-    	foreach ($datos as $row) {
-    		$lista[$contador] = $row->NOMBRE_SESION;
-    		$contador++;
-    	}
-    	$contador = 0;
-    	while($contador < count($lista)){
-    		if(strtolower($lista[$contador]) == strtolower($nombre)){
-    			return -1;
-    		}
-    		$contador = $contador + 1;
-    	}
-    	return 1;
+    public function nombreExiste($nombre){
+    	$this->db->select('COUNT(ID_SESION) AS resultado', FALSE);
+		$query = $this->db->where('NOMBRE_SESION', $nombre);
+		$query = $this->db->get('sesion_de_clase');
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->row()->resultado > 0) {
+			return TRUE;
+		}
+		return FALSE;
     }
 
      /**
@@ -246,7 +237,7 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     public function nombreExisteEM($nombre, $codigo){
 		//$sql="SELECT * FROM sesion ORDER BY COD_SESION";
     	$this->db->select('*');
-    	$this->db->from('sesion');
+    	$this->db->from('sesion_de_clase');
     	$this->db->order_by("COD_SESION", "asc"); 
     	$query=$this->db->get();
     	$datos=$query->result();

@@ -125,7 +125,6 @@ class Plantillas extends MasterManteka {
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
-			
 			/* Si la validación del formulario es exitosa, se intenta actualizar la plantilla en la base de datos. */
 			$this->load->model('Model_plantilla');
 			$id_plantilla = $this->input->post('id_plantilla');

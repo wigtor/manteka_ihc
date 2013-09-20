@@ -75,12 +75,14 @@ class Model_modulo_tematico extends CI_Model {
 	* @return $lista contiene la lista de modulos tematicos con toda su información
 	*/
 	public function getAllModulosTematicos() {
+		$this->db->select('ID_MODULO_TEM AS id');
+		$this->db->select('NOMBRE_MODULO AS nombre');
+		$this->db->select('DESCRIPCION_MODULO AS descripcion');
 		$query = $this->db->get('modulo_tematico');
 		if ($query == FALSE) {
 			return array();
 		}
-		$datos = $query->result();
-		return $datos;
+		return $query->result();
 	}
 	
 	/**

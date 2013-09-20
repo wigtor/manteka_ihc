@@ -94,7 +94,7 @@ class Model_profesor extends CI_Model {
 			return TRUE;
 		}
 		return FALSE;
-    }
+	}
 
 
     public function getTiposProfesores() {

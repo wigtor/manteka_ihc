@@ -1,33 +1,27 @@
 <script>
 
-	function comprobarNombre() {
-		var nombre = document.getElementById("nombre_sesion").value;
+	function comprobarNombreSesion() {
+		var nombre = $("#nombre").val();
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
+
 		$.ajax({
 			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Sesiones/nombreExisteC") ?>", /* Se setea la url del controlador que responderá */
+			url: "<?php echo site_url("Sesiones/nombreExisteAjax") ?>", /* Se setea la url del controlador que responderá */
 			data: { nombre_post: nombre},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				//var tablaResultados = document.getElementById("modulos");
-				//$(tablaResultados).empty();
 				var existe = jQuery.parseJSON(respuesta);
-				if(existe == -1){
-					var mensaje = document.getElementById("mensaje");
-					$(mensaje).empty();
-			
-					$('#modalNombreUsado').modal();
-					document.getElementById("nombre_sesion").value = "";
-
+				if(existe == true) {
+					$('#tituloErrorDialog').html('Error en el nombre');
+					$('#textoErrorDialog').html('El nombre ingresado ya está repetido en el sistema');
+					$('#modalError').modal();
+					$("#nombre").val('');
 				}
 
 				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
+				$('#icono_cargando').hide();
 				}
 		});
-
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
 	}
 
 </script>
@@ -35,84 +29,93 @@
 <script type="text/javascript">
 
 
-	function agregarSesion(){
-		var nombre = document.getElementById("nombre_sesion").value;
-		var descripcion = document.getElementById("descripcion_sesion").value;
-
-		if(nombre!="" ){
-					return true;
+	function agregarSesion() {
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar sesión de clase');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar la sesión de clase al sistema?');
+			$('#modalConfirmacion').modal();
 		}
 		else {
-				alert("Ingrese todos los datos");
-				return false;
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
 		}
+	}
+
+	function resetearSesion() {
+		$('#nombre').val("");
+		$('#descripcion').val("");
+		$('#id_moduloTem').val("");
 	}
 </script>
 
-		<fieldset>
-			<legend>Agregar Sesión</legend>
-		
-				<div class="row-fluid">
-					<div class="span6">
-						<font color="red">* Campos Obligatorios</font>
-					</div>
-				</div>
+<fieldset>
+	<legend>Agregar Sesión de clase</legend>
+	<?php
+		$atributos= array('id' => 'formAgregar', 'name' => 'formAgregar', 'class' => 'form-horizontal');
+		echo form_open('Sesiones/postAgregarSesion/', $atributos);
+	?>
+	<div class="row-fluid">
+		<div class="span6">
+			<font color="red">* Campos Obligatorios</font>
+		</div>
+	</div>
+	
+	<div class= "row-fluid">
+		<div class= "span6">
+			<p>Complete los datos del formulario para agregar una sesión de clase:</p>
+		</div>
+	</div>
 			
-			
-			<div class= "row-fluid">
-				<div class= "span6">
-					<p>Complete los datos del formulario para agregar una sesión:</p>
+	<div  class= "row-fluid">
+		<div class= "span7">
+			<div class="control-group">
+				<label class="control-label" for="nombre" style="cursor: default">1.- <font color="red">*</font> Nombre</label>
+				<div class="controls">
+					<input id="nombre" name="nombre" onblur="comprobarNombreSesion()" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" maxlength="99" required >
 				</div>
 			</div>
-					
-			<div  class= "row-fluid">
+			<div class="control-group">
+				<label class="control-label" for="descripcion" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
+				<div class="controls">
+					<textarea id="descripcion" name="descripcion" style="resize: none;" class="span12" type="text" cols="40" rows="5" maxlength="99" required ></textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="id_moduloTem" >3.- <font color="red">*</font> Asignar módulo temático:</label>
+				<div class="controls">
+					<select required id="id_moduloTem" name="id_moduloTem" class="span12" title="asigne módulo temático">
+					<?php
+					if (isset($modulosTematicos)) {
+						foreach ($modulosTematicos as $moduloTem) {
+							?>
+								<option value="<?php echo $moduloTem->id; ?>"><?php echo $moduloTem->nombre; ?></option>
+							<?php 
+						}
+					}
+					?>
+					</select> 
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<button type="button" class="btn" onclick="agregarSesion()">
+						<div class="btn_with_icon_solo">Ã</div>
+						&nbsp; Agregar
+					</button>
+					<button class="btn" type="button" onclick="resetearSesion()" >
+						<div class="btn_with_icon_solo">Â</div>
+						&nbsp; Cancelar
+					</button>
+				</div>
 				<?php
-					$atributos= array('onsubmit' => 'return agregarSesion()', 'id' => 'formAgregar', 'name' => 'formAgregar', 'class' => 'form-horizontal');
-					echo form_open('Sesiones/agregarSesiones/', $atributos);
+					if (isset($dialogos)) {
+						echo $dialogos;
+					}
 				?>
-				<div class= "span7">
-					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">1.- <font color="red">*</font> Nombre</label>
-						<div class="controls">
-							<input id="nombre_sesion" onblur="comprobarNombre()" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" name="nombre_sesion" maxlength="99" required >
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
-						<div class="controls">
-							<textarea id="descripcion_sesion" class="span12" type="text" cols="40" rows="5" name="descripcion_sesion" maxlength="99" required ></textarea>
-						</div>
-					</div>
-				</div> 
 			</div>
-			<div class="span7" style="margin-left: 0px">
-				<div class="controls pull-right">
-					<button class="btn" type="submit" style= "margin-right: 7px" style="width:102px">
-						<div class= "btn_with_icon_solo">Ã</div>
-							&nbsp Agregar
-					</button>
-			
-				
-					<button class="btn" type="reset" style="width:105px">
-						<div class= "btn_with_icon_solo">Â</div>
-							&nbsp Cancelar
-					</button>
-				</div>
-			</div>
-							
-							<!-- Modal de modalNombreUsado -->
-				<div id="modalNombreUsado" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>Nombre de la sesion ya existe.</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>	
-
-			</div>
-		</fieldset>
+		</div>
+	</div>
+	<?php echo form_close(""); ?>
+</fieldset>

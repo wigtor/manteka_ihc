@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     19-09-2013 4:21:09                           */
+/* Created on:     20-09-2013 13:16:57                          */
 /*==============================================================*/
 
 
@@ -56,6 +56,8 @@ drop table if exists NOTA;
 
 drop table if exists PERSONA;
 
+drop table if exists PLANIFICACION_CLASE;
+
 drop table if exists PLANTILLA;
 
 drop table if exists PROFESOR;
@@ -69,8 +71,6 @@ drop table if exists REQUISITO;
 drop table if exists REQUISITO_MODULO;
 
 drop table if exists SALA;
-
-drop table if exists SALA_HORARIO;
 
 drop table if exists SALA_IMPLEMENTO;
 
@@ -206,7 +206,6 @@ create table CARTA
 (
    ID_CORREO            int not null auto_increment,
    RUT_USUARIO          int not null,
-   ID_BORRADOR          int,
    ID_PLANTILLA         int,
    CUERPO_EMAIL         text not null,
    ASUNTO               varchar(40),
@@ -422,6 +421,22 @@ create table PERSONA
 alter table PERSONA comment 'corresponde a cualquier persona, de la que no se necesitan l';
 
 /*==============================================================*/
+/* Table: PLANIFICACION_CLASE                                   */
+/*==============================================================*/
+create table PLANIFICACION_CLASE
+(
+   ID_PLANIFICACION_CLASE int not null auto_increment,
+   ID_SESION            int not null,
+   ID_SALA              int not null,
+   ID_SECCION           int not null,
+   ID_HORARIO           int not null,
+   FECHA_PLANIFICADA    date,
+   primary key (ID_PLANIFICACION_CLASE)
+);
+
+alter table PLANIFICACION_CLASE comment 'Se utiliza para representar la hora en que se realiza una se';
+
+/*==============================================================*/
 /* Table: PLANTILLA                                             */
 /*==============================================================*/
 create table PLANTILLA
@@ -509,20 +524,6 @@ create table SALA
 alter table SALA comment 'Es el lugar físico en donde los estudiantes tendrán sus clas';
 
 /*==============================================================*/
-/* Table: SALA_HORARIO                                          */
-/*==============================================================*/
-create table SALA_HORARIO
-(
-   ID_HORARIO_SALA      int not null auto_increment,
-   ID_SALA              int not null,
-   ID_SECCION           int not null,
-   ID_HORARIO           int not null,
-   primary key (ID_HORARIO_SALA)
-);
-
-alter table SALA_HORARIO comment 'Se utiliza para representar la hora en que se realiza una se';
-
-/*==============================================================*/
 /* Table: SALA_IMPLEMENTO                                       */
 /*==============================================================*/
 create table SALA_IMPLEMENTO
@@ -556,8 +557,7 @@ create table SESION_DE_CLASE
    ID_SESION            int not null auto_increment,
    ID_SECCION           int,
    ID_MODULO_TEM        int not null,
-   FECHA_SESION         date,
-   NOMBRE_SESION        varchar(100),
+   NOMBRE_SESION        varchar(30) not null,
    DESCRIPCION_SESION   varchar(100),
    primary key (ID_SESION)
 );
@@ -616,13 +616,13 @@ alter table ACT_ESTUDIANTE add constraint FK_RELATIONSHIP_33 foreign key (ID_ACT
 alter table ACT_ESTUDIANTE add constraint FK_RELATIONSHIP_34 foreign key (RUT_USUARIO)
       references ESTUDIANTE (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ADJUNTO add constraint FK_RELATIONSHIP_51 foreign key (ID_CORREO)
+alter table ADJUNTO add constraint FK_RELATIONSHIP_50 foreign key (ID_CORREO)
       references CARTA (ID_CORREO) on delete cascade on update cascade;
 
-alter table ASISTENCIA add constraint FK_RELATIONSHIP_57 foreign key (RUT_USUARIO)
+alter table ASISTENCIA add constraint FK_RELATIONSHIP_56 foreign key (RUT_USUARIO)
       references ESTUDIANTE (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ASISTENCIA add constraint FK_RELATIONSHIP_58 foreign key (ID_SESION)
+alter table ASISTENCIA add constraint FK_RELATIONSHIP_57 foreign key (ID_SESION)
       references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
 
 alter table AUDITORIA add constraint FK_RELATIONSHIP_35 foreign key (RUT_USUARIO)
@@ -637,10 +637,10 @@ alter table AYU_PROFE add constraint FK_RELATIONSHIP_37 foreign key (RUT_USUARIO
 alter table AYU_PROFE add constraint FK_RELATIONSHIP_39 foreign key (PRO_RUT_USUARIO)
       references PROFESOR (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table AYU_PROFE add constraint FK_RELATIONSHIP_55 foreign key (ID_SECCION)
+alter table AYU_PROFE add constraint FK_RELATIONSHIP_54 foreign key (ID_SECCION)
       references SECCION (ID_SECCION) on delete cascade on update cascade;
 
-alter table BORRADOR add constraint FK_RELATIONSHIP_45 foreign key (ID_CORREO)
+alter table BORRADOR add constraint FK_RELATIONSHIP_44 foreign key (ID_CORREO)
       references CARTA (ID_CORREO) on delete cascade on update cascade;
 
 alter table CARTA add constraint FK_RELATIONSHIP_22 foreign key (ID_PLANTILLA)
@@ -649,13 +649,10 @@ alter table CARTA add constraint FK_RELATIONSHIP_22 foreign key (ID_PLANTILLA)
 alter table CARTA add constraint FK_RELATIONSHIP_43 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table CARTA add constraint FK_RELATIONSHIP_44 foreign key (ID_BORRADOR)
-      references BORRADOR (ID_BORRADOR) on delete cascade on update cascade;
-
-alter table CARTA_PERSONA add constraint FK_RELATIONSHIP_46 foreign key (ID_PERSONA)
+alter table CARTA_PERSONA add constraint FK_RELATIONSHIP_45 foreign key (ID_PERSONA)
       references PERSONA (ID_PERSONA) on delete cascade on update cascade;
 
-alter table CARTA_PERSONA add constraint FK_RELATIONSHIP_47 foreign key (ID_CORREO)
+alter table CARTA_PERSONA add constraint FK_RELATIONSHIP_46 foreign key (ID_CORREO)
       references CARTA (ID_CORREO) on delete cascade on update cascade;
 
 alter table CARTA_USUARIO add constraint FK_RELATIONSHIP_30 foreign key (ID_CORREO)
@@ -679,13 +676,13 @@ alter table ESTUDIANTE add constraint FK_RELATIONSHIP_1 foreign key (COD_CARRERA
 alter table ESTUDIANTE add constraint FK_RELATIONSHIP_6 foreign key (ID_SECCION)
       references SECCION (ID_SECCION) on delete cascade on update cascade;
 
-alter table EVALUACION add constraint FK_RELATIONSHIP_49 foreign key (ID_MODULO_TEM)
+alter table EVALUACION add constraint FK_RELATIONSHIP_48 foreign key (ID_MODULO_TEM)
       references MODULO_TEMATICO (ID_MODULO_TEM) on delete cascade on update cascade;
 
 alter table FILTRO_CONTACTO add constraint FK_RELATIONSHIP_38 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table HISTORIALES_BUSQUEDA add constraint FK_RELATIONSHIP_52 foreign key (RUT_USUARIO)
+alter table HISTORIALES_BUSQUEDA add constraint FK_RELATIONSHIP_51 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table HORARIO add constraint FK_RELATIONSHIP_8 foreign key (ID_DIA)
@@ -703,19 +700,31 @@ alter table NOTA add constraint FK_RELATIONSHIP_36 foreign key (RUT_USUARIO)
 alter table NOTA add constraint FK_RELATIONSHIP_42 foreign key (ID_EVALUACION)
       references EVALUACION (ID_EVALUACION) on delete cascade on update cascade;
 
-alter table PLANTILLA add constraint FK_RELATIONSHIP_59 foreign key (RUT_USUARIO)
+alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_10 foreign key (ID_SALA)
+      references SALA (ID_SALA) on delete cascade on update cascade;
+
+alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
+      references HORARIO (ID_HORARIO) on delete cascade on update cascade;
+
+alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_55 foreign key (ID_SECCION)
+      references SECCION (ID_SECCION) on delete cascade on update cascade;
+
+alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_59 foreign key (ID_SESION)
+      references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
+
+alter table PLANTILLA add constraint FK_RELATIONSHIP_58 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table PROFESOR add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table PROFESOR add constraint FK_RELATIONSHIP_53 foreign key (ID_TIPO_PROFESOR)
+alter table PROFESOR add constraint FK_RELATIONSHIP_52 foreign key (ID_TIPO_PROFESOR)
       references TIPO_PROFESOR (ID_TIPO_PROFESOR) on delete cascade on update cascade;
 
-alter table PROFESOR_SECCION add constraint FK_RELATIONSHIP_50 foreign key (RUT_USUARIO)
+alter table PROFESOR_SECCION add constraint FK_RELATIONSHIP_49 foreign key (RUT_USUARIO)
       references PROFESOR (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table PROFESOR_SECCION add constraint FK_RELATIONSHIP_54 foreign key (ID_SECCION)
+alter table PROFESOR_SECCION add constraint FK_RELATIONSHIP_53 foreign key (ID_SECCION)
       references SECCION (ID_SECCION) on delete cascade on update cascade;
 
 alter table PROFE_EQUI_LIDER add constraint FK_RELATIONSHIP_40 foreign key (ID_EQUIPO)
@@ -730,22 +739,13 @@ alter table REQUISITO_MODULO add constraint FK_RELATIONSHIP_19 foreign key (ID_R
 alter table REQUISITO_MODULO add constraint FK_RELATIONSHIP_27 foreign key (ID_MODULO_TEM)
       references MODULO_TEMATICO (ID_MODULO_TEM) on delete cascade on update cascade;
 
-alter table SALA_HORARIO add constraint FK_RELATIONSHIP_10 foreign key (ID_SALA)
-      references SALA (ID_SALA) on delete cascade on update cascade;
-
-alter table SALA_HORARIO add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
-      references HORARIO (ID_HORARIO) on delete cascade on update cascade;
-
-alter table SALA_HORARIO add constraint FK_RELATIONSHIP_56 foreign key (ID_SECCION)
-      references SECCION (ID_SECCION) on delete cascade on update cascade;
-
 alter table SALA_IMPLEMENTO add constraint FK_RELATIONSHIP_16 foreign key (ID_SALA)
       references SALA (ID_SALA) on delete cascade on update cascade;
 
 alter table SALA_IMPLEMENTO add constraint FK_RELATIONSHIP_17 foreign key (ID_IMPLEMENTO)
       references IMPLEMENTO (ID_IMPLEMENTO) on delete cascade on update cascade;
 
-alter table SECCION add constraint FK_RELATIONSHIP_48 foreign key (ID_SESION)
+alter table SECCION add constraint FK_SE_ENCUENTRA_ACTUALMENTE foreign key (ID_SESION)
       references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
 
 alter table SESION_DE_CLASE add constraint FK_RELATIONSHIP_13 foreign key (ID_MODULO_TEM)
