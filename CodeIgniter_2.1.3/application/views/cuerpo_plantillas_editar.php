@@ -11,6 +11,14 @@
 ?>
 
 <script type="text/javascript">
+	var tiposFiltro = ["Nombre", "Asunto", "Cuerpo"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", ""];
+	var inputAllowedFiltro = ["", "", ""];
+	var prefijo_tipoDato = "plantilla_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+	var url_post_busquedas = "<?php echo site_url("Plantillas/getPlantillasAjax") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/plantillas") ?>";
+
 	/**
 	* Hace que el cuerpo de la plantilla no sea de sólo lectura.
 	* 
@@ -24,38 +32,57 @@
 		editor = ev.editor;
 		editor.setReadOnly(false);
 	});
-	/**
-	* Permite mostrar y ocultar la ventana modal que informa sobre el uso
-	* de variables para la creación de plantillas.
-	* 
-	* Al hacer clic en el vínculo cuyo clase es "verVariables" se muestra
-	* la ventana modal. Y al hacer click en el botón cuyo identificador es
-	* "botonCerrar" se oculta dicha ventana.
-	* 
-	* @author Diego García (DGM)
-	**/
-	$(document).ready(function() {
-		$('.verVariables').click(function() {
-			type=$(this).attr('data-type');
-			$('.contenedor-principal').fadeIn(function() {
-			window.setTimeout(function(){
-				$('.contenedor-secundario.'+type).addClass('contenedor-secundario-visible');
-			}, 100);
-			});
-		});
-		$('#botonCerrar').click(function() {
-			document.documentElement.style.overflowY='auto';
-			$('.contenedor-principal').fadeOut().end().find('.contenedor-secundario').removeClass('contenedor-secundario-visible');
-		});
-	});
 
 	function mostrarConsejosPlantilla() {
 		$('#modalConsejosPlantilla').modal();
 	}
 
+	function verDetalle(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		id_plantilla = idElem.substring(prefijo_tipoDato.length, idElem.length);
+		
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST", /* Indico que es una petición POST al servidor */
+			url: "<?php echo site_url("Plantillas/getDetallesPlantillaAjax") ?>", /* Se setea la url del controlador que responderá */
+			data: { id_plantilla_post: id_plantilla }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
+			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$('#id_plantilla').val($.trim(datos.id));
+				$('#txtNombrePlantilla').val($.trim(datos.nombre));
+				$('#txtAsunto').val((datos.asunto == "" ? '' : $.trim(datos.asunto)));
+				$('#editor').val(datos.cuerpo);
+				CKEDITOR.instances.editor.setData(datos.cuerpo);
+
+				/* Quito el div que indica que se está cargando */
+				$('#icono_cargando').hide();
+			}
+		});
+	}
+
+	function resetearPlantilla() {
+		$('#id_plantilla').val("");
+		$('#txtNombrePlantilla').val("");
+		$('#nombre2').val("");
+		$('#txtAsunto').val("");
+		$('#editor').val("");
+		CKEDITOR.instances.editor.setData("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('#listadoResultados tbody tr').removeClass('highlight');
+	}
+
 	function editarPlantilla() {
 		var form = document.forms["formEditar"];
-		if ($('#id_seccion').val().trim() == '') {
+		if ($('#id_plantilla').val().trim() == '') {
 			$('#tituloErrorDialog').html('Error, no ha seleccionado plantilla');
 			$('#textoErrorDialog').html('No ha seleccionado una plantilla para editar');
 			$('#modalError').modal();
@@ -73,21 +100,43 @@
 		}
 	}
 
+	//Se cargan por ajax
+	$(document).ready(function() {
+		escribirHeadTable();
+		cambioTipoFiltro(undefined);
+	});
+
 </script>
 
 <fieldset>
 	<legend>Editar plantilla</legend>
-
-	<?php
-		$atributos = array('class' => 'form', 'id' => 'formEditar');
-		echo form_open('plantillas/postEditarPlantilla', $atributos);
-	?>
 		<div class="row-fluid">
 			<div class="span12">
 				La creación de plantillas permite definir variables cuyos valores serán asignados automáticamente por el sistema al momento de enviar un correo.
 			</div>
 			<div class="span12">
 				Para obtener más información sobre el uso de variables haga clic <a onclick="mostrarConsejosPlantilla()" >acá</a>.
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span6">
+				<font color="red">* Campos Obligatorios</font>
+				<div class="controls controls-row">
+					<div class="input-append span7">
+						<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+						<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+					</div>
+					<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6" >
+				<p>1.- Seleccione el profesor a editar:</p>
+			</div>
+			<div class="span6" >
+				<p>2.- Complete los datos del formulario para modificar el profesor:</p>
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -100,6 +149,12 @@
 
 
 			<div class="span6">
+				<?php
+					$atributos = array('class' => 'form', 'id' => 'formEditar');
+					echo form_open('plantillas/postEditarPlantilla', $atributos);
+				?>
+				<input type="hidden" id="id_plantilla" name="id_plantilla" value="" required>
+
 				<div class="control-group">
 					<label class="control-label" for="txtNombrePlantilla">1-.<font color="red">*</font> Nombre de la plantilla:</label>
 					<div class="controls">
@@ -112,14 +167,10 @@
 						<input type="text" id="txtAsunto" name="txtAsunto" class="span12" placeHolder='Máximo 40 caracteres' maxlength="40" title="Ingrese el asunto de la plantilla" min="1" required>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row-fluid">
-			<div class="span12">
+
 				<div class="control-group">
 					<label class="control-label" for="editor">3-.<font color="red">*</font> Cuerpo del mensaje:</label>
 					<div class="controls">
-						
 						<textarea id="editor" name="editor" class="span12 ckeditor" title="Ingrese el texto del mensaje que desea guardar como plantilla" required>
 						</textarea>
 					</div>
@@ -131,7 +182,7 @@
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Agregar
 						</button>
-						<button class="btn" type="button" onclick="borrarCKEditor()" >
+						<button class="btn" type="button" onclick="resetearPlantilla()" >
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Limpiar
 						</button>
@@ -142,6 +193,7 @@
 						}
 					?>
 				</div>
+				<?php echo form_close(""); ?>
 			</div>
 		</div>
 
@@ -183,5 +235,4 @@
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
 			</div>
 		</div>
-	<?php echo form_close(""); ?>
 </fieldset>

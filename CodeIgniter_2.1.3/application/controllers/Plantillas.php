@@ -128,9 +128,9 @@ class Plantillas extends MasterManteka {
 			
 			/* Si la validación del formulario es exitosa, se intenta actualizar la plantilla en la base de datos. */
 			$this->load->model('Model_plantilla');
-			$id_plantilla = $this->input->post('idPlantilla');
-			$nombrePlantilla = $this->input->post('nombrePlantilla');
-			$asunto = $this->input->post('asunto');
+			$id_plantilla = $this->input->post('id_plantilla');
+			$nombrePlantilla = $this->input->post('txtNombrePlantilla');
+			$asunto = $this->input->post('txtAsunto');
 			$cuerpo = $this->input->post('editor');
 			$rut_usuario = $this->session->userdata('rut');
 			$resultado = $this->Model_plantilla->editarPlantilla($rut_usuario, $id_plantilla, $nombrePlantilla, $asunto, $cuerpo);
@@ -206,5 +206,58 @@ class Plantillas extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
+	}
+
+
+	/**
+	* Se buscan plantillas de forma asincrona para mostrarlos en la vista
+	*
+	**/
+	public function getPlantillasAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_plantilla');
+		$resultado = $this->Model_plantilla->getPlantillasByFilter($rut_usuario, $textoFiltro, $textoFiltrosAvanzados);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('Model_busqueda');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'plantillas', $this->session->userdata('rut'));
+			
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'plantillas', $this->session->userdata('rut'));
+			}
+			
+		}
+		echo json_encode($resultado);
+	}
+
+	/**
+	* Método que responde a una solicitud de post para pedir los datos de un módulo temático
+	* Recibe como parámetro el código del módulo temático
+	*/
+	public function getDetallesPlantillaAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$id_plantilla = $this->input->post('id_plantilla_post');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_plantilla');
+		$resultado = $this->Model_plantilla->getDetallesPlantilla($rut_usuario, $id_plantilla);
+		echo json_encode($resultado);
 	}
 }

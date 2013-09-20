@@ -93,7 +93,7 @@
 	<legend>Editar Profesor</legend>
 	<div class="row-fluid">
 		<div class="span6">
-		<font color="red">* Campos Obligatorios</font>
+			<font color="red">* Campos Obligatorios</font>
 			<div class="controls controls-row">
 				<div class="input-append span7">
 					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
