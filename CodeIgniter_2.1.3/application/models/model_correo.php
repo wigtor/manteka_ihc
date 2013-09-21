@@ -680,7 +680,7 @@ class Model_correo extends CI_Model
 			$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
 			$this->db->where('carta_usuario.RUT_USUARIO', $rut);
 			$this->db->where('ID_BORRADOR IS NULL');
-			$this->db->where('RECIBIDA_CARTA_USUARIO',1);
+			$this->db->where('RECIBIDA_CARTA_USUARIO', 1);
 			$this->db->join('carta_usuario','carta.ID_CORREO = carta_usuario.ID_CORREO');
 			$query = $this->db->get('carta');
 			$res = $query->row();

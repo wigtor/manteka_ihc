@@ -5,11 +5,10 @@
 ?>
 
 <body>
-	 <link href="/<?php echo config_item('dir_alias') ?>/css/especial.css" rel="stylesheet" type="text/css">
-	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
-	 <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.js"></script>
-     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.bpopup.min.js"></script>
-     <script src="/<?php echo config_item('dir_alias') ?>/javascripts/funcionAyuda.js"></script>
+	<link href="/<?php echo config_item('dir_alias') ?>/css/especial.css" rel="stylesheet" type="text/css">
+	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/verificadorRut.js"></script>
+	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/jquery.js"></script>
+	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-modal.js"></script>
      
 
 	<script type='text/javascript'>
@@ -73,8 +72,8 @@
 			</div>
 			<fieldset class="span3">
 				<legend>Inicio de sesión</legend>
-					<div  id="my-button" class="pull-right pull-top" ><a class="btn_with_icon_solo" style="position: absolute; font-size: 45px !important; margin-top: -15px; margin-left: -25px;" href="<?php echo site_url("Ayuda/index") ?>">R</a></div>
-					<div id="element_to_pop_up"><img src="/<?php echo config_item('dir_alias') ?>/img/ayudaInicio.png"></div>
+					<div  id="my-button" class="pull-right pull-top" ><a class="btn_with_icon_solo" style="position: absolute; font-size: 45px !important; margin-top: -15px; margin-left: -25px;" onclick="$('#modalAyudaLogin').modal();" >R</a></div>
+					
 					<?php
 						$attributes = array('onSubmit' => 'return validacionRut()', 'id' => 'formLogin');
 						echo form_open('Login/LoginPost', $attributes);
@@ -166,6 +165,25 @@
 							</button>
 						</div>
 				<?php echo form_close(""); ?>
+
+				<div id="modalAyudaLogin" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>¿Cómo iniciar sesión en manteka?</h3>
+					</div>
+					<div class="modal-body">
+						<p>
+							Si usted es profesor o coordinador de la asignatura de comunicación efectiva y es la primera vez que 
+							intenta ingresar a ManteKA, puede acceder de 3 formas distintas:
+						</p>
+						<p>Ingresando su RUT(Sin dígito verificador, sin puntos ni guiones) como contraseña</p>
+						<p>Ingresando a través de su correo electrónico Gmail con que esté registrado en ManteKa</p>
+						<p>Ingresando a la sección "<a href="<?php echo site_url("Login/olvidoPass")?>">¿Olvidó su contraseña?</a>"</p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
 			</fieldset>
 		</div>
 	</div>

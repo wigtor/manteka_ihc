@@ -1,93 +1,104 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     20-09-2013 13:16:57                          */
+/* Created on:     21-09-2013 17:18:21                          */
 /*==============================================================*/
 
 
-drop table if exists ACTIVIDAD_MASIVA;
+drop table if exists act_estudiante;
 
-drop table if exists ACT_ESTUDIANTE;
+drop table if exists actividad_masiva;
 
-drop table if exists ADJUNTO;
+drop table if exists adjunto;
 
-drop table if exists ASISTENCIA;
+drop table if exists asistencia;
 
-drop table if exists AUDITORIA;
+drop table if exists auditoria;
 
-drop table if exists AYUDANTE;
+drop table if exists ayu_profe;
 
-drop table if exists AYU_PROFE;
+drop table if exists ayudante;
 
-drop table if exists BORRADOR;
+drop table if exists borrador;
 
-drop table if exists CARRERA;
+drop table if exists carrera;
 
-drop table if exists CARTA;
+drop table if exists carta;
 
-drop table if exists CARTA_PERSONA;
+drop table if exists carta_persona;
 
-drop table if exists CARTA_USUARIO;
+drop table if exists carta_usuario;
 
-drop table if exists COORDINADOR;
+drop table if exists coordinador;
 
-drop table if exists CRON_JOBS;
+drop table if exists cron_jobs;
 
-drop table if exists DIA_HORARIO;
+drop table if exists dia_horario;
 
-drop table if exists EQUIPO_PROFESOR;
+drop table if exists equipo_profesor;
 
-drop table if exists ESTUDIANTE;
+drop table if exists estudiante;
 
-drop table if exists EVALUACION;
+drop table if exists evaluacion;
 
-drop table if exists FILTRO_CONTACTO;
+drop table if exists filtro_contacto;
 
-drop table if exists HISTORIALES_BUSQUEDA;
+drop table if exists historiales_busqueda;
 
-drop table if exists HORARIO;
+drop table if exists horario;
 
-drop table if exists IMPLEMENTO;
+drop table if exists implemento;
 
-drop table if exists MODULO_HORARIO;
+drop table if exists modulo_horario;
 
-drop table if exists MODULO_TEMATICO;
+drop table if exists modulo_tematico;
 
-drop table if exists NOTA;
+drop table if exists nota;
 
-drop table if exists PERSONA;
+drop table if exists persona;
 
-drop table if exists PLANIFICACION_CLASE;
+drop table if exists planificacion_clase;
 
-drop table if exists PLANTILLA;
+drop table if exists plantilla;
 
-drop table if exists PROFESOR;
+drop table if exists profe_equi_lider;
 
-drop table if exists PROFESOR_SECCION;
+drop table if exists profesor;
 
-drop table if exists PROFE_EQUI_LIDER;
+drop table if exists profesor_seccion;
 
-drop table if exists REQUISITO;
+drop table if exists requisito;
 
-drop table if exists REQUISITO_MODULO;
+drop table if exists requisito_modulo;
 
-drop table if exists SALA;
+drop table if exists sala;
 
-drop table if exists SALA_IMPLEMENTO;
+drop table if exists sala_implemento;
 
-drop table if exists SECCION;
+drop table if exists seccion;
 
-drop table if exists SESION_DE_CLASE;
+drop table if exists sesion_de_clase;
 
-drop table if exists TIPO_PROFESOR;
+drop table if exists tipo_profesor;
 
-drop table if exists TIPO_USER;
+drop table if exists tipo_user;
 
-drop table if exists USUARIO;
+drop table if exists usuario;
 
 /*==============================================================*/
-/* Table: ACTIVIDAD_MASIVA                                      */
+/* Table: act_estudiante                                        */
 /*==============================================================*/
-create table ACTIVIDAD_MASIVA
+create table act_estudiante
+(
+   ID_ACT               int not null,
+   RUT_USUARIO          int not null
+);
+
+alter table act_estudiante comment 'Se utiliza con el fin de representar que muchos estudiantes ';
+
+/*==============================================================*/
+/* Table: actividad_masiva                                      */
+/*==============================================================*/
+create table actividad_masiva
 (
    ID_ACT               int not null auto_increment,
    NOMBRE_ACT           varchar(20) not null,
@@ -97,23 +108,12 @@ create table ACTIVIDAD_MASIVA
    primary key (ID_ACT)
 );
 
-alter table ACTIVIDAD_MASIVA comment 'El curso tiene programa 3 salidas extraprogramáticas, obre d';
+alter table actividad_masiva comment 'El curso tiene programa 3 salidas extraprogramáticas, obre d';
 
 /*==============================================================*/
-/* Table: ACT_ESTUDIANTE                                        */
+/* Table: adjunto                                               */
 /*==============================================================*/
-create table ACT_ESTUDIANTE
-(
-   ID_ACT               int not null,
-   RUT_USUARIO          int not null
-);
-
-alter table ACT_ESTUDIANTE comment 'Se utiliza con el fin de representar que muchos estudiantes ';
-
-/*==============================================================*/
-/* Table: ADJUNTO                                               */
-/*==============================================================*/
-create table ADJUNTO
+create table adjunto
 (
    ID_ADJUNTO           int not null auto_increment,
    ID_CORREO            int not null,
@@ -123,9 +123,9 @@ create table ADJUNTO
 );
 
 /*==============================================================*/
-/* Table: ASISTENCIA                                            */
+/* Table: asistencia                                            */
 /*==============================================================*/
-create table ASISTENCIA
+create table asistencia
 (
    ID_SESION            int not null,
    RUT_USUARIO          int not null,
@@ -135,9 +135,9 @@ create table ASISTENCIA
 );
 
 /*==============================================================*/
-/* Table: AUDITORIA                                             */
+/* Table: auditoria                                             */
 /*==============================================================*/
-create table AUDITORIA
+create table auditoria
 (
    ID_REG_AUDITORIA     int not null auto_increment,
    RUT_USUARIO          int,
@@ -150,25 +150,12 @@ create table AUDITORIA
    primary key (ID_REG_AUDITORIA)
 );
 
-alter table AUDITORIA comment 'Se utiliza para realizar un registro de los datos que son re';
+alter table auditoria comment 'Se utiliza para realizar un registro de los datos que son re';
 
 /*==============================================================*/
-/* Table: AYUDANTE                                              */
+/* Table: ayu_profe                                             */
 /*==============================================================*/
-create table AYUDANTE
-(
-   RUT_USUARIO          int not null,
-   ID_AYUDANTE          int not null auto_increment,
-   primary key (RUT_USUARIO),
-   key AK_IDENTIFIER_1 (ID_AYUDANTE)
-);
-
-alter table AYUDANTE comment 'Las secciones cuentan con ayudante a los que el sistema debe';
-
-/*==============================================================*/
-/* Table: AYU_PROFE                                             */
-/*==============================================================*/
-create table AYU_PROFE
+create table ayu_profe
 (
    ID_SECCION           int,
    RUT_USUARIO          int not null,
@@ -176,9 +163,22 @@ create table AYU_PROFE
 );
 
 /*==============================================================*/
-/* Table: BORRADOR                                              */
+/* Table: ayudante                                              */
 /*==============================================================*/
-create table BORRADOR
+create table ayudante
+(
+   RUT_USUARIO          int not null,
+   ID_AYUDANTE          int not null auto_increment,
+   primary key (RUT_USUARIO),
+   key AK_IDENTIFIER_1 (ID_AYUDANTE)
+);
+
+alter table ayudante comment 'Las secciones cuentan con ayudante a los que el sistema debe';
+
+/*==============================================================*/
+/* Table: borrador                                              */
+/*==============================================================*/
+create table borrador
 (
    ID_BORRADOR          int not null auto_increment,
    ID_CORREO            int not null,
@@ -187,9 +187,9 @@ create table BORRADOR
 );
 
 /*==============================================================*/
-/* Table: CARRERA                                               */
+/* Table: carrera                                               */
 /*==============================================================*/
-create table CARRERA
+create table carrera
 (
    COD_CARRERA          int not null,
    NOMBRE_CARRERA       varchar(100) not null,
@@ -197,15 +197,16 @@ create table CARRERA
    primary key (COD_CARRERA)
 );
 
-alter table CARRERA comment 'Estas son las carreras pertenecientes a la Faculdad de Ingen';
+alter table carrera comment 'Estas son las carreras pertenecientes a la Faculdad de Ingen';
 
 /*==============================================================*/
-/* Table: CARTA                                                 */
+/* Table: carta                                                 */
 /*==============================================================*/
-create table CARTA
+create table carta
 (
    ID_CORREO            int not null auto_increment,
    RUT_USUARIO          int not null,
+   ID_BORRADOR          int,
    ID_PLANTILLA         int,
    CUERPO_EMAIL         text not null,
    ASUNTO               varchar(40),
@@ -214,21 +215,21 @@ create table CARTA
    primary key (ID_CORREO)
 );
 
-alter table CARTA comment 'Esta carta representa la posibilidad de crear un mail y pode';
+alter table carta comment 'Esta carta representa la posibilidad de crear un mail y pode';
 
 /*==============================================================*/
-/* Table: CARTA_PERSONA                                         */
+/* Table: carta_persona                                         */
 /*==============================================================*/
-create table CARTA_PERSONA
+create table carta_persona
 (
    ID_CORREO            int not null,
    ID_PERSONA           int not null
 );
 
 /*==============================================================*/
-/* Table: CARTA_USUARIO                                         */
+/* Table: carta_usuario                                         */
 /*==============================================================*/
-create table CARTA_USUARIO
+create table carta_usuario
 (
    ID_CORREO            int not null,
    RUT_USUARIO          int not null,
@@ -236,12 +237,12 @@ create table CARTA_USUARIO
    RECIBIDA_CARTA_USUARIO bool
 );
 
-alter table CARTA_USUARIO comment 'Representa la posibilidad que tiene un coordinador de enviar';
+alter table carta_usuario comment 'Representa la posibilidad que tiene un coordinador de enviar';
 
 /*==============================================================*/
-/* Table: COORDINADOR                                           */
+/* Table: coordinador                                           */
 /*==============================================================*/
-create table COORDINADOR
+create table coordinador
 (
    RUT_USUARIO          int not null,
    ID_COORDINADOR       int not null auto_increment,
@@ -249,12 +250,12 @@ create table COORDINADOR
    key AK_IDENTIFIER_1 (ID_COORDINADOR)
 );
 
-alter table COORDINADOR comment 'Se utiliza para guardar los datos de las personas que usarán';
+alter table coordinador comment 'Se utiliza para guardar los datos de las personas que usarán';
 
 /*==============================================================*/
-/* Table: CRON_JOBS                                             */
+/* Table: cron_jobs                                             */
 /*==============================================================*/
-create table CRON_JOBS
+create table cron_jobs
 (
    ID_JOB               int not null auto_increment,
    DESCRIPCION_JOB      varchar(255),
@@ -265,9 +266,9 @@ create table CRON_JOBS
 );
 
 /*==============================================================*/
-/* Table: DIA_HORARIO                                           */
+/* Table: dia_horario                                           */
 /*==============================================================*/
-create table DIA_HORARIO
+create table dia_horario
 (
    ID_DIA               int not null auto_increment,
    NOMBRE_DIA           varchar(10) not null,
@@ -275,24 +276,24 @@ create table DIA_HORARIO
    primary key (ID_DIA)
 );
 
-alter table DIA_HORARIO comment 'Se utiliza para indicar los días que hay clases.';
+alter table dia_horario comment 'Se utiliza para indicar los días que hay clases.';
 
 /*==============================================================*/
-/* Table: EQUIPO_PROFESOR                                       */
+/* Table: equipo_profesor                                       */
 /*==============================================================*/
-create table EQUIPO_PROFESOR
+create table equipo_profesor
 (
    ID_EQUIPO            int not null auto_increment,
    ID_MODULO_TEM        int,
    primary key (ID_EQUIPO)
 );
 
-alter table EQUIPO_PROFESOR comment 'Existe un equipo de profesores por cada modulo temático(Unid';
+alter table equipo_profesor comment 'Existe un equipo de profesores por cada modulo temático(Unid';
 
 /*==============================================================*/
-/* Table: ESTUDIANTE                                            */
+/* Table: estudiante                                            */
 /*==============================================================*/
-create table ESTUDIANTE
+create table estudiante
 (
    RUT_USUARIO          int not null,
    COD_CARRERA          int not null,
@@ -302,12 +303,12 @@ create table ESTUDIANTE
    key AK_IDENTIFIER_1 (ID_ESTUDIANTE)
 );
 
-alter table ESTUDIANTE comment 'Son los estudiantes inscritos, los que pertenecen a las 20 c';
+alter table estudiante comment 'Son los estudiantes inscritos, los que pertenecen a las 20 c';
 
 /*==============================================================*/
-/* Table: EVALUACION                                            */
+/* Table: evaluacion                                            */
 /*==============================================================*/
-create table EVALUACION
+create table evaluacion
 (
    ID_EVALUACION        int not null auto_increment,
    ID_MODULO_TEM        int,
@@ -315,9 +316,9 @@ create table EVALUACION
 );
 
 /*==============================================================*/
-/* Table: FILTRO_CONTACTO                                       */
+/* Table: filtro_contacto                                       */
 /*==============================================================*/
-create table FILTRO_CONTACTO
+create table filtro_contacto
 (
    ID_FILTRO_CONTACTO   int not null,
    RUT_USUARIO          int not null,
@@ -326,12 +327,12 @@ create table FILTRO_CONTACTO
    primary key (ID_FILTRO_CONTACTO)
 );
 
-alter table FILTRO_CONTACTO comment 'Cada usuario tiene la posibilidad de crear filtros con respe';
+alter table filtro_contacto comment 'Cada usuario tiene la posibilidad de crear filtros con respe';
 
 /*==============================================================*/
-/* Table: HISTORIALES_BUSQUEDA                                  */
+/* Table: historiales_busqueda                                  */
 /*==============================================================*/
-create table HISTORIALES_BUSQUEDA
+create table historiales_busqueda
 (
    ID_HISTORIAL_BUSQ    int not null auto_increment,
    RUT_USUARIO          int not null,
@@ -342,9 +343,9 @@ create table HISTORIALES_BUSQUEDA
 );
 
 /*==============================================================*/
-/* Table: HORARIO                                               */
+/* Table: horario                                               */
 /*==============================================================*/
-create table HORARIO
+create table horario
 (
    ID_HORARIO           int not null auto_increment,
    ID_MODULO            int not null,
@@ -353,12 +354,12 @@ create table HORARIO
    primary key (ID_HORARIO)
 );
 
-alter table HORARIO comment 'Se usa para representar los horarios en los que se realizan ';
+alter table horario comment 'Se usa para representar los horarios en los que se realizan ';
 
 /*==============================================================*/
-/* Table: IMPLEMENTO                                            */
+/* Table: implemento                                            */
 /*==============================================================*/
-create table IMPLEMENTO
+create table implemento
 (
    ID_IMPLEMENTO        int not null auto_increment,
    NOMBRE_IMPLEMENTO    varchar(20) not null,
@@ -367,12 +368,12 @@ create table IMPLEMENTO
    key AK_IDENTIFIER_2 (NOMBRE_IMPLEMENTO)
 );
 
-alter table IMPLEMENTO comment 'Es utilizada con el fin de indicar los artefactos que posee ';
+alter table implemento comment 'Es utilizada con el fin de indicar los artefactos que posee ';
 
 /*==============================================================*/
-/* Table: MODULO_HORARIO                                        */
+/* Table: modulo_horario                                        */
 /*==============================================================*/
-create table MODULO_HORARIO
+create table modulo_horario
 (
    ID_MODULO            int not null auto_increment,
    HORA_INI             time not null,
@@ -380,12 +381,12 @@ create table MODULO_HORARIO
    primary key (ID_MODULO)
 );
 
-alter table MODULO_HORARIO comment 'Se utiliza para representar los módulos en los que se realiz';
+alter table modulo_horario comment 'Se utiliza para representar los módulos en los que se realiz';
 
 /*==============================================================*/
-/* Table: MODULO_TEMATICO                                       */
+/* Table: modulo_tematico                                       */
 /*==============================================================*/
-create table MODULO_TEMATICO
+create table modulo_tematico
 (
    ID_MODULO_TEM        int not null auto_increment,
    ID_EQUIPO            int,
@@ -395,12 +396,12 @@ create table MODULO_TEMATICO
    key AK_IDENTIFIER_2 (NOMBRE_MODULO)
 );
 
-alter table MODULO_TEMATICO comment 'Es la unidad temática que se le pasará a los alumnos durante';
+alter table modulo_tematico comment 'Es la unidad temática que se le pasará a los alumnos durante';
 
 /*==============================================================*/
-/* Table: NOTA                                                  */
+/* Table: nota                                                  */
 /*==============================================================*/
-create table NOTA
+create table nota
 (
    ID_EVALUACION        int not null,
    RUT_USUARIO          int not null,
@@ -409,21 +410,21 @@ create table NOTA
 );
 
 /*==============================================================*/
-/* Table: PERSONA                                               */
+/* Table: persona                                               */
 /*==============================================================*/
-create table PERSONA
+create table persona
 (
    ID_PERSONA           int not null auto_increment,
    CORREO_PERSONA       varchar(200) not null,
    primary key (ID_PERSONA)
 );
 
-alter table PERSONA comment 'corresponde a cualquier persona, de la que no se necesitan l';
+alter table persona comment 'corresponde a cualquier persona, de la que no se necesitan l';
 
 /*==============================================================*/
-/* Table: PLANIFICACION_CLASE                                   */
+/* Table: planificacion_clase                                   */
 /*==============================================================*/
-create table PLANIFICACION_CLASE
+create table planificacion_clase
 (
    ID_PLANIFICACION_CLASE int not null auto_increment,
    ID_SESION            int not null,
@@ -434,12 +435,12 @@ create table PLANIFICACION_CLASE
    primary key (ID_PLANIFICACION_CLASE)
 );
 
-alter table PLANIFICACION_CLASE comment 'Se utiliza para representar la hora en que se realiza una se';
+alter table planificacion_clase comment 'Se utiliza para representar la hora en que se realiza una se';
 
 /*==============================================================*/
-/* Table: PLANTILLA                                             */
+/* Table: plantilla                                             */
 /*==============================================================*/
-create table PLANTILLA
+create table plantilla
 (
    ID_PLANTILLA         int not null auto_increment,
    RUT_USUARIO          int,
@@ -449,12 +450,22 @@ create table PLANTILLA
    primary key (ID_PLANTILLA)
 );
 
-alter table PLANTILLA comment 'Se refiere a las plantillas que se podrán adjuntar en la car';
+alter table plantilla comment 'Se refiere a las plantillas que se podrán adjuntar en la car';
 
 /*==============================================================*/
-/* Table: PROFESOR                                              */
+/* Table: profe_equi_lider                                      */
 /*==============================================================*/
-create table PROFESOR
+create table profe_equi_lider
+(
+   ID_EQUIPO            int,
+   RUT_USUARIO          int,
+   LIDER_PROFESOR       bool not null
+);
+
+/*==============================================================*/
+/* Table: profesor                                              */
+/*==============================================================*/
+create table profesor
 (
    RUT_USUARIO          int not null,
    ID_TIPO_PROFESOR     int not null,
@@ -463,31 +474,21 @@ create table PROFESOR
    key AK_IDENTIFIER_1 (ID_PROFESOR)
 );
 
-alter table PROFESOR comment 'Se utiliza para guardar los datos de las personas que usarán';
+alter table profesor comment 'Se utiliza para guardar los datos de las personas que usarán';
 
 /*==============================================================*/
-/* Table: PROFESOR_SECCION                                      */
+/* Table: profesor_seccion                                      */
 /*==============================================================*/
-create table PROFESOR_SECCION
+create table profesor_seccion
 (
    ID_SECCION           int not null,
    RUT_USUARIO          int not null
 );
 
 /*==============================================================*/
-/* Table: PROFE_EQUI_LIDER                                      */
+/* Table: requisito                                             */
 /*==============================================================*/
-create table PROFE_EQUI_LIDER
-(
-   ID_EQUIPO            int,
-   RUT_USUARIO          int,
-   LIDER_PROFESOR       bool not null
-);
-
-/*==============================================================*/
-/* Table: REQUISITO                                             */
-/*==============================================================*/
-create table REQUISITO
+create table requisito
 (
    ID_REQUISITO         int not null auto_increment,
    NOMBRE_REQUISITO     varchar(20) not null,
@@ -496,23 +497,23 @@ create table REQUISITO
    key AK_IDENTIFIER_2 (NOMBRE_REQUISITO)
 );
 
-alter table REQUISITO comment 'Cada modulo temático tiene sus requisitos para que se pueda ';
+alter table requisito comment 'Cada modulo temático tiene sus requisitos para que se pueda ';
 
 /*==============================================================*/
-/* Table: REQUISITO_MODULO                                      */
+/* Table: requisito_modulo                                      */
 /*==============================================================*/
-create table REQUISITO_MODULO
+create table requisito_modulo
 (
    ID_MODULO_TEM        int not null,
    ID_REQUISITO         int not null
 );
 
-alter table REQUISITO_MODULO comment 'Es utilizada para tratar la relación n a n que existe entre ';
+alter table requisito_modulo comment 'Es utilizada para tratar la relación n a n que existe entre ';
 
 /*==============================================================*/
-/* Table: SALA                                                  */
+/* Table: sala                                                  */
 /*==============================================================*/
-create table SALA
+create table sala
 (
    ID_SALA              int not null auto_increment,
    NUM_SALA             int not null,
@@ -521,23 +522,23 @@ create table SALA
    primary key (ID_SALA)
 );
 
-alter table SALA comment 'Es el lugar físico en donde los estudiantes tendrán sus clas';
+alter table sala comment 'Es el lugar físico en donde los estudiantes tendrán sus clas';
 
 /*==============================================================*/
-/* Table: SALA_IMPLEMENTO                                       */
+/* Table: sala_implemento                                       */
 /*==============================================================*/
-create table SALA_IMPLEMENTO
+create table sala_implemento
 (
    ID_SALA              int not null,
    ID_IMPLEMENTO        int not null
 );
 
-alter table SALA_IMPLEMENTO comment 'Se utiliza para representar la relación que exite entre las ';
+alter table sala_implemento comment 'Se utiliza para representar la relación que exite entre las ';
 
 /*==============================================================*/
-/* Table: SECCION                                               */
+/* Table: seccion                                               */
 /*==============================================================*/
-create table SECCION
+create table seccion
 (
    ID_SECCION           int not null auto_increment,
    ID_SESION            int,
@@ -547,12 +548,12 @@ create table SECCION
    key AK_IDENTIFIER_2 (LETRA_SECCION, NUMERO_SECCION)
 );
 
-alter table SECCION comment 'Las secciones son la forma en que se organizarán los más de ';
+alter table seccion comment 'Las secciones son la forma en que se organizarán los más de ';
 
 /*==============================================================*/
-/* Table: SESION_DE_CLASE                                       */
+/* Table: sesion_de_clase                                       */
 /*==============================================================*/
-create table SESION_DE_CLASE
+create table sesion_de_clase
 (
    ID_SESION            int not null auto_increment,
    ID_SECCION           int,
@@ -562,12 +563,12 @@ create table SESION_DE_CLASE
    primary key (ID_SESION)
 );
 
-alter table SESION_DE_CLASE comment 'Las sesiones son los bloques del curso, cada unidad son 3 se';
+alter table sesion_de_clase comment 'Las sesiones son los bloques del curso, cada unidad son 3 se';
 
 /*==============================================================*/
-/* Table: TIPO_PROFESOR                                         */
+/* Table: tipo_profesor                                         */
 /*==============================================================*/
-create table TIPO_PROFESOR
+create table tipo_profesor
 (
    ID_TIPO_PROFESOR     int not null auto_increment,
    TIPO_PROFESOR        varchar(20) not null,
@@ -575,9 +576,9 @@ create table TIPO_PROFESOR
 );
 
 /*==============================================================*/
-/* Table: TIPO_USER                                             */
+/* Table: tipo_user                                             */
 /*==============================================================*/
-create table TIPO_USER
+create table tipo_user
 (
    ID_TIPO              int not null,
    NOMBRE_TIPO          varchar(11) not null comment 'Debe tener el mismo nombre que la tabla con la que hacer JOIN',
@@ -585,12 +586,12 @@ create table TIPO_USER
    key AK_IDENTIFIER_2 (NOMBRE_TIPO)
 );
 
-alter table TIPO_USER comment 'Existen distintos usuarios, con diferentes permisos dentro d';
+alter table tipo_user comment 'Existen distintos usuarios, con diferentes permisos dentro d';
 
 /*==============================================================*/
-/* Table: USUARIO                                               */
+/* Table: usuario                                               */
 /*==============================================================*/
-create table USUARIO
+create table usuario
 (
    RUT_USUARIO          int not null,
    ID_TIPO              int not null,
@@ -608,152 +609,155 @@ create table USUARIO
    primary key (RUT_USUARIO)
 );
 
-alter table USUARIO comment 'Se utiliza para guardar los datos de las personas que usarán';
+alter table usuario comment 'Se utiliza para guardar los datos de las personas que usarán';
 
-alter table ACT_ESTUDIANTE add constraint FK_RELATIONSHIP_33 foreign key (ID_ACT)
-      references ACTIVIDAD_MASIVA (ID_ACT) on delete cascade on update cascade;
+alter table act_estudiante add constraint FK_RELATIONSHIP_33 foreign key (ID_ACT)
+      references actividad_masiva (ID_ACT) on delete cascade on update cascade;
 
-alter table ACT_ESTUDIANTE add constraint FK_RELATIONSHIP_34 foreign key (RUT_USUARIO)
-      references ESTUDIANTE (RUT_USUARIO) on delete cascade on update cascade;
+alter table act_estudiante add constraint FK_RELATIONSHIP_34 foreign key (RUT_USUARIO)
+      references estudiante (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ADJUNTO add constraint FK_RELATIONSHIP_50 foreign key (ID_CORREO)
-      references CARTA (ID_CORREO) on delete cascade on update cascade;
+alter table adjunto add constraint FK_RELATIONSHIP_50 foreign key (ID_CORREO)
+      references carta (ID_CORREO) on delete cascade on update cascade;
 
-alter table ASISTENCIA add constraint FK_RELATIONSHIP_56 foreign key (RUT_USUARIO)
-      references ESTUDIANTE (RUT_USUARIO) on delete cascade on update cascade;
+alter table asistencia add constraint FK_RELATIONSHIP_56 foreign key (RUT_USUARIO)
+      references estudiante (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ASISTENCIA add constraint FK_RELATIONSHIP_57 foreign key (ID_SESION)
-      references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
+alter table asistencia add constraint FK_RELATIONSHIP_57 foreign key (ID_SESION)
+      references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
 
-alter table AUDITORIA add constraint FK_RELATIONSHIP_35 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table auditoria add constraint FK_RELATIONSHIP_35 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table AYUDANTE add constraint FK_INHERIT_USUARIO3 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table ayu_profe add constraint FK_RELATIONSHIP_37 foreign key (RUT_USUARIO)
+      references ayudante (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table AYU_PROFE add constraint FK_RELATIONSHIP_37 foreign key (RUT_USUARIO)
-      references AYUDANTE (RUT_USUARIO) on delete cascade on update cascade;
+alter table ayu_profe add constraint FK_RELATIONSHIP_39 foreign key (PRO_RUT_USUARIO)
+      references profesor (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table AYU_PROFE add constraint FK_RELATIONSHIP_39 foreign key (PRO_RUT_USUARIO)
-      references PROFESOR (RUT_USUARIO) on delete cascade on update cascade;
+alter table ayu_profe add constraint FK_RELATIONSHIP_54 foreign key (ID_SECCION)
+      references seccion (ID_SECCION) on delete cascade on update cascade;
 
-alter table AYU_PROFE add constraint FK_RELATIONSHIP_54 foreign key (ID_SECCION)
-      references SECCION (ID_SECCION) on delete cascade on update cascade;
+alter table ayudante add constraint FK_INHERIT_USUARIO3 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table BORRADOR add constraint FK_RELATIONSHIP_44 foreign key (ID_CORREO)
-      references CARTA (ID_CORREO) on delete cascade on update cascade;
+alter table borrador add constraint FK_RELATIONSHIP_45 foreign key (ID_CORREO)
+      references carta (ID_CORREO) on delete cascade on update cascade;
 
-alter table CARTA add constraint FK_RELATIONSHIP_22 foreign key (ID_PLANTILLA)
-      references PLANTILLA (ID_PLANTILLA) on delete cascade on update cascade;
+alter table carta add constraint FK_RELATIONSHIP_22 foreign key (ID_PLANTILLA)
+      references plantilla (ID_PLANTILLA) on delete cascade on update cascade;
 
-alter table CARTA add constraint FK_RELATIONSHIP_43 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table carta add constraint FK_RELATIONSHIP_43 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table CARTA_PERSONA add constraint FK_RELATIONSHIP_45 foreign key (ID_PERSONA)
-      references PERSONA (ID_PERSONA) on delete cascade on update cascade;
+alter table carta add constraint FK_RELATIONSHIP_44 foreign key (ID_BORRADOR)
+      references borrador (ID_BORRADOR) on delete cascade on update cascade;
 
-alter table CARTA_PERSONA add constraint FK_RELATIONSHIP_46 foreign key (ID_CORREO)
-      references CARTA (ID_CORREO) on delete cascade on update cascade;
+alter table carta_persona add constraint FK_RELATIONSHIP_46 foreign key (ID_PERSONA)
+      references persona (ID_PERSONA) on delete cascade on update cascade;
 
-alter table CARTA_USUARIO add constraint FK_RELATIONSHIP_30 foreign key (ID_CORREO)
-      references CARTA (ID_CORREO) on delete cascade on update cascade;
+alter table carta_persona add constraint FK_RELATIONSHIP_47 foreign key (ID_CORREO)
+      references carta (ID_CORREO) on delete cascade on update cascade;
 
-alter table CARTA_USUARIO add constraint FK_RELATIONSHIP_31 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table carta_usuario add constraint FK_RELATIONSHIP_30 foreign key (ID_CORREO)
+      references carta (ID_CORREO) on delete cascade on update cascade;
 
-alter table COORDINADOR add constraint FK_INHERIT_USUARIO foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table carta_usuario add constraint FK_RELATIONSHIP_31 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table EQUIPO_PROFESOR add constraint FK_RELATIONSHIP_29 foreign key (ID_MODULO_TEM)
-      references MODULO_TEMATICO (ID_MODULO_TEM) on delete cascade on update cascade;
+alter table coordinador add constraint FK_INHERIT_USUARIO foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ESTUDIANTE add constraint FK_INHERIT_USUARIO4 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table equipo_profesor add constraint FK_RELATIONSHIP_29 foreign key (ID_MODULO_TEM)
+      references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
 
-alter table ESTUDIANTE add constraint FK_RELATIONSHIP_1 foreign key (COD_CARRERA)
-      references CARRERA (COD_CARRERA) on delete cascade on update cascade;
+alter table estudiante add constraint FK_INHERIT_USUARIO4 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ESTUDIANTE add constraint FK_RELATIONSHIP_6 foreign key (ID_SECCION)
-      references SECCION (ID_SECCION) on delete cascade on update cascade;
+alter table estudiante add constraint FK_RELATIONSHIP_1 foreign key (COD_CARRERA)
+      references carrera (COD_CARRERA) on delete cascade on update cascade;
 
-alter table EVALUACION add constraint FK_RELATIONSHIP_48 foreign key (ID_MODULO_TEM)
-      references MODULO_TEMATICO (ID_MODULO_TEM) on delete cascade on update cascade;
+alter table estudiante add constraint FK_RELATIONSHIP_6 foreign key (ID_SECCION)
+      references seccion (ID_SECCION) on delete cascade on update cascade;
 
-alter table FILTRO_CONTACTO add constraint FK_RELATIONSHIP_38 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table evaluacion add constraint FK_RELATIONSHIP_48 foreign key (ID_MODULO_TEM)
+      references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
 
-alter table HISTORIALES_BUSQUEDA add constraint FK_RELATIONSHIP_51 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table filtro_contacto add constraint FK_RELATIONSHIP_38 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table HORARIO add constraint FK_RELATIONSHIP_8 foreign key (ID_DIA)
-      references DIA_HORARIO (ID_DIA) on delete cascade on update cascade;
+alter table historiales_busqueda add constraint FK_RELATIONSHIP_51 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table HORARIO add constraint FK_RELATIONSHIP_9 foreign key (ID_MODULO)
-      references MODULO_HORARIO (ID_MODULO) on delete cascade on update cascade;
+alter table horario add constraint FK_RELATIONSHIP_8 foreign key (ID_DIA)
+      references dia_horario (ID_DIA) on delete cascade on update cascade;
 
-alter table MODULO_TEMATICO add constraint FK_RELATIONSHIP_28 foreign key (ID_EQUIPO)
-      references EQUIPO_PROFESOR (ID_EQUIPO) on delete cascade on update cascade;
+alter table horario add constraint FK_RELATIONSHIP_9 foreign key (ID_MODULO)
+      references modulo_horario (ID_MODULO) on delete cascade on update cascade;
 
-alter table NOTA add constraint FK_RELATIONSHIP_36 foreign key (RUT_USUARIO)
-      references ESTUDIANTE (RUT_USUARIO) on delete cascade on update cascade;
+alter table modulo_tematico add constraint FK_RELATIONSHIP_28 foreign key (ID_EQUIPO)
+      references equipo_profesor (ID_EQUIPO) on delete cascade on update cascade;
 
-alter table NOTA add constraint FK_RELATIONSHIP_42 foreign key (ID_EVALUACION)
-      references EVALUACION (ID_EVALUACION) on delete cascade on update cascade;
+alter table nota add constraint FK_RELATIONSHIP_36 foreign key (RUT_USUARIO)
+      references estudiante (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_10 foreign key (ID_SALA)
-      references SALA (ID_SALA) on delete cascade on update cascade;
+alter table nota add constraint FK_RELATIONSHIP_42 foreign key (ID_EVALUACION)
+      references evaluacion (ID_EVALUACION) on delete cascade on update cascade;
 
-alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
-      references HORARIO (ID_HORARIO) on delete cascade on update cascade;
+alter table planificacion_clase add constraint FK_RELATIONSHIP_10 foreign key (ID_SALA)
+      references sala (ID_SALA) on delete cascade on update cascade;
 
-alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_55 foreign key (ID_SECCION)
-      references SECCION (ID_SECCION) on delete cascade on update cascade;
+alter table planificacion_clase add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
+      references horario (ID_HORARIO) on delete cascade on update cascade;
 
-alter table PLANIFICACION_CLASE add constraint FK_RELATIONSHIP_59 foreign key (ID_SESION)
-      references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
+alter table planificacion_clase add constraint FK_RELATIONSHIP_55 foreign key (ID_SECCION)
+      references seccion (ID_SECCION) on delete cascade on update cascade;
 
-alter table PLANTILLA add constraint FK_RELATIONSHIP_58 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table planificacion_clase add constraint FK_RELATIONSHIP_59 foreign key (ID_SESION)
+      references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
 
-alter table PROFESOR add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO) on delete cascade on update cascade;
+alter table plantilla add constraint FK_RELATIONSHIP_58 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table PROFESOR add constraint FK_RELATIONSHIP_52 foreign key (ID_TIPO_PROFESOR)
-      references TIPO_PROFESOR (ID_TIPO_PROFESOR) on delete cascade on update cascade;
+alter table profe_equi_lider add constraint FK_RELATIONSHIP_40 foreign key (ID_EQUIPO)
+      references equipo_profesor (ID_EQUIPO) on delete cascade on update cascade;
 
-alter table PROFESOR_SECCION add constraint FK_RELATIONSHIP_49 foreign key (RUT_USUARIO)
-      references PROFESOR (RUT_USUARIO) on delete cascade on update cascade;
+alter table profe_equi_lider add constraint FK_RELATIONSHIP_41 foreign key (RUT_USUARIO)
+      references profesor (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table PROFESOR_SECCION add constraint FK_RELATIONSHIP_53 foreign key (ID_SECCION)
-      references SECCION (ID_SECCION) on delete cascade on update cascade;
+alter table profesor add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO)
+      references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table PROFE_EQUI_LIDER add constraint FK_RELATIONSHIP_40 foreign key (ID_EQUIPO)
-      references EQUIPO_PROFESOR (ID_EQUIPO) on delete cascade on update cascade;
+alter table profesor add constraint FK_RELATIONSHIP_52 foreign key (ID_TIPO_PROFESOR)
+      references tipo_profesor (ID_TIPO_PROFESOR) on delete cascade on update cascade;
 
-alter table PROFE_EQUI_LIDER add constraint FK_RELATIONSHIP_41 foreign key (RUT_USUARIO)
-      references PROFESOR (RUT_USUARIO) on delete cascade on update cascade;
+alter table profesor_seccion add constraint FK_RELATIONSHIP_49 foreign key (RUT_USUARIO)
+      references profesor (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table REQUISITO_MODULO add constraint FK_RELATIONSHIP_19 foreign key (ID_REQUISITO)
-      references REQUISITO (ID_REQUISITO) on delete cascade on update cascade;
+alter table profesor_seccion add constraint FK_RELATIONSHIP_53 foreign key (ID_SECCION)
+      references seccion (ID_SECCION) on delete cascade on update cascade;
 
-alter table REQUISITO_MODULO add constraint FK_RELATIONSHIP_27 foreign key (ID_MODULO_TEM)
-      references MODULO_TEMATICO (ID_MODULO_TEM) on delete cascade on update cascade;
+alter table requisito_modulo add constraint FK_RELATIONSHIP_19 foreign key (ID_REQUISITO)
+      references requisito (ID_REQUISITO) on delete cascade on update cascade;
 
-alter table SALA_IMPLEMENTO add constraint FK_RELATIONSHIP_16 foreign key (ID_SALA)
-      references SALA (ID_SALA) on delete cascade on update cascade;
+alter table requisito_modulo add constraint FK_RELATIONSHIP_27 foreign key (ID_MODULO_TEM)
+      references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
 
-alter table SALA_IMPLEMENTO add constraint FK_RELATIONSHIP_17 foreign key (ID_IMPLEMENTO)
-      references IMPLEMENTO (ID_IMPLEMENTO) on delete cascade on update cascade;
+alter table sala_implemento add constraint FK_RELATIONSHIP_16 foreign key (ID_SALA)
+      references sala (ID_SALA) on delete cascade on update cascade;
 
-alter table SECCION add constraint FK_SE_ENCUENTRA_ACTUALMENTE foreign key (ID_SESION)
-      references SESION_DE_CLASE (ID_SESION) on delete cascade on update cascade;
+alter table sala_implemento add constraint FK_RELATIONSHIP_17 foreign key (ID_IMPLEMENTO)
+      references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
 
-alter table SESION_DE_CLASE add constraint FK_RELATIONSHIP_13 foreign key (ID_MODULO_TEM)
-      references MODULO_TEMATICO (ID_MODULO_TEM) on delete cascade on update cascade;
+alter table seccion add constraint FK_SE_ENCUENTRA_ACTUALMENTE foreign key (ID_SESION)
+      references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
 
-alter table SESION_DE_CLASE add constraint FK_RELATIONSHIP_14 foreign key (ID_SECCION)
-      references SECCION (ID_SECCION) on delete cascade on update cascade;
+alter table sesion_de_clase add constraint FK_RELATIONSHIP_13 foreign key (ID_MODULO_TEM)
+      references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
 
-alter table USUARIO add constraint FK_RELATIONSHIP_23 foreign key (ID_TIPO)
-      references TIPO_USER (ID_TIPO) on delete cascade on update cascade;
+alter table sesion_de_clase add constraint FK_RELATIONSHIP_14 foreign key (ID_SECCION)
+      references seccion (ID_SECCION) on delete cascade on update cascade;
+
+alter table usuario add constraint FK_RELATIONSHIP_23 foreign key (ID_TIPO)
+      references tipo_user (ID_TIPO) on delete cascade on update cascade;
 
