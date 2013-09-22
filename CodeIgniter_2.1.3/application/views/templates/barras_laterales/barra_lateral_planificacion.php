@@ -14,6 +14,8 @@
 		}
 		// Las operaciones por defecto no poseen clases
 		$verPlanificacion = "";
+		$agregarPlanificacion = "";
+		$eliminarPlanificacion = "";
 		$verModulos = "";
 		$agregarModulo = "";
 		$editarModulo = "";
@@ -22,7 +24,6 @@
 		$agregarSesion = "";
 		$editarSesion = "";
 		$eliminarSesion = "";
-
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
 		$inPlanificacion = "";
@@ -34,6 +35,14 @@
 		if ($subVistaLateralAbierta == "verPlanificacion") {
 			$verPlanificacion = 'class="active"';
 			$inPlanificacion = 'in';
+		}
+		else if ($subVistaLateralAbierta == "agregarPlanificacion"){
+			$agregarPlanificacion = 'class="active"';
+			$inPlanificacion = "in";
+		}
+		else if ($subVistaLateralAbierta == "eliminarPlanificacion"){
+			$eliminarPlanificacion = 'class="active"';
+			$inPlanificacion = "in";
 		}
 		else if ($subVistaLateralAbierta == "verModulos") {
 			$verModulos = 'class="active"';
@@ -79,7 +88,10 @@
 			<div id="collapseTwo" class="accordion-body collapse <?php echo $inPlanificacion; ?>">
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/verPlanificacion")?>">Ver planificación</a></li>
-					
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/agregarPlanificacion")?>">Agregar planificación</a></li>
+						<li <?php echo $eliminarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/eliminarPlanificacion")?>">Eliminar planificación</a></li>
+					<?php } ?>
 				</div>
 			</div>
 		</div>

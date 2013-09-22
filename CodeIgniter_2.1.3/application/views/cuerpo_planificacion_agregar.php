@@ -122,7 +122,7 @@
 <div class="row-fluid">
 	<div class="span12">
 		<fieldset>
-			<legend>Asignación de Sección</legend>
+			<legend>Agregar Planificación de Clase</legend>
 			<div class="row-fluid">
 				<div class="span6">
 					<font color="red">* Campos Obligatorios</font>
@@ -134,114 +134,75 @@
 				</div>
 			</div>
 			<?php
-				$atributos= array('onsubmit' => 'return AsignarSeccion()', 'id' => 'formAsignar');
+				$atributos= array('id' => 'formAsignar', 'class' => 'form-horizontal');
 		 		echo form_open('Secciones/HacerAsignarAsecciones/', $atributos);
 			?>
 			<div class="row-fluid">
 				<div class= "span6">
-					<div class="row-fluid">
-						<div class="span9">
-							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">1.- <font color="red">*</font> Seleccione la sección para asignación</label>
-							</div>
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table id="listadoSecciones" class="table table-hover">
-								<thead>
-									<tr>
-										
-									</tr>
-								</thead>
-								<tbody >
-
+					<div class="control-group">
+						<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección de curso a planificar:</label>
+						<div class="controls">
+							<select id="seccion" name="seccion" class="span12" title="Sección que desea planificar" required>
+								<option value="" disabled selected>Seleccione sección de curso</option>
 								<?php
-									$contador=0;
-										$comilla= "'";
-										
-										while ($contador<count($seccion)){
-											
-											echo '<tr>';
-											echo '<td style="width:26px;"><input required type="radio" name="seccion_seleccionada" id="seccion_'.$contador.'" value="'.$seccion[$contador][0].'"> '.$seccion[$contador][1].'</td>';
-											echo '</tr>';
-																		
-											$contador = $contador + 1;
-										}
+								foreach ($listadoSecciones as $valor) {
+									?>
+										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
+									<?php 
+								}
 								?>
+							</select>
+						</div>
+					</div>
 
-								</tbody>
-							</table>
+					<!-- Seleccion de módulo tematico y sesión de clase -->
+					<div class="control-group">
+						<div>2.- <font color="red">*</font> Sesión de clase a planificar</div>
+					</div>
+					
+					<div class="control-group offset1" >
+						<label class="control-label" for="moduloTematico">2.1.- <font color="red">*</font> Módulo temático:</label>
+						<div class="controls">
+							<select id="moduloTematico" name="moduloTematico" class="span12" required title="Módulo temático que se va a planificar para esa sección">
+								<option value="" disabled selected>Seleccione módulos temático</option>
+
+							</select>
 						</div>
 					</div>
-					<div class="row-fluid" style="margin-top:7%">
-						<div class="span9">
-							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">3.- <font color="red">*</font> Seleccione el profesor disponible del módulo</label>
-							</div>
+
+					<!-- Variable según el módulo temático que se seleccione -->
+					<div class="control-group offset1">
+						<label class="control-label" for="sesion">2.2.- <font color="red">*</font> Sesión de clase:</label>
+						<div class="controls">
+							<select id="sesion" name="sesion" class="span12" required title="Sección que desea planificar">
+								<option value="" disabled selected>Seleccione sesión de clase</option>
+
+							</select>
 						</div>
 					</div>
-					<div class="row-fluid">
-						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;  margin-top:1%">
-							<table id="profesores" class="table table-hover">
-								<thead>
-									<tr>
-										
-									</tr>
-								</thead>
-								<tbody id="profes" >
-									
-								</tbody>
-							</table>
+
+					<div class="control-group">
+						<label class="control-label" for="profesor">3.- <font color="red">*</font> Profesor:</label>
+						<div class="controls">
+							<select id="profesor" name="profesor" class="span12" title="Sección que desea planificar">
+								<option value="" disabled selected>Seleccione profesor</option>
+								
+							</select>
 						</div>
 					</div>
 				</div>
 
 
 				<div class="span6">
-					<div class="row-fluid">
+					<div class="row-fluid" >
 						<div class="span9">
 							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">2.- <font color="red">*</font> Seleccione el módulo a asignar</label>
-							</div>
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										
-									</tr>
-								</thead>
-								<tbody >
-									<?php
-										$contador=0;
-										$comilla= "'";
-										
-										while ($contador<count($modulos)){
-											
-											echo '<tr>';
-											echo '<td><input required onclick="profesDelModulo('.$comilla.$modulos[$contador]['NOMBRE_MODULO'].$comilla.')" type="radio" name="modulo_seleccionado" id="modulo_'.$contador.'" value="'.$modulos[$contador]['COD_MODULO_TEM'].'"> '.$modulos[$contador]['NOMBRE_MODULO'].'</td>';
-											echo '</tr>';
-																		
-											$contador = $contador + 1;
-										}
-									
-									?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="row-fluid" style="margin-top:2%">
-						<div class="span9">
-							<div class="control-group">
-								<label class="control-label" for="inputInfo" style="cursor:default">4.- <font color="red">*</font> Seleccione la sala y horario</label>
+								<div>4.- <font color="red">*</font> Seleccione la sala y horario</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="row-fluid" style="margin-left:3%">
+					<div class="row-fluid" >
 						<div class="span6" >
 							4.1.- Sala
 						</div>
@@ -259,80 +220,58 @@
 									</tr>
 								</thead>
 								<tbody >
-									<?php
-										$contador=0;
-										$comilla= "'";
-
-										
-										while ($contador<count($salas)){
-											
-											echo '<tr>';
-											echo '<td style="width:26px;"><input required type="radio" name="sala_seleccionada" id="sala_'.$contador.'" value="'.$salas[$contador]['COD_SALA'].'"> '.$salas[$contador]['NUM_SALA'].'</td>';
-											echo '</tr>';
-																		
-											$contador = $contador + 1;
-										}
-									?>
+									
 								</tbody>
 							</table>
 						</div>
 
 						<div class="row-fluid">
-								<select id="dia" name="dia_seleccionado" class= "span4" style="margin-left: 2%" required>
-									<option value="" disabled selected>Día</option>
-									<option>Lunes</option>
-									<option>Martes</option>
-									<option>Miercoles</option>
-									<option>Jueves</option>
-									<option>Viernes</option>
-									<option>Sabado</option>
-									<option>Domingo</option>
+								<select id="dia" name="dia_seleccionado" class= "span5" style="margin-left: 2%" required>
+									<option value="" disabled selected>Seleccione día</option>
+									<?php
+									if (isset($listadoDias)) {
+										foreach ($listadoDias as $valor) {
+											?>
+												<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
+											<?php 
+										}
+									}
+									?>
 								</select>
 							
 
 						
-								<select id="bloque" name="bloque_seleccionado" class= "span4" style="margin-left: 2%; margin-top:5%" required>
-									<option value="" disabled selected>Bloque</option>
-									<option>08:00</option>
-									<option>09:40</option>
-									<option>11:20</option>
-									<option>13:50</option>
-									<option>15:30</option>
-									<option>17:10</option>
-									<option>19:00</option>
-									<option>20:20</option>
-									<option>22:00</option>
+								<select id="bloque" name="bloque_seleccionado" class= "span5" style="margin-left: 2%; margin-top:5%" required>
+									<option value="" disabled selected>Seleccione bloque horario</option>
+									<?php
+									if (isset($listadoBloquesHorario)) {
+										foreach ($listadoBloquesHorario as $valor) {
+											?>
+												<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
+											<?php 
+										}
+									}
+									?>
 								</select>
 							
 						</div>
 
-						<div class="control-group" style="margin-top:5%; margin-left: 35%">
-							<div class="controls pull-right">
-								<button class="btn" type="submit" style="width:102px; margin-right: 7px">
-									<div class= "btn_with_icon_solo">Ã</div>
-									&nbsp Asignar
-
+						<div class="control-group">
+							<div class="controls">
+								<button type="button" class="btn" onclick="agregarPlanificacion()" >
+									<div class="btn_with_icon_solo">Ã</div>
+									&nbsp; Agregar
 								</button>
-								<button class="btn" onClick="Cancelar()" type="reset" style="width:105px">
-									<div class= "btn_with_icon_solo">Â</div>
-									&nbsp Cancelar
-
+								<button class="btn" type="button" onclick="resetearPlanificacion()" >
+									<div class="btn_with_icon_solo">Â</div>
+									&nbsp; Cancelar
 								</button>
 							</div>
-						</div>
-
-						<!-- Modal para cuando un horario ya existe -->
-						<div id="modalVerificaHorario" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>El horario que se quiere ingresar ya existe</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor ingrese otro horario (dia y bloque) y vuelva a intentarlo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
+							<?php
+								if (isset($dialogos)) {
+									echo $dialogos;
+								}
+							?>
 						</div>
 						
 					</div>

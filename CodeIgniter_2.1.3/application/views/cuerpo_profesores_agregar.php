@@ -104,10 +104,12 @@
 					<div class="controls">
 						<select id="tipo_profesor" name="tipo_profesor" class="span12" title="Tipo de contrato">
 							<?php
-							foreach ($tipos_profesores as $valor) {
-								?>
-									<option value="<?php echo $valor->id?>"><?php echo $valor->nombre_tipo?></option>
-								<?php 
+							if (isset($tipos_profesores)) {
+								foreach ($tipos_profesores as $valor) {
+									?>
+										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre_tipo?></option>
+									<?php 
+								}
 							}
 							?>
 						</select>
