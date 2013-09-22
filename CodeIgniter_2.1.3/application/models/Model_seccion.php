@@ -205,30 +205,29 @@ class Model_seccion extends CI_Model {
 	* @return $lista arreglo que coniene el detalle de la sección solicitada
 	*/
 
-	public function getDetallesSeccion($id_seccion)
-	{
+	public function getDetallesSeccion($id_seccion) {
 		$this->db->select('seccion.ID_SECCION as id_seccion');
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->select('LETRA_SECCION AS letra_seccion');
 		$this->db->select('NUMERO_SECCION AS numero_seccion');
 		$this->db->select('NOMBRE_MODULO AS modulo');
-		//$this->db->select('sala.NUM_SALA AS sala');
+		$this->db->select('sala.NUM_SALA AS sala');
 		$this->db->select('usuario.NOMBRE1 as nombre1');
 		$this->db->select('usuario.APELLIDO1 as apellido1');
 		$this->db->select('usuario.APELLIDO2 as apellido2');
-		//$this->db->select('horario.NOMBRE_HORARIO as horario');
+		$this->db->select('horario.NOMBRE_HORARIO as horario');
 		$this->db->where('seccion.ID_SECCION', $id_seccion);
+
 		$this->db->join('sesion_de_clase', 'sesion_de_clase.ID_SESION = seccion.ID_SESION', 'LEFT OUTER');
 		$this->db->join('modulo_tematico', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM', 'LEFT OUTER');
-		$this->db->join('ayu_profe','ayu_profe.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('planificacion_clase','seccion.ID_SECCION = planificacion_clase.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('horario','planificacion_clase.ID_HORARIO = horario.ID_HORARIO', 'LEFT OUTER');
+		$this->db->join('sala','planificacion_clase.ID_SALA = sala.ID_SALA', 'LEFT OUTER');
+		$this->db->join('ayu_profe','ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
 		$this->db->join('profesor','ayu_profe.PRO_RUT_USUARIO = profesor.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('ayudante','ayu_profe.RUT_USUARIO = ayudante.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->join('usuario','usuario.RUT_USUARIO = profesor.RUT_USUARIO', 'LEFT OUTER');
-		/* //PENDIENTE
-		$this->db->join('equipo_profesor', 'modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO', 'LEFT OUTER');
-		$this->db->join('sala_horario', 'seccion_mod_tem.ID_HORARIO_SALA = sala_horario.ID_HORARIO_SALA', 'LEFT OUTER');
-		$this->db->join('sala','sala_horario.COD_SALA=sala.COD_SALA', 'LEFT OUTER');
-		$this->db->join('horario','sala_horario.COD_HORARIO = horario.COD_HORARIO', 'LEFT OUTER');
-		*/
+		//PENDIENTE JOIN CON USUARIO AYUDANTE
 		$query = $this->db->get('seccion');
 
 		//echo $this->db->last_query();

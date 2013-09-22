@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     21-09-2013 18:31:48                          */
+/* Created on:     21-09-2013 23:28:08                          */
 /*==============================================================*/
 
 
@@ -63,8 +63,6 @@ drop table if exists plantilla;
 drop table if exists profe_equi_lider;
 
 drop table if exists profesor;
-
-drop table if exists profesor_seccion;
 
 drop table if exists requisito;
 
@@ -157,9 +155,10 @@ alter table auditoria comment 'Se utiliza para realizar un registro de los datos
 /*==============================================================*/
 create table ayu_profe
 (
-   ID_SECCION           int,
+   ID_AYU_PROFE         int not null auto_increment,
    RUT_USUARIO          int not null,
-   PRO_RUT_USUARIO      int not null
+   PRO_RUT_USUARIO      int not null,
+   primary key (ID_AYU_PROFE)
 );
 
 /*==============================================================*/
@@ -207,7 +206,6 @@ create table carta
    ID_CORREO            int not null auto_increment,
    RUT_USUARIO          int not null,
    ID_BORRADOR          int,
-   ID_PLANTILLA         int,
    CUERPO_EMAIL         text not null,
    ASUNTO               varchar(40),
    FECHA_HORA_CORREO    datetime not null,
@@ -429,6 +427,7 @@ create table planificacion_clase
    ID_PLANIFICACION_CLASE int not null auto_increment,
    ID_SESION            int not null,
    ID_SALA              int not null,
+   ID_AYU_PROFE         int,
    ID_SECCION           int not null,
    ID_HORARIO           int not null,
    FECHA_PLANIFICADA    date,
@@ -475,15 +474,6 @@ create table profesor
 );
 
 alter table profesor comment 'Se utiliza para guardar los datos de las personas que usarán';
-
-/*==============================================================*/
-/* Table: profesor_seccion                                      */
-/*==============================================================*/
-create table profesor_seccion
-(
-   ID_SECCION           int not null,
-   RUT_USUARIO          int not null
-);
 
 /*==============================================================*/
 /* Table: requisito                                             */
@@ -634,17 +624,11 @@ alter table ayu_profe add constraint FK_RELATIONSHIP_37 foreign key (RUT_USUARIO
 alter table ayu_profe add constraint FK_RELATIONSHIP_39 foreign key (PRO_RUT_USUARIO)
       references profesor (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table ayu_profe add constraint FK_RELATIONSHIP_54 foreign key (ID_SECCION)
-      references seccion (ID_SECCION) on delete cascade on update cascade;
-
 alter table ayudante add constraint FK_INHERIT_USUARIO3 foreign key (RUT_USUARIO)
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table borrador add constraint FK_RELATIONSHIP_45 foreign key (ID_CORREO)
       references carta (ID_CORREO) on delete cascade on update cascade;
-
-alter table carta add constraint FK_RELATIONSHIP_22 foreign key (ID_PLANTILLA)
-      references plantilla (ID_PLANTILLA) on delete cascade on update cascade;
 
 alter table carta add constraint FK_RELATIONSHIP_43 foreign key (RUT_USUARIO)
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
@@ -709,6 +693,9 @@ alter table planificacion_clase add constraint FK_RELATIONSHIP_10 foreign key (I
 alter table planificacion_clase add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
       references horario (ID_HORARIO) on delete cascade on update cascade;
 
+alter table planificacion_clase add constraint FK_RELATIONSHIP_54 foreign key (ID_AYU_PROFE)
+      references ayu_profe (ID_AYU_PROFE) on delete cascade on update cascade;
+
 alter table planificacion_clase add constraint FK_RELATIONSHIP_55 foreign key (ID_SECCION)
       references seccion (ID_SECCION) on delete cascade on update cascade;
 
@@ -730,12 +717,6 @@ alter table profesor add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO
 alter table profesor add constraint FK_RELATIONSHIP_52 foreign key (ID_TIPO_PROFESOR)
       references tipo_profesor (ID_TIPO_PROFESOR) on delete cascade on update cascade;
 
-alter table profesor_seccion add constraint FK_RELATIONSHIP_49 foreign key (RUT_USUARIO)
-      references profesor (RUT_USUARIO) on delete cascade on update cascade;
-
-alter table profesor_seccion add constraint FK_RELATIONSHIP_53 foreign key (ID_SECCION)
-      references seccion (ID_SECCION) on delete cascade on update cascade;
-
 alter table requisito_modulo add constraint FK_RELATIONSHIP_19 foreign key (ID_REQUISITO)
       references requisito (ID_REQUISITO) on delete cascade on update cascade;
 
@@ -748,7 +729,7 @@ alter table sala_implemento add constraint FK_RELATIONSHIP_16 foreign key (ID_SA
 alter table sala_implemento add constraint FK_RELATIONSHIP_17 foreign key (ID_IMPLEMENTO)
       references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
 
-alter table seccion add constraint FK_RELATIONSHIP_60 foreign key (ID_SESION)
+alter table seccion add constraint FK_RELATIONSHIP_49 foreign key (ID_SESION)
       references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
 
 alter table sesion_de_clase add constraint FK_RELATIONSHIP_13 foreign key (ID_MODULO_TEM)

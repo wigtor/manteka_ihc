@@ -201,8 +201,8 @@ INSERT INTO `ayudante` (`RUT_USUARIO`, `ID_AYUDANTE`) VALUES
 --
 -- Volcado de datos para la tabla `ayu_profe`
 --
-INSERT INTO `ayu_profe` (`ID_SECCION`, `RUT_USUARIO`, `PRO_RUT_USUARIO`) VALUES
-(NULL, 17242754, 17705318);
+INSERT INTO `ayu_profe` (`ID_AYU_PROFE`, `RUT_USUARIO`, `PRO_RUT_USUARIO`) VALUES
+(1, 17242754, 17705318);
 
 
 -- Volcado de datos para la tabla `estudiante`

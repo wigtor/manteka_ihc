@@ -185,10 +185,14 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('ayudante.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('APELLIDO1 AS apellido1');
-		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
+		$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTematico');
+		$this->db->select('GROUP_CONCAT( CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
 		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
-		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('sesion_de_clase', 'planificacion_clase.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'sesion_de_clase.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
 		$this->db->group_by('ayudante.RUT_USUARIO', 'asc');
 		$this->db->order_by('APELLIDO1', 'asc');
 
@@ -257,11 +261,15 @@ class Model_ayudante extends CI_Model {
 		$this->db->select('APELLIDO1_PROFESOR AS apellido1_profe');
 		$this->db->select('APELLIDO2_PROFESOR AS apellido2_profe');
 */
-		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
+		$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTematico');
+		$this->db->select('GROUP_CONCAT( CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
 		$this->db->join('usuario', 'ayudante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('ayu_profe', 'ayudante.RUT_USUARIO = ayu_profe.RUT_USUARIO', 'LEFT OUTER');
-		$this->db->join('seccion', 'ayu_profe.ID_SECCION  = seccion.ID_SECCION ', 'LEFT OUTER');
-		$this->db->join('profesor', 'profesor.RUT_USUARIO = ayu_profe.PRO_RUT_USUARIO', 'LEFT OUTER'); //QUIZÁ DEBA IR AL REVEZ
+		$this->db->join('planificacion_clase', 'ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('sesion_de_clase', 'planificacion_clase.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'sesion_de_clase.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->group_by('ayudante.RUT_USUARIO', 'asc');
 		$this->db->where('ayudante.RUT_USUARIO', $rut);
 		$query = $this->db->get('ayudante');
 		if ($query == FALSE) {

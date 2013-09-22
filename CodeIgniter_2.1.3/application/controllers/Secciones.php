@@ -276,15 +276,18 @@ class Secciones extends MasterManteka {
 	* Se carga el modelo de secciones 
 	* Se realiza la operación de asiganción a la seccion correspondiente llamando al modelo
 	**/	
-	public function asignarAsecciones() {
+	public function blablablasd() {
 
 		$datos_vista = array();
 		$subMenuLateralAbierto = "asignarAseccion"; 
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->load->model('Model_seccion');
-		$cod_seccion = $this->input->post("cod_seccion");
+
+		//$cod_seccion = $this->input->post("cod_seccion");
         $datos_vista = array();
+
+
         //$datos_vista = array('seccion' =>$this->Model_seccion->VerSeccionesNoAsignadas(), 'modulos' => $this->Model_seccion->verModulosPorAsignar(), 'salas' => $this->Model_seccion->verSalasPorAsignar());
 		$this->cargarTodo("Secciones", 'cuerpo_secciones_asignar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 

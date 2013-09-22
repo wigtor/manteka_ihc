@@ -176,18 +176,18 @@ class Model_profesor extends CI_Model {
 		$this->db->select('TIPO_PROFESOR AS tipo_profesor');
 		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
-		//$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTem');
-		$this->db->select('NOMBRE_MODULO AS moduloTem');
-		//$this->db->select('GROUP_CONCAT( NOMBRE_SECCION) AS seccion');
-		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
+		$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTematico');
+		$this->db->select('GROUP_CONCAT( CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('tipo_profesor', 'profesor.ID_TIPO_PROFESOR = tipo_profesor.ID_TIPO_PROFESOR');
-		$this->db->join('profesor_seccion', 'profesor.RUT_USUARIO = profesor_seccion.RUT_USUARIO', 'LEFT OUTER');
-		$this->db->join('seccion', 'profesor_seccion.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
-		$this->db->join('sesion_de_clase', 'seccion.ID_SECCION = sesion_de_clase.ID_SECCION', 'LEFT OUTER');
-		$this->db->join('modulo_tematico', 'sesion_de_clase.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('profe_equi_lider', 'profesor.RUT_USUARIO = profe_equi_lider.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('equipo_profesor', 'profe_equi_lider.ID_EQUIPO = equipo_profesor.ID_EQUIPO', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'equipo_profesor.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('ayu_profe', 'profesor.RUT_USUARIO = ayu_profe.PRO_RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
 		$this->db->where('profesor.RUT_USUARIO', $rut);
-		//$this->db->group_by('RUT_USUARIO');
+		$this->db->group_by('profesor.RUT_USUARIO');
 		$query = $this->db->get('profesor');
 		if ($query == FALSE) {
 			return array();
@@ -200,17 +200,18 @@ class Model_profesor extends CI_Model {
 		$this->db->select('profesor.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('APELLIDO1 AS apellido1');
-		//$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTem');
-		$this->db->select('NOMBRE_MODULO AS moduloTem');
-		//$this->db->select('GROUP_CONCAT( NOMBRE_SECCION) AS seccion');
-		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
+		$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTematico');
+		$this->db->select('GROUP_CONCAT( CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('tipo_profesor', 'profesor.ID_TIPO_PROFESOR = tipo_profesor.ID_TIPO_PROFESOR');
-		$this->db->join('profesor_seccion', 'profesor.RUT_USUARIO = profesor_seccion.RUT_USUARIO', 'LEFT OUTER');
-		$this->db->join('seccion', 'profesor_seccion.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
-		$this->db->join('sesion_de_clase', 'seccion.ID_SECCION = sesion_de_clase.ID_SECCION', 'LEFT OUTER');
-		$this->db->join('modulo_tematico', 'sesion_de_clase.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
-		//$this->db->group_by('profesor.RUT_USUARIO');
+		$this->db->join('profe_equi_lider', 'profesor.RUT_USUARIO = profe_equi_lider.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('equipo_profesor', 'profe_equi_lider.ID_EQUIPO = equipo_profesor.ID_EQUIPO', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'equipo_profesor.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('ayu_profe', 'profesor.RUT_USUARIO = ayu_profe.PRO_RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
+
+		$this->db->group_by('profesor.RUT_USUARIO');
 		$this->db->order_by('APELLIDO1', 'asc');
 
 		if ($texto != "") {
