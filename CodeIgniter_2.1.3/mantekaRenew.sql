@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     21-09-2013 17:18:21                          */
+/* Created on:     21-09-2013 18:31:48                          */
 /*==============================================================*/
 
 
@@ -556,7 +556,6 @@ alter table seccion comment 'Las secciones son la forma en que se organizarán lo
 create table sesion_de_clase
 (
    ID_SESION            int not null auto_increment,
-   ID_SECCION           int,
    ID_MODULO_TEM        int not null,
    NOMBRE_SESION        varchar(30) not null,
    DESCRIPCION_SESION   varchar(100),
@@ -749,14 +748,11 @@ alter table sala_implemento add constraint FK_RELATIONSHIP_16 foreign key (ID_SA
 alter table sala_implemento add constraint FK_RELATIONSHIP_17 foreign key (ID_IMPLEMENTO)
       references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
 
-alter table seccion add constraint FK_SE_ENCUENTRA_ACTUALMENTE foreign key (ID_SESION)
+alter table seccion add constraint FK_RELATIONSHIP_60 foreign key (ID_SESION)
       references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
 
 alter table sesion_de_clase add constraint FK_RELATIONSHIP_13 foreign key (ID_MODULO_TEM)
       references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
-
-alter table sesion_de_clase add constraint FK_RELATIONSHIP_14 foreign key (ID_SECCION)
-      references seccion (ID_SECCION) on delete cascade on update cascade;
 
 alter table usuario add constraint FK_RELATIONSHIP_23 foreign key (ID_TIPO)
       references tipo_user (ID_TIPO) on delete cascade on update cascade;

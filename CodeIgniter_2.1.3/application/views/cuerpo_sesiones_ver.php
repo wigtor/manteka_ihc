@@ -1,56 +1,40 @@
 <script>
-	var tiposFiltro = ["Sesión", "Módulo temático"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", ""];
+	var tiposFiltro = ["Nombre sesión", "Descripción", "Módulo temático"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", ""];
 	var prefijo_tipoDato = "sesion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Sesiones/postBusquedaSesiones") ?>";
-	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/secciones") ?>";
+	var url_post_busquedas = "<?php echo site_url("Sesiones/getSesionesAjax") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/sesiones") ?>";
 
 	function verDetalle(elemTabla) {
 
 		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		sesion_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
-		//var rut_clickeado = elemTabla;
-
+		
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
 
 		/* Defino el ajax que hará la petición al servidor */
 		$.ajax({
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Sesiones/postDetallesSesion") ?>", /* Se setea la url del controlador que responderá */
-			data: { sesion: sesion_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				/* Obtengo los objetos HTML donde serán escritos los resultados */
-				var nombreDetalle = document.getElementById("nombreDetalle");
-				var modTemDetalle = document.getElementById("mod_temDetalle");
-				var descrDetalle = document.getElementById("descripcionDetalle");
-				
+			type: "POST",
+			url: "<?php echo site_url("Sesiones/getDetallesSesionAjax") ?>",
+			data: { id_sesion: sesion_clickeado }, 
+			success: function(respuesta) {
 				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
 				var datos = jQuery.parseJSON(respuesta);
 
-				if (datos.mod_tem == null) {
-					datos.mod_tem = 'No tiene asignado';
-				}
-				if (datos.descripcion == null) {
-					datos.descripcion = '';
-				}
-
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-				$(nombreDetalle).html($.trim(datos.nombre));
-				$(modTemDetalle).html($.trim(datos.mod_tem));
-				$(descrDetalle).html($.trim(datos.descripcion));
+				$('#nombre').html(datos.nombre == '' ? '' : $.trim(datos.nombre));
+				$('#nombre_moduloTematico').html(datos.nombre_moduloTematico == '' ? '' : $.trim(datos.nombre_moduloTematico));
+				$('#descripcion').html(datos.descripcion == '' ? 'Sin descripción' : $.trim(datos.descripcion));
 				
-
 				/* Quito el div que indica que se está cargando */
 				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
+				$('#icono_cargando').hide();
 
 			}
 		});
-		
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
 	}
 	
 	//Se cargan por ajax
@@ -60,7 +44,7 @@
 	});
 </script>
 <fieldset>
-	<legend>Ver Sesión</legend>
+	<legend>Ver Sesión de clase</legend>
 
 	<div class="row-fluid">
 		<div class="span6">
@@ -95,9 +79,9 @@
 		<div class="span6">
 			
 			<pre style="padding: 2%; cursor:default">
-Nombre de la sesión: 	    <b id="nombreDetalle"></b>
-Nombre del módulo temático: <b id="mod_temDetalle"></b>
-Descripción: 		    <b id="descripcionDetalle"></b></pre>
+Nombre de la sesión:        <b id="nombre"></b>
+Nombre del módulo temático: <b id="nombre_moduloTematico"></b>
+Descripción:                <b id="descripcion"></b></pre>
 		</div>
 	</div>
 

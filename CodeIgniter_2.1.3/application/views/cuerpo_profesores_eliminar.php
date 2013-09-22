@@ -123,7 +123,7 @@
 		</div>
 		<div class="span6">
 			<?php
-				$atributos= array('id' => 'formBorrar');
+				$atributos= array('id' => 'formEliminar');
 				echo form_open('Profesores/postEliminarProfesor', $atributos);
 			?>
 			<pre style="padding: 2%; cursor:default">

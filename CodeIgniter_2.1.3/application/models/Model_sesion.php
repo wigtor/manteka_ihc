@@ -15,14 +15,18 @@ class Model_sesion extends CI_Model {
 **/
 
 
-public function getDetallesSesion($codigo) {
-	$this->db->select('COD_SESION AS codigo_sesion');
+public function getDetallesSesion($id_sesion) {
+	$this->db->select('ID_SESION AS id');
 	$this->db->select('NOMBRE_SESION AS nombre');
-	$this->db->select('NOMBRE_MODULO AS mod_tem');
 	$this->db->select('DESCRIPCION_SESION AS descripcion');
-	$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT OUTER');
-	$this->db->where('COD_SESION', $codigo);
-	$query = $this->db->get('sesion');
+	$this->db->select('modulo_tematico.ID_MODULO_TEM AS id_moduloTematico');
+	$this->db->select('NOMBRE_MODULO AS nombre_moduloTematico');
+	$this->db->join('modulo_tematico', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
+	$this->db->where('ID_SESION', $id_sesion);
+	$query = $this->db->get('sesion_de_clase');
+	if ($query == FALSE) {
+		return array();
+	}
 	return $query->row();
 }
 /**
@@ -42,32 +46,37 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 {
 
 	$this->db->select('NOMBRE_SESION AS nombre');
-	$this->db->select('NOMBRE_MODULO AS mod_tem');
-	$this->db->select('COD_SESION AS id');
-	$this->db->join('modulo_tematico', 'modulo_tematico.COD_MODULO_TEM = sesion.COD_MODULO_TEM', 'LEFT');
+	$this->db->select(' CONCAT( SUBSTRING(DESCRIPCION_SESION ,1, 20 ), \'...\') AS descripcion', false);
+	$this->db->select('NOMBRE_MODULO AS nombre_moduloTematico');
+	$this->db->select('ID_SESION AS id');
+	$this->db->join('modulo_tematico', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
 	$this->db->order_by('NOMBRE_SESION');
 
 	if ($texto != "") {
 		$this->db->like("NOMBRE_SESION", $texto);
+		$this->db->or_like("DESCRIPCION_SESION", $texto);
 		$this->db->or_like("NOMBRE_MODULO", $texto);
 	}
-	else{
-
-			//Sólo para acordarse
+	else {
+		//Sólo para acordarse
 		define("BUSCAR_POR_NOMBRE_SESION", 0);
-		define("BUSCAR_POR_NOMBRE_MOD", 1);
+		define("BUSCAR_POR_DESCRIPCION_SESION", 1);
+		define("BUSCAR_POR_NOMBRE_MODULO", 2);
 
 		if($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_SESION] != ''){
 			$this->db->like("NOMBRE_SESION", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_SESION]);
 		}
-		if($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_MOD] != ''){
-			$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_MOD]);
+		if($textoFiltrosAvanzados[BUSCAR_POR_DESCRIPCION_SESION] != ''){
+			$this->db->like("DESCRIPCION_SESION", $textoFiltrosAvanzados[BUSCAR_POR_DESCRIPCION_SESION]);
+		}
+		if($textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_MODULO] != ''){
+			$this->db->like("NOMBRE_MODULO", $textoFiltrosAvanzados[BUSCAR_POR_NOMBRE_MODULO]);
 		}
 
 	}
 
-	$query = $this->db->get('sesion');
-
+	$query = $this->db->get('sesion_de_clase');
+	//echo $this->db->last_query();
 	if ($query == FALSE) {
 		return array();
 	}
@@ -151,18 +160,44 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     * @return -1 en caso de que no se pueda realizar la operación correctamente
     **/
 
-    public function eliminarSesion($codEliminar)
-    {
-    	$this->db->where('COD_SESION', $codEliminar);
-    	$datos = $this->db->delete('sesion_de_clase'); 
+    public function eliminarSesion($codEliminar) {
+    	$this->db->trans_start();
 
-    	if($datos == true){
-    		return 1;
-    	}
-    	else{
-    		return -1;
-    	}
-    }
+    	//Eliminar la planificación de clase
+
+
+
+
+    	//Poner a null la sesión en que se encuentren las secciones
+    	$this->db->select('ID_SECCION AS id');
+    	$this->db->where('ID_SESION', $codEliminar);
+    	$query = $this->db->get('seccion');
+    	$this->db->flush_cache();//Limpio active record
+    	if ($query != FALSE) {
+	    	if ($query->num_rows() > 0) {
+				foreach ($query->result() as $row) {
+					$datos = array('ID_SESION' => NULL);
+					$this->db->where('ID_SECCION', $row->id);
+					$this->db->insert('seccion', $datos);
+					$this->db->flush_cache();
+				}
+			}
+		}
+
+
+    	//Finalmente elimino la sesión
+		$this->db->where('ID_SESION', $codEliminar);
+		$datos = $this->db->delete('sesion_de_clase');
+
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+	}
 
     /**
     *
@@ -178,21 +213,23 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
     * @return -1 en caso de que la operacion no se realice correctamente
     **/
 
-    public function editarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion)
-    {
-    	$data = array(					
-    		'NOMBRE_SESION' => $nombre_sesion ,
-    		'DESCRIPCION_SESION' => $descripcion_sesion
-    		);
-    	$this->db->where('COD_SESION', $codigo_sesion);
-    	$datos = $this->db->update('sesion_de_clase',$data);
+    public function editarSesion($id_sesion, $nombre_sesion, $descripcion_sesion, $id_moduloTem) {
+		$data = array(
+			'NOMBRE_SESION' => $nombre_sesion,
+			'DESCRIPCION_SESION' => $descripcion_sesion,
+			'ID_MODULO_TEM' => $id_moduloTem
+			);
+		$this->db->trans_start();
+    	$this->db->where('ID_SESION', $id_sesion);
+    	$datos = $this->db->update('sesion_de_clase', $data);
+    	$this->db->trans_complete();
 
-    	if($datos == true){
-    		return 1;
-    	}
-    	else{
-    		return -1;
-    	}	
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
     }
 
     /**

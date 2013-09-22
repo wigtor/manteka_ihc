@@ -1,13 +1,13 @@
 <script>
-	var tiposFiltro = ["Sesión", "Módulo temático"]; //Debe ser escrito con PHP
-	var valorFiltrosJson = ["", ""];
+	var tiposFiltro = ["Nombre sesión", "Descripción", "Módulo temático"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = ["", "", ""];
 	var prefijo_tipoDato = "sesion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";
-	var url_post_busquedas = "<?php echo site_url("Sesiones/postBusquedaSesiones") ?>";
-	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/secciones") ?>";
+	var url_post_busquedas = "<?php echo site_url("Sesiones/getSesionesAjax") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/sesiones") ?>";
 
 
-function comprobarNombre() {
+	function comprobarNombre() {
 		var nombre = document.getElementById("nombresesion").value;
 		var codigo = document.getElementById("codigoSesion").value;
 			$.ajax({
@@ -37,85 +37,72 @@ function comprobarNombre() {
 		var iconoCargado = document.getElementById("icono_cargando");
 		$(icono_cargando).show();
 	}
-function EditarSesion(){
-							
-		var nombre = document.getElementById("nombresesion").value;
-		var descripcion =document.getElementById("descripcionSesion").value;
-		var cod =document.getElementById("codigoSesion").value;
 
-		
-	
-		if(descripcion!="" && nombre!=""){
-			
-			$('#modalConfirmacion').modal();
+
+	function editarSesion(){
+		var form = document.forms["formEditar"];
+		if ($('#id_sesion').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado sesión');
+			$('#textoErrorDialog').html('No ha seleccionado una sesión para editar');
+			$('#modalError').modal();
 			return;
 		}
-		else{
-			if( descripcion=="" && nombre==""){
-				$('#modalSeleccioneAlgo').modal();
-			}
-			else{
-				$('#modalCamposVacios').modal();
-			}
+		if (form.checkValidity()) {
+			$('#tituloConfirmacionDialog').html('Confirmación para guardar cambios');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea guardar los cambios de la sesión en el sistema?');
+			$('#modalConfirmacion').modal();
 		}
-}
-
-function resetearSesion() {
-
-	var nombreDetalle = document.getElementById("nombresesion");
-	var descripcionDetalle = document.getElementById("descripcionSesion");
-	var codigoDetalle = document.getElementById("codigoSesion");
-	
-	$(nombreDetalle).val("");
-	$(codigoDetalle).val("");
-	$(descripcionDetalle).val("");
-
-	//Se limpia lo que está seleccionado en la tabla
-	$('tbody tr').removeClass('highlight');
-}
-
-function verDetalle(elemTabla) {
-
-	/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
-	var idElem = elemTabla.id;
-	sesion_clickeado = idElem.substring("sesion_".length, idElem.length);
-	//var rut_clickeado = elemTabla;
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
+	}
 
 
-	/* Defino el ajax que hará la petición al servidor */
-	$.ajax({
-		type: "POST", /* Indico que es una petición POST al servidor */
-		url: "<?php echo site_url("Sesiones/postDetallesSesion") ?>", /* Se setea la url del controlador que responderá */
-		data: { sesion: sesion_clickeado }, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
-		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+	function resetearSesion() {
+		//ESTO ES DE QUIENES HICIERON EL BORRADO
+		$('#id_sesion').val("");
 
-			/* Obtengo los objetos HTML donde serán escritos los resultados */
-			var nombreDetalle = document.getElementById("nombresesion");
-			var descripcionDetalle = document.getElementById("descripcionSesion");
-			var codigoDetalle = document.getElementById("codigoSesion");
-			//var descripcionDetalle = document.getElementById("descripcionDetalle");
-			/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
-			var datos = jQuery.parseJSON(respuesta);
+		/* Seteo los valores a string vacio */
+		$('#nombre').val("");
+		$('#moduloTematico').val("");
+		$('#descripcion').val("");
 
-			/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
-			//$(codigoDetalle).html(datos.cod_sesion);
-			$(nombreDetalle).val(datos.nombre);
-			$(codigoDetalle).val(datos.codigo_sesion);
-			$(descripcionDetalle).val(datos.descripcion);
+		//Se limpia lo que está seleccionado en la tabla
+		$('#listadoResultados tbody tr').removeClass('highlight');
+	}
+
+	function verDetalle(elemTabla) {
+
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		sesion_clickeado = idElem.substring(prefijo_tipoDato.length, idElem.length);
 		
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
 
-			/* Quito el div que indica que se está cargando */
-			var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).hide();
-            saveState();
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Sesiones/getDetallesSesionAjax") ?>",
+			data: { id_sesion: sesion_clickeado }, 
+			success: function(respuesta) {
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
 
-		}
-	});
-	
-	/* Muestro el div que indica que se está cargando... */
-	var iconoCargado = document.getElementById("icono_cargando");
-	$(icono_cargando).show();
-}
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$('#id_sesion').val(datos.id);
+				$('#nombre').val(datos.nombre == '' ? '' : $.trim(datos.nombre));
+				$('#id_moduloTem').val(datos.id_moduloTematico == '' ? '' : $.trim(datos.id_moduloTematico));
+				$('#descripcion').val(datos.descripcion == '' ? 'Sin descripción' : $.trim(datos.descripcion));
+				
+				/* Quito el div que indica que se está cargando */
+				$('#icono_cargando').hide();
+
+			}
+		});
+	}
 
 	//Se cargan por ajax
 	$(document).ready(function() {
@@ -125,7 +112,7 @@ function verDetalle(elemTabla) {
 
 </script>
 <fieldset>
-	<legend>Editar Sesión</legend>
+	<legend>Editar Sesión de clase</legend>
 	<div class="row-fluid">
 		<div class="span6">
 		<font color="red">* Campos Obligatorios</font>
@@ -143,7 +130,7 @@ function verDetalle(elemTabla) {
 			1.- Seleccione la sesión a editar:
 		</div>
 		<div class="span6" >
-				<p>Complete los datos del formulario para modificar la sesión</p>
+			<p>Complete los datos del formulario para modificar la sesión</p>
 		</div>
 	</div>
 	<div class="row-fluid">
@@ -161,95 +148,57 @@ function verDetalle(elemTabla) {
 		<!-- Segunda columna -->
 		<div class="span6">
 			<?php
-				$attributes = array('id' => 'FormEditar', 'class' => 'form-horizontal', 'onsubmit' => 'EditarProfesor()');
-				echo form_open('Sesiones/cambiarSesiones/', $attributes);
+				$attributes = array('id' => 'formEditar', 'class' => 'form-horizontal');
+				echo form_open('Sesiones/postEditarSesion/', $attributes);
 			?>
-			<input type="hidden" readonly id="codigoSesion" name="codigo_sesion" maxlength="99" required >
-			
-			<div class="control-group">
-				<label class="control-label" for="inputInfo" style="cursor: default">1.- <font color="red">*</font> Nombre de sesión</label>
-				<div class="controls">
-					<input type="text" id="nombresesion" onblur="comprobarNombre()" class="span12" name="nombre_sesion" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
+				<input type="hidden" readonly id="id_sesion" name="id_sesion" required >
+				
+				<div class="control-group">
+					<label class="control-label" for="nombre" style="cursor: default">1.- <font color="red">*</font> Nombre de sesión</label>
+					<div class="controls">
+						<input type="text" id="nombre" onblur="comprobarNombre()" class="span12" name="nombre" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" maxlength="99" required >
+					</div>
 				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="inputInfo" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
-				<div class="controls">
-					<textarea type="text" class="span12" id="descripcionSesion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion_sesion" maxlength="99" required></textarea>
+				<div class="control-group">
+					<label class="control-label" for="descripcion" style="cursor: default">2.- Descripción</label>
+					<div class="controls">
+						<textarea type="text" class="span12" id="descripcion" cols="40" rows="5" title="Use solo letras para este campo" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" name="descripcion" maxlength="99" ></textarea>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="controls pull-right">
-					<button type="button" class="btn" style= "margin-right: 4px" type="button" onClick="EditarSesion()">
-						<i class= "icon-pencil"></i>
-						&nbsp; Guardar
-					</button>
-					<button  class ="btn" type="button" onclick="resetearSesion()" >
-						<div class="btn_with_icon_solo">Â</div>
-						&nbsp; Cancelar
-					</button>
+				<div class="control-group">
+					<label class="control-label" for="id_moduloTem" >3.- <font color="red">*</font> Asignar módulo temático:</label>
+					<div class="controls">
+						<select required id="id_moduloTem" name="id_moduloTem" class="span12" title="asigne módulo temático">
+						<?php
+						if (isset($modulosTematicos)) {
+							foreach ($modulosTematicos as $moduloTem) {
+								?>
+									<option value="<?php echo $moduloTem->id; ?>"><?php echo $moduloTem->nombre; ?></option>
+								<?php 
+							}
+						}
+						?>
+						</select> 
+					</div>
 				</div>
+				<div class="control-group" >
+					<div class="controls">
+						<button class ="btn" type="button" onclick="editarSesion()" >
+							<div class= "icon-pencil"></div>
+							&nbsp Guardar
+						</button>
+						<button  class ="btn" type="reset" onclick="resetearSesion()" >
+							<div class= "btn_with_icon_solo">Â</div>
+							&nbsp Cancelar
+						</button>
+					</div>
+					<?php
+						if (isset($dialogos)) {
+							echo $dialogos;
+						}
+					?>
+				</div>
+			<?php echo form_close(""); ?>
 		</div>
 	</div>
-				<!-- Modal de confirmación -->
-				<div id="modalConfirmacion" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>Confirmación</h3>
-					</div>
-					<div class="modal-body">
-						<p>Se van a guardar los cambios de la sesión ¿Está seguro?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
-						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
-					</div>
-				</div>
-
-				<!-- Modal de aviso que no ha seleccionado algo -->
-				<div id="modalSeleccioneAlgo" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>No ha seleccionado ninguna sesión</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor seleccione una sesión y vuelva a intentarlo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>
-
-				<!-- Modal de campos vacíos -->
-				<div id="modalNombreUsado" class="modal hide fade">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>Nombre de la sesion ya existe.</h3>
-					</div>
-					<div class="modal-body">
-						<p>Por favor ingrese otro nombre para la sesión y vuelva a intentarlo.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-					</div>
-				</div>	
-				<!-- Modal de faltan campos -->
-							<div id="modalCamposVacios" class="modal hide fade">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h3>Campos Obligatorios no completados</h3>
-							</div>
-							<div class="modal-body">
-								<p>Por favor complete el campo vacío y vuelva a intentarlo.</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
-							</div>
-						</div>	
-				
-		
-		<?php echo form_close(""); ?>
-
-
-
 </fieldset>

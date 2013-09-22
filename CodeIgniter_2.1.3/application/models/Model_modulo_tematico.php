@@ -309,6 +309,8 @@ class Model_modulo_tematico extends CI_Model {
 			return TRUE;
 		}
     }
+
+    
 	/**
 	*
 	* Obtiene la lista de los modulos con su información
@@ -572,7 +574,7 @@ class Model_modulo_tematico extends CI_Model {
 	public function getModulosByFilter($texto, $textoFiltrosAvanzados)
 	{
 		$this->db->select('NOMBRE_MODULO AS nombre');
-		$this->db->select('DESCRIPCION_MODULO AS descripcion');
+		$this->db->select(' CONCAT( SUBSTRING(DESCRIPCION_MODULO ,1, 20 ), \'...\') AS descripcion', false);
 		$this->db->select('ID_MODULO_TEM AS id');
 		$this->db->order_by('NOMBRE_MODULO', 'asc');
 

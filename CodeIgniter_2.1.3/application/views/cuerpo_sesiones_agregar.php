@@ -71,15 +71,15 @@
 	<div  class= "row-fluid">
 		<div class= "span7">
 			<div class="control-group">
-				<label class="control-label" for="nombre" style="cursor: default">1.- <font color="red">*</font> Nombre</label>
+				<label class="control-label" for="nombre" >1.- <font color="red">*</font> Nombre</label>
 				<div class="controls">
-					<input id="nombre" name="nombre" onblur="comprobarNombreSesion()" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" maxlength="99" required >
+					<input id="nombre" name="nombre" onblur="comprobarNombreSesion()" placeholder="Tema de la clase" type="text" pattern="[0-9a-zA-ZñÑáéíóúüÁÉÍÓÚÑ\-_çÇ& ]+" class="span12" title="Use solo letras para este campo" maxlength="99" required >
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="descripcion" style="cursor: default">2.- <font color="red">*</font> Descripción</label>
+				<label class="control-label" for="descripcion" >2.- Descripción</label>
 				<div class="controls">
-					<textarea id="descripcion" name="descripcion" style="resize: none;" class="span12" type="text" cols="40" rows="5" maxlength="99" required ></textarea>
+					<textarea id="descripcion" name="descripcion" style="resize: none;" class="span12" type="text" cols="40" rows="5" maxlength="99" ></textarea>
 				</div>
 			</div>
 			<div class="control-group">

@@ -151,9 +151,9 @@ class Sesiones extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_sesion');
-			$codEliminar = $this->input->post('codEliminar');
+			$id_sesionEliminar = $this->input->post('id_sesionEliminar');
 
-			$confirmacion = $this->Model_sesion->eliminarSesion($codEliminar);
+			$confirmacion = $this->Model_sesion->eliminarSesion($id_sesionEliminar);
 			
 			
 			if ($confirmacion == TRUE){
@@ -192,6 +192,8 @@ class Sesiones extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
+			$this->load->model('Model_modulo_tematico');
+			$datos_vista['modulosTematicos'] = $this->Model_modulo_tematico->getAllModulosTematicos();
 			$subMenuLateralAbierto = "editarSesion"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -220,11 +222,12 @@ class Sesiones extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_sesion');
-			$nombre_sesion = $this->input->post('nombre_sesion');
-			$descripcion_sesion = $this->input->post('descripcion_sesion');
-			$codigo_sesion = $this->input->post('codigo_sesion');
+			$nombre_sesion = $this->input->post('nombre');
+			$descripcion_sesion = $this->input->post('descripcion');
+			$id_moduloTem = $this->input->post('id_moduloTem');
+			$id_sesion = $this->input->post('id_sesion');
 			
-			$confirmacion = $this->Model_sesion->EditarSesion($nombre_sesion,$descripcion_sesion, $codigo_sesion);
+			$confirmacion = $this->Model_sesion->editarSesion($id_sesion, $nombre_sesion, $descripcion_sesion, $id_moduloTem);
 	        if ($confirmacion == TRUE){
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha editado la sesión con éxito";
@@ -298,15 +301,15 @@ class Sesiones extends MasterManteka {
 	* Sesion. Finalmente se llama a la función getDetallesSesion del modelo, que retorna el detalle de la sesion.
 	* @return json Resultado de la busqueda en forma de objeto json
 	*/
-	public function postDetallesSesion() {
+	public function getDetallesSesionAjax() {
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
 
-		$codigo = $this->input->post('sesion');
+		$id_sesion = $this->input->post('id_sesion');
 		$this->load->model('Model_sesion');
-		$resultado = $this->Model_sesion->getDetallesSesion($codigo);
+		$resultado = $this->Model_sesion->getDetallesSesion($id_sesion);
 		echo json_encode($resultado);
 	}
 
@@ -319,18 +322,30 @@ class Sesiones extends MasterManteka {
 	* Finalmente se retorna el resultado de la búsqueda, dados los filtros seleccionados.
 	* @return json Resultado de la busqueda en forma de objeto json
 	*/
-	public function postBusquedaSesiones() {
+	public function getSesionesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}
-		
 		$textoFiltro = $this->input->post('textoFiltroBasico');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
-		
+
 		$this->load->model('Model_sesion');
 		$resultado = $this->Model_sesion->getSesionesByFilter($textoFiltro, $textoFiltrosAvanzados);
 		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('Model_busqueda');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'sesiones', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'sesiones', $this->session->userdata('rut'));
+			}
+		}
 		echo json_encode($resultado);
 	}
 }
