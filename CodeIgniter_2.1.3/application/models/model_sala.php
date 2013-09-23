@@ -238,13 +238,11 @@ class Model_sala extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todas las salas en el sistema
 	*/
-	public function getAllSalas()
-	{
-		//$sql="SELECT * FROM sala ORDER BY NUM_SALA"; //código MySQL
-		$this->db->select('sala.ID_SALA AS cod');
-		$this->db->select('sala.NUM_SALA AS num');
-		$this->db->select('sala.UBICACION AS ubic');
-		$this->db->select('sala.CAPACIDAD AS cap');
+	public function getAllSalas() {
+		$this->db->select('sala.ID_SALA AS id');
+		$this->db->select('sala.NUM_SALA AS numero');
+		$this->db->select('sala.UBICACION AS ubicacion');
+		$this->db->select('sala.CAPACIDAD AS capacidad');
 		$this->db->from('sala');
 		$this->db->order_by("sala.NUM_SALA", "asc");
 		$query = $this->db->get();

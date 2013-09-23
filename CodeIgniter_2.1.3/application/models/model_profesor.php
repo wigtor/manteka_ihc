@@ -29,6 +29,28 @@ class Model_profesor extends CI_Model {
 	}
 
 
+	function getProfesoresByModuloTematico($id_moduloTematico) {
+		$this->db->select('profesor.RUT_USUARIO AS id');
+		$this->db->select('profesor.RUT_USUARIO AS rut');
+		$this->db->select('NOMBRE1 AS nombre1');
+		$this->db->select('NOMBRE1 AS nombre2');
+		$this->db->select('APELLIDO1 AS apellido1');
+		$this->db->select('APELLIDO2 AS apellido2');
+		$this->db->select('TELEFONO AS fono');
+		$this->db->select('CORREO1_USER AS email1');
+		$this->db->select('CORREO2_USER AS email2');
+		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->join('profe_equi_lider', 'profesor.RUT_USUARIO = profe_equi_lider.RUT_USUARIO');
+		$this->db->join('equipo_profesor', 'profe_equi_lider.ID_EQUIPO = equipo_profesor.ID_EQUIPO');
+		$this->db->where('ID_MODULO_TEM', $id_moduloTematico);
+		$query = $this->db->get('profesor');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
 	/**
 	* Inserta un profesor en la base de datos
 	*

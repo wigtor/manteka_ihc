@@ -52,7 +52,6 @@ class Model_planificacion extends CI_Model {
 		$datos=$query->result();
 
 		foreach ($datos as $row){
-
 			$lista[$contador]=array();
 			$lista[$contador][0] = $row->nombre_seccion;
 			$lista[$contador][1] = $row->nombre1;
@@ -63,23 +62,89 @@ class Model_planificacion extends CI_Model {
 			$lista[$contador][6] = $row->bloque;
 			$lista[$contador][7] = $row->hora;
 			$lista[$contador][8] = $row->dia;
-
 			$contador=$contador+1;
-
 		}
-		
-		
-	
 		return $lista;
+	}
 
-		
-						
-		
+	public function agregarPlanificacion($seccion, $sesion, $rut_profesor, $sala, $dia, $bloque, $fecha_planificada) {
+		$this->db->trans_start();
+
+		$this->db->select('ID_HORARIO as id');
+		$this->db->where('ID_MODULO', $bloque);
+		$this->db->where('ID_DIA', $dia);
+		$query = $this->db->get('horario');
+		if ($query == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+		$id_horario = 0; //Valor por default
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			$id_horario = $row->id;
+		}
+
+		$this->db->flush_cache();
+
+		$this->db->select('ID_AYU_PROFE as id');
+		$this->db->where('PRO_RUT_USUARIO', $rut_profesor);
+		//$this->db->where('RUT_USUARIO', $rut_ayudante);
+		$query = $this->db->get('ayu_profe');
+		if ($query == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+		$id_ayu_profe = 0; //Valor por default
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			$id_ayu_profe = $row->id;
+		}
+
+
+		$data = array(
+			'ID_SECCION' => $seccion,
+			'ID_SESION' => $sesion,
+			'ID_AYU_PROFE' => $id_ayu_profe,
+			'ID_SALA' => $sala,
+			'ID_HORARIO' => $id_horario,
+			'FECHA_PLANIFICADA' => $fecha_planificada,
+			);
+		$datos = $this->db->insert('planificacion_clase', $data);
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 
 	}
 
-	
 
+	public function getAllDias() {
+		$this->db->select('ID_DIA AS id');
+		$this->db->select('NOMBRE_DIA AS nombre');
+		$this->db->order_by('ID_DIA', 'asc');
+		$query = $this->db->get('dia_horario');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
+	public function getAllBloquesHorarios() {
+		$this->db->select('ID_MODULO AS id');
+		$this->db->select('date_format(HORA_INI, \'%H:%i\') AS inicio', FALSE);
+		$this->db->select('date_format(HORA_FIN, \'%H:%i\') AS fin', FALSE);
+		$this->db->order_by('ID_MODULO', 'asc');
+		$query = $this->db->get('modulo_horario');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
 }
 
 ?>

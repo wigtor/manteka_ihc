@@ -4,8 +4,7 @@ require_once APPPATH.'controllers/Master.php';
 
 class Secciones extends MasterManteka {
 
-	public function index() //Esto hace que el index sea la vista que se desee
-	{
+	public function index() {
 
 		$this->verSecciones();
 	}
@@ -17,14 +16,18 @@ class Secciones extends MasterManteka {
 	* Se carga el modelo de secciones,finalmente se carga la vista nuevamente con todos los datos para permitir ver otra seccion.
 	*
 	*/
-	public function verSecciones()
-	{
-		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = array();		
-		$subMenuLateralAbierto = "verSecciones"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-        $this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	public function verSecciones() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "verSecciones"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Secciones", 'cuerpo_secciones_ver', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 
@@ -102,7 +105,11 @@ class Secciones extends MasterManteka {
 	* que se le envía a la vista a través de la variable 'mensaje_confirmacion' para que de el feedback al usuario, en la vista, de como resulto la operación.
 	* Finalmente se carga la vista nuevamente con todos los datos para permitir la inserción de otra seccion.
 	*/
-	public function agregarSeccion() {	
+	public function agregarSeccion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$subMenuLateralAbierto = "agregarSeccion"; 
@@ -163,7 +170,11 @@ class Secciones extends MasterManteka {
 	*
 	*/
     public function editarSeccion() {
-    	if ($this->input->server('REQUEST_METHOD') == 'GET') {
+    	if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
     		$datos_vista = array();
 			$subMenuLateralAbierto = "editarSeccion"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -225,13 +236,17 @@ class Secciones extends MasterManteka {
 	*
 	*/
     public function eliminarSeccion() {
-		
-		// se carga el modelo, los datos de la vista, las funciones a utilizar del modelo
-		$datos_vista = array();		
-		$subMenuLateralAbierto = "eliminarSeccion"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "eliminarSeccion"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Secciones", 'cuerpo_secciones_eliminar', "barra_lateral_secciones", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 	/**
@@ -243,27 +258,31 @@ class Secciones extends MasterManteka {
 	*/
 
 	public function postEliminarSeccion() {
-		
-		$this->load->model('Model_seccion');
-		$cod_seccion = $this->input->post("id_seccion");
-		$confirmacion = $this->Model_seccion->eliminarSeccion($cod_seccion);
-        
-		if ($confirmacion == TRUE){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sección con éxito";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la eliminación en base de datos";
-			$datos_plantilla["tipo_msj"] = "alert-error";	
-		}
-		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Secciones/eliminarSeccion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		$datos_plantilla["nombre_redirecTo"] = "Eliminar sección"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_seccion');
+			$cod_seccion = $this->input->post("id_seccion");
+			$confirmacion = $this->Model_seccion->eliminarSeccion($cod_seccion);
 
+			if ($confirmacion == TRUE){
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la sección con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la eliminación en base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Secciones/eliminarSeccion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["nombre_redirecTo"] = "Eliminar sección"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
 	}
 
 
@@ -331,7 +350,9 @@ class Secciones extends MasterManteka {
 	*/
 
 	public function postDetalleModulos() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
@@ -352,7 +373,9 @@ class Secciones extends MasterManteka {
 	*/
 
 	public function postVerificaHorarios() {
-		//Se comprueba que quien hace esta petición de ajax esté logueado
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;

@@ -10,16 +10,19 @@ class Planificacion extends MasterManteka {
 
 
 	public function verPlanificacion() {
-
-		$datos_vista = array();
-		$subMenuLateralAbierto = "verPlanificacion"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-		$this->load->model('model_planificacion');
-        $datos_vista = array('lista' => $this->model_planificacion->selectPlanificacion());
-		$this->cargarTodo("Planificacion", 'cuerpo_planificacion', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-		
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "verPlanificacion"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->load->model('model_planificacion');
+			$datos_vista = array('lista' => $this->model_planificacion->selectPlanificacion());
+			$this->cargarTodo("Planificacion", 'cuerpo_planificacion', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 
@@ -33,18 +36,27 @@ class Planificacion extends MasterManteka {
 	* Se realiza la operación de asiganción a la seccion correspondiente llamando al modelo
 	**/	
 	public function agregarPlanificacion() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "agregarPlanificacion"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->load->model('Model_seccion');
+			$datos_vista['listadoSecciones'] = $this->Model_seccion->getAllSecciones();
+			$this->load->model('Model_modulo_tematico');
+			$datos_vista['listadoModulosTematicos'] = $this->Model_modulo_tematico->getAllModulos();
+			$this->load->model('Model_sala');
+			$datos_vista['listadoSalas'] = $this->Model_sala->getAllSalas();
+			$this->load->model('Model_planificacion');
+			$datos_vista['listadoDias'] = $this->Model_planificacion->getAllDias();;
+			$datos_vista['listadoBloquesHorario'] = $this->Model_planificacion->getAllBloquesHorarios();
 
-		$datos_vista = array();
-		$subMenuLateralAbierto = "agregarPlanificacion"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->load->model('Model_seccion');
-
-        //$datos_vista = array('seccion' =>$this->Model_seccion->VerSeccionesNoAsignadas(), 'modulos' => $this->Model_seccion->verModulosPorAsignar(), 'salas' => $this->Model_seccion->verSalasPorAsignar());
-		$this->cargarTodo("Planificacion", 'cuerpo_planificacion_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
-
-
+			$this->cargarTodo("Planificacion", 'cuerpo_planificacion_agregar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 
@@ -59,37 +71,42 @@ class Planificacion extends MasterManteka {
 	*
 	**/
 	public function postAgregarPlanificacion() {
-		$this->load->model('Model_seccion');
-
-		$cod_seccion = $this->input->post('seccion_seleccionada');
-		$cod_profesor = $this->input->post('profesor_seleccionado');
-		$cod_modulo = $this->input->post('modulo_seleccionado');
-		$cod_sala = $this->input->post('sala_seleccionada');
-		$nombre_dia = $this->input->post('dia_seleccionado');
-		$numero_modulo = $this->input->post('bloque_seleccionado');
-
-		$confirmacion = $this->Model_seccion->agregarPlanificacion($cod_seccion,$cod_profesor,$cod_modulo,$cod_sala,$nombre_dia,$numero_modulo);
-
-        if ($confirmacion == TRUE){
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha asignado la sección con éxito";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la asignación de secciones";
-			$datos_plantilla["tipo_msj"] = "alert-error";	
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_planificacion');
+
+			$seccion = $this->input->post('seccion');
+			$moduloTematico = $this->input->post('moduloTematico'); //No se usa
+			$sesion = $this->input->post('sesion');
+			$profesor = $this->input->post('profesor');
+			$sala = $this->input->post('sala');
+			$dia = $this->input->post('dia');
+			$bloque = $this->input->post('bloque');
+			$fecha_planificada = $this->input->post('fecha_planificada');
+
+			$confirmacion = $this->Model_planificacion->agregarPlanificacion($seccion, $sesion, $profesor, $sala, $dia, $bloque, $fecha_planificada);
+
+	        if ($confirmacion == TRUE){
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha creado la planificación con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error en la planificación de la sección";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+
+			$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Planificacion/agregarPlanificacion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["nombre_redirecTo"] = "Agregar planificación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
-
-		$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Secciones/asignarAsecciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-		$datos_plantilla["nombre_redirecTo"] = "Realizar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-
-
-
 	}
 
 
@@ -104,15 +121,19 @@ class Planificacion extends MasterManteka {
 	**/
 
 	public function eliminarPlanificacion() {
-		
-		$subMenuLateralAbierto = "eliminarPlanificacion"; 
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		
-        $datos_vista = array();
-        //$datos_vista['seccion'] = $this->Model_seccion->VerSeccionesAsignadas();
-		$this->cargarTodo("Planificacion", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$subMenuLateralAbierto = "eliminarPlanificacion"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 
+			$datos_vista = array();
+			//$datos_vista['seccion'] = $this->Model_seccion->VerSeccionesAsignadas();
+			$this->cargarTodo("Planificacion", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 
@@ -126,32 +147,66 @@ class Planificacion extends MasterManteka {
 	* Se realiza la operación de  elimnar asignacionae invocando la función en el modelo	
 	**/
 	public function postEliminarAsignacion() {
-
-		$this->load->model('Model_Planificacion');
-		$id_planificacion = $this->input->post('id_planificacion');
-
-		$confirmacion = $this->Model_Planificacion->eliminarPlanificacion($id_planificacion);
-
-		if ($confirmacion == TRUE){
-			// mostramos el mensaje de operacion realizada
-			$datos_plantilla["titulo_msj"] = "Acción Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la asignación de la sección";
-			$datos_plantilla["tipo_msj"] = "alert-success";
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		else{
-			$datos_plantilla["titulo_msj"] = "Acción No Realizada";
-			$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error con la eliminación en base de datos";
-			$datos_plantilla["tipo_msj"] = "alert-success";
-		}
-		
-		
-		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Planificacion/eliminarPlanificacion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		$datos_plantilla["nombre_redirecTo"] = "Eliminar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_Planificacion');
+			$id_planificacion = $this->input->post('id_planificacion');
 
+			$confirmacion = $this->Model_Planificacion->eliminarPlanificacion($id_planificacion);
+
+			if ($confirmacion == TRUE){
+				// mostramos el mensaje de operacion realizada
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la asignación de la sección";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error con la eliminación en base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			
+			
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Planificacion/eliminarPlanificacion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["nombre_redirecTo"] = "Eliminar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
 	}
 
+
+	public function getSesionesByModuloTematico() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_moduloTematico = $this->input->post('id_moduloTematico');
+		$this->load->model('Model_sesion');
+		$resultado = $this->Model_sesion->getSesionesByModuloTematico($id_moduloTematico);
+		echo json_encode($resultado);
+	}
+
+	public function getProfesoresByModuloTematico() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_moduloTematico = $this->input->post('id_moduloTematico');
+		$this->load->model('Model_profesor');
+		$resultado = $this->Model_profesor->getProfesoresByModuloTematico($id_moduloTematico);
+		echo json_encode($resultado);
+	}
 }
 

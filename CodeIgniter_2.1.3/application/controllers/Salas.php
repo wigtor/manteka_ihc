@@ -256,7 +256,7 @@ class Salas extends MasterManteka {
     	if (!$this->input->is_ajax_request()) {
 			return;
 		}
-    	if (!$this->isLogged()) {
+		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;
 		}

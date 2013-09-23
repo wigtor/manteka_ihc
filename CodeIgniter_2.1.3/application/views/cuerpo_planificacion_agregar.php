@@ -70,52 +70,99 @@
 		return retorno;
 	}
 
-	function AsignarSeccion(){
-		var seccion = 0;
-		var profesor = 0;
-		var modulo = 0;
-		var sala = 0;
-		var dia = 0;
-		var bloque = 0;
-		for (var i = 0; i < document.getElementsByName('seccion_seleccionada').length; i++) {
-			if(document.getElementById('seccion_'+i).checked==true){
-				seccion = seccion + 1;
-			}
+	function resetearPlanificacion() {
+		$('#seccion').val("");
+		$('#moduloTematico').val("");
+		$('#sesion').val("");
+		$('#profesor').val("");
+		$('#sala').val("");
+		$('#dia').val("");
+		$('#bloque').val("");
+
+		$("#profesor").empty();
+		var opcionDefault = new Option("Seleccione profesor", "");
+		opcionDefault.setAttribute("disabled","disabled");
+		opcionDefault.setAttribute("selected","selected");
+		$("#profesor").append(opcionDefault);
+
+		$("#sesion").empty();
+		var opcionDefault = new Option("Seleccione sesión de clase", "");
+		opcionDefault.setAttribute("disabled","disabled");
+		opcionDefault.setAttribute("selected","selected");
+		$("#sesion").append(opcionDefault);
+	}
+
+	function agregarPlanificacion(){
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para agregar profesor');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea agregar el profesor al sistema?');
+			$('#modalConfirmacion').modal();
 		}
-		for (var i = 0; i < document.getElementsByName('profesor_seleccionado').length; i++) {
-			if(document.getElementById('profesor_'+i).checked==true){
-				profesor = profesor + 1;
-			}
-		}
-		for (var i = 0; i < document.getElementsByName('modulo_seleccionado').length; i++) {
-			if(document.getElementById('modulo_'+i).checked==true){
-				modulo = modulo + 1;
-			}
-		}
-		for (var i = 0; i < document.getElementsByName('sala_seleccionada').length; i++) {
-			if(document.getElementById('sala_'+i).checked==true){
-				sala = sala + 1;
-			}
-		}
-		if(document.getElementById("dia").value != ""){
-			dia = dia + 1;
-		}
-		if(document.getElementById("bloque").value != ""){
-			bloque = bloque + 1;
-		}
-		if(verificaHorario()==1){
-			// No se puede hacer la asignacion por el horario, mostrar el MODAL
-			$('#modalVerificaHorario').modal();
-			return false;
-		}else{
-			if(seccion == 0 || profesor == 0 || modulo == 0 || sala == 0 || dia == 0 || bloque == 0){
-				// Caso en que no se eligen todos los campos obligatorios, no se deberia llegar hasta esté
-				return false;
-			}else{
-				return;
-			}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
 		}
 	}
+
+	//Se cargan los profesores y las sesiones de clase
+	function seleccionadoModuloTem() {
+		var codigo_modulo = $('#moduloTematico').val();
+
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
+
+		$.ajax({
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Planificacion/getSesionesByModuloTematico") ?>",
+			data: { id_moduloTematico: codigo_modulo},
+			success: function(respuesta) {
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				$("#sesion").empty();
+				var opcionDefault = new Option("Seleccione sesión de clase", "");
+				opcionDefault.setAttribute("disabled","disabled");
+				opcionDefault.setAttribute("selected","selected");
+				$("#sesion").append(opcionDefault);
+
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					$("#sesion").append(new Option(arrayRespuesta[i].nombre, arrayRespuesta[i].id));
+				}
+
+
+			}
+		});
+
+		$.ajax({
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Planificacion/getProfesoresByModuloTematico") ?>",
+			data: { id_moduloTematico: codigo_modulo},
+			success: function(respuesta) { 
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				$("#profesor").empty();
+				var opcionDefault = new Option("Seleccione profesor", "");
+				opcionDefault.setAttribute("disabled","disabled");
+				opcionDefault.setAttribute("selected","selected");
+				$("#profesor").append(opcionDefault);
+				
+				var texto;
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					texto = arrayRespuesta[i].rut + " - "+arrayRespuesta[i].nombre1+" "+arrayRespuesta[i].apellido1;
+					$("#profesor").append(new Option(texto, arrayRespuesta[i].rut));
+				}
+			}
+		});
+
+		$('#icono_cargando').hide();
+	}
+
+	$(document).ready(function() {
+		$('#dp3').datepicker({
+		});
+	});
+	
 
 </script>
 
@@ -134,47 +181,58 @@
 				</div>
 			</div>
 			<?php
-				$atributos= array('id' => 'formAsignar', 'class' => 'form-horizontal');
-		 		echo form_open('Secciones/HacerAsignarAsecciones/', $atributos);
+				$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
+		 		echo form_open('Planificacion/postAgregarPlanificacion/', $atributos);
 			?>
 			<div class="row-fluid">
 				<div class= "span6">
 					<div class="control-group">
-						<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección de curso a planificar:</label>
+						<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección de curso:</label>
 						<div class="controls">
-							<select id="seccion" name="seccion" class="span12" title="Sección que desea planificar" required>
+							<select id="seccion" name="seccion" class="span10" title="Sección que desea planificar" required>
 								<option value="" disabled selected>Seleccione sección de curso</option>
 								<?php
-								foreach ($listadoSecciones as $valor) {
-									?>
-										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
-									<?php 
+								if (isset($listadoSecciones)) {
+									foreach ($listadoSecciones as $valor) {
+										?>
+											<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
+										<?php 
+									}
 								}
 								?>
+
 							</select>
 						</div>
 					</div>
 
 					<!-- Seleccion de módulo tematico y sesión de clase -->
 					<div class="control-group">
-						<div>2.- <font color="red">*</font> Sesión de clase a planificar</div>
+						<div>2.- Sesión de clase a planificar</div>
 					</div>
 					
-					<div class="control-group offset1" >
+					<div class="control-group" >
 						<label class="control-label" for="moduloTematico">2.1.- <font color="red">*</font> Módulo temático:</label>
 						<div class="controls">
-							<select id="moduloTematico" name="moduloTematico" class="span12" required title="Módulo temático que se va a planificar para esa sección">
-								<option value="" disabled selected>Seleccione módulos temático</option>
-
+							<select id="moduloTematico" name="moduloTematico" class="span10" onchange="seleccionadoModuloTem();" required title="Módulo temático que se va a planificar para esa sección">
+								<option value="" disabled selected>Seleccione módulo temático</option>
+								<?php
+								if (isset($listadoModulosTematicos)) {
+									foreach ($listadoModulosTematicos as $valor) {
+										?>
+											<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
+										<?php 
+									}
+								}
+								?>
 							</select>
 						</div>
 					</div>
 
 					<!-- Variable según el módulo temático que se seleccione -->
-					<div class="control-group offset1">
+					<div class="control-group">
 						<label class="control-label" for="sesion">2.2.- <font color="red">*</font> Sesión de clase:</label>
 						<div class="controls">
-							<select id="sesion" name="sesion" class="span12" required title="Sección que desea planificar">
+							<select id="sesion" name="sesion" class="span10" required title="Sección que desea planificar">
 								<option value="" disabled selected>Seleccione sesión de clase</option>
 
 							</select>
@@ -184,7 +242,7 @@
 					<div class="control-group">
 						<label class="control-label" for="profesor">3.- <font color="red">*</font> Profesor:</label>
 						<div class="controls">
-							<select id="profesor" name="profesor" class="span12" title="Sección que desea planificar">
+							<select id="profesor" name="profesor" class="span10" title="Sección que desea planificar">
 								<option value="" disabled selected>Seleccione profesor</option>
 								
 							</select>
@@ -197,83 +255,86 @@
 					<div class="row-fluid" >
 						<div class="span9">
 							<div class="control-group">
-								<div>4.- <font color="red">*</font> Seleccione la sala y horario</div>
+								<div>4.- Seleccione la sala y horario</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="row-fluid" >
-						<div class="span6" >
-							4.1.- Sala
-						</div>
-						<div class="span6" >
-							4.2.- Horario
+					<div class="control-group">
+						<label class="control-label" for="sala">4.1.- <font color="red">*</font> Sala:</label>
+						<div class="controls">
+							<select id="sala" name="sala" class="span6" required>
+								<option value="" disabled selected>Seleccione sala</option>
+									<?php
+									if (isset($listadoSalas)) {
+										foreach ($listadoSalas as $valor) {
+											?>
+												<option value="<?php echo $valor->id?>"><?php echo 'N°'.$valor->numero.' - Capacidad:'.$valor->capacidad; ?></option>
+											<?php 
+										}
+									}
+									?>
+							</select>
 						</div>
 					</div>
 
-					<div class="row-fluid">
-						<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:200px; -webkit-border-radius: 4px;">
-							<table id="listadoResultados" class="table table-hover">
-								<thead>
-									<tr>
-										
-									</tr>
-								</thead>
-								<tbody >
-									
-								</tbody>
-							</table>
-						</div>
-
-						<div class="row-fluid">
-								<select id="dia" name="dia_seleccionado" class= "span5" style="margin-left: 2%" required>
-									<option value="" disabled selected>Seleccione día</option>
-									<?php
-									if (isset($listadoDias)) {
-										foreach ($listadoDias as $valor) {
-											?>
-												<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
-											<?php 
-										}
+					<div class="control-group">
+						<label class="control-label" for="dia">4.2.- <font color="red">*</font> Horario:</label>
+						<div class="controls">
+							<select id="dia" name="dia" class="span6" required>
+								<option value="" disabled selected>Día</option>
+								<?php
+								if (isset($listadoDias)) {
+									foreach ($listadoDias as $valor) {
+										?>
+											<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
+										<?php 
 									}
-									?>
-								</select>
-							
-
-						
-								<select id="bloque" name="bloque_seleccionado" class= "span5" style="margin-left: 2%; margin-top:5%" required>
-									<option value="" disabled selected>Seleccione bloque horario</option>
-									<?php
-									if (isset($listadoBloquesHorario)) {
-										foreach ($listadoBloquesHorario as $valor) {
-											?>
-												<option value="<?php echo $valor->id?>"><?php echo $valor->nombre?></option>
-											<?php 
-										}
-									}
-									?>
-								</select>
-							
-						</div>
-
-						<div class="control-group">
-							<div class="controls">
-								<button type="button" class="btn" onclick="agregarPlanificacion()" >
-									<div class="btn_with_icon_solo">Ã</div>
-									&nbsp; Agregar
-								</button>
-								<button class="btn" type="button" onclick="resetearPlanificacion()" >
-									<div class="btn_with_icon_solo">Â</div>
-									&nbsp; Cancelar
-								</button>
-							</div>
-							<?php
-								if (isset($dialogos)) {
-									echo $dialogos;
 								}
-							?>
+								?>
+							</select>
+
+							<select id="bloque" name="bloque" class="span6" required>
+								<option value="" disabled selected>Hora</option>
+								<?php
+								if (isset($listadoBloquesHorario)) {
+									foreach ($listadoBloquesHorario as $valor) {
+										?>
+											<option value="<?php echo $valor->id?>"><?php echo $valor->id.' - '.$valor->inicio.'-'.$valor->fin; ?></option>
+										<?php 
+									}
+								}
+								?>
+							</select>
 						</div>
-						
+					</div>
+
+					<div class="control-group">
+						<label class="control-label" for="fecha_planificada">5.- <font color="red">*</font> Fecha planificada:</label>
+						<div class="controls">
+							<div class="input-append date" id="dp3" data-date="<?php echo date('Y-m-d'); ?>"  data-date-format="yyyy-mm-dd">
+								<input class="span8" size="16" readonly id="fecha_planificada" name="fecha_planificada" type="text" value="">
+								<span class="add-on"><i class="icon-calendar"></i></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<div class="controls">
+							<button type="button" class="btn" onclick="agregarPlanificacion()" >
+								<div class="btn_with_icon_solo">Ã</div>
+								&nbsp; Agregar
+							</button>
+							<button class="btn" type="button" onclick="resetearPlanificacion()" >
+								<div class="btn_with_icon_solo">Â</div>
+								&nbsp; Cancelar
+							</button>
+						</div>
+						<?php
+							if (isset($dialogos)) {
+								echo $dialogos;
+							}
+						?>
 					</div>
 				</div>
 			</div>

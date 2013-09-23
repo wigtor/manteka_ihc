@@ -114,51 +114,30 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 		}
 	}
 
-    /**
-    *
-    * VerTodasLasSesiones() permite ver todas la sesiones exitentes en la base3 da datos de manteka
-    *
-    * Se realiza la consulta a la base que retorna todas las filas de la tabla seccióin de la base de datos
-    * ordenadas por el codigo de sesión
-    *
-    * @return list $lista contiene los datos de todas la sesiones en la base de datos de manteka
-    **/
-    public function getAllSesiones()
-    {
-		//$sql="SELECT * FROM sesion ORDER BY COD_SESION"; //código MySQL
-    	$this->db->select('*');
-    	$this->db->from('sesion');
-    	$this->order_by("COD_SESION", "asc");
-    	$query=$this->db->get();
-    	$datos=$query->result();
-		//$datos=mysql_query($sql); //enviar código MySQL
-    	$contador = 0;
-    	$lista = array();
-    	if (false != $datos) {                      
-		//while ($row=mysql_fetch_array($datos)) { //Bucle para ver todos los registros
-    		foreach ($datos as $row) {
-    			$lista[$contador] = array();
-    			$lista[$contador][0] = $row->COD_SESION;
-    			$lista[$contador][1] = $row->COD_MODULO_TEM;
-    			$lista[$contador][2] = $row->NOMBRE_SESION;
-    			$lista[$contador][3] = $row->DESCRIPCION_SESION;
 
-    			$contador = $contador + 1;
-    		}
-    	}
-    	return $lista;
-    }
+	public function getSesionesByModuloTematico($id_moduloTematico) {
+		$this->db->select('ID_SESION AS id');
+		$this->db->select('NOMBRE_SESION AS nombre');
+		$this->db->select('DESCRIPCION_SESION AS descripcion');
+		$this->db->where('ID_MODULO_TEM', $id_moduloTematico);
+		$query = $this->db->get('sesion_de_clase');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
 
-    /**
-    *
-    * Elimina una sesión de la base de datos
-    *
-    * elimina la sesión de la base da datos de manteka cuyo codigo es entregado como parametro en $cod eliminar
-    *
-    * @param int $codEliminar el codigo de la sesión que se eliminará de la base de datos
-    * @return 1 en caso de que la operación resulte exitosa
-    * @return -1 en caso de que no se pueda realizar la operación correctamente
-    **/
+
+	/**
+	*
+	* Elimina una sesión de la base de datos
+	*
+	* elimina la sesión de la base da datos de manteka cuyo codigo es entregado como parametro en $cod eliminar
+	*
+	* @param int $codEliminar el codigo de la sesión que se eliminará de la base de datos
+	* @return 1 en caso de que la operación resulte exitosa
+	* @return -1 en caso de que no se pueda realizar la operación correctamente
+	**/
 
     public function eliminarSesion($codEliminar) {
     	$this->db->trans_start();

@@ -10,8 +10,7 @@ class Model_seccion extends CI_Model {
 	*
 	* @return array $lista Contiene la información de todas las secciones del sistema
 	*/
-	public function getAllSecciones()
-	{
+	public function getAllSecciones() {
 		return $this->getSeccionesByFilter('');
 	}
 	
@@ -182,6 +181,8 @@ class Model_seccion extends CI_Model {
 	public function getSeccionesByFilter($texto) {
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
 		$this->db->select('ID_SECCION AS id');
+		$this->db->select('LETRA_SECCION AS letra');
+		$this->db->select('NUMERO_SECCION AS numero');
 		$this->db->order_by('LETRA_SECCION', 'asc');
 		//$this->db->order_by('NUMERO_SECCION', 'asc');
 
@@ -216,12 +217,16 @@ class Model_seccion extends CI_Model {
 		$this->db->select('usuario.APELLIDO1 as apellido1');
 		$this->db->select('usuario.APELLIDO2 as apellido2');
 		$this->db->select('horario.NOMBRE_HORARIO as horario');
+		$this->db->select('horario.ID_MODULO as modulo_horario');
+		$this->db->select('date_format(HORA_INI, \'%H:%i\') AS hora_clase', FALSE);
 		$this->db->where('seccion.ID_SECCION', $id_seccion);
 
 		$this->db->join('sesion_de_clase', 'sesion_de_clase.ID_SESION = seccion.ID_SESION', 'LEFT OUTER');
 		$this->db->join('modulo_tematico', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM', 'LEFT OUTER');
-		$this->db->join('planificacion_clase','seccion.ID_SECCION = planificacion_clase.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('planificacion_clase','sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION', 'LEFT OUTER'); //Para saber en que se encuentra actualmente
 		$this->db->join('horario','planificacion_clase.ID_HORARIO = horario.ID_HORARIO', 'LEFT OUTER');
+		$this->db->join('dia_horario','horario.ID_DIA = dia_horario.ID_DIA', 'LEFT OUTER');
+		$this->db->join('modulo_horario','horario.ID_MODULO = modulo_horario.ID_MODULO', 'LEFT OUTER');
 		$this->db->join('sala','planificacion_clase.ID_SALA = sala.ID_SALA', 'LEFT OUTER');
 		$this->db->join('ayu_profe','ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
 		$this->db->join('profesor','ayu_profe.PRO_RUT_USUARIO = profesor.RUT_USUARIO', 'LEFT OUTER');

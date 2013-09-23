@@ -322,9 +322,8 @@ class Model_modulo_tematico extends CI_Model {
 	*/
 	public function getAllModulos()
 	{
-		$this->db->select('ID_MODULO_TEM AS cod_mod');
-		$this->db->select('COD_EQUIPO AS cod_equipo');
-		$this->db->select('NOMBRE_MODULO AS nombre_mod');
+		$this->db->select('ID_MODULO_TEM AS id');
+		$this->db->select('NOMBRE_MODULO AS nombre');
 		$this->db->select('DESCRIPCION_MODULO AS descripcion');
 		$this->db->order_by('NOMBRE_MODULO','asc');
 		$query = $this->db->get('modulo_tematico');
