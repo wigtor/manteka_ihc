@@ -24,7 +24,7 @@ class Estudiantes extends MasterManteka {
 	*/
 	public function verEstudiantes() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		$datos_vista = array();
@@ -49,7 +49,7 @@ class Estudiantes extends MasterManteka {
 	*/
 	public function editarEstudiante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -79,7 +79,7 @@ class Estudiantes extends MasterManteka {
 	**/
 	public function postEditarEstudiante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -141,7 +141,7 @@ class Estudiantes extends MasterManteka {
 	*/
 	public function eliminarEstudiante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -170,7 +170,7 @@ class Estudiantes extends MasterManteka {
 	*/
 	public function postEliminarEstudiante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -211,7 +211,7 @@ class Estudiantes extends MasterManteka {
 	*/
 	public function agregarEstudiante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -243,7 +243,7 @@ class Estudiantes extends MasterManteka {
 	*/
 	public function postAgregarEstudiante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -306,7 +306,7 @@ class Estudiantes extends MasterManteka {
 	
 	public function cambiarSeccionEstudiantes() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -332,7 +332,7 @@ class Estudiantes extends MasterManteka {
 
 	public function postCambiarSeccionEstudiantes() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

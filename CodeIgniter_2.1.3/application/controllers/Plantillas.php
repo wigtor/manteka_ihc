@@ -39,7 +39,7 @@ class Plantillas extends MasterManteka {
     **/
 	public function agregarPlantilla() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -54,7 +54,7 @@ class Plantillas extends MasterManteka {
 
 	public function postAgregarPlantilla() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -87,7 +87,7 @@ class Plantillas extends MasterManteka {
 
 	public function editarPlantilla() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -121,7 +121,7 @@ class Plantillas extends MasterManteka {
     **/
 	public function postEditarPlantilla() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -165,7 +165,7 @@ class Plantillas extends MasterManteka {
     **/
 	public function eliminarPlantilla() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -180,7 +180,7 @@ class Plantillas extends MasterManteka {
 
 	public function postEliminarPlantilla() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

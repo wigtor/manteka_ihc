@@ -19,14 +19,19 @@ class Profesores extends MasterManteka {
 	*
 	*/
 	public function verProfesores() {
-		$datos_plantilla = array();
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_plantilla = array();
 
-		$subMenuLateralAbierto = 'verProfesores'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$subMenuLateralAbierto = 'verProfesores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 
-		$this->cargarTodo("Docentes", "cuerpo_profesores_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-	
+			$this->cargarTodo("Docentes", "cuerpo_profesores_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 	
@@ -40,6 +45,10 @@ class Profesores extends MasterManteka {
 	*
 	*/
 	public function agregarProfesor() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$this->load->model('Model_profesor');
@@ -67,6 +76,7 @@ class Profesores extends MasterManteka {
 	*/
 	 public function postAgregarProfesor() {
 		if (!$this->isLogged()) {
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -125,6 +135,10 @@ class Profesores extends MasterManteka {
 	*
 	*/
 	public function eliminarProfesor() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$subMenuLateralAbierto = "eliminarProfesor"; //Para este ejemplo, los informes no tienen submenu lateral
@@ -149,6 +163,7 @@ class Profesores extends MasterManteka {
 	*/
 	public function postEliminarProfesor() {
 		if (!$this->isLogged()) {
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -188,6 +203,10 @@ class Profesores extends MasterManteka {
 	*
 	*/
 	public function editarProfesor() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$this->load->model('Model_profesor');
@@ -203,6 +222,7 @@ class Profesores extends MasterManteka {
 
 	public function postEditarProfesor() {
 		if (!$this->isLogged()) {
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

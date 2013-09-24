@@ -4,8 +4,7 @@ require_once APPPATH.'controllers/Master.php';
 
 class Modulos extends MasterManteka {
 	
-	public function index() //Esto hace que el index sea la vista que se desee
-	{
+	public function index() {
 		//funcion por defecto
 		$this->verModulos();
 	}
@@ -20,7 +19,7 @@ class Modulos extends MasterManteka {
 	*/
 	public function verModulos() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -43,7 +42,7 @@ class Modulos extends MasterManteka {
 	*/
     public function agregarModulo() {
     	if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -74,7 +73,7 @@ class Modulos extends MasterManteka {
 	*/
 	public function postAgregarModulo() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -118,7 +117,7 @@ class Modulos extends MasterManteka {
 	*/
     public function editarModulo() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -147,7 +146,7 @@ class Modulos extends MasterManteka {
 	*/
 	public function postEditarModulo() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -190,7 +189,7 @@ class Modulos extends MasterManteka {
 	*/
     public function eliminarModulo() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -214,7 +213,7 @@ class Modulos extends MasterManteka {
 	*/
 	public function postEliminarModulo() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

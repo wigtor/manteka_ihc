@@ -11,7 +11,7 @@ class Planificacion extends MasterManteka {
 
 	public function verPlanificacion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -37,7 +37,7 @@ class Planificacion extends MasterManteka {
 	**/	
 	public function agregarPlanificacion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -72,7 +72,7 @@ class Planificacion extends MasterManteka {
 	**/
 	public function postAgregarPlanificacion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -122,7 +122,7 @@ class Planificacion extends MasterManteka {
 
 	public function eliminarPlanificacion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -148,7 +148,7 @@ class Planificacion extends MasterManteka {
 	**/
 	public function postEliminarAsignacion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

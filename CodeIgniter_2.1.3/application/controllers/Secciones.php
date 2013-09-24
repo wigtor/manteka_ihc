@@ -18,7 +18,7 @@ class Secciones extends MasterManteka {
 	*/
 	public function verSecciones() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -107,7 +107,7 @@ class Secciones extends MasterManteka {
 	*/
 	public function agregarSeccion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -133,7 +133,7 @@ class Secciones extends MasterManteka {
 
 	public function postAgregarSeccion() {	
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -177,7 +177,7 @@ class Secciones extends MasterManteka {
 	*/
     public function editarSeccion() {
     	if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -203,7 +203,7 @@ class Secciones extends MasterManteka {
 
     public function postEditarSeccion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -249,7 +249,7 @@ class Secciones extends MasterManteka {
 	*/
     public function eliminarSeccion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -271,7 +271,7 @@ class Secciones extends MasterManteka {
 
 	public function postEliminarSeccion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

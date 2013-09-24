@@ -23,7 +23,7 @@ class Sesiones extends MasterManteka {
 	*/
 	public function verSesiones() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -47,7 +47,7 @@ class Sesiones extends MasterManteka {
 	*/
 	public function agregarSesion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -76,7 +76,7 @@ class Sesiones extends MasterManteka {
 	*/
 	public function postAgregarSesion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -118,7 +118,7 @@ class Sesiones extends MasterManteka {
 	*/
     public function eliminarSesion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -146,7 +146,7 @@ class Sesiones extends MasterManteka {
 	*/
     public function postEliminarSesion() {
     	if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -187,7 +187,7 @@ class Sesiones extends MasterManteka {
 	*/
 	public function editarSesion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -217,7 +217,7 @@ class Sesiones extends MasterManteka {
 	*/
 	public function postEditarSesion() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -257,6 +257,9 @@ class Sesiones extends MasterManteka {
 	* @return json Resultado de la busqueda en forma de objeto json
 	*/
 	public function nombreExisteEC() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
 		if (!$this->isLogged()) {
 			//echo 'No estás logueado!!';
 			return;

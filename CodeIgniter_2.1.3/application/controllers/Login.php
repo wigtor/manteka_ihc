@@ -363,8 +363,7 @@ class Login extends MasterManteka {
 		$datos_plantilla["redirecTo"] = "Correo/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 		$datos_plantilla["nombre_redirecTo"] = "vista principal"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array();
-		$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 	}
 	

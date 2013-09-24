@@ -35,12 +35,17 @@ class Coordinadores extends MasterManteka {
 	* @return none
 	*/
 	public function verCoordinadores() {
-		$datos_plantilla = array();
-		$subMenuLateralAbierto = 'verCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->cargarTodo("Docentes", "cuerpo_coordinadores_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_plantilla = array();
+			$subMenuLateralAbierto = 'verCoordinadores'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Docentes", "cuerpo_coordinadores_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 
@@ -53,6 +58,10 @@ class Coordinadores extends MasterManteka {
 	* @return none
 	*/
 	public function agregarCoordinador() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_cuerpo = array();
 			$subMenuLateralAbierto = 'agregarCoordinador'; //Para este ejemplo, los informes no tienen submenu lateral
@@ -73,6 +82,7 @@ class Coordinadores extends MasterManteka {
 	*/
 	public function postAgregarCoordinador() {
 		if (!$this->isLogged()) {
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -121,6 +131,10 @@ class Coordinadores extends MasterManteka {
 	* @return none
 	*/
 	public function editarCoordinador() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_plantilla = array();
 			$subMenuLateralAbierto = 'editarCoordinador'; //Para este ejemplo, los informes no tienen submenu lateral
@@ -144,6 +158,7 @@ class Coordinadores extends MasterManteka {
 	*/
 	public function postEditarCoordinador() {
 		if (!$this->isLogged()) {
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -196,6 +211,10 @@ class Coordinadores extends MasterManteka {
       * @return none
       */
     public function eliminarCoordinador() {
+    	if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
     	if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$this->load->model('Model_coordinador');
 			$rut = $this->session->userdata('rut');
@@ -212,6 +231,7 @@ class Coordinadores extends MasterManteka {
 
 	public function postEliminarCoordinador() {
 		if (!$this->isLogged()) {
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

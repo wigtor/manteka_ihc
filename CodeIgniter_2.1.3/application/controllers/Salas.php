@@ -34,7 +34,7 @@ class Salas extends MasterManteka {
 	*/
 	public function verSalas() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		$datos_vista = array();
@@ -53,7 +53,7 @@ class Salas extends MasterManteka {
 	*/
 	public function agregarSala() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -81,7 +81,7 @@ class Salas extends MasterManteka {
 	*/
 	public function postAgregarSala() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -121,7 +121,7 @@ class Salas extends MasterManteka {
 	*/
     public function editarSala() {
     	if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -150,7 +150,7 @@ class Salas extends MasterManteka {
 	*/
 	public function postEditarSala() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -190,7 +190,7 @@ class Salas extends MasterManteka {
 	*/
 	 public function eliminarSala() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
@@ -215,7 +215,7 @@ class Salas extends MasterManteka {
 	*/
 	public function postEliminarSala() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {

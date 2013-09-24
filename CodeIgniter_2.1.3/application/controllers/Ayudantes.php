@@ -19,13 +19,18 @@ class Ayudantes extends MasterManteka {
 	* ayudantes del sistema. Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function verAyudantes()
-	{
-		$datos_plantilla = array();
-		$subMenuLateralAbierto = 'verAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-		$this->cargarTodo("Docentes", "cuerpo_ayudantes_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+	public function verAyudantes() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_plantilla = array();
+			$subMenuLateralAbierto = 'verAyudantes'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+			$this->cargarTodo("Docentes", "cuerpo_ayudantes_ver", "barra_lateral_profesores", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
 	}
 
 
@@ -39,8 +44,11 @@ class Ayudantes extends MasterManteka {
 	* por primera ves la vista de agregar ayudante. Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function agregarAyudante()
-	{
+	public function agregarAyudante() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_plantilla = array();
 			$this->load->model('Model_profesor');
@@ -67,10 +75,9 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function postAgregarAyudante()
-	{
+	public function postAgregarAyudante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -129,8 +136,11 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function editarAyudante()
-	{
+	public function editarAyudante() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_plantilla = array();
 			$this->load->model('Model_profesor');
@@ -156,10 +166,9 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function postEditarAyudante()
-	{
+	public function postEditarAyudante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -214,8 +223,11 @@ class Ayudantes extends MasterManteka {
 	* Finalmente se carga la vista con todos los datos.
 	*
 	*/
-	public function eliminarAyudante()
-	{
+	public function eliminarAyudante() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_plantilla = array();
 			$subMenuLateralAbierto = 'eliminarAyudante'; //Para este ejemplo, los informes no tienen submenu lateral
@@ -239,10 +251,9 @@ class Ayudantes extends MasterManteka {
 	*
 	* @param string $rut_estudiante
 	*/
-	public function postEliminarAyudante()
-	{
+	public function postEliminarAyudante() {
 		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
+			$this->invalidSession();
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
