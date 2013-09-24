@@ -19,9 +19,7 @@ class Planificacion extends MasterManteka {
 			$subMenuLateralAbierto = "verPlanificacion"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-			$this->load->model('model_planificacion');
-			$datos_vista = array('lista' => $this->model_planificacion->selectPlanificacion());
-			$this->cargarTodo("Planificacion", 'cuerpo_planificacion', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$this->cargarTodo("Planificacion", 'cuerpo_planificacion_ver', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
 
@@ -83,11 +81,9 @@ class Planificacion extends MasterManteka {
 			$sesion = $this->input->post('sesion');
 			$profesor = $this->input->post('profesor');
 			$sala = $this->input->post('sala');
-			$dia = $this->input->post('dia');
-			$bloque = $this->input->post('bloque');
 			$fecha_planificada = $this->input->post('fecha_planificada');
 
-			$confirmacion = $this->Model_planificacion->agregarPlanificacion($seccion, $sesion, $profesor, $sala, $dia, $bloque, $fecha_planificada);
+			$confirmacion = $this->Model_planificacion->agregarPlanificacion($seccion, $sesion, $profesor, $sala, $fecha_planificada);
 
 	        if ($confirmacion == TRUE){
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -131,8 +127,7 @@ class Planificacion extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 
 			$datos_vista = array();
-			//$datos_vista['seccion'] = $this->Model_seccion->VerSeccionesAsignadas();
-			$this->cargarTodo("Planificacion", 'cuerpo_secciones_eliminarAsignacion', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$this->cargarTodo("Planificacion", 'cuerpo_planificacion_eliminar', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
 
@@ -146,7 +141,7 @@ class Planificacion extends MasterManteka {
 	* Se carga el modelo de secciones 
 	* Se realiza la operación de  elimnar asignacionae invocando la función en el modelo	
 	**/
-	public function postEliminarAsignacion() {
+	public function postEliminarPlanificacion() {
 		if (!$this->isLogged()) {
 			$this->invalidSession();
 			return;
@@ -179,7 +174,7 @@ class Planificacion extends MasterManteka {
 	}
 
 
-	public function getSesionesByModuloTematico() {
+	public function getSesionesByModuloTematicoAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -194,7 +189,7 @@ class Planificacion extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-	public function getProfesoresByModuloTematico() {
+	public function getProfesoresByModuloTematicoAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -206,6 +201,47 @@ class Planificacion extends MasterManteka {
 		$id_moduloTematico = $this->input->post('id_moduloTematico');
 		$this->load->model('Model_profesor');
 		$resultado = $this->Model_profesor->getProfesoresByModuloTematico($id_moduloTematico);
+		echo json_encode($resultado);
+	}
+
+	public function getHorarioSeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$this->load->model('Model_seccion');
+		$resultado = $this->Model_seccion->getHorarioSeccion($id_seccion);
+		echo json_encode($resultado);
+	}
+
+	public function getPlanificacionesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+
+		$this->load->model('Model_planificacion');
+		$resultado = $this->Model_planificacion->getPlanificaciones($textoFiltro, $textoFiltrosAvanzados);
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('Model_busqueda');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'planificacion', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'planificacion', $this->session->userdata('rut'));
+			}
+		}
 		echo json_encode($resultado);
 	}
 }

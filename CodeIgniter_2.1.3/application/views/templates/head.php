@@ -23,6 +23,7 @@
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-transition.js"></script>
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-alert.js"></script>
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-datepicker.js"></script>
+	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-datepicker.es.js"></script>
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-modal.js"></script>
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-dropdown.js"></script>
 	<script src="/<?php echo config_item('dir_alias') ?>/javascripts/bootstrap-scrollspy.js"></script>

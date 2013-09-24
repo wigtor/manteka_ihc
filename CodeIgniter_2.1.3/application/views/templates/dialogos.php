@@ -6,7 +6,7 @@
 			<h3><div id="tituloConfirmacionDialog"></div></h3>
 		</div>
 		<div class="modal-body">
-			<p><div id="textoConfirmacionDialog"></div></p>
+			<div id="textoConfirmacionDialog"></div>
 		</div>
 		<div class="modal-footer">
 			<button type="submit" class="btn"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
@@ -20,7 +20,7 @@
 			<h3><div id="tituloErrorDialog"></div></h3>
 		</div>
 		<div class="modal-body">
-			<p><div id="textoErrorDialog"></div></p>
+			<div id="textoErrorDialog"></div>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" type="button" data-dismiss="modal">Cerrar</button>

@@ -44,6 +44,27 @@ class Model_seccion extends CI_Model {
 			return TRUE;
 		}
     }
+
+
+    public function getHorarioSeccion($id_seccion) {
+    	$this->db->select('CONCAT(ABREVIATURA_DIA,modulo_horario.ID_MODULO) as horario', FALSE);
+		$this->db->select('NOMBRE_DIA as nombre_dia');
+		$this->db->select('(dia_horario.ID_DIA MOD 7) as dia'); //Dice el día de la semana, comenzando con el domingo en 0
+		$this->db->select('date_format(HORA_INI, \'%H:%i\') AS hora_clase', FALSE);
+		$this->db->join('horario','seccion.ID_HORARIO = horario.ID_HORARIO', 'LEFT OUTER');
+		$this->db->join('dia_horario','horario.ID_DIA = dia_horario.ID_DIA', 'LEFT OUTER');
+		$this->db->join('modulo_horario','horario.ID_MODULO = modulo_horario.ID_MODULO', 'LEFT OUTER');
+		$this->db->where('ID_SECCION', $id_seccion);
+
+		$query = $this->db->get('seccion');
+		if ($query == FALSE) {
+			return array();
+		}
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		}
+		return array();
+    }
 	
 	
 	/**

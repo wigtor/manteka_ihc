@@ -148,7 +148,7 @@ class Model_modulo_tematico extends CI_Model {
 		$this->db->trans_start();
 
 		//0 insertar modulo
-		$data = array(					
+		$data = array(
 				'NOMBRE_MODULO' => $nombre,
 				'DESCRIPCION_MODULO' => $descripcion 
 				);
@@ -157,7 +157,7 @@ class Model_modulo_tematico extends CI_Model {
 		$id_modulo = $this->db->insert_id();
 		
 		//1 insertar equipo
-		$data = array(					
+		$data = array(
 				'ID_MODULO_TEM' => $id_modulo
 			);
 		$confirmacion1 = $this->db->insert('equipo_profesor', $data);
@@ -165,7 +165,7 @@ class Model_modulo_tematico extends CI_Model {
 		$id_equipo = $this->db->insert_id();
 		
 		//2 actualizar mod_tem
-		$data = array(					
+		$data = array(
 				'ID_EQUIPO'=>$id_equipo
 		);
 		$this->db->where('ID_MODULO_TEM', $id_modulo);
@@ -201,6 +201,12 @@ class Model_modulo_tematico extends CI_Model {
 				$datos = $this->db->insert('implementos_modulo_tematico', $data);
 			}
 		}
+
+		//6 insertar evaluación para ese módulo
+		$data = array(					
+				'ID_MODULO_TEM' => $id_modulo
+			);
+		$datos = $this->db->insert('evaluacion', $data);
 		//fin inserciones
 		
 		$this->db->trans_complete();
