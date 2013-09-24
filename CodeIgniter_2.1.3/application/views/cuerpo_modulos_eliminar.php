@@ -91,12 +91,12 @@
 				});
 
 				
-				$.ajax({//AJAX PARA requisitos
+				$.ajax({//AJAX PARA implementos
 					type: "POST",
-					url: "<?php echo site_url("Modulos/getRequisitosByModuloTematicoAjax") ?>",
+					url: "<?php echo site_url("Modulos/getImplementosByModuloTematicoAjax") ?>",
 					data: { id_mod_post: codigo_modulo},
 					success: function(respuesta) {
-						var tablaResultados = document.getElementById("requisitos");
+						var tablaResultados = document.getElementById("implementos");
 						$(tablaResultados).find('tbody').remove();
 						var arrayRespuesta = jQuery.parseJSON(respuesta);
 						var tr, td, th,nodoTexto;
@@ -250,17 +250,17 @@ Descripción módulo: <b id="descripcion_modulo"></b></pre>
 			<div class="row-fluid">
 				<div class="row-fluid" style="margin-top:2%">
 					<div class="span7">
-						5.- Requisitos del módulo temático
+						5.- Implementos necesarios del módulo temático
 					</div>
 				</div>
 			</div>
 			<div class="row-fluid">
 				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:100px; -webkit-border-radius: 4px" >
-					<table id="requisitos" class="table table-hover">
+					<table id="implementos" class="table table-hover">
 						<thead>
 							<tr>
 								<th>
-									Nombre requisitos
+									Nombre implemento
 								</th>
 							<tr>
 						</thead>

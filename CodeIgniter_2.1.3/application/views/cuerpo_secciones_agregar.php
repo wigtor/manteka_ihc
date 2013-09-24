@@ -84,6 +84,36 @@
 					</div>
 				</div>
 				<div class="control-group">
+					<label class="control-label" for="dia">2.- <font color="red">*</font> Horario:</label>
+					<div class="controls">
+						<select id="dia" name="dia" class="span4" required>
+							<option value="" disabled selected>Día</option>
+							<?php
+							if (isset($listadoDias)) {
+								foreach ($listadoDias as $valor) {
+									?>
+										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
+									<?php 
+								}
+							}
+							?>
+						</select>
+
+						<select id="bloque" name="bloque" class="span4" required>
+							<option value="" disabled selected>Hora</option>
+							<?php
+							if (isset($listadoBloquesHorario)) {
+								foreach ($listadoBloquesHorario as $valor) {
+									?>
+										<option value="<?php echo $valor->id?>"><?php echo $valor->id.' - '.$valor->inicio.'-'.$valor->fin; ?></option>
+									<?php 
+								}
+							}
+							?>
+						</select>
+					</div>
+				</div>
+				<div class="control-group">
 					<div class="controls ">
 						<button type="button" class="btn" onclick="agregarSeccion()">
 							<div class="btn_with_icon_solo">Ã</div>

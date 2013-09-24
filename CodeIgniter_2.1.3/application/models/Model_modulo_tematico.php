@@ -117,78 +117,17 @@ class Model_modulo_tematico extends CI_Model {
 	}
 	
 
-	public function getAllRequisitos(){
-		$this->db->select('ID_REQUISITO AS id');
-		$this->db->select('NOMBRE_REQUISITO AS nombre');
-		$this->db->select('DESCRIPCION_REQUISITO AS descripcion');
-		$query = $this->db->get('requisito');	
+	public function getAllImplementos(){
+		$this->db->select('ID_IMPLEMENTO AS id');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descripcion');
+		$query = $this->db->get('implemento');	
 		if ($query == FALSE) {
 			return array();
 		}
 		return $query->result();
 	}
 
-	
-	/**
-	*
-	* obtiene la lista de todos los requisitos con su información e indicando si están asociados a un cierto código de módulo
-	*
-	* @param int $cod_mod codico del modulo tematico que se quiere editar
-	* @return $lista_r lista cpn los requisitos del modulo tematico que se quiere editar
-	*/
-	public function listaRequisitosParaEditarModulo($cod_mod){		
-		$this->db->select('*');
-		$this->db->from('requisito');
-		$query = $this->db->get();
-		if ($query == FALSE) {
-			return array();
-		}
-		$datos = $query->result(); 
-		$contador = 0;
-		$lista_r = array();
-		foreach ($datos as $row) { 
-			$lista_r[$contador] = array();
-			$lista_r[$contador][0] = $row->COD_REQUISITO;
-			$lista_r[$contador][1] = $row->NOMBRE_REQUISITO;
-			$lista_r[$contador][2] = $row->DESCRIPCION_REQUISITO;
-			$lista_r[$contador][3] = 0;
-			$contador = $contador + 1;
-		}
-		
-		$this->db->select('*');
-		$this->db->from('requisito_modulo');
-		$this->db->where('ID_MODULO_TEM', $cod_mod); 
-		$query = $this->db->get();	
-		if ($query == FALSE) {
-			return array();
-		}
-	    $datos = $query->result();
-		$contador = 0;
-		$lista = array();
-		
-		if($query->num_rows() > 0){
-			foreach ($datos as $row) {  
-				$lista[$contador] = array();
-				$lista[$contador][0] = $row->ID_MODULO_TEM;
-				$lista[$contador][1] = $row->COD_REQUISITO;
-				$contador = $contador + 1;
-			}
-		}
-		
-		$contador = 0;
-		$contador2 = 0;
-		while($contador < count($lista_r)){
-			while($contador2 < count($lista)){
-				if($lista_r[$contador][0] == $lista[$contador2][1]){
-					$lista_r[$contador][3] = 1;
-				}
-				$contador2++;
-			}
-			$contador2 = 0;
-			$contador++;
-		}
-		return $lista_r;
-	}
 	
 	/**
 	*
@@ -205,7 +144,7 @@ class Model_modulo_tematico extends CI_Model {
 	* @return -1 en caso de fallo
 	*
 	*/
-	public function agregarModulo($nombre, $descripcion, $profesor_lider, $equipo_profesores, $requisitos) {
+	public function agregarModulo($nombre, $descripcion, $profesor_lider, $equipo_profesores, $implementos) {
 		$this->db->trans_start();
 
 		//0 insertar modulo
@@ -223,7 +162,7 @@ class Model_modulo_tematico extends CI_Model {
 			);
 		$confirmacion1 = $this->db->insert('equipo_profesor', $data);
 		
-		$id_equipo = $this->db->insert_id();	
+		$id_equipo = $this->db->insert_id();
 		
 		//2 actualizar mod_tem
 		$data = array(					
@@ -252,14 +191,14 @@ class Model_modulo_tematico extends CI_Model {
 			}
 		}
 
-		//5 insertar requisito modulo
-		if (is_array($requisitos)) {
-			foreach($requisitos as $id_req) {
+		//5 insertar implementos requisito modulo
+		if (is_array($implementos)) {
+			foreach($implementos as $id_impl) {
 				$data = array(
-						'ID_REQUISITO' => $id_req,
+						'ID_IMPLEMENTO' => $id_impl,
 						'ID_MODULO_TEM' => $id_modulo
 						);
-				$datos = $this->db->insert('requisito_modulo', $data);
+				$datos = $this->db->insert('implementos_modulo_tematico', $data);
 			}
 		}
 		//fin inserciones
@@ -353,7 +292,7 @@ class Model_modulo_tematico extends CI_Model {
 	* @return -1 en caso de fallo
 	*
 	*/
-	public function editarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos,$cod_equipo,$cod_mod){
+	public function editarModulo($nombre_modulo,$sesiones,$descripcion_modulo,$profesor_lider,$equipo_profesores,$requisitos, $cod_equipo, $cod_mod){
 		//0 insertar modulo
 		$data = array(					
 				'NOMBRE_MODULO' => $nombre_modulo ,
@@ -522,13 +461,13 @@ class Model_modulo_tematico extends CI_Model {
 	* @return $query->result() en caso de encontrarse requisitos
 	* @return array() en caso de fallar la consulta
 	*/
-	public function getRequisitosByModulo($id_mod){
-		$this->db->select('requisito.ID_REQUISITO AS id');
-		$this->db->select('NOMBRE_REQUISITO AS nombre');
-		$this->db->select('DESCRIPCION_REQUISITO AS descripcion');
-		$this->db->join('requisito_modulo', 'requisito_modulo.ID_REQUISITO = requisito.ID_REQUISITO');
-		$this->db->where('requisito_modulo.ID_MODULO_TEM', $id_mod); 
-		$query = $this->db->get('requisito');
+	public function getImplementosByModulo($id_mod) {
+		$this->db->select('implemento.ID_IMPLEMENTO AS id');
+		$this->db->select('NOMBRE_IMPLEMENTO AS nombre');
+		$this->db->select('DESCRIPCION_IMPLEMENTO AS descripcion');
+		$this->db->join('implementos_modulo_tematico', 'implementos_modulo_tematico.ID_IMPLEMENTO = implemento.ID_IMPLEMENTO');
+		$this->db->where('implementos_modulo_tematico.ID_MODULO_TEM', $id_mod); 
+		$query = $this->db->get('implemento');
 		if ($query == FALSE) {
 			return array();
 		}

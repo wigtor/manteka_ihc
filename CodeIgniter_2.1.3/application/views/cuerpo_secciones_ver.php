@@ -31,7 +31,8 @@
 				$('#modulo_tematico').html($.trim(datos.modulo));
 				$('#profesor').html(datos.apellido1 == '' ? 'Sin asignación' : $.trim(datos.nombre1) + ' ' + $.trim(datos.apellido1));
 				$('#dia').html(datos.dia == '' ? 'Sin asignación' : $.trim(datos.dia));
-				$('#modulo').html(datos.modulo_horario == "" ? 'Sin asignación' : $.trim(datos.modulo_horario));
+				$('#modulo_horario').html(datos.horario == "" ? 'Sin asignación' : $.trim(datos.horario));
+				$('#hora').html(datos.hora_clase == "" ? 'Sin asignación' : $.trim(datos.hora_clase));
 
 				/* Quito el div que indica que se está cargando */
 				//$('#icono_cargando').hide();
@@ -152,8 +153,9 @@ Sección:         <b id="nombre_seccion"></b>
 Módulo temático: <b id="modulo_tematico"></b>
 Profesor:        <b id="profesor"></b>
 Sala de clases:  <b id="sala"></b>
-Día:             <b id="dia"></b>
-Bloque:          <b id="modulo_horario"></b></pre>
+Bloque horario:  <b id="modulo_horario"></b>
+Día clase:       <b id="dia"></b>
+Hora clase:      <b id="hora"></b></pre>
 		
 			<input name="id_seccion" type="hidden" id="id_seccion" value="">
 		

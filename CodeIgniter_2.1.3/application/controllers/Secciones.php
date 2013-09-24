@@ -112,6 +112,10 @@ class Secciones extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
+			$this->load->model('Model_planificacion');
+			$datos_vista['listadoDias'] = $this->Model_planificacion->getAllDias();;
+			$datos_vista['listadoBloquesHorario'] = $this->Model_planificacion->getAllBloquesHorarios();
+
 			$subMenuLateralAbierto = "agregarSeccion"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -136,7 +140,9 @@ class Secciones extends MasterManteka {
 			$this->load->model('Model_seccion');
 			$letra_seccion = $this->input->post("letra_seccion");
 			$num_seccion = $this->input->post("numero_seccion");
-			$confirmacion = $this->Model_seccion->agregarSeccion($letra_seccion, $num_seccion);
+			$dia = $this->input->post("dia");
+			$bloque = $this->input->post("bloque");
+			$confirmacion = $this->Model_seccion->agregarSeccion($letra_seccion, $num_seccion, $dia, $bloque);
 
 			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -176,6 +182,10 @@ class Secciones extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
     		$datos_vista = array();
+    		$this->load->model('Model_planificacion');
+			$datos_vista['listadoDias'] = $this->Model_planificacion->getAllDias();;
+			$datos_vista['listadoBloquesHorario'] = $this->Model_planificacion->getAllBloquesHorarios();
+			
 			$subMenuLateralAbierto = "editarSeccion"; 
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -201,7 +211,9 @@ class Secciones extends MasterManteka {
 			$cod_seccion = $this->input->post("id_seccion");
 			$letra_seccion = $this->input->post("letra_seccion");
 			$numero_seccion = $this->input->post("numero_seccion");
-			$confirmacion = $this->Model_seccion->actualizarSeccion($cod_seccion, $letra_seccion, $numero_seccion);
+			$dia = $this->input->post("dia");
+			$bloque = $this->input->post("bloque");
+			$confirmacion = $this->Model_seccion->actualizarSeccion($cod_seccion, $letra_seccion, $numero_seccion, $dia, $bloque);
 
 			// se muestra mensaje de operación realizada
 			if ($confirmacion == TRUE) {

@@ -64,16 +64,16 @@
 					</div>
 				</div>
 				
-				<!-- Requisitos módulo temático -->
+				<!-- Implementos módulo temático -->
 				<div class="control-group">
-					<label class="control-label" for="id_requisitos">3.- Agregar requisitos existentes:</label>
+					<label class="control-label" for="id_implementos">3.- Agregar implementos requeridos:</label>
 					<div class="controls">
-						<select id="id_requisitos" name="id_requisitos[]" class="span12" title="asigne profesor" multiple="multiple">
+						<select id="id_implementos" name="id_implementos[]" class="span12" title="Implementos necesarios para realizar el módulo temático" multiple="multiple">
 						<?php
-						if (isset($requisitosModulo)) {
-							foreach ($requisitosModulo as $req) {
+						if (isset($implementosModulo)) {
+							foreach ($implementosModulo as $impl) {
 								?>
-									<option value="<?php echo $req->id; ?>"><?php echo $req->nombre; ?></option>
+									<option value="<?php echo $impl->id; ?>"><?php echo $impl->nombre; ?></option>
 								<?php 
 							}
 						}

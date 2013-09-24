@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     21-09-2013 23:28:08                          */
+/* Created on:     24-09-2013 1:31:57                           */
 /*==============================================================*/
 
 
@@ -48,6 +48,8 @@ drop table if exists horario;
 
 drop table if exists implemento;
 
+drop table if exists implementos_modulo_tematico;
+
 drop table if exists modulo_horario;
 
 drop table if exists modulo_tematico;
@@ -64,10 +66,6 @@ drop table if exists profe_equi_lider;
 
 drop table if exists profesor;
 
-drop table if exists requisito;
-
-drop table if exists requisito_modulo;
-
 drop table if exists sala;
 
 drop table if exists sala_implemento;
@@ -75,6 +73,8 @@ drop table if exists sala_implemento;
 drop table if exists seccion;
 
 drop table if exists sesion_de_clase;
+
+drop table if exists tipo_justificacion;
 
 drop table if exists tipo_profesor;
 
@@ -127,6 +127,7 @@ create table asistencia
 (
    ID_SESION            int not null,
    RUT_USUARIO          int not null,
+   ID_SUSPENCION        int,
    PRESENTE_ASISTENCIA  bool,
    JUSTIFICADO_ASISTENCIA bool,
    COMENTARIO_ASISTENCIA varchar(100)
@@ -348,7 +349,6 @@ create table horario
    ID_HORARIO           int not null auto_increment,
    ID_MODULO            int not null,
    ID_DIA               int not null,
-   NOMBRE_HORARIO       varchar(20),
    primary key (ID_HORARIO)
 );
 
@@ -367,6 +367,17 @@ create table implemento
 );
 
 alter table implemento comment 'Es utilizada con el fin de indicar los artefactos que posee ';
+
+/*==============================================================*/
+/* Table: implementos_modulo_tematico                           */
+/*==============================================================*/
+create table implementos_modulo_tematico
+(
+   ID_IMPLEMENTO        int,
+   ID_MODULO_TEM        int not null
+);
+
+alter table implementos_modulo_tematico comment 'Es utilizada para tratar la relación n a n que existe entre ';
 
 /*==============================================================*/
 /* Table: modulo_horario                                        */
@@ -429,7 +440,6 @@ create table planificacion_clase
    ID_SALA              int not null,
    ID_AYU_PROFE         int,
    ID_SECCION           int not null,
-   ID_HORARIO           int not null,
    FECHA_PLANIFICADA    date,
    primary key (ID_PLANIFICACION_CLASE)
 );
@@ -476,31 +486,6 @@ create table profesor
 alter table profesor comment 'Se utiliza para guardar los datos de las personas que usarán';
 
 /*==============================================================*/
-/* Table: requisito                                             */
-/*==============================================================*/
-create table requisito
-(
-   ID_REQUISITO         int not null auto_increment,
-   NOMBRE_REQUISITO     varchar(20) not null,
-   DESCRIPCION_REQUISITO varchar(50),
-   primary key (ID_REQUISITO),
-   key AK_IDENTIFIER_2 (NOMBRE_REQUISITO)
-);
-
-alter table requisito comment 'Cada modulo temático tiene sus requisitos para que se pueda ';
-
-/*==============================================================*/
-/* Table: requisito_modulo                                      */
-/*==============================================================*/
-create table requisito_modulo
-(
-   ID_MODULO_TEM        int not null,
-   ID_REQUISITO         int not null
-);
-
-alter table requisito_modulo comment 'Es utilizada para tratar la relación n a n que existe entre ';
-
-/*==============================================================*/
 /* Table: sala                                                  */
 /*==============================================================*/
 create table sala
@@ -532,6 +517,7 @@ create table seccion
 (
    ID_SECCION           int not null auto_increment,
    ID_SESION            int,
+   ID_HORARIO           int not null,
    LETRA_SECCION        varchar(2) not null,
    NUMERO_SECCION       int not null,
    primary key (ID_SECCION),
@@ -553,6 +539,16 @@ create table sesion_de_clase
 );
 
 alter table sesion_de_clase comment 'Las sesiones son los bloques del curso, cada unidad son 3 se';
+
+/*==============================================================*/
+/* Table: tipo_justificacion                                    */
+/*==============================================================*/
+create table tipo_justificacion
+(
+   ID_SUSPENCION        int not null auto_increment,
+   NOMBRE_SUSPENCION    varchar(50),
+   primary key (ID_SUSPENCION)
+);
 
 /*==============================================================*/
 /* Table: tipo_profesor                                         */
@@ -614,6 +610,9 @@ alter table asistencia add constraint FK_RELATIONSHIP_56 foreign key (RUT_USUARI
 
 alter table asistencia add constraint FK_RELATIONSHIP_57 foreign key (ID_SESION)
       references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
+
+alter table asistencia add constraint FK_RELATIONSHIP_60 foreign key (ID_SUSPENCION)
+      references tipo_justificacion (ID_SUSPENCION) on delete cascade on update cascade;
 
 alter table auditoria add constraint FK_RELATIONSHIP_35 foreign key (RUT_USUARIO)
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
@@ -678,6 +677,12 @@ alter table horario add constraint FK_RELATIONSHIP_8 foreign key (ID_DIA)
 alter table horario add constraint FK_RELATIONSHIP_9 foreign key (ID_MODULO)
       references modulo_horario (ID_MODULO) on delete cascade on update cascade;
 
+alter table implementos_modulo_tematico add constraint FK_RELATIONSHIP_27 foreign key (ID_MODULO_TEM)
+      references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
+
+alter table implementos_modulo_tematico add constraint FK_RELATIONSHIP_53 foreign key (ID_IMPLEMENTO)
+      references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
+
 alter table modulo_tematico add constraint FK_RELATIONSHIP_28 foreign key (ID_EQUIPO)
       references equipo_profesor (ID_EQUIPO) on delete cascade on update cascade;
 
@@ -689,9 +694,6 @@ alter table nota add constraint FK_RELATIONSHIP_42 foreign key (ID_EVALUACION)
 
 alter table planificacion_clase add constraint FK_RELATIONSHIP_10 foreign key (ID_SALA)
       references sala (ID_SALA) on delete cascade on update cascade;
-
-alter table planificacion_clase add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
-      references horario (ID_HORARIO) on delete cascade on update cascade;
 
 alter table planificacion_clase add constraint FK_RELATIONSHIP_54 foreign key (ID_AYU_PROFE)
       references ayu_profe (ID_AYU_PROFE) on delete cascade on update cascade;
@@ -717,17 +719,14 @@ alter table profesor add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO
 alter table profesor add constraint FK_RELATIONSHIP_52 foreign key (ID_TIPO_PROFESOR)
       references tipo_profesor (ID_TIPO_PROFESOR) on delete cascade on update cascade;
 
-alter table requisito_modulo add constraint FK_RELATIONSHIP_19 foreign key (ID_REQUISITO)
-      references requisito (ID_REQUISITO) on delete cascade on update cascade;
-
-alter table requisito_modulo add constraint FK_RELATIONSHIP_27 foreign key (ID_MODULO_TEM)
-      references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
-
 alter table sala_implemento add constraint FK_RELATIONSHIP_16 foreign key (ID_SALA)
       references sala (ID_SALA) on delete cascade on update cascade;
 
 alter table sala_implemento add constraint FK_RELATIONSHIP_17 foreign key (ID_IMPLEMENTO)
       references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
+
+alter table seccion add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
+      references horario (ID_HORARIO) on delete cascade on update cascade;
 
 alter table seccion add constraint FK_RELATIONSHIP_49 foreign key (ID_SESION)
       references sesion_de_clase (ID_SESION) on delete cascade on update cascade;

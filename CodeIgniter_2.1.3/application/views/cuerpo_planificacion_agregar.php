@@ -281,31 +281,9 @@
 					<div class="control-group">
 						<label class="control-label" for="dia">4.2.- <font color="red">*</font> Horario:</label>
 						<div class="controls">
-							<select id="dia" name="dia" class="span6" required>
-								<option value="" disabled selected>Día</option>
-								<?php
-								if (isset($listadoDias)) {
-									foreach ($listadoDias as $valor) {
-										?>
-											<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
-										<?php 
-									}
-								}
-								?>
-							</select>
+							<input id="dia" name="dia" class="span6" required value="">
 
-							<select id="bloque" name="bloque" class="span6" required>
-								<option value="" disabled selected>Hora</option>
-								<?php
-								if (isset($listadoBloquesHorario)) {
-									foreach ($listadoBloquesHorario as $valor) {
-										?>
-											<option value="<?php echo $valor->id?>"><?php echo $valor->id.' - '.$valor->inicio.'-'.$valor->fin; ?></option>
-										<?php 
-									}
-								}
-								?>
-							</select>
+							<input id="bloque" name="bloque" class="span6" required value="">
 						</div>
 					</div>
 

@@ -30,6 +30,8 @@
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				$('#letra_seccion').val($.trim(datos.letra_seccion));
 				$('#numero_seccion').val($.trim(datos.numero_seccion));
+				$('#dia').val($.trim(datos.id_dia));
+				$('#bloque').val($.trim(datos.id_modulo_horario));
 
 				/* Quito el div que indica que se está cargando */
 				$('#icono_cargando').hide();
@@ -157,9 +159,36 @@
 						-<input id="numero_seccion" name="numero_seccion"  onblur="comprobarSeccion(letra_seccion, numero_seccion)" maxlength="2"  title=" Ingrese sólo dos dígitos" pattern="[0-9]" type="text" class="span2" required>
 					</div>
 				</div>
+				<div class="control-group">
+					<label class="control-label" for="dia">2.- <font color="red">*</font> Horario:</label>
+					<div class="controls">
+						<select id="dia" name="dia" class="span4" required>
+							<option value="" disabled selected>Día</option>
+							<?php
+							if (isset($listadoDias)) {
+								foreach ($listadoDias as $valor) {
+									?>
+										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
+									<?php 
+								}
+							}
+							?>
+						</select>
 
-				<br>
-
+						<select id="bloque" name="bloque" class="span4" required>
+							<option value="" disabled selected>Hora</option>
+							<?php
+							if (isset($listadoBloquesHorario)) {
+								foreach ($listadoBloquesHorario as $valor) {
+									?>
+										<option value="<?php echo $valor->id?>"><?php echo $valor->id.' - '.$valor->inicio.'-'.$valor->fin; ?></option>
+									<?php 
+								}
+							}
+							?>
+						</select>
+					</div>
+				</div>
 				<div class="control-group">
 					<div class="controls ">
 						<button class="btn" type="button" onclick="editarSeccion()">

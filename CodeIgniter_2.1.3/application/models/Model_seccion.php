@@ -56,8 +56,7 @@ class Model_seccion extends CI_Model {
 	* @param string $nombre_seccion2 número del nombre de la seccion a editar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function agregarSeccion($letra_seccion, $numero_seccion)
-	{
+	public function agregarSeccion($letra_seccion, $numero_seccion, $dia, $bloque) {
 		$letra_seccion = strtoupper($letra_seccion);
 		
 		$this->db->trans_start();
@@ -75,7 +74,35 @@ class Model_seccion extends CI_Model {
 			return FALSE;
 		}
 
-		$data1 = array('LETRA_SECCION' => $letra_seccion, 'NUMERO_SECCION' => $numero_seccion);
+		//Busco el horario
+		$this->db->select('ID_HORARIO as id');
+		$this->db->where('ID_MODULO', $bloque);
+		$this->db->where('ID_DIA', $dia);
+		$query = $this->db->get('horario');
+		if ($query == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+		$id_horario = 0; //Valor por default
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			$id_horario = $row->id;
+		}
+		else { //Si no existe, inserto el horario (no debiese ocurrir con el poblado inicial)
+			$this->db->flush_cache();
+			$data0 = array(
+				'ID_MODULO' => $bloque,
+				'ID_DIA' => $dia);
+			$resultadoInsert = $this->db->insert('horario', $data0);
+			$id_horario = $this->db->insert_id();	
+		}
+
+		$this->db->flush_cache();
+
+		$data1 = array(
+			'LETRA_SECCION' => $letra_seccion,
+			'NUMERO_SECCION' => $numero_seccion,
+			'ID_HORARIO' => $id_horario);
 		$resultadoInsert = $this->db->insert('seccion', $data1);
 
 		$this->db->trans_complete();
@@ -99,15 +126,40 @@ class Model_seccion extends CI_Model {
 	* @param string $nombre_seccion2 número del nombre de la seccion a agregar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
-	public function actualizarSeccion($cod_seccion, $letra_seccion, $numero_seccion) {
-
-		$data = array(	
-					'LETRA_SECCION' => $letra_seccion,
-					'NUMERO_SECCION' => $numero_seccion	
-		);
+	public function actualizarSeccion($cod_seccion, $letra_seccion, $numero_seccion, $dia, $bloque) {
 		
 		$this->db->trans_start();
 
+		//Busco el horario
+		$this->db->select('ID_HORARIO as id');
+		$this->db->where('ID_MODULO', $bloque);
+		$this->db->where('ID_DIA', $dia);
+		$query = $this->db->get('horario');
+		if ($query == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+		$id_horario = 0; //Valor por default
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			$id_horario = $row->id;
+		}
+		else { //Si no existe, inserto el horario (no debiese ocurrir con el poblado inicial)
+			$this->db->flush_cache();
+			$data0 = array(
+				'ID_MODULO' => $bloque,
+				'ID_DIA' => $dia);
+			$resultadoInsert = $this->db->insert('horario', $data0);
+			$id_horario = $this->db->insert_id();	
+		}
+
+		$this->db->flush_cache();
+
+
+		$data = array(
+					'LETRA_SECCION' => $letra_seccion,
+					'NUMERO_SECCION' => $numero_seccion,
+					'ID_HORARIO' => $id_horario);
 		$this->db->where('ID_SECCION', $cod_seccion);
 		$confirmacion0 = $this->db->update('seccion', $data);
 
@@ -186,8 +238,9 @@ class Model_seccion extends CI_Model {
 		$this->db->order_by('LETRA_SECCION', 'asc');
 		//$this->db->order_by('NUMERO_SECCION', 'asc');
 
+		define("BUSCAR_POR_NOMBRE", 0);
 		if ($texto != "") {
-			$this->db->where("(LETRA_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%' OR NUMERO_SECCION LIKE '%".$textoFiltrosAvanzados[BUSCAR_POR_APELLIDO]."%')");
+			$this->db->where("(LETRA_SECCION LIKE '%".$texto."%' OR NUMERO_SECCION LIKE '%".$texto."%')");
 		}
 		$query = $this->db->get('seccion');
 		//echo $this->db->last_query();
@@ -216,15 +269,18 @@ class Model_seccion extends CI_Model {
 		$this->db->select('usuario.NOMBRE1 as nombre1');
 		$this->db->select('usuario.APELLIDO1 as apellido1');
 		$this->db->select('usuario.APELLIDO2 as apellido2');
-		$this->db->select('horario.NOMBRE_HORARIO as horario');
+		$this->db->select('CONCAT(ABREVIATURA_DIA,modulo_horario.ID_MODULO) as horario', FALSE);
 		$this->db->select('horario.ID_MODULO as modulo_horario');
+		$this->db->select('NOMBRE_DIA as dia');
+		$this->db->select('dia_horario.ID_DIA as id_dia');
+		$this->db->select('modulo_horario.ID_MODULO as id_modulo_horario');
 		$this->db->select('date_format(HORA_INI, \'%H:%i\') AS hora_clase', FALSE);
 		$this->db->where('seccion.ID_SECCION', $id_seccion);
 
 		$this->db->join('sesion_de_clase', 'sesion_de_clase.ID_SESION = seccion.ID_SESION', 'LEFT OUTER');
 		$this->db->join('modulo_tematico', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM', 'LEFT OUTER');
 		$this->db->join('planificacion_clase','sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION', 'LEFT OUTER'); //Para saber en que se encuentra actualmente
-		$this->db->join('horario','planificacion_clase.ID_HORARIO = horario.ID_HORARIO', 'LEFT OUTER');
+		$this->db->join('horario','seccion.ID_HORARIO = horario.ID_HORARIO', 'LEFT OUTER');
 		$this->db->join('dia_horario','horario.ID_DIA = dia_horario.ID_DIA', 'LEFT OUTER');
 		$this->db->join('modulo_horario','horario.ID_MODULO = modulo_horario.ID_MODULO', 'LEFT OUTER');
 		$this->db->join('sala','planificacion_clase.ID_SALA = sala.ID_SALA', 'LEFT OUTER');
