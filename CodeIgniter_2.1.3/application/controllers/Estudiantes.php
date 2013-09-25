@@ -482,8 +482,7 @@ class Estudiantes extends MasterManteka {
 	*
 	*
 	**/
-	function cargaMasivaEstudiantes()
-	{
+	function cargaMasivaEstudiantes() {
 		$config['upload_path'] = './uploads/';
 		$config['allowed_types'] = 'csv';
 		$config['max_size']	= '100';	

@@ -132,6 +132,19 @@ class Model_planificacion extends CI_Model {
 	}
 
 
+	public function eliminarPlanificacion($id_planificacion) {
+		$this->db->trans_start();
+		$this->db->where('ID_PLANIFICACION_CLASE', $id_planificacion);
+		$this->db->delete('planificacion_clase');
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+	}
+
+
 	public function getAllDias() {
 		$this->db->select('ID_DIA AS id');
 		$this->db->select('NOMBRE_DIA AS nombre');

@@ -155,7 +155,7 @@ class Planificacion extends MasterManteka {
 			if ($confirmacion == TRUE){
 				// mostramos el mensaje de operacion realizada
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
-				$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la asignación de la sección";
+				$datos_plantilla["cuerpo_msj"] = "Se ha eliminado la planificación de clases";
 				$datos_plantilla["tipo_msj"] = "alert-success";
 			}
 			else{
@@ -167,7 +167,7 @@ class Planificacion extends MasterManteka {
 			
 			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 			$datos_plantilla["redirecTo"] = "Planificacion/eliminarPlanificacion"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-			$datos_plantilla["nombre_redirecTo"] = "Eliminar Asignación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$datos_plantilla["nombre_redirecTo"] = "Eliminar planificación"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
