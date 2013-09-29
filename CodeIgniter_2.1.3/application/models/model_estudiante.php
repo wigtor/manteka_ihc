@@ -212,7 +212,8 @@ class Model_estudiante extends CI_Model {
 			$this->db->or_like('APELLIDO1',$texto);
 			$this->db->or_like('APELLIDO2',$texto);
 			$this->db->or_like('NOMBRE_CARRERA',$texto);
-			$this->db->or_like('NOMBRE_SECCION',$texto);
+			$this->db->or_like('LETRA_SECCION',$texto);
+			$this->db->or_like('NUMERO_SECCION',$texto);
 		} 
 		else {
 			
@@ -307,22 +308,44 @@ class Model_estudiante extends CI_Model {
 	* @param $listaRut Lista de rutd correspondedientes a los estudiantes que se cambiaran de sección
 	* @return $conformacion resultado de la función que es uno en el caso exitoso y -1 en el caso fallido
 	*/	
-	function CambioDeSecciones($seccionOUT,$listaRut){
-		$contador = 0;
-		$confirmacion = 1;
-		while ($contador<count($listaRut)){
-			$data = array(
+	function cambioDeSeccion($seccionOUT, $listaRut){
+		if (is_array($listaRut) === FALSE) {
+			return FALSE;
+		}
+		$data = array(
 				'ID_SECCION' => $seccionOUT
 				);
-			$this->db->where('RUT_ESTUDIANTE', $listaRut[$contador]);
-			$datos = $this->db->update('estudiante',$data);
-			if($datos != true){
-				$confirmacion = -1;
-			}
 
-			$contador = $contador + 1;
+		$this->db->trans_start();
+
+		//Busco que la sección de destino existe
+		$this->db->select('COUNT(ID_SECCION) AS resultado');
+		$query = $this->db->where('ID_SECCION', $seccionOUT);
+		$query = $this->db->get('seccion');
+		if ($query == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
 		}
-		return $confirmacion;
+		if ($query->row()->resultado <= 0) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+
+		$this->db->flush_cache();
+
+		foreach ($listaRut as $value) {
+			$this->db->where('RUT_USUARIO', $value);
+			$datos = $this->db->update('estudiante', $data);
+			$this->db->flush_cache();
+		}
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 	}
 
 

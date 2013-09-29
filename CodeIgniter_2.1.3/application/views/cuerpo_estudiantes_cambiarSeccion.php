@@ -1,118 +1,71 @@
-<script type="text/javascript">
-	function cambioSeccion(desde){
-		var seccion1 = document.getElementsByName("cod_seccion1");
-		var seccion2 = document.getElementsByName("cod_seccion2");
-		var cont;
-		var numS1;
-		var numS2;
-		for(cont=0;cont < seccion1.length;cont++){
-			if(seccion1[cont].checked == true){
-				numS1 = cont;
-				cont = seccion1.lenght;
-			}
-		}
-		for(cont=0;cont < seccion2.length;cont++){
-			if(seccion2[cont].checked == true){
-				numS2 = cont;
-				cont = seccion2.lenght;
-			}
-		}
-	
-		if(seccion1[numS1].value == seccion2[numS2].value){		
-			$('#modalSeccionIgual').modal();
-			return false;
-		}
-		
-		if(desde == 1){
-			document.getElementById("boton_desde").value = "1";
-		}
-		else{
-			document.getElementById("boton_desde").value = "2";
-		}
-		$('#modalConfirmacion').modal();
-	
-	}
-</script>
+
 
 <script type="text/javascript">
-	function mostrarS(cod_seccion,tipo_lista){
-	//
-	$.ajax({//
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Alumnos/obtenerAlumnosSeccion") ?>", /* Se setea la url del controlador que responderá */
-			data: { cod_seccion_post: cod_seccion},
+	var tiposFiltro = ["Nombre sección"]; //Debe ser escrito con PHP
+	var valorFiltrosJson = [""];
+	var inputAllowedFiltro = [""];
+	var prefijo_tipoDato = "seccion_";
+	var prefijo_tipoFiltro = "tipo_filtro_";
+	var url_post_busquedas = "<?php echo site_url("Secciones/getseccionesAjax") ?>";
+	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/secciones") ?>";
+
+	function seccionOrigenSeleccionada(elemTabla) {
+		/* Obtengo el rut del usuario clickeado a partir del id de lo que se clickeó */
+		var idElem = elemTabla.id;
+		var cod_seccion = idElem.substring(prefijo_tipoDato.length, idElem.length);
+
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
+
+		/* Defino el ajax que hará la petición al servidor */
+		$.ajax({
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Secciones/getDetallesSeccionAjax") ?>",
+			data: { seccion: cod_seccion },
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
+				/* Decodifico los datos provenientes del servidor en formato JSON para construir un objeto */
+				var datos = jQuery.parseJSON(respuesta);
 
-				var tablaResultados = document.getElementById(tipo_lista+"tabla");
-				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, input,nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre alumnos de sección");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++) {
-					tr = document.createElement('tr');
-					td = document.createElement('td');
-					input = document.createElement('input');
-					input.setAttribute('type','checkbox');
-					if(tipo_lista == "lista1_"){
-						input.setAttribute('name','seleccionadosS1[]');
-					}
-					else{
-						input.setAttribute('name','seleccionadosS2[]');
-					}
-					input.setAttribute('value', arrayRespuesta[i].rut);
-					nodoTexto = document.createTextNode(" "+arrayRespuesta[i].apellido1+" "+arrayRespuesta[i].apellido2+" "+arrayRespuesta[i].nombre1+" "+arrayRespuesta[i].nombre2);
-					td.appendChild(input);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
-					tablaResultados.appendChild(tr);
-					
-				}
+				//$('#id_seccion').val($.trim(datos.id_seccion));
+
+				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
+				$('#nombreSeccionOrigen').html($.trim(datos.seccion));
+				/*
+				$('#modulo_tematico').html($.trim(datos.modulo));
+				$('#profesor').html(datos.apellido1 == '' ? 'Sin asignación' : $.trim(datos.nombre1) + ' ' + $.trim(datos.apellido1));
+				$('#dia').html(datos.dia == '' ? 'Sin asignación' : $.trim(datos.dia));
+				$('#modulo_horario').html(datos.horario == "" ? 'Sin asignación' : $.trim(datos.horario));
+				$('#hora').html(datos.hora_clase == "" ? 'Sin asignación' : $.trim(datos.hora_clase));
+				*/
+				cargarSeccionesMismoModulo(datos.id_seccion);
+				limpiarListaEstudiantesSeccionDestino();
 
 				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
+				$('#icono_cargando').hide();
+			}
 		});
-	//
 	}
-</script>
 
-<script type="text/javascript">
-function ordenarFiltroSeccion(tipo_seccion){
-	var filtroLista = document.getElementById(tipo_seccion).value;
-	var arreglo = new Array();
-	var ocultarInput;
-	var ocultarTd;
-	var cont;
-	
-	<?php
-	$contadorE = 0;
-	while($contadorE<count($secciones)){
-		echo 'arreglo['.$contadorE.'] = "'.$secciones[$contadorE].'";';
-		$contadorE = $contadorE + 1;
+	function cargarSeccionesMismoModulo(idSeccion) {
+		alert("cargando secciones del mismo módulo");
 	}
-	?>
-	
-	for(cont=0;cont < arreglo.length;cont++){
-		ocultarInput=document.getElementById(tipo_seccion+arreglo[cont]);
-		ocultarTd=document.getElementById(tipo_seccion+cont);
-		if(0 > arreglo[cont].toLowerCase ().indexOf(filtroLista.toLowerCase ())){
-			ocultarTd.style.display='none';
-			//ocultarInput.checked = false;
-		}
-		else
-		{
-			ocultarTd.style.display='';
-		}
-    }
-}
+
+	function cargarAlumnosSeccion(idSeccion) {
+		
+	}
+
+	function limpiarListaEstudiantesSeccionDestino() {
+		
+	}
+
+	//Se cargan por ajax
+	$(document).ready(function() {
+		escribirHeadTable('listadoResultados');
+		escribirHeadTable('listadoResultados2');
+		cambioTipoFiltro(undefined, 'listadoResultados', 'filtroLista', "seccionOrigenSeleccionada(this)");
+	});
+
 </script>
 
 
@@ -121,136 +74,90 @@ function ordenarFiltroSeccion(tipo_seccion){
 
 <fieldset>
 	<legend>Cambio de sección</legend>
-	<div class= "row-fluid">
-		<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Estudiantes/postCambiarSeccionEstudiantes/")?>"><!--FORM  SECCION-->
-		<div class="span6">
-		<input id="boton_desde" type="hidden" name="direccion" value="">
-			<div class="row-fluid">
-				<div class="span6"> 
-					1.- Seleccione una sección:
-				</div>
-				<div class="span6" style="align:right">
-					
-					<div class="controls">
-						<input type="text" onkeyup="ordenarFiltroSeccion('filtro1_')" id="filtro1_" placeholder="Filtro de Sección" style="width: 93%">
-					</div>
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px;-webkit-border-radius: 4px" >
-						<table class="table table-hover">
-							<thead>
-							</thead>
-								<tbody>									
-									
-								</tbody>
-						</table>		
-					</div>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<br>
-				Estudiantes de la sección:
-				 
-				<br>
-				<br>
-				<div class="row-fluid">
-				
-					<div class="span12">
-						<div class="span6">
-							<input id="lista1_filtro"  onkeyup="ordenarFiltro('lista1_')" type="text" placeholder="Filtro búsqueda" style="width:90%">
-						</div>
-					
-
-						<div class="span6" >
-								
-								
-								<select id="lista1_tipoDeFiltro" title="Tipo de filtro" style="width:100%">
-								<option value="1">Filtrar por Nombre</option>
-								<option value="3">Filtrar por Apellido paterno</option>
-								<option value="4">Filtrar por Apellido materno</option>
-								<option value="7">Filtrar por Código carrera</option>
-								</select>
-						</div> 
-					</div>
-				</div>
-			</div>
-		
-	
-			<div class="row-fluid" style="margin-left: 0%;">
-				
-
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-						<table class="table table-hover" id="lista1_tabla">
-
-						</table>
-					</div>
-
-			</div>
-
-			<div class="controls pull-right" style="margin-top: 7px">
-				<button class="btn"  type="button" onclick="cambioSeccion(1)">
-					<i class="icon-chevron-right"></i>
-					Cambiar de sección
-				</button>
-			</div>
-		</div>
-		<div class="span6">
-			<div class="row-fluid">
-				<div class="span6"> 
-					2.- Seleccione una sección:
-				</div>
-				<div class="span6">
-					
-					<div class="controls">
-						<input type="text" onkeyup="ordenarFiltroSeccion('filtro2_')" id="filtro2_" placeholder="Filtro de Sección" style="width:93%">
-					</div>
-					<div style="border:#cccccc 1px solid;overflow-y:scroll;height:200px;-webkit-border-radius: 4px" >
-						<table class="table table-hover">
-							<thead>
-							</thead>
-								<tbody>									
-									
-								</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
+	<?php
+		$attributes = array('id' => 'formS1');
+		echo form_open("Estudiantes/postCambiarSeccionEstudiantes/", $attributes);
+	?>
 		<div class="row-fluid">
-			<br>
-			Estudiantes de la sección:
-			<br>
-			<br>
-			<div class="row-fluid">
-			
-				<div class="span12">
-					<div class="span6">
-						<input id="lista2_filtro"  onkeyup="ordenarFiltro('lista2_')" type="text" placeholder="Filtro búsqueda" style="width:90%">
+			<div class="span6">
+				<div class="controls controls-row">
+					<div class="input-append span7">
+						<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+						<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
 					</div>
-					<div class="span6">
-							<select id="lista2_tipoDeFiltro" title="Tipo de filtro" style="width:100%">
-							<option value="1">Filtrar por Nombre</option>
-							<option value="3">Filtrar por Apellido paterno</option>
-							<option value="4">Filtrar por Apellido materno</option>
-							<option value="7">Filtrar por Código carrera</option>
-							</select>
-					</div> 
+					<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+				</div>
+			</div>
+
+			<div class="span6">
+				<div class="controls controls-row">
+					<div class="input-append span7">
+						<input id="filtroLista2" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+						<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+					</div>
+					<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
 				</div>
 			</div>
 		</div>
-			<div class="row-fluid" style="margin-left: 0%;">
-
-					<div style="border:#cccccc  1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px">
-						<table class="table table-hover" id="lista2_tabla">
-
-						</table>
-					</div>
-
+		<div class="row-fluid">
+			<div class="span6" >
+				1.- Seleccione una sección de origen
 			</div>
-			<div class="controls pull-right" style="margin-top:7px">
-				<button class="btn" type="button" onclick="cambioSeccion(2)">
-					<i class="icon-chevron-left"></i>
-					Cambiar de sección
-				</button>
+			<div class="span6" >
+				2.- Seleccione una sección de destino
 			</div>
 		</div>
+		<div class="row-fluid">
+			<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:300px; -webkit-border-radius: 4px;">
+				<table id="listadoResultados" class="table table-hover">
+					<thead>
+						
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+			<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:300px; -webkit-border-radius: 4px;">
+				<table id="listadoResultados2" class="table table-hover">
+					<thead>
+						
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<br>
+
+		<div class="row-fluid">
+			<div class="span5">
+				3.- Estudiantes de la sección de origen <div id="nombreSeccionOrigen"></div>
+			</div>
+			<div class="span5 offset2">
+				Estudiantes de la sección de destino <div id="nombreSeccionDestino"></div>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span5">
+				<select required id="id_alumnos" size="10" name="id_alumnos[]" class="span12" title="Seleccione los alumnos a cambiar de sección" multiple="multiple">
+					
+				</select>
+			</div>
+			<div class="span2">
+				<button class="btn" type="submit">
+					<i class="icon-chevron-right"></i>
+					Mover estudiantes
+				</button>
+			</div>
+			<div class="span5">
+				<select required id="id_alumnos2" size="10" class="span12" title="Alumnos de la sección de destino" multiple="multiple" >
+					
+				</select>
+			</div>
+		</div>
+
 		<?php echo form_close(""); ?>
-	</div>
 </fieldset>

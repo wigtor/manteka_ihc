@@ -1,8 +1,9 @@
 
 
-function escribirHeadTable() {
+function escribirHeadTable(nombreTabla) {
+	var nombreTabla = nombreTabla || "listadoResultados";
 
-	var tablaResultados = document.getElementById("listadoResultados");
+	var tablaResultados = document.getElementById(nombreTabla);
 	$(tablaResultados).find('tbody').remove();
 	var tr, td, th, thead, nodoTexto, nodoBtnFiltroAvanzado;
 	thead = document.createElement('thead');
@@ -71,8 +72,12 @@ function escribirHeadTable() {
 	tablaResultados.appendChild(thead);
 }
 
-function cambioTipoFiltro(inputUsado) {
-	var inputTextoFiltro = document.getElementById('filtroLista');
+function cambioTipoFiltro(inputUsado, nombreTabla, nombreFiltro, funcionAlClickear) {
+	var nombreTabla = nombreTabla || "listadoResultados";
+	var nombreFiltro = nombreFiltro || "filtroLista";
+	var funcionAlClickear = funcionAlClickear || "verDetalle(this)";
+
+	var inputTextoFiltro = document.getElementById(nombreFiltro);
 	var texto = inputTextoFiltro.value;
 	if (inputUsado != undefined) {
 		if(!inputUsado.validity.valid){			// Se verifica si el texto ingresado en el input respeta la expresión regular
@@ -89,7 +94,7 @@ function cambioTipoFiltro(inputUsado) {
 		url: url_post_busquedas, /* Se setea la url del controlador que responderá */
 		data: { textoFiltroBasico: texto, textoFiltrosAvanzados: valorFiltrosJson}, /* Se codifican los datos que se enviarán al servidor usando el formato JSON */
 		success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-			var tablaResultados = document.getElementById("listadoResultados");
+			var tablaResultados = document.getElementById(nombreTabla);
 			$(tablaResultados).find('tbody').remove();
 			var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
 			var arrayRespuesta = new Array();
@@ -115,7 +120,7 @@ function cambioTipoFiltro(inputUsado) {
 				tr = document.createElement('tr');
 				tr.setAttribute('style', "cursor:pointer");
 				tr.setAttribute("id", prefijo_tipoDato+arrayObjectRespuesta[i].id); //Da lo mismo en este caso los id repetidos en los div
-				tr.setAttribute("onClick", "verDetalle(this)");
+				tr.setAttribute("onClick", funcionAlClickear);
 				for (var j = 0; j < tiposFiltro.length; j++) {
 					td = document.createElement('td');
 					if(arrayRespuesta[i][j] == null){
@@ -148,12 +153,13 @@ function cambioTipoFiltro(inputUsado) {
 }
 
 
-function limpiarFiltros() {
+function limpiarFiltros(nombreFiltro) {
 	var tam = valorFiltrosJson.length;
 	for (var i = 0; i < tam; i++) {
 		valorFiltrosJson[i] = "";
 	}
-	var inputTextoFiltro = document.getElementById('filtroLista');
+	var nombreFiltro = nombreFiltro || "filtroLista";
+	var inputTextoFiltro = document.getElementById(nombreFiltro);
 	$(inputTextoFiltro).val("");
 
 	//Luego de limpiar los filtros, se debe iniciar una nueva búsqueda

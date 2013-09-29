@@ -337,23 +337,23 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_estudiante');
-			$seccion1 = $this->input->post('cod_seccion1');
+			$seccion1 = $this->input->post('id_seccion1');
 			$cambiarDesde = $this->input->post('direccion');
-			$seccion2 = $this->input->post('cod_seccion2');
+			$seccion2 = $this->input->post('id_seccion2');
 			
 			
 			
 			if($cambiarDesde == 1) {
 				$lista_seleccionados = $this->input->post('seleccionadosS1');
 				$seccionOUT = $this->input->post('cod_seccion2');
-				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT, $lista_seleccionados);
+				$confirmacion = $this->Model_estudiante->cambioDeSeccion($seccionOUT, $lista_seleccionados);
 			}
 			else {
 				$lista_seleccionados = $this->input->post('seleccionadosS2');
 				$seccionOUT = $this->input->post('cod_seccion1');
-				$confirmacion = $this->Model_estudiante->CambioDeSecciones($seccionOUT, $lista_seleccionados);
+				$confirmacion = $this->Model_estudiante->cambioDeSeccion($seccionOUT, $lista_seleccionados);
 			}
-			if($confirmacion != 1) {
+			if($confirmacion != TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error al intertar cambiar de sección";
 				$datos_plantilla["tipo_msj"] = "alert-error";
