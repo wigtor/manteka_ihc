@@ -337,20 +337,18 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model('Model_estudiante');
-			$seccion1 = $this->input->post('id_seccion1');
-			$cambiarDesde = $this->input->post('direccion');
-			$seccion2 = $this->input->post('id_seccion2');
+			$cambiarDesde = 1; //Paso por defecto de izquierda a derecha
 			
 			
 			
 			if($cambiarDesde == 1) {
-				$lista_seleccionados = $this->input->post('seleccionadosS1');
-				$seccionOUT = $this->input->post('cod_seccion2');
+				$lista_seleccionados = $this->input->post('id_alumnos');
+				$seccionOUT = $this->input->post('selectSeccionDestino');
 				$confirmacion = $this->Model_estudiante->cambioDeSeccion($seccionOUT, $lista_seleccionados);
 			}
 			else {
-				$lista_seleccionados = $this->input->post('seleccionadosS2');
-				$seccionOUT = $this->input->post('cod_seccion1');
+				$lista_seleccionados = $this->input->post('id_alumnos2');
+				$seccionOUT = $this->input->post('selectSeccionOrigen');
 				$confirmacion = $this->Model_estudiante->cambioDeSeccion($seccionOUT, $lista_seleccionados);
 			}
 			if($confirmacion != TRUE) {

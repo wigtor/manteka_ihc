@@ -360,14 +360,19 @@ class Model_estudiante extends CI_Model {
 	* @return bool TRUE o FALSE segun corresponda si el rut es valido o no.
 	*/	
 
-	function validaRut($rut){
+	function validaRut($rut, $dvExistente){
 		$suma = 0;
-		if(strpos($rut,"-")==false){
+		$RUT[0] = $rut;
+		$RUT[1] = $dvExistente;
+		/*
+		if(strpos($rut,"-")==false) {
 			$RUT[0] = substr($rut, 0, -1);
 			$RUT[1] = substr($rut, -1);
-		}else{
+		}
+		else {
 			$RUT = explode("-", trim($rut));
 		}
+		*/
 		$elRut = str_replace(".", "", trim($RUT[0]));
 		$ffactor = 2;
 		for($i = strlen($elRut)-1; $i >= 0; $i--):
@@ -417,8 +422,11 @@ class Model_estudiante extends CI_Model {
 			case "carrera":				
 			return filter_var($campo, FILTER_VALIDATE_INT);     
 			break;
+			case "coordinacion":
+			$reg = array("options"=>array("regexp"=>"/^[a-zA-Z\-]+$/"));
+			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
 			case "seccion":
-			$reg = array("options"=>array("regexp"=>"/^[a-zA-Z0-9\-]+$/"));
+			$reg = array("options"=>array("regexp"=>"/^[0-9\-]+$/"));
 			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
 			break;
 			case "nombre":
@@ -444,10 +452,11 @@ class Model_estudiante extends CI_Model {
 	* @param $seccion es el nombre de la sección que se evaluará
 	* @return $sec->ID_SECCION es el codigo de la sección que corresponde al nombre ingresado en $seccion
 	*/	
-	function validarSeccion($seccion){
+	function validarSeccion($coord, $seccion){
 		
 		$query = $this->db->select('seccion.ID_SECCION');
-		$query = $this->db->where('CONCAT(LETRA_SECCION, "-", NUMERO_SECCION ) = ', $seccion);
+		$query = $this->db->where('LETRA_SECCION', $coord);
+		$query = $this->db->where('NUMERO_SECCION', $seccion);
 		$query = $this->db->get('seccion');
 		//echo $this->db->last_query().'      ';
 		$sec = $query->row();
@@ -512,7 +521,7 @@ class Model_estudiante extends CI_Model {
 
 			if(!$header) { //Si está vacio
 				$header = explode(';',trim($linea));
-				if((strcmp($header[0], 'RUT') != 0) || (count($header)!=8)) { //CANTIDAD DE COLUMNAS = 8
+				if((strcmp($header[0], 'RUT') != 0) || (count($header) != 10)) { //CANTIDAD DE COLUMNAS = 10
 					fclose($ff);
 					unlink($archivo);
 					return FALSE;
@@ -521,7 +530,7 @@ class Model_estudiante extends CI_Model {
 			else {
 				$linea =  explode(';',$linea);
 				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
-					$linea[] = "</br>El numero de argumentos en la linea es incorrecto</br>";
+					$linea[] = "<br>El numero de argumentos en la linea es incorrecto</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -529,15 +538,15 @@ class Model_estudiante extends CI_Model {
 				}
 				$validador = $this->validarDatos($data['RUT'],"rut");
 				if(!$validador) {
-					$linea[] = "</br>El rut del estudiante tiene caracteres no válidos</br>";
+					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
 				try {
-					if(($this->validaRut($data['RUT'])) == FALSE) {
-						$linea[] = "</br>El rut del estudiante no es valido</br>";
+					if(($this->validaRut($data['RUT'], $data['DIG'])) == FALSE) {
+						$linea[] = "<br>El rut del estudiante no es valido</br>";
 						$stack[$c] = $linea;
 						fclose($ff);
 						unlink($archivo);
@@ -545,7 +554,7 @@ class Model_estudiante extends CI_Model {
 					}
 				}
 				catch(Exception $e) {
-					$linea[] = "</br>El rut del estudiante no es valido</br>";
+					$linea[] = "<br>El rut del estudiante no es valido</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -553,10 +562,10 @@ class Model_estudiante extends CI_Model {
 				}
 				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
 				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
-				$data['RUT'] = substr($data['RUT'], 0, -1);	//Elimino dígito verificador			
+				//$data['RUT'] = substr($data['RUT'], 0, -1);	//Elimino dígito verificador			
 				$validador = $this->rutExiste($data['RUT']);
 				if($validador == -1) {
-					$linea[] = "</br>El rut de estudiante ya existe en manteka</br>";
+					$linea[] = "<br>El rut de estudiante ya existe en manteka</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -564,15 +573,23 @@ class Model_estudiante extends CI_Model {
 				}
 				$validador = $this->validarDatos($data['COD_CARRERA'], "carrera");
 				if(!$validador) {
-					$linea[] = "</br>La carrera del estudiante es erronea, solo se admiten numeros.</br>";
+					$linea[] = "<br>La carrera del estudiante es erronea, solo se admiten numeros.</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				$validador = $this->validarDatos($data['ID_SECCION'], "seccion");
+				$validador = $this->validarDatos($data['COORD'], "coordinacion");
 				if(!$validador) {
-					$linea[] = "</br>EL nombre de la seccion no existe en manteka</br>";
+					$linea[] = "<br>EL nombre de la coordinación no es válido</br>";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$validador = $this->validarDatos($data['SECCION'], "seccion");
+				if(!$validador) {
+					$linea[] = "<br>EL nombre de la sección no es válida</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -581,7 +598,7 @@ class Model_estudiante extends CI_Model {
 				$data['CORREO1'] = trim($data['CORREO1']);				
 				$validador = $this->validarDatos($data['CORREO1'],"correo");
 				if(!$validador) {
-					$linea[] = "</br>El correo del estudiante no tiene un formato válido</br>";
+					$linea[] = "<br>El correo del estudiante no tiene un formato válido</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -589,21 +606,21 @@ class Model_estudiante extends CI_Model {
 				}
 				$validador = $this->validarDatos($data['NOMBRE1'].$data['NOMBRE2'].$data['APELLIDO1'].$data['APELLIDO2'],"nombre");
 				if(!$validador) {
-					$linea[] = "</br>El nombre del estudiante tiene caracteres no válidos</br>";
+					$linea[] = "<br>El nombre del estudiante tiene caracteres no válidos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				if(($data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION'])) == FALSE) {
-					$linea[] = "</br>La sección no se encuentra en la base de datos</br>";
+				if(($data['ID_SECCION'] = $this->validarSeccion($data['COORD'], $data['SECCION'])) == FALSE) {
+					$linea[] = "<br>La sección no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
 				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE) {
-					$linea[] = "</br>La carrera no se encuentra en la base de datos</br>";
+					$linea[] = "<br>La carrera no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -633,14 +650,15 @@ class Model_estudiante extends CI_Model {
 					foreach ($data as $key => $value) {
 						$data[$key] = trim($value);
 					}
-					if ($data['ID_SECCION'] !== "") {		
-						$data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION']);
+					$data['ID_SECCION'] = NULL;
+					if (($data['COORD'] !== "") && ($data['SECCION'] !== "")) {		
+						$data['ID_SECCION'] = $this->validarSeccion($data['COORD'], $data['SECCION']);
 					}
 
 					if ($data['RUT'] !== "") {
 						$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
 						$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
-						$data['RUT'] = substr($data['RUT'], 0, -1);
+						//$data['RUT'] = substr($data['RUT'], 0, -1);
 					}
 					$datosUsuario = array();
 					if ($data['RUT'] === "") $data['RUT'] = NULL;
