@@ -18,7 +18,7 @@ class Model_estudiante extends CI_Model {
 	* @param string $apellido_paterno Apellido paterno del estudiante a insertar
 	* @param string $apellido_materno Apellido mateno del estudiante a insertar
 	* @param string $correo_estudiante Correo del estudiante a insertar
-	* @param string $cod_seccion Código de la sección del estudiante a insertar
+	* @param string $ID_SECCION Código de la sección del estudiante a insertar
 	* @param string $cod_carrera Código de carrera del estudiante a insertar
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
@@ -65,7 +65,7 @@ class Model_estudiante extends CI_Model {
 	* @param string $apellido_paterno Apellido paterno del estudiante
 	* @param string $apellido_materno Apellido mateno del estudiante
 	* @param string $correo_estudiante Correo a editar del estudiante
-	* @param string $cod_seccion Código de la sección a editar del estudiante
+	* @param string $ID_SECCION Código de la sección a editar del estudiante
 	* @return int 1 o -1 en caso de éxito o fracaso en la operación
 	*/
 	public function actualizarEstudiante($rut, $nombre1, $nombre2, $apellido1, $apellido2, $correo1, $correo2, $telefono, $carrera, $seccion) {
@@ -365,6 +365,20 @@ class Model_estudiante extends CI_Model {
 	}
 
 
+	public function rutExiste($rut) {
+		$this->db->select('COUNT(RUT_USUARIO) AS resultado');
+		$query = $this->db->where('RUT_USUARIO', $rut);
+		$query = $this->db->get('usuario');
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->row()->resultado > 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+
 	/**
 	* Función que valida que los campos ingresados posean solo caracteres validos 
 	*
@@ -410,9 +424,9 @@ class Model_estudiante extends CI_Model {
 	function validarSeccion($seccion){
 		
 		$query = $this->db->select('seccion.ID_SECCION');
-		$query = $this->db->from('seccion');
-		$query = $this->db->where('NOMBRE_SECCION',$seccion);
-		$query = $this->db->get();
+		$query = $this->db->where('CONCAT(LETRA_SECCION, "-", NUMERO_SECCION ) = ', $seccion);
+		$query = $this->db->get('seccion');
+		//echo $this->db->last_query().'      ';
 		$sec = $query->row();
 		if ($sec == FALSE) {
 			return FALSE;
@@ -459,8 +473,9 @@ class Model_estudiante extends CI_Model {
 	*/
 	public function cargaMasiva($archivo){
 
-		if(!file_exists($archivo) || !is_readable($archivo))
+		if(!file_exists($archivo) || !is_readable($archivo)) {
 			return FALSE;
+		}
 
 		$ff = fopen($archivo, "r");
 
@@ -470,102 +485,101 @@ class Model_estudiante extends CI_Model {
 		$stack  = array();
 		$c = 1;
 		$flag = FALSE;
-		while(($linea = fgets($ff)) !== FALSE)
-		{
+		while(($linea = fgets($ff)) !== FALSE) {
 
-			if(!$header){
+			if(!$header) { //Si está vacio
 				$header = explode(';',trim($linea));
-				if((strcmp($header[0], 'RUT_ESTUDIANTE') != 0)||(count($header)!=8)){
+				if((strcmp($header[0], 'RUT') != 0) || (count($header)!=8)) { //CANTIDAD DE COLUMNAS = 8
 					fclose($ff);
 					unlink($archivo);
 					return FALSE;
 				}				
 			}
-			else
-			{
+			else {
 				$linea =  explode(';',$linea);
-				if(($data = array_combine($header, $linea)) == FALSE) {
+				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
 					$linea[] = "</br>El numero de argumentos en la linea es incorrecto</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				$validador = $this->validarDatos($data['RUT_ESTUDIANTE'],"rut");
-				if(!$validador){
+				$validador = $this->validarDatos($data['RUT'],"rut");
+				if(!$validador) {
 					$linea[] = "</br>El rut del estudiante tiene caracteres no válidos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				try{
-					if(($this->validaRut($data['RUT_ESTUDIANTE'])) == FALSE){
+				try {
+					if(($this->validaRut($data['RUT'])) == FALSE) {
 						$linea[] = "</br>El rut del estudiante no es valido</br>";
-					$stack[$c] = $linea;
+						$stack[$c] = $linea;
 						fclose($ff);
 						unlink($archivo);
 						return $stack;
 					}
-				}catch(Exception $e){
+				}
+				catch(Exception $e) {
 					$linea[] = "</br>El rut del estudiante no es valido</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
-				$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);				
-				$validador = $this->rutExisteM($data['RUT_ESTUDIANTE']);
-				if($validador == -1){
+				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
+				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
+				$data['RUT'] = substr($data['RUT'], 0, -1);	//Elimino dígito verificador			
+				$validador = $this->rutExiste($data['RUT']);
+				if($validador == -1) {
 					$linea[] = "</br>El rut de estudiante ya existe en manteka</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
-					return $stack;		
-				}				
-				$validador = $this->validarDatos($data['COD_CARRERA'],"carrera");
-				if(!$validador){
+					return $stack;
+				}
+				$validador = $this->validarDatos($data['COD_CARRERA'], "carrera");
+				if(!$validador) {
 					$linea[] = "</br>La carrera del estudiante es erronea, solo se admiten numeros.</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				$validador = $this->validarDatos($data['ID_SECCION'],"seccion");
-				if(!$validador){
+				$validador = $this->validarDatos($data['ID_SECCION'], "seccion");
+				if(!$validador) {
 					$linea[] = "</br>EL nombre de la seccion no existe en manteka</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				$data['CORREO_ESTUDIANTE'] = trim($data['CORREO_ESTUDIANTE']);				
-				$validador = $this->validarDatos($data['CORREO_ESTUDIANTE'],"correo");
-				if(!$validador){
+				$data['CORREO1'] = trim($data['CORREO1']);				
+				$validador = $this->validarDatos($data['CORREO1'],"correo");
+				if(!$validador) {
 					$linea[] = "</br>El correo del estudiante no tiene un formato válido</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				$validador = $this->validarDatos($data['NOMBRE1_ESTUDIANTE'].$data['NOMBRE2_ESTUDIANTE'].$data['APELLIDO1_ESTUDIANTE'].$data['APELLIDO2_ESTUDIANTE'],"nombre");
-				if(!$validador){
+				$validador = $this->validarDatos($data['NOMBRE1'].$data['NOMBRE2'].$data['APELLIDO1'].$data['APELLIDO2'],"nombre");
+				if(!$validador) {
 					$linea[] = "</br>El nombre del estudiante tiene caracteres no válidos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				if(($data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION'])) == FALSE){
+				if(($data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION'])) == FALSE) {
 					$linea[] = "</br>La sección no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
 				}
-				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE){
+				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE) {
 					$linea[] = "</br>La carrera no se encuentra en la base de datos</br>";
 					$stack[$c] = $linea;
 					fclose($ff);
@@ -576,30 +590,71 @@ class Model_estudiante extends CI_Model {
 
 			}
 			$c++;						
-		}	
+		}
 		fclose($ff);
 		$ffa = fopen($archivo, "r");	
-		if ($flag) {			
-			while(($linea = fgets($ffa)) !== FALSE)
-			{
-				if(!$header){
-					$header = explode(';',trim($linea));
+
+		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
+		$header = array();
+		if ($flag) {
+			while(($linea = fgets($ffa)) !== FALSE) {
+				if(!$header) {
+					$header = explode(';', trim($linea));
 				}
-				else
-				{
-					$linea =  explode(';',$linea);
-					$data = array_combine($header, $linea);				
-					$data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION']);
-					$data['RUT_ESTUDIANTE'] =  preg_replace('[\-]','',$data['RUT_ESTUDIANTE']);
-					$data['RUT_ESTUDIANTE'] =  preg_replace('[\.]','',$data['RUT_ESTUDIANTE']);
-					$data['RUT_ESTUDIANTE'] = substr($data['RUT_ESTUDIANTE'], 0, -1);	
+				else {
+					$this->db->trans_start();
 
-					$this->db->insert('estudiante',$data);
+					$linea =  explode(';', $linea);
+					$data = array_combine($header, $linea);
+					//Trimeo todos los elementos
+					foreach ($data as $key => $value) {
+						$data[$key] = trim($value);
+					}
+					if ($data['ID_SECCION'] !== "") {		
+						$data['ID_SECCION'] = $this->validarSeccion($data['ID_SECCION']);
+					}
 
+					if ($data['RUT'] !== "") {
+						$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
+						$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
+						$data['RUT'] = substr($data['RUT'], 0, -1);
+					}
+					$datosUsuario = array();
+					if ($data['RUT'] === "") $data['RUT'] = NULL;
+					$datosUsuario['RUT_USUARIO'] = $data['RUT'];
+					$datosUsuario['ID_TIPO'] = TIPO_USR_ESTUDIANTE;
+					$datosUsuario['LOGUEABLE'] = FALSE;
+					if ($data['CORREO1'] === "") $data['CORREO1'] = NULL;
+					$datosUsuario['CORREO1_USER'] = $data['CORREO1'];
+					if ($data['NOMBRE1'] === "") $data['NOMBRE1'] = NULL;
+					$datosUsuario['NOMBRE1'] = $data['NOMBRE1'];
+					if ($data['NOMBRE2'] === "") $data['NOMBRE2'] = NULL;
+					$datosUsuario['NOMBRE2'] = $data['NOMBRE2'];
+					if ($data['APELLIDO1'] === "") $data['APELLIDO1'] = NULL;
+					$datosUsuario['APELLIDO1'] = $data['APELLIDO1'];
+					if ($data['APELLIDO2'] === "") $data['APELLIDO2'] = NULL;
+					$datosUsuario['APELLIDO2'] = $data['APELLIDO2'];
+					$datosUsuario['PASSWORD_PRIMARIA'] = md5($data['RUT']);
+					$this->db->insert('usuario', $datosUsuario);
+
+					$datosEstudiante = array();
+					$datosEstudiante['RUT_USUARIO'] = $data['RUT'];
+					if ($data['COD_CARRERA'] === "") $data['COD_CARRERA'] = NULL;
+					$datosEstudiante['COD_CARRERA'] = $data['COD_CARRERA'];
+					if ($data['ID_SECCION'] === "") $data['ID_SECCION'] = NULL;
+					$datosEstudiante['ID_SECCION'] = $data['ID_SECCION'];
+					$this->db->insert('estudiante', $datosEstudiante);
+
+					$this->db->trans_complete();
+
+					if ($this->db->trans_status() === FALSE) {
+						return FALSE;
+					}
 				}
 
 			}
-		}else{
+		}
+		else {
 			fclose($ffa);
 			unlink($archivo);
 			return FALSE;

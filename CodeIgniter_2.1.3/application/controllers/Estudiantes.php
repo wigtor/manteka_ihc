@@ -311,8 +311,8 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
-			$this->load->model('Model_seccion');
-			$datos_vista['secciones'] = $this->Model_seccion->getAllSecciones();
+			//$this->load->model('Model_seccion');
+			//$datos_vista['secciones'] = $this->Model_seccion->getAllSecciones();
 			$subMenuLateralAbierto = "cambiarSeccionEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
@@ -498,16 +498,14 @@ class Estudiantes extends MasterManteka {
 		
 
 
-		if ( ! $this->upload->do_upload())
-		{
+		if ( ! $this->upload->do_upload()) {
 			$error = array('error' => $this->upload->display_errors());
 
 			$datos_vista = $error;
 
 			$this->cargarTodo("Estudiantes", 'cuerpo_estudiantes_cargaMasiva', "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
-		else
-		{
+		else {
 			$data = array('upload_data' => $this->upload->data());
 
 			
@@ -530,7 +528,7 @@ class Estudiantes extends MasterManteka {
 						foreach ($value as $cadena) {
 							$linea = $linea.";".$cadena;
 						}
-							$datos_plantilla["cuerpo_msj"] = "Se encontró un error en la siguiente linea:</br>".$key.".-".$linea."</br> Vuelva intentarlo luego de arreglar el errror";
+							$datos_plantilla["cuerpo_msj"] = "Se encontró un error en la siguiente linea:</br>".$key.".-".$linea."</br> Vuelva intentarlo luego de arreglar el error";
 							break;
 					}				
 					$datos_plantilla["tipo_msj"] = "alert-error";
@@ -553,7 +551,8 @@ class Estudiantes extends MasterManteka {
 					$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 					$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 				}
-			}else{
+			}
+			else {
 
 				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "El archivo no tiene el formato correcto.";

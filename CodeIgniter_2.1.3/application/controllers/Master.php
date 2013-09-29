@@ -41,12 +41,16 @@ class MasterManteka extends CI_Controller {
 		
 		$esValido = FALSE;
 		$permitidoAnonimo = FALSE;
+		$esAnonimo = FALSE;
 		foreach ($tipos_usuarios_permitidos as $user_permitido) {
 			if ($user_permitido == $id_tipo_usuario) {
 				$esValido = TRUE;
 			}
 			if ($user_permitido == TIPO_USR_ANONYMOUS) {
 				$esValido = TRUE;
+				if ($user_permitido == $id_tipo_usuario) {
+					$esAnonimo = TRUE;
+				}
 				$permitidoAnonimo = TRUE;
 			}
 		}
@@ -75,7 +79,7 @@ class MasterManteka extends CI_Controller {
 		$datos_plantilla["head"] = $this->load->view('templates/head', $datos_plantilla, TRUE);
 
 		$datos_plantilla["barra_usuario"] = ''; $datos_plantilla["menu_superior"] = ''; $datos_plantilla["barra_navegacion"] = '';
-		if (!$permitidoAnonimo) {
+		if (!$permitidoAnonimo || !$esAnonimo) {
 			//Se carga la barra de usuario, utiliza variables como el nombre de usuario para mostrar su información.
 			$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, TRUE);
 

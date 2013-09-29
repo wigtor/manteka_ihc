@@ -105,7 +105,7 @@ class Model_profesor extends CI_Model {
 	}
 
 
-    public function rutExiste($rut) {
+	public function rutExiste($rut) {
 		$this->db->select('COUNT(RUT_USUARIO) AS resultado');
 		$query = $this->db->where('RUT_USUARIO', $rut);
 		$query = $this->db->get('usuario');

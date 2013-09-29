@@ -122,7 +122,7 @@ function ordenarFiltroSeccion(tipo_seccion){
 <fieldset>
 	<legend>Cambio de sección</legend>
 	<div class= "row-fluid">
-		<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Alumnos/HacerCambiarSeccionAlumnos/")?>"><!--FORM  SECCION-->
+		<form id="FormS1" type="post"   method="post" action="<?php echo site_url("Estudiantes/postCambiarSeccionEstudiantes/")?>"><!--FORM  SECCION-->
 		<div class="span6">
 		<input id="boton_desde" type="hidden" name="direccion" value="">
 			<div class="row-fluid">
