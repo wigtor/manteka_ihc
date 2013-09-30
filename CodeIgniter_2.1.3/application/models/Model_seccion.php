@@ -272,6 +272,24 @@ class Model_seccion extends CI_Model {
 	}
 
 
+	public function getSeccionesByProfesor($rut) {
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
+		$this->db->select('ID_SECCION AS id');
+		$this->db->select('LETRA_SECCION AS letra');
+		$this->db->select('NUMERO_SECCION AS numero');
+		$this->db->order_by('LETRA_SECCION', 'asc');
+		//$this->db->order_by('NUMERO_SECCION', 'asc');
+
+		
+		$query = $this->db->get('seccion');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
 	public function getSeccionesSameModuloTematico($seccion_mismo_modulo) {
 		//Obtengo el módulo temático en que se encuentra la sección
 		$id_modulo_tematico = NULL;

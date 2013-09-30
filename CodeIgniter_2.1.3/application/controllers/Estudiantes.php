@@ -564,6 +564,26 @@ class Estudiantes extends MasterManteka {
 			}
 		}
 	}
+
+
+	public function asistencia() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$this->load->model('Model_carrera');
+			$this->load->model('Model_seccion');
+			$rutProfesor = $this->session->userdata('rut');
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+
+			$subMenuLateralAbierto = 'asistencia'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$this->cargarTodo("Estudiantes", "cuerpo_estudiantes_asistencia", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
 }
 
 /* End of file Estudiantes.php */
