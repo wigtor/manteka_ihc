@@ -11,7 +11,7 @@
 		/* Muestro el div que indica que se está cargando... */
 		$('#icono_cargando').show();
 
-		//cargarSesionesDeClase();
+		cargarSesionesDeClase();
 		cargarEstudiantesSeccion();
 
 		/* Quito el div que indica que se está cargando */
@@ -230,7 +230,7 @@
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="control-group offset6">
+			<div class="control-group offset7">
 				<div class="controls ">
 					<button class="btn" type="button" onclick="guardarAsistencia()">
 						<div class="btn_with_icon_solo">Ã</div>

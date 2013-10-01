@@ -128,6 +128,20 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 	}
 
 
+	public function getSesionesBySeccion($id_seccion) {
+		$this->db->select('ID_SESION AS id');
+		$this->db->select('NOMBRE_SESION AS nombre');
+		$this->db->select('DESCRIPCION_SESION AS descripcion');
+		$this->db->join('seccion', 'sesion_de_clase.ID_SESION = seccion.ID_SESION');
+		$this->db->where('seccion.ID_SECCION', $id_seccion);
+		$query = $this->db->get('sesion_de_clase');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
 	/**
 	*
 	* Elimina una sesión de la base de datos

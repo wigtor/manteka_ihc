@@ -369,6 +369,22 @@ class Secciones extends MasterManteka {
 	}
 
 
+	public function getSesionesBySeccionAndProfesorAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$id_seccion = $this->input->post('seccion');
+		$this->load->model('Model_sesion');
+		$resultado = $this->Model_sesion->getSesionesBySeccion($id_seccion);
+		
+		echo json_encode($resultado);
+	}
+
+
 	/**
 	* Función llamada por una vista a través de una petición AJAX
 	* Esta función rescata, a través de la vista, la variable 'nombre_modulo'
