@@ -241,8 +241,8 @@ class Login extends MasterManteka {
 			$new_pass = $this->randomPassword();
 			/* Seteo la nueva contraseña en el modelo y le doy un tiempo de validez */
 			$this->load->model('Model_usuario');
-			$fechaValidez = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')."+86400 minutes"));//date("Y-m-d", strtotime(date("Y-m-d")." +1 day"));
-			//echo 'FECHA VALIDEZ: '.$fechaValidez;
+			$fechaValidez = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')."+2 day")); //date("Y-m-d", strtotime(date("Y-m-d")." +1 day"));
+			//echo 'FECHA VALIDEZ: '.$fechaValidez.'   ';
 			$existeEmail = $this->Model_usuario->setPassSecundaria($destino, $new_pass, $fechaValidez);
 			if ($existeEmail) {
 

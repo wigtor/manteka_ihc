@@ -157,7 +157,6 @@ class Model_estudiante extends CI_Model {
 
 
 	public function	getEstudiantesBySeccion($id_seccion){
-		$this->db->select('estudiante.RUT_USUARIO AS id');
 		$this->db->select('estudiante.RUT_USUARIO AS rut');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('NOMBRE2 AS nombre2');
@@ -168,6 +167,7 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('CORREO2_USER AS correo2');
 		$this->db->select('carrera.COD_CARRERA AS cod_carrera');
 		$this->db->select('carrera.NOMBRE_CARRERA AS carrera');
+		$this->db->select('estudiante.RUT_USUARIO AS id');
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('carrera', 'estudiante.COD_CARRERA = carrera.COD_CARRERA');
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);
