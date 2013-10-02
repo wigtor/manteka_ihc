@@ -368,5 +368,21 @@ class Sesiones extends MasterManteka {
 		
 		echo json_encode($resultado);
 	}
+
+
+	public function getSesionesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$id_seccion = $this->input->post('seccion');
+		$this->load->model('Model_sesion');
+		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccion($id_seccion);
+		
+		echo json_encode($resultado);
+	}
 }
 

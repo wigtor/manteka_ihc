@@ -3,19 +3,35 @@
 	var tiposFiltro = ["", "Rut", "Nombre", "Apellido paterno", "Comentario"];
 	var ruts_estudiantes = new Array();
 
-	function guardarAsistencia() {
-		
-	}
-
-	function seleccionadaSeccion() {
+		function seleccionadaSeccion() {
 		/* Muestro el div que indica que se está cargando... */
 		$('#icono_cargando').show();
 
 		cargarSesionesDeClase();
-		cargarEstudiantesSeccion();
+		//$('#sesion_de_clase').val("");
+		resetTablaAsistencia();
+		//cargarEstudiantesSeccion();
 
 		/* Quito el div que indica que se está cargando */
 		$('#icono_cargando').hide();
+	}
+
+	function seleccionadaClase() {
+		cargarAsistenciaEstudiantes();
+	}
+
+	function resetTablaAsistencia() {
+		var tablaResultados = document.getElementById("tablaAsistencia");
+		$(tablaResultados).find('tbody').remove();
+		var tr, td;
+		var tbody = document.createElement('tbody');
+		tr = document.createElement('tr');
+		td = document.createElement('td');
+		$(td).html("No hay asistencia para la sección seleccionada en esa sesión de clase o no tiene estudiantes");
+		$(td).attr('colspan', tiposFiltro.length);
+		tr.appendChild(td);
+		tbody.appendChild(tr);
+		tablaResultados.appendChild(tbody);
 	}
 
 	function cargarSesionesDeClase() {
@@ -24,7 +40,7 @@
 		$.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAndProfesorAjax") ?>",
+			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAjax") ?>",
 			data: { seccion: idElem },
 			success: function(respuesta) {
 				var arrayRespuesta = jQuery.parseJSON(respuesta);
@@ -49,14 +65,18 @@
 	}
 
 
-	function cargarEstudiantesSeccion() {
-		var idElem = $('#seccion').val();
+	function cargarAsistenciaEstudiantes() {
+		var id_seccion = $('#seccion').val();
+		var id_sesion_de_clase = $('#sesion_de_clase').val();
+		if ((id_seccion == "") || (id_sesion_de_clase == "")) {
+			return;
+		}
 		
 		$.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Secciones/getEstudiantesBySeccionAjax") ?>",
-			data: { seccion: idElem },
+			url: "<?php echo site_url("Estudiantes/getAsistenciaEstudiantesBySeccionAndSesionAjax") ?>",
+			data: { id_seccion: id_seccion, id_sesion_de_clase: id_sesion_de_clase },
 			success: function(respuesta) {
 				var tablaResultados = document.getElementById("tablaAsistencia");
 				$(tablaResultados).find('tbody').remove();
@@ -74,16 +94,12 @@
 
 
 				//CARGO EL CUERPO DE LA TABLA
-				var tbody = document.createElement('tbody');
 				if (arrayRespuesta.length == 0) {
-					tr = document.createElement('tr');
-					td = document.createElement('td');
-					$(td).html("La sección no tiene estudiantes");
-					$(td).attr('colspan', tiposFiltro.length);
-					tr.appendChild(td);
-					tbody.appendChild(tr);
+					resetTablaAsistencia();
+					return;
 				}
 
+				var tbody = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) {
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:pointer");
@@ -93,7 +109,11 @@
 					nodoTexto = document.createElement('input');
 					//nodoTexto.type = 'checkbox';
 					nodoTexto.setAttribute("type", 'checkbox');
+					//nodoTexto.setAttribute("disabled", 'disabled');
 					nodoTexto.setAttribute("name", 'asistencia['+arrayObjectRespuesta[i].id+']');
+					estaPresente = arrayObjectRespuesta[i].presente == undefined ? false : arrayObjectRespuesta[i].presente;
+					estaPresente = arrayObjectRespuesta[i].presente == 1 ? true : false; //paso a booleano
+					$(nodoTexto).prop('checked', estaPresente);
 					nodoTexto.setAttribute("id", 'asistencia_'+arrayObjectRespuesta[i].id);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
@@ -117,6 +137,7 @@
 					nodoTexto = document.createElement('input');
 					nodoTexto.setAttribute('type', 'text');
 					nodoTexto.setAttribute('name', 'comentario['+arrayObjectRespuesta[i].id+']');
+					nodoTexto.setAttribute("value", arrayObjectRespuesta[i].comentario == "" ? '' : $.trim(arrayObjectRespuesta[i].comentario));
 					nodoTexto.setAttribute('id', 'comentario_'+arrayObjectRespuesta[i].id);
 					nodoTexto.setAttribute('maxlength', '100');
 					td.appendChild(nodoTexto);
@@ -124,7 +145,8 @@
 
 					tbody.appendChild(tr);
 				}
-				tablaResultados.appendChild(tbody);			}
+				tablaResultados.appendChild(tbody);
+			}
 		});
 	}
 
@@ -170,6 +192,12 @@
 		}
 	}
 
+	function resetearAsistencia() {
+		$('#sesion_de_clase').val("");
+		$('#seccion').val("");
+		resetTablaAsistencia();
+	}
+
 	function guardarAsistencia() {
 		var form = document.forms["formAgregar"];
 		if (form.checkValidity() ) {
@@ -187,6 +215,7 @@
 	//Se cargan por ajax
 	$(document).ready(function() {
 		cargaHeadTabla();
+		resetTablaAsistencia();
 	});
 
 </script>
@@ -250,7 +279,7 @@
 						<div class="btn_with_icon_solo">Ã</div>
 						&nbsp; Guardar
 					</button>
-					<button class="btn" type="button" onclick="resetearAsistencia(true)">
+					<button class="btn" type="button" onclick="resetearAsistencia()">
 						<div class="btn_with_icon_solo">Â</div>
 						&nbsp; Cancelar
 					</button>

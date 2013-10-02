@@ -379,7 +379,6 @@ class Estudiantes extends MasterManteka {
 	* en el modelo para obtener los datos de los estudianes que pertencenede a la sección $cod_seccion 
 	* obtenida de la vista.
 	**/
-
 	public function getEstudiantesBySeccionAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
@@ -394,6 +393,24 @@ class Estudiantes extends MasterManteka {
 		$resultado = $this->Model_estudiante->getEstudiantesBySeccion($id_seccion);
 		echo json_encode($resultado);
 	}
+
+
+	public function getAsistenciaEstudiantesBySeccionAndSesionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$id_sesion_de_clase = $this->input->post('id_sesion_de_clase');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getAsistenciaEstudiantesBySeccionAndSesion($id_seccion, $id_sesion_de_clase);
+		echo json_encode($resultado);
+	}
+
 
 
 	/**
@@ -643,13 +660,13 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
-			//$this->load->model('Model_seccion');
+			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
-			//$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 
 			$subMenuLateralAbierto = 'verAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
