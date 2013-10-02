@@ -551,8 +551,8 @@ class Model_modulo_tematico extends CI_Model {
    **/
 	public function getDetallesModulo($id_modulo)
 	{
-		$this->db->select('ID_MODULO_TEM AS id_mod');
-		$this->db->select('equipo_profesores.ID_EQUIPO AS id_equipo');
+		$this->db->select('modulo_tematico.ID_MODULO_TEM AS id_mod');
+		$this->db->select('equipo_profesor.ID_EQUIPO AS id_equipo');
 		$this->db->select('NOMBRE_MODULO AS nombre_modulo');
 		$this->db->select('DESCRIPCION_MODULO AS descripcion_modulo');
 		$this->db->select('NOMBRE1 AS nombre1_profe_lider');
@@ -560,10 +560,10 @@ class Model_modulo_tematico extends CI_Model {
 		$this->db->select('APELLIDO1 AS apellido1_profe_lider');
 		$this->db->select('APELLIDO2 AS apellido2_profe_lider');
 		$this->db->select('usuario.RUT_USUARIO AS rut_profe_lider');
-		$this->db->join('equipo_profesores', 'modulo_tematico.ID_MODULO_TEM = equipo_profesores.ID_MODULO_TEM', 'LEFT OUTER');
-		$this->db->join('profe_equi_lider', 'equipo_profesores.ID_EQUIPO = profe_equi_lider.ID_EQUIPO', 'LEFT OUTER');
+		$this->db->join('equipo_profesor', 'modulo_tematico.ID_MODULO_TEM = equipo_profesor.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('profe_equi_lider', 'equipo_profesor.ID_EQUIPO = profe_equi_lider.ID_EQUIPO', 'LEFT OUTER');
 		$this->db->join('usuario', 'profe_equi_lider.RUT_USUARIO = usuario.RUT_USUARIO', 'LEFT OUTER');
-		$this->db->where('ID_MODULO_TEM', $id_modulo);
+		$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_modulo);
 		$this->db->where('LIDER_PROFESOR', TRUE);
 		$this->db->order_by('NOMBRE_MODULO', 'asc');
 		$query = $this->db->get('modulo_tematico');
