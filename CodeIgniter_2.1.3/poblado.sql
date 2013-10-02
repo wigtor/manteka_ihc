@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 11-09-2013 a las 20:52:17
--- Versión del servidor: 5.5.24-log
--- Versión de PHP: 5.4.3
+-- Tiempo de generaci�n: 11-09-2013 a las 20:52:17
+-- Versi�n del servidor: 5.5.24-log
+-- Versi�n de PHP: 5.4.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `manteka_db`
 --
+
+START TRANSACTION;
 
 --
 --
@@ -191,26 +193,30 @@ INSERT INTO `implemento` (`ID_IMPLEMENTO`, `NOMBRE_IMPLEMENTO`, `DESCRIPCION_IMP
 -- Volcado de datos para la tabla `usuario`
 --
 INSERT INTO `usuario` (`RUT_USUARIO`, `ID_TIPO`, `PASSWORD_PRIMARIA`, `PASSWORD_TEMPORAL`, `CORREO1_USER`, `CORREO2_USER`, `VALIDEZ`, `NOMBRE1`, `NOMBRE2`, `APELLIDO1`, `APELLIDO2`, `TELEFONO`, `LOGUEABLE`) VALUES
-(16941031, 2, '258353f17feacf272bcf36cac249df42', NULL, 'fabian.arismendi@usach.cl', NULL, '2013-09-15 16:31:29', 'Fabián', NULL, 'Arismendi', 'Ferrada', 11111111, 1),
-(17314314, 4, '93e66e9afa9305838f72ae3c9879c03d', NULL, 'olga.gajardo@usach.cl', NULL, '2013-09-15 16:27:01', 'Olga', NULL, 'Gajardo', 'Saavedra', NULL, 0),
+(16941031, 1, '258353f17feacf272bcf36cac249df42', NULL, 'fabian.arismendi@usach.cl', NULL, '2013-10-01 18:00:38', 'Fabian', NULL, 'Arismendi', 'Ferrada', 11111111, 1),
 (17242754, 4, '806b825fabc803278d5d44c4e02a5f74', NULL, 'alex.ahumada@usach.cl', NULL, '2013-09-15 22:18:50', 'Alex', 'Patricio', 'Ahumada', 'Ahumada', 22222222, 0),
+(17314314, 4, '93e66e9afa9305838f72ae3c9879c03d', NULL, 'olga.gajardo@usach.cl', NULL, '2013-09-15 16:27:01', 'Olga', NULL, 'Gajardo', 'Saavedra', NULL, 0),
+(17316139, 3, '5a81a2e2f5afccd323e28b855ffc1f68', NULL, 'karin.prueba@usach.cl', NULL, '2013-09-29 16:20:31', 'Karin', 'Gisselle', 'Acevedo', 'Lizana', NULL, 0),
+(17419849, 3, '50b87b5f34068f04ffedfbebfff5b245', NULL, 'karina.cuevas02@gmail.com\r\n', NULL, '2013-09-29 01:13:58', 'Karina', 'Karina', 'Cuevas', 'Concha', NULL, 0),
 (17490314, 1, '8e2ac88a84b995bdfec563fc93505ec2', NULL, 'gary.fuenzalida@usach.cl', NULL, '2013-09-15 15:35:57', 'Gary', NULL, 'Fuenzalida', 'Navarrete', 11111111, 1),
-(17565743, 2, '202cb962ac59075b964b07152d234b70', NULL, 'victor.floress@usach.cl', NULL, '2013-09-15 16:31:22', 'Víctor', 'Manuel', 'Flores', 'Sánchez', 92656442, 1),
-(17705318, 1, '92fb71f6dbd626e319cfbe304e686e25', NULL, 'carlos.barrerap@usach.cl', NULL, '2013-09-15 16:31:18', 'Carlos', 'Alfredo', 'Barrera', 'Pulgar', 66666661, 1);
+(17565743, 2, '202cb962ac59075b964b07152d234b70', '38f63f5000e2fd4faff655cb1b52ec90', 'victor.floress@usach.cl', NULL, '2013-10-02 19:05:52', 'Víctor', 'Manuel', 'Flores', 'Sánchez', 92656442, 1),
+(17705318, 1, 'cb31dcc21d3a3ba2dc4dba8dccf0a24c', NULL, 'carlos.barrerap@usach.cl', NULL, '2013-09-29 20:44:13', 'Carlos', 'Alfredo', 'Barrera', 'Pulgar', 66666661, 1),
+(17705959, 1, 'a488786e726d533f97256e3f048a0c21', NULL, 'andres.arismendi@usach.cl', NULL, '2013-10-01 18:02:04', 'Andres', NULL, 'Arismendi', 'Ferrada', 11111111, 1);
 
 
 -- Volcado de datos para la tabla `coordinador`
 --
 INSERT INTO `coordinador` (`RUT_USUARIO`, `ID_COORDINADOR`) VALUES
-(17565743, 1),
-(16941031, 4);
+(17565743, 1);
 
 
 -- Volcado de datos para la tabla `profesor`
 --
 INSERT INTO `profesor` (`RUT_USUARIO`, `ID_TIPO_PROFESOR`, `ID_PROFESOR`) VALUES
+(16941031, 2, 4),
 (17490314, 2, 3),
-(17705318, 1, 1);
+(17705318, 1, 1),
+(17705959, 1, 5);
 
 
 -- Volcado de datos para la tabla `ayudante`
@@ -219,18 +225,65 @@ INSERT INTO `ayudante` (`RUT_USUARIO`, `ID_AYUDANTE`) VALUES
 (17242754, 1);
 
 
---
--- Volcado de datos para la tabla `ayu_profe`
---
 INSERT INTO `ayu_profe` (`ID_AYU_PROFE`, `RUT_USUARIO`, `PRO_RUT_USUARIO`) VALUES
-(1, 17242754, 17705318);
+(1, 17242754, 17705318),
+(3, NULL, 16941031),
+(4, NULL, 17490314),
+(5, NULL, 17705959);
 
 
 -- Volcado de datos para la tabla `estudiante`
 --
 INSERT INTO `estudiante` (`RUT_USUARIO`, `COD_CARRERA`, `ID_SECCION`, `ID_ESTUDIANTE`) VALUES
-(17314314, 1363, 1, 1);
+(17314314, 1363, 1, 1),
+(17316139, 1361, 1, 14),
+(17419849, 1363, 1, 8);
 
+
+INSERT INTO `modulo_tematico` (`ID_MODULO_TEM`, `NOMBRE_MODULO`, `DESCRIPCION_MODULO`) VALUES
+(1, 'Comunicacion no verbal', 'bla'),
+(2, 'Medios de comunicacion', 'fdsghdsfdg');
+
+
+INSERT INTO `evaluacion` (`ID_EVALUACION`, `ID_MODULO_TEM`) VALUES
+(1, 1),
+(2, 2);
+
+
+INSERT INTO `implementos_modulo_tematico` (`ID_IMPLEMENTO`, `ID_MODULO_TEM`) VALUES
+(1, 1),
+(1, 2),
+(2, 2);
+
+
+INSERT INTO `equipo_profesor` (`ID_EQUIPO`, `ID_MODULO_TEM`) VALUES
+(1, 1),
+(2, 2);
+
+
+INSERT INTO `profe_equi_lider` (`ID_EQUIPO`, `RUT_USUARIO`, `LIDER_PROFESOR`) VALUES
+(1, 17705318, 1),
+(1, 17490314, 0),
+(2, 16941031, 1),
+(2, 17705959, 0);
+
+
+INSERT INTO `sesion_de_clase` (`ID_SESION`, `ID_MODULO_TEM`, `NOMBRE_SESION`, `DESCRIPCION_SESION`) VALUES
+(1, 1, 'Clase no-verbal 1', 'sdfdf'),
+(2, 1, 'Clase no-verbal 2', 'sfddfsdf'),
+(3, 1, 'Clase no-verbal 3', 'dfffvxvf'),
+(4, 2, 'Clase medios 1', ''),
+(5, 2, 'Clase medios 2', ''),
+(6, 2, 'Clase medios 3', 'dfdfg');
+
+
+INSERT INTO `planificacion_clase` (`ID_PLANIFICACION_CLASE`, `ID_SESION`, `ID_SALA`, `ID_AYU_PROFE`, `ID_SECCION`, `FECHA_PLANIFICADA`) VALUES
+(1, 1, 6, 1, 1, '2013-10-02'),
+(2, 2, 6, 1, 1, '2013-10-09'),
+(3, 3, 6, 1, 1, '2013-10-16'),
+(4, 1, 7, 4, 5, '2013-10-17');
+
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

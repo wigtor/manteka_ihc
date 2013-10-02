@@ -24,7 +24,7 @@
 		$.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Secciones/getSesionesBySeccionAndProfesorAjax") ?>",
+			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAndProfesorAjax") ?>",
 			data: { seccion: idElem },
 			success: function(respuesta) {
 				var arrayRespuesta = jQuery.parseJSON(respuesta);
@@ -39,10 +39,10 @@
 				}
 				opcionDefault.setAttribute("disabled","disabled");
 				opcionDefault.setAttribute("selected","selected");
-				$("#selectSeccionOrigen").append(opcionDefault);
+				$("#sesion_de_clase").append(opcionDefault);
 
 				for (var i = 0; i < arrayRespuesta.length; i++) {
-					$("#selectSeccionOrigen").append(new Option(arrayRespuesta[i].nombre, arrayRespuesta[i].id));
+					$("#sesion_de_clase").append(new Option(arrayRespuesta[i].nombre+" - "+arrayRespuesta[i].fecha_planificada, arrayRespuesta[i].id));
 				}
 			}
 		});
@@ -93,7 +93,7 @@
 					nodoTexto = document.createElement('input');
 					//nodoTexto.type = 'checkbox';
 					nodoTexto.setAttribute("type", 'checkbox');
-					nodoTexto.setAttribute("name", 'asistencia[\''+arrayObjectRespuesta[i].id+'\']');
+					nodoTexto.setAttribute("name", 'asistencia['+arrayObjectRespuesta[i].id+']');
 					nodoTexto.setAttribute("id", 'asistencia_'+arrayObjectRespuesta[i].id);
 					td.appendChild(nodoTexto);
 					tr.appendChild(td);
@@ -116,7 +116,7 @@
 					td = document.createElement('td');
 					nodoTexto = document.createElement('input');
 					nodoTexto.setAttribute('type', 'text');
-					nodoTexto.setAttribute('name', 'comentario[\''+arrayObjectRespuesta[i].id+'\']');
+					nodoTexto.setAttribute('name', 'comentario['+arrayObjectRespuesta[i].id+']');
 					nodoTexto.setAttribute('id', 'comentario_'+arrayObjectRespuesta[i].id);
 					nodoTexto.setAttribute('maxlength', '100');
 					td.appendChild(nodoTexto);
@@ -170,6 +170,20 @@
 		}
 	}
 
+	function guardarAsistencia() {
+		var form = document.forms["formAgregar"];
+		if (form.checkValidity() ) {
+			$('#tituloConfirmacionDialog').html('Confirmación para guardar asistencia');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea guardar el registro de asistencia en el sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
+	}
+
 	//Se cargan por ajax
 	$(document).ready(function() {
 		cargaHeadTabla();
@@ -181,7 +195,7 @@
 <fieldset> 
 <legend>Agregar asistencia</legend>
 	<?php
-		$atributos= array('id' => 'formEditar', 'class' => 'form-horizontal');
+		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
 		echo form_open('Estudiantes/postAgregarAsistencia/', $atributos);
 	?>
 		<div class="row-fluid">
@@ -192,9 +206,9 @@
 		<div class="row-fluid">
 			<div class="span5">
 				<div class="control-group">
-					<label class="control-label" for="dia">1.- <font color="red">*</font> Sección:</label>
+					<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección:</label>
 					<div class="controls">
-						<select id="seccion" class="span10" required onchange="seleccionadaSeccion()">
+						<select id="seccion" name="seccion" class="span12" required onchange="seleccionadaSeccion()">
 							<option value="" disabled selected>Sección</option>
 							<?php
 							if (isset($secciones)) {
@@ -209,9 +223,9 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="dia">2.- <font color="red">*</font> Clase planificada:</label>
+					<label class="control-label" for="sesion_de_clase">2.- <font color="red">*</font> Clase planificada:</label>
 					<div class="controls">
-						<select id="sesion_de_clase" class="span10" required onchange="seleccionadaClase()">
+						<select id="sesion_de_clase" name="sesion_de_clase" class="span12" required onchange="seleccionadaClase()">
 							<option value="" disabled selected>Clase</option>
 
 						</select>

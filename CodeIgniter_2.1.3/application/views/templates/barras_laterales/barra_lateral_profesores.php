@@ -85,39 +85,39 @@
 	?>
 
 	<!--	Barra lateral de profesores	-->
-    <div class="accordion" id="accordion2">
-    	<div class="accordion-group">
-		    <div class="accordion-heading">
+	<div class="accordion" id="accordion2">
+		<div class="accordion-group">
+			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
 				Profesores</a>
-		    </div>
-		    <div id="collapseOne" class="accordion-body collapse <?php echo $inProfesores; ?>">
-		    	<div class="accordion-inner nav nav-list">
-		        	<li <?php echo $verProfesores?>><a href="<?php echo site_url("Profesores/verProfesores")?>">Ver profesores</a></li>
-		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-		        		<li <?php echo $agregarProfesor; ?> ><a href="<?php echo site_url("Profesores/agregarProfesor")?>">Agregar profesores</a></li>
+			</div>
+			<div id="collapseOne" class="accordion-body collapse <?php echo $inProfesores; ?>">
+				<div class="accordion-inner nav nav-list">
+					<li <?php echo $verProfesores?>><a href="<?php echo site_url("Profesores/verProfesores")?>">Ver profesores</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarProfesor; ?> ><a href="<?php echo site_url("Profesores/agregarProfesor")?>">Agregar profesores</a></li>
 						<li <?php echo $editarProfesor; ?> ><a href="<?php echo site_url("Profesores/editarProfesor")?>">Editar  profesores</a></li>
 						<li <?php echo $eliminarProfesor; ?> ><a href="<?php echo site_url("Profesores/eliminarProfesor")?>">Borrar profesores</a></li>
-		     		<?php } ?>
-		     	</div>
-		    </div>
-	  	</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
 		<div class="accordion-group">
-		    <div class="accordion-heading">
+			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
 				Ayudantes</a>
-		    </div>
-		    <div id="collapseTwo" class="accordion-body collapse <?php echo $inAyudantes; ?>">
-		    	<div class="accordion-inner nav nav-list">
-		        	<li <?php echo $verAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
-		        	<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+			</div>
+			<div id="collapseTwo" class="accordion-body collapse <?php echo $inAyudantes; ?>">
+				<div class="accordion-inner nav nav-list">
+					<li <?php echo $verAyudantes; ?> ><a href="<?php echo site_url("Ayudantes/verAyudantes")?>">Ver ayudantes</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 						<li <?php echo $agregarAyudante; ?> ><a href="<?php echo site_url("Ayudantes/agregarAyudante")?>">Agregar ayudantes</a></li>
 						<li <?php echo $editarAyudante; ?> ><a href="<?php echo site_url("Ayudantes/editarAyudante")?>">Editar ayudantes</a></li>
 						<li <?php echo $eliminarAyudante; ?> ><a href="<?php echo site_url("Ayudantes/eliminarAyudante")?>">Borrar ayudantes</a></li>
 					<?php } ?>
-		     	</div>
-		    </div>
-  		</div>
+				</div>
+			</div>
+		</div>
 		<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 			<div class="accordion-group">
 				<div class="accordion-heading">
@@ -133,6 +133,6 @@
 					</div>
 				</div>
 			</div>
-	  	<?php } ?>
+		<?php } ?>
 	</div>
 	

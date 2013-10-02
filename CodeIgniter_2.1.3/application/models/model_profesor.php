@@ -90,10 +90,15 @@ class Model_profesor extends CI_Model {
 			'ID_TIPO_PROFESOR' => $tipo_profesor
 		);
 
+		$data3 = array(
+			'PRO_RUT_USUARIO' => $rut
+		);
+
 		$this->db->trans_start();
 		$datos2 = $this->db->insert('usuario', $data1);
 
 		$datos = $this->db->insert('profesor', $data2);
+		$datos = $this->db->insert('ayu_profe', $data3); //Lo agrego sin ayudante por defecto
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE) {

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     24-09-2013 1:31:57                           */
+/* Created on:     01/10/2013 7:24:13 p. m.                     */
 /*==============================================================*/
 
 
@@ -126,8 +126,8 @@ create table adjunto
 create table asistencia
 (
    ID_SESION            int not null,
-   RUT_USUARIO          int not null,
    ID_SUSPENCION        int,
+   RUT_USUARIO          int not null,
    PRESENTE_ASISTENCIA  bool,
    JUSTIFICADO_ASISTENCIA bool,
    COMENTARIO_ASISTENCIA varchar(100)
@@ -157,7 +157,7 @@ alter table auditoria comment 'Se utiliza para realizar un registro de los datos
 create table ayu_profe
 (
    ID_AYU_PROFE         int not null auto_increment,
-   RUT_USUARIO          int not null,
+   RUT_USUARIO          int,
    PRO_RUT_USUARIO      int not null,
    primary key (ID_AYU_PROFE)
 );
@@ -398,7 +398,6 @@ alter table modulo_horario comment 'Se utiliza para representar los módulos en l
 create table modulo_tematico
 (
    ID_MODULO_TEM        int not null auto_increment,
-   ID_EQUIPO            int,
    NOMBRE_MODULO        varchar(50) not null,
    DESCRIPCION_MODULO   varchar(100),
    primary key (ID_MODULO_TEM),
@@ -641,16 +640,16 @@ alter table carta_persona add constraint FK_RELATIONSHIP_46 foreign key (ID_PERS
 alter table carta_persona add constraint FK_RELATIONSHIP_47 foreign key (ID_CORREO)
       references carta (ID_CORREO) on delete cascade on update cascade;
 
-alter table carta_usuario add constraint FK_RELATIONSHIP_30 foreign key (ID_CORREO)
+alter table carta_usuario add constraint FK_RELATIONSHIP_29 foreign key (ID_CORREO)
       references carta (ID_CORREO) on delete cascade on update cascade;
 
-alter table carta_usuario add constraint FK_RELATIONSHIP_31 foreign key (RUT_USUARIO)
+alter table carta_usuario add constraint FK_RELATIONSHIP_30 foreign key (RUT_USUARIO)
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table coordinador add constraint FK_INHERIT_USUARIO foreign key (RUT_USUARIO)
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
-alter table equipo_profesor add constraint FK_RELATIONSHIP_29 foreign key (ID_MODULO_TEM)
+alter table equipo_profesor add constraint FK_RELATIONSHIP_28 foreign key (ID_MODULO_TEM)
       references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
 
 alter table estudiante add constraint FK_INHERIT_USUARIO4 foreign key (RUT_USUARIO)
@@ -682,9 +681,6 @@ alter table implementos_modulo_tematico add constraint FK_RELATIONSHIP_27 foreig
 
 alter table implementos_modulo_tematico add constraint FK_RELATIONSHIP_53 foreign key (ID_IMPLEMENTO)
       references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
-
-alter table modulo_tematico add constraint FK_RELATIONSHIP_28 foreign key (ID_EQUIPO)
-      references equipo_profesor (ID_EQUIPO) on delete cascade on update cascade;
 
 alter table nota add constraint FK_RELATIONSHIP_36 foreign key (RUT_USUARIO)
       references estudiante (RUT_USUARIO) on delete cascade on update cascade;

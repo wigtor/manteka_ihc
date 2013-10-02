@@ -164,13 +164,6 @@ class Model_modulo_tematico extends CI_Model {
 		
 		$id_equipo = $this->db->insert_id();
 		
-		//2 actualizar mod_tem
-		$data = array(
-				'ID_EQUIPO'=>$id_equipo
-		);
-		$this->db->where('ID_MODULO_TEM', $id_modulo);
-		$confirmacion4 = $this->db->update('modulo_tematico', $data);
-		
 		//3 insertar lider del equipo
 		$data = array(
 				'RUT_USUARIO' => $profesor_lider,
@@ -559,7 +552,7 @@ class Model_modulo_tematico extends CI_Model {
 	public function getDetallesModulo($id_modulo)
 	{
 		$this->db->select('ID_MODULO_TEM AS id_mod');
-		$this->db->select('modulo_tematico.ID_EQUIPO AS id_equipo');
+		$this->db->select('equipo_profesores.ID_EQUIPO AS id_equipo');
 		$this->db->select('NOMBRE_MODULO AS nombre_modulo');
 		$this->db->select('DESCRIPCION_MODULO AS descripcion_modulo');
 		$this->db->select('NOMBRE1 AS nombre1_profe_lider');
@@ -567,7 +560,8 @@ class Model_modulo_tematico extends CI_Model {
 		$this->db->select('APELLIDO1 AS apellido1_profe_lider');
 		$this->db->select('APELLIDO2 AS apellido2_profe_lider');
 		$this->db->select('usuario.RUT_USUARIO AS rut_profe_lider');
-		$this->db->join('profe_equi_lider', 'modulo_tematico.ID_EQUIPO = profe_equi_lider.ID_EQUIPO', 'LEFT OUTER');
+		$this->db->join('equipo_profesores', 'modulo_tematico.ID_MODULO_TEM = equipo_profesores.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('profe_equi_lider', 'equipo_profesores.ID_EQUIPO = profe_equi_lider.ID_EQUIPO', 'LEFT OUTER');
 		$this->db->join('usuario', 'profe_equi_lider.RUT_USUARIO = usuario.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->where('ID_MODULO_TEM', $id_modulo);
 		$this->db->where('LIDER_PROFESOR', TRUE);

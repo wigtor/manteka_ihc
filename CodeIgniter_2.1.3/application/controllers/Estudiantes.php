@@ -566,7 +566,7 @@ class Estudiantes extends MasterManteka {
 	}
 
 
-	public function asistencia() {
+	public function agregarAsistencia() {
 		if (!$this->isLogged()) {
 			$this->invalidSession();
 			return;
@@ -578,10 +578,61 @@ class Estudiantes extends MasterManteka {
 			$rutProfesor = $this->session->userdata('rut');
 			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 
-			$subMenuLateralAbierto = 'asistencia'; //Para este ejemplo, los informes no tienen submenu lateral
+			$subMenuLateralAbierto = 'agregarAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_estudiantes_asistencia", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+	public function postAgregarAsistencia() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_asistencia');
+			$rut_profesor = $this->session->userdata('rut');
+			$asistencia = $this->input->post('asistencia');
+			$comentarios = $this->input->post('comentario');
+			$id_sesion_de_clase = $this->input->post('sesion_de_clase');
+			$id_seccion = $this->input->post('seccion'); //No es necesario más que para hacer control de reglas de negocio después
+			//echo 'Se está implementando esto, largo array asistencia:'.count($asistencia).'  comentario:'.count($comentarios).'...';
+			$confirmacion = TRUE;
+			foreach ($comentarios as $rut => $comentario) { //Comentarios tiene todos los ruts de la sección como key
+				$asistio = FALSE;
+				if (array_key_exists ( $rut, $asistencia)) {
+					$asistio = TRUE;
+				}
+				$justificado = !$asistio; //la negación de si asistió por defecto
+				if ($comentario !== NULL) {
+					if (trim($comentario) === "") { //Si el comentario es vacio
+						$justificado = FALSE;
+						$comentario = NULL;
+					}
+				}
+				else { //Si no hay comentario
+					$justificado = FALSE;
+				}
+				$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
+			}
+
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha guardado la asistencia con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error al guardar la asistencia de algún estudiante";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Estudiantes/agregarAsistencia"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["nombre_redirecTo"] = "Agregar Asistencia"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
 	}
 }
