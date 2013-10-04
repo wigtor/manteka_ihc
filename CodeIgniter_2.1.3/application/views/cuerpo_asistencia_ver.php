@@ -200,6 +200,25 @@
 		$('#icono_cargando').hide();
 	}
 
+
+<?php
+	if ($ONLY_VIEW !== TRUE) {
+?>
+
+	function checkAll(checkboxAll) {
+		var idSesion = checkboxAll.id;
+		idSesion = idSesion.substring('selectorTodos_'.length, idSesion.length);//obtengo los 2 id separados por un _
+		//idSesion = idSesion.substring(idSesion.search('_'), idSesion.length);
+
+		var checkeado = false;
+		if ($(checkboxAll).is(':checked')) {
+			checkeado = true;
+		}
+		for (var i = 0; i < ruts_estudiantes.length; i++) {
+			$('#asistencia_'+ruts_estudiantes[i]+'_'+idSesion).prop('checked', checkeado);
+		}
+	}
+
 	function guardarAsistencia() {
 		var form = document.forms["formAgregar"];
 		if (form.checkValidity() ) {
@@ -213,11 +232,27 @@
 			$('#modalError').modal();
 		}
 	}
+
+<?php
+	}
+?>
 </script>
 
 
-<fieldset> 
-<legend>Ver asistencia</legend>
+<fieldset>
+	<?php
+		if ($ONLY_VIEW === TRUE) {
+	?>
+	<legend>Ver asistencia</legend>
+	<?php
+		} else {
+	?>
+	<legend>Agregar asistencia</legend>
+	<?php
+	}
+		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
+		echo form_open('Estudiantes/postAgregarAsistencia/', $atributos);
+	?>
 		<div class="row-fluid">
 			<div class="span5">
 				<font color="red">* Campos Obligatorios</font>
@@ -256,21 +291,30 @@
 				</table>
 			</div>
 		</div>
-		<?php if ($id_tipo_usuario == TIPO_USR_PROFESOR) { ?>
 		<div class="row-fluid">
 			<div class="control-group offset7">
-				<div class="controls" >
-					<a href="<?php echo site_url("Estudiantes/agregarAsistencia")?>" class="btn" type="button">
+				<?php if ($ONLY_VIEW !== TRUE) { ?>
+				<div class="controls ">
+					<button class="btn" type="button" onclick="guardarAsistencia()">
 						<div class="btn_with_icon_solo">Ã</div>
-						&nbsp; Editar asistencia
-					</a>
+						&nbsp; Guardar
+					</button>
+					<button class="btn" type="button" onclick="resetearAsistencia()">
+						<div class="btn_with_icon_solo">Â</div>
+						&nbsp; Cancelar
+					</button>
 				</div>
 				<?php
+					}
 					if (isset($dialogos)) {
 						echo $dialogos;
 					}
 				?>
 			</div>
 		</div>
-		<?php } ?>
+		<?php
+			if ($ONLY_VIEW !== TRUE) {
+				echo form_close('');
+		}
+		?>
 </fieldset>

@@ -293,14 +293,15 @@ class Model_seccion extends CI_Model {
 	public function getSeccionesSameModuloTematico($seccion_mismo_modulo) {
 		//Obtengo el módulo temático en que se encuentra la sección
 		$id_modulo_tematico = NULL;
-		$this->db->select('ID_MODULO_TEM AS id_modulo_tematico');
-		$this->db->join('sesion_de_clase', 'seccion.ID_SESION = sesion_de_clase.ID_SESION');
+		$this->db->select('sesion_de_clase.ID_MODULO_TEM AS id_modulo_tematico');
+		$this->db->join('sesion_de_clase', 'seccion.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
 		$this->db->where('seccion.ID_SECCION', $seccion_mismo_modulo);
 		$query = $this->db->get('seccion');
 		if ($query->num_rows() > 0) {
 			$row = $query->row();
 			$id_modulo_tematico = $row->id_modulo_tematico;
 		}
+		//echo 'id_modulo_tematico: '.$id_modulo_tematico.'   ';
 
 
 		$this->db->flush_cache();
@@ -317,33 +318,35 @@ class Model_seccion extends CI_Model {
 			$this->db->where('sesion_de_clase.ID_MODULO_TEM', $id_modulo_tematico);
 		}
 		$query = $this->db->get('seccion');
-		//echo $this->db->last_query();
+		//echo 'query1: '.$this->db->last_query();
 		if ($query == FALSE) {
 			return array();
 		}
 		$resultado1 = $query->result();
-
+		//echo 'largo resultado1 : '.count($resultado1).'   ';
 
 		$this->db->flush_cache();
 		$resultado2 = array();
-		if ($id_modulo_tematico === NULL) {
-			//Agrego las secciones que no tienen módulo temático (No están en una sesión de clases)
-			$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
-			$this->db->select('seccion.ID_SECCION AS id');
-			$this->db->select('LETRA_SECCION AS letra');
-			$this->db->select('NUMERO_SECCION AS numero');
-			$this->db->order_by('LETRA_SECCION', 'asc');
-			$this->db->order_by('NUMERO_SECCION', 'asc');
-			$this->db->where('seccion.ID_SECCION !=', $seccion_mismo_modulo); //Evito que se seleccione a si mismo
-			$this->db->join('sesion_de_clase', 'seccion.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
-			$this->db->where('seccion.ID_SESION IS NULL', NULL, FALSE);
-			$query = $this->db->get('seccion');
-			//echo $this->db->last_query();
-			if ($query == FALSE) {
-				return array();
-			}
-			$resultado2 = $query->result();
+		
+
+		//Agrego las secciones que no tienen módulo temático (No están en una sesión de clases)
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
+		$this->db->select('seccion.ID_SECCION AS id');
+		$this->db->select('LETRA_SECCION AS letra');
+		$this->db->select('NUMERO_SECCION AS numero');
+		$this->db->order_by('LETRA_SECCION', 'asc');
+		$this->db->order_by('NUMERO_SECCION', 'asc');
+		$this->db->where('seccion.ID_SECCION !=', $seccion_mismo_modulo); //Evito que se seleccione a si mismo
+		$this->db->join('sesion_de_clase', 'seccion.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->where('seccion.ID_SESION IS NULL', NULL, FALSE);
+		$query = $this->db->get('seccion');
+		//echo 'query2: '.$this->db->last_query();
+		if ($query == FALSE) {
+			return array();
 		}
+		$resultado2 = $query->result();
+		//echo 'largo resultado2 : '.count($resultado2).'   ';
+	
 
 		return array_merge($resultado1, $resultado2);
 	}

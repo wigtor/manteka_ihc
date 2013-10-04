@@ -618,7 +618,7 @@ class Estudiantes extends MasterManteka {
 			$subMenuLateralAbierto = 'agregarAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
-			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_agregar", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
 
