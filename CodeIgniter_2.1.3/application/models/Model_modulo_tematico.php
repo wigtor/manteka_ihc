@@ -496,6 +496,26 @@ class Model_modulo_tematico extends CI_Model {
 	}
 
 
+	public function getIdModuloTematicoByProfesorAndSeccion($rut_profesor, $id_seccion) {
+		$this->db->select('modulo_tematico.ID_MODULO_TEM AS id');
+		$this->db->join('sesion_de_clase', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
+		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
+		$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+		$this->db->where('planificacion_clase.ID_SECCION', $id_seccion);
+		$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut_profesor);
+		$query = $this->db->group_by('modulo_tematico.ID_MODULO_TEM');
+		$query = $this->db->get('modulo_tematico');
+		//echo $this->db->last_query().'  ';
+		if ($query == FALSE) {
+			return -1;
+		}
+		if ($query->num_rows() > 0) {
+			return $query->row()->id; //POSIBLE ERROR SI EL PROFESOR ESTÁ EN MÁS DE UN MÓDULO TEMÁTICO, SÓLO PODRÁ VER UNA ÚNICA ASISTENCIA
+		}
+		return -1;
+	}
+
+
 	/**
 	* Función que obtiene los modulos que coinciden con cierta búsqueda
 	*

@@ -395,7 +395,7 @@ class Estudiantes extends MasterManteka {
 	}
 
 
-	public function getAsistenciaEstudiantesBySeccionAndSesionAjax() {
+	public function getAsistenciaEstudiantesBySeccionAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -405,10 +405,30 @@ class Estudiantes extends MasterManteka {
 		}
 
 		$id_seccion = $this->input->post('id_seccion');
-		$id_sesion_de_clase = $this->input->post('id_sesion_de_clase');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_asistencia');
 		$this->load->model('Model_estudiante');
-		$resultado = $this->Model_estudiante->getAsistenciaEstudiantesBySeccionAndSesion($id_seccion, $id_sesion_de_clase);
-		echo json_encode($resultado);
+		$this->load->model('Model_modulo_tematico');
+		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+			$id_modulo_tem = NULL;
+		}
+		else {
+			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
+		}
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
+			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
+			$estudiante->asistencia = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			while (count($estudiante->asistencia) < 3) {
+				$estudiante->asistencia[count($estudiante->asistencia)]['presente'] = 0;
+			}
+			$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			while (count($estudiante->comentarios) < 3) {
+				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
+			}
+		}
+		echo json_encode($listaEstudiantes);
 	}
 
 
@@ -590,6 +610,7 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
+			$datos_vista['ONLY_VIEW'] = FALSE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
 			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
@@ -660,6 +681,7 @@ class Estudiantes extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
+			$datos_vista['ONLY_VIEW'] = TRUE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
 			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);

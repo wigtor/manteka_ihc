@@ -1,53 +1,8 @@
 <script type="text/javascript">
 	var prefijo_tipoDato = "estudiante_";
-	var tiposFiltro = ["", "Rut", "Nombre", "Apellido paterno", "Comentario"];
+	var listaColumnas = ["Rut", "Nombres", "Apellido paterno", "Apellido materno"];
 	var ruts_estudiantes = new Array();
-
-	function seleccionadaSeccion() {
-		/* Muestro el div que indica que se está cargando... */
-		$('#icono_cargando').show();
-
-		cargarSesionesDeClase();
-		//$('#sesion_de_clase').val("");
-		resetTablaAsistencia();
-
-		/* Quito el div que indica que se está cargando */
-		$('#icono_cargando').hide();
-	}
-
-	function seleccionadaClase() {
-		cargarAsistenciaEstudiantes();
-	}
-
-	function cargarSesionesDeClase() {
-		var idElem = $('#seccion').val();
-
-		$.ajax({
-			type: "POST",
-			async: false,
-			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAjax") ?>",
-			data: { seccion: idElem },
-			success: function(respuesta) {
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-
-				$("#sesion_de_clase").empty();
-				var opcionDefault;
-				if (arrayRespuesta.length == 0) {
-					opcionDefault = new Option("No hay sesiones de clase para la sección", "");
-				}
-				else {
-					opcionDefault = new Option("Seleccione sección", "");
-				}
-				opcionDefault.setAttribute("disabled","disabled");
-				opcionDefault.setAttribute("selected","selected");
-				$("#sesion_de_clase").append(opcionDefault);
-
-				for (var i = 0; i < arrayRespuesta.length; i++) {
-					$("#sesion_de_clase").append(new Option(arrayRespuesta[i].nombre+" - "+arrayRespuesta[i].fecha_planificada, arrayRespuesta[i].id));
-				}
-			}
-		});
-	}
+	var lista_idSesiones = new Array();
 
 	function resetTablaAsistencia() {
 		var tablaResultados = document.getElementById("tablaAsistencia");
@@ -57,39 +12,39 @@
 		tr = document.createElement('tr');
 		td = document.createElement('td');
 		$(td).html("No hay asistencia para la sección seleccionada en esa sesión de clase o no tiene estudiantes");
-		$(td).attr('colspan', tiposFiltro.length);
+		$(td).attr('colspan', listaColumnas.length);
 		tr.appendChild(td);
 		tbody.appendChild(tr);
 		tablaResultados.appendChild(tbody);
 	}
 
-
-	function cargarAsistenciaEstudiantes() {
+	//Carga una matriz con los datos del estudiante y sus asistencias
+	function cargarDatosAsistencia() {
 		var id_seccion = $('#seccion').val();
-		var id_sesion_de_clase = $('#sesion_de_clase').val();
-		if ((id_seccion == "") || (id_sesion_de_clase == "")) {
+		if (id_seccion == "") {
 			return;
 		}
 		
 		$.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Estudiantes/getAsistenciaEstudiantesBySeccionAndSesionAjax") ?>",
-			data: { id_seccion: id_seccion, id_sesion_de_clase: id_sesion_de_clase },
+			url: "<?php echo site_url("Estudiantes/getAsistenciaEstudiantesBySeccionAjax") ?>",
+			data: { id_seccion: id_seccion},
 			success: function(respuesta) {
 				var tablaResultados = document.getElementById("tablaAsistencia");
 				$(tablaResultados).find('tbody').remove();
 
 				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
 				var arrayRespuesta = new Array();
-				ruts_estudiantes = arrayObjectRespuesta;
+				ruts_estudiantes = new Array();
 				for (var i = 0; i < arrayObjectRespuesta.length; i++) {
-					arrayRespuesta[i] = $.map( arrayObjectRespuesta[i], function( value, key ) {
+					ruts_estudiantes[i] = arrayObjectRespuesta[i].rut; //Guardo los ruts de los estudiantes
+					arrayRespuesta[i] = $.map( arrayObjectRespuesta[i], function( value, key ) { //Transformo de array asociativo a basado en indices
 						return (value == null ? "": value);
 					});
 				}
 
-				var nodoTexto, tr, td, inicio, estaPresente;
+				var nodo, tr, td, divTd, estaPresente, comentario;
 
 
 				//CARGO EL CUERPO DE LA TABLA
@@ -99,49 +54,66 @@
 				}
 
 				var tbody = document.createElement('tbody');
-				for (var i = 0; i < arrayRespuesta.length; i++) {
+				for (var i = 0; i < arrayRespuesta.length; i++) { //Cada iteración es una fila o un estudiante
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:pointer");
-					//tr.setAttribute("onClick", "marcarAsistencia(this);");
 
-					td = document.createElement('td');
-					nodoTexto = document.createElement('input');
-					//nodoTexto.type = 'checkbox';
-					nodoTexto.setAttribute("type", 'checkbox');
-					nodoTexto.setAttribute("disabled", 'disabled');
-					nodoTexto.setAttribute("name", 'asistencia['+arrayObjectRespuesta[i].id+']');
-					estaPresente = arrayObjectRespuesta[i].presente == undefined ? false : arrayObjectRespuesta[i].presente;
-					estaPresente = arrayObjectRespuesta[i].presente == 1 ? true : false; //paso a booleano
-					$(nodoTexto).prop('checked', estaPresente);
-					//nodoTexto.checked = estaPresente;
-					nodoTexto.setAttribute("id", 'asistencia_'+arrayObjectRespuesta[i].id);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
 
-					td = document.createElement('td');
-					nodoTexto = document.createTextNode(arrayObjectRespuesta[i].rut);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
+					for (j = 0; j < arrayRespuesta[i].length; j++) { //cada iteración es una columna (datos del estudiante o dias de asistencia)
+						
 
-					td = document.createElement('td');
-					nodoTexto = document.createTextNode(arrayObjectRespuesta[i].nombre1);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
+						//Entonces se están cargando las columnas relacionadas con los datos del estudiante
+						if (j < listaColumnas.length) {
+							td = document.createElement('td'); //Creo la celda
+							nodo = document.createTextNode(arrayRespuesta[i][j]);
+							td.appendChild(nodo);
+							tr.appendChild(td); //Agrego la celda a la fila
+						}
+						else { //Entonces se están cargando las columnas relacionadas con la asistencia
+							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
+							for (var k = 0; (k < arrayObjectRespuesta[i].asistencia.length) && (k < lista_idSesiones.length) ; k++) {
+								td = document.createElement('td'); //Creo la celda
+								divTd = document.createElement('div'); //Creo la celda
 
-					td = document.createElement('td');
-					nodoTexto = document.createTextNode(arrayObjectRespuesta[i].apellido1);
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
+								nodo = document.createElement('input');
+								nodo.setAttribute("type", 'checkbox');
+								<?php 
+									if ($ONLY_VIEW === TRUE) {
+										?>
+								nodo.setAttribute("disabled", 'disabled');
+										<?php
+									}
+								?>
+								nodo.setAttribute("name", 'asistencia['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
+								estaPresente = arrayObjectRespuesta[i].asistencia[k].presente == undefined ? false : arrayObjectRespuesta[i].asistencia[k].presente;
+								estaPresente = arrayObjectRespuesta[i].asistencia[k].presente == 1 ? true : false; //paso a booleano
+								$(nodo).prop('checked', estaPresente);
+								nodo.setAttribute("id", 'asistencia_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
 
-					td = document.createElement('td');
-					nodoTexto = document.createElement('input');
-					nodoTexto.setAttribute('type', 'text');
-					nodoTexto.setAttribute('name', 'comentario['+arrayObjectRespuesta[i].id+']');
-					nodoTexto.setAttribute("value", arrayObjectRespuesta[i].comentario == "" ? '' : $.trim(arrayObjectRespuesta[i].comentario));
-					nodoTexto.setAttribute('id', 'comentario_'+arrayObjectRespuesta[i].id);
-					nodoTexto.setAttribute('maxlength', '100');
-					td.appendChild(nodoTexto);
-					tr.appendChild(td);
+
+
+								//Agrego el popover para poner comentarios
+								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
+								var divBtnCerrar = '';// '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
+								var divs = '<div ><input class="popovers" value="'+comentario+
+								'" id="asistencia_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]+
+								<?php 
+									if ($ONLY_VIEW === TRUE) {
+										?>
+								'" disabled="disabled'+
+										<?php
+									}
+								?>
+								'" type="text" ></div>';
+								$(divTd).clickover({html:true, content: divs, placement:'top', title:"Comentarios"});
+								divTd.appendChild(nodo);
+								td.appendChild(divTd);
+								tr.appendChild(td); //Agrego la celda a la fila
+							}
+							break; //Se mostró todo el listado de asistencias, esto no funciona si se agregan más atributos despues de las asistencias
+						}
+					}
+
 
 					tbody.appendChild(tr);
 				}
@@ -150,7 +122,28 @@
 		});
 	}
 
-	function cargaHeadTabla() {
+
+	function getListaSesiones() {
+		var idElem = $('#seccion').val();
+		var respuesta = $.ajax({
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAjax") ?>",
+			data: { seccion: idElem },
+			success: function(respuesta) {
+
+			}
+		});
+		var arrayRespuesta = jQuery.parseJSON(respuesta.responseText);
+		lista_idSesiones = new Array();
+		for (var i = 0; i < arrayRespuesta.length; i++) {
+			lista_idSesiones[i] = arrayRespuesta[i].id;
+		}
+		return arrayRespuesta;
+	}
+
+
+	function cargarHeadTabla() {
 		var tablaResultados = document.getElementById("tablaAsistencia");
 		$(tablaResultados).find('thead').remove();
 		
@@ -159,28 +152,52 @@
 		thead.setAttribute('style', "cursor:default;");
 		tr = document.createElement('tr');
 
-		for (var i = 0; i < tiposFiltro.length; i++) {
+		//Recorro la lista de columnas para crearlas
+		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
-			if (tiposFiltro[i] != '') {
-				// Texto
-				nodoTexto = document.createTextNode(tiposFiltro[i]);
-				th.appendChild(nodoTexto);
-			}
-			else { //Esto es para el caso de los checkbox que marcan toda la tabla
-				nodoCheckeable = document.createElement('input');
-				nodoCheckeable.setAttribute('data-previous', 'false,true,false');
-				nodoCheckeable.setAttribute('type', 'checkbox');
-				nodoCheckeable.setAttribute("disabled", 'disabled');
-				nodoCheckeable.setAttribute('id', 'selectorTodos');
-				nodoCheckeable.setAttribute('title', 'Seleccionar todos');
-				nodoCheckeable.setAttribute('onchange', "checkAll(this);");
-				th.appendChild(nodoCheckeable);
-			}
+			nodoTexto = document.createTextNode(listaColumnas[i]);
+			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
+
+
+		//Ahora recorro la lista de columnas para poner la asistencia, esto depende cuantas sesiones de clase existan
+		var listaSesiones = getListaSesiones();
+		for (var i = 0; i < listaSesiones.length; i++) {
+			th = document.createElement('th');
+
+			//Agrego el input que los checkea a todos
+			nodoCheckeable = document.createElement('input');
+			nodoCheckeable.setAttribute('data-previous', 'false,true,false');
+			nodoCheckeable.setAttribute('type', 'checkbox');
+			<?php 
+				if ($ONLY_VIEW === TRUE) {
+					?>
+			nodoCheckeable.setAttribute("disabled", 'disabled');
+					<?php
+				}
+			?>
+			nodoCheckeable.setAttribute('id', 'selectorTodos_'+listaSesiones[i].id);
+			nodoCheckeable.setAttribute('title', 'Seleccionar todos');
+			nodoCheckeable.setAttribute('onchange', "checkAll(this);");
+			th.appendChild(nodoCheckeable);
+
+			//Agrego la fecha de la sesión
+			nodoTexto = document.createTextNode(listaSesiones[i].fecha_planificada);
+			th.appendChild(nodoTexto);
+			tr.appendChild(th);
+		}
+
 		thead.appendChild(tr);
 		
 		tablaResultados.appendChild(thead);
+	}
+
+	function cargarAsistencia() {
+		$('#icono_cargando').show();
+		cargarHeadTabla();
+		cargarDatosAsistencia();
+		$('#icono_cargando').hide();
 	}
 
 	function guardarAsistencia() {
@@ -196,13 +213,6 @@
 			$('#modalError').modal();
 		}
 	}
-
-	//Se cargan por ajax
-	$(document).ready(function() {
-		cargaHeadTabla();
-		resetTablaAsistencia();
-	});
-
 </script>
 
 
@@ -218,7 +228,7 @@
 				<div class="control-group">
 					<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección:</label>
 					<div class="controls">
-						<select id="seccion" name="seccion" class="span12" required onchange="seleccionadaSeccion()">
+						<select id="seccion" name="seccion" class="span12" required onchange="cargarAsistencia();">
 							<option value="" disabled selected>Sección</option>
 							<?php
 							if (isset($secciones)) {
@@ -232,17 +242,10 @@
 						</select>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="sesion_de_clase">2.- <font color="red">*</font> Clase planificada:</label>
-					<div class="controls">
-						<select id="sesion_de_clase" name="sesion_de_clase" class="span12" required onchange="seleccionadaClase()">
-							<option value="" disabled selected>Clase</option>
-
-						</select>
-					</div>
-				</div>
 			</div>
-			<div class="span7">
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
 				<table id="tablaAsistencia" class="table table-hover">
 					<thead>
 
