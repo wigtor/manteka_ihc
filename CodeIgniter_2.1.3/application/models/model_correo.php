@@ -700,24 +700,22 @@ class Model_correo extends CI_Model
 	* @author Víctor Flores
 	*
 	*/
-    public function cantidadRecibidosNoLeidos($rut)
-	{
-		try
-		{
-			$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
-			$this->db->join('carta_usuario','carta.ID_CORREO = carta_usuario.ID_CORREO');
-			$this->db->where('carta_usuario.RUT_USUARIO', $rut);
-			$this->db->where('ID_BORRADOR IS NULL');
-			$this->db->where('RECIBIDA_CARTA_USUARIO', TRUE);
-			$this->db->where('NO_LEIDA_CARTA_USUARIO', TRUE);
-			$query = $this->db->get('carta');
+    public function cantidadRecibidosNoLeidos($rut) {
+		$this->db->select('COUNT(carta.ID_CORREO) AS resultado');
+		$this->db->join('carta_usuario','carta.ID_CORREO = carta_usuario.ID_CORREO');
+		$this->db->where('carta_usuario.RUT_USUARIO', $rut);
+		$this->db->where('ID_BORRADOR IS NULL');
+		$this->db->where('RECIBIDA_CARTA_USUARIO', TRUE);
+		$this->db->where('NO_LEIDA_CARTA_USUARIO', TRUE);
+		$query = $this->db->get('carta');
+		if ($query == FALSE) {
+			return -1;
+		}
+		if ($query->num_rows() > 0) {
 			$res = $query->row();
 			return $res->resultado;
 		}
-		catch(Exception $e)
-		{
-			return -1;
-		}
+		return -1;
     }
 
     /**

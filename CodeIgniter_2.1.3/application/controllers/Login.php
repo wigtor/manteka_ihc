@@ -86,50 +86,6 @@ class Login extends MasterManteka {
    	}
 
 
-	/**
-	*	Esta función muestra la vista para cambiar la contraseña
-	*	Lleva un argumento que se setea por defecto en un array vacio, 
-	*	de esta forma cuando el usuario abre esa vista por primera vez el array está vacio
-	*	Cuando la vista es rellamada para mostrarla nuevamente pero con mensajes de error, warnings o success entonces 
-	*	este array contiene el mensaje a ser mostrado (ver más abajo como se llama con el array)
-	* 
-	*	@param array $mensajes_alert Un arreglo con los mensajes de error que se mostrarán.
-	*/
-	public function cambiarContrasegna($mensajes_alert = array())
-	{
-	    /*
-	    *	Se cargan en un arreglo información para pasarla a la vista
-	    *	una vez se cargue.
-	    */
-	    $datos_plantilla["rut_usuario"] = $rut_user = $this->session->userdata('rut');		// Rut del usuario
-		$datos_plantilla["nombre_usuario"] = $this->session->userdata('nombre_usuario');	// Nombre del usuario
-		$datos_plantilla["tipo_usuario"] = $this->session->userdata('tipo_usuario');		// Tipo de cuenta del usuario
-
-		
-		$this->load->model('Model_usuario');												// Se carga el Modelo para utilizar sus funciones
-
-		// Se busca al usuario con un rut específico
-		// En caso de encontrarlo se obtienen todos sus datos
-		$datos = $this->Model_usuario->datos_usuario($rut_user);
-		
-		/* Esta parte hace que se muestren los mensajes de error, warnings, etc */
-		if (count($mensajes_alert) > 0) {
-			$datos_plantilla["mensaje_alert"] = $this->load->view('templates/mensajes/mensajeError', $mensajes_alert, true);
-		}
-
-		
-		$datos_plantilla["datos"] = $datos;
-		$subMenuLateralAbierto = '';
-		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-		$this->cargarTodo("", "cuerpo_cambio_contrasegna", "", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-	
-	}
-
-
-
-
-
 	/******************************************************************************************************************************
 	* Funciones de tipo POST
 	* Por convención, las funciones que terminan en "Post" corresponden a las funciones que son llamadas cuando se envian datos
@@ -284,88 +240,6 @@ class Login extends MasterManteka {
 		}
 	}
 
-	
-	
-	
-	/**
-	*	Función que se llama cuando el usuario envía el formulario para cambiar la contraseña
-	*	Se comprueba que el usuario está logueado, la validez de las variables.
-	*	Se comprueba que la contraseña actual introducida es correcta.
-	*	Se comprueba de que las contraseñas nuevas y su repetición son iguales.
-	*	Si existen errores en las validaciones, se setean los mensajes de error y se llama la vista 
-	*	normal para cambiar la contraseña.
-	*/
-	public function cambiarContrasegnaPost() {
-	
-		$rut = $this->session->userdata('rut'); //Se comprueba si el usuario tiene sesión iniciada
-		if ($rut == FALSE) {
-			redirect('/Login/', ''); // Se redirecciona a login si no tiene sesión iniciada
-		}
-
-		// Se carga el modelo de usuarios
-		$this->load->model('Model_usuario');
-
-		$this->form_validation->set_rules('correo1', 'Correo', 'required|max_length[100]|valid_email|xss_clean');
-		$this->form_validation->set_rules('correo2', 'Correo alternativo', 'max_length[100]|valid_email|xss_clean');
-		$this->form_validation->set_rules('telefono', 'Teléfono', 'min_length[7]|max_length[100]|is_natural_no_zero|xss_clean');
-		$this->form_validation->set_error_delimiters('<div class="error alert alert-error">', '</div>');
-
-		// Si existe contraseña actual
-		if ($this->input->post('contrasegna_actual')) {
-			// Se identifican las validaciones que deben realizarse para el cambio de contraseña
-			$this->form_validation->set_rules('contrasegna_actual', 'Contraseña actual', "required|xss_clean|callback_check_user_and_password[$rut]");
-			$this->form_validation->set_rules('nva_contrasegna_rep', 'Confirmación de contraseña', 'required|min_length[5]|max_length[100]|matches[nva_contrasegna]|xss_clean');
-			$this->form_validation->set_rules('nva_contrasegna', 'Contraseña nueva', 'required|min_length[5]|max_length[100]|xss_clean');
-			
-
-			// Si la validación es incorrecta
-			if ($this->form_validation->run() == FALSE)
-			{
-				/* Se debe setear un array asociativo con 3 keys: "titulo_msj", "cuerpo_msj" y "tipo_msj"
-				titulo_msj: puede ser cualquier texto que represente a grandes rasgos el mensaje
-				cuerpo_msj: puede ser cualquier texto que represente a el detalle del mensaje
-				tipo_msj: indica el tipo de mensaje, puede tomar los valores: "alert-error", "alert-warning", "alert-success", "alert-danger" y "alert-info"
-				Luego se debe pasar este array como argumento al método del controlador que carga la vista con errores
-				*/
-				$mensaje_alert["titulo_msj"] = "Hay un problema para cambiar la contraseña";
-				$mensaje_alert["cuerpo_msj"] = "Revise los campos señalados más abajo e intente nuevamente";
-				$mensaje_alert['tipo_msj'] = "alert-error";
-				$this->cambiarContrasegna($mensaje_alert); //	Vuelvo a llamar el cambio de contraseña si hubo un error con el mensaje apropiado
-
-				// Terminar
-				return ;
-			}
-
-			// Caso contrario, cambiar la contraseña mediante el modelo
-			$resultado = $this->Model_usuario->cambiarContrasegna($rut ,md5($this->input->post('nva_contrasegna')));
-		}
-		
-		if ($this->form_validation->run() == FALSE)
-		{
-			$mensaje_alert["titulo_msj"] = "Hay un problema para cambiar los datos del usuario";
-			$mensaje_alert["cuerpo_msj"] = "Revise los campos señalados más abajo e intente nuevamente";
-			$mensaje_alert['tipo_msj'] = "alert-error";
-			$this->cambiarContrasegna($mensaje_alert); //	Vuelvo a llamar el cambio de contraseña si hubo un error con el mensaje apropiado
-			return;
-		}
-		$tipo = $this->session->userdata('id_tipo_usuario');
-		$mail1 = $this->input->post("correo1");
-		$mail2 = $this->input->post("correo2");
-		$telefono = $this->input->post("telefono");
-
-		$resultado = $this->Model_usuario->cambiarDatosUsuario($rut, $tipo, $telefono, $mail1, $mail2);
-
-
-		$datos_plantilla["titulo_msj"] = "Listo";
-		$datos_plantilla["cuerpo_msj"] = "Se ha actualizado el perfil del usuario";
-		$datos_plantilla["tipo_msj"] = "alert-success";
-		$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-		$datos_plantilla["redirecTo"] = "Correo/index"; //Acá se pone el controlador/metodo hacia donde se redireccionará
-		//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-		$datos_plantilla["nombre_redirecTo"] = "vista principal"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-		$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
-	}
 	
 
 	/**

@@ -44,7 +44,7 @@
 					});
 				}
 
-				var nodo, tr, td, divTd, estaPresente, comentario;
+				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario;
 
 
 				//CARGO EL CUERPO DE LA TABLA
@@ -77,6 +77,15 @@
 
 								nodo = document.createElement('input');
 								nodo.setAttribute("type", 'checkbox');
+
+								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
+								nodoComentario = document.createElement('input');
+								nodoComentario.setAttribute("type", 'hidden');
+								nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
+								nodoComentario.setAttribute("name", 'comentario['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
+								nodoComentario.setAttribute("value", comentario);
+								divTd.appendChild(nodoComentario);
+										
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
 										?>
@@ -93,10 +102,10 @@
 
 
 								//Agrego el popover para poner comentarios
-								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
+								
 								var divBtnCerrar = '';// '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
-								var divs = '<div ><input class="popovers" value="'+comentario+
-								'" id="asistencia_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]+
+								var divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
+								'" id="comentario_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]+
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
 										?>
@@ -105,7 +114,7 @@
 									}
 								?>
 								'" type="text" ></div>';
-								$(divTd).clickover({html:true, content: divs, placement:'top', title:"Comentarios"});
+								$(divTd).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idSesiones[k]});
 								divTd.appendChild(nodo);
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
@@ -120,6 +129,24 @@
 				tablaResultados.appendChild(tbody);
 			}
 		});
+	}
+
+
+	function cambioComentario(inputComentario) {
+		var valor = inputComentario.value;
+		var part2Nombre = inputComentario.id.substring('comentario_'.length, inputComentario.length);
+		$('#comentarioHidden_'+part2Nombre).val(valor);
+	}
+
+	function copiarDeHidenToClickover() {
+		var input_popover = document.getElementById("comentario_"+this.options.indice1+"_"+this.options.indice2);
+		var inputHidden = document.getElementById("comentarioHidden_"+this.options.indice1+"_"+this.options.indice2);
+	
+		if (input_popover != undefined) {
+			$(input_popover).focus();
+			$(input_popover).val($(inputHidden).val());
+
+		}
 	}
 
 

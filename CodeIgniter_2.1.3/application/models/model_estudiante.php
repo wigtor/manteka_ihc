@@ -207,8 +207,7 @@ class Model_estudiante extends CI_Model {
 	* @return Se devuelve un array de objetos alumnos con sólo su nombre y rut
 	* @author Víctor Flores
 	*/
-	public function getEstudiantesByFilter($texto, $textoFiltrosAvanzados)
-	{
+	public function getEstudiantesByFilter($texto, $textoFiltrosAvanzados, $rut_usr_solicitante, $tipo_usr_solicitante) {
 		$this->db->select('usuario.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		//$this->db->select('NOMBRE2_ESTUDIANTE AS nombre2');
@@ -218,7 +217,21 @@ class Model_estudiante extends CI_Model {
 		$this->db->join('usuario', 'usuario.RUT_USUARIO = estudiante.RUT_USUARIO');
 		$this->db->join('carrera', 'carrera.COD_CARRERA = estudiante.COD_CARRERA');
 		$this->db->join('seccion', 'seccion.ID_SECCION = estudiante.ID_SECCION', 'LEFT OUTER');
+		if ($tipo_usr_solicitante == TIPO_USR_AYUDANTE) {
+			$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.RUT_USUARIO', $rut_usr_solicitante);
+		}
+		if ($tipo_usr_solicitante == TIPO_USR_PROFESOR) {
+			$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut_usr_solicitante);
+		}
+		if ($tipo_usr_solicitante == TIPO_USR_ESTUDIANTE) {
+			//Deben ser sólo los estudiantes de su misma sección
+		}
 		$this->db->order_by('APELLIDO1', 'asc');
+		$this->db->group_by('usuario.RUT_USUARIO');
 
 		if ($texto != "") {
 			$this->db->like('usuario.RUT_USUARIO',$texto);

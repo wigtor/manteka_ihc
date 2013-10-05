@@ -273,11 +273,37 @@ class Model_seccion extends CI_Model {
 
 
 	public function getSeccionesByProfesor($rut) {
+		$this->db->select('ID_TIPO AS id');
+		$this->db->where('RUT_USUARIO', $rut);
+		$query = $this->db->get('usuario');
+		if ($query == FALSE) {
+			return array();
+		}
+		$id_tipo_usuario = 0;
+		if ($query->num_rows() > 0) {
+			$row = $query->row();
+			$id_tipo_usuario = $row->id;
+		}
+
+
+		//echo 'id tipo usuario: '.$id_tipo_usuario.' ';
+		$this->db->flush_cache();
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
-		$this->db->select('ID_SECCION AS id');
+		$this->db->select('seccion.ID_SECCION AS id');
 		$this->db->select('LETRA_SECCION AS letra');
 		$this->db->select('NUMERO_SECCION AS numero');
 		$this->db->order_by('LETRA_SECCION', 'asc');
+		if ($id_tipo_usuario == TIPO_USR_PROFESOR) {
+			$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut);
+		}
+		if ($id_tipo_usuario == TIPO_USR_AYUDANTE) { //Aun no se usa ya que el ayudante no hace login
+			$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.RUT_USUARIO', $rut);
+		}
+		$this->db->group_by('seccion.ID_SECCION');
 		//$this->db->order_by('NUMERO_SECCION', 'asc');
 
 		
@@ -477,29 +503,6 @@ public function verModulosPorAsignar(){
 	return $array;
 }
 
-	/**
-	* Entrega todos los profesores de un módulo temático en particular
-	*
-	* Se obtienen el nombre, el apellido y el rut de todos los profesores que estan asignados a un módulo temático
-	* Este modulo tematico se encuentra dado por el parametro '$modulo'
-	*
-	* @param string $modulo nombre del módulo temático al que se le quieren buscar los profesores
-	* @return array $array todos los profesores asignados al módulo temático
-	*/
-
-public function verProfeSegunModulo($modulo){
-
-	$columnas = 'profesor.NOMBRE1_PROFESOR, profesor.APELLIDO1_PROFESOR, profesor.RUT_USUARIO2';
-	$condiciones  = '(modulo_tematico.COD_MODULO_TEM = equipo_profesor.COD_MODULO_TEM) AND (modulo_tematico.COD_EQUIPO = equipo_profesor.COD_EQUIPO)AND(profe_equi_lider.COD_EQUIPO = equipo_profesor.COD_EQUIPO) AND (profe_equi_lider.RUT_USUARIO2 = profesor.RUT_USUARIO2) AND (modulo_tematico.NOMBRE_MODULO = \''.$modulo.'\')';
-	$desde = 'profesor, equipo_profesor, modulo_tematico, profe_equi_lider';
-
-	$query = $this->db->select($columnas);
-	$query = $this->db->where($condiciones);
-	$query = $this->db->get($desde);
-	$array = $query->result_array();
-						
-	return $array;
-}
 
 	/**
 	* Entrega todas las salas del sistema
@@ -510,20 +513,20 @@ public function verProfeSegunModulo($modulo){
 	* @return array $array todas las salas del sistema
 	*/
 
-public function verSalasPorAsignar(){
+	public function verSalasPorAsignar(){
 
-	$columnas = '`sala.NUM_SALA`, `sala.COD_SALA`';
-	$desde = '`sala`';
-	$query = $this->db->select($columnas);
-	$query = $this->db->get($desde);
-	
-	$array = $query->result_array();
-						
-	return $array;
+		$columnas = '`sala.NUM_SALA`, `sala.ID_SALA`';
+		$desde = '`sala`';
+		$query = $this->db->select($columnas);
+		$query = $this->db->get($desde);
+		
+		$array = $query->result_array();
+							
+		return $array;
 
-}
+	}
 
-	/**
+	/** NO USADA AL PARECER!!!
 	* Asigna una sección a sus correspondientes parametros
 	* Estos parametros son: módulo tematico, profesor, sala y horario
 	* Primero se obtiene el horario para hacer la relacion entre este y la sala

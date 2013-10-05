@@ -21,30 +21,40 @@ class Model_usuario extends CI_Model{
 	function ValidarUsuario($rut,$password){
 		// La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
 		$query = $this->db->where('RUT_USUARIO',$rut);
-		$query = $this->db->where('PASSWORD_PRIMARIA',md5($password));
+		$query = $this->db->where('PASSWORD_PRIMARIA', md5($password));
 		$query = $this->db->where('LOGUEABLE', TRUE);
 		$query = $this->db->get('usuario'); //Acá va el nombre de la tabla
 
-		// Se obtiene la fila del resultado de la consulta a la base de datos
-		$filaResultado = $query->row();
-
+		if ($query->num_rows() > 0) {
+			// Se obtiene la fila del resultado de la consulta a la base de datos
+			$filaResultado = $query->row();
+		}
+		else {
+			$filaResultado = FALSE;
+		}
 		// Si la fila es nula, es decir, el usuario no coincide con la contraseña, se valida con la contraseña secuandaria o temporal
 		if ($filaResultado == FALSE) { //Si no validó usando la password primaria, uso la password secundaria
 			// Se limpia la caché para una nueva consulta
 			$this->db->stop_cache();
 			$this->db->flush_cache();
-			$this->db->stop_cache();
+			$this->db->start_cache();
 
 			// Consulta a la base de datos
 			$query = $this->db->where('RUT_USUARIO',$rut);
-			$query = $this->db->where('PASSWORD_TEMPORAL',md5($password));
+			$query = $this->db->where('PASSWORD_TEMPORAL', md5($password));
 			$query = $this->db->where('LOGUEABLE', TRUE);
 			$query = $this->db->where('VALIDEZ >', date('Y-m-d H:i:s')); //compruebo que esté dentro del periodo de validez
 			$query = $this->db->get('usuario');
 			//echo $this->db->last_query(); //Para hacer debug de la query
 
 			// Nuevamente se obtienen la fila resultante a la consulta
-			$filaResultado = $query->row();
+			if ($query->num_rows() > 0) {
+				// Se obtiene la fila del resultado de la consulta a la base de datos
+				$filaResultado = $query->row();
+			}
+			else {
+				$filaResultado = FALSE;
+			}
 		}
 
 		// Se conprueba una vez más por si se encontró alguna coincidencia con la contraseña temporal
@@ -265,21 +275,21 @@ class Model_usuario extends CI_Model{
 	*  @param string $mail2 Nuevo correo altenativo del usuario
 	*  @return int Tipo de cuenta del usuario ingresado. En caso de que no se realice la operación, se devuelve FALSE
 	*/
-	function cambiarDatosUsuario($rut, $tipo_usuario, $telefono, $mail1, $mail2) {
+	function cambiarDatosUsuario($rut, $telefono, $mail1, $mail2) {
 
-		// Dado que los correos del usuario se guardan en una tabla independiente de su tipo de cuenta. Se actualizan sus correo directamente
-
-		// La consulta se efectúa mediante Active Record. Una manera alternativa, y en lenguaje más sencillo, de generar las consultas Sql.
+		$this->db->trans_start();
+		
 		$query = $this->db->where('RUT_USUARIO',$rut);
 		$query = $this->db->update('usuario', array('CORREO1_USER'=>$mail1, 'CORREO2_USER'=>$mail2, 'TELEFONO'=>$telefono)); //Acá va el nombre de la tabla
 
-		// Se limpia la caché de la consulta
-		$this->db->stop_cache();
-		$this->db->flush_cache();
-		$this->db->stop_cache();
+		$this->db->trans_complete();
 
-		// Finalmente. Se retorna el tipo de cuenta del usuario
-		return $tipo_usuario;
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
 	}
 }
 ?>

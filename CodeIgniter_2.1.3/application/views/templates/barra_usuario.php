@@ -6,7 +6,7 @@
 			<a class="btn btn-mini" href="<?php echo site_url("Correo/enviarCorreo") ?>" title="Enviar correo">
 				<i class="icon-envelope"></i>
 			</a>
-			<a class="btn btn-mini" href="<?php echo site_url("Login/cambiarContrasegna") ?>" title="Perfil de usuario y cambio de contraseña">
+			<a class="btn btn-mini" href="<?php echo site_url("User/datosUsuario") ?>" title="Perfil de usuario y cambio de contraseña">
 				<i class="icon-user"> </i>
 			</a>
 			<a class="btn btn-mini" href="<?php echo site_url("Login/logout") ?>" title="Desconectarse de ManteKA">

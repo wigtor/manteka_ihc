@@ -27,7 +27,7 @@ class Estudiantes extends MasterManteka {
 			$this->invalidSession();
 			return;
 		}
-		$datos_vista = array();
+		$datos_vista = array('id_tipo_usuario' => $this->session->userdata('id_tipo_usuario'));
 		$subMenuLateralAbierto = "verEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
@@ -467,9 +467,11 @@ class Estudiantes extends MasterManteka {
 		}
 		$textoFiltro = $this->input->post('textoFiltroBasico');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		$id_tipo_usr_consultante = $this->session->userdata('id_tipo_usuario');
+		$rut = $this->session->userdata('rut');
 		
 		$this->load->model('Model_estudiante');
-		$resultado = $this->Model_estudiante->getEstudiantesByFilter($textoFiltro, $textoFiltrosAvanzados);
+		$resultado = $this->Model_estudiante->getEstudiantesByFilter($textoFiltro, $textoFiltrosAvanzados, $rut, $id_tipo_usr_consultante);
 		
 		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
 		if (count($resultado) > 0) {
@@ -636,22 +638,33 @@ class Estudiantes extends MasterManteka {
 			$id_seccion = $this->input->post('seccion'); //No es necesario más que para hacer control de reglas de negocio después
 			//echo 'Se está implementando esto, largo array asistencia:'.count($asistencia).'  comentario:'.count($comentarios).'...';
 			$confirmacion = TRUE;
-			foreach ($comentarios as $rut => $comentario) { //Comentarios tiene todos los ruts de la sección como key
-				$asistio = FALSE;
-				if (array_key_exists ( $rut, $asistencia)) {
-					$asistio = TRUE;
-				}
-				$justificado = !$asistio; //la negación de si asistió por defecto
-				if ($comentario !== NULL) {
-					if (trim($comentario) === "") { //Si el comentario es vacio
-						$justificado = FALSE;
-						$comentario = NULL;
+			echo 'Largo comentarios: '.count($comentarios).'  '.$comentarios.'caca ';
+			foreach ($comentarios as $rut => $arrayComentarioBySesion) { //Comentarios tiene todos los ruts de la sección como key
+				foreach ($arrayComentarioBySesion as $id_sesion_de_clase => $comentario) {
+					$asistio = FALSE;
+					if (array_key_exists ($rut, $asistencia)) { //Compruebo el primer índice (rut)
+						if (array_key_exists ($id_sesion_de_clase, $asistencia[$rut])) { //Compruebo el segundo índice (id_sesion)
+							$asistio = TRUE;
+
+							$justificado = !$asistio; //la negación de si asistió por defecto
+							if ($comentario !== NULL) {
+								if (trim($comentario) === "") { //Si el comentario es vacio
+									$justificado = FALSE;
+									$comentario = NULL;
+								}
+							}
+							else { //Si no hay comentario
+								$justificado = FALSE;
+							}
+
+
+							$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
+						}
 					}
 				}
-				else { //Si no hay comentario
-					$justificado = FALSE;
-				}
-				$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
+
+
+				
 			}
 
 			if ($confirmacion == TRUE) {

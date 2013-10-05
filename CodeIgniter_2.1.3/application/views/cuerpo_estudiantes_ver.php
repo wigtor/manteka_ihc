@@ -53,6 +53,18 @@
 
 	<fieldset>
 			<legend>Ver Estudiante</legend>
+			<?php 
+				if (($id_tipo_usuario == TIPO_USR_AYUDANTE) || ($id_tipo_usuario == TIPO_USR_PROFESOR)) {
+					?>
+			<div class="row-fluid">
+				<div class="span12">
+					<font color="red">Sólo se muestran los estudiantes que le ha hecho o le hará clases en algún momento</font>
+				</div>
+			</div>
+					<?php
+				}
+			?>
+			
 			<div class= "row-fluid">
 				<div class="span6">
 					<div class="controls controls-row">
