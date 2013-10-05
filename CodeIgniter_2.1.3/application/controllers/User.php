@@ -28,7 +28,7 @@ class User extends MasterManteka {
 			return;
 		}
 
-		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+		//if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			/*
 			*	Se cargan en un arreglo información para pasarla a la vista
 			*	una vez se cargue.
@@ -56,7 +56,7 @@ class User extends MasterManteka {
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 			$this->cargarTodo("", "cuerpo_cambio_contrasegna", "", $datos_plantilla, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
-		}
+		//}
 	}
 
 

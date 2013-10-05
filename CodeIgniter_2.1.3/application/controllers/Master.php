@@ -28,8 +28,7 @@ class MasterManteka extends CI_Controller {
 	* 
 	*/
 	protected function cargarTodo($titulo, $cuerpo_a_cargar, $barra_lateral, $datos_cuerpo, $tipos_usuarios_permitidos, 
-		$subMenuLateralAbierto = '' , $mostrarBarraProgreso = FALSE)
-	{
+		$subMenuLateralAbierto = '' , $mostrarBarraProgreso = FALSE) {
 		/* Verifica si el usuario que intenta acceder esta autentificado o no. */
 		$rut = $this->session->userdata('rut');
 		$tipo_usuario = $this->session->userdata('tipo_usuario');

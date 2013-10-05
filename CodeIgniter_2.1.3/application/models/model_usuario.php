@@ -76,12 +76,16 @@ class Model_usuario extends CI_Model{
 	*  @return array Datos del usuario encontrado. En caso de que no se encuentre, el arreglo es nulo
 	*/
 	function ValidarRut($rut){
-		// La consulta se efect?a mediante Active Record. Una manera alternativa, y en lenguaje m?s sencillo, de generar las consultas Sql.
+		$this->db->flush_cache();
 		$query = $this->db->where('RUT_USUARIO',$rut);
 		$query = $this->db->get('usuario');
-
-		// Resultado de la consulta
-		return $query->row(); // Se retorna la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias)
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->num_rows() > 0) {
+			return $query->row(); // Se retorna la fila que coincide con la búsqueda. (FALSE en caso que no existir coincidencias)
+		}
+		return FALSE;
 	}
 
 
