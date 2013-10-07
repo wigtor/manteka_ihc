@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     01/10/2013 7:24:13 p. m.                     */
+/* Created on:     07/10/2013 4:07:45 p. m.                     */
 /*==============================================================*/
 
 
@@ -440,6 +440,7 @@ create table planificacion_clase
    ID_AYU_PROFE         int,
    ID_SECCION           int not null,
    FECHA_PLANIFICADA    date,
+   NUM_SESION_SECCION   int,
    primary key (ID_PLANIFICACION_CLASE)
 );
 

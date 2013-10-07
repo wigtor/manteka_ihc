@@ -16,10 +16,10 @@ class Model_planificacion extends CI_Model {
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
 		$this->db->select('CONCAT_WS(\' \', NOMBRE1, APELLIDO1, APELLIDO2 ) AS profesor');
 		$this->db->select('NOMBRE_MODULO AS modulo');
-		$this->db->select('NUM_SALA AS sala');
 		$this->db->select('CONCAT(ABREVIATURA_DIA, modulo_horario.ID_MODULO ) AS bloque');
-		$this->db->select('HORA_INI as hora');
 		$this->db->select('NOMBRE_DIA as dia');
+		$this->db->select('HORA_INI as hora');
+		$this->db->select('NUM_SALA AS sala');
 		$this->db->select('FECHA_PLANIFICADA as fecha');
 		$this->db->select('planificacion_clase.ID_PLANIFICACION_CLASE as id');
 

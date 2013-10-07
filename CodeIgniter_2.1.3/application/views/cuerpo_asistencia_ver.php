@@ -44,7 +44,7 @@
 					});
 				}
 
-				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario;
+				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono;
 
 
 				//CARGO EL CUERPO DE LA TABLA
@@ -73,10 +73,12 @@
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
 							for (var k = 0; (k < arrayObjectRespuesta[i].asistencia.length) && (k < lista_idSesiones.length) ; k++) {
 								td = document.createElement('td'); //Creo la celda
-								divTd = document.createElement('div'); //Creo la celda
+								divTd = document.createElement('div');
+								divTd.setAttribute('class', 'row-fluid');
 
 								nodo = document.createElement('input');
 								nodo.setAttribute("type", 'checkbox');
+								nodo.setAttribute("class", 'span3');
 
 								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
 								nodoComentario = document.createElement('input');
@@ -84,7 +86,24 @@
 								nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
 								nodoComentario.setAttribute("name", 'comentario['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
 								nodoComentario.setAttribute("value", comentario);
+								nodoComentario.setAttribute("class", 'span1');
 								divTd.appendChild(nodoComentario);
+
+
+								nodoIconComentario = document.createElement('div');
+								icono = document.createElement('i');
+								icono.setAttribute('class', 'icon-comment');
+								nodoIconComentario.appendChild(icono);
+								if ($.trim(comentario) != '') {
+									nodoAsterisco = document.createElement('font');
+									nodoAsterisco.setAttribute('color', 'red');
+									nodoComentario = document.createTextNode('*');
+									nodoAsterisco.appendChild(nodoComentario);
+									nodoIconComentario.appendChild(nodoAsterisco);
+								}
+								nodoIconComentario.setAttribute("class", 'btn btn-mini');
+								nodoIconComentario.setAttribute("value", '*');
+								
 										
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
@@ -102,7 +121,6 @@
 
 
 								//Agrego el popover para poner comentarios
-								
 								var divBtnCerrar = '';// '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
 								var divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
 								'" id="comentario_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]+
@@ -114,8 +132,10 @@
 									}
 								?>
 								'" type="text" ></div>';
-								$(divTd).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idSesiones[k]});
+								$(nodoIconComentario).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idSesiones[k]});
+								
 								divTd.appendChild(nodo);
+								divTd.appendChild(nodoIconComentario);
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
 							}

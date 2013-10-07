@@ -16,6 +16,7 @@
 		$verPlanificacion = "";
 		$agregarPlanificacion = "";
 		$eliminarPlanificacion = "";
+		$asignacionActual = "";
 		$verModulos = "";
 		$agregarModulo = "";
 		$editarModulo = "";
@@ -38,6 +39,10 @@
 		}
 		else if ($subVistaLateralAbierta == "agregarPlanificacion"){
 			$agregarPlanificacion = 'class="active"';
+			$inPlanificacion = "in";
+		}
+		else if ($subVistaLateralAbierta == "asignacionActual"){
+			$asignacionActual = 'class="active"';
 			$inPlanificacion = "in";
 		}
 		else if ($subVistaLateralAbierta == "eliminarPlanificacion"){
@@ -91,6 +96,7 @@
 					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 						<li <?php echo $agregarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/agregarPlanificacion")?>">Agregar planificación</a></li>
 						<li <?php echo $eliminarPlanificacion; ?> ><a href="<?php echo site_url("Planificacion/eliminarPlanificacion")?>">Eliminar planificación</a></li>
+						<li <?php echo $asignacionActual; ?> ><a href="<?php echo site_url("Planificacion/asignacionActual")?>">Asignación actual</a></li>
 					<?php } ?>
 				</div>
 			</div>

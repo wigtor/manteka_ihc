@@ -148,8 +148,7 @@ class Estudiantes extends MasterManteka {
 			$datos_vista = array();
 			$subMenuLateralAbierto = "eliminarEstudiante"; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array();
-			$tipos_usuarios_permitidos[0] = TIPO_USR_COORDINADOR;
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 			$this->cargarTodo("Estudiantes", 'cuerpo_estudiantes_eliminar', "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);	
 		}
 	}
