@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	var prefijo_tipoDato = "estudiante_";
-	var listaColumnas = ["Rut", "Nombres", "Apellido paterno", "Apellido materno"];
+	var listaColumnas = ["Sección", "Semana de avance"];
 	var ruts_estudiantes = new Array();
 	var lista_idSesiones = new Array();
 
@@ -19,19 +19,15 @@
 	}
 
 	//Carga una matriz con los datos del estudiante y sus asistencias
-	function cargarDatosAsistencia() {
-		var id_seccion = $('#seccion').val();
-		if (id_seccion == "") {
-			return;
-		}
+	function cargarAvanceSecciones() {
 		
 		$.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Estudiantes/getAsistenciaEstudiantesBySeccionAjax") ?>",
-			data: { id_seccion: id_seccion},
+			url: "<?php echo site_url("Planificacion/getAvanceSeccionesAjax") ?>",
+			data: { },
 			success: function(respuesta) {
-				var tablaResultados = document.getElementById("tablaAsistencia");
+				var tablaResultados = document.getElementById("tablaAvanceSecciones");
 				$(tablaResultados).find('tbody').remove();
 
 				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
@@ -259,10 +255,9 @@
 		$('#icono_cargando').hide();
 	}
 
-
-<?php
-	if ($ONLY_VIEW !== TRUE) {
-?>
+	$(document).ready(function() {
+		cargarAvanceSecciones();
+	});
 
 	function checkAll(checkboxAll) {
 		var idSesion = checkboxAll.id;
@@ -292,55 +287,28 @@
 		}
 	}
 
-<?php
-	}
-?>
 </script>
 
 
 <fieldset>
+	<legend>Asignacion Actual</legend>
 	<?php
-		if ($ONLY_VIEW === TRUE) {
-	?>
-	<legend>Ver asistencia</legend>
-	<?php
-		} else {
-	?>
-	<legend>Agregar asistencia</legend>
-	<?php
-	}
 		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
-		echo form_open('Estudiantes/postAgregarAsistencia/', $atributos);
+		echo form_open('Planificacion/postAsignacionActual/', $atributos);
 	?>
 		<div class="row-fluid">
-			<div class="span5">
-				<font color="red">* Campos Obligatorios</font>
-			</div>
-		</div>
-		<div class="row-fluid">
-			<div class="span5">
-				<div class="control-group">
-					<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección:</label>
-					<div class="controls">
-						<select id="seccion" name="seccion" class="span12" required onchange="cargarAsistencia();">
-							<option value="" disabled selected>Sección</option>
-							<?php
-							if (isset($secciones)) {
-								foreach ($secciones as $valor) {
-									?>
-										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
-									<?php 
-								}
-							}
-							?>
-						</select>
-					</div>
+			<div class="control-group offset7">
+				<div class="controls ">
+					<button class="btn" type="button" onclick="avanzarUnaSemana()">
+						<div class="btn_with_icon_solo">Ã</div>
+						&nbsp; Avanzar todos
+					</button>
 				</div>
 			</div>
 		</div>
 		<div class="row-fluid">
 			<div class="span12">
-				<table id="tablaAsistencia" class="table table-hover">
+				<table id="tablaAvanceSecciones" class="table table-hover">
 					<thead>
 
 					</thead>
@@ -352,19 +320,17 @@
 		</div>
 		<div class="row-fluid">
 			<div class="control-group offset7">
-				<?php if ($ONLY_VIEW !== TRUE) { ?>
 				<div class="controls ">
-					<button class="btn" type="button" onclick="guardarAsistencia()">
+					<button class="btn" type="button" onclick="guardarAsignacionActual()">
 						<div class="btn_with_icon_solo">Ã</div>
 						&nbsp; Guardar
 					</button>
-					<button class="btn" type="button" onclick="resetearAsistencia()">
+					<button class="btn" type="button" onclick="resetearAsignacionActual()">
 						<div class="btn_with_icon_solo">Â</div>
 						&nbsp; Cancelar
 					</button>
 				</div>
 				<?php
-					}
 					if (isset($dialogos)) {
 						echo $dialogos;
 					}
@@ -372,8 +338,6 @@
 			</div>
 		</div>
 		<?php
-			if ($ONLY_VIEW !== TRUE) {
-				echo form_close('');
-		}
+			echo form_close('');
 		?>
 </fieldset>

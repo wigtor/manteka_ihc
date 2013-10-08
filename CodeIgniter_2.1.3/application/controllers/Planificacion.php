@@ -174,6 +174,36 @@ class Planificacion extends MasterManteka {
 	}
 
 
+	public function asignacionActual() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "asignacionActual"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Planificacion", 'cuerpo_asignacion_actual', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function postAsignacionActual() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$datos_vista = array();
+			$subMenuLateralAbierto = "asignacionActual"; 
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Planificacion", 'cuerpo_asignacion_actual', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
 	public function getSesionesByModuloTematicoAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
