@@ -363,8 +363,14 @@ class Sesiones extends MasterManteka {
 		}
 		$id_seccion = $this->input->post('seccion');
 		$rut_profesor = $this->session->userdata('rut');
+		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+			$esCoordinador = TRUE;
+		}
+		else {
+			$esCoordinador = FALSE;
+		}
 		$this->load->model('Model_sesion');
-		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor);
+		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor, $esCoordinador);
 		
 		echo json_encode($resultado);
 	}

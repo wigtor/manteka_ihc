@@ -56,7 +56,7 @@
 				var tbody = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) { //Cada iteración es una fila o un estudiante
 					tr = document.createElement('tr');
-					tr.setAttribute('style', "cursor:pointer");
+					tr.setAttribute('style', "cursor:default");
 
 
 					for (j = 0; j < arrayRespuesta[i].length; j++) { //cada iteración es una columna (datos del estudiante o dias de asistencia)
@@ -187,7 +187,7 @@
 		var respuesta = $.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAjax") ?>",
+			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAndProfesorAjax") ?>",
 			data: { seccion: idElem },
 			success: function(respuesta) {
 
@@ -339,7 +339,8 @@
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span12">
+			<div class="span12" >
+				<div style="border:#cccccc 1px solid; overflow-x:scroll; width:72em; -webkit-border-radius: 4px;">
 				<table id="tablaAsistencia" class="table table-hover">
 					<thead>
 
@@ -348,6 +349,7 @@
 
 					</tbody>
 				</table>
+				</div>
 			</div>
 		</div>
 		<div class="row-fluid">

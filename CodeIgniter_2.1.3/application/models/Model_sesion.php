@@ -128,16 +128,18 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 	}
 
 
-	public function getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor) {
+	public function getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor, $esCoordinador = FALSE) {
 		$this->db->select('sesion_de_clase.ID_SESION AS id');
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('DESCRIPCION_SESION AS descripcion');
 		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
 		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
 		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION');
-		$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+		if ($esCoordinador == FALSE) {
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut_profesor);
+		}
 		$this->db->where('seccion.ID_SECCION', $id_seccion);
-		$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut_profesor);
 		$query = $this->db->get('sesion_de_clase');
 		//echo $this->db->last_query();
 		if ($query == FALSE) {

@@ -407,6 +407,7 @@ class Estudiantes extends MasterManteka {
 		$rut_usuario = $this->session->userdata('rut');
 		$this->load->model('Model_asistencia');
 		$this->load->model('Model_estudiante');
+		$this->load->model('Model_planificacion');
 		$this->load->model('Model_modulo_tematico');
 		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
 			$id_modulo_tem = NULL;
@@ -419,11 +420,12 @@ class Estudiantes extends MasterManteka {
 			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
 			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
 			$estudiante->asistencia = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			while (count($estudiante->asistencia) < 3) {
+			$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			while (count($estudiante->asistencia) < $cantidadSesiones) {
 				$estudiante->asistencia[count($estudiante->asistencia)]['presente'] = 0;
 			}
 			$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			while (count($estudiante->comentarios) < 3) {
+			while (count($estudiante->comentarios) < $cantidadSesiones) {
 				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
 			}
 		}
@@ -632,12 +634,14 @@ class Estudiantes extends MasterManteka {
 			$this->load->model('Model_asistencia');
 			$rut_profesor = $this->session->userdata('rut');
 			$asistencia = $this->input->post('asistencia');
+			if ($asistencia == FALSE)
+				$asistencia = array();
 			$comentarios = $this->input->post('comentario');
 			$id_sesion_de_clase = $this->input->post('sesion_de_clase');
 			$id_seccion = $this->input->post('seccion'); //No es necesario más que para hacer control de reglas de negocio después
 			//echo 'Se está implementando esto, largo array asistencia:'.count($asistencia).'  comentario:'.count($comentarios).'...';
 			$confirmacion = TRUE;
-			echo 'Largo comentarios: '.count($comentarios).'  '.$comentarios.'caca ';
+			//echo 'Largo comentarios: '.count($comentarios).'  '.$comentarios.'caca ';
 			foreach ($comentarios as $rut => $arrayComentarioBySesion) { //Comentarios tiene todos los ruts de la sección como key
 				foreach ($arrayComentarioBySesion as $id_sesion_de_clase => $comentario) {
 					$asistio = FALSE;
@@ -659,6 +663,13 @@ class Estudiantes extends MasterManteka {
 
 							$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
 						}
+					}
+					else {
+						$asistio = FALSE;
+						$justificado = FALSE;
+						$comentario = NULL;
+						$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
+						
 					}
 				}
 
