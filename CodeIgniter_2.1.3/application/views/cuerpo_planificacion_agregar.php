@@ -258,6 +258,13 @@
 			</div>
 
 			<div class="control-group">
+				<label class="control-label" for="numero_sesion_seccion">6.- <font color="red">*</font> N° de clase semestral:</label>
+				<div class="controls">
+					<input type="numeric" id="numero_sesion_seccion" name="numero_sesion_seccion" value="1" class="span2">
+				</div>
+			</div>
+
+			<div class="control-group">
 				<div class="controls">
 					<button type="button" class="btn" onclick="agregarPlanificacion()" >
 						<div class="btn_with_icon_solo">Ã</div>

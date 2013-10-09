@@ -82,8 +82,9 @@ class Planificacion extends MasterManteka {
 			$profesor = $this->input->post('profesor');
 			$sala = $this->input->post('sala');
 			$fecha_planificada = $this->input->post('fecha_planificada');
+			$numero_sesion_seccion = $this->input->post('numero_sesion_seccion');
 
-			$confirmacion = $this->Model_planificacion->agregarPlanificacion($seccion, $sesion, $profesor, $sala, $fecha_planificada);
+			$confirmacion = $this->Model_planificacion->agregarPlanificacion($seccion, $sesion, $profesor, $sala, $fecha_planificada, $numero_sesion_seccion);
 
 	        if ($confirmacion == TRUE){
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -233,6 +234,39 @@ class Planificacion extends MasterManteka {
 		$resultado = $this->Model_profesor->getProfesoresByModuloTematico($id_moduloTematico);
 		echo json_encode($resultado);
 	}
+
+
+	public function getAvanceSeccionesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_planificacion');
+		$resultado = $this->Model_planificacion->getAvanceSecciones();
+		echo json_encode($resultado);
+	}
+
+
+	public function getSesionesByModuloTematicoAndSeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$id_mod_tem = $this->input->post('id_mod_tem');
+		$this->load->model('Model_planificacion');
+		$resultado = $this->Model_planificacion->getSesionesByModuloTematicoAndSeccion($id_seccion, $id_mod_tem);
+		echo json_encode($resultado);
+	}
+	
 
 	public function getHorarioSeccionAjax() {
 		if (!$this->input->is_ajax_request()) {

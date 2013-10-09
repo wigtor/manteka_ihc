@@ -14,6 +14,7 @@ class Model_planificacion extends CI_Model {
 
 	public function getPlanificaciones($texto, $textoFiltrosAvanzados) {
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS seccion');
+		$this->db->select('NUM_SESION_SECCION as numero_sesion_seccion');
 		$this->db->select('CONCAT_WS(\' \', NOMBRE1, APELLIDO1, APELLIDO2 ) AS profesor');
 		$this->db->select('NOMBRE_MODULO AS modulo');
 		$this->db->select('CONCAT(ABREVIATURA_DIA, modulo_horario.ID_MODULO ) AS bloque');
@@ -94,7 +95,7 @@ class Model_planificacion extends CI_Model {
 		return $query->result();
 	}
 
-	public function agregarPlanificacion($seccion, $sesion, $rut_profesor, $sala, $fecha_planificada) {
+	public function agregarPlanificacion($seccion, $sesion, $rut_profesor, $sala, $fecha_planificada, $numero_sesion_seccion) {
 		$this->db->trans_start();
 
 		$this->db->select('ID_AYU_PROFE as id');
@@ -118,6 +119,7 @@ class Model_planificacion extends CI_Model {
 			'ID_AYU_PROFE' => $id_ayu_profe,
 			'ID_SALA' => $sala,
 			'FECHA_PLANIFICADA' => $fecha_planificada,
+			'NUM_SESION_SECCION' => $numero_sesion_seccion
 			);
 		$datos = $this->db->insert('planificacion_clase', $data);
 		$this->db->trans_complete();
@@ -142,6 +144,66 @@ class Model_planificacion extends CI_Model {
 		else{
 			return TRUE;
 		}
+	}
+
+
+	public function getSesionesByModuloTematicoAndSeccion($id_seccion, $id_mod_tem) {
+		$this->db->select('NOMBRE_SESION AS nombre_sesion');
+		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
+		$this->db->select('NUM_SESION_SECCION AS num_sesion_de_seccion');
+		$this->db->select('sesion_de_clase.ID_SESION AS id');
+		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->where('planificacion_clase.ID_SECCION', $id_seccion);
+		$this->db->where('sesion_de_clase.ID_MODULO_TEM', $id_mod_tem);
+		$query = $this->db->get('sesion_de_clase');
+		//echo $this->db->last_query().'    ';
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
+	public function getAvanceSecciones() {
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre_seccion');
+		$this->db->select('NOMBRE_MODULO AS nombre_modulo_tem');
+		$this->db->select('modulo_tematico.ID_MODULO_TEM AS id_mod_tem');
+		$this->db->select('NOMBRE_SESION AS nombre_sesion');
+		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
+		$this->db->select('NUM_SESION_SECCION AS num_sesion_de_seccion');
+		$this->db->select('seccion.ID_SECCION AS id');
+		$this->db->select('seccion.ID_SESION AS id_sesion');
+		$this->db->join('sesion_de_clase', 'seccion.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'sesion_de_clase.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
+		//$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION', 'LEFT OUTER');
+		$this->db->where('planificacion_clase.ID_SESION', 'seccion.ID_SESION', FALSE);
+		$this->db->or_where('seccion.ID_SESION IS NULL', NULL);
+		$this->db->group_by('seccion.ID_SECCION');
+		$this->db->order_by('LETRA_SECCION', 'asc');
+		$this->db->order_by('NUMERO_SECCION', 'asc');
+		$query = $this->db->get('seccion');
+		//echo $this->db->last_query().'    ';
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
+	public function getSesionesBySeccion($id_seccion) {
+		$this->db->select('NOMBRE_SESION AS nombre_sesion');
+		$this->db->select('NUM_SESION_SECCION AS num_sesion_de_seccion');
+		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
+		$this->db->select('ID_PLANIFICACION_CLASE AS id');
+		$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('sesion_de_clase', 'planificacion_clase.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->where('seccion.ID_SECCION', $id_seccion);
+		$query = $this->db->get('seccion');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
 	}
 
 

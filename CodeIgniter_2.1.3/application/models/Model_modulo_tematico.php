@@ -569,8 +569,7 @@ class Model_modulo_tematico extends CI_Model {
    * @return $query->row() fila con los datos del detalle del modulo solicitado
    *
    **/
-	public function getDetallesModulo($id_modulo)
-	{
+	public function getDetallesModulo($id_modulo) {
 		$this->db->select('modulo_tematico.ID_MODULO_TEM AS id_mod');
 		$this->db->select('equipo_profesor.ID_EQUIPO AS id_equipo');
 		$this->db->select('NOMBRE_MODULO AS nombre_modulo');
@@ -585,6 +584,8 @@ class Model_modulo_tematico extends CI_Model {
 		$this->db->join('usuario', 'profe_equi_lider.RUT_USUARIO = usuario.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_modulo);
 		$this->db->where('LIDER_PROFESOR', TRUE);
+		$this->db->or_where('LIDER_PROFESOR IS NULL', NULL); //En caso de no estár unido a un equipo de profesores
+		$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_modulo);
 		$this->db->order_by('NOMBRE_MODULO', 'asc');
 		$query = $this->db->get('modulo_tematico');
 		//echo $this->db->last_query(). '    ';

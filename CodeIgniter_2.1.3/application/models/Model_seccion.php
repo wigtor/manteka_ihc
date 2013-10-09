@@ -405,14 +405,14 @@ class Model_seccion extends CI_Model {
 		$this->db->select('date_format(HORA_INI, \'%H:%i\') AS hora_clase', FALSE);
 		$this->db->where('seccion.ID_SECCION', $id_seccion);
 
-		$this->db->join('sesion_de_clase', 'sesion_de_clase.ID_SESION = seccion.ID_SESION', 'LEFT OUTER');
-		$this->db->join('modulo_tematico', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('sesion_de_clase', 'seccion.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('modulo_tematico', 'sesion_de_clase.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
 		$this->db->join('planificacion_clase','sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION', 'LEFT OUTER'); //Para saber en que se encuentra actualmente
 		$this->db->join('horario','seccion.ID_HORARIO = horario.ID_HORARIO', 'LEFT OUTER');
 		$this->db->join('dia_horario','horario.ID_DIA = dia_horario.ID_DIA', 'LEFT OUTER');
 		$this->db->join('modulo_horario','horario.ID_MODULO = modulo_horario.ID_MODULO', 'LEFT OUTER');
 		$this->db->join('sala','planificacion_clase.ID_SALA = sala.ID_SALA', 'LEFT OUTER');
-		$this->db->join('ayu_profe','ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
+		$this->db->join('ayu_profe','planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE', 'LEFT OUTER');
 		$this->db->join('profesor','ayu_profe.PRO_RUT_USUARIO = profesor.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->join('ayudante','ayu_profe.RUT_USUARIO = ayudante.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->join('usuario','usuario.RUT_USUARIO = profesor.RUT_USUARIO', 'LEFT OUTER');

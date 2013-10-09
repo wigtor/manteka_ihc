@@ -29,6 +29,7 @@
 				/* Seteo los valores desde el objeto proveniente del servidor en los objetos HTML */
 				$('#nombre_seccion').html($.trim(datos.seccion));
 				$('#modulo_tematico').html($.trim(datos.modulo));
+				$('#sala').html($.trim(datos.sala));
 				$('#profesor').html(datos.apellido1 == '' ? 'Sin asignación' : $.trim(datos.nombre1) + ' ' + $.trim(datos.apellido1));
 				$('#dia').html(datos.dia == '' ? 'Sin asignación' : $.trim(datos.dia));
 				$('#modulo_horario').html(datos.horario == "" ? 'Sin asignación' : $.trim(datos.horario));

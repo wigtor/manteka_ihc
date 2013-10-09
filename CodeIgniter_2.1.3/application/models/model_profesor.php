@@ -226,8 +226,8 @@ class Model_profesor extends CI_Model {
 		$this->db->select('profesor.RUT_USUARIO AS id');
 		$this->db->select('NOMBRE1 AS nombre1');
 		$this->db->select('APELLIDO1 AS apellido1');
-		$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTematico');
-		$this->db->select('GROUP_CONCAT( CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
+		$this->db->select('GROUP_CONCAT( DISTINCT NOMBRE_MODULO ) AS moduloTematico');
+		$this->db->select('GROUP_CONCAT( DISTINCT CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('tipo_profesor', 'profesor.ID_TIPO_PROFESOR = tipo_profesor.ID_TIPO_PROFESOR');
 		$this->db->join('profe_equi_lider', 'profesor.RUT_USUARIO = profe_equi_lider.RUT_USUARIO', 'LEFT OUTER');

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	var tiposFiltro = ["Sección", "Profesor", "Módulo temático", "Bloque", "Día", "Hora", "Sala", "Fecha"]; //Debe ser escrito con PHP
+	var tiposFiltro = ["Sección", "N° sesión", "Profesor", "Módulo temático", "Bloque", "Día", "Hora", "Sala", "Fecha"]; //Debe ser escrito con PHP
 	var valorFiltrosJson = ["", "", "", "", "", "", ""];
 	var prefijo_tipoDato = "planificacion_";
 	var prefijo_tipoFiltro = "tipo_filtro_";

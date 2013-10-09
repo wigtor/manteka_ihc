@@ -160,19 +160,19 @@
 				<div class="control-group">
 					<label class="control-label" for="correo1">6.- <font color="red">*</font> Correo:</label>
 					<div class="controls">
-						<input type="email" id="correo1" name="correo1" class="span12" onblur="comprobarCorreos(correo1, correo2)" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
+						<input type="email" id="correo1" name="correo1" class="span12" onblur="comprobarCorreos(correo1, correo2)" maxlength="199" placeholder="nombre1_usuario@miemail.com" required>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="correo2">7.- Correo secundario:</label>
 					<div class="controls">
-						<input type="email" id="correo2" name="correo2" class="span12" onblur="comprobarCorreos(correo1, correo2)" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z]+)$" maxlength="199" placeholder="nombre2_usuario@miemail.com">
+						<input type="email" id="correo2" name="correo2" class="span12" onblur="comprobarCorreos(correo1, correo2)" maxlength="199" placeholder="nombre2_usuario@miemail.com">
 					</div>
 				</div>	
 				<div class="control-group">
 					<label class="control-label" for="telefono">8.- <font color="red">*</font> Teléfono:</label>
 					<div class="controls">
-						<input id="telefono" name="telefono" class="span12" maxlength="10" minlength="7" type="text" pattern="[0-9]{8}" title="Ingrese sólo números" placeholder="Ingrese solo numeros" required>
+						<input id="telefono" name="telefono" class="span12" maxlength="10" minlength="7" type="text" pattern="[0-9]{8}" title="Ingrese sólo números" placeholder="Ingrese solo numeros">
 					</div>
 				</div>
 				<div class="control-group">
