@@ -140,6 +140,7 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut_profesor);
 		}
 		$this->db->where('seccion.ID_SECCION', $id_seccion);
+		$this->db->order_by('planificacion_clase.FECHA_PLANIFICADA');
 		$query = $this->db->get('sesion_de_clase');
 		//echo $this->db->last_query();
 		if ($query == FALSE) {

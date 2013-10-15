@@ -56,6 +56,7 @@
 					td = document.createElement('td'); //Creo la celda
 					nodoSelect = document.createElement('select');
 					nodoSelect.setAttribute("id", 'moduloTematico_'+arrayRespuesta[i].id);
+					nodoSelect.setAttribute("class", 'span8');
 					nodoSelect.setAttribute("onchange", 'moduloTematicoSeleccionado(this)');
 					//Agrego los modulos temáticos al select
 					elementoSelect = document.createElement('option');
@@ -80,6 +81,7 @@
 					var listaSesiones = getSesionesByModuloTematico(arrayRespuesta[i].id_mod_tem, arrayRespuesta[i].id);
 					td = document.createElement('td'); //Creo la celda
 					nodoSelect = document.createElement('select');
+					nodoSelect.setAttribute("class", 'span12');
 					nodoSelect.setAttribute("id", 'sesion_seccion_'+arrayRespuesta[i].id);
 					nodoSelect.setAttribute("name", 'sesion_seccion['+arrayRespuesta[i].id+']');
 					//Agrego las sesiones para el módulo temático seleccionado
@@ -242,10 +244,6 @@
 					<button class="btn" type="button" onclick="guardarAsignacionActual()">
 						<div class="btn_with_icon_solo">Ã</div>
 						&nbsp; Guardar
-					</button>
-					<button class="btn" type="button" onclick="resetearAsignacionActual()">
-						<div class="btn_with_icon_solo">Â</div>
-						&nbsp; Cancelar
 					</button>
 				</div>
 				<?php

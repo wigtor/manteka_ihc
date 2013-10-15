@@ -190,6 +190,24 @@ class Model_planificacion extends CI_Model {
 		return $query->result();
 	}
 
+
+	public function setAsignacionSesionSeccion($id_seccion, $id_sesion) {
+		$this->db->trans_start();
+		
+		$datos = array('ID_SESION' => $id_sesion);
+		$this->db->where('ID_SECCION', $id_seccion);
+		$this->db->update('seccion', $datos);
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+	}
+
+
 	public function cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem) {
 		$this->db->select('COUNT( ID_PLANIFICACION_CLASE ) AS resultado');
 		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');

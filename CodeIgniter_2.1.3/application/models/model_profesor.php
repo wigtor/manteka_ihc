@@ -203,7 +203,7 @@ class Model_profesor extends CI_Model {
 		$this->db->select('TIPO_PROFESOR AS tipo_profesor');
 		$this->db->select('CORREO1_USER AS correo1');
 		$this->db->select('CORREO2_USER AS correo2');
-		$this->db->select('GROUP_CONCAT( NOMBRE_MODULO) AS moduloTematico');
+		$this->db->select('GROUP_CONCAT( DISTINCT NOMBRE_MODULO) AS moduloTematico');
 		$this->db->select('GROUP_CONCAT( CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION )) AS seccion', FALSE);
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('tipo_profesor', 'profesor.ID_TIPO_PROFESOR = tipo_profesor.ID_TIPO_PROFESOR');
@@ -214,6 +214,7 @@ class Model_profesor extends CI_Model {
 		$this->db->join('planificacion_clase', 'ayu_profe.ID_AYU_PROFE = planificacion_clase.ID_AYU_PROFE', 'LEFT OUTER');
 		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
 		$this->db->where('profesor.RUT_USUARIO', $rut);
+		//$this->db->where('seccion.ID_SESION', 'planificacion_clase.ID_SESION', FALSE);
 		$this->db->group_by('profesor.RUT_USUARIO');
 		$query = $this->db->get('profesor');
 		if ($query == FALSE) {

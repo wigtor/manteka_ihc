@@ -484,8 +484,28 @@ class Model_modulo_tematico extends CI_Model {
 		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('profe_equi_lider', 'profesor.RUT_USUARIO = profe_equi_lider.RUT_USUARIO', 'LEFT OUTER');
 		$this->db->where('profe_equi_lider.RUT_USUARIO IS NULL', null, false);
-		//$this->db->where('profesor.RUT_USUARIO', $rut);
 		$this->db->order_by("APELLIDO1", "asc");
+		$query = $this->db->get('profesor');
+		//echo $this->db->last_query().'  ';
+		if ($query == FALSE) {
+			$query = array();
+			return $query;
+		}
+		return $query->result();
+	}
+
+
+	public function getAllProfesores() {
+		$this->db->select('profe_equi_lider.RUT_USUARIO');
+		$this->db->select('profesor.RUT_USUARIO AS id');
+		$this->db->select('NOMBRE1 AS nombre1');
+		$this->db->select('NOMBRE2 AS nombre2');
+		$this->db->select('APELLIDO1 AS apellido1');
+		$this->db->select('APELLIDO2 AS apellido2');
+		$this->db->join('usuario', 'profesor.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->join('profe_equi_lider', 'profesor.RUT_USUARIO = profe_equi_lider.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->order_by("APELLIDO1", "asc");
+		$this->db->group_by("profesor.RUT_USUARIO");
 		$query = $this->db->get('profesor');
 		//echo $this->db->last_query().'  ';
 		if ($query == FALSE) {

@@ -26,6 +26,14 @@
 		$('#id_profesoresEquipo').val("");
 	}
 
+	function seleccionadoLider(selectorLider) {
+		var rutLider = $(selectorLider).val();
+		console.log(rutLider);
+		$("#id_profesoresEquipo option[value='"+rutLider+"']")
+			.attr("disabled", "disabled")
+			.siblings().removeAttr("disabled");
+	}
+
 </script>
 
 
@@ -88,7 +96,8 @@
 				<div class="control-group">
 					<label class="control-label" for="id_profesorLider" >4.- <font color="red">*</font> Asignar profesor lider:</label>
 					<div class="controls">
-						<select required id="id_profesorLider" name="id_profesorLider" class="span12" title="asigne profesor lider">
+						<select required id="id_profesorLider" name="id_profesorLider" onchange="seleccionadoLider(this);" class="span12" title="asigne profesor lider">
+							<option value="" selected="selected" disabled="disabled">Seleccione profesor</option>
 						<?php
 						if (isset($posiblesProfesoresLider)) {
 							foreach ($posiblesProfesoresLider as $profe) {

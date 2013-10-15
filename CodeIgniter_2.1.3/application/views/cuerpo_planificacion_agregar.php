@@ -230,7 +230,7 @@
 			<div class="control-group">
 				<label class="control-label" for="sala">4.- <font color="red">*</font> Sala:</label>
 				<div class="controls">
-					<select id="sala" name="sala" class="span6" required>
+					<select id="sala" name="sala" class="span7" required>
 						<option value="" disabled selected>Seleccione sala</option>
 							<?php
 							if (isset($listadoSalas)) {

@@ -49,8 +49,8 @@ class Modulos extends MasterManteka {
 			$this->load->model("Model_modulo_tematico");
 			$datos_vista = array();
 
-			$datos_vista['posiblesProfesoresLider'] = $this->Model_modulo_tematico->getAllProfesoresWhitoutEquipo();
-			$datos_vista['posiblesProfesoresEquipo'] = $this->Model_modulo_tematico->getAllProfesoresWhitoutEquipo();
+			$datos_vista['posiblesProfesoresLider'] = $this->Model_modulo_tematico->getAllProfesores();
+			$datos_vista['posiblesProfesoresEquipo'] = $this->Model_modulo_tematico->getAllProfesores();
 			$datos_vista['implementosModulo'] = $this->Model_modulo_tematico->getAllImplementos();
 
 	 		$subMenuLateralAbierto = "agregarModulo"; //Para este ejemplo, los informes no tienen submenu lateral

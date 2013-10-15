@@ -196,11 +196,44 @@ class Planificacion extends MasterManteka {
 			return;
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
-			$datos_vista = array();
-			$subMenuLateralAbierto = "asignacionActual"; 
-			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$this->load->model('Model_Planificacion');
+			$id_planificacion = $this->input->post('id_planificacion');
+			$confirmacion = TRUE;
+			$array_sesion_seccion = $this->input->post('sesion_seccion');
+			if ($array_sesion_seccion == NULL) {
+				$array_sesion_seccion = array();
+			}
+
+			//Cada iteración es una sección
+			foreach ($array_sesion_seccion as $id_seccion => $id_sesion) {
+				if ($id_seccion == '') {
+					$id_seccion = NULL;
+				}
+				if ($id_sesion == '') {
+					$id_sesion = NULL;
+				}
+				//echo 'Seccion con id: '.$id_seccion.' va en la sesión con id: '.$id_sesion.'<br>';
+				$confirmacion = $confirmacion && $this->Model_Planificacion->setAsignacionSesionSeccion($id_seccion, $id_sesion);
+			}
+
+			if ($confirmacion == TRUE){
+				// mostramos el mensaje de operacion realizada
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha actualizado la asignación actual de secciones";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Ha ocurrido un error con la eliminación en base de datos";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			
+			
+			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Planificacion/asignacionActual"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["nombre_redirecTo"] = "Asignación actual"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
-			$this->cargarTodo("Planificacion", 'cuerpo_asignacion_actual', "barra_lateral_planificacion", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
 	}
 

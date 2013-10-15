@@ -715,6 +715,49 @@ class Estudiantes extends MasterManteka {
 			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
+
+
+	public function verCalificaciones() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$datos_vista['ONLY_VIEW'] = TRUE;
+			$this->load->model('Model_seccion');
+			$rutProfesor = $this->session->userdata('rut');
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+
+			$subMenuLateralAbierto = 'verCalificaciones'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function getEvaluacionesBySeccionAndProfesorAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$id_seccion = $this->input->post('seccion');
+		$rut_profesor = $this->session->userdata('rut');
+		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+			$esCoordinador = TRUE;
+		}
+		else {
+			$esCoordinador = FALSE;
+		}
+		$this->load->model('Model_calificaciones');
+		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador);
+		
+		echo json_encode($resultado);
+	}
 }
 
 /* End of file Estudiantes.php */
