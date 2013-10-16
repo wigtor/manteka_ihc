@@ -71,14 +71,17 @@
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la Calificaciones
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
-							for (var k = 0; (k < arrayObjectRespuesta[i].Calificaciones.length) && (k < lista_idEvaluaciones.length) ; k++) {
+							for (var k = 0; (k < arrayObjectRespuesta[i].notas.length) && (k < lista_idEvaluaciones.length) ; k++) {
 								td = document.createElement('td'); //Creo la celda
 								divTd = document.createElement('div');
 								divTd.setAttribute('class', 'row-fluid');
 
 								nodo = document.createElement('input');
-								nodo.setAttribute("type", 'checkbox');
-								nodo.setAttribute("class", 'span3');
+								nodo.setAttribute("type", 'numeric');
+								nodo.setAttribute("step", '0.1');
+								nodo.setAttribute("min", '1');
+								nodo.setAttribute("max", '7');
+								nodo.setAttribute("class", 'span2');
 
 								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
 								nodoComentario = document.createElement('input');
@@ -118,9 +121,9 @@
 									}
 								?>
 								nodo.setAttribute("name", 'Calificaciones['+arrayObjectRespuesta[i].rut+']['+lista_idEvaluaciones[k]+']');
-								estaPresente = arrayObjectRespuesta[i].Calificaciones[k].presente == undefined ? false : arrayObjectRespuesta[i].Calificaciones[k].presente;
-								estaPresente = arrayObjectRespuesta[i].Calificaciones[k].presente == 1 ? true : false; //paso a booleano
-								$(nodo).prop('checked', estaPresente);
+								nota = arrayObjectRespuesta[i].notas[k].nota == undefined ? "" : arrayObjectRespuesta[i].notas[k].nota;
+								//nota = arrayObjectRespuesta[i].Calificaciones[k].nota == 1 ? true : false; //paso a booleano
+								$(nodo).prop('value', nota);
 								nodo.setAttribute("id", 'Calificaciones_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]);
 
 
@@ -225,24 +228,8 @@
 		for (var i = 0; i < listaCalificaciones.length; i++) {
 			th = document.createElement('th');
 
-			//Agrego el input que los checkea a todos
-			nodoCheckeable = document.createElement('input');
-			nodoCheckeable.setAttribute('data-previous', 'false,true,false');
-			nodoCheckeable.setAttribute('type', 'checkbox');
-			<?php 
-				if ($ONLY_VIEW === TRUE) {
-					?>
-			nodoCheckeable.setAttribute("disabled", 'disabled');
-					<?php
-				}
-			?>
-			nodoCheckeable.setAttribute('id', 'selectorTodos_'+listaCalificaciones[i].id);
-			nodoCheckeable.setAttribute('title', 'Seleccionar todos');
-			nodoCheckeable.setAttribute('onchange', "checkAll(this);");
-			th.appendChild(nodoCheckeable);
-
 			//Agrego la fecha de la sesión
-			nodoTexto = document.createTextNode(listaCalificaciones[i].fecha_planificada);
+			nodoTexto = document.createTextNode(listaCalificaciones[i].nombre);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}

@@ -372,144 +372,6 @@ class Estudiantes extends MasterManteka {
 
 	/**
 	*
-	* Obtiene para la vista los estudiantes de una sección determinada
-	*
-	* Se consulta el estado de logueado del usuario si lo esta se llama a la función
-	* en el modelo para obtener los datos de los estudianes que pertencenede a la sección $cod_seccion 
-	* obtenida de la vista.
-	**/
-	public function getEstudiantesBySeccionAjax() {
-		if (!$this->input->is_ajax_request()) {
-			return;
-		}
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$id_seccion = $this->input->post('id_seccion');
-		$this->load->model('Model_estudiante');
-		$resultado = $this->Model_estudiante->getEstudiantesBySeccion($id_seccion);
-		echo json_encode($resultado);
-	}
-
-
-	public function getAsistenciaEstudiantesBySeccionAjax() {
-		if (!$this->input->is_ajax_request()) {
-			return;
-		}
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$id_seccion = $this->input->post('id_seccion');
-		$rut_usuario = $this->session->userdata('rut');
-		$this->load->model('Model_asistencia');
-		$this->load->model('Model_estudiante');
-		$this->load->model('Model_planificacion');
-		$this->load->model('Model_modulo_tematico');
-		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
-			$id_modulo_tem = NULL;
-		}
-		else {
-			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
-		}
-		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
-		foreach ($listaEstudiantes as $estudiante) {
-			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
-			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
-			$estudiante->asistencia = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
-			while (count($estudiante->asistencia) < $cantidadSesiones) {
-				$estudiante->asistencia[count($estudiante->asistencia)]['presente'] = 0;
-			}
-			$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			while (count($estudiante->comentarios) < $cantidadSesiones) {
-				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
-			}
-		}
-		echo json_encode($listaEstudiantes);
-	}
-
-
-
-	/**
-	* Método que responde a una solicitud de post para pedir los datos de un estudiante
-	* Recibe como parámetro el rut del estudiante
-	*/
-	public function getDetallesEstudianteAjax() {
-		if (!$this->input->is_ajax_request()) {
-			return;
-		}
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-
-		$rut = $this->input->post('rut');
-		$this->load->model('Model_estudiante');
-		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
-		echo json_encode($resultado);
-	}
-
-
-	/**
-	* Se buscan estudiantes de forma asincrona para mostrarlos en la vista
-	*
-	**/
-	public function getEstudiantesAjax() {
-		if (!$this->input->is_ajax_request()) {
-			return;
-		}
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-		$textoFiltro = $this->input->post('textoFiltroBasico');
-		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
-		$id_tipo_usr_consultante = $this->session->userdata('id_tipo_usuario');
-		$rut = $this->session->userdata('rut');
-		
-		$this->load->model('Model_estudiante');
-		$resultado = $this->Model_estudiante->getEstudiantesByFilter($textoFiltro, $textoFiltrosAvanzados, $rut, $id_tipo_usr_consultante);
-		
-		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
-		if (count($resultado) > 0) {
-			$this->load->model('Model_busqueda');
-			//Se debe insertar sólo si se encontraron resultados
-			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'estudiantes', $this->session->userdata('rut'));
-			$cantidad = count($textoFiltrosAvanzados);
-			for ($i = 0; $i < $cantidad; $i++) {
-				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'estudiantes', $this->session->userdata('rut'));
-			}
-		}
-		echo json_encode($resultado);
-	}
-
-
-	/**
-	*
-	* Se obtienen todas las secciones que hay ingresadas en manteka
-	*
-	**/
-	public function getAllSeccionesAjax() {
-		if (!$this->input->is_ajax_request()) {
-			return;
-		}
-		if (!$this->isLogged()) {
-			//echo 'No estás logueado!!';
-			return;
-		}
-		$this->load->model('Model_seccion');
-
-		$resultado = $this->Model_seccion->getAllSecciones();
-		echo json_encode($resultado);
-	}
-	
-
-	/**
-	*
 	* Controla la carga masiva de estudiantes en el sistema
 	*
 	* Se realiza la configuración del archivo que esta permitido cargar en el sistema indicando la ruta, la extención y el tamaño
@@ -737,6 +599,164 @@ class Estudiantes extends MasterManteka {
 	}
 
 
+	public function agregarCalificaciones() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$datos_vista['ONLY_VIEW'] = FALSE;
+			$this->load->model('Model_seccion');
+			$rutProfesor = $this->session->userdata('rut');
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+
+			$subMenuLateralAbierto = 'agregarCalificaciones'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	/**
+	*
+	* Obtiene para la vista los estudiantes de una sección determinada
+	*
+	* Se consulta el estado de logueado del usuario si lo esta se llama a la función
+	* en el modelo para obtener los datos de los estudianes que pertencenede a la sección $cod_seccion 
+	* obtenida de la vista.
+	**/
+	public function getEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getEstudiantesBySeccion($id_seccion);
+		echo json_encode($resultado);
+	}
+
+
+	public function getAsistenciaEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_asistencia');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_planificacion');
+		$this->load->model('Model_modulo_tematico');
+		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+			$id_modulo_tem = NULL;
+		}
+		else {
+			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
+		}
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
+			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
+			$estudiante->asistencia = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			while (count($estudiante->asistencia) < $cantidadSesiones) {
+				$estudiante->asistencia[count($estudiante->asistencia)]['presente'] = 0;
+			}
+			$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			while (count($estudiante->comentarios) < $cantidadSesiones) {
+				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
+			}
+		}
+		echo json_encode($listaEstudiantes);
+	}
+
+
+
+	/**
+	* Método que responde a una solicitud de post para pedir los datos de un estudiante
+	* Recibe como parámetro el rut del estudiante
+	*/
+	public function getDetallesEstudianteAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$rut = $this->input->post('rut');
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getDetallesEstudiante($rut);
+		echo json_encode($resultado);
+	}
+
+
+	/**
+	* Se buscan estudiantes de forma asincrona para mostrarlos en la vista
+	*
+	**/
+	public function getEstudiantesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$textoFiltro = $this->input->post('textoFiltroBasico');
+		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
+		$id_tipo_usr_consultante = $this->session->userdata('id_tipo_usuario');
+		$rut = $this->session->userdata('rut');
+		
+		$this->load->model('Model_estudiante');
+		$resultado = $this->Model_estudiante->getEstudiantesByFilter($textoFiltro, $textoFiltrosAvanzados, $rut, $id_tipo_usr_consultante);
+		
+		/* ACÁ SE ALMACENA LA BÚSQUEDA REALIZADA POR EL USUARIO */
+		if (count($resultado) > 0) {
+			$this->load->model('Model_busqueda');
+			//Se debe insertar sólo si se encontraron resultados
+			$this->Model_busqueda->insertarNuevaBusqueda($textoFiltro, 'estudiantes', $this->session->userdata('rut'));
+			$cantidad = count($textoFiltrosAvanzados);
+			for ($i = 0; $i < $cantidad; $i++) {
+				$this->Model_busqueda->insertarNuevaBusqueda($textoFiltrosAvanzados[$i], 'estudiantes', $this->session->userdata('rut'));
+			}
+		}
+		echo json_encode($resultado);
+	}
+
+
+	/**
+	*
+	* Se obtienen todas las secciones que hay ingresadas en manteka
+	*
+	**/
+	public function getAllSeccionesAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$this->load->model('Model_seccion');
+
+		$resultado = $this->Model_seccion->getAllSecciones();
+		echo json_encode($resultado);
+	}
+
+
 	public function getEvaluacionesBySeccionAndProfesorAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
@@ -757,6 +777,50 @@ class Estudiantes extends MasterManteka {
 		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador);
 		
 		echo json_encode($resultado);
+	}
+
+
+	public function getCalificacionesEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_calificaciones');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_modulo_tematico');
+		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+			$id_modulo_tem = NULL;
+		}
+		else {
+			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
+		}
+		//DE AQUÍ PARA ABAJO HAY QUE CAMBIAR
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			
+			$estudiante->notas = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
+			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
+			$estudiante->notas = $this->Model_calificaciones->getCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			$cantidadCalificaciones = $this->Model_calificaciones->cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			//echo 'Cantidad calificaciones: '.$cantidadCalificaciones.' ';
+			
+			while (count($estudiante->notas) < $cantidadCalificaciones) {
+				$estudiante->notas[count($estudiante->notas)]['nota'] = "";
+			}
+			$estudiante->comentarios = $this->Model_calificaciones->getComentariosCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			while (count($estudiante->comentarios) < $cantidadCalificaciones) {
+				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
+			}
+			
+			
+		}
+		echo json_encode($listaEstudiantes);
 	}
 }
 

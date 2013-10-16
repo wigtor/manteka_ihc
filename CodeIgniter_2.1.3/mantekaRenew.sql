@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     07/10/2013 4:07:45 p. m.                     */
+/* Created on:     16/10/2013 11:42:16 a. m.                    */
 /*==============================================================*/
 
 
@@ -88,7 +88,8 @@ drop table if exists usuario;
 create table act_estudiante
 (
    ID_ACT               int not null,
-   RUT_USUARIO          int not null
+   RUT_USUARIO          int not null,
+   primary key (ID_ACT, RUT_USUARIO)
 );
 
 alter table act_estudiante comment 'Se utiliza con el fin de representar que muchos estudiantes ';
@@ -125,12 +126,13 @@ create table adjunto
 /*==============================================================*/
 create table asistencia
 (
+   RUT_USUARIO          int not null,
    ID_SESION            int not null,
    ID_SUSPENCION        int,
-   RUT_USUARIO          int not null,
    PRESENTE_ASISTENCIA  bool,
    JUSTIFICADO_ASISTENCIA bool,
-   COMENTARIO_ASISTENCIA varchar(100)
+   COMENTARIO_ASISTENCIA varchar(100),
+   primary key (RUT_USUARIO, ID_SESION)
 );
 
 /*==============================================================*/
@@ -221,8 +223,9 @@ alter table carta comment 'Esta carta representa la posibilidad de crear un mail
 /*==============================================================*/
 create table carta_persona
 (
+   ID_PERSONA           int not null,
    ID_CORREO            int not null,
-   ID_PERSONA           int not null
+   primary key (ID_PERSONA, ID_CORREO)
 );
 
 /*==============================================================*/
@@ -233,7 +236,8 @@ create table carta_usuario
    ID_CORREO            int not null,
    RUT_USUARIO          int not null,
    NO_LEIDA_CARTA_USUARIO bool,
-   RECIBIDA_CARTA_USUARIO bool
+   RECIBIDA_CARTA_USUARIO bool,
+   primary key (ID_CORREO, RUT_USUARIO)
 );
 
 alter table carta_usuario comment 'Representa la posibilidad que tiene un coordinador de enviar';
@@ -373,8 +377,9 @@ alter table implemento comment 'Es utilizada con el fin de indicar los artefacto
 /*==============================================================*/
 create table implementos_modulo_tematico
 (
-   ID_IMPLEMENTO        int,
-   ID_MODULO_TEM        int not null
+   ID_MODULO_TEM        int not null,
+   ID_IMPLEMENTO        int not null,
+   primary key (ID_MODULO_TEM, ID_IMPLEMENTO)
 );
 
 alter table implementos_modulo_tematico comment 'Es utilizada para tratar la relación n a n que existe entre ';
@@ -411,10 +416,11 @@ alter table modulo_tematico comment 'Es la unidad temática que se le pasará a lo
 /*==============================================================*/
 create table nota
 (
-   ID_EVALUACION        int not null,
    RUT_USUARIO          int not null,
-   VALOR_NOTA           decimal(2,2),
-   COMENTARIO_NOTA      varchar(100)
+   ID_EVALUACION        int not null,
+   VALOR_NOTA           real,
+   COMENTARIO_NOTA      varchar(100),
+   primary key (RUT_USUARIO, ID_EVALUACION)
 );
 
 /*==============================================================*/
@@ -436,7 +442,7 @@ create table planificacion_clase
 (
    ID_PLANIFICACION_CLASE int not null auto_increment,
    ID_SESION            int not null,
-   ID_SALA              int not null,
+   ID_SALA              int,
    ID_AYU_PROFE         int,
    ID_SECCION           int not null,
    FECHA_PLANIFICADA    date,
@@ -466,9 +472,10 @@ alter table plantilla comment 'Se refiere a las plantillas que se podrán adjunta
 /*==============================================================*/
 create table profe_equi_lider
 (
-   ID_EQUIPO            int,
-   RUT_USUARIO          int,
-   LIDER_PROFESOR       bool not null
+   ID_EQUIPO            int not null,
+   RUT_USUARIO          int not null,
+   LIDER_PROFESOR       bool not null,
+   primary key (ID_EQUIPO, RUT_USUARIO)
 );
 
 /*==============================================================*/
@@ -505,7 +512,8 @@ alter table sala comment 'Es el lugar físico en donde los estudiantes tendrán su
 create table sala_implemento
 (
    ID_SALA              int not null,
-   ID_IMPLEMENTO        int not null
+   ID_IMPLEMENTO        int not null,
+   primary key (ID_SALA, ID_IMPLEMENTO)
 );
 
 alter table sala_implemento comment 'Se utiliza para representar la relación que exite entre las ';
@@ -657,10 +665,10 @@ alter table estudiante add constraint FK_INHERIT_USUARIO4 foreign key (RUT_USUAR
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table estudiante add constraint FK_RELATIONSHIP_1 foreign key (COD_CARRERA)
-      references carrera (COD_CARRERA) on delete cascade on update cascade;
+      references carrera (COD_CARRERA) on delete restrict on update cascade;
 
 alter table estudiante add constraint FK_RELATIONSHIP_6 foreign key (ID_SECCION)
-      references seccion (ID_SECCION) on delete cascade on update cascade;
+      references seccion (ID_SECCION) on delete set null on update cascade;
 
 alter table evaluacion add constraint FK_RELATIONSHIP_48 foreign key (ID_MODULO_TEM)
       references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
@@ -672,10 +680,10 @@ alter table historiales_busqueda add constraint FK_RELATIONSHIP_51 foreign key (
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table horario add constraint FK_RELATIONSHIP_8 foreign key (ID_DIA)
-      references dia_horario (ID_DIA) on delete cascade on update cascade;
+      references dia_horario (ID_DIA) on delete restrict on update cascade;
 
 alter table horario add constraint FK_RELATIONSHIP_9 foreign key (ID_MODULO)
-      references modulo_horario (ID_MODULO) on delete cascade on update cascade;
+      references modulo_horario (ID_MODULO) on delete restrict on update cascade;
 
 alter table implementos_modulo_tematico add constraint FK_RELATIONSHIP_27 foreign key (ID_MODULO_TEM)
       references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
@@ -690,10 +698,10 @@ alter table nota add constraint FK_RELATIONSHIP_42 foreign key (ID_EVALUACION)
       references evaluacion (ID_EVALUACION) on delete cascade on update cascade;
 
 alter table planificacion_clase add constraint FK_RELATIONSHIP_10 foreign key (ID_SALA)
-      references sala (ID_SALA) on delete cascade on update cascade;
+      references sala (ID_SALA) on delete set null on update cascade;
 
 alter table planificacion_clase add constraint FK_RELATIONSHIP_54 foreign key (ID_AYU_PROFE)
-      references ayu_profe (ID_AYU_PROFE) on delete cascade on update cascade;
+      references ayu_profe (ID_AYU_PROFE) on delete restrict on update cascade;
 
 alter table planificacion_clase add constraint FK_RELATIONSHIP_55 foreign key (ID_SECCION)
       references seccion (ID_SECCION) on delete cascade on update cascade;
@@ -714,7 +722,7 @@ alter table profesor add constraint FK_INHERIT_USUARIO2 foreign key (RUT_USUARIO
       references usuario (RUT_USUARIO) on delete cascade on update cascade;
 
 alter table profesor add constraint FK_RELATIONSHIP_52 foreign key (ID_TIPO_PROFESOR)
-      references tipo_profesor (ID_TIPO_PROFESOR) on delete cascade on update cascade;
+      references tipo_profesor (ID_TIPO_PROFESOR) on delete restrict on update cascade;
 
 alter table sala_implemento add constraint FK_RELATIONSHIP_16 foreign key (ID_SALA)
       references sala (ID_SALA) on delete cascade on update cascade;
@@ -723,14 +731,14 @@ alter table sala_implemento add constraint FK_RELATIONSHIP_17 foreign key (ID_IM
       references implemento (ID_IMPLEMENTO) on delete cascade on update cascade;
 
 alter table seccion add constraint FK_RELATIONSHIP_11 foreign key (ID_HORARIO)
-      references horario (ID_HORARIO) on delete cascade on update cascade;
+      references horario (ID_HORARIO) on delete restrict on update cascade;
 
 alter table seccion add constraint FK_RELATIONSHIP_49 foreign key (ID_SESION)
-      references sesion_de_clase (ID_SESION) on delete cascade on update cascade;
+      references sesion_de_clase (ID_SESION) on delete set null on update cascade;
 
 alter table sesion_de_clase add constraint FK_RELATIONSHIP_13 foreign key (ID_MODULO_TEM)
       references modulo_tematico (ID_MODULO_TEM) on delete cascade on update cascade;
 
 alter table usuario add constraint FK_RELATIONSHIP_23 foreign key (ID_TIPO)
-      references tipo_user (ID_TIPO) on delete cascade on update cascade;
+      references tipo_user (ID_TIPO) on delete restrict on update cascade;
 
