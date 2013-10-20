@@ -510,33 +510,23 @@ class Estudiantes extends MasterManteka {
 					if (array_key_exists ($rut, $asistencia)) { //Compruebo el primer índice (rut)
 						if (array_key_exists ($id_sesion_de_clase, $asistencia[$rut])) { //Compruebo el segundo índice (id_sesion)
 							$asistio = TRUE;
-
-							$justificado = !$asistio; //la negación de si asistió por defecto
-							if ($comentario !== NULL) {
-								if (trim($comentario) === "") { //Si el comentario es vacio
-									$justificado = FALSE;
-									$comentario = NULL;
-								}
-							}
-							else { //Si no hay comentario
-								$justificado = FALSE;
-							}
-
-
-							$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
 						}
 					}
-					else {
-						$asistio = FALSE;
+
+					$justificado = !$asistio; //la negación de si asistió por defecto
+					if ($comentario !== NULL) {
+						if (trim($comentario) === "") { //Si el comentario es vacio
+							$justificado = FALSE;
+							$comentario = NULL;
+						}
+					}
+					else { //Si no hay comentario
 						$justificado = FALSE;
-						$comentario = NULL;
+					}
+					if (($asistio == TRUE) || ($comentario != NULL) || ($justificado == TRUE)) {
 						$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
-						
 					}
 				}
-
-
-				
 			}
 
 			if ($confirmacion == TRUE) {
@@ -615,6 +605,72 @@ class Estudiantes extends MasterManteka {
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function postAgregarCalificaciones() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_calificaciones');
+			$rut_profesor = $this->session->userdata('rut');
+			$notas = $this->input->post('Calificaciones');
+			if ($notas == FALSE)
+				$notas = array();
+			$comentarios = $this->input->post('comentario');
+			$id_seccion = $this->input->post('seccion'); //No es necesario más que para hacer control de reglas de negocio después
+			//echo 'Se está implementando esto, largo array notas:'.count($notas).'  comentario:'.count($comentarios).'...';
+			$confirmacion = TRUE;
+			//echo 'Largo comentarios: '.count($comentarios).'  '.$comentarios.'caca ';
+			foreach ($comentarios as $rut => $arrayComentarioByEvaluacion) { //Comentarios tiene todos los ruts de la sección como key
+				foreach ($arrayComentarioByEvaluacion as $id_evaluacion => $comentario) {
+					$nota = NULL;
+					if (array_key_exists ($rut, $notas)) { //Compruebo el primer índice (rut)
+						if (array_key_exists ($id_evaluacion, $notas[$rut])) { //Compruebo el segundo índice (id_evaluacion)
+							$nota = $notas[$rut][$id_evaluacion];
+
+							if ($comentario !== NULL) {
+								if (trim($comentario) === "") { //Si el comentario es vacio
+									$comentario = NULL;
+								}
+							}
+							//echo 'NOTA: '.$nota.' comentario: '.$comentario.' rut_estudiante: '.$rut.'   ';
+
+
+							$confirmacion = $confirmacion && $this->Model_calificaciones->agregarCalificacion($rut_profesor, $rut, $nota, $comentario, $id_evaluacion);
+						}
+					}
+					else {
+						$nota = NULL;
+						$comentario = NULL;
+						$confirmacion = $confirmacion && $this->Model_calificaciones->agregarCalificacion($rut_profesor, $rut, $nota, $comentario, $id_evaluacion);
+						
+					}
+				}
+
+
+				
+			}
+
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha guardado la asistencia con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error al guardar la asistencia de algún estudiante";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Estudiantes/agregarCalificaciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["nombre_redirecTo"] = "Agregar Calificaciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
 	}
 

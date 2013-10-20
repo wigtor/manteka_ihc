@@ -77,11 +77,9 @@
 								divTd.setAttribute('class', 'row-fluid');
 
 								nodo = document.createElement('input');
-								nodo.setAttribute("type", 'numeric');
-								nodo.setAttribute("step", '0.1');
-								nodo.setAttribute("min", '1');
-								nodo.setAttribute("max", '7');
-								nodo.setAttribute("class", 'span2');
+								nodo.setAttribute("type", 'text');
+								nodo.setAttribute("pattern", "[1-6]([\.|,][0-9])|[1-7]([\.|,][0])|[1-7]?");
+								nodo.setAttribute("class", 'input-mini');
 
 								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
 								nodoComentario = document.createElement('input');
@@ -250,20 +248,6 @@
 <?php
 	if ($ONLY_VIEW !== TRUE) {
 ?>
-
-	function checkAll(checkboxAll) {
-		var idSesion = checkboxAll.id;
-		idSesion = idSesion.substring('selectorTodos_'.length, idSesion.length);//obtengo los 2 id separados por un _
-		//idSesion = idSesion.substring(idSesion.search('_'), idSesion.length);
-
-		var checkeado = false;
-		if ($(checkboxAll).is(':checked')) {
-			checkeado = true;
-		}
-		for (var i = 0; i < ruts_estudiantes.length; i++) {
-			$('#Calificaciones_'+ruts_estudiantes[i]+'_'+idSesion).prop('checked', checkeado);
-		}
-	}
 
 	function guardarCalificaciones() {
 		var form = document.forms["formAgregar"];

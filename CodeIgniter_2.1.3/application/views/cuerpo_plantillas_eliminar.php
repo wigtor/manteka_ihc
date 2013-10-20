@@ -308,7 +308,7 @@
 		$atributos = array('id'=>'editor', 'class'=>'ckeditor', 'name'=>'editor');
 		echo form_textarea($atributos);
 		?>
-		<input name="idPlantilla" type="hidden" id="idPlantilla" maxlength="6">
+		<input name="idPlantilla" type="hidden" id="idPlantilla">
 		<?php
 		echo form_close();
 		?>

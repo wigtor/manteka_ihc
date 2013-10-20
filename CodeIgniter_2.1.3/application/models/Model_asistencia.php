@@ -4,34 +4,66 @@ class Model_asistencia extends CI_Model {
 	public function agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase) {
 		
 		$this->db->trans_start();
-		$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
-			'JUSTIFICADO_ASISTENCIA' => $justificado, 
-			'COMENTARIO_ASISTENCIA' => $comentario);
-		$data2 = array('RUT_USUARIO' => $rut, 
-			'ID_SESION' => $id_sesion_de_clase,
-			'PRESENTE_ASISTENCIA' => $asistio, 
-			'JUSTIFICADO_ASISTENCIA' => $justificado, 
-			'COMENTARIO_ASISTENCIA' => $comentario);
 
+		$this->db->select('PRESENTE_ASISTENCIA');
+		$this->db->select('JUSTIFICADO_ASISTENCIA');
+		$this->db->select('COMENTARIO_ASISTENCIA');
 		$this->db->where('RUT_USUARIO', $rut);
 		$this->db->where('ID_SESION', $id_sesion_de_clase);
 		$primeraResp = $this->db->get('asistencia');
+		//echo $this->db->last_query().'    ';
 		if ($primeraResp == FALSE) {
-			return array();
+			$this->db->trans_complete();
+			return FALSE;
 		}
 		if ($primeraResp->num_rows() > 0) {
 			//Se intenta updatear si es que existe esa asistencia
+
 			$this->db->flush_cache();
+			$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
+				'JUSTIFICADO_ASISTENCIA' => $justificado, 
+				'COMENTARIO_ASISTENCIA' => $comentario);
 			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->where('ID_SESION', $id_sesion_de_clase);
-			$datos2 = $this->db->update('asistencia', $data1);
+			$this->db->update('asistencia', $data1);
+
+			//Si hubo cambios, entonces hago insert en auditoría
+			if ($this->db->affected_rows() > 0) {
+				$row_original = $primeraResp->row();
+				$asistioOri = $row_original->PRESENTE_ASISTENCIA;
+				$justificadoOri = $row_original->JUSTIFICADO_ASISTENCIA;
+				$comentarioOri = $row_original->COMENTARIO_ASISTENCIA;
+				$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
+					'NOMBRE' => 'UPDATE', 
+					'DATO_PRE_CAMBIO' => 'PRESENTE_ASISTENCIA=`'.$asistioOri.'`, '.'JUSTIFICADO_ASISTENCIA=`'.$justificadoOri.'`, '.'COMENTARIO_ASISTENCIA=`'.$comentarioOri.'`', 
+					'DATO_POST_CAMBIO' => 'PRESENTE_ASISTENCIA=`'.$asistio.'`, '.'JUSTIFICADO_ASISTENCIA=`'.$justificado.'`, '.'COMENTARIO_ASISTENCIA=`'.$comentario.'`', 
+					'TABLA_MODIFICADA'=> 'asistencia', 
+					'QUERY'=> $this->db->last_query());
+				$this->db->flush_cache();
+				$this->db->insert('auditoria', $datos_auditoria);
+			}
 		}
 		else {
 			//Se intenta insertar si no existe registro
 			$this->db->flush_cache();
-			$datos2 = $this->db->insert('asistencia', $data2);
+			$data2 = array('RUT_USUARIO' => $rut, 
+				'ID_SESION' => $id_sesion_de_clase,
+				'PRESENTE_ASISTENCIA' => $asistio, 
+				'JUSTIFICADO_ASISTENCIA' => $justificado, 
+				'COMENTARIO_ASISTENCIA' => $comentario);
+			$this->db->insert('asistencia', $data2);
+
+			$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
+					'NOMBRE' => 'INSERT', 
+					'DATO_PRE_CAMBIO' => NULL,
+					'DATO_POST_CAMBIO' => 'PRESENTE_ASISTENCIA=`'.$asistio.'`, '.'JUSTIFICADO_ASISTENCIA=`'.$justificado.'`, '.'COMENTARIO_ASISTENCIA=`'.$comentario.'`', 
+					'TABLA_MODIFICADA'=> 'asistencia', 
+					'QUERY'=> $this->db->last_query());
+			$this->db->flush_cache();
+			$this->db->insert('auditoria', $datos_auditoria);
+			//echo $this->db->last_query().'    ';
 		}
-		//echo $this->db->last_query();
+
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE) {

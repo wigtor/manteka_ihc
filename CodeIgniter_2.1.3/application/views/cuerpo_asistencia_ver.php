@@ -78,7 +78,7 @@
 
 								nodo = document.createElement('input');
 								nodo.setAttribute("type", 'checkbox');
-								nodo.setAttribute("class", 'span3');
+								nodo.setAttribute("class", 'input-mini');
 
 								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
 								nodoComentario = document.createElement('input');

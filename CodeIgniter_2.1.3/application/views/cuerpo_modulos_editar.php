@@ -6,247 +6,158 @@
 	var url_post_busquedas = "<?php echo site_url("Modulos/getModulosTematicosAjax") ?>";
 	var url_post_historial = "<?php echo site_url("HistorialBusqueda/buscar/modulos") ?>";
 
-	function Cancelar(){
-		document.getElementById("nombre_modulo").value = "";
-		document.getElementById("descripcion").value = "";
-		document.getElementById("cod_modulo").value = "";
-		document.getElementById("nombre_modulo2").value = "";
-		document.getElementById("cod_equipo2").value = "";
-	
-		var sesiones = document.getElementById("sesiones");
-		$(sesiones).empty();
-		var equipo = document.getElementById("equipo");
-		$(equipo).empty();
-		var profLider = document.getElementById("prof_lider");
-		$(profLider).empty();
-		var requisitos = document.getElementById("requisitos");
-		$(requisitos).empty();
-		
-		return false;
+	function editarModulo(){
+		var form = document.forms["formEditar"];
+		if ($('#id_moduloSeleccionado').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado módulo temático');
+			$('#textoErrorDialog').html('No ha seleccionado un módulo temático para editar');
+			$('#modalError').modal();
+			return;
+		}
+		if (form.checkValidity()) {
+			$('#tituloConfirmacionDialog').html('Confirmación para guardar cambios');
+			$('#textoConfirmacionDialog').html('¿Está seguro que desea guardar los cambios del módulo temático en el sistema?');
+			$('#modalConfirmacion').modal();
+		}
+		else {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('Revise los campos del formulario e intente nuevamente');
+			$('#modalError').modal();
+		}
 	}
+
+	function resetearModulo() {
+		$('#id_moduloSeleccionado').val("");
+
+		$('#nombre').val("");
+		$('#descripcion').val("");
+		$('#id_requisitos').val("");
+		$('#id_profesorLider').val("");
+		$('#id_profesoresEquipo').val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('tbody tr').removeClass('highlight');
+	}
+
 
 	function verDetalle(elemTabla) {
 		/* Obtengo el código del módulo clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
-		var cod_mod = idElem.substring(prefijo_tipoDato.length, idElem.length);
+		var codigo_modulo = idElem.substring(prefijo_tipoDato.length, idElem.length);
 
-		var descripcion, cod_equipo, name_mod; //Se setean en el primer ajax
+		/* Muestro el div que indica que se está cargando... */
+		$('#icono_cargando').show();
 
 		$.ajax({//AJAX PARA OBTENER LOS DETALLES DEL MÓDULO
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Modulos/postDetallesModulo") ?>", /* Se setea la url del controlador que responderá */
-			async: false, //con esto se hace que el ajax sea sincrono con la función javascript
-			data: { cod_modulo: cod_mod},
+			type: "POST",
+			url: "<?php echo site_url("Modulos/getDetallesModuloTematicoAjax") ?>",
+			data: { cod_modulo: codigo_modulo},
 			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var moduloRespuesta = jQuery.parseJSON(respuesta);
-				cod_equipo = $.trim(moduloRespuesta.cod_equipo);
-				descripcion = $.trim(moduloRespuesta.descripcion);
-				name_mod = $.trim(moduloRespuesta.nombre_mod);
-				if($.trim(moduloRespuesta.descripcion) ==""){
-					moduloRespuesta.descripcion = "No tiene descripcion";
-				}
+				var datos = jQuery.parseJSON(respuesta);
+				$("#descripcion").html(datos.nombre_modulo);
+				$("#nombre").val(datos.nombre_modulo);
+				$('#descripcion_modulo').val(datos.descripcion_modulo == '' ? 'Sin descripción' : $.trim(datos.descripcion_modulo));
+				$('#profesor_lider').html(datos.rut_profe_lider == '' ? '' : $.trim(datos.rut_profe_lider)+' - '+$.trim(datos.nombre1_profe_lider)+' '+$.trim(datos.apellido1_profe_lider)+' '+$.trim(datos.apellido2_profe_lider));
+				var codigo_modulo = datos.id_mod;
+
+				$.ajax({//AJAX PARA SESIONES
+					type: "POST",
+					url: "<?php echo site_url("Modulos/getSesionesByModuloTematicoAjax") ?>",
+					data: { id_mod_post: codigo_modulo},
+					success: function(respuesta) {
+						var tablaResultados = document.getElementById("sesiones");
+						$(tablaResultados).find('tbody').remove();
+						var arrayRespuesta = jQuery.parseJSON(respuesta);
+						var tr, td, th, nodoTexto;
+						tbody = document.createElement('tbody');
+
+						for (var i = 0; i < arrayRespuesta.length; i++) {
+								tr = document.createElement('tr');
+								tr.setAttribute("style", "cursor:default");
+								td = document.createElement('td');
+								if ((arrayRespuesta[i].descripcion == null) || $.trim(arrayRespuesta[i].descripcion) == '') {
+									arrayRespuesta[i].descripcion = 'Sin descripción';
+								}
+								td.setAttribute('title', arrayRespuesta[i].descripcion);
+								nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
+								td.appendChild(nodoTexto);
+								tr.appendChild(td);
+								tbody.appendChild(tr);
+						}
+						tablaResultados.appendChild(tbody);
+
+					}
+				});
+
+
+				$.ajax({//AJAX PARA EQUIPO y lider
+					type: "POST",
+					url: "<?php echo site_url("Modulos/getProfesoresByModuloTematicoAjax") ?>",
+					data: { id_mod_post: codigo_modulo},
+					success: function(respuesta) {
+						//para equipo
+						var tablaResultados = document.getElementById("equipo");
+						$(tablaResultados).find('tbody').remove();
+						var arrayRespuesta = jQuery.parseJSON(respuesta);
+						var tr, td, th,nodoTexto;
+						tbody = document.createElement('tbody');
+
+						for (var i = 0; i < arrayRespuesta.length; i++) {
+							tr = document.createElement('tr');
+							tr.setAttribute("style", "cursor:default;");
+							td = document.createElement('td');
+							var asterisco = "";
+							if(arrayRespuesta[i].esLider == true) {
+								asterisco = "* ";
+								tr.setAttribute("style", "cursor:default; font-weight:bold;");
+							}
+							nodoTexto = document.createTextNode(asterisco+arrayRespuesta[i].rut+" - "+arrayRespuesta[i].nombre1+" "+arrayRespuesta[i].apellido1+" "+arrayRespuesta[i].apellido2);
+							
+							td.appendChild(nodoTexto);
+							tr.appendChild(td);
+							tbody.appendChild(tr);
+							
+						}
+						tablaResultados.appendChild(tbody);
+					}	
+				});
+
+				
+				$.ajax({//AJAX PARA implementos
+					type: "POST",
+					url: "<?php echo site_url("Modulos/getImplementosByModuloTematicoAjax") ?>",
+					data: { id_mod_post: codigo_modulo},
+					success: function(respuesta) {
+						var tablaResultados = document.getElementById("implementos");
+						$(tablaResultados).find('tbody').remove();
+						var arrayRespuesta = jQuery.parseJSON(respuesta);
+						var tr, td, th,nodoTexto;
+						tbody = document.createElement('tbody');
+
+						for (var i = 0; i < arrayRespuesta.length; i++) {
+								tr = document.createElement('tr');
+								tr.setAttribute("style", "cursor:default");
+								td = document.createElement('td');
+								if ((arrayRespuesta[i].descripcion == null) || $.trim(arrayRespuesta[i].descripcion) == '') {
+									arrayRespuesta[i].descripcion = 'Sin descripción';
+								}
+								td.setAttribute('title', arrayRespuesta[i].descripcion);
+								nodoTexto = document.createTextNode(arrayRespuesta[i].nombre);
+								td.appendChild(nodoTexto);
+								tr.appendChild(td);
+								tbody.appendChild(tr);
+						}
+						tablaResultados.appendChild(tbody);				
+					}
+				});
+
+
+				/* Quito el div que indica que se está cargando */
+				$('#icono_cargando').hide();
 			}
 		});
-
-		$('#nombre_modulo').val(name_mod);
-		$('#cod_modulo').val(cod_mod);
-		$('#nombre_modulo2').val(name_mod);
-		$('#cod_equipo2').val(cod_equipo);
-		if(descripcion == "null"){
-			descripcion = "No hay descripción";
-		}
-		$('#descripcion').val(descripcion);
-		
-		$.ajax({//AJAX PARA SESIONES
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Modulos/obtenerSesionesEditar") ?>", /* Se setea la url del controlador que responderá */
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var tablaResultados = document.getElementById("sesiones");
-				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, input,nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre sesiones");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++) {
-					if(arrayRespuesta[i][1]==cod_mod || arrayRespuesta[i][1] == null){
-						tr = document.createElement('tr');
-						tr.setAttribute("style", "cursor:default");
-						td = document.createElement('td');
-						input = document.createElement('input');
-						input.setAttribute('type','checkbox');
-						input.setAttribute('value', arrayRespuesta[i][0]);
-						input.setAttribute("name", "sesion[]");
-						if(arrayRespuesta[i][1] == cod_mod){
-							input.setAttribute('checked', 'true');
-						}
-						td.setAttribute('title', arrayRespuesta[i][2]);
-						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][3]);
-						td.appendChild(input);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-						tablaResultados.appendChild(tr);
-						}
-				}
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
-		});
-		$.ajax({//AJAX PARA EQUIPO y lider
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Modulos/obtenerProfes") ?>", /* Se setea la url del controlador que responderá */
-			data: { cod_equipo_post: cod_equipo},
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-			//para equipo
-			var tablaResultados = document.getElementById("equipo");
-				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, input,nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre profesores");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++){
-					if( arrayRespuesta[i][0] == cod_equipo  || arrayRespuesta[i][0] == "" || arrayRespuesta[i][7] == cod_equipo
-						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==1)
-						|| (arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==1)
-					){
-						tr = document.createElement('tr');
-						tr.setAttribute("style", "cursor:default");
-						td = document.createElement('td');
-						input = document.createElement('input');
-						input.setAttribute('type','checkbox');
-						input.setAttribute('id',arrayRespuesta[i][1]);
-						input.setAttribute('value', arrayRespuesta[i][1]);
-						input.setAttribute("name", "profesores[]");
-						if(	(arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6]==1 && arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==0)
-						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==0 && arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8]==1)){
-							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','1','9')");
-							}
-						else{
-							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','1','0')");
-						}
-						if( (arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6] != 1) || (arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8] != 1)){
-							input.setAttribute('checked', 'true');
-						}
-						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
-						td.appendChild(input);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-						tablaResultados.appendChild(tr);
-					}
-				}
-				//para lider
-				tablaResultados = document.getElementById("prof_lider");
-				$(tablaResultados).empty();
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre profesores");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++){	
-					if( arrayRespuesta[i][0] == cod_equipo  || arrayRespuesta[i][0] == "" || arrayRespuesta[i][7] == cod_equipo
-						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==0)
-						|| (arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==0)
-					)			
-					{
-						tr = document.createElement('tr');
-						tr.setAttribute("style", "cursor:default");
-						td = document.createElement('td');
-						input = document.createElement('input');
-						input.setAttribute('type','radio');
-						input.setAttribute('value', arrayRespuesta[i][1]);
-						input.setAttribute('id',arrayRespuesta[i][1]);
-						input.setAttribute("name", "cod_profesor_lider");
-						if(	(arrayRespuesta[i][0] == cod_equipo && arrayRespuesta[i][6]==0 && arrayRespuesta[i][7] != cod_equipo && arrayRespuesta[i][8]==1)
-						|| (arrayRespuesta[i][0] != cod_equipo && arrayRespuesta[i][6]==1 && arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8]==0)){
-							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','2','9')");
-						}
-						else{
-							input.setAttribute("onClick", "noPuedeEstar('"+arrayRespuesta[i][1]+"','2','0')");
-							}
-						if( (arrayRespuesta[i][6] == 1 && arrayRespuesta[i][0] == cod_equipo)
-							||	(arrayRespuesta[i][7] == cod_equipo && arrayRespuesta[i][8]==1)
-						){
-							input.setAttribute('checked', 'true');
-						}
-						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][2]+" "+arrayRespuesta[i][3]+" "+arrayRespuesta[i][4]+" "+arrayRespuesta[i][5]);
-						td.appendChild(input);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-						tablaResultados.appendChild(tr);
-					}
-				}
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
-		});
-		$.ajax({//AJAX PARA requisitos
-			type: "POST", /* Indico que es una petición POST al servidor */
-			url: "<?php echo site_url("Modulos/obtenerRequisitos") ?>", /* Se setea la url del controlador que responderá */
-			data: { cod_mod_post: cod_mod},
-			success: function(respuesta) { /* Esta es la función que se ejecuta cuando el resultado de la respuesta del servidor es satisfactorio */
-				var tablaResultados = document.getElementById("requisitos");
-				$(tablaResultados).empty();
-				var arrayRespuesta = jQuery.parseJSON(respuesta);
-				var tr, td, th, thead, input,nodoTexto;
-				thead = document.createElement('thead');
-				tr = document.createElement('tr');
-				th = document.createElement('th');
-				nodoTexto = document.createTextNode("Nombre Requisitos");
-				th.appendChild(nodoTexto);
-				tr.appendChild(th);
-				thead.appendChild(tr);
-				tablaResultados.appendChild(thead);
-				for (var i = 0; i < arrayRespuesta.length; i++) {
-					
-						tr = document.createElement('tr');
-						tr.setAttribute("style", "cursor:default");
-						td = document.createElement('td');
-						input = document.createElement('input');
-						input.setAttribute('type','checkbox');
-						input.setAttribute('value', arrayRespuesta[i][0]);
-						input.setAttribute("name", "requisitos[]");
-						if(arrayRespuesta[i][3] == 1){
-							input.setAttribute('checked', 'true');
-						}						
-						if(arrayRespuesta[i][2]  == null){
-							td.setAttribute('title', "Sin descripción");
-						}else{
-							td.setAttribute('title', arrayRespuesta[i][2]);
-						}
-						nodoTexto = document.createTextNode(" "+arrayRespuesta[i][1]);
-						td.appendChild(input);
-						td.appendChild(nodoTexto);
-						tr.appendChild(td);
-						tablaResultados.appendChild(tr);
-				}
-
-				/* Quito el div que indica que se está cargando */
-				var iconoCargado = document.getElementById("icono_cargando");
-				$(icono_cargando).hide();
-				}
-		});
-		/* Muestro el div que indica que se está cargando... */
-		var iconoCargado = document.getElementById("icono_cargando");
-		$(icono_cargando).show();
 	}
+
 		
 	//Se cargan por ajax
 	$(document).ready(function() {
@@ -330,50 +241,7 @@ function noPuedeEstar(rut,num_lista,nopuede){
 				}
 			}
 		}
-}
-function editarMod(){
-		var sesion = document.getElementsByName("sesion[]");
-		var equipo = document.getElementsByName("profesores[]");
-		var cod=document.getElementById("cod_modulo").value;
-		var nombre=document.getElementById("nombre_modulo").value;
-		var des=document.getElementById("descripcion").value;
-
-		var cont;
-		var numS = 0;
-		var numE = 0;
-		for(cont=0;cont < sesion.length;cont++){
-			if(sesion[cont].checked == true){
-				numS = numS + 1;
-			}
-		}
-		
-		for(cont=0;cont < equipo.length;cont++){
-			if(equipo[cont].checked == true){
-				numE = numE + 1;
-			}
-		}if(numS == 0 &&cod!=""){
-			$('#EscojaSesion').modal();
-			return false;
-		}
-		if(numE == 0 && cod!=""){
-			$('#EscojaEquipo').modal();
-			return false;
-		}
-		
-		if(cod==""){
-			$('#EscojaModulo').modal();
-			return false;
-		}
-		if(nombre!="" && des!=""){
-			$('#modalConfirmacion').modal();
-		}
-		else{
-			$('#modalFaltanCampos').modal();
-			return false;
-		}
-
-}
-
+	}
 </script>
 
 <fieldset style="min-width: 1000px;">
@@ -411,6 +279,7 @@ function editarMod(){
 				$attributes = array('id' => 'formEditar', 'class' => 'form-horizontal');
 				echo form_open('Modulos/postEditarModulo', $attributes);
 			?>
+				<input name="id_moduloSeleccionado" type="hidden" id="id_moduloSeleccionado" maxlength="6">
 				<!-- nombre modulo -->
 				<div class="control-group">
 					<label class="control-label" for="nombre">1.- <font color="red">*</font> Nombre módulo:</label>
@@ -486,9 +355,9 @@ function editarMod(){
 				</br>
 				<div class="control-group">
 					<div class="controls">
-						<button type="button" class="btn" onclick="agregarModulo()">
+						<button type="button" class="btn" onclick="editarModulo()">
 							<div class="btn_with_icon_solo">Ã</div>
-							&nbsp; Agregar
+							&nbsp; Guardar
 						</button>
 						<button class="btn" type="button" onclick="resetearModulo()" >
 							<div class="btn_with_icon_solo">Â</div>

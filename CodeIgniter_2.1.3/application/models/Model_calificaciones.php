@@ -1,6 +1,79 @@
 <?php
 class Model_calificaciones extends CI_Model {
 
+	public function agregarCalificacion($rut_profesor, $rut, $nota, $comentario, $id_evaluacion) {
+
+		$this->db->trans_start();
+
+		$this->db->select('VALOR_NOTA');
+		$this->db->select('COMENTARIO_NOTA');
+		$this->db->where('RUT_USUARIO', $rut);
+		$this->db->where('ID_EVALUACION', $id_evaluacion);
+		$primeraResp = $this->db->get('nota');
+		//echo $this->db->last_query().'    ';
+		if ($primeraResp == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+		if ($primeraResp->num_rows() > 0) {
+			//Se intenta updatear si es que existe esa asistencia
+
+			$this->db->flush_cache();
+			$data1 = array('VALOR_NOTA' => $nota,
+				'COMENTARIO_NOTA' => $comentario
+			);
+			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->where('ID_EVALUACION', $id_evaluacion);
+			$this->db->update('nota', $data1);
+
+			//Si hubo cambios, entonces hago insert en auditoría
+			if ($this->db->affected_rows() > 0) {
+				$row_original = $primeraResp->row();
+				$notaOri = $row_original->VALOR_NOTA;
+				$comentarioOri = $row_original->COMENTARIO_NOTA;
+				$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
+					'NOMBRE' => 'UPDATE', 
+					'DATO_PRE_CAMBIO' => 'VALOR_NOTA=`'.$notaOri.'`, '.'COMENTARIO_NOTA=`'.$comentarioOri.'`', 
+					'DATO_POST_CAMBIO' => 'VALOR_NOTA=`'.$nota.'`, '.'COMENTARIO_NOTA=`'.$comentario.'`', 
+					'TABLA_MODIFICADA'=> 'nota', 
+					'QUERY'=> $this->db->last_query());
+				$this->db->flush_cache();
+				$this->db->insert('auditoria', $datos_auditoria);
+			}
+		}
+		else {
+			//Se intenta insertar si no existe registro
+			$this->db->flush_cache();
+			$data2 = array('RUT_USUARIO' =>$rut,
+				'ID_EVALUACION' => $id_evaluacion,
+				'VALOR_NOTA' => $nota,
+				'COMENTARIO_NOTA' => $comentario
+			);
+			$this->db->insert('nota', $data2);
+
+			$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
+					'NOMBRE' => 'INSERT', 
+					'DATO_PRE_CAMBIO' => NULL,
+					'DATO_POST_CAMBIO' => 'VALOR_NOTA=`'.$nota.'`, '.'COMENTARIO_NOTA=`'.$comentario.'`', 
+					'TABLA_MODIFICADA'=> 'nota', 
+					'QUERY'=> $this->db->last_query());
+			$this->db->flush_cache();
+			$this->db->insert('auditoria', $datos_auditoria);
+			//echo $this->db->last_query().'    ';
+		}
+
+		//echo $this->db->last_query();
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+	}
+
+
 	public function getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador) {
 		$this->db->select('evaluacion.ID_EVALUACION AS id');
 		$this->db->select('CONCAT(\'Nota: \', NOMBRE_MODULO) AS nombre', FALSE);
