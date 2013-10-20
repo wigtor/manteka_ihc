@@ -13,8 +13,8 @@ class MasterManteka extends CI_Controller {
 		$rut = $this->session->userdata('rut');
 		if ($rut == FALSE)
 			return FALSE;
-		$this->load->model('Model_usuario');
-		$resultado = $this->Model_usuario->ValidarRut($rut);
+		$this->load->model('model_usuario');
+		$resultado = $this->model_usuario->ValidarRut($rut);
 		if ($resultado == FALSE) {
 			return FALSE;
 		}
@@ -64,8 +64,8 @@ class MasterManteka extends CI_Controller {
 		}
 
 		//Se carga la cantidad de correos sin leer
-		$this->load->model('Model_correo');
-		$datos_plantilla["numNoLeidos"] = $this->Model_correo->cantidadRecibidosNoLeidos($rut);
+		$this->load->model('model_correo');
+		$datos_plantilla["numNoLeidos"] = $this->model_correo->cantidadRecibidosNoLeidos($rut);
 		
 		/* Carga en el layout los menús, variables, configuraciones y elementos necesarios para ver las vistas */
 		//Se setea el título de la página.
@@ -403,8 +403,8 @@ class MasterManteka extends CI_Controller {
 	* 
 	*/
 	private function ejecutarCronjobs() {
-		$this->load->model('Model_cronJob');
-		$cronJobs = $this->Model_cronJob->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
+		$this->load->model('model_cronJob');
+		$cronJobs = $this->model_cronJob->getAllCronJobsPorHacer(); //Obtengo sólo los que cumplen con la fecha y hora para ser realizados
 		$cantidadCronJobs = count($cronJobs);
 		//echo 'Cantidad de cronjobs obtenida: '.$cantidadCronJobs;
 
@@ -432,9 +432,9 @@ class MasterManteka extends CI_Controller {
 				  		$str = strstr($message,'Ver mensaje en su contexto:');
 				  		$str = substr($str, 27);
 						echo '<!-- BORRADOS CORRECTAMENTE LOS MAILS REBOTADOS -->'; //Esto saldrá como un comentario html
-				    	$this->load->model('Model_mail_rebote');
-				    	$resultado = $this->Model_mail_rebote->eliminarRebote($str);
-				    	$this->Model_mail_rebote->notificacionRebote($resultado['cuerpo'],$resultado['rut']);
+				    	$this->load->model('model_mail_rebote');
+				    	$resultado = $this->model_mail_rebote->eliminarRebote($str);
+				    	$this->model_mail_rebote->notificacionRebote($resultado['cuerpo'],$resultado['rut']);
 					}
 				}
 				if ($inbox) { //Evita que si hay un fail, salgan más fails

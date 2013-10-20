@@ -50,9 +50,9 @@ class Correo extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$rut = $this->session->userdata('rut');
-			$this->load->model('Model_correo');
+			$this->load->model('model_correo');
 
-			$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadRecibidos($rut));
+			$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadRecibidos($rut));
 
 			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -87,9 +87,9 @@ class Correo extends MasterManteka {
 			$rut = $this->session->userdata('rut');
 			/* Carga el modelo del correo y obtiene un array con todos los correos enviados y sus
 			respectivos destinatarios. */
-			$this->load->model('Model_correo');
+			$this->load->model('model_correo');
 
-			$datos_cuerpo = array( 'msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
+			$datos_cuerpo = array( 'msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut)); //Cambiarlo por datos que provengan de los modelos para pasarsela a su vista_cuerpo
 			
 			/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 			* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -136,8 +136,8 @@ class Correo extends MasterManteka {
 				$this->load->model('model_log');
 				$date = date("YmdHis");
 				$this->model_log->LogEnviados($correos,$rut,$date);
-				$this->load->model('Model_correo');
-				$this->Model_correo->EliminarCorreo($correos);
+				$this->load->model('model_correo');
+				$this->model_correo->EliminarCorreo($correos);
 				if(isset($estado))
 					unset($estado);
 				$estado="1";
@@ -183,8 +183,8 @@ class Correo extends MasterManteka {
 			$this->load->model('model_log');
 			$date = date("YmdHis");
 			$this->model_log->LogRecibidos($correos,$rut,$date);
-			$this->load->model('Model_correo');
-			$this->Model_correo->EliminarRecibidos($correos,$rut);
+			$this->load->model('model_correo');
+			$this->model_correo->EliminarRecibidos($correos,$rut);
 			
 			if(isset($estado))
 				unset($estado);
@@ -229,8 +229,8 @@ class Correo extends MasterManteka {
 			$this->load->model('model_log');
 			$date = date("YmdHis");
 			echo $this->model_log->LogBorradores($correos,$rut,$date);
-			$this->load->model('Model_correo');
-			echo $this->Model_correo->EliminarBorradores($correos);
+			$this->load->model('model_correo');
+			echo $this->model_correo->EliminarBorradores($correos);
 			if(isset($estado))
 				unset($estado);
 			$estado="1";
@@ -288,9 +288,9 @@ class Correo extends MasterManteka {
 	*/
 	public function verBorradores($msj=null) {
 		$rut = $this->session->userdata('rut');
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$datos_cuerpo = array( 'msj'=>$msj,'cantidadBorradores'=>$this->Model_correo->cantidadBorradores($rut));
+		$datos_cuerpo = array( 'msj'=>$msj,'cantidadBorradores'=>$this->model_correo->cantidadBorradores($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -345,10 +345,10 @@ class Correo extends MasterManteka {
 
 		/* Se cargan los modelos necesarios para guardar los correos enviados, con el
 		fin de que aparezcan en la bandeja de recibidos y enviados según corresponda. */
-		$this->load->model('Model_correo');
-		$this->load->model('Model_correo_e');
-		$this->load->model('Model_correo_u');
-		$this->load->model('Model_correo_a');
+		$this->load->model('model_correo');
+		$this->load->model('model_correo_e');
+		$this->load->model('model_correo_u');
+		$this->load->model('model_correo_a');
 		
 		/* Se obtiene la información del correo a enviar. */
 		$rutRecept=$this->input->post('rutRecept');
@@ -357,7 +357,7 @@ class Correo extends MasterManteka {
 		$codigoBorrador=$this->input->post('codigoBorrador');
 		$this->setTimeZone();
 		$date=date("YmdHis");
-		$cod=$this->Model_correo->getCodigo($date,$codigoBorrador);
+		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 		$mensaje=$this->input->post('editor');
 		$archivosElim = json_decode($this->input->post('archivosElim'));
 		
@@ -386,9 +386,9 @@ class Correo extends MasterManteka {
 			$mensaje = str_replace('%%hoy', date("d/m/Y"), $mensaje);
 		}
 		if($variableRemitente > 0) {
-			$this->load->model('Model_usuario');
+			$this->load->model('model_usuario');
 			$modeloUsuarioCargado=true;
-			$remitente=$this->Model_usuario->datos_usuario($rut);
+			$remitente=$this->model_usuario->datos_usuario($rut);
 			$remitente=trim($remitente->nombre1).' '.trim($remitente->apellido1);
 			$asunto=str_replace('%%remitente', $remitente, $asunto);
 			$mensaje=str_replace('%%remitente', $remitente, $mensaje);
@@ -425,17 +425,17 @@ class Correo extends MasterManteka {
 			$hayAyudantes=false;
 			$hayOtroTipoDestinatario=false;
 			if(!$modeloUsuarioCargado) {
-				$this->load->model('Model_usuario');
+				$this->load->model('model_usuario');
 			}
 			foreach($receptores as $receptor) {
-				$estudiante=$this->Model_correo->getRutEst($receptor);
-				$user=$this->Model_correo->getRutUser($receptor);
-				$ayudante=$this->Model_correo->getRutAyu($receptor);
+				$estudiante=$this->model_correo->getRutEst($receptor);
+				$user=$this->model_correo->getRutUser($receptor);
+				$ayudante=$this->model_correo->getRutAyu($receptor);
 				if($estudiante != 0)
 					$hayEstudiantes=true;
 				else if($user != 0)
 				{
-					$usuario=$this->Model_usuario->datos_usuario($receptor);
+					$usuario=$this->model_usuario->datos_usuario($receptor);
 					if($usuario->ID_TIPO == 1)
 						$hayProfesores=true;
 					else
@@ -475,16 +475,16 @@ class Correo extends MasterManteka {
 			$this->load->model('model_estudiante');
 			$this->load->model('model_ayudante');
 			if(!$modeloUsuarioCargado) {
-				$this->load->model('Model_usuario');
+				$this->load->model('model_usuario');
 			}
 			foreach ($receptores as $receptor) 
 			{	
 				try {
 					$mensajePersonalizado=$mensaje;
 					$asuntoPersonalizado=$asunto;
-					$estudiante=$this->Model_correo->getRutEst($receptor);
-					$user=$this->Model_correo->getRutUser($receptor);
-					$ayudante=$this->Model_correo->getRutAyu($receptor);					
+					$estudiante=$this->model_correo->getRutEst($receptor);
+					$user=$this->model_correo->getRutUser($receptor);
+					$ayudante=$this->model_correo->getRutAyu($receptor);					
 					if($estudiante != 0) {
 						$datosEstudiante=$this->model_estudiante->getDetallesEstudiante($receptor);
 						$seccionEstudiante=$datosEstudiante->seccion;
@@ -513,7 +513,7 @@ class Correo extends MasterManteka {
 						$mensajePersonalizado=str_replace('%%modulo_estudiante', $moduloEstudiante, $mensajePersonalizado);
 					}
 					else if($user != 0) {
-						$datosUsuario=$this->Model_usuario->datos_usuario($receptor);
+						$datosUsuario=$this->model_usuario->datos_usuario($receptor);
 						$to=$datosUsuario->email1;
 						$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
 						$rutUsuario=trim($datosUsuario->rut);
@@ -561,22 +561,22 @@ class Correo extends MasterManteka {
 			$mensajeAux=str_replace('%%carrera_estudiante', '[Carrera estudiante destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%seccion_estudiante', '[Sección estudiante destinatario]', $mensajeAux);
 			$mensajeAux=str_replace('%%modulo_estudiante', '[Módulo estudiante destinatario]', $mensajeAux);
-			$this->Model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
+			$this->model_correo->InsertarCorreo($asuntoAux,$mensajeAux,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 			
 			/* Se guarda la información que asocia el correo enviado con cada destinatario. */
 			foreach($receptores as $receptor) {
 				if(!in_array($receptor, $error)) {
-					$estudiante=$this->Model_correo->getRutEst($receptor);
+					$estudiante=$this->model_correo->getRutEst($receptor);
 					if($estudiante!=0)
-						$this->Model_correo_e->InsertarCorreoE($receptor,$cod);
+						$this->model_correo_e->InsertarCorreoE($receptor,$cod);
 								
-					$user=$this->Model_correo->getRutUser($receptor);
+					$user=$this->model_correo->getRutUser($receptor);
 					if($user!=0)
-						$this->Model_correo_u->InsertarCorreoU($receptor,$cod);
+						$this->model_correo_u->InsertarCorreoU($receptor,$cod);
 							
-					$ayudante=$this->Model_correo->getRutAyu($receptor);
+					$ayudante=$this->model_correo->getRutAyu($receptor);
 					if($ayudante!=0)
-						$this->Model_correo_a->InsertarCorreoA($receptor,$cod);
+						$this->model_correo_a->InsertarCorreoA($receptor,$cod);
 				}
 			}
 			$estado="2";
@@ -591,22 +591,22 @@ class Correo extends MasterManteka {
 				if ($this->enviarMail($to, $asunto, $mensajeMail, $adjuntos) == FALSE)
 					throw new Exception("Error en el envio");
 
-				$this->Model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
+				$this->model_correo->InsertarCorreo($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 				
 				/* Se guarda la información que asocia el correo enviado con cada destinatario. */
 				foreach($receptores as $receptor)
 				{
-					$estudiante=$this->Model_correo->getRutEst($receptor);
+					$estudiante=$this->model_correo->getRutEst($receptor);
 					if($estudiante!=0)
-						$this->Model_correo_e->InsertarCorreoE($receptor,$cod);
+						$this->model_correo_e->InsertarCorreoE($receptor,$cod);
 						
-					$user=$this->Model_correo->getRutUser($receptor);
+					$user=$this->model_correo->getRutUser($receptor);
 					if($user!=0)
-						$this->Model_correo_u->InsertarCorreoU($receptor,$cod);
+						$this->model_correo_u->InsertarCorreoU($receptor,$cod);
 							
-					$ayudante=$this->Model_correo->getRutAyu($receptor);
+					$ayudante=$this->model_correo->getRutAyu($receptor);
 					if($ayudante!=0)
-						$this->Model_correo_a->InsertarCorreoA($receptor,$cod);
+						$this->model_correo_a->InsertarCorreoA($receptor,$cod);
 				}
 			}
 			catch (Exception $e)
@@ -643,8 +643,8 @@ class Correo extends MasterManteka {
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
 		
 
-		$this->load->model('Model_usuario');
-		$datosUsuario=$this->Model_usuario->datos_usuario($rut);
+		$this->load->model('model_usuario');
+		$datosUsuario=$this->model_usuario->datos_usuario($rut);
 		$nombreUsuario=trim($datosUsuario->nombre1).' '.trim($datosUsuario->apellido1);
 		$rutUsuario=trim($datosUsuario->rut);
 		$largoRut=strlen($rutUsuario);
@@ -652,8 +652,8 @@ class Correo extends MasterManteka {
 		$milesRut=substr($rutUsuario,$largoRut-6,3);
 		$millonesRut=substr($rutUsuario,0,$largoRut-6);
 		$rutUsuario=$millonesRut.'.'.$milesRut.'.'.$cientosRut.'-'.$this->digitoVerificador($rutUsuario);
-		$this->load->model('Model_correo');
-		$resultado =$this->Model_correo->VerCorreosRecibidos($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
+		$this->load->model('model_correo');
+		$resultado =$this->model_correo->VerCorreosRecibidos($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
 		
 		$resultadoAux=array();
 		
@@ -693,8 +693,8 @@ class Correo extends MasterManteka {
 			return;
 		}
 		$codigo = $this->input->post('codigo');
-		$this->load->model('Model_correo');
-		$resultado =$this->Model_correo->getAdjuntos($codigo);
+		$this->load->model('model_correo');
+		$resultado =$this->model_correo->getAdjuntos($codigo);
 		echo json_encode($resultado);
 	}
 
@@ -712,9 +712,9 @@ class Correo extends MasterManteka {
 		}
 		$offset = $this->input->post('offset');
 		$rut = $this->session->userdata('rut');
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$resultado =$this->Model_correo->VerBorradores($rut,$offset);
+		$resultado =$this->model_correo->VerBorradores($rut,$offset);
 		echo json_encode($resultado);
 	}
 
@@ -731,9 +731,9 @@ class Correo extends MasterManteka {
 		}
 		$codigo = $this->input->post('codigo');
 		$rut = $this->session->userdata('rut');
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$resultado =$this->Model_correo->marcarLeido($rut, $codigo);
+		$resultado =$this->model_correo->marcarLeido($rut, $codigo);
 		echo json_encode($resultado);
 	}
 
@@ -758,10 +758,10 @@ class Correo extends MasterManteka {
 		$archivosElim = $this->input->post('archivosElim');
 		$rutRecept = $this->input->post('rutRecept');
 		$date = date("YmdHis");
-		$this->load->model('Model_correo');
-		$this->load->model('Model_correo_e');
-		$this->load->model('Model_correo_u');
-		$this->load->model('Model_correo_a');
+		$this->load->model('model_correo');
+		$this->load->model('model_correo_e');
+		$this->load->model('model_correo_u');
+		$this->load->model('model_correo_a');
 		
 		if($archivosElim!="")
 		foreach ($archivosElim as $archivo) {
@@ -769,21 +769,21 @@ class Correo extends MasterManteka {
 			
 		}
 
-		$resultado =$this->Model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
+		$resultado =$this->model_correo->insertarBorrador($asunto,$mensaje,$rut,$date,$rutRecept,$codigoBorrador,$adjuntos);
 
-		$cod=$this->Model_correo->getCodigo($date,$codigoBorrador);
+		$cod=$this->model_correo->getCodigo($date,$codigoBorrador);
 
 			$receptores = explode(",",$rutRecept);
 			foreach ($receptores as $receptor) {
-				$estudiante=$this->Model_correo->getRutEst($receptor);
+				$estudiante=$this->model_correo->getRutEst($receptor);
 			if($estudiante!=0)
-				$this->Model_correo_e->InsertarCorreoE($receptor,$cod);
-			$user=$this->Model_correo->getRutUser($receptor);
+				$this->model_correo_e->InsertarCorreoE($receptor,$cod);
+			$user=$this->model_correo->getRutUser($receptor);
 			if($user!=0)
-				$this->Model_correo_u->InsertarCorreoU($receptor,$cod);
-			$ayudante=$this->Model_correo->getRutAyu($receptor);
+				$this->model_correo_u->InsertarCorreoU($receptor,$cod);
+			$ayudante=$this->model_correo->getRutAyu($receptor);
 			if($ayudante!=0)
-				$this->Model_correo_a->InsertarCorreoA($receptor,$cod);
+				$this->model_correo_a->InsertarCorreoA($receptor,$cod);
 			}
 		echo json_encode($resultado);
 	}
@@ -806,9 +806,9 @@ class Correo extends MasterManteka {
 		$textoFiltro = $this->input->post('textoBusqueda');
 		$textoFiltrosAvanzados = $this->input->post('textoFiltrosAvanzados');
 
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$resultado =$this->Model_correo->VerCorreosUser($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
+		$resultado =$this->model_correo->VerCorreosUser($rut, $offset, $tipoUsuario, $textoFiltro, $textoFiltrosAvanzados);
 
 		if (count($resultado) > 0) {
 			$this->load->model('model_busquedas');
@@ -849,9 +849,9 @@ class Correo extends MasterManteka {
 
 		$rut = $this->session->userdata('rut');
 		$codigo = $this->input->post('codigo');
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$resultado =$this->Model_correo->cargarBorrador($codigo,$rut);
+		$resultado =$this->model_correo->cargarBorrador($codigo,$rut);
 		echo json_encode($resultado);
 	}
 
@@ -869,9 +869,9 @@ class Correo extends MasterManteka {
 
 		$rut = $this->session->userdata('rut');
 		$codigo = $this->input->post('codigo');
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$resultado =$this->Model_correo->cargarCorreo($codigo, $rut);
+		$resultado =$this->model_correo->cargarCorreo($codigo, $rut);
 		echo json_encode($resultado);
 	}
 	
@@ -901,27 +901,27 @@ class Correo extends MasterManteka {
 			return;
 		}
 		$destinatario = $this->input->post('destinatario');
-		$this->load->model('Model_filtro');
-		$this->load->model('Model_estudiante');
-		$this->load->model('Model_profesor');
-		$this->load->model('Model_ayudante');
-		$this->load->model('Model_coordinador');
+		$this->load->model('model_filtro');
+		$this->load->model('model_estudiante');
+		$this->load->model('model_profesor');
+		$this->load->model('model_ayudante');
+		$this->load->model('model_coordinador');
 
 		switch ($destinatario) {
 			case 0:
-				$resultado = $this->Model_filtro->getAll();
+				$resultado = $this->model_filtro->getAll();
 				break;
 			case 1:
-				$resultado = $this->Model_estudiante->getAllEstudiantes();
+				$resultado = $this->model_estudiante->getAllEstudiantes();
 				break;
 			case 2:
-				$resultado = $this->Model_profesor->getAllProfesores();
+				$resultado = $this->model_profesor->getAllProfesores();
 				break;
 			case 3:
-				$resultado = $this->Model_ayudante->getAllAyudantes();
+				$resultado = $this->model_ayudante->getAllAyudantes();
 				break;
 			case 4:
-				$resultado = $this->Model_coordinador->getAllCoordinadores();
+				$resultado = $this->model_coordinador->getAllCoordinadores();
 			default:
 				# code...
 				break;
@@ -939,8 +939,8 @@ class Correo extends MasterManteka {
 		if(!$this->isLogged()){
 			return;
 		}
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAllCarreras();
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getAllCarreras();
 		echo json_encode($resultado);
 	}
 
@@ -954,8 +954,8 @@ class Correo extends MasterManteka {
 		if(!$this->isLogged()){
 			return;
 		}
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAllSecciones();
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getAllSecciones();
 		echo json_encode($resultado);
 	}
 
@@ -969,8 +969,8 @@ class Correo extends MasterManteka {
 		if(!$this->isLogged()){
 			return;
 		}
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAllHorarios();
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getAllHorarios();
 		echo json_encode($resultado);
 	}
 
@@ -984,8 +984,8 @@ class Correo extends MasterManteka {
 		if(!$this->isLogged()){
 			return;
 		}
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAllModulosTematicos();
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getAllModulosTematicos();
 		echo json_encode($resultado);
 	}
 
@@ -1004,8 +1004,8 @@ class Correo extends MasterManteka {
 		$seccion = $this->input->post('seccion');
 		$modulo_tematico = $this->input->post('modulo_tematico');
 		$bloque = $this->input->post('bloque');
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico,$bloque);
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getAlumnosByFiltro($profesor,$codigo,$seccion,$modulo_tematico,$bloque);
 		echo json_encode($resultado);
 	}
 
@@ -1022,8 +1022,8 @@ class Correo extends MasterManteka {
 		$seccion = $this->input->post('seccion');
 		$modulo_tematico = $this->input->post('modulo_tematico');
 		$bloque = $this->input->post('bloque');
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getProfesoresByFiltro($seccion,$modulo_tematico,$bloque);
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getProfesoresByFiltro($seccion,$modulo_tematico,$bloque);
 		echo json_encode($resultado);
 	}
 
@@ -1041,8 +1041,8 @@ class Correo extends MasterManteka {
 		$seccion = $this->input->post('seccion');
 		$modulo_tematico = $this->input->post('modulo_tematico');
 		$bloque = $this->input->post('bloque');
-		$this->load->model('Model_filtro');
-		$resultado = $this->Model_filtro->getAyudantesByFiltro($profesor,$seccion,$modulo_tematico,$bloque);
+		$this->load->model('model_filtro');
+		$resultado = $this->model_filtro->getAyudantesByFiltro($profesor,$seccion,$modulo_tematico,$bloque);
 		echo json_encode($resultado);
 	}
 
@@ -1073,9 +1073,9 @@ class Correo extends MasterManteka {
 	{
 
 		$rut = $this->session->userdata('rut');
-		$this->load->model('Model_correo');
+		$this->load->model('model_correo');
 
-		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->Model_correo->cantidadCorreos($rut));
+		$datos_cuerpo = array('msj'=>$msj,'cantidadCorreos'=>$this->model_correo->cantidadCorreos($rut));
 
 		/* Se setea que usuarios pueden ver la vista, estos pueden ser las constantes: TIPO_USR_COORDINADOR y TIPO_USR_PROFESOR
 		* se deben introducir en un array, para luego pasarlo como parámetro al método cargarTodo()
@@ -1098,8 +1098,8 @@ class Correo extends MasterManteka {
 			return;
 		}
 		$rut = $this->session->userdata('rut');
-		$this->load->model('Model_correo');
-		$resultado = $this->Model_correo->cantidadRecibidosNoLeidos($rut);
+		$this->load->model('model_correo');
+		$resultado = $this->model_correo->cantidadRecibidosNoLeidos($rut);
 		echo $resultado;
 	}
 
