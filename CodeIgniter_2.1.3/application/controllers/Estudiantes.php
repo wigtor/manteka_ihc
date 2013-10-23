@@ -709,12 +709,13 @@ class Estudiantes extends MasterManteka {
 		}
 
 		$id_seccion = $this->input->post('id_seccion');
+		$only_view = $this->input->post('only_view');
 		$rut_usuario = $this->session->userdata('rut');
 		$this->load->model('Model_asistencia');
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_planificacion');
 		$this->load->model('Model_modulo_tematico');
-		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
 			$id_modulo_tem = NULL;
 		}
 		else {
@@ -821,9 +822,11 @@ class Estudiantes extends MasterManteka {
 			//echo 'No estás logueado!!';
 			return;
 		}
+
+		$only_view = $this->input->post('only_view');
 		$id_seccion = $this->input->post('seccion');
 		$rut_profesor = $this->session->userdata('rut');
-		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
 			$esCoordinador = TRUE;
 		}
 		else {
@@ -846,11 +849,12 @@ class Estudiantes extends MasterManteka {
 		}
 
 		$id_seccion = $this->input->post('id_seccion');
+		$only_view = $this->input->post('only_view');
 		$rut_usuario = $this->session->userdata('rut');
 		$this->load->model('Model_calificaciones');
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_modulo_tematico');
-		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
 			$id_modulo_tem = NULL;
 		}
 		else {
@@ -878,6 +882,33 @@ class Estudiantes extends MasterManteka {
 		}
 		echo json_encode($listaEstudiantes);
 	}
+
+
+		public function getSesionesBySeccionAndProfesorAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$only_view = $this->input->post('only_view');
+		$id_seccion = $this->input->post('seccion');
+		$rut_profesor = $this->session->userdata('rut');
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
+			$esCoordinador = TRUE;
+		}
+		else {
+			$esCoordinador = FALSE;
+		}
+		//echo 'caca:'.$only_view.'listo. esCoordinador:'.$esCoordinador.'caca ';return;
+		$this->load->model('Model_sesion');
+		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor, $esCoordinador);
+		
+		echo json_encode($resultado);
+	}
+
 }
 
 /* End of file Estudiantes.php */

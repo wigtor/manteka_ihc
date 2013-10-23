@@ -24,12 +24,21 @@
 		if (id_seccion == "") {
 			return;
 		}
-		
+
+		var only_view = 0;
+		<?php 
+			if ($ONLY_VIEW === TRUE) {
+				?>
+			only_view = 1;
+				<?php
+			}
+		?>
+
 		$.ajax({
 			type: "POST",
 			async: false,
 			url: "<?php echo site_url("Estudiantes/getAsistenciaEstudiantesBySeccionAjax") ?>",
-			data: { id_seccion: id_seccion},
+			data: { id_seccion: id_seccion, only_view: only_view},
 			success: function(respuesta) {
 				var tablaResultados = document.getElementById("tablaAsistencia");
 				$(tablaResultados).find('tbody').remove();
@@ -184,11 +193,21 @@
 
 	function getListaSesiones() {
 		var idElem = $('#seccion').val();
+
+		var only_view = 0;
+		<?php 
+			if ($ONLY_VIEW === TRUE) {
+				?>
+			only_view = 1;
+				<?php
+			}
+		?>
+
 		var respuesta = $.ajax({
 			type: "POST",
 			async: false,
-			url: "<?php echo site_url("Sesiones/getSesionesBySeccionAndProfesorAjax") ?>",
-			data: { seccion: idElem },
+			url: "<?php echo site_url("Estudiantes/getSesionesBySeccionAndProfesorAjax") ?>",
+			data: { seccion: idElem, only_view: only_view },
 			success: function(respuesta) {
 
 			}
@@ -316,6 +335,15 @@
 			<div class="span5">
 				<font color="red">* Campos Obligatorios</font>
 			</div>
+		</div>
+		<div class="row-fluid">
+			<?php 
+				if ($ONLY_VIEW === FALSE) {
+					?>
+				<p><font color="red">Atención: </font>Sólo puede ver las asistencias que le corresponde poner a la sección</p>
+					<?php
+				}
+			?>
 		</div>
 		<div class="row-fluid">
 			<div class="span5">
