@@ -478,6 +478,7 @@ class Estudiantes extends MasterManteka {
 			$datos_vista['ONLY_VIEW'] = FALSE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
+			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
 			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 
 			$subMenuLateralAbierto = 'agregarAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
@@ -559,6 +560,7 @@ class Estudiantes extends MasterManteka {
 			$datos_vista['ONLY_VIEW'] = TRUE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
+			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
 			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 
 			$subMenuLateralAbierto = 'verAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
@@ -579,6 +581,7 @@ class Estudiantes extends MasterManteka {
 			$datos_vista['ONLY_VIEW'] = TRUE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
+			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
 			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 
 			$subMenuLateralAbierto = 'verCalificaciones'; //Para este ejemplo, los informes no tienen submenu lateral
@@ -597,15 +600,42 @@ class Estudiantes extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$datos_vista['ONLY_VIEW'] = FALSE;
-			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
-			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+			$datos_vista['secciones'] = $this->getSeccionesByProfesor();
+			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
 
 			$subMenuLateralAbierto = 'agregarCalificaciones'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
+	}
+
+
+	private function esProfesorLider($rutProfesor) {
+		$this->load->model('Model_profesor');
+		$modulosTematicosProfesor = $this->Model_profesor->getModulosTematicosProfesor($rutProfesor);
+		$esLider = FALSE;
+		foreach ($modulosTematicosProfesor as $modTem) {
+			$esProfesorLider = $this->Model_profesor->isProfesorLider($rutProfesor, $modTem->id);
+			if ($esProfesorLider) {
+				$esLider = TRUE;
+			}
+		}
+		return $esLider;
+	}
+
+
+	private function getSeccionesByProfesor() {
+		$this->load->model('Model_seccion');
+		$rutProfesor = $this->session->userdata('rut');
+		$seccionesOtras = array();
+		$esLider = $this->esProfesorLider($rutProfesor);
+		
+		if ($esLider) {
+			return $this->Model_seccion->getSeccionesByProfesorLider();
+		}
+		return $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 	}
 
 

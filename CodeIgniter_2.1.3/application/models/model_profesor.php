@@ -306,6 +306,37 @@ class Model_profesor extends CI_Model {
     }
 
 
+	public function getModulosTematicosProfesor($rutProfesor) {
+    	$this->db->select('modulo_tematico.ID_MODULO_TEM AS id');
+		$this->db->select('modulo_tematico.NOMBRE_MODULO AS nombre');
+		$this->db->join('equipo_profesor', 'modulo_tematico.ID_MODULO_TEM = equipo_profesor.ID_MODULO_TEM');
+		$this->db->join('profe_equi_lider', 'equipo_profesor.ID_EQUIPO = profe_equi_lider.ID_EQUIPO');
+		$this->db->where('profe_equi_lider.RUT_USUARIO', $rutProfesor);
+		$query = $this->db->get('modulo_tematico');
+		//echo $this->db->last_query().'    ';
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
+	public function isProfesorLider($rutProfesor, $id_moduloTematico) {
+    	$this->db->select('COUNT(equipo_profesor.ID_EQUIPO) as resultado', FALSE);
+		$this->db->join('equipo_profesor', 'modulo_tematico.ID_MODULO_TEM = equipo_profesor.ID_MODULO_TEM');
+		$this->db->join('profe_equi_lider', 'equipo_profesor.ID_EQUIPO = profe_equi_lider.ID_EQUIPO');
+		$this->db->where('profe_equi_lider.RUT_USUARIO', $rutProfesor);
+		$this->db->where('profe_equi_lider.LIDER_PROFESOR', TRUE);
+		$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_moduloTematico);
+		$query = $this->db->get('modulo_tematico');
+		//echo $this->db->last_query().'    ';
+		if ($query == FALSE) {
+			return array();
+		}
+		if($query->row()->resultado > 0)
+			return TRUE;
+		return FALSE;
+    }
 }
 
 ?>

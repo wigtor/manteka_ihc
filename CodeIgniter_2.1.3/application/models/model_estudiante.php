@@ -448,26 +448,31 @@ class Model_estudiante extends CI_Model {
 	function validarDatos($campo,$tipo){
 		switch ($tipo) {
 			case "carrera":				
-			return filter_var($campo, FILTER_VALIDATE_INT);     
+				return filter_var($campo, FILTER_VALIDATE_INT);     
 			break;
-			case "coordinacion":
-			$reg = array("options"=>array("regexp"=>"/^[a-zA-Z\-]+$/"));
-			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+				case "coordinacion":
+				$reg = array("options"=>array("regexp"=>"/^[a-zA-Z\-]+$/"));
+				return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
 			case "seccion":
-			$reg = array("options"=>array("regexp"=>"/^[0-9\-]+$/"));
-			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
-			break;
+				$reg = array("options"=>array("regexp"=>"/^[0-9\-]+$/"));
+				return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+				break;
 			case "nombre":
-			$reg = array("options"=>array("regexp"=>"/^[a-zA-ZäáàëéèíìöóòúùñçÄÁÀËÉÈÍÌÖÓÒÚÙÑÇ \-]+$/"));			
-			return filter_var(trim($campo), FILTER_VALIDATE_REGEXP,$reg);
-			break;
+				$reg = array("options"=>array("regexp"=>"/^[a-zA-ZäáàëéèíìöóòúùñçÄÁÀËÉÈÍÌÖÓÒÚÙÑÇ \-.]+$/"));			
+				return filter_var(trim($campo), FILTER_VALIDATE_REGEXP,$reg);
+				break;
 			case "rut":
-			$reg = array("options"=>array("regexp"=>"/^[k0-9\-\.]+$/"));
-			return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
-			break;
+				$reg = array("options"=>array("regexp"=>"/^[k0-9\-\.]+$/"));
+				return filter_var($campo, FILTER_VALIDATE_REGEXP,$reg);
+				break;
 			case "correo":
-			return filter_var($campo, FILTER_VALIDATE_EMAIL);
-			break;
+				if (trim($campo) != "") {
+					return filter_var($campo, FILTER_VALIDATE_EMAIL);
+				}
+				else {
+					return TRUE;
+				}
+				break;
 		} 
 		return FALSE;
 	} 

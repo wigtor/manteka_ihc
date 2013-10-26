@@ -590,7 +590,7 @@ create table usuario
    ID_TIPO              int not null,
    PASSWORD_PRIMARIA    varchar(32),
    PASSWORD_TEMPORAL    varchar(32),
-   CORREO1_USER         varchar(200) not null,
+   CORREO1_USER         varchar(200),
    CORREO2_USER         varchar(200),
    VALIDEZ              timestamp,
    NOMBRE1              varchar(20) not null,

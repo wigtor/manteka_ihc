@@ -335,6 +335,18 @@
 						</select>
 					</div>
 				</div>
+				<?php 
+				if ($IS_PROFESOR_LIDER == TRUE) {
+					?>
+					<div class="control-group">
+						<label class="control-label" for="seccion">2.- <font color="red">*</font> Ver sólo mis secciones:</label>
+						<div class="controls">
+							<input type="checkbox" checked id="checkVerSoloMisSecciones"/>
+						</div>
+					</div>
+				<?php
+					}
+				?>
 			</div>
 		</div>
 		<div class="row-fluid">
