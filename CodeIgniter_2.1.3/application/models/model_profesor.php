@@ -327,7 +327,9 @@ class Model_profesor extends CI_Model {
 		$this->db->join('profe_equi_lider', 'equipo_profesor.ID_EQUIPO = profe_equi_lider.ID_EQUIPO');
 		$this->db->where('profe_equi_lider.RUT_USUARIO', $rutProfesor);
 		$this->db->where('profe_equi_lider.LIDER_PROFESOR', TRUE);
-		$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_moduloTematico);
+		if ($id_moduloTematico != NULL) {
+			$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_moduloTematico);
+		}
 		$query = $this->db->get('modulo_tematico');
 		//echo $this->db->last_query().'    ';
 		if ($query == FALSE) {

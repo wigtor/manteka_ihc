@@ -272,40 +272,32 @@ class Model_seccion extends CI_Model {
 	}
 
 
-	public function getSeccionesByProfesor($rut) {
-		$this->db->select('ID_TIPO AS id');
-		$this->db->where('RUT_USUARIO', $rut);
-		$query = $this->db->get('usuario');
-		if ($query == FALSE) {
-			return array();
-		}
-		$id_tipo_usuario = 0;
-		if ($query->num_rows() > 0) {
-			$row = $query->row();
-			$id_tipo_usuario = $row->id;
-		}
+	public function getSeccionesByProfesor($rut, $id_tipo_usuario, $verTodas) {
 
-
-		//echo 'id tipo usuario: '.$id_tipo_usuario.' ';
-		$this->db->flush_cache();
 		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
 		$this->db->select('seccion.ID_SECCION AS id');
 		$this->db->select('LETRA_SECCION AS letra');
 		$this->db->select('NUMERO_SECCION AS numero');
-		$this->db->order_by('LETRA_SECCION', 'asc');
-		$this->db->order_by('NUMERO_SECCION', 'asc');
-		if ($id_tipo_usuario == TIPO_USR_PROFESOR) {
-			$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
-			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
-			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut);
-		}
-		if ($id_tipo_usuario == TIPO_USR_AYUDANTE) { //Aun no se usa ya que el ayudante no hace login
-			$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
-			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
-			$this->db->where('ayu_profe.RUT_USUARIO', $rut);
+		$this->db->select('TRUE AS propia_del_profesor', FALSE);
+
+		//echo 'verTodas:'.$verTodas.'  id_tipo_usuario: '.$id_tipo_usuario.'  TIPO_PROFE: '.TIPO_USR_PROFESOR;
+		if (!$verTodas) {
+			//echo 'entro1   ';
+			if ($id_tipo_usuario == TIPO_USR_PROFESOR) {
+				//echo 'ENTRO   ';
+				$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+				$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut);
+			}
+			if ($id_tipo_usuario == TIPO_USR_AYUDANTE) { //Aun no se usa ya que el ayudante no hace login
+				$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+				$this->db->where('ayu_profe.RUT_USUARIO', $rut);
+			}
 		}
 		$this->db->group_by('seccion.ID_SECCION');
-		//$this->db->order_by('NUMERO_SECCION', 'asc');
+		$this->db->order_by('LETRA_SECCION', 'asc');
+		$this->db->order_by('NUMERO_SECCION', 'asc');
 
 		
 		$query = $this->db->get('seccion');
@@ -313,27 +305,33 @@ class Model_seccion extends CI_Model {
 		if ($query == FALSE) {
 			return array();
 		}
-		return $query->result();
-	}
-
-
-	public function getSeccionesByProfesorLider() {
-		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
-		$this->db->select('seccion.ID_SECCION AS id');
-		$this->db->select('LETRA_SECCION AS letra');
-		$this->db->select('NUMERO_SECCION AS numero');
-		$this->db->order_by('LETRA_SECCION', 'asc');
-		$this->db->order_by('NUMERO_SECCION', 'asc');
-		$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
-		$this->db->join('sesion_de_clase', 'planificacion_clase.ID_SESION = sesion_de_clase.ID_SESION');
-		$this->db->group_by('seccion.ID_SECCION');
-		
-		$query = $this->db->get('seccion');
-		//echo $this->db->last_query();
-		if ($query == FALSE) {
-			return array();
+		$resultadoProfe = $query->result();
+		/*
+		if ($verTodas) {
+			$resultadoCompleto = $this->getSeccionesByProfesor($rut, TIPO_USR_COORDINADOR, FALSE);
+			if ($verTodas) {
+				return $resultadoCompleto;
+			}
+			foreach ($resultadoCompleto as $fila) {
+				$esDelProfe = FALSE;
+				foreach ($resultadoProfe as $fila_solo_profe) {
+					if ($fila->id == $fila_solo_profe->id) {
+						$esDelProfe = TRUE;
+						break;
+					}
+				}
+				if ($esDelProfe) {
+					$fila->propia_del_profesor = TRUE;
+				}
+				else {
+					$fila->propia_del_profesor = FALSE;
+				}
+				
+			}
+			$resultadoProfe = $resultadoCompleto;
 		}
-		return $query->result();
+		*/
+		return $resultadoProfe;
 	}
 
 

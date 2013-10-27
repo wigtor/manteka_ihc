@@ -479,11 +479,13 @@ class Estudiantes extends MasterManteka {
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
 			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
-			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
 
 			$subMenuLateralAbierto = 'agregarAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
@@ -560,8 +562,11 @@ class Estudiantes extends MasterManteka {
 			$datos_vista['ONLY_VIEW'] = TRUE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
-			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
-			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+			$esLider = $this->esProfesorLider($rutProfesor);
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+			$datos_vista['IS_PROFESOR_LIDER'] = $esLider;
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
 
 			$subMenuLateralAbierto = 'verAsistencia'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -581,8 +586,10 @@ class Estudiantes extends MasterManteka {
 			$datos_vista['ONLY_VIEW'] = TRUE;
 			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
 			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
-			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
 
 			$subMenuLateralAbierto = 'verCalificaciones'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -600,13 +607,16 @@ class Estudiantes extends MasterManteka {
 		if ($this->input->server('REQUEST_METHOD') == 'GET') {
 			$datos_vista = array();
 			$datos_vista['ONLY_VIEW'] = FALSE;
+			$this->load->model('Model_seccion');
 			$rutProfesor = $this->session->userdata('rut');
-			$datos_vista['secciones'] = $this->getSeccionesByProfesor();
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
 			$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
 
 			$subMenuLateralAbierto = 'agregarCalificaciones'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
@@ -623,19 +633,6 @@ class Estudiantes extends MasterManteka {
 			}
 		}
 		return $esLider;
-	}
-
-
-	private function getSeccionesByProfesor() {
-		$this->load->model('Model_seccion');
-		$rutProfesor = $this->session->userdata('rut');
-		$seccionesOtras = array();
-		$esLider = $this->esProfesorLider($rutProfesor);
-		
-		if ($esLider) {
-			return $this->Model_seccion->getSeccionesByProfesorLider();
-		}
-		return $this->Model_seccion->getSeccionesByProfesor($rutProfesor);
 	}
 
 
@@ -702,6 +699,24 @@ class Estudiantes extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
+	}
+
+
+	public function getSeccionesByProfesorAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		$verTodas = $this->input->post('verTodas');
+		$this->load->model('Model_seccion');
+		$rutProfesor = $this->session->userdata('rut');
+		//$esLider = $this->esProfesorLider($rutProfesor);
+		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		$resultado = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+		echo json_encode($resultado);
 	}
 
 
@@ -856,14 +871,16 @@ class Estudiantes extends MasterManteka {
 		$only_view = $this->input->post('only_view');
 		$id_seccion = $this->input->post('seccion');
 		$rut_profesor = $this->session->userdata('rut');
-		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
+		$esCoordinador = FALSE;
+		$this->load->model('Model_profesor');
+		$esProfesorLider = $this->Model_profesor->isProfesorLider($rut_profesor, NULL);
+		$mostrarTodas = $only_view;
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || $only_view) {
 			$esCoordinador = TRUE;
 		}
-		else {
-			$esCoordinador = FALSE;
-		}
+		//echo 'esCoordinador: '.$esCoordinador.'   ';
 		$this->load->model('Model_calificaciones');
-		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador);
+		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador, $esProfesorLider, $mostrarTodas);
 		
 		echo json_encode($resultado);
 	}
@@ -892,6 +909,7 @@ class Estudiantes extends MasterManteka {
 		}
 		//DE AQUÍ PARA ABAJO HAY QUE CAMBIAR
 		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		//echo 'id_modulo_tem: '.$id_modulo_tem.'   ';
 		foreach ($listaEstudiantes as $estudiante) {
 			
 			$estudiante->notas = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
@@ -908,13 +926,32 @@ class Estudiantes extends MasterManteka {
 				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
 			}
 			
+			//Agrego el promedio final
+			$estudiante->notas[count($estudiante->notas)]['nota'] = $this->calculaPromedio($estudiante->notas);
+			$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
+
 			
 		}
 		echo json_encode($listaEstudiantes);
 	}
 
 
-		public function getSesionesBySeccionAndProfesorAjax() {
+	private function calculaPromedio($notas) {
+		$cantidadNotas = 0;
+		$acum = 0;
+		foreach ($notas as $nota) {
+			if ($nota["nota"] != "") {
+				$acum = $acum + $nota["nota"];
+				$cantidadNotas = $cantidadNotas + 1;
+			}
+		}
+		if ($cantidadNotas != 0)
+			return $acum/$cantidadNotas;
+		return "";
+	}
+
+
+	public function getSesionesBySeccionAndProfesorAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}

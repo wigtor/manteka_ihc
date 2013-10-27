@@ -234,6 +234,7 @@
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
+			th.setAttribute('class', "span2");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
@@ -244,8 +245,9 @@
 		var listaCalificaciones = getlistaCalificaciones();
 		for (var i = 0; i < listaCalificaciones.length; i++) {
 			th = document.createElement('th');
+			th.setAttribute('class', "span2");
 
-			//Agrego la fecha de la sesión
+			//Agrego el nombre de la evaluación
 			nodoTexto = document.createTextNode(listaCalificaciones[i].nombre);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
@@ -285,6 +287,48 @@
 <?php
 	}
 ?>
+
+
+<?php 
+if ($IS_PROFESOR_LIDER == TRUE) {
+	?>
+	function verSoloMisSeccionesClicked() {
+		var soloMisSecciones = $('#checkVerSoloMisSecciones').is(':checked');
+		var verTodas = 1;
+		if (soloMisSecciones) {
+			verTodas = 0;
+		}
+		var only_view = 0;
+		<?php 
+			if ($ONLY_VIEW === TRUE) {
+				?>
+		only_view = 1;
+				<?php
+			}
+		?>
+		$('#icono_cargando').show();
+
+		var respuesta = $.ajax({
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Estudiantes/getSeccionesByProfesorAjax") ?>",
+			data: { verTodas: verTodas },
+			success: function(respuesta) {
+				var elementoSelect = document.getElementById('seccion');
+				$(elementoSelect).empty();
+				$(elementoSelect).append(new Option( "Sección", "", true, true));
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					$(elementoSelect).append(new Option( arrayRespuesta[i].nombre, arrayRespuesta[i].id, false, false));
+				}
+				$('#icono_cargando').hide();
+			}
+		});
+	}
+	<?php
+}
+?>
+
 </script>
 
 
@@ -327,7 +371,7 @@
 							if (isset($secciones)) {
 								foreach ($secciones as $valor) {
 									?>
-										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
+										<option value="<?php echo $valor->id; ?>"><?php echo $valor->nombre; ?></option>
 									<?php 
 								}
 							}
@@ -341,7 +385,7 @@
 					<div class="control-group">
 						<label class="control-label" for="seccion">2.- <font color="red">*</font> Ver sólo mis secciones:</label>
 						<div class="controls">
-							<input type="checkbox" checked id="checkVerSoloMisSecciones"/>
+							<input type="checkbox" checked id="checkVerSoloMisSecciones" onchange="verSoloMisSeccionesClicked()"/>
 						</div>
 					</div>
 				<?php

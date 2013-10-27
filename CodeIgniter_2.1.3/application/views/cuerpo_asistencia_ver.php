@@ -233,6 +233,7 @@
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
+			th.setAttribute('class', "span2");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
@@ -243,6 +244,7 @@
 		var listaSesiones = getListaSesiones();
 		for (var i = 0; i < listaSesiones.length; i++) {
 			th = document.createElement('th');
+			th.setAttribute('class', "span2");
 
 			//Agrego el input que los checkea a todos
 			nodoCheckeable = document.createElement('input');
@@ -261,7 +263,7 @@
 			th.appendChild(nodoCheckeable);
 
 			//Agrego la fecha de la sesión
-			nodoTexto = document.createTextNode(listaSesiones[i].fecha_planificada);
+			nodoTexto = document.createTextNode(" N°" + listaSesiones[i].numero_sesion_global + " - " + listaSesiones[i].fecha_planificada);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
@@ -314,6 +316,46 @@
 <?php
 	}
 ?>
+
+<?php 
+if ($IS_PROFESOR_LIDER == TRUE) {
+	?>
+	function verSoloMisSeccionesClicked() {
+		var soloMisSecciones = $('#checkVerSoloMisSecciones').is(':checked');
+		var verTodas = 1;
+		if (soloMisSecciones) {
+			verTodas = 0;
+		}
+		var only_view = 0;
+		<?php 
+			if ($ONLY_VIEW === TRUE) {
+				?>
+		only_view = 1;
+				<?php
+			}
+		?>
+		$('#icono_cargando').show();
+
+		var respuesta = $.ajax({
+			type: "POST",
+			async: false,
+			url: "<?php echo site_url("Estudiantes/getSeccionesByProfesorAjax") ?>",
+			data: { verTodas: verTodas },
+			success: function(respuesta) {
+				var elementoSelect = document.getElementById('seccion');
+				$(elementoSelect).empty();
+				$(elementoSelect).append(new Option( "Sección", "", true, true));
+				var arrayRespuesta = jQuery.parseJSON(respuesta);
+				for (var i = 0; i < arrayRespuesta.length; i++) {
+					$(elementoSelect).append(new Option( arrayRespuesta[i].nombre, arrayRespuesta[i].id, false, false));
+				}
+				$('#icono_cargando').hide();
+			}
+		});
+	}
+	<?php
+}
+?>
 </script>
 
 
@@ -355,8 +397,12 @@
 							<?php
 							if (isset($secciones)) {
 								foreach ($secciones as $valor) {
+									$ocultar = "";
+									if (!$valor->propia_del_profesor) {
+										$ocultar = "disabled";
+									}
 									?>
-										<option value="<?php echo $valor->id?>"><?php echo $valor->nombre; ?></option>
+										<option value="<?php echo $valor->id?>" <?php echo $ocultar; ?> ><?php echo $valor->nombre; ?></option>
 									<?php 
 								}
 							}
@@ -371,7 +417,7 @@
 				<div class="control-group">
 					<label class="control-label" for="seccion">2.- <font color="red">*</font> Ver sólo mis secciones:</label>
 					<div class="controls">
-						<input type="checkbox" checked id="checkVerSoloMisSecciones"/>
+						<input type="checkbox" checked id="checkVerSoloMisSecciones" onchange="verSoloMisSeccionesClicked()"/>
 					</div>
 				</div>
 			<?php

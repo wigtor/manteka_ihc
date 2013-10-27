@@ -100,9 +100,7 @@
 			<div id="collapseTwo" class="accordion-body collapse <?php echo $inAsistencia; ?>" >
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/verAsistencia")?>">Ver asistencia</a></li>
-					<?php if ($id_tipo_usuario == TIPO_USR_PROFESOR) { ?>
-						<li <?php echo $agregarAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/agregarAsistencia")?>">Agregar asistencia</a></li>
-					<?php } ?>
+					<li <?php echo $agregarAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/agregarAsistencia")?>">Agregar asistencia</a></li>
 				</div>
 			</div>
 		</div>
@@ -114,9 +112,7 @@
 			<div id="collapseThree" class="accordion-body collapse <?php echo $inCalificaciones; ?>" >
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/verCalificaciones")?>">Ver calificaciones</a></li>
-					<?php if ($id_tipo_usuario == TIPO_USR_PROFESOR) { ?>
-						<li <?php echo $agregarCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/agregarCalificaciones")?>">Agregar calificaciones</a></li>
-					<?php } ?>
+					<li <?php echo $agregarCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/agregarCalificaciones")?>">Agregar calificaciones</a></li>
 				</div>
 			</div>
 		</div>

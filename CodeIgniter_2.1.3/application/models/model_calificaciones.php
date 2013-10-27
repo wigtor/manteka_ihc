@@ -74,10 +74,11 @@ class Model_calificaciones extends CI_Model {
 	}
 
 
-	public function getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador) {
+	public function getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador, $esProfesorLider, $mostrarTodas) {
 		$this->db->select('evaluacion.ID_EVALUACION AS id');
 		$this->db->select('CONCAT(\'Nota: \', NOMBRE_MODULO) AS nombre', FALSE);
 		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
+		$this->db->select('TRUE AS editable', FALSE);
 		$this->db->join('modulo_tematico', 'evaluacion.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM');
 		$this->db->join('sesion_de_clase', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
 		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
@@ -94,7 +95,16 @@ class Model_calificaciones extends CI_Model {
 		if ($query == FALSE) {
 			return array();
 		}
-		return $query->result();
+		$resultado = $query->result();
+
+		//Agrego la columna para el promedio final
+		$notaFinal = new stdClass();
+		$notaFinal->id = -1;
+		$notaFinal->nombre = "Promedio final acumulado";
+		$notaFinal->fecha_planificada = "";
+		$notaFinal->editable = FALSE;
+		$resultado[count($resultado)] = $notaFinal;
+		return $resultado;
 	}
 
 

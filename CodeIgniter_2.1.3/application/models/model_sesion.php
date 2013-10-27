@@ -133,6 +133,7 @@ public function getSesionesByFilter($texto, $textoFiltrosAvanzados)
 		$this->db->select('NOMBRE_SESION AS nombre');
 		$this->db->select('DESCRIPCION_SESION AS descripcion');
 		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
+		$this->db->select('NUM_SESION_SECCION AS numero_sesion_global');
 		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
 		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION');
 		if ($esCoordinador == FALSE) {

@@ -80,7 +80,7 @@ class Login extends MasterManteka {
     	$this->session->unset_userdata('loggued_in');			// Se quita de las coockies la variable loggued_in
     	$this->session->unset_userdata('id_tipo_usuario');		// Se quita de las coockies la variable id_tipo_usuario
     	$this->session->unset_userdata('tipo_usuario');			// Se quita de las coockies la variables tipo_usuario
-    	$this->session->unset_userdata('nombre_usuario');			// Se quita de las coockies la variables nombre_usuario
+    	$this->session->unset_userdata('nombre_usuario');		// Se quita de las coockies la variables nombre_usuario
 
 		redirect('/Login/', '');								// Redirección al método principal de Login
    	}
