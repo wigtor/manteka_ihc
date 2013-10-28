@@ -658,6 +658,9 @@ class Estudiantes extends MasterManteka {
 					if (array_key_exists ($rut, $notas)) { //Compruebo el primer índice (rut)
 						if (array_key_exists ($id_evaluacion, $notas[$rut])) { //Compruebo el segundo índice (id_evaluacion)
 							$nota = $notas[$rut][$id_evaluacion];
+							if ($nota == 0) {
+								$nota = NULL;
+							}
 
 							if ($comentario !== NULL) {
 								if (trim($comentario) === "") { //Si el comentario es vacio
@@ -677,9 +680,6 @@ class Estudiantes extends MasterManteka {
 						
 					}
 				}
-
-
-				
 			}
 
 			if ($confirmacion == TRUE) {
@@ -696,7 +696,7 @@ class Estudiantes extends MasterManteka {
 			$datos_plantilla["redirecTo"] = "Estudiantes/agregarCalificaciones"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 			$datos_plantilla["nombre_redirecTo"] = "Agregar Calificaciones"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR);
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
 	}
@@ -774,21 +774,17 @@ class Estudiantes extends MasterManteka {
 			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
 		}
 		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
-		//echo json_encode($listaEstudiantes).'    dfdfdfdddddddddddddddddddddddddd';
 		foreach ($listaEstudiantes as $estudiante) {
 			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
 			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
 
 			if (count($modulosTematicosEnQueEsLider) < 1) {
-				//echo 'modT: '.$id_modulo_tem.'   ';
 				$asistenciaDelEstudiante = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
 				$estudiante->asistencia = $asistenciaDelEstudiante;
-				//echo json_encode($estudiante->asistencia).'    ';
 				//Lo ordeno por num_sesion_seccion
 				$comentariosDelEstudiante = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
 				$estudiante->comentarios = $comentariosDelEstudiante;
-				//$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-				//echo json_encode($estudiante->comentarios).'    ';
+				
 				$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
 			}
 			else {
@@ -803,95 +799,8 @@ class Estudiantes extends MasterManteka {
 
 				}
 			}
-			//ACÁ ESTÁ EL QUESO
-			/*
-			$asistenciaTemp = $this->reyenarAsistenciaFaltantes($estudiante->asistencia, $cantidadSesiones);
-			
-			foreach ($asistenciaTemp as $value) {
-				array_push($estudiante->asistencia, $value);
-			}
-			echo json_encode($estudiante->asistencia).'    primerawea ';
-			
-			$comentariosTemp = $this->reyenarComentariosFaltantes($estudiante->comentarios, $cantidadSesiones);
-			foreach ($comentariosTemp as $value) {
-				array_push($estudiante->comentarios, $value);
-			}
-			*/
-			//echo json_encode($estudiante->comentarios).'   ultimawea  ';
-			//$estudiante->asistencia = array_merge($estudiante->asistencia, $estudiante->asistencia);
-			//$estudiante->comentarios = array_merge($estudiante->comentarios, $estudiante->comentarios);
-			//$estudiante->asistencia = array_merge($estudiante->asistencia, $this->reyenarAsistenciaFaltantes($estudiante->asistencia, $cantidadSesiones));
-			//$estudiante->comentarios = array_merge($estudiante->comentarios, $this->reyenarComentariosFaltantes($estudiante->comentarios, $cantidadSesiones));
-			//$estudiante->asistencia = $this->reyenarAsistenciaFaltantes($estudiante->asistencia, $cantidadSesiones);
-			//$estudiante->comentarios = $this->reyenarComentariosFaltantes($estudiante->comentarios, $cantidadSesiones);
 		}
-		//echo 'largo array: '.count($listaEstudiantes);
 		echo json_encode($listaEstudiantes);
-	}
-
-
-	private function reyenarAsistenciaFaltantes($asistencia, $cantidadSesiones) {
-		//echo 'largo ori: '.count($asistencia).' cantSesiones: '.$cantidadSesiones. '  ';
-		uasort($asistencia, array($this, "compara_num_sesion_seccion"));
-		$resultado = array();
-		$contador = 0;
-		foreach ($asistencia as $value) {
-			while(($contador+1) < $value->numero_sesion_seccion) {
-				array_push($resultado, new stdClass());
-				//$resultado[$contador] = new stdClass();
-				$resultado[$contador]->presente = 0;
-				$resultado[$contador]->numero_sesion_seccion = $contador;
-				$contador++;
-			}
-			array_push($resultado, new stdClass());
-			$resultado[$contador]->presente = $value->presente;
-			$resultado[$contador]->numero_sesion_seccion =  $value->numero_sesion_seccion;
-			//$resultado[$contador] = $value;
-			$contador++;
-		}
-
-		while ($contador < $cantidadSesiones) {
-			array_push($resultado, new stdClass());
-			$resultado[$contador]->presente = 0;
-			$resultado[$contador]->numero_sesion_seccion = $contador;
-			$contador++;
-		}
-		return $resultado;
-	}
-
-
-	private function reyenarComentariosFaltantes($comentarios, $cantidadSesiones) {
-		uasort($comentarios, array($this, "compara_num_sesion_seccion"));
-		$resultado = array();
-		$contador = 0;
-		foreach ($comentarios as $value) {
-			while(($contador+1) < $value->numero_sesion_seccion) {
-				array_push($resultado, new stdClass());
-				$resultado[$contador]->comentario = NULL;
-				$resultado[$contador]->numero_sesion_seccion = $contador;
-				$contador++;
-			}
-			array_push($resultado, new stdClass());
-			$resultado[$contador]->comentario = $value->comentario;
-			$resultado[$contador]->numero_sesion_seccion =  $value->numero_sesion_seccion;
-			$contador++;
-		}
-
-		while ($contador < $cantidadSesiones) {
-			array_push($resultado, new stdClass());
-			$resultado[$contador]->comentario = NULL;
-			$resultado[$contador]->numero_sesion_seccion = $contador;
-			$contador++;
-		}
-		return $resultado;
-	}
-
-
-	private function compara_num_sesion_seccion($a, $b) {
-		if ($a->numero_sesion_seccion == $b->numero_sesion_seccion) {
-			return 0;
-		}
-		return ($a->numero_sesion_seccion < $b->numero_sesion_seccion) ? -1 : 1;
 	}
 
 
@@ -1052,22 +961,16 @@ class Estudiantes extends MasterManteka {
 				}
 			}
 			
-			
-			//echo 'Cantidad calificaciones: '.$cantidadCalificaciones.' ';
-			
-			while (count($estudiante->notas) < $cantidadCalificaciones) {
-				$estudiante->notas[count($estudiante->notas)]['nota'] = "";
-			}
-			
-			while (count($estudiante->comentarios) < $cantidadCalificaciones) {
-				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
-			}
-			
 			//Agrego el promedio final
-			$estudiante->notas[count($estudiante->notas)]['nota'] = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
-			$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
-
-			
+			$posicionUltimo = count($estudiante->notas);
+			if ($posicionUltimo > 0) {
+				$estudiante->notas[$posicionUltimo] = new stdClass();
+				$estudiante->notas[$posicionUltimo]->nota = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
+				$estudiante->notas[$posicionUltimo]->id_evaluacion = -1;
+				$estudiante->comentarios[$posicionUltimo] = new stdClass();
+				$estudiante->comentarios[$posicionUltimo]->comentario = NULL;
+				$estudiante->comentarios[$posicionUltimo]->id_evaluacion = -1;
+			}
 		}
 		echo json_encode($listaEstudiantes);
 	}

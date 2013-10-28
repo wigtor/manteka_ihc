@@ -115,10 +115,10 @@ class Model_calificaciones extends CI_Model {
 
 	public function cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem) {
 		$this->db->select('COUNT( DISTINCT evaluacion.ID_EVALUACION ) AS resultado');
-		$this->db->join('modulo_tematico', 'evaluacion.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM');
-		$this->db->join('sesion_de_clase', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
-		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
-		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION');
+		$this->db->join('modulo_tematico', 'evaluacion.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('sesion_de_clase', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
 		if ($id_modulo_tem != NULL) {
 			$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_modulo_tem);
 		}
@@ -133,13 +133,14 @@ class Model_calificaciones extends CI_Model {
 
 	public function getCalificacionesEstudianteByModuloTematico($rut_estudiante, $id_modulotem) {
 		$this->db->select('nota.VALOR_NOTA AS nota');
-		$this->db->join('evaluacion', 'nota.ID_EVALUACION = evaluacion.ID_EVALUACION', 'LEFT OUTER');
+		$this->db->select('evaluacion.ID_EVALUACION AS id_evaluacion');
+		$this->db->join('nota', 'evaluacion.ID_EVALUACION = nota.ID_EVALUACION', 'LEFT OUTER');
 		$this->db->where('nota.RUT_USUARIO', $rut_estudiante);
 		if ($id_modulotem !== NULL) {
 			$this->db->where('evaluacion.ID_MODULO_TEM', $id_modulotem);
 		}
 		$this->db->order_by('evaluacion.ID_MODULO_TEM');
-		$query = $this->db->get('nota');
+		$query = $this->db->get('evaluacion');
 		//echo $this->db->last_query().'  ';
 		if ($query == FALSE) {
 			return array();
@@ -150,12 +151,13 @@ class Model_calificaciones extends CI_Model {
 
 	public function getComentariosCalificacionesEstudianteByModuloTematico($rut_estudiante, $id_modulotem) {
 		$this->db->select('nota.COMENTARIO_NOTA AS comentario');
-		$this->db->join('evaluacion', 'nota.ID_EVALUACION = evaluacion.ID_EVALUACION', 'LEFT OUTER');
+		$this->db->select('evaluacion.ID_EVALUACION AS id_evaluacion');
+		$this->db->join('nota', 'evaluacion.ID_EVALUACION = nota.ID_EVALUACION', 'LEFT OUTER');
 		$this->db->where('nota.RUT_USUARIO', $rut_estudiante);
 		if ($id_modulotem !== NULL) {
 			$this->db->where('evaluacion.ID_MODULO_TEM', $id_modulotem);
 		}
-		$query = $this->db->get('nota');
+		$query = $this->db->get('evaluacion');
 		//echo $this->db->last_query().'  ';
 		if ($query == FALSE) {
 			return array();

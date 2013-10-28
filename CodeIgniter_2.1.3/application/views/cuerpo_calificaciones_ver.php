@@ -18,6 +18,15 @@
 		tablaResultados.appendChild(tbody);
 	}
 
+	function buscarCalificacion(arrayCalificaciones, id_evaluacion_buscada) {
+		for (var i = 0; i < arrayCalificaciones.length; i++) {
+			if (arrayCalificaciones[i].id_evaluacion == id_evaluacion_buscada) {
+				return i;
+			}
+		};
+		return -1;
+	}
+
 	//Carga una matriz con los datos del estudiante y sus Calificacioness
 	function cargarDatosCalificaciones() {
 		var id_seccion = $('#seccion').val();
@@ -67,8 +76,8 @@
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:default");
 
-
-					for (j = 0; j < arrayRespuesta[i].length; j++) { //cada iteración es una columna (datos del estudiante o dias de Calificaciones)
+					var cantidadAtributos = Object.keys(arrayObjectRespuesta[i]).length;
+					for (j = 0; j < cantidadAtributos; j++) { //cada iteración es una columna (datos del estudiante o dias de Calificaciones)
 						
 
 						//Entonces se están cargando las columnas relacionadas con los datos del estudiante
@@ -80,45 +89,59 @@
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la Calificaciones
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
-							for (var k = 0; (k < arrayObjectRespuesta[i].notas.length) && (k < lista_idEvaluaciones.length) ; k++) {
+							for (var k = 0; k < lista_idEvaluaciones.length ; k++) {
+								//ACÁ ESTÁ EL
+								//Busco si viene esa asistencia en la respuesta del servidor
+								var indiceEncontrado = buscarCalificacion(arrayObjectRespuesta[i].notas, lista_idEvaluaciones[k]);
+								if (indiceEncontrado >= 0) {
+									comentario = arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario; //paso a booleano
+									nota = arrayObjectRespuesta[i].notas[k].nota == undefined ? "" : arrayObjectRespuesta[i].notas[k].nota;
+								}
+								else { //Si se encontró -1
+									comentario = '';
+									nota = '';
+								}
+
+
 								td = document.createElement('td'); //Creo la celda
 								divTd = document.createElement('div');
 								divTd.setAttribute('class', 'row-fluid');
 
 								nodo = document.createElement('input');
 								nodo.setAttribute("type", 'text');
-								nodo.setAttribute("pattern", "[1-6]([\.|,][0-9])|[1-7]([\.|,][0])|[1-7]?");
 								nodo.setAttribute("class", 'input-mini');
+								if (lista_idEvaluaciones[k] != -1) {
+									nodo.setAttribute("pattern", "[1-6]([\.][0-9])|[1-7]([\.][0])|[1-7]?");
 
-								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
-								nodoComentario = document.createElement('input');
-								nodoComentario.setAttribute("type", 'hidden');
-								nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]);
-								nodoComentario.setAttribute("name", 'comentario['+arrayObjectRespuesta[i].rut+']['+lista_idEvaluaciones[k]+']');
-								nodoComentario.setAttribute("value", comentario);
-								nodoComentario.setAttribute("class", 'span1');
-								divTd.appendChild(nodoComentario);
-
-
-								nodoIconComentario = document.createElement('div');
-								icono = document.createElement('i');
-								icono.setAttribute('class', 'icon-comment');
-								nodoIconComentario.appendChild(icono);
+									nodoComentario = document.createElement('input');
+									nodoComentario.setAttribute("type", 'hidden');
+									nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]);
 								
-								nodoAsterisco = document.createElement('font');
-								nodoAsterisco.setAttribute('color', 'red');
-								if ($.trim(comentario) != '') {
-									nodoComentario = document.createTextNode('*');
-								}
-								else {
-									nodoComentario = document.createTextNode("\u00a0");
-								}
-								nodoAsterisco.appendChild(nodoComentario);
-								nodoIconComentario.appendChild(nodoAsterisco);
-							
-								nodoIconComentario.setAttribute("class", 'btn btn-mini');
-								nodoIconComentario.setAttribute("value", '*');
+									nodoComentario.setAttribute("name", 'comentario['+arrayObjectRespuesta[i].rut+']['+lista_idEvaluaciones[k]+']');
 								
+									nodoComentario.setAttribute("value", comentario);
+									nodoComentario.setAttribute("class", 'span1');
+									divTd.appendChild(nodoComentario);
+
+									nodoIconComentario = document.createElement('div');
+									icono = document.createElement('i');
+									icono.setAttribute('class', 'icon-comment');
+									nodoIconComentario.appendChild(icono);
+									
+									nodoAsterisco = document.createElement('font');
+									nodoAsterisco.setAttribute('color', 'red');
+									if ($.trim(comentario) != '') {
+										nodoComentario = document.createTextNode('*');
+									}
+									else {
+										nodoComentario = document.createTextNode("\u00a0");
+									}
+									nodoAsterisco.appendChild(nodoComentario);
+									nodoIconComentario.appendChild(nodoAsterisco);
+								
+									nodoIconComentario.setAttribute("class", 'btn btn-mini');
+									nodoIconComentario.setAttribute("value", '*');
+								}
 										
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
@@ -126,31 +149,41 @@
 								nodo.setAttribute("disabled", 'disabled');
 										<?php
 									}
+									else { ?>
+										if (lista_idEvaluaciones[k] == -1) {
+								nodo.setAttribute("disabled", 'disabled');
+										}
+								<?php
+									}
 								?>
+								if (lista_idEvaluaciones[k] != -1) {
 								nodo.setAttribute("name", 'Calificaciones['+arrayObjectRespuesta[i].rut+']['+lista_idEvaluaciones[k]+']');
-								nota = arrayObjectRespuesta[i].notas[k].nota == undefined ? "" : arrayObjectRespuesta[i].notas[k].nota;
+								}
+								
 								//nota = arrayObjectRespuesta[i].Calificaciones[k].nota == 1 ? true : false; //paso a booleano
 								$(nodo).prop('value', nota);
 								nodo.setAttribute("id", 'Calificaciones_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]);
 
 
-
+								divTd.appendChild(nodo);
 								//Agrego el popover para poner comentarios
 								var divBtnCerrar = '';// '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
-								var divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
-								'" id="comentario_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]+
-								<?php 
-									if ($ONLY_VIEW === TRUE) {
-										?>
-								'" disabled="disabled'+
-										<?php
-									}
-								?>
-								'" type="text" ></div>';
-								$(nodoIconComentario).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idEvaluaciones[k]});
-								
-								divTd.appendChild(nodo);
-								divTd.appendChild(nodoIconComentario);
+								var divs;
+								if (lista_idEvaluaciones[k] != -1) {
+									divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
+									'" id="comentario_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]+
+									<?php 
+										if ($ONLY_VIEW === TRUE) {
+											?>
+									'" disabled="disabled'+
+											<?php
+										}
+									?>
+									'" type="text" ></div>';
+									$(nodoIconComentario).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idEvaluaciones[k]});
+									
+									divTd.appendChild(nodoIconComentario);
+								}
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
 							}
