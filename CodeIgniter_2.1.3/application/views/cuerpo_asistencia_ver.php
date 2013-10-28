@@ -18,6 +18,15 @@
 		tablaResultados.appendChild(tbody);
 	}
 
+	function buscarAsistencia(arrayAsistencia, id_sesion_buscada) {
+		for (var i = 0; i < arrayAsistencia.length; i++) {
+			if (arrayAsistencia[i].id_sesion == id_sesion_buscada) {
+				return i;
+			}
+		};
+		return -1;
+	}
+
 	//Carga una matriz con los datos del estudiante y sus asistencias
 	function cargarDatosAsistencia() {
 		var id_seccion = $('#seccion').val();
@@ -34,6 +43,10 @@
 			}
 		?>
 
+		var tablaResultados = document.getElementById("tablaAsistencia");
+		$(tablaResultados).find('tbody').remove();
+
+
 		$.ajax({
 			type: "POST",
 			async: false,
@@ -41,7 +54,6 @@
 			data: { id_seccion: id_seccion, only_view: only_view},
 			success: function(respuesta) {
 				var tablaResultados = document.getElementById("tablaAsistencia");
-				$(tablaResultados).find('tbody').remove();
 
 				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
 				var arrayRespuesta = new Array();
@@ -67,8 +79,8 @@
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:default");
 
-
-					for (j = 0; j < arrayRespuesta[i].length; j++) { //cada iteración es una columna (datos del estudiante o dias de asistencia)
+					var cantidadAtributos = Object.keys(arrayObjectRespuesta[i]).length;
+					for (j = 0; j < cantidadAtributos; j++) { //cada iteración es una columna (datos del estudiante o dias de asistencia)
 						
 
 						//Entonces se están cargando las columnas relacionadas con los datos del estudiante
@@ -80,7 +92,21 @@
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la asistencia
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
-							for (var k = 0; (k < arrayObjectRespuesta[i].asistencia.length) && (k < lista_idSesiones.length) ; k++) {
+							for (var k = 0; k < lista_idSesiones.length ; k++) {
+
+								//Busco si viene esa asistencia en la respuesta del servidor
+								var indiceEncontrado = buscarAsistencia(arrayObjectRespuesta[i].asistencia, lista_idSesiones[k]);
+								if (indiceEncontrado >= 0) {
+									comentario = arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario; //paso a booleano
+									estaPresente = arrayObjectRespuesta[i].asistencia[indiceEncontrado].presente == undefined ? false : arrayObjectRespuesta[i].asistencia[indiceEncontrado].presente;
+									estaPresente = arrayObjectRespuesta[i].asistencia[indiceEncontrado].presente == 1 ? true : false; //paso a booleano
+								}
+								else { //Si se encontró -1
+									comentario = '';
+									estaPresente = false;
+								}
+
+								
 								td = document.createElement('td'); //Creo la celda
 								divTd = document.createElement('div');
 								divTd.setAttribute('class', 'row-fluid');
@@ -89,7 +115,7 @@
 								nodo.setAttribute("type", 'checkbox');
 								nodo.setAttribute("class", 'input-mini');
 
-								comentario = arrayObjectRespuesta[i].comentarios[k].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[k].comentario; //paso a booleano
+								
 								nodoComentario = document.createElement('input');
 								nodoComentario.setAttribute("type", 'hidden');
 								nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
@@ -127,8 +153,7 @@
 									}
 								?>
 								nodo.setAttribute("name", 'asistencia['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
-								estaPresente = arrayObjectRespuesta[i].asistencia[k].presente == undefined ? false : arrayObjectRespuesta[i].asistencia[k].presente;
-								estaPresente = arrayObjectRespuesta[i].asistencia[k].presente == 1 ? true : false; //paso a booleano
+								
 								$(nodo).prop('checked', estaPresente);
 								nodo.setAttribute("id", 'asistencia_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
 
