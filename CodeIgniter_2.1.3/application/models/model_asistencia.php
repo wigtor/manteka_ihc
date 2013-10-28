@@ -77,11 +77,18 @@ class Model_asistencia extends CI_Model {
 
 	public function getAsistenciaEstudianteByModuloTematico($rut_estudiante, $id_modulotem) {
 		$this->db->select('asistencia.PRESENTE_ASISTENCIA AS presente');
+		$this->db->select('NUM_SESION_SECCION AS numero_sesion_seccion');
 		$this->db->join('sesion_de_clase', 'asistencia.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('estudiante', 'asistencia.RUT_USUARIO = estudiante.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('seccion', 'estudiante.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION', 'LEFT OUTER');
 		$this->db->where('asistencia.RUT_USUARIO', $rut_estudiante);
+		$this->db->where('planificacion_clase.ID_SESION', 'sesion_de_clase.ID_SESION', FALSE);
 		if ($id_modulotem !== NULL) {
 			$this->db->where('sesion_de_clase.ID_MODULO_TEM', $id_modulotem);
 		}
+		$this->db->group_by('asistencia.RUT_USUARIO');
+		$this->db->order_by('NUM_SESION_SECCION');
 		$query = $this->db->get('asistencia');
 		//echo $this->db->last_query().'  ';
 		if ($query == FALSE) {
@@ -93,11 +100,18 @@ class Model_asistencia extends CI_Model {
 
 	public function getComentariosAsistenciaEstudianteByModuloTematico($rut_estudiante, $id_modulotem) {
 		$this->db->select('asistencia.COMENTARIO_ASISTENCIA AS comentario');
+		$this->db->select('NUM_SESION_SECCION AS numero_sesion_seccion');
 		$this->db->join('sesion_de_clase', 'asistencia.ID_SESION = sesion_de_clase.ID_SESION', 'LEFT OUTER');
+		$this->db->join('estudiante', 'asistencia.RUT_USUARIO = estudiante.RUT_USUARIO', 'LEFT OUTER');
+		$this->db->join('seccion', 'estudiante.ID_SECCION = seccion.ID_SECCION', 'LEFT OUTER');
+		$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION', 'LEFT OUTER');
 		$this->db->where('asistencia.RUT_USUARIO', $rut_estudiante);
+		$this->db->where('planificacion_clase.ID_SESION', 'sesion_de_clase.ID_SESION', FALSE);
 		if ($id_modulotem !== NULL) {
 			$this->db->where('sesion_de_clase.ID_MODULO_TEM', $id_modulotem);
 		}
+		$this->db->group_by('asistencia.RUT_USUARIO');
+		$this->db->order_by('NUM_SESION_SECCION');
 		$query = $this->db->get('asistencia');
 		if ($query == FALSE) {
 			return array();

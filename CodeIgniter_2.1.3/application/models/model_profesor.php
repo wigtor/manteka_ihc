@@ -307,11 +307,27 @@ class Model_profesor extends CI_Model {
 
 
 	public function getModulosTematicosProfesor($rutProfesor) {
+		$this->db->select('modulo_tematico.ID_MODULO_TEM AS id');
+		$this->db->select('modulo_tematico.NOMBRE_MODULO AS nombre');
+		$this->db->join('equipo_profesor', 'modulo_tematico.ID_MODULO_TEM = equipo_profesor.ID_MODULO_TEM');
+		$this->db->join('profe_equi_lider', 'equipo_profesor.ID_EQUIPO = profe_equi_lider.ID_EQUIPO');
+		$this->db->where('profe_equi_lider.RUT_USUARIO', $rutProfesor);
+		$query = $this->db->get('modulo_tematico');
+		//echo $this->db->last_query().'    ';
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
+	public function getModulosTematicosProfesorLider($rutProfesor) {
     	$this->db->select('modulo_tematico.ID_MODULO_TEM AS id');
 		$this->db->select('modulo_tematico.NOMBRE_MODULO AS nombre');
 		$this->db->join('equipo_profesor', 'modulo_tematico.ID_MODULO_TEM = equipo_profesor.ID_MODULO_TEM');
 		$this->db->join('profe_equi_lider', 'equipo_profesor.ID_EQUIPO = profe_equi_lider.ID_EQUIPO');
 		$this->db->where('profe_equi_lider.RUT_USUARIO', $rutProfesor);
+		$this->db->where('profe_equi_lider.LIDER_PROFESOR', TRUE);
 		$query = $this->db->get('modulo_tematico');
 		//echo $this->db->last_query().'    ';
 		if ($query == FALSE) {

@@ -757,32 +757,104 @@ class Estudiantes extends MasterManteka {
 		$only_view = $this->input->post('only_view');
 		$rut_usuario = $this->session->userdata('rut');
 		$this->load->model('Model_asistencia');
+		$this->load->model('Model_profesor');
 		$this->load->model('Model_estudiante');
 		$this->load->model('Model_planificacion');
 		$this->load->model('Model_modulo_tematico');
-		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || $only_view) {
+			$esCoordinador = TRUE;
 			$id_modulo_tem = NULL;
+			$modulosTematicosEnQueEsLider = array();
 		}
 		else {
+			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_usuario);
+			//Podría tomar -1 si se está consultando una sección a la cual no le hace clases el profesor, sin embargo igualmente puede ser profesor lider
 			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
 		}
 		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
 		foreach ($listaEstudiantes as $estudiante) {
 			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
 			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
-			$estudiante->asistencia = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
-			while (count($estudiante->asistencia) < $cantidadSesiones) {
-				$estudiante->asistencia[count($estudiante->asistencia)]['presente'] = 0;
+
+			if (count($modulosTematicosEnQueEsLider) < 1) {
+				$estudiante->asistencia = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+				//Lo ordeno por num_sesion_seccion
+				$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+				$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
 			}
-			$estudiante->comentarios = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			while (count($estudiante->comentarios) < $cantidadSesiones) {
-				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
+			else {
+				$cantidadSesiones = 0;
+				foreach ($modulosTematicosEnQueEsLider as $modTem) {
+					$id_modulo_tem = $modTem->id;
+					$asistenciaTemp = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+					$comentariosTemp = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+					$estudiante->asistencia = array_merge($estudiante->asistencia, $asistenciaTemp);
+					$estudiante->comentarios = array_merge($estudiante->comentarios, $comentariosTemp);
+					$cantidadSesiones += $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+
+				}
 			}
+			$estudiante->asistencia = $this->reyenarAsistenciaFaltantes($estudiante->asistencia, $cantidadSesiones);
+			$estudiante->comentarios = $this->reyenarComentariosFaltantes($estudiante->comentarios, $cantidadSesiones);
 		}
 		echo json_encode($listaEstudiantes);
 	}
 
+
+	private function reyenarAsistenciaFaltantes($asistencia, $cantidadSesiones) {
+		//echo 'largo ori: '.count($asistencia).' cantSesiones: '.$cantidadSesiones. '  ';
+		uasort($asistencia, array($this, "compara_num_sesion_seccion"));
+		$resultado = array();
+		$contador = 0;
+		foreach ($asistencia as $value) {
+			while(($contador+1) < $value->numero_sesion_seccion) {
+				$resultado[$contador]['presente'] = 0;
+				$resultado[$contador]['numero_sesion_seccion'] = $contador;
+				$contador++;
+			}
+			$resultado[$contador] = $value;
+			$contador++;
+		}
+
+		while ($contador < $cantidadSesiones) {
+			$asistencia[$contador]['presente'] = 0;
+			$resultado[$contador]['numero_sesion_seccion'] = $contador;
+			$contador++;
+		}
+		return $resultado;
+	}
+
+
+	private function reyenarComentariosFaltantes($comentarios, $cantidadSesiones) {
+		uasort($comentarios, array($this, "compara_num_sesion_seccion"));
+		$resultado = array();
+		$contador = 0;
+		foreach ($comentarios as $value) {
+			while(($contador+1) < $value->numero_sesion_seccion) {
+				$resultado[$contador]['comentario'] = NULL;
+				$resultado[$contador]['numero_sesion_seccion'] = $contador;
+				$contador++;
+			}
+			$resultado[$contador] = $value;
+			$contador++;
+		}
+
+		while ($contador < $cantidadSesiones) {
+			$asistencia[$contador]['comentario'] = NULL;
+			$resultado[$contador]['numero_sesion_seccion'] = $contador;
+			$contador++;
+		}
+		return $resultado;
+	}
+
+
+	private function compara_num_sesion_seccion($a, $b) {
+		if ($a->numero_sesion_seccion == $b->numero_sesion_seccion) {
+			return 0;
+		}
+		return ($a->numero_sesion_seccion < $b->numero_sesion_seccion) ? -1 : 1;
+	}
 
 
 	/**
@@ -871,16 +943,20 @@ class Estudiantes extends MasterManteka {
 		$only_view = $this->input->post('only_view');
 		$id_seccion = $this->input->post('seccion');
 		$rut_profesor = $this->session->userdata('rut');
-		$esCoordinador = FALSE;
 		$this->load->model('Model_profesor');
-		$esProfesorLider = $this->Model_profesor->isProfesorLider($rut_profesor, NULL);
 		$mostrarTodas = $only_view;
-		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || $only_view) {
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR)) {
 			$esCoordinador = TRUE;
+			$modulosTematicosEnQueEsLider = array();
+		}
+		else {
+			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_profesor);
 		}
 		//echo 'esCoordinador: '.$esCoordinador.'   ';
 		$this->load->model('Model_calificaciones');
-		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador, $esProfesorLider, $mostrarTodas);
+		$this->load->model('Model_profesor');
+		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
 		
 		echo json_encode($resultado);
 	}
@@ -900,11 +976,17 @@ class Estudiantes extends MasterManteka {
 		$rut_usuario = $this->session->userdata('rut');
 		$this->load->model('Model_calificaciones');
 		$this->load->model('Model_estudiante');
+		$this->load->model('Model_profesor');
 		$this->load->model('Model_modulo_tematico');
-		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || $only_view) {
+			$esCoordinador = TRUE;
 			$id_modulo_tem = NULL;
+			$modulosTematicosEnQueEsLider = array();
 		}
 		else {
+			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_usuario);
+			//Podría tomar -1 si se está consultando una sección a la cual no le hace clases el profesor, sin embargo igualmente puede ser profesor lider
 			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
 		}
 		//DE AQUÍ PARA ABAJO HAY QUE CAMBIAR
@@ -914,20 +996,37 @@ class Estudiantes extends MasterManteka {
 			
 			$estudiante->notas = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
 			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
-			$estudiante->notas = $this->Model_calificaciones->getCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
-			$cantidadCalificaciones = $this->Model_calificaciones->cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			if (count($modulosTematicosEnQueEsLider) < 1) {
+				$estudiante->notas = $this->Model_calificaciones->getCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+				$estudiante->comentarios = $this->Model_calificaciones->getComentariosCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+				$cantidadCalificaciones = $this->Model_calificaciones->cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			}
+			else {
+				$cantidadCalificaciones = 0;
+				foreach ($modulosTematicosEnQueEsLider as $modTem) {
+					$id_modulo_tem = $modTem->id;
+					$notasTemp = $this->Model_calificaciones->getCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+					$comentariosTemp = $this->Model_calificaciones->getComentariosCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+					$estudiante->notas = array_merge($estudiante->notas, $notasTemp);
+					$estudiante->comentarios = array_merge($estudiante->comentarios, $comentariosTemp);
+					$cantidadCalificaciones += $this->Model_calificaciones->cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+
+				}
+			}
+			
+			
 			//echo 'Cantidad calificaciones: '.$cantidadCalificaciones.' ';
 			
 			while (count($estudiante->notas) < $cantidadCalificaciones) {
 				$estudiante->notas[count($estudiante->notas)]['nota'] = "";
 			}
-			$estudiante->comentarios = $this->Model_calificaciones->getComentariosCalificacionesEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
+			
 			while (count($estudiante->comentarios) < $cantidadCalificaciones) {
 				$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
 			}
 			
 			//Agrego el promedio final
-			$estudiante->notas[count($estudiante->notas)]['nota'] = $this->calculaPromedio($estudiante->notas);
+			$estudiante->notas[count($estudiante->notas)]['nota'] = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
 			$estudiante->comentarios[count($estudiante->comentarios)]['comentario'] = NULL;
 
 			
@@ -960,18 +1059,23 @@ class Estudiantes extends MasterManteka {
 			return;
 		}
 
+
+		$this->load->model('Model_profesor');
 		$only_view = $this->input->post('only_view');
 		$id_seccion = $this->input->post('seccion');
 		$rut_profesor = $this->session->userdata('rut');
-		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || ($only_view == TRUE)) {
+		$mostrarTodas = $only_view;
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR)) {
 			$esCoordinador = TRUE;
+			$modulosTematicosEnQueEsLider = array();
 		}
 		else {
 			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_profesor);
 		}
 		//echo 'caca:'.$only_view.'listo. esCoordinador:'.$esCoordinador.'caca ';return;
 		$this->load->model('Model_sesion');
-		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor, $esCoordinador);
+		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
 		
 		echo json_encode($resultado);
 	}
