@@ -964,15 +964,51 @@ class Estudiantes extends MasterManteka {
 			//Agrego el promedio final
 			$posicionUltimo = count($estudiante->notas);
 			if ($posicionUltimo > 0) {
-				$estudiante->notas[$posicionUltimo] = new stdClass();
-				$estudiante->notas[$posicionUltimo]->nota = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
-				$estudiante->notas[$posicionUltimo]->id_evaluacion = -1;
-				$estudiante->comentarios[$posicionUltimo] = new stdClass();
-				$estudiante->comentarios[$posicionUltimo]->comentario = NULL;
-				$estudiante->comentarios[$posicionUltimo]->id_evaluacion = -1;
+				
+				$objetoNota = new stdClass();
+				$objetoNota->nota = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
+				//echo 'nota:'.$objetoNota->nota.' c:'.count($estudiante->notas).' ';
+				$objetoNota->id_evaluacion = -1;
+				$estudiante->notas[$posicionUltimo] = $objetoNota;
+
+				//$promedio = array($objetoNota);
+				//array_merge($estudiante->notas, $promedio);
+
+				$objetoComentario = new stdClass();
+				$objetoComentario->comentario = NULL;
+				$objetoComentario->id_evaluacion = -1;
+				$estudiante->comentarios[$posicionUltimo] = $objetoComentario;
+				//$comentarioPromedio = array($objetoComentario);
+				//array_merge($estudiante->comentarios, $comentarioPromedio);
+				
 			}
+			
+			/*
+			if ($posicionUltimo > 0) {
+				$objetoNota = array();
+				$objetoNota['nota'] = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
+				//echo 'nota:'.$objetoNota['nota'].' ';
+				$objetoNota['id_evaluacion'] = -1;
+				$promedio = array($objetoNota);
+				array_merge($estudiante->notas, $promedio);
+
+				$objetoComentario = array();
+				$objetoComentario['comentario'] = NULL;
+				$objetoComentario['id_evaluacion'] = -1;
+				$comentarioPromedio = array($objetoComentario);
+				array_merge($estudiante->comentarios, $comentarioPromedio);
+			}
+			*/
+
 		}
-		echo json_encode($listaEstudiantes);
+		try {
+			$aImprimir = json_encode($listaEstudiantes);
+			echo $aImprimir;
+		}
+		catch (Exception $e) {
+			echo 'Error en la wea';
+		}
+		
 	}
 
 

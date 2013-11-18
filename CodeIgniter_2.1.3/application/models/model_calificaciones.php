@@ -167,9 +167,10 @@ class Model_calificaciones extends CI_Model {
 
 
 	public function calculaPromedio($rut_estudiante) {
-		$this->db->select('CAST(AVG(nota.VALOR_NOTA) AS DECIMAL (10,2)) AS promedio', FALSE);
+		$this->db->select('CAST(AVG(nota.VALOR_NOTA) AS DECIMAL (10,1)) AS promedio', FALSE);
 		$this->db->join('evaluacion', 'nota.ID_EVALUACION = evaluacion.ID_EVALUACION', 'LEFT OUTER');
 		$this->db->where('nota.RUT_USUARIO', $rut_estudiante);
+		$this->db->where('nota.VALOR_NOTA IS NOT NULL', NULL);
 		$query = $this->db->get('nota');
 		//echo $this->db->last_query();
 		if ($query == FALSE) {

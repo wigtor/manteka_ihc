@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	var prefijo_tipoDato = "estudiante_";
-	var listaColumnas = ["Rut", "Nombres", "Apellido paterno", "Apellido materno"];
+	var listaColumnas = ["Rut", "Nombres"];
 	var ruts_estudiantes = new Array();
 	var lista_idSesiones = new Array();
 
@@ -453,7 +453,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 		<div class="row-fluid">
 			<div class="span12" >
 				<div style="border:#cccccc 1px solid; overflow-x:scroll; width:72em; -webkit-border-radius: 4px;">
-				<table id="tablaAsistencia" class="table table-hover">
+				<table id="tablaAsistencia" class="table table-striped">
 					<thead>
 
 					</thead>

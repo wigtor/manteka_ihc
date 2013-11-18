@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	var prefijo_tipoDato = "estudiante_";
-	var listaColumnas = ["Rut", "Nombres", "Apellido paterno", "Apellido materno"];
+	var listaColumnas = ["Rut", "Nombres"];
 	var ruts_estudiantes = new Array();
 	var lista_idEvaluaciones = new Array();
 
@@ -95,7 +95,7 @@
 								var indiceEncontrado = buscarCalificacion(arrayObjectRespuesta[i].notas, lista_idEvaluaciones[k]);
 								if (indiceEncontrado >= 0) {
 									comentario = arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario; //paso a booleano
-									nota = arrayObjectRespuesta[i].notas[k].nota == undefined ? "" : arrayObjectRespuesta[i].notas[k].nota;
+									nota = arrayObjectRespuesta[i].notas[indiceEncontrado].nota == undefined ? "" : arrayObjectRespuesta[i].notas[indiceEncontrado].nota;
 								}
 								else { //Si se encontró -1
 									comentario = '';
@@ -153,6 +153,10 @@
 										if (lista_idEvaluaciones[k] == -1) {
 								nodo.setAttribute("disabled", 'disabled');
 										}
+										else {
+											//nodo.setAttribute("placeholder", "4.0");//Confunde
+											nodo.setAttribute("title", "Ingrese la nota utilizando un . (punto) para separar los decimales");
+										}
 								<?php
 									}
 								?>
@@ -180,7 +184,7 @@
 										}
 									?>
 									'" type="text" ></div>';
-									$(nodoIconComentario).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idEvaluaciones[k]});
+									$(nodoIconComentario).popover({html:true, trigger:'hover', content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idEvaluaciones[k]});
 									
 									divTd.appendChild(nodoIconComentario);
 								}
@@ -267,7 +271,7 @@
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
-			th.setAttribute('class', "span2");
+			//th.setAttribute('class', "span2");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
@@ -429,7 +433,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 		<div class="row-fluid">
 			<div class="span12" >
 				<div style="border:#cccccc 1px solid; overflow-x:scroll; width:72em; -webkit-border-radius: 4px;">
-				<table id="tablaCalificaciones" class="table table-hover">
+				<table id="tablaCalificaciones" class="table table-striped">
 					<thead>
 
 					</thead>
