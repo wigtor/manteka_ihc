@@ -7,7 +7,7 @@
 	function resettablaCalificaciones() {
 		var tablaResultados = document.getElementById("tablaCalificaciones");
 		$(tablaResultados).find('tbody').remove();
-		var tr, td;
+		var tr, td, nodoAsterisco;
 		var tbody = document.createElement('tbody');
 		tr = document.createElement('tr');
 		td = document.createElement('td');
@@ -109,7 +109,10 @@
 
 								nodo = document.createElement('input');
 								nodo.setAttribute("type", 'text');
-								nodo.setAttribute("class", 'input-mini');
+								nodo.setAttribute("autocomplete", "off");
+								nodo.setAttribute("class", 'popover-input');
+								nodo.setAttribute("style", 'width:25px;');
+
 								if (lista_idEvaluaciones[k] != -1) {
 									nodo.setAttribute("pattern", "[1-6]([\.][0-9])|[1-7]([\.][0])|[1-7]?");
 
@@ -122,72 +125,73 @@
 									nodoComentario.setAttribute("value", comentario);
 									nodoComentario.setAttribute("class", 'span1');
 									divTd.appendChild(nodoComentario);
-
-									nodoIconComentario = document.createElement('div');
-									icono = document.createElement('i');
-									icono.setAttribute('class', 'icon-comment');
-									nodoIconComentario.appendChild(icono);
 									
 									nodoAsterisco = document.createElement('font');
 									nodoAsterisco.setAttribute('color', 'red');
 									if ($.trim(comentario) != '') {
-										nodoComentario = document.createTextNode('*');
+										nodoComentario = document.createTextNode('\u00a0*');
 									}
 									else {
 										nodoComentario = document.createTextNode("\u00a0");
 									}
 									nodoAsterisco.appendChild(nodoComentario);
-									nodoIconComentario.appendChild(nodoAsterisco);
-								
-									nodoIconComentario.setAttribute("class", 'btn btn-mini');
-									nodoIconComentario.setAttribute("value", '*');
 								}
 										
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
 										?>
-								nodo.setAttribute("disabled", 'disabled');
+									nodo.setAttribute("readOnly", 'readOnly');
 										<?php
 									}
 									else { ?>
 										if (lista_idEvaluaciones[k] == -1) {
-								nodo.setAttribute("disabled", 'disabled');
+									nodo.setAttribute("readOnly", 'readOnly');
 										}
 										else {
 											//nodo.setAttribute("placeholder", "4.0");//Confunde
-											nodo.setAttribute("title", "Ingrese la nota utilizando un . (punto) para separar los decimales");
+									divTd.setAttribute("title", "Ingrese la nota utilizando un . (punto) para separar los decimales");
 										}
 								<?php
 									}
 								?>
-								if (lista_idEvaluaciones[k] != -1) {
-								nodo.setAttribute("name", 'Calificaciones['+arrayObjectRespuesta[i].rut+']['+lista_idEvaluaciones[k]+']');
+								if (lista_idEvaluaciones[k] != -1) { //La nota promedio no es editable y no se guarda en DB
+									nodo.setAttribute("name", 'Calificaciones['+arrayObjectRespuesta[i].rut+']['+lista_idEvaluaciones[k]+']');
 								}
 								
 								//nota = arrayObjectRespuesta[i].Calificaciones[k].nota == 1 ? true : false; //paso a booleano
 								$(nodo).prop('value', nota);
 								nodo.setAttribute("id", 'Calificaciones_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]);
 
-
-								divTd.appendChild(nodo);
 								//Agrego el popover para poner comentarios
 								var divBtnCerrar = '';// '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
 								var divs;
-								if (lista_idEvaluaciones[k] != -1) {
-									divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
+								if (lista_idEvaluaciones[k] != -1) { //La nota promedio no lleva comentarios
+									divs = '<div ><input class="popovers" onChange="cambioComentario(this)" title="Ingrese comentario" value="'+comentario+
 									'" id="comentario_'+arrayObjectRespuesta[i].rut+'_'+lista_idEvaluaciones[k]+
 									<?php 
 										if ($ONLY_VIEW === TRUE) {
 											?>
-									'" disabled="disabled'+
+									'" readonly="readonly'+
 											<?php
 										}
 									?>
 									'" type="text" ></div>';
-									$(nodoIconComentario).popover({html:true, trigger:'hover', content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idEvaluaciones[k]});
-									
-									divTd.appendChild(nodoIconComentario);
+
+									nodo.setAttribute("indice1", arrayObjectRespuesta[i].rut);
+									nodo.setAttribute("indice2", lista_idEvaluaciones[k]);
+									$(nodo).dblclick(function(evento){ //mostrar popover
+										//evento.stopPropagation();
+										//$('.popover-input').not('#'+evento.currentTarget.id).popover('hide');
+										$(evento.currentTarget).popover('show');
+										copiarDeHidenToClickover(evento.currentTarget.getAttribute("indice1"), evento.currentTarget.getAttribute("indice2"));
+									});
+									$(nodo).popover({html:true, trigger:'manual', content: divs, onShown: copiarDeHidenToClickoverMasquerade, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idEvaluaciones[k]});
+										
+									//divTd.appendChild(nodoIconComentario);
 								}
+
+								divTd.appendChild(nodo);
+								divTd.appendChild(nodoAsterisco);
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
 							}
@@ -204,28 +208,43 @@
 	}
 
 
+	
+
 	function cambioComentario(inputComentario) {
 		var valor = $.trim(inputComentario.value);
-		var fontAsterisco = $(inputComentario).parent().parent().parent().siblings().find('font');
+		var fontAsterisco = $(inputComentario).siblings().find('font');
 		if (valor != '') { //Pongo el asterisco rojo indicando que hay un comentario
-			fontAsterisco.html('*');
+			fontAsterisco.html('\u00a0*');
 		}
 		else {
 			fontAsterisco.html('\u00a0');
 		}
-		var part2Nombre = inputComentario.id.substring('comentario_'.length, inputComentario.length);
+		var part2Nombre = inputComentario.id.substring('comentario_'.length, inputComentario.id.length);
 		$('#comentarioHidden_'+part2Nombre).val(valor);
 	}
 
-	function copiarDeHidenToClickover() {
-		var input_popover = document.getElementById("comentario_"+this.options.indice1+"_"+this.options.indice2);
-		var inputHidden = document.getElementById("comentarioHidden_"+this.options.indice1+"_"+this.options.indice2);
+	function copiarDeHidenToClickover(indice1, indice2) {
+		var input_popover = document.getElementById("comentario_"+indice1+"_"+indice2);
+		var inputHidden = document.getElementById("comentarioHidden_"+indice1+"_"+indice2);
 	
 		if (input_popover != undefined) {
 			$(input_popover).focus();
 			$(input_popover).val($(inputHidden).val());
 
+			$('.popover').focusout(function(evento) {
+				var esPopOverInput = $(evento.currentTarget).hasClass("popover-input");
+				if (!esPopOverInput) {
+					$('.popover-input').popover('hide');
+				}
+				else {
+					console.log("No se oculta");
+				}
+			});
 		}
+	}
+
+	function copiarDeHidenToClickoverMasquerade() {
+		copiarDeHidenToClickover(this.options.indice1, this.options.indice2);
 	}
 
 
@@ -384,8 +403,8 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 		echo form_open('Estudiantes/postAgregarCalificaciones/', $atributos);
 	?>
 		<div class="row-fluid">
-			<div class="span5">
-				<font color="red">* Campos Obligatorios</font>
+			<div class="span6">
+				<font color="red">'*'</font> indica que se han ingresado comentarios
 			</div>
 		</div>
 		<div class="row-fluid">

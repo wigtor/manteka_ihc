@@ -65,7 +65,7 @@
 					});
 				}
 
-				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono;
+				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono, blanco;
 
 
 				//CARGO EL CUERPO DE LA TABLA
@@ -100,10 +100,12 @@
 									comentario = arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario; //paso a booleano
 									estaPresente = arrayObjectRespuesta[i].asistencia[indiceEncontrado].presente == undefined ? false : arrayObjectRespuesta[i].asistencia[indiceEncontrado].presente;
 									estaPresente = arrayObjectRespuesta[i].asistencia[indiceEncontrado].presente == 1 ? true : false; //paso a booleano
+									blanco = false;
 								}
 								else { //Si se encontró -1
 									comentario = '';
 									estaPresente = false;
+									blanco = true;
 								}
 
 								
@@ -112,8 +114,12 @@
 								divTd.setAttribute('class', 'row-fluid');
 
 								nodo = document.createElement('input');
-								nodo.setAttribute("type", 'checkbox');
-								nodo.setAttribute("class", 'input-mini');
+								nodo.setAttribute("type", 'text');
+								nodo.setAttribute("autocomplete", "off");
+								nodo.setAttribute("class", 'popover-input');
+								nodo.setAttribute("style", 'width:20px;');
+
+								nodo.setAttribute("pattern", "[0-1]?");
 
 								
 								nodoComentario = document.createElement('input');
@@ -121,40 +127,37 @@
 								nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
 								nodoComentario.setAttribute("name", 'comentario['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
 								nodoComentario.setAttribute("value", comentario);
-								nodoComentario.setAttribute("class", 'span1');
+								//nodoComentario.setAttribute("class", 'span2');
 								divTd.appendChild(nodoComentario);
-
-
-								nodoIconComentario = document.createElement('div');
-								icono = document.createElement('i');
-								icono.setAttribute('class', 'icon-comment');
-								nodoIconComentario.appendChild(icono);
 								
 								nodoAsterisco = document.createElement('font');
 								nodoAsterisco.setAttribute('color', 'red');
 								if ($.trim(comentario) != '') {
-									nodoComentario = document.createTextNode('*');
+									nodoComentario = document.createTextNode('\u00a0*');
 								}
 								else {
 									nodoComentario = document.createTextNode("\u00a0");
 								}
 								nodoAsterisco.appendChild(nodoComentario);
-								nodoIconComentario.appendChild(nodoAsterisco);
-							
-								nodoIconComentario.setAttribute("class", 'btn btn-mini');
-								nodoIconComentario.setAttribute("value", '*');
 								
 										
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
 										?>
-								nodo.setAttribute("disabled", 'disabled');
+								nodo.setAttribute("readOnly", 'readOnly');
 										<?php
 									}
 								?>
 								nodo.setAttribute("name", 'asistencia['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
 								
-								$(nodo).prop('checked', estaPresente);
+								//$(nodo).prop('checked', estaPresente);
+								if (!blanco) {
+									if (estaPresente)
+										nodo.setAttribute("value", "1");
+									else {
+										nodo.setAttribute("value", "0");
+									}
+								}
 								nodo.setAttribute("id", 'asistencia_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
 
 
@@ -166,15 +169,24 @@
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
 										?>
-								'" disabled="disabled'+
+								'" readOnly="readOnly'+
 										<?php
 									}
 								?>
 								'" type="text" ></div>';
-								$(nodoIconComentario).clickover({html:true, content: divs, onShown: copiarDeHidenToClickover, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idSesiones[k]});
+
+								nodo.setAttribute("indice1", arrayObjectRespuesta[i].rut);
+								nodo.setAttribute("indice2", lista_idSesiones[k]);
+								$(nodo).dblclick(function(evento){ //mostrar popover
+									//evento.stopPropagation();
+									//$('.popover-input').not('#'+evento.currentTarget.id).popover('hide');
+									$(evento.currentTarget).popover('show');
+									copiarDeHidenToClickover(evento.currentTarget.getAttribute("indice1"), evento.currentTarget.getAttribute("indice2"));
+								});
+								$(nodo).popover({html:true, trigger:'manual', content: divs, onShown: copiarDeHidenToClickoverMasquerade, placement:'top', title:"Comentarios", indice1: arrayObjectRespuesta[i].rut, indice2: lista_idSesiones[k]});
 								
 								divTd.appendChild(nodo);
-								divTd.appendChild(nodoIconComentario);
+								divTd.appendChild(nodoAsterisco);
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
 							}
@@ -193,26 +205,39 @@
 
 	function cambioComentario(inputComentario) {
 		var valor = $.trim(inputComentario.value);
-		var fontAsterisco = $(inputComentario).parent().parent().parent().siblings().find('font');
+		var fontAsterisco = $(inputComentario).parent().parent().parent().parent().parent().children().find('font');
 		if (valor != '') { //Pongo el asterisco rojo indicando que hay un comentario
-			fontAsterisco.html('*');
+			fontAsterisco.html('\u00a0*');
 		}
 		else {
 			fontAsterisco.html('\u00a0');
 		}
-		var part2Nombre = inputComentario.id.substring('comentario_'.length, inputComentario.length);
+		var part2Nombre = inputComentario.id.substring('comentario_'.length, inputComentario.id.length);
 		$('#comentarioHidden_'+part2Nombre).val(valor);
 	}
 
-	function copiarDeHidenToClickover() {
-		var input_popover = document.getElementById("comentario_"+this.options.indice1+"_"+this.options.indice2);
-		var inputHidden = document.getElementById("comentarioHidden_"+this.options.indice1+"_"+this.options.indice2);
+	function copiarDeHidenToClickover(indice1, indice2) {
+		var input_popover = document.getElementById("comentario_"+indice1+"_"+indice2);
+		var inputHidden = document.getElementById("comentarioHidden_"+indice1+"_"+indice2);
 	
 		if (input_popover != undefined) {
 			$(input_popover).focus();
 			$(input_popover).val($(inputHidden).val());
 
+			$('.popover').focusout(function(evento) {
+				var esPopOverInput = $(evento.currentTarget).hasClass("popover-input");
+				if (!esPopOverInput) {
+					$('.popover-input').popover('hide');
+				}
+				else {
+					console.log("No se oculta");
+				}
+			});
 		}
+	}
+
+	function copiarDeHidenToClickoverMasquerade() {
+		copiarDeHidenToClickover(this.options.indice1, this.options.indice2);
 	}
 
 
@@ -258,7 +283,10 @@
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
-			th.setAttribute('class', "span2");
+			if (i == 0)
+				th.setAttribute('style', "min-width:70px");
+			else
+				th.setAttribute('style', "min-width:250px");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
@@ -269,8 +297,9 @@
 		var listaSesiones = getListaSesiones();
 		for (var i = 0; i < listaSesiones.length; i++) {
 			th = document.createElement('th');
-			th.setAttribute('class', "span2");
+			th.setAttribute('style', "min-width:65px");
 
+			/*
 			//Agrego el input que los checkea a todos
 			nodoCheckeable = document.createElement('input');
 			nodoCheckeable.setAttribute('data-previous', 'false,true,false');
@@ -286,9 +315,10 @@
 			nodoCheckeable.setAttribute('title', 'Seleccionar todos');
 			nodoCheckeable.setAttribute('onchange', "checkAll(this);");
 			th.appendChild(nodoCheckeable);
+			*/
 
 			//Agrego la fecha de la sesión
-			nodoTexto = document.createTextNode(" N°" + listaSesiones[i].numero_sesion_global + " - " + listaSesiones[i].fecha_planificada);
+			nodoTexto = document.createTextNode(" Sem " + listaSesiones[i].numero_sesion_global + " - " + tranformFecha(listaSesiones[i].fecha_planificada));
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
@@ -296,6 +326,25 @@
 		thead.appendChild(tr);
 		
 		tablaResultados.appendChild(thead);
+	}
+
+	//Confierte la fecha de formato yyyy-mm-dd a: dd-mes
+	function tranformFecha(fechaStr) {
+		var indexGuion = fechaStr.indexOf('-');
+		var agnoInt = fechaStr.substring(0, indexGuion);
+		agnoInt = parseInt(agnoInt);
+		fechaStr = fechaStr.substring(indexGuion+1);
+		indexGuion = fechaStr.indexOf('-');
+		var mesInt = fechaStr.substring(0, indexGuion);
+		mesInt = parseInt(mesInt);
+		fechaStr = fechaStr.substring(indexGuion+1);
+		var diaInt = parseInt(fechaStr);
+		var monthNames = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
+    	var mes;
+    	if ((mesInt >= 0) && mesInt <= monthNames.length)
+    		mes = (monthNames[mesInt-1]).substring(0, 3);
+		return diaInt+"-"+mes;
 	}
 
 	function cargarAsistencia() {
@@ -452,8 +501,8 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 		</div>
 		<div class="row-fluid">
 			<div class="span12" >
-				<div style="border:#cccccc 1px solid; overflow-x:scroll; width:72em; -webkit-border-radius: 4px;">
-				<table id="tablaAsistencia" class="table table-striped">
+				<div style="border:#cccccc 1px solid; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px;">
+				<table id="tablaAsistencia" class="table table-striped" >
 					<thead>
 
 					</thead>

@@ -511,8 +511,24 @@ class Estudiantes extends MasterManteka {
 				foreach ($arrayComentarioBySesion as $id_sesion_de_clase => $comentario) {
 					$asistio = FALSE;
 					if (array_key_exists ($rut, $asistencia)) { //Compruebo el primer índice (rut)
-						if (array_key_exists ($id_sesion_de_clase, $asistencia[$rut])) { //Compruebo el segundo índice (id_sesion)
-							$asistio = TRUE;
+						if (array_key_exists ($id_sesion_de_clase, $asistencia[$rut])) { //Compruebo el segundo índice (id_evaluacion)
+							$asistio = $asistencia[$rut][$id_sesion_de_clase];
+							//echo 'Rut: '.$rut.' '.$asistio.' ';
+							if ($asistio === "") {
+								$asistio = NULL;
+							}
+							else if ($asistio == 0) {
+								$asistio = FALSE;
+							}
+							else {
+								$asistio = TRUE;
+							}
+
+							if ($comentario !== NULL) {
+								if (trim($comentario) === "") { //Si el comentario es vacio
+									$comentario = NULL;
+								}
+							}
 						}
 					}
 
@@ -526,7 +542,7 @@ class Estudiantes extends MasterManteka {
 					else { //Si no hay comentario
 						$justificado = FALSE;
 					}
-					if (($asistio == TRUE) || ($comentario != NULL) || ($justificado == TRUE)) {
+					if (($asistio !== NULL) || ($comentario !== NULL) || ($justificado === TRUE)) {
 						$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
 					}
 				}
