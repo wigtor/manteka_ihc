@@ -404,7 +404,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 	?>
 		<div class="row-fluid">
 			<div class="span6">
-				<font color="red">'*'</font> indica que se han ingresado comentarios
+				<font color="red">*</font> indica que se han ingresado comentarios
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -419,7 +419,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 		<div class="row-fluid">
 			<div class="span5">
 				<div class="control-group">
-					<label class="control-label" for="seccion">1.- <font color="red">*</font> Sección:</label>
+					<label class="control-label" for="seccion">1.- Sección:</label>
 					<div class="controls">
 						<select id="seccion" name="seccion" class="span12" required onchange="cargarCalificaciones();">
 							<option value="" disabled selected>Sección</option>
