@@ -32,12 +32,12 @@ function escribirHeadTable(nombreTabla) {
 
 				// Botón de filtros avanzado
 				nodoBtnFiltroAvanzado = document.createElement('a');
-				nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-mini clickover");
+				nodoBtnFiltroAvanzado.setAttribute('class', "btn btn-default btn-xs clickover");
 				nodoBtnFiltroAvanzado.setAttribute('id', 'cabeceraTabla_'+tiposFiltro[i]);
 				//$(nodoBtnFiltroAvanzado).attr('title', "Buscar por "+tiposFiltro[i]);
 				nodoBtnFiltroAvanzado.setAttribute('style', "cursor:pointer;");
-				span = document.createElement('i');
-				span.setAttribute('class', "icon-filter clickover");
+				span = document.createElement('span');
+				span.setAttribute('class', "glyphicon glyphicon-search clickover");
 					//span.setAttribute('style', "vertical-align:middle;");
 				nodoBtnFiltroAvanzado.appendChild(span);
 				th.appendChild(nodoBtnFiltroAvanzado);
@@ -47,9 +47,9 @@ function escribirHeadTable(nombreTabla) {
 				/// Se asigna el valor del atributo pattern que tendrá el input.
 				var inputPattern = inputAllowedFiltro[i] != "" ? 'pattern="'+inputAllowedFiltro[i]+'"' : "";
 
-				var divBtnCerrar = '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
+				var divBtnCerrar = '<div class="btn btn-default btn-xs" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><span class="glyphicon glyphicon-remove"></span></div>';
 				
-				var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" '+inputPattern+' id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(this)" ><button class="btn" onClick="cambioTipoFiltro(this.parentNode.firstChild)" type="button"><i class="icon-search"></i></button></div>';
+				var divs = divBtnCerrar+'<div class="input-append"><input class="span9 popovers" '+inputPattern+' id="'+ prefijo_tipoFiltro + i +'" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(this)" ><button class="btn" onClick="cambioTipoFiltro(this.parentNode.firstChild)" type="button"><span class="glyphicon glyphicon-search"></span></button></div>';
 				
 
 				$(nodoBtnFiltroAvanzado).clickover({html:true, content: divs, placement:'top', onShown: despuesDeMostrarPopOver, title:"Búsqueda sólo por " + tiposFiltro[i], rel:"clickover", indice: i});

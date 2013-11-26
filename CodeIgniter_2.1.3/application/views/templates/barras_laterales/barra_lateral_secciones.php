@@ -7,7 +7,7 @@
 
 		//	Si la variable no se ha seteado, se asume operación principal.
 		if (!isset($subVistaLateralAbierta)) {
-			$subVistaLateralAbierta = "verSecciones";
+			$subVistaLateralAbierta = "";
 		}
 
 		// Las operaciones por defecto no poseen clases
@@ -38,22 +38,13 @@
 		}
 	?>
 
-	<!--	Barra lateral de secciones	-->
-	<div class="accordion" id="accordion2">
-    	<div class="accordion-group">
-		    <div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-				Secciones</a>
-			</div>
-			<div id="collapseOne" class="accordion-body collapse <?php echo $inSecciones; ?>">
-				<div class="accordion-inner nav nav-list">
-					<li <?php echo $verSecciones; ?> ><a href="<?php echo site_url("Secciones/verSecciones")?>">Ver secciones</a></li>
-					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarSeccion; ?> ><a href="<?php echo site_url("Secciones/agregarSeccion")?>">Agregar sección</a></li>
-						<li <?php echo $editarSeccion; ?> ><a href="<?php echo site_url("Secciones/editarSeccion")?>">Editar sección</a></li>
-						<li <?php echo $eliminarSeccion; ?> ><a href="<?php echo site_url("Secciones/eliminarSeccion")?>">Eliminar sección</a></li>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-	</div>
+
+	<ul class="dropdown-menu" role="menu" aria-labelledby="drop_secciones">
+		<li class="dropdown-header <?php echo $inSecciones; ?>">Secciones</li>
+			<li <?php echo $verSecciones; ?> ><a href="<?php echo site_url("Secciones/verSecciones")?>">Ver secciones</a></li>
+		<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+			<li <?php echo $agregarSeccion; ?> ><a href="<?php echo site_url("Secciones/agregarSeccion")?>">Agregar sección</a></li>
+			<li <?php echo $editarSeccion; ?> ><a href="<?php echo site_url("Secciones/editarSeccion")?>">Editar sección</a></li>
+			<li <?php echo $eliminarSeccion; ?> ><a href="<?php echo site_url("Secciones/eliminarSeccion")?>">Eliminar sección</a></li>
+		<?php } ?>
+	</ul>

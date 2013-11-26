@@ -2,19 +2,19 @@
 <fieldset>
 	<legend>Ver <?php echo $nombreView?></legend>
 	<div class="row-fluid">
-		<div class="span6">
+		<div class="col-md-6">
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="col-md-6">
 					1.- Lista de <?php echo $nombreView?>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span11">
+				<div class="col-md-11">
 					<div class="row-fluid">
-						<div class="span6">
+						<div class="col-md-6">
 							<input id="<?php echo $idInputFiltro?>" type="text" onChange="<?php echo $nombreFncCambiarTipoFiltro?>()" placeholder="Filtro búsqueda" style="width:90%">
 						</div>
-						<div class="span6">
+						<div class="col-md-6">
 							<select id="<?php echo $idSelectFiltro?>" onChange="<?php echo $nombreFncCambiarTipoFiltro?>()" title="Tipo de filtro" name="Filtro a usar">
 								<?php
 									foreach ($OpcionesFiltro as $opcion)
@@ -36,7 +36,7 @@
 
 			
 			<div class="row-fluid" style="margin-left: 0%;">
-				<div class="span12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
+				<div class="col-md-12" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
 					<table id="listadoResultados" class="table table-hover">
 						<thead>
 							<b>Nombre Completo</b>
@@ -48,7 +48,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="span6" style="margin-left: 2%; padding: 0%; ">
+		<div class="col-md-6" style="margin-left: 2%; padding: 0%; ">
 		2.-Detalle <?php echo $nombreView ?>:
 	    <pre style="margin-top: 2%; padding: 2%">
 	    	<?php

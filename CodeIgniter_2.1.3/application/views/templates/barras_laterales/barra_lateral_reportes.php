@@ -1,7 +1,7 @@
 <!--	Barra lateral con las operaciones que puede realizar el usuario cuando se encuentra en el módulo "Infomes"	-->
 	<?php
 		if (!isset($subVistaLateralAbierta)) {
-			$subVistaLateralAbierta = "reportesUsuario";
+			$subVistaLateralAbierta = "";
 		}
 
 		$reportesSistema = "";

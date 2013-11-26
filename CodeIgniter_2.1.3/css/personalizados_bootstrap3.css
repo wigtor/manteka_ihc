@@ -1,0 +1,54 @@
+/* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
+
+.caca-clear-filters {
+	display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  line-height: 14px;
+  vertical-align: text-top;
+	background-image: url("../img/clear-filters.png");
+}
+
+.icon_footer {
+	width: 15px;
+	height: 15px;
+}
+
+@font-face{
+font-family: 'MyWebFont';
+	src: url('WebFont.eot');
+	src: url('WebFont.eot?#iefix') format('embedded-opentype'),
+	url('WebFont.woff') format('woff'),
+	url('WebFont.ttf') format('truetype'),
+	url('WebFont.svg#webfont') format('svg');
+	/*
+	src: url('/manteka/css/WebFont.eot');
+	src: url('/manteka/css/WebFont.eot?#iefix') format('embedded-opentype'),
+	url('/manteka/css/WebFont.woff') format('woff'),
+	url('/manteka/css/WebFont.ttf') format('truetype'),
+	url('/manteka/css/WebFont.svg#webfont') format('svg'); */
+}
+
+.btn_with_icon:first-letter {
+	font-family: MyWebFont,Serif ! important;
+	font-size: 30px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+}
+.btn_with_icon_solo{
+	font-family: MyWebFont,Serif ! important;
+	font-size: 20px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+	display:inline-block;
+}
+
+.btn_with_icon_solo_footer{
+	font-family: MyWebFont,Serif ! important;
+	font-size: 18px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+	color: gray;
+}
+

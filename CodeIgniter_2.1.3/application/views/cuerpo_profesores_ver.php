@@ -53,54 +53,81 @@
 </script>
 
 
-
-
-<fieldset>
-	<legend>Ver Profesor</legend>
-	<div class="row-fluid">
-		<div class="span6">
-			<div class="controls controls-row">
-			    <div class="input-append span7">
-					<input id="filtroLista" class="span9" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
-					<button class="btn" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><i class="icon-search"></i></button>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h4 class="panel-title">Ver Profesor</h4>
+	</div>
+	<div class="panel-body">
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="input-group col-md-9">
+					<input id="filtroLista" class="form-control" type="text" onkeypress="getDataSource(this)" onChange="cambioTipoFiltro(undefined)" placeholder="Filtro búsqueda">
+					<span class="input-group-btn">
+						<button class="btn btn-default" onClick="cambioTipoFiltro(undefined)" title="Iniciar una búsqueda considerando todos los atributos" type="button"><span class="glyphicon glyphicon-search"></span></button>
+					</span>
 				</div>
-				<button class="btn" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><i class="caca-clear-filters"></i></button>
+				<div class="col-md-3">
+					<button class="btn btn-default btn-xs" onClick="limpiarFiltros()" title="Limpiar todos los filtros de búsqueda" type="button"><span class="caca-clear-filters"></span></button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-7" >
+				<p>1.- Seleccione un profesor para ver sus detalles:</p>
+			</div>
+			<div class="col-md-5" >
+				<p>2.- Detalle profesor:</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-7">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="table-responsive" style="overflow-y:scroll;">
+							<table id="listadoResultados" class="table table-striped">
+								<thead>
+									
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<dl>
+					<dt>Rut:</dt>
+					<dd id="rut"></dd>
+
+					<dt>Nombres:</dt>
+					<dd><span id="nombre1"></span> <span id="nombre2"></span></dd>
+
+					<dt>Apellidos:</dt>
+					<dd><span id="apellido1"></span> <span id="apellido2"></span></dd>
+
+					<dt>Telefono:</dt>
+					<dd id="telefono"></dd>
+
+					<dt>Correo:</dt>
+					<dd id="correo1"></dd>
+
+					<dt>Correo secundario:</dt>
+					<dd id="correo2"></dd>
+
+					<dt>Tipo de profesor:</dt>
+					<dd id="tipo_profesor"></dd>
+
+					<dt>Módulo temático:</dt>
+					<dd id="moduloTematico"></dd>
+				</dl>
+
 			</div>
 		</div>
 	</div>
-	<div class="row-fluid">
-		<div class="span6" >
-			1.- Seleccione un profesor para ver sus detalles:
-		</div>
-		<div class="span6" >
-			2.- Detalle profesor:
-		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span6" style="border:#cccccc 1px solid; overflow-y:scroll; height:400px; -webkit-border-radius: 4px;">
-			<table id="listadoResultados" class="table table-hover">
-				<thead>
-					
-				</thead>
-				<tbody>
-
-				</tbody>
-			</table>
-		</div>
-		<div class="span6">
-			<pre style="padding: 2%; cursor:default">
-Rut:              <b id="rut" ></b>
-Nombres:          <b id="nombre1" ></b> <b id="nombre2" ></b>
-Apellido paterno: <b id="apellido1" ></b>
-Apellido materno: <b id="apellido2" ></b>
-Telefono:         <b id="telefono" ></b>
-Correo:           <b id="correo1" ></b>
-Correo secundario:<b id="correo2" ></b>
-Tipo:             <b id="tipo_profesor"></b>
-Módulo temático:  <b id="moduloTematico"></pre>
-		</div>
-	</div>
-</fieldset>
+</div>
 
 
 

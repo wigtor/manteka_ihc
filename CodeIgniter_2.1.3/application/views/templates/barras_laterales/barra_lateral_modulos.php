@@ -7,7 +7,7 @@
 
 		//	Si la variable no se ha seteado, se asume operación principal.
 		if (!isset($subVistaLateralAbierta)) {
-			$subVistaLateralAbierta = "verModulos";
+			$subVistaLateralAbierta = "";
 		}
 
 		// Las operaciones por defecto no poseen clases

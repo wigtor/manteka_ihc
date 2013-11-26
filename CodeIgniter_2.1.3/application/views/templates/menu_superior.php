@@ -35,14 +35,8 @@
 		else if ($menuSuperiorAbierto == "Planificacion") {
 			$Planificacion = 'class="active"';
 		}
-		else if ($menuSuperiorAbierto == "Salas") {
-			$Salas = 'class="active"';
-		}
 		else if ($menuSuperiorAbierto == "Estudiantes") {
 			$Estudiantes = 'class="active"';
-		}
-		else if ($menuSuperiorAbierto == "Reportes") {
-			$Reportes = 'class="active"';
 		}
 
 		
@@ -54,32 +48,55 @@
 		}
 ?>
 
-	<div class="navbar pull-right">
-		<div class="navbar-inner" style="width:815px;">
-			<ul class="nav">
-				<li <?php echo $Correos;?> >
-					<a class="btn_with_icon" style="width:100px;" href="<?php echo site_url("Correo/index") ?>">M Correos<span id="botonCorreosSuperior"><?php echo $mensajesNoLeidos ?></span></a>
-				</li>
-				<li <?php echo $Docentes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docencia</a>
-				</li>
-				<li <?php echo $Secciones;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
-				</li>
-				<li <?php echo $Planificacion;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a>
-				</li>
-				<li <?php echo $Salas;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
-				</li>
-				<li <?php echo $Estudiantes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Estudiantes/index") ?>">Ù Estudiantes</a>
-				</li>
-				<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-				<li <?php echo $Reportes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("ReportesSistema/index") ?>">E Reportes</a>
-				</li>
-				<?php } ?>
-			</ul>
-		</div>
-	</div>
+	<ul class="nav navbar-nav">
+		<li <?php echo $Correos;?> >
+			<a class="dropdown-toggle" id="drop_correos" data-toggle="dropdown" role="button" href="<?php echo site_url("Correo/index") ?>">
+				Correos
+				<span id="botonCorreosSuperior"><?php echo $mensajesNoLeidos ?></span>
+				<span class="caret"></span>
+			</a>
+			<?php
+				echo $barra_lateral_correos; //	Barra Lateral
+			?>
+		</li>
+
+		<li <?php echo $Docentes;?> >
+			<a class="dropdown-toggle" id="drop_docentes" data-toggle="dropdown" role="button" href="<?php echo site_url("Profesores/index") ?>">
+				Docencia
+				<span class="caret"></span>
+			</a>
+			<?php
+				echo $barra_lateral_profesores; //	Barra Lateral
+			?>
+		</li>
+
+		<li <?php echo $Secciones;?> >
+			<a class="dropdown-toggle" id="drop_secciones" data-toggle="dropdown" role="button" href="<?php echo site_url("Secciones/index") ?>">
+				Secciones
+				<span class="caret"></span>
+			</a>
+			<?php
+				echo $barra_lateral_secciones; //	Barra Lateral
+			?>
+		</li>
+
+		<li <?php echo $Planificacion;?> >
+			<a class="dropdown-toggle" id="drop_planificacion" data-toggle="dropdown" role="button" href="<?php echo site_url("Planificacion/index") ?>">
+				Planificación
+				<span class="caret"></span>
+			</a>
+			<?php
+				echo $barra_lateral_planificacion; //	Barra Lateral
+			?>
+		</li>
+
+		<li <?php echo $Estudiantes;?> >
+			<a class="dropdown-toggle" id="drop_estudiantes" data-toggle="dropdown" role="button" href="<?php echo site_url("Estudiantes/index") ?>">
+				Estudiantes
+				<span class="caret"></span>
+			</a>
+			<?php
+				echo $barra_lateral_estudiantes; //	Barra Lateral
+			?>
+		</li>
+	</ul>

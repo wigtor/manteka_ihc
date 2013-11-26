@@ -111,7 +111,7 @@
 								
 								td = document.createElement('td'); //Creo la celda
 								divTd = document.createElement('div');
-								divTd.setAttribute('class', 'row-fluid');
+								divTd.setAttribute('class', 'row');
 
 								nodo = document.createElement('input');
 								nodo.setAttribute("type", 'text');
@@ -127,7 +127,7 @@
 								nodoComentario.setAttribute("id", 'comentarioHidden_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]);
 								nodoComentario.setAttribute("name", 'comentario['+arrayObjectRespuesta[i].rut+']['+lista_idSesiones[k]+']');
 								nodoComentario.setAttribute("value", comentario);
-								//nodoComentario.setAttribute("class", 'span2');
+								//nodoComentario.setAttribute("class", 'col-md-2');
 								divTd.appendChild(nodoComentario);
 								
 								nodoAsterisco = document.createElement('font');
@@ -447,12 +447,12 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
 		echo form_open('Estudiantes/postAgregarAsistencia/', $atributos);
 	?>
-		<div class="row-fluid">
-			<div class="span5">
+		<div class="row">
+			<div class="col-md-5">
 				<font color="red">*</font> indica que se han ingresado comentarios
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<?php 
 				if ($ONLY_VIEW === FALSE) {
 					?>
@@ -461,12 +461,12 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				}
 			?>
 		</div>
-		<div class="row-fluid">
-			<div class="span5">
-				<div class="control-group">
+		<div class="row">
+			<div class="col-md-5">
+				<div class="form-group">
 					<label class="control-label" for="seccion">1.- Sección:</label>
 					<div class="controls">
-						<select id="seccion" name="seccion" class="span12" required onchange="cargarAsistencia();">
+						<select id="seccion" name="seccion" class="col-md-12" required onchange="cargarAsistencia();">
 							<option value="" disabled selected>Sección</option>
 							<?php
 							if (isset($secciones)) {
@@ -488,7 +488,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			<?php 
 				if ($IS_PROFESOR_LIDER == TRUE) {
 					?>
-				<div class="control-group">
+				<div class="form-group">
 					<label class="control-label" for="seccion">2.- <font color="red">*</font> Ver sólo mis secciones:</label>
 					<div class="controls">
 						<input type="checkbox" checked id="checkVerSoloMisSecciones" onchange="verSoloMisSeccionesClicked()"/>
@@ -499,8 +499,8 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			?>
 			</div>
 		</div>
-		<div class="row-fluid">
-			<div class="span12" >
+		<div class="row">
+			<div class="col-md-12" >
 				<div style="border:#cccccc 1px solid; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px;">
 				<table id="tablaAsistencia" class="table table-striped" >
 					<thead>
@@ -513,8 +513,8 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				</div>
 			</div>
 		</div>
-		<div class="row-fluid">
-			<div class="control-group offset7">
+		<div class="row">
+			<div class="form-group col-md-offset-7">
 				<?php if ($ONLY_VIEW !== TRUE) { ?>
 				<div class="controls ">
 					<button class="btn" type="button" onclick="guardarAsistencia()">

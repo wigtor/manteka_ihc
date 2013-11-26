@@ -82,6 +82,13 @@ class MasterManteka extends CI_Controller {
 			//Se carga la barra de usuario, utiliza variables como el nombre de usuario para mostrar su información.
 			$datos_plantilla["barra_usuario"] = $this->load->view('templates/barra_usuario', $datos_plantilla, TRUE);
 
+			//Se carga lad barrad laterales
+			$datos_plantilla["barra_lateral_correos"] = $this->load->view('templates/barras_laterales/barra_lateral_correos', $datos_plantilla, TRUE);
+			$datos_plantilla["barra_lateral_profesores"] = $this->load->view('templates/barras_laterales/barra_lateral_profesores', $datos_plantilla, TRUE);
+			$datos_plantilla["barra_lateral_secciones"] = $this->load->view('templates/barras_laterales/barra_lateral_secciones', $datos_plantilla, TRUE);
+			$datos_plantilla["barra_lateral_planificacion"] = $this->load->view('templates/barras_laterales/barra_lateral_planificacion', $datos_plantilla, TRUE);
+			$datos_plantilla["barra_lateral_estudiantes"] = $this->load->view('templates/barras_laterales/barra_lateral_estudiantes', $datos_plantilla, TRUE);
+			
 			//Se carga el menú superior de la aplicación, utiliza la variable "menuSuperiorAberto".
 			$datos_plantilla["menu_superior"] = $this->load->view('templates/menu_superior', $datos_plantilla, TRUE);
 
@@ -110,13 +117,6 @@ class MasterManteka extends CI_Controller {
 		//Se setea que botón de la barra lateral se encuentra presionado
 		$datos_plantilla["subVistaLateralAbierta"] = $subMenuLateralAbierto;
 
-		//Se carga la barra lateral
-		if($barra_lateral != '') {
-			$datos_plantilla["barra_lateral"] = $this->load->view('templates/barras_laterales/'.$barra_lateral, $datos_plantilla, TRUE);
-		}
-		else {
-			$datos_plantilla["barra_lateral"] = '';
-		}
 
 		//Se carga la template de todo el sitio pasándole como parámetros los demás templates cargados
 		$this->load->view('templates/template_general', $datos_plantilla);

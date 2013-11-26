@@ -7,7 +7,7 @@
 
 		//	Si la variable no se ha seteado, se asume operación principal.
 		if (!isset($subVistaLateralAbierta)) {
-			$subVistaLateralAbierta = "verEstudiantes";
+			$subVistaLateralAbierta = "";
 		}
 
 		// Las operaciones por defecto no poseen clases
@@ -72,48 +72,27 @@
 		}
 	?>
 
-	<!--	Barra lateral de estudiantes	-->
-	<div class="accordion" id="accordion2">
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-				Estudiantes</a>
-			</div>
-			<div id="collapseOne" class="accordion-body collapse <?php echo $inEstudiantes; ?>" >
-				<div class="accordion-inner nav nav-list">
-					<li <?php echo $verEstudiantes; ?> ><a href="<?php echo site_url("Estudiantes/verEstudiantes")?>">Ver estudiantes</a></li>
-					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarEstudiante; ?> ><a href="<?php echo site_url("Estudiantes/agregarEstudiante")?>">Agregar estudiantes</a></li>
-						<li <?php echo $editarEstudiante; ?> ><a href="<?php echo site_url("Estudiantes/editarEstudiante")?>">Editar estudiantes</a></li>
-						<li <?php echo $eliminarEstudiante; ?> ><a href="<?php echo site_url("Estudiantes/eliminarEstudiante")?>">Borrar estudiantes</a></li>
-						<li <?php echo $cambiarSeccionEstudiantes; ?> ><a href="<?php echo site_url("Estudiantes/cambiarSeccionEstudiantes")?>">Cambiar de sección</a></li>
-						<li <?php echo $cargaMasivaEstudiantes; ?> ><a href="<?php echo site_url("Estudiantes/cargaMasivaEstudiantes")?>">Carga masiva</a></li>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-				Asistencia</a>
-			</div>
-			<div id="collapseTwo" class="accordion-body collapse <?php echo $inAsistencia; ?>" >
-				<div class="accordion-inner nav nav-list">
-					<li <?php echo $verAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/verAsistencia")?>">Ver asistencia</a></li>
-					<li <?php echo $agregarAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/agregarAsistencia")?>">Agregar asistencia</a></li>
-				</div>
-			</div>
-		</div>
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-				Calificaciones</a>
-			</div>
-			<div id="collapseThree" class="accordion-body collapse <?php echo $inCalificaciones; ?>" >
-				<div class="accordion-inner nav nav-list">
-					<li <?php echo $verCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/verCalificaciones")?>">Ver calificaciones</a></li>
-					<li <?php echo $agregarCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/agregarCalificaciones")?>">Agregar calificaciones</a></li>
-				</div>
-			</div>
-		</div>
-	</div>
+	<ul class="dropdown-menu" role="menu" aria-labelledby="drop_estudiantes">
+		<li class="dropdown-header <?php echo $inEstudiantes; ?>">Estudiantes</li>
+			<li <?php echo $verEstudiantes; ?> ><a href="<?php echo site_url("Estudiantes/verEstudiantes")?>">Ver estudiantes</a></li>
+		<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+			<li <?php echo $agregarEstudiante; ?> ><a href="<?php echo site_url("Estudiantes/agregarEstudiante")?>">Agregar estudiantes</a></li>
+			<li <?php echo $editarEstudiante; ?> ><a href="<?php echo site_url("Estudiantes/editarEstudiante")?>">Editar estudiantes</a></li>
+			<li <?php echo $eliminarEstudiante; ?> ><a href="<?php echo site_url("Estudiantes/eliminarEstudiante")?>">Borrar estudiantes</a></li>
+			<li <?php echo $cambiarSeccionEstudiantes; ?> ><a href="<?php echo site_url("Estudiantes/cambiarSeccionEstudiantes")?>">Cambiar de sección</a></li>
+			<li <?php echo $cargaMasivaEstudiantes; ?> ><a href="<?php echo site_url("Estudiantes/cargaMasivaEstudiantes")?>">Carga masiva</a></li>
+		<?php } ?>
+
+		<li class="divider"></li>
+
+		<li class="dropdown-header <?php echo $inAsistencia; ?>">Asistencia</li>
+			<li <?php echo $verAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/verAsistencia")?>">Ver asistencia</a></li>
+			<li <?php echo $agregarAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/agregarAsistencia")?>">Agregar asistencia</a></li>
+		
+		<li class="divider"></li>
+
+		<li class="dropdown-header <?php echo $inCalificaciones; ?>">Calificaciones</li>
+			<li <?php echo $verCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/verCalificaciones")?>">Ver calificaciones</a></li>
+			<li <?php echo $agregarCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/agregarCalificaciones")?>">Agregar calificaciones</a></li>
+			
+	</ul>
