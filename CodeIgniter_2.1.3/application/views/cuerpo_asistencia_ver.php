@@ -44,7 +44,9 @@
 		?>
 
 		var tablaResultados = document.getElementById("tablaAsistencia");
+		var tablaNombres = document.getElementById("tablaAsistenciaNombres");
 		$(tablaResultados).find('tbody').remove();
+		$(tablaNombres).find('tbody').remove();
 
 
 		$.ajax({
@@ -54,6 +56,7 @@
 			data: { id_seccion: id_seccion, only_view: only_view},
 			success: function(respuesta) {
 				var tablaResultados = document.getElementById("tablaAsistencia");
+				var tablaNombres = document.getElementById("tablaAsistenciaNombres");
 
 				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
 				var arrayRespuesta = new Array();
@@ -65,7 +68,7 @@
 					});
 				}
 
-				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono, blanco;
+				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono, blanco, tbodyNombres, trNombres, stringTemp;
 
 
 				//CARGO EL CUERPO DE LA TABLA
@@ -75,20 +78,30 @@
 				}
 
 				var tbody = document.createElement('tbody');
+				var tbodyNombres = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) { //Cada iteración es una fila o un estudiante
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:default");
+					trNombres = document.createElement('tr');
+					trNombres.setAttribute('style', "cursor:default; height:47px;");
+					
 
 					var cantidadAtributos = Object.keys(arrayObjectRespuesta[i]).length;
 					for (j = 0; j < cantidadAtributos; j++) { //cada iteración es una columna (datos del estudiante o dias de asistencia)
 						
-
 						//Entonces se están cargando las columnas relacionadas con los datos del estudiante
 						if (j < listaColumnas.length) {
 							td = document.createElement('td'); //Creo la celda
-							nodo = document.createTextNode(arrayRespuesta[i][j]);
+							stringTemp = arrayRespuesta[i][j];
+							if (stringTemp.length > 22) {
+								stringTemp = stringTemp.substring(0,22) + "..."
+							}
+							else {
+								stringTemp = stringTemp.substring(0,22);
+							}
+							nodo = document.createTextNode(stringTemp);
 							td.appendChild(nodo);
-							tr.appendChild(td); //Agrego la celda a la fila
+							trNombres.appendChild(td); //Agrego la celda a la fila
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la asistencia
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
@@ -196,7 +209,9 @@
 
 
 					tbody.appendChild(tr);
+					tbodyNombres.appendChild(trNombres);
 				}
+				tablaNombres.appendChild(tbodyNombres);
 				tablaResultados.appendChild(tbody);
 			}
 		});
@@ -273,12 +288,15 @@
 
 	function cargarHeadTabla() {
 		var tablaResultados = document.getElementById("tablaAsistencia");
+		var tablaNombres = document.getElementById("tablaAsistenciaNombres");
 		$(tablaResultados).find('thead').remove();
+		$(tablaNombres).find('thead').remove();
 		
 		var nodoCheckeable, nodoTexto, th, thead, tr;
 		thead = document.createElement('thead');
 		thead.setAttribute('style', "cursor:default;");
 		tr = document.createElement('tr');
+		tr.setAttribute('style', "height:56px;");
 
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
@@ -286,13 +304,20 @@
 			if (i == 0)
 				th.setAttribute('style', "min-width:70px");
 			else
-				th.setAttribute('style', "min-width:250px");
+				th.setAttribute('style', "min-width:170px");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
+		thead.appendChild(tr);
+		tablaNombres.appendChild(thead);
 
 
+		
+		thead = document.createElement('thead');
+		thead.setAttribute('style', "cursor:default;");
+		tr = document.createElement('tr');
+		tr.setAttribute('style', "height:56px;");
 		//Ahora recorro la lista de columnas para poner la asistencia, esto depende cuantas sesiones de clase existan
 		var listaSesiones = getListaSesiones();
 		for (var i = 0; i < listaSesiones.length; i++) {
@@ -444,7 +469,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 	<legend>Agregar asistencia</legend>
 	<?php
 	}
-		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
+		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal', 'style' => 'max-width:1000px;');
 		echo form_open('Estudiantes/postAgregarAsistencia/', $atributos);
 	?>
 		<div class="row-fluid">
@@ -462,7 +487,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			?>
 		</div>
 		<div class="row-fluid">
-			<div class="span5">
+			<div class="span6">
 				<div class="control-group">
 					<label class="control-label" for="seccion">1.- Sección:</label>
 					<div class="controls">
@@ -498,10 +523,42 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				}
 			?>
 			</div>
+			<div class="span5 offset1">
+				<div class="control-group">
+					<?php if ($ONLY_VIEW !== TRUE) { ?>
+					<div class="controls ">
+						<button class="btn" type="button" onclick="guardarAsistencia()">
+							<div class="btn_with_icon_solo">Ã</div>
+							&nbsp; Guardar
+						</button>
+						<button class="btn" type="button" onclick="resetearAsistencia()">
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>
+					</div>
+					<?php
+						}
+					?>
+				</div>
+			</div>
 		</div>
-		<div class="row-fluid">
-			<div class="span12" >
-				<div style="border:#cccccc 1px solid; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px;">
+		<div class="row-fluid" >
+			
+			<div class="span4" style="margin-left:0px;">
+				<table id="tablaAsistenciaNombres" class="table table-striped" >
+					<thead>
+
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="span8" style="margin-left:0px; overflow-x:scroll; max-width:100%;">
+			
+				<!-- <div style="border:#cccccc 1px solid; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px;">
+				-->
 				<table id="tablaAsistencia" class="table table-striped" >
 					<thead>
 
@@ -510,13 +567,13 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 
 					</tbody>
 				</table>
-				</div>
+				<!--</div>-->
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="control-group offset7">
+			<div class="control-group span5 offset7" style="margin-top:10px;">
 				<?php if ($ONLY_VIEW !== TRUE) { ?>
-				<div class="controls ">
+				<div class="controls">
 					<button class="btn" type="button" onclick="guardarAsistencia()">
 						<div class="btn_with_icon_solo">Ã</div>
 						&nbsp; Guardar
