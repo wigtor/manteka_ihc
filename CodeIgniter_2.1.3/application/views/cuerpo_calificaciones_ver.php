@@ -306,7 +306,7 @@
 		thead = document.createElement('thead');
 		thead.setAttribute('style', "cursor:default;");
 		tr = document.createElement('tr');
-		tr.setAttribute('style', "height:76px;");
+		tr.setAttribute('style', "height:77px;");
 
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
@@ -326,7 +326,7 @@
 		thead = document.createElement('thead');
 		thead.setAttribute('style', "cursor:default;");
 		tr = document.createElement('tr');
-		tr.setAttribute('style', "height:76px;");
+		tr.setAttribute('style', "height:77px;");
 		//Ahora recorro la lista de columnas para poner la Calificaciones, esto depende cuantas sesiones de clase existan
 		var listaCalificaciones = getlistaCalificaciones();
 		for (var i = 0; i < listaCalificaciones.length; i++) {
