@@ -4,7 +4,7 @@
 	var ruts_estudiantes = new Array();
 	var lista_idEvaluaciones = new Array();
 
-	function resettablaCalificaciones() {
+	function resetTablaCalificaciones() {
 		var tablaResultados = document.getElementById("tablaCalificaciones");
 		$(tablaResultados).find('tbody').remove();
 		var tr, td, nodoAsterisco;
@@ -42,7 +42,13 @@
 				<?php
 			}
 		?>
-
+		
+		var tablaResultados = document.getElementById("tablaCalificaciones");
+		var tablaNombres = document.getElementById("tablaCalificacionesNombres");
+		$(tablaResultados).find('tbody').remove();
+		$(tablaNombres).find('tbody').remove();
+		
+		
 		$.ajax({
 			type: "POST",
 			async: false,
@@ -50,7 +56,7 @@
 			data: { id_seccion: id_seccion, only_view: only_view},
 			success: function(respuesta) {
 				var tablaResultados = document.getElementById("tablaCalificaciones");
-				$(tablaResultados).find('tbody').remove();
+				var tablaNombres = document.getElementById("tablaCalificacionesNombres");
 
 				var arrayObjectRespuesta = jQuery.parseJSON(respuesta);
 				var arrayRespuesta = new Array();
@@ -62,30 +68,40 @@
 					});
 				}
 
-				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono;
+				var nodo, tr, td, divTd, estaPresente, comentario, nodoComentario, nodoIconComentario, icono, tbodyNombres, trNombres, stringTemp;
 
 
 				//CARGO EL CUERPO DE LA TABLA
 				if (arrayRespuesta.length == 0) {
-					resettablaCalificaciones();
+					resetTablaCalificaciones();
 					return;
 				}
 
 				var tbody = document.createElement('tbody');
+				var tbodyNombres = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) { //Cada iteración es una fila o un estudiante
 					tr = document.createElement('tr');
 					tr.setAttribute('style', "cursor:default");
+					trNombres = document.createElement('tr');
+					trNombres.setAttribute('style', "cursor:default; height:47px;");
+					
 
 					var cantidadAtributos = Object.keys(arrayObjectRespuesta[i]).length;
 					for (j = 0; j < cantidadAtributos; j++) { //cada iteración es una columna (datos del estudiante o dias de Calificaciones)
 						
-
 						//Entonces se están cargando las columnas relacionadas con los datos del estudiante
 						if (j < listaColumnas.length) {
 							td = document.createElement('td'); //Creo la celda
-							nodo = document.createTextNode(arrayRespuesta[i][j]);
+							stringTemp = arrayRespuesta[i][j];
+							if (stringTemp.length > 21) {
+								stringTemp = stringTemp.substring(0,21) + "..."
+							}
+							else {
+								stringTemp = stringTemp.substring(0,21);
+							}
+							nodo = document.createTextNode(stringTemp);
 							td.appendChild(nodo);
-							tr.appendChild(td); //Agrego la celda a la fila
+							trNombres.appendChild(td); //Agrego la celda a la fila
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la Calificaciones
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
@@ -201,7 +217,9 @@
 
 
 					tbody.appendChild(tr);
+					tbodyNombres.appendChild(trNombres);
 				}
+				tablaNombres.appendChild(tbodyNombres);
 				tablaResultados.appendChild(tbody);
 			}
 		});
@@ -212,7 +230,7 @@
 
 	function cambioComentario(inputComentario) {
 		var valor = $.trim(inputComentario.value);
-		var fontAsterisco = $(inputComentario).siblings().find('font');
+		var fontAsterisco = $(inputComentario).parent().parent().parent().parent().parent().children().find('font');
 		if (valor != '') { //Pongo el asterisco rojo indicando que hay un comentario
 			fontAsterisco.html('\u00a0*');
 		}
@@ -280,28 +298,40 @@
 
 	function cargarHeadTabla() {
 		var tablaResultados = document.getElementById("tablaCalificaciones");
+		var tablaNombres = document.getElementById("tablaCalificacionesNombres");
 		$(tablaResultados).find('thead').remove();
+		$(tablaNombres).find('thead').remove();
 		
 		var nodoCheckeable, nodoTexto, th, thead, tr;
 		thead = document.createElement('thead');
 		thead.setAttribute('style', "cursor:default;");
 		tr = document.createElement('tr');
+		tr.setAttribute('style', "height:76px;");
 
 		//Recorro la lista de columnas para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
-			//th.setAttribute('class', "span2");
+			if (i == 0)
+				th.setAttribute('style', "min-width:70px");
+			else
+				th.setAttribute('style', "min-width:170px");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
+		thead.appendChild(tr);
+		tablaNombres.appendChild(thead);
 
 
+		thead = document.createElement('thead');
+		thead.setAttribute('style', "cursor:default;");
+		tr = document.createElement('tr');
+		tr.setAttribute('style', "height:76px;");
 		//Ahora recorro la lista de columnas para poner la Calificaciones, esto depende cuantas sesiones de clase existan
 		var listaCalificaciones = getlistaCalificaciones();
 		for (var i = 0; i < listaCalificaciones.length; i++) {
 			th = document.createElement('th');
-			th.setAttribute('class', "span2");
+			th.setAttribute('style', "min-width:80px");
 
 			//Agrego el nombre de la evaluación
 			nodoTexto = document.createTextNode(listaCalificaciones[i].nombre);
@@ -417,7 +447,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			?>
 		</div>
 		<div class="row-fluid">
-			<div class="span5">
+			<div class="span6">
 				<div class="control-group">
 					<label class="control-label" for="seccion">1.- Sección:</label>
 					<div class="controls">
@@ -448,11 +478,29 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 					}
 				?>
 			</div>
+			<div class="span5 offset1">
+				<div class="control-group">
+					<?php if ($ONLY_VIEW !== TRUE) { ?>
+					<div class="controls ">
+						<button class="btn" type="button" onclick="guardarCalificaciones()">
+							<div class="btn_with_icon_solo">Ã</div>
+							&nbsp; Guardar
+						</button>
+						<button class="btn" type="button" onclick="resetearCalificaciones()">
+							<div class="btn_with_icon_solo">Â</div>
+							&nbsp; Cancelar
+						</button>
+					</div>
+					<?php
+						}
+					?>
+				</div>
+			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span12" >
-				<div style="border:#cccccc 1px solid; overflow-x:scroll; width:72em; -webkit-border-radius: 4px;">
-				<table id="tablaCalificaciones" class="table table-striped">
+			
+			<div class="span4" style="margin-left:0px; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+				<table id="tablaCalificacionesNombres" class="table table-striped" >
 					<thead>
 
 					</thead>
@@ -460,11 +508,21 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 
 					</tbody>
 				</table>
-				</div>
+			</div>
+			
+			<div class="span8" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+				<table id="tablaCalificaciones" class="table table-striped" >
+					<thead>
+
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="control-group offset7">
+			<div class="control-group span5 offset7" style="margin-top:10px;">
 				<?php if ($ONLY_VIEW !== TRUE) { ?>
 				<div class="controls ">
 					<button class="btn" type="button" onclick="guardarCalificaciones()">

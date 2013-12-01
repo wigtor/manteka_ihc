@@ -313,7 +313,6 @@
 		tablaNombres.appendChild(thead);
 
 
-		
 		thead = document.createElement('thead');
 		thead.setAttribute('style', "cursor:default;");
 		tr = document.createElement('tr');
@@ -543,7 +542,6 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			</div>
 		</div>
 		<div class="row-fluid" >
-			
 			<div class="span4" style="margin-left:0px;">
 				<table id="tablaAsistenciaNombres" class="table table-striped" >
 					<thead>
@@ -556,9 +554,6 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			</div>
 			
 			<div class="span8" style="margin-left:0px; overflow-x:scroll; max-width:100%;">
-			
-				<!-- <div style="border:#cccccc 1px solid; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px;">
-				-->
 				<table id="tablaAsistencia" class="table table-striped" >
 					<thead>
 
@@ -567,7 +562,6 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 
 					</tbody>
 				</table>
-				<!--</div>-->
 			</div>
 		</div>
 		<div class="row-fluid">
