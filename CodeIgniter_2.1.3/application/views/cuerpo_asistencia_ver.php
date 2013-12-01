@@ -93,11 +93,11 @@
 						if (j < listaColumnas.length) {
 							td = document.createElement('td'); //Creo la celda
 							stringTemp = arrayRespuesta[i][j];
-							if (stringTemp.length > 22) {
-								stringTemp = stringTemp.substring(0,22) + "..."
+							if (stringTemp.length > 21) {
+								stringTemp = stringTemp.substring(0,21) + "..."
 							}
 							else {
-								stringTemp = stringTemp.substring(0,22);
+								stringTemp = stringTemp.substring(0,21);
 							}
 							nodo = document.createTextNode(stringTemp);
 							td.appendChild(nodo);
