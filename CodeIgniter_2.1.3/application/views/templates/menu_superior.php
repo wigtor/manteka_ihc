@@ -58,26 +58,26 @@
 		<div class="navbar-inner" style="width:815px;">
 			<ul class="nav">
 				<li <?php echo $Correos;?> >
-					<a class="btn_with_icon" style="width:100px;" href="<?php echo site_url("Correo/index") ?>">M Correos<span id="botonCorreosSuperior"><?php echo $mensajesNoLeidos ?></span></a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Correo/index") ?>">M Correos<span id="botonCorreosSuperior"><?php echo $mensajesNoLeidos ?></span></a>
 				</li>
 				<li <?php echo $Docentes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Profesores/index") ?>">L Docencia</a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Profesores/index") ?>">L Docencia</a>
 				</li>
 				<li <?php echo $Secciones;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Secciones/index") ?>">K Secciones</a>
 				</li>
 				<li <?php echo $Planificacion;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a>
 				</li>
 				<li <?php echo $Salas;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
 				</li>
 				<li <?php echo $Estudiantes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("Estudiantes/index") ?>">Ù Estudiantes</a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Estudiantes/index") ?>">Ù Estudiantes</a>
 				</li>
 				<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 				<li <?php echo $Reportes;?> >
-					<a class="btn_with_icon" href="<?php echo site_url("ReportesSistema/index") ?>">E Reportes</a>
+					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("ReportesSistema/index") ?>">E Reportes</a>
 				</li>
 				<?php } ?>
 			</ul>
