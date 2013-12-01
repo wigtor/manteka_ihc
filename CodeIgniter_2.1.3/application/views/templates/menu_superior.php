@@ -70,10 +70,10 @@
 					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Planificacion/index") ?>">É Planificación</a>
 				</li>
 				<li <?php echo $Salas;?> >
-					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
+					<a class="btn_with_icon" style="max-width:90px;" href="<?php echo site_url("Salas/index") ?>">S Salas</a>
 				</li>
 				<li <?php echo $Estudiantes;?> >
-					<a class="btn_with_icon" style="max-width:100px;" href="<?php echo site_url("Estudiantes/index") ?>">Ù Estudiantes</a>
+					<a class="btn_with_icon" style="max-width:95px;" href="<?php echo site_url("Estudiantes/index") ?>">Ù Estudiantes</a>
 				</li>
 				<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
 				<li <?php echo $Reportes;?> >
