@@ -195,6 +195,125 @@ class Model_asistencia extends CI_Model {
 
 		return $resultado;
 	}
+
+
+	public function cargaMasiva($archivo, $id_seccion){
+
+		if(!file_exists($archivo) || !is_readable($archivo)) {
+			return FALSE;
+		}
+
+		$ff = fopen($archivo, "r");
+
+		$header = array();
+		$data = array();		
+		$splitArray = array();
+		$stack  = array();
+		$c = 1;
+		$flag = FALSE;
+		while(($linea = fgets($ff)) !== FALSE) {
+
+			//Se comprueba la cabecera del archivo, es decir, los nombres de las columnas
+			if(!$header) { //Si está vacio
+				$header = explode(';',trim($linea));
+				if((strcmp($header[1], 'RUT') != 0) || (count($header) <= 5)) { //CANTIDAD DE COLUMNAS DEBE SER MAYOR A 5
+					fclose($ff);
+					unlink($archivo);
+					return FALSE;
+				}				
+			}
+			else {
+				$linea =  explode(';',$linea);
+				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
+					$linea[] = "<br>El numero de argumentos en la linea es incorrecto</br>";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
+				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
+				$validador = 1;//$this->validarDatos($data['RUT'],"rut");
+				if(!$validador) {
+					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos</br>";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				/*
+				$validador = $this->rutExiste($data['RUT']);
+				if($validador == -1) {
+					$linea[] = "<br>El rut de estudiante no existe en manteka</br>";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				*/
+				$flag = TRUE;
+
+			}
+			$c++;						
+		}
+		fclose($ff);
+		$ffa = fopen($archivo, "r");	
+
+		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
+		$header = array();
+		if ($flag) {
+			while(($linea = fgets($ffa)) !== FALSE) {
+				if(!$header) {
+					$header = explode(';', trim($linea));
+				}
+				else {
+					$this->db->trans_start();
+
+					$linea =  explode(';', $linea);
+					$data = array_combine($header, $linea);
+					//Trimeo todos los elementos
+					foreach ($data as $key => $value) {
+						$data[$key] = trim($value);
+					}
+
+					//Hago un insert o update por cada sesión de clase
+					$cantidadColumnas = count($header);
+					for($i = 5; $i < $cantidadColumnas; $i=$i+1) {
+						$fechaClase = $header[$i];
+						//$id_sesion_de_clase = $this->buscarSesionByFecha($fechaClase);
+
+						if ($data['RUT'] !== "") {
+							$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
+							$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
+						}
+						if ($data['fechaClase'] !== "") { //Los blancos no se agregan, ni se modifican
+							$asistio = $data[$fechaClase];
+							echo 'Insertando: '.$data['RUT'].' asistió: '.$asistio.' ';
+							//$this->agregarAsistencia($rut_profesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+						}
+						
+					}
+
+					$this->db->trans_complete();
+
+					if ($this->db->trans_status() === FALSE) {
+						return FALSE;
+					}
+				}
+
+			}
+		}
+		else {
+			fclose($ffa);
+			unlink($archivo);
+			return FALSE;
+		}
+		fclose($ffa);
+		unlink($archivo);
+		return $stack;		
+	}
+
+
 }
 
 ?>

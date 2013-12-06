@@ -18,12 +18,41 @@ function validacion(){
 </script>
 
 <fieldset>
-	<legend>Carga masiva de alumnos</legend>
+	<legend><?php echo $titulo;?></legend>
 	<div style="text-align:center!important;width: 100%">
 		<?php //echo $error;?>
 
-		<?php $atributos = array('onsubmit' => 'return validacion()', 'id'=>'formCargar');
-		echo form_open_multipart('Estudiantes/cargaMasivaEstudiantes',$atributos);?>
+		<?php $atributos = array('onsubmit' => 'return validacion()', 'id'=>'formCargar', 'class' => 'form-horizontal');
+		echo form_open_multipart('Estudiantes/'.$funcionControlador, $atributos);?>
+
+		<?php if ($tipoCarga == CARGA_MASIVA_ASISTENCIA || $tipoCarga == CARGA_MASIVA_CALIFICACIONES) { ?>
+		<div class="row-fluid">
+			<div class="span6">
+				<div class="control-group">
+					<label class="control-label" for="seccion">1.- Sección:</label>
+					<div class="controls">
+						<select id="seccion" name="seccion" class="span6" required onchange="cargarAsistencia();">
+							<option value="" disabled selected>Sección</option>
+							<?php
+							if (isset($secciones)) {
+								foreach ($secciones as $valor) {
+									$ocultar = "";
+									if (!$valor->propia_del_profesor) {
+										$ocultar = "disabled";
+									}
+									?>
+										<option value="<?php echo $valor->id?>" <?php echo $ocultar; ?> ><?php echo $valor->nombre; ?></option>
+									<?php 
+								}
+							}
+							?>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+
 		<div class="fileupload fileupload-new" data-provides="fileupload">
 			<div class="input-append">
 				<div id="archivo" class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Seleccionar Archivo</span><span class="fileupload-exists">Cambiar</span><input  id ="arch" type="file"  name = "userfile"/></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remover</a>

@@ -1,6 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once APPPATH.'controllers/Master.php'; 
+require_once APPPATH.'controllers/Master.php';
+define('CARGA_MASIVA_ASISTENCIA', 1);
+define('CARGA_MASIVA_CALIFICACIONES', 2);
+define('CARGA_MASIVA_ESTUDIANTE', 3);
 
 class Estudiantes extends MasterManteka {
 
@@ -382,7 +385,15 @@ class Estudiantes extends MasterManteka {
 	*
 	*
 	**/
-	function cargaMasivaEstudiantes() {
+	public function cargaMasivaEstudiantes() {
+		$subMenuLateralAbierto = "cargaMasivaEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+		$titulo = "Carga masiva de estudiantes";
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ESTUDIANTE, 'estudiantes', array());
+	}
+
+
+	private function cargaMasiva($nombreMenuLateral, $nombre_cuerpo_vista, $titulo, $tipos_usuarios_permitidos, $tipoCarga, $deQueEsLaCarga, $datos_vista) {
 		$config['upload_path'] = './uploads/';
 		$config['allowed_types'] = 'csv';
 		$config['max_size']	= '100';	
@@ -391,19 +402,19 @@ class Estudiantes extends MasterManteka {
 		$this->load->library('upload', $config);
 
 
-		$subMenuLateralAbierto = "cargaMasivaEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
+		$subMenuLateralAbierto = $nombreMenuLateral;
+		$datos_vista['tipoCarga'] = $tipoCarga;
+		$datos_vista['funcionControlador'] = $subMenuLateralAbierto;
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
-		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
-
-		
+		//$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 
 
 		if ( ! $this->upload->do_upload()) {
-			$error = array('error' => $this->upload->display_errors());
 
-			$datos_vista = $error;
+			$datos_vista['error'] = $this->upload->display_errors();
+			$datos_vista['titulo'] = $titulo;
 
-			$this->cargarTodo("Estudiantes", 'cuerpo_estudiantes_cargaMasiva', "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+			$this->cargarTodo("Estudiantes", $nombre_cuerpo_vista, "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 		else {
 			$data = array('upload_data' => $this->upload->data());
@@ -413,11 +424,23 @@ class Estudiantes extends MasterManteka {
 			$nombre_archivo = $datos['full_path'];
 
 			//falta valida aqui el archivo
-
-			$this->load->model('Model_estudiante');
 			$stack = array();
-			$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo);
-			
+
+			if ($tipoCarga == CARGA_MASIVA_ESTUDIANTE) {
+				$this->load->model('Model_estudiante');
+				$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo);
+			}
+			else if ($tipoCarga == CARGA_MASIVA_ASISTENCIA) {
+				$this->load->model('Model_asistencia');
+				$id_seccion = $this->input->post('id_seccion');
+				$stack = $this->Model_asistencia->cargaMasiva($nombre_archivo, $id_seccion);
+			}
+			else if ($tipoCarga == CARGA_MASIVA_CALIFICACIONES) {
+				$this->load->model('Model_calificaciones');
+				$id_seccion = $this->input->post('id_seccion');
+				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $id_seccion);
+			}
+
 			if ($stack !== FALSE) {
 
 				if(count($stack) != 0) {
@@ -433,10 +456,10 @@ class Estudiantes extends MasterManteka {
 					}				
 					$datos_plantilla["tipo_msj"] = "alert-error";
 					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-					$datos_plantilla["redirecTo"] = "Estudiantes/cargaMasivaEstudiantes"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+					$datos_plantilla["redirecTo"] = "Estudiantes/".$nombreMenuLateral; //Acá se pone el controlador/metodo hacia donde se redireccionará
 					//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-					$datos_plantilla["nombre_redirecTo"] = "Carga masiva de estudiantes"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-					$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+					$datos_plantilla["nombre_redirecTo"] = "Carga masiva de ".$deQueEsLaCarga; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+					//$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 					$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 					
 					
@@ -445,10 +468,10 @@ class Estudiantes extends MasterManteka {
 					$datos_plantilla["cuerpo_msj"] = "El archivo se ha cargado exitosamente.";
 					$datos_plantilla["tipo_msj"] = "alert-success";
 					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-					$datos_plantilla["redirecTo"] = "Estudiantes/cargaMasivaEstudiantes"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+					$datos_plantilla["redirecTo"] = "Estudiantes/".$nombreMenuLateral; //Acá se pone el controlador/metodo hacia donde se redireccionará
 					//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-					$datos_plantilla["nombre_redirecTo"] = "Carga masiva de estudiantes"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-					$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+					$datos_plantilla["nombre_redirecTo"] = "Carga masiva de ".$deQueEsLaCarga; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+					//$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 					$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 				}
 			}
@@ -458,10 +481,10 @@ class Estudiantes extends MasterManteka {
 				$datos_plantilla["cuerpo_msj"] = "El archivo no tiene el formato correcto.";
 				$datos_plantilla["tipo_msj"] = "alert-error";
 				$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-				$datos_plantilla["redirecTo"] = "Estudiantes/cargaMasivaEstudiantes"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+				$datos_plantilla["redirecTo"] = "Estudiantes/".$nombreMenuLateral; //Acá se pone el controlador/metodo hacia donde se redireccionará
 				//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
-				$datos_plantilla["nombre_redirecTo"] = "Carga masiva de estudiantes"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-				$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+				$datos_plantilla["nombre_redirecTo"] = "Carga masiva de ".$deQueEsLaCarga; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+				//$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 				$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 			}
 		}
@@ -592,6 +615,20 @@ class Estudiantes extends MasterManteka {
 	}
 
 
+	public function cargaMasivaAsistencia() {
+		$subMenuLateralAbierto = "cargaMasivaAsistencia"; //Para este ejemplo, los informes no tienen submenu lateral
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+		$titulo = "Carga masiva de asistencia";
+		$datos_vista = array();
+		$this->load->model('Model_seccion');
+		$rutProfesor = $this->session->userdata('rut');
+		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		$verTodas = FALSE;
+		$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ASISTENCIA, 'asistencia', $datos_vista);
+	}
+
+
 	public function verCalificaciones() {
 		if (!$this->isLogged()) {
 			$this->invalidSession();
@@ -635,6 +672,20 @@ class Estudiantes extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
+	}
+
+
+	public function cargaMasivaCalificaciones() {
+		$subMenuLateralAbierto = "cargaMasivaCalificaciones"; //Para este ejemplo, los informes no tienen submenu lateral
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
+		$titulo = "Carga masiva de calificaciones";
+		$datos_vista = array();
+		$this->load->model('Model_seccion');
+		$rutProfesor = $this->session->userdata('rut');
+		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		$verTodas = FALSE;
+		$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_CALIFICACIONES, 'calificaciones', $datos_vista);
 	}
 
 

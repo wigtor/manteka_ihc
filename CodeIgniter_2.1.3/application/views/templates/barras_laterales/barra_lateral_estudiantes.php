@@ -19,8 +19,10 @@
 		$cargaMasivaEstudiantes = "";
 		$agregarAsistencia = "";
 		$verAsistencia = "";
+		$cargaMasivaAsistencia = "";
 		$agregarCalificaciones = "";
 		$verCalificaciones = "";
+		$cargaMasivaCalificaciones = "";
 
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
@@ -62,12 +64,20 @@
 			$agregarAsistencia = 'class="active"';
 			$inAsistencia = "in";
 		}
+		else if ($subVistaLateralAbierta == "cargaMasivaAsistencia") {
+			$cargaMasivaAsistencia = 'class="active"';
+			$inAsistencia = "in";
+		}
 		else if ($subVistaLateralAbierta == "agregarCalificaciones") {
 			$agregarCalificaciones = 'class="active"';
 			$inCalificaciones = "in";
 		}
 		else if ($subVistaLateralAbierta == "verCalificaciones") {
 			$verCalificaciones = 'class="active"';
+			$inCalificaciones = "in";
+		}
+		else if ($subVistaLateralAbierta == "cargaMasivaCalificaciones") {
+			$cargaMasivaCalificaciones = 'class="active"';
 			$inCalificaciones = "in";
 		}
 	?>
@@ -101,6 +111,7 @@
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/verAsistencia")?>">Ver asistencia</a></li>
 					<li <?php echo $agregarAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/agregarAsistencia")?>">Agregar asistencia</a></li>
+					<li <?php echo $cargaMasivaAsistencia; ?> ><a href="<?php echo site_url("Estudiantes/cargaMasivaAsistencia")?>">Carga masiva asistencia</a></li>
 				</div>
 			</div>
 		</div>
@@ -113,6 +124,7 @@
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/verCalificaciones")?>">Ver calificaciones</a></li>
 					<li <?php echo $agregarCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/agregarCalificaciones")?>">Agregar calificaciones</a></li>
+					<li <?php echo $cargaMasivaCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/cargaMasivaCalificaciones")?>">Carga masiva calificaciones</a></li>
 				</div>
 			</div>
 		</div>

@@ -543,7 +543,7 @@ class Model_estudiante extends CI_Model {
 		$ff = fopen($archivo, "r");
 
 		$header = array();
-		$data = array();		
+		$data = array();
 		$splitArray = array();
 		$stack  = array();
 		$c = 1;
@@ -556,7 +556,7 @@ class Model_estudiante extends CI_Model {
 					fclose($ff);
 					unlink($archivo);
 					return FALSE;
-				}				
+				}
 			}
 			else {
 				$linea =  explode(';',$linea);
@@ -656,14 +656,14 @@ class Model_estudiante extends CI_Model {
 					fclose($ff);
 					unlink($archivo);
 					return $stack;
-				}				
+				}
 				$flag = TRUE;
 
 			}
-			$c++;						
+			$c++;
 		}
 		fclose($ff);
-		$ffa = fopen($archivo, "r");	
+		$ffa = fopen($archivo, "r");
 
 		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
 		$header = array();
@@ -733,7 +733,7 @@ class Model_estudiante extends CI_Model {
 		}
 		fclose($ffa);
 		unlink($archivo);
-		return $stack;		
+		return $stack;
 	}
 
 }
