@@ -273,6 +273,7 @@ class Model_asistencia extends CI_Model {
 		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
 		$header = array();
 		$hayErrores = FALSE;
+		$saltarEstudiante = FALSE;
 		if ($flag) {
 			while(($linea = fgets($ffa)) !== FALSE) {
 				if(!$header) {
@@ -291,7 +292,11 @@ class Model_asistencia extends CI_Model {
 
 					//Hago un insert o update por cada sesión de clase
 					$cantidadColumnas = count($header);
+					$saltarEstudiante = FALSE;
 					for($i = 5; $i < $cantidadColumnas; $i=$i+1) {
+						if ($saltarEstudiante) {
+							break;
+						}
 						if ($data['RUT'] !== "") {
 							$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
 							$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
@@ -307,10 +312,18 @@ class Model_asistencia extends CI_Model {
 						}
 
 						$id_seccion = $this->findSeccionByEstudiante($data['RUT']);
-						if ($id_seccion == NULL) {
-							$linea[] = "<br>El estudiante no tiene sección asignada o no está en el sistema";
+						if ($id_seccion == -1) {
+							$linea[] = "<br>El estudiante no tiene sección asignada en el sistema";
 							//$stack[count($stack)] = $linea;
 							$hayErrores = TRUE;
+							$saltarEstudiante = TRUE; //No se intenta insertar las demás fechas de asistencia para ese estudiante
+							continue;
+						}
+						if ($id_seccion == NULL) {
+							$linea[] = "<br>El estudiante no está registrado en el sistema";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							$saltarEstudiante = TRUE; //No se intenta insertar las demás fechas de asistencia para ese estudiante
 							continue;
 						}
 						$id_sesion_de_clase = $this->findSesionByFechaAndSeccion($fechaClaseAdaptada, $id_seccion);
@@ -357,6 +370,9 @@ class Model_asistencia extends CI_Model {
 		$query = $this->db->get('estudiante');
 		if ($query->num_rows() > 0) {
 			$primeraResp = $query->row();
+			if ($primeraResp->ID_SECCION == NULL) {
+				return -1;
+			}
 			return $primeraResp->ID_SECCION;
 		}
 		else {

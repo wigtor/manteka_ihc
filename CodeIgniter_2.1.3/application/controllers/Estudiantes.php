@@ -451,8 +451,13 @@ class Estudiantes extends MasterManteka {
 					$linea = '';
 					$datos_plantilla["cuerpo_msj"] = "A continuación se listan los errores encontrados";
 
+					if ($tipoCarga == CARGA_MASIVA_ESTUDIANTE) {
+						$mensajeErrorExtra = ", repare todos los problemas en el archivo de entrada y vuelva a intentarlo.<br><br>";
+						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"].$mensajeErrorExtra;
+					}
+
 					if ($tipoCarga == CARGA_MASIVA_ASISTENCIA) {
-						$mensajeErrorExtra = ", sin embargo los estudiantes que no hayan tenido problemas se ha guardado su asistencia<br><br>";
+						$mensajeErrorExtra = ", sin embargo se ha guardado la asistencia del resto de estudiantes.<br><br>";
 						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"].$mensajeErrorExtra;
 					}
 
