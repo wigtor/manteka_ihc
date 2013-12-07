@@ -548,6 +548,7 @@ class Model_estudiante extends CI_Model {
 		$stack  = array();
 		$c = 1;
 		$flag = FALSE;
+		$hayErrores = FALSE;
 		while(($linea = fgets($ff)) !== FALSE) {
 
 			if(!$header) { //Si está vacio
@@ -568,110 +569,94 @@ class Model_estudiante extends CI_Model {
 				}
 			}
 			else {
+				$hayErrores = FALSE;
 				$linea =  explode(';',$linea);
 				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
 					$linea[] = "<br>El numero de argumentos en la linea es incorrecto";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$validador = $this->validarDatos($data['RUT'],"rut");
 				if(!$validador) {
 					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				try {
 					if(($this->validaRut($data['RUT'], $data['DIG'])) == FALSE) {
 						$linea[] = "<br>El rut del estudiante no es valido";
-						$stack[$c] = $linea;
-						fclose($ff);
-						unlink($archivo);
-						return $stack;
+						//$stack[count($stack)] = $linea;
+						$hayErrores = TRUE;
 					}
 				}
 				catch(Exception $e) {
 					$linea[] = "<br>El rut del estudiante no es valido";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
 				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
 				//$data['RUT'] = substr($data['RUT'], 0, -1);	//Elimino dígito verificador			
 				$validador = $this->rutExiste($data['RUT']);
-				if($validador == -1) {
+				if($validador) {
 					$linea[] = "<br>El rut de estudiante ya existe en manteka";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$validador = $this->validarDatos($data['COD_CARRERA'], "carrera");
 				if(!$validador) {
 					$linea[] = "<br>La carrera del estudiante es erronea, solo se admiten numeros.";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$validador = $this->validarDatos($data['COORD'], "coordinacion");
 				if(!$validador) {
 					$linea[] = "<br>EL nombre de la coordinación no es válido";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$validador = $this->validarDatos($data['SECCION'], "seccion");
 				if(!$validador) {
 					$linea[] = "<br>EL nombre de la sección no es válida";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$data['CORREO1'] = trim($data['CORREO1']);				
 				$validador = $this->validarDatos($data['CORREO1'],"correo");
 				if(!$validador) {
 					$linea[] = "<br>El correo del estudiante no tiene un formato válido";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$validador = $this->validarDatos($data['NOMBRE1'].$data['NOMBRE2'].$data['APELLIDO1'].$data['APELLIDO2'],"nombre");
 				if(!$validador) {
 					$linea[] = "<br>El nombre del estudiante tiene caracteres no válidos";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				if(($data['ID_SECCION'] = $this->validarSeccion($data['COORD'], $data['SECCION'])) == FALSE) {
 					$linea[] = "<br>La sección no se encuentra en la base de datos";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				if(($data['COD_CARRERA'] = $this->validarCarrera($data['COD_CARRERA'])) == FALSE) {
 					$linea[] = "<br>La carrera no se encuentra en la base de datos";
-					$stack[$c] = $linea;
-					fclose($ff);
-					unlink($archivo);
-					return $stack;
+					//$stack[count($stack)] = $linea;
+					$hayErrores = TRUE;
 				}
 				$flag = TRUE;
 
+				if ($hayErrores)
+					$stack[count($stack)] = $linea;
 			}
 			$c++;
 		}
 		fclose($ff);
+		if ($hayErrores) {
+			unlink($archivo);
+			return $stack;
+		}
+
 		$ffa = fopen($archivo, "r");
 
 		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK

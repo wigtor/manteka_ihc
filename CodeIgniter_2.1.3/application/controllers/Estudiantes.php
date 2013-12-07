@@ -449,11 +449,17 @@ class Estudiantes extends MasterManteka {
 
 					$datos_plantilla["titulo_msj"] = "Han ocurrido errores";
 					$linea = '';
-					$datos_plantilla["cuerpo_msj"] = "A continuación se listan los errores encontrados, sin embargo los estudiantes que no hayan tenido problemas se ha guardado su asistencia<br><br>";
+					$datos_plantilla["cuerpo_msj"] = "A continuación se listan los errores encontrados";
+
+					if ($tipoCarga == CARGA_MASIVA_ASISTENCIA) {
+						$mensajeErrorExtra = ", sin embargo los estudiantes que no hayan tenido problemas se ha guardado su asistencia<br><br>";
+						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"].$mensajeErrorExtra;
+					}
+
 					foreach ($stack as $key => $value) { //Cada linea procesada
 						$linea = ' ';
 						foreach ($value as $cadena) { //Cada columna por linea
-							$linea = $linea.$cadena.";";
+							$linea = $linea.$cadena."; ";
 						}
 						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"]."Se encontró un error en la siguiente linea:</br>".$key.".-".$linea."</br><br>";
 						//break;

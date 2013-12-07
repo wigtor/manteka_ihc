@@ -279,6 +279,7 @@ class Model_asistencia extends CI_Model {
 					$header = explode(';', trim($linea));
 				}
 				else {
+					$hayErrores = FALSE;
 					$this->db->trans_start();
 
 					$linea =  explode(';', $linea);
@@ -327,10 +328,9 @@ class Model_asistencia extends CI_Model {
 						}
 						
 					}
-					
+
 					if ($hayErrores)
 						$stack[count($stack)] = $linea;
-					$hayErrores = FALSE;
 
 					$this->db->trans_complete();
 					if ($this->db->trans_status() === FALSE) {
