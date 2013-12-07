@@ -389,11 +389,13 @@ class Estudiantes extends MasterManteka {
 		$subMenuLateralAbierto = "cargaMasivaEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
 		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$titulo = "Carga masiva de estudiantes";
-		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ESTUDIANTE, 'estudiantes', array());
+		$datos_vista = array();
+		$rutProfesor = $this->session->userdata('rut');
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ESTUDIANTE, 'estudiantes', $datos_vista, $rutProfesor);
 	}
 
 
-	private function cargaMasiva($nombreMenuLateral, $nombre_cuerpo_vista, $titulo, $tipos_usuarios_permitidos, $tipoCarga, $deQueEsLaCarga, $datos_vista) {
+	private function cargaMasiva($nombreMenuLateral, $nombre_cuerpo_vista, $titulo, $tipos_usuarios_permitidos, $tipoCarga, $deQueEsLaCarga, $datos_vista, $rutProfesor) {
 		$config['upload_path'] = './uploads/';
 		$config['allowed_types'] = 'csv';
 		$config['max_size']	= '100';	
@@ -428,32 +430,34 @@ class Estudiantes extends MasterManteka {
 
 			if ($tipoCarga == CARGA_MASIVA_ESTUDIANTE) {
 				$this->load->model('Model_estudiante');
-				$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo);
+				$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo, $rutProfesor);
 			}
 			else if ($tipoCarga == CARGA_MASIVA_ASISTENCIA) {
 				$this->load->model('Model_asistencia');
 				$id_seccion = $this->input->post('id_seccion');
-				$stack = $this->Model_asistencia->cargaMasiva($nombre_archivo, $id_seccion);
+				$stack = $this->Model_asistencia->cargaMasiva($nombre_archivo, $rutProfesor);
 			}
 			else if ($tipoCarga == CARGA_MASIVA_CALIFICACIONES) {
 				$this->load->model('Model_calificaciones');
 				$id_seccion = $this->input->post('id_seccion');
-				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $id_seccion);
+				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $rutProfesor);
 			}
 
 			if ($stack !== FALSE) {
 
 				if(count($stack) != 0) {
 
-					$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+					$datos_plantilla["titulo_msj"] = "Han ocurrido errores";
 					$linea = '';
-					foreach ($stack as $key => $value) {
-						foreach ($value as $cadena) {
-							$linea = $linea.";".$cadena;
+					$datos_plantilla["cuerpo_msj"] = "A continuación se listan los errores encontrados, sin embargo los estudiantes que no hayan tenido problemas se ha guardado su asistencia<br><br>";
+					foreach ($stack as $key => $value) { //Cada linea procesada
+						$linea = ' ';
+						foreach ($value as $cadena) { //Cada columna por linea
+							$linea = $linea.$cadena.";";
 						}
-							$datos_plantilla["cuerpo_msj"] = "Se encontró un error en la siguiente linea:</br>".$key.".-".$linea."</br> Vuelva intentarlo luego de arreglar el error";
-							break;
-					}				
+						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"]."Se encontró un error en la siguiente linea:</br>".$key.".-".$linea."</br><br>";
+						//break;
+					}
 					$datos_plantilla["tipo_msj"] = "alert-error";
 					$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
 					$datos_plantilla["redirecTo"] = "Estudiantes/".$nombreMenuLateral; //Acá se pone el controlador/metodo hacia donde se redireccionará
@@ -620,12 +624,12 @@ class Estudiantes extends MasterManteka {
 		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 		$titulo = "Carga masiva de asistencia";
 		$datos_vista = array();
-		$this->load->model('Model_seccion');
+		//$this->load->model('Model_seccion');
 		$rutProfesor = $this->session->userdata('rut');
-		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
-		$verTodas = FALSE;
-		$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
-		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ASISTENCIA, 'asistencia', $datos_vista);
+		//$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		//$verTodas = FALSE;
+		//$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ASISTENCIA, 'asistencia', $datos_vista, $rutProfesor);
 	}
 
 
@@ -680,12 +684,12 @@ class Estudiantes extends MasterManteka {
 		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 		$titulo = "Carga masiva de calificaciones";
 		$datos_vista = array();
-		$this->load->model('Model_seccion');
+		//$this->load->model('Model_seccion');
 		$rutProfesor = $this->session->userdata('rut');
-		$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
-		$verTodas = FALSE;
-		$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
-		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_CALIFICACIONES, 'calificaciones', $datos_vista);
+		//$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+		//$verTodas = FALSE;
+		//$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_CALIFICACIONES, 'calificaciones', $datos_vista, $rutProfesor);
 	}
 
 

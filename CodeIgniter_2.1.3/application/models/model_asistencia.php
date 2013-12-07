@@ -197,7 +197,7 @@ class Model_asistencia extends CI_Model {
 	}
 
 
-	public function cargaMasiva($archivo, $id_seccion){
+	public function cargaMasiva($archivo, $rutProfesor){
 
 		if(!file_exists($archivo) || !is_readable($archivo)) {
 			return FALSE;
@@ -206,6 +206,7 @@ class Model_asistencia extends CI_Model {
 		$ff = fopen($archivo, "r");
 
 		$header = array();
+		$revisandoHeader = FALSE;
 		$data = array();		
 		$splitArray = array();
 		$stack  = array();
@@ -214,18 +215,28 @@ class Model_asistencia extends CI_Model {
 		while(($linea = fgets($ff)) !== FALSE) {
 
 			//Se comprueba la cabecera del archivo, es decir, los nombres de las columnas
-			if(!$header) { //Si está vacio
+			if(!$revisandoHeader) { //Si está vacio
 				$header = explode(';',trim($linea));
-				if((strcmp($header[1], 'RUT') != 0) || (count($header) <= 5)) { //CANTIDAD DE COLUMNAS DEBE SER MAYOR A 5
+				if (count($header) <= 5) { //CANTIDAD DE COLUMNAS DEBE SER MAYOR A 5
+					$header[] = "<br>La cantidad de elementos de la cabecera no es válida";
+					$stack[$c] = $header;
 					fclose($ff);
 					unlink($archivo);
-					return FALSE;
-				}				
+					return $stack;
+				}
+				if((strcmp($header[1], 'RUT') != 0) || (strcmp($header[2], 'PATERNO') != 0) || (strcmp($header[3], 'MATERNO') != 0) || (strcmp($header[4], 'NOMBRES') != 0)) {
+					$header[] = "<br>La cabecera del archivo no es válida";
+					$stack[$c] = $header;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$revisandoHeader = TRUE;
 			}
-			else {
+			else { //Ahora que la cabecera está bien, se revisa el cuerpo
 				$linea =  explode(';',$linea);
 				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
-					$linea[] = "<br>El numero de argumentos en la linea es incorrecto</br>";
+					$linea[] = "<br>El numero de argumentos en la linea es incorrecto";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -233,9 +244,9 @@ class Model_asistencia extends CI_Model {
 				}
 				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
 				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
-				$validador = 1;//$this->validarDatos($data['RUT'],"rut");
+				$validador = TRUE;//$this->validarDatos($data['RUT'],"rut");
 				if(!$validador) {
-					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos</br>";
+					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -244,7 +255,7 @@ class Model_asistencia extends CI_Model {
 				/*
 				$validador = $this->rutExiste($data['RUT']);
 				if($validador == -1) {
-					$linea[] = "<br>El rut de estudiante no existe en manteka</br>";
+					$linea[] = "<br>El rut de estudiante no existe en manteka";
 					$stack[$c] = $linea;
 					fclose($ff);
 					unlink($archivo);
@@ -261,6 +272,7 @@ class Model_asistencia extends CI_Model {
 
 		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
 		$header = array();
+		$hayErrores = FALSE;
 		if ($flag) {
 			while(($linea = fgets($ffa)) !== FALSE) {
 				if(!$header) {
@@ -279,26 +291,52 @@ class Model_asistencia extends CI_Model {
 					//Hago un insert o update por cada sesión de clase
 					$cantidadColumnas = count($header);
 					for($i = 5; $i < $cantidadColumnas; $i=$i+1) {
-						$fechaClase = $header[$i];
-						//$id_sesion_de_clase = $this->buscarSesionByFecha($fechaClase);
-
 						if ($data['RUT'] !== "") {
 							$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
 							$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
 						}
-						if ($data['fechaClase'] !== "") { //Los blancos no se agregan, ni se modifican
+
+						$fechaClase = $header[$i];
+						$fechaClaseAdaptada = $this->adaptFechaFormat($fechaClase);
+						if ($fechaClaseAdaptada == NULL) {
+							$linea[] = "<br>La fecha de la sesión de clase no tiene un formáto válido, debe ser dd-mm-yyyy";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+
+						$id_seccion = $this->findSeccionByEstudiante($data['RUT']);
+						if ($id_seccion == NULL) {
+							$linea[] = "<br>El estudiante no tiene sección asignada o no está en el sistema";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+						$id_sesion_de_clase = $this->findSesionByFechaAndSeccion($fechaClaseAdaptada, $id_seccion);
+						if ($id_sesion_de_clase == NULL) {
+							$linea[] = "<br>No se ha encontrado una sesión de clases para la fecha: ".$fechaClase." en la sección, revise si el estudiante se cambió de sección";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+
+						if ($data[$fechaClase] !== "") { //Los blancos no se agregan, ni se modifican
 							$asistio = $data[$fechaClase];
-							echo 'Insertando: '.$data['RUT'].' asistió: '.$asistio.' ';
-							//$this->agregarAsistencia($rut_profesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+							//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_sesion_de_clase: '.$id_sesion_de_clase.'         ';
+							$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
 						}
 						
 					}
+					
+					if ($hayErrores)
+						$stack[count($stack)] = $linea;
+					$hayErrores = FALSE;
 
 					$this->db->trans_complete();
-
 					if ($this->db->trans_status() === FALSE) {
-						return FALSE;
+						return $stack;
 					}
+					
 				}
 
 			}
@@ -310,7 +348,44 @@ class Model_asistencia extends CI_Model {
 		}
 		fclose($ffa);
 		unlink($archivo);
-		return $stack;		
+		return $stack;
+	}
+
+	private function findSeccionByEstudiante($rut_estudiante) {
+		$this->db->select('estudiante.ID_SECCION');
+		$this->db->where('RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('estudiante');
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row();
+			return $primeraResp->ID_SECCION;
+		}
+		else {
+			return NULL;
+		}
+	}
+
+	private function findSesionByFechaAndSeccion($fechaClase, $id_seccion) {
+		$this->db->select('planificacion_clase.ID_SESION');
+		$this->db->where('FECHA_PLANIFICADA', $fechaClase);
+		$this->db->where('planificacion_clase.ID_SECCION', $id_seccion);
+		$query = $this->db->get('planificacion_clase');
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row(); //POSIBLE ERROR SI LLEGAN A EXISTIR MÁS DE 2 CLASES POR DÍA PARA UNA MISMA SECCIÓN
+			return $primeraResp->ID_SESION;
+		}
+		else {
+			return NULL;
+		}
+
+	}
+
+	private function adaptFechaFormat($fecha) {
+		if (preg_match ('/^\d{1,2}\/\d{1,2}\/\d{4}$/' , $fecha)) {
+			$fechaArray =  explode('/', $fecha);
+			$fechaResultado = $fechaArray[2].'-'.$fechaArray[1].'-'.$fechaArray[0];
+			return $fechaResultado;
+		}
+		return NULL;
 	}
 
 

@@ -26,6 +26,7 @@ function validacion(){
 		echo form_open_multipart('Estudiantes/'.$funcionControlador, $atributos);?>
 
 		<?php if ($tipoCarga == CARGA_MASIVA_ASISTENCIA || $tipoCarga == CARGA_MASIVA_CALIFICACIONES) { ?>
+		<!--
 		<div class="row-fluid">
 			<div class="span6">
 				<div class="control-group">
@@ -51,6 +52,7 @@ function validacion(){
 				</div>
 			</div>
 		</div>
+		-->
 		<?php } ?>
 
 		<div class="fileupload fileupload-new" data-provides="fileupload">
