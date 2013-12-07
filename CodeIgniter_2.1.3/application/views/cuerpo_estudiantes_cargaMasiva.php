@@ -66,7 +66,7 @@ function validacion(){
 
 		<br /><br />
 
-		<div><font style="font-weight:bold" color="red">Aviso: </font>Solo es posible subir archivos con formato csv (Revisar manual de usuario)</div>
+		<div><font style="font-weight:bold" color="red">Aviso: </font>Solo es posible subir archivos con formato csv, <a href="/<?php echo config_item('dir_alias') ?>/uploads/ejemplo_<?php echo $queSeCarga ?>.csv">revise este ejemplo</a>.</div>
 	</div>
     
     <!-- Modal de formato incompatible -->

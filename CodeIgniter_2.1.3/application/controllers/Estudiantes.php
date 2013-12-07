@@ -415,6 +415,7 @@ class Estudiantes extends MasterManteka {
 
 			$datos_vista['error'] = $this->upload->display_errors();
 			$datos_vista['titulo'] = $titulo;
+			$datos_vista['queSeCarga'] = $deQueEsLaCarga;
 
 			$this->cargarTodo("Estudiantes", $nombre_cuerpo_vista, "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
