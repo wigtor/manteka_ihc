@@ -397,8 +397,9 @@ class Estudiantes extends MasterManteka {
 
 	private function cargaMasiva($nombreMenuLateral, $nombre_cuerpo_vista, $titulo, $tipos_usuarios_permitidos, $tipoCarga, $deQueEsLaCarga, $datos_vista, $rutProfesor) {
 		$config['upload_path'] = './uploads/';
-		$config['allowed_types'] = 'csv';
-		$config['max_size']	= '100';	
+		$config['allowed_types'] = 'text/plain|text/csv|csv';
+		//$config['allowed_types']  = 'text/comma-separated-values|application/csv|application/excel|application/vnd.ms-excel|application/vnd.msexcel|text/anytext';
+		$config['max_size']	= '1024';
 
 
 		$this->load->library('upload', $config);
@@ -410,9 +411,7 @@ class Estudiantes extends MasterManteka {
 		$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
 		//$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR, TIPO_USR_PROFESOR);
 
-
 		if ( ! $this->upload->do_upload()) {
-
 			$datos_vista['error'] = $this->upload->display_errors();
 			$datos_vista['titulo'] = $titulo;
 			$datos_vista['queSeCarga'] = $deQueEsLaCarga;

@@ -20,7 +20,7 @@ function validacion(){
 <fieldset>
 	<legend><?php echo $titulo;?></legend>
 	<div style="text-align:center!important;width: 100%">
-		<?php //echo $error;?>
+		<?php echo $error;?>
 
 		<?php $atributos = array('onsubmit' => 'return validacion()', 'id'=>'formCargar', 'class' => 'form-horizontal');
 		echo form_open_multipart('Estudiantes/'.$funcionControlador, $atributos);?>

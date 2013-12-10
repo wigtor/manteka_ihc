@@ -171,7 +171,7 @@ class Model_estudiante extends CI_Model {
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
 		$this->db->join('carrera', 'estudiante.COD_CARRERA = carrera.COD_CARRERA');
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);
-		$this->db->order_by('APELLIDO1', 'asc');
+		$this->db->order_by('APELLIDO1 ASC, APELLIDO2 ASC');
 		$query = $this->db->get('estudiante');
 		if ($query == FALSE) {
 			return array();
@@ -185,6 +185,7 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('CONCAT_WS(\' \', APELLIDO1, APELLIDO2, NOMBRE1, NOMBRE2 ) AS nombres', FALSE);
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->order_by('APELLIDO1 ASC, APELLIDO2 ASC');
 		$query = $this->db->get('estudiante');
 		if ($query == FALSE) {
 			return array();
