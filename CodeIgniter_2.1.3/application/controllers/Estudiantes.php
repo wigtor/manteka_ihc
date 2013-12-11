@@ -434,12 +434,10 @@ class Estudiantes extends MasterManteka {
 			}
 			else if ($tipoCarga == CARGA_MASIVA_ASISTENCIA) {
 				$this->load->model('Model_asistencia');
-				$id_seccion = $this->input->post('id_seccion');
 				$stack = $this->Model_asistencia->cargaMasiva($nombre_archivo, $rutProfesor);
 			}
 			else if ($tipoCarga == CARGA_MASIVA_CALIFICACIONES) {
 				$this->load->model('Model_calificaciones');
-				$id_seccion = $this->input->post('id_seccion');
 				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $rutProfesor);
 			}
 

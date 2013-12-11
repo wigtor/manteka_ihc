@@ -25,7 +25,6 @@ class Model_calificaciones extends CI_Model {
 			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->where('ID_EVALUACION', $id_evaluacion);
 			$this->db->update('nota', $data1);
-
 			//Si hubo cambios, entonces hago insert en auditoría
 			if ($this->db->affected_rows() > 0) {
 				$row_original = $primeraResp->row();
@@ -50,6 +49,7 @@ class Model_calificaciones extends CI_Model {
 				'COMENTARIO_NOTA' => $comentario
 			);
 			$this->db->insert('nota', $data2);
+			//echo $this->db->last_query().'    ';
 
 			$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
 					'NOMBRE' => 'INSERT', 
@@ -183,6 +183,218 @@ class Model_calificaciones extends CI_Model {
 			return $promedio;
 		}
 		return "";
+	}
+	
+	
+	public function cargaMasiva($archivo, $rutProfesor){
+
+		if(!file_exists($archivo) || !is_readable($archivo)) {
+			return FALSE;
+		}
+
+		$ff = fopen($archivo, "r");
+
+		$header = array();
+		$revisandoHeader = FALSE;
+		$data = array();		
+		$splitArray = array();
+		$stack  = array();
+		$c = 1;
+		$flag = FALSE;
+		while(($linea = fgets($ff)) !== FALSE) {
+
+			//Se comprueba la cabecera del archivo, es decir, los nombres de las columnas
+			if(!$revisandoHeader) { //Si está vacio
+				$header = explode(';',trim($linea));
+				if (count($header) <= 5) { //CANTIDAD DE COLUMNAS DEBE SER MAYOR A 5
+					$header[] = "<br>La cantidad de elementos de la cabecera no es válida";
+					$stack[$c] = $header;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				if((strcmp($header[1], 'RUT') != 0) || (strcmp($header[2], 'PATERNO') != 0) || (strcmp($header[3], 'MATERNO') != 0) || (strcmp($header[4], 'NOMBRES') != 0)) {
+					$header[] = "<br>La cabecera del archivo no es válida";
+					$stack[$c] = $header;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$revisandoHeader = TRUE;
+			}
+			else { //Ahora que la cabecera está bien, se revisa el cuerpo
+				$linea =  explode(';',$linea);
+				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
+					$linea[] = "<br>El numero de argumentos en la linea es incorrecto";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
+				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
+				$validador = TRUE;//$this->validarDatos($data['RUT'],"rut");
+				if(!$validador) {
+					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				/*
+				$validador = $this->rutExiste($data['RUT']);
+				if($validador == -1) {
+					$linea[] = "<br>El rut de estudiante no existe en manteka";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				*/
+				$flag = TRUE;
+
+			}
+			$c++;						
+		}
+		fclose($ff);
+		$ffa = fopen($archivo, "r");	
+
+		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
+		$header = array();
+		$hayErrores = FALSE;
+		$saltarEstudiante = FALSE;
+		if ($flag) {
+			while(($linea = fgets($ffa)) !== FALSE) {
+				if(!$header) {
+					$header = explode(';', trim($linea));
+				}
+				else {
+					$hayErrores = FALSE;
+					$this->db->trans_start();
+
+					$linea =  explode(';', $linea);
+					$data = array_combine($header, $linea);
+					//Trimeo todos los elementos
+					foreach ($data as $key => $value) {
+						$data[$key] = trim($value);
+					}
+
+					//Hago un insert o update por cada sesión de clase
+					$cantidadColumnas = count($header);
+					$saltarEstudiante = FALSE;
+					for($i = 5; $i < $cantidadColumnas; $i=$i+1) {
+						if ($saltarEstudiante) {
+							break;
+						}
+						if ($data['RUT'] !== "") {
+							$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
+							$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
+						}
+
+						$abreviaturaModuloTem = $header[$i];
+						$id_modulo_tem = $this->findModuloTemByAbreviatura($abreviaturaModuloTem);
+						if ($id_modulo_tem == NULL) {
+							$linea[] = "<br>El módulo temático no es válido";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+						$id_evaluacion = $this->findEvaluacionByModuloTematico($id_modulo_tem);
+						if ($id_evaluacion == NULL) {
+							$linea[] = "<br>No se ha encontrado una evaluación para el módulo temático: ".$abreviaturaModuloTem.", revise si el estudiante se cambió de sección";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+						
+						$rut_estudiante = $this->findEstudianteByRut($data['RUT']);
+						if ($rut_estudiante == NULL) {
+							$linea[] = "<br>No se ha encontrado el estudiante con RUT: ".$data['RUT'].", revise si el estudiante fue eliminado del sistema";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+
+						if ($data[$abreviaturaModuloTem] !== "") { //Los blancos no se agregan, ni se modifican
+							$nota = $data[$abreviaturaModuloTem];
+							$nota = str_replace(',', '.', $nota); 
+							if (preg_match ('/^([123456]([\.][0-9])?)|[7]([\.][0])?$/', $nota)) {
+								//echo 'es válido:'.$nota.'  ';
+								//echo 'RP:'.$rutProfesor.' Rut: '.$data['RUT'].' nota: '.$nota.' id_evaluacion: '.$id_evaluacion.'         ';
+								$this->agregarCalificacion($rutProfesor, $data['RUT'], $nota, NULL, $id_evaluacion);
+							}
+							else {
+								//echo 'Inválido:'.$nota.'  ';
+								$linea[] = "<br>El formato de nota ingresado no es válido";
+								//$stack[count($stack)] = $linea;
+								$hayErrores = TRUE;
+								continue;
+							}
+						}
+					}
+					
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+						$linea[] = "<br>Ha ocurrido un error en la base de datos al agregar la calificación";
+						$hayErrores = TRUE;
+					}
+
+					if ($hayErrores)
+						$stack[count($stack)] = $linea;
+				}
+
+			}
+		}
+		else {
+			fclose($ffa);
+			unlink($archivo);
+			return FALSE;
+		}
+		fclose($ffa);
+		unlink($archivo);
+		return $stack;
+	}
+	
+	private function findModuloTemByAbreviatura($abreviaturaModuloTem) {
+		$this->db->select('modulo_tematico.ID_MODULO_TEM');
+		$this->db->where('modulo_tematico.ABREVIATURA', $abreviaturaModuloTem);
+		$query = $this->db->get('modulo_tematico');
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row();
+			if ($primeraResp->ID_MODULO_TEM == NULL) {
+				return -1;
+			}
+			return $primeraResp->ID_MODULO_TEM;
+		}
+		else {
+			return NULL;
+		}
+	}
+
+	private function findEvaluacionByModuloTematico($id_modulo_tem) {
+		$this->db->select('evaluacion.ID_EVALUACION');
+		$this->db->where('evaluacion.ID_MODULO_TEM', $id_modulo_tem);
+		$query = $this->db->get('evaluacion');
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row(); //POSIBLE ERROR SI LLEGAN A EXISTIR MÁS DE 2 EVALUACIONES POR MODULO TEMÁTICO
+			return $primeraResp->ID_EVALUACION;
+		}
+		else {
+			return NULL;
+		}
+	}
+	
+	private function findEstudianteByRut($rut_estudiante) {
+		$this->db->select('estudiante.RUT_USUARIO');
+		$this->db->where('estudiante.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('estudiante');
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row();
+			return $primeraResp->RUT_USUARIO;
+		}
+		else {
+			return NULL;
+		}
 	}
 }
 

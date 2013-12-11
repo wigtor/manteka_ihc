@@ -336,19 +336,31 @@ class Model_asistencia extends CI_Model {
 
 						if ($data[$fechaClase] !== "") { //Los blancos no se agregan, ni se modifican
 							$asistio = $data[$fechaClase];
-							//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_sesion_de_clase: '.$id_sesion_de_clase.'         ';
-							$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+							if (preg_match ('/^[0]|[1]$/' , $asistio)) {
+								//echo 'es válido:'.$asistio.'  ';
+								//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_sesion_de_clase: '.$id_sesion_de_clase.'         ';
+								$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+							}
+							else {
+								//echo 'No es válido:'.$asistio.'  ';
+								$linea[] = "<br>El formato de asistencia ingresado no es válido, debe ser 0 o 1";
+								//$stack[count($stack)] = $linea;
+								$hayErrores = TRUE;
+								continue;
+							}
+							
 						}
 						
+					}
+					
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+						$linea[] = "<br>Ha ocurrido un error en la base de datos al agregar la asistencia";
+						$hayErrores = TRUE;
 					}
 
 					if ($hayErrores)
 						$stack[count($stack)] = $linea;
-
-					$this->db->trans_complete();
-					if ($this->db->trans_status() === FALSE) {
-						return $stack;
-					}
 					
 				}
 
@@ -392,7 +404,6 @@ class Model_asistencia extends CI_Model {
 		else {
 			return NULL;
 		}
-
 	}
 
 	private function adaptFechaFormat($fecha) {
