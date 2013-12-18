@@ -79,6 +79,7 @@ class Model_calificaciones extends CI_Model {
 		$this->db->select('CONCAT(\'Nota: \', NOMBRE_MODULO) AS nombre', FALSE);
 		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
 		$this->db->select('TRUE AS editable', FALSE);
+		$this->db->select('modulo_tematico.ABREVIATURA AS abreviatura');
 		$this->db->join('modulo_tematico', 'evaluacion.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM');
 		$this->db->join('sesion_de_clase', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
 		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
@@ -108,6 +109,7 @@ class Model_calificaciones extends CI_Model {
 		$notaFinal->nombre = "Promedio final acumulado";
 		$notaFinal->fecha_planificada = "";
 		$notaFinal->editable = FALSE;
+		$notaFinal->abreviatura = 'FIN';
 		$resultado[count($resultado)] = $notaFinal;
 		return $resultado;
 	}
@@ -292,6 +294,9 @@ class Model_calificaciones extends CI_Model {
 						}
 
 						$abreviaturaModuloTem = $header[$i];
+						if ($abreviaturaModuloTem == "FIN") { //PROMEDIO FINAL NO SE AGREGA COMO CALIFICACIÓN
+							continue;
+						}
 						$id_modulo_tem = $this->findModuloTemByAbreviatura($abreviaturaModuloTem);
 						if ($id_modulo_tem == NULL) {
 							$linea[] = "<br>El módulo temático no es válido";

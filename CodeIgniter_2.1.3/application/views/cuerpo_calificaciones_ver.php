@@ -1,3 +1,4 @@
+<script src="/<?php echo config_item('dir_alias') ?>/javascripts/descargaByJquery.js"></script>
 <script type="text/javascript">
 	var prefijo_tipoDato = "estudiante_";
 	var listaColumnas = ["N°", "Rut", "Nombres"];
@@ -352,10 +353,36 @@
 		$('#icono_cargando').show();
 		cargarHeadTabla();
 		cargarDatosCalificaciones();
+		
+		//Quito el foco al select de la sección
 		$('#seccion').blur();
+
+		//Habilito el botón de descarga
+		$('#btn_descargar').prop('disabled', false).button('refresh');
+
 		$('#icono_cargando').hide();
 	}
 
+	function descargarToArchivo() {
+		$('#icono_cargando').show();
+		var id_seccion = $('#seccion').val();
+		if (id_seccion == "") {
+			return;
+		}
+
+		var only_view = 0;
+		<?php 
+			if ($ONLY_VIEW === TRUE) {
+				?>
+			only_view = 1;
+				<?php
+			}
+		?>
+		url =  "<?php echo site_url("Estudiantes/generateCSVCalificacionesBySeccionAjax") ?>";
+		parametros = 'id_seccion='+id_seccion+'&only_view='+only_view;
+		$.download(url, parametros);
+		$('#icono_cargando').hide();
+	}
 
 <?php
 	if ($ONLY_VIEW !== TRUE) {
@@ -494,6 +521,15 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 						<button class="btn" type="button" onclick="resetearCalificaciones()">
 							<div class="btn_with_icon_solo">Â</div>
 							&nbsp; Cancelar
+						</button>
+					</div>
+					<?php
+						}
+						else { ?>
+					<div class="controls ">
+						<button class="btn" type="button" id="btn_descargar" onclick="descargarToArchivo()" disabled title="Debe seleccionar una sección para descargar su registro de calificaciones">
+							<i class="icon-download-alt"></i>
+							&nbsp; Descargar a archivo
 						</button>
 					</div>
 					<?php

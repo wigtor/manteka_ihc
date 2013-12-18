@@ -984,7 +984,6 @@ class Estudiantes extends MasterManteka {
 		}
 		//echo 'esCoordinador: '.$esCoordinador.'   ';
 		$this->load->model('Model_calificaciones');
-		$this->load->model('Model_profesor');
 		$resultado = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
 		
 		echo json_encode($resultado);
@@ -1083,13 +1082,288 @@ class Estudiantes extends MasterManteka {
 			*/
 
 		}
-		try {
-			$aImprimir = json_encode($listaEstudiantes);
-			echo $aImprimir;
+		echo json_encode($listaEstudiantes);
+		
+	}
+
+
+	public function generateCSVCalificacionesBySeccionAjax() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
 		}
-		catch (Exception $e) {
-			echo 'Error en la wea';
+
+		$id_seccion = $this->input->post('id_seccion');
+		$only_view = $this->input->post('only_view');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_calificaciones');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_profesor');
+		$this->load->model('Model_modulo_tematico');
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || $only_view) {
+			$esCoordinador = TRUE;
+			$id_modulo_tem = NULL;
+			$modulosTematicosEnQueEsLider = array();
 		}
+		else {
+			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_usuario);
+			//Podría tomar -1 si se está consultando una sección a la cual no le hace clases el profesor, sin embargo igualmente puede ser profesor lider
+			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
+		}
+		
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistenciaFormatCSV($id_seccion);
+		$numEstudiante = 1;
+		foreach ($listaEstudiantes as $estudiante) {
+			$estudiante->posicion = strval($numEstudiante);
+			$estudiante->notas = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
+			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
+			if (count($modulosTematicosEnQueEsLider) < 1) {
+				$estudiante->notas = $this->Model_calificaciones->getCalificacionesEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+				$estudiante->comentarios = $this->Model_calificaciones->getComentariosCalificacionesEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+				$cantidadCalificaciones = $this->Model_calificaciones->cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			}
+			else {
+				$cantidadCalificaciones = 0;
+				foreach ($modulosTematicosEnQueEsLider as $modTem) {
+					$id_modulo_tem = $modTem->id;
+					$notasTemp = $this->Model_calificaciones->getCalificacionesEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+					$comentariosTemp = $this->Model_calificaciones->getComentariosCalificacionesEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+					$estudiante->notas = array_merge($estudiante->notas, $notasTemp);
+					$estudiante->comentarios = array_merge($estudiante->comentarios, $comentariosTemp);
+					$cantidadCalificaciones += $this->Model_calificaciones->cantidadCalificacionesBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+
+				}
+			}
+			
+			//Agrego el promedio final
+			$posicionUltimo = count($estudiante->notas);
+			if ($posicionUltimo > 0) {
+				
+				$objetoNota = new stdClass();
+				$objetoNota->nota = $this->Model_calificaciones->calculaPromedio($estudiante->RUT);
+				//echo 'nota:'.$objetoNota->nota.' c:'.count($estudiante->notas).' ';
+				$objetoNota->id_evaluacion = -1;
+				$estudiante->notas[$posicionUltimo] = $objetoNota;
+
+				//$promedio = array($objetoNota);
+				//array_merge($estudiante->notas, $promedio);
+
+				$objetoComentario = new stdClass();
+				$objetoComentario->comentario = NULL;
+				$objetoComentario->id_evaluacion = -1;
+				$estudiante->comentarios[$posicionUltimo] = $objetoComentario;
+				//$comentarioPromedio = array($objetoComentario);
+				//array_merge($estudiante->comentarios, $comentarioPromedio);
+				
+			}
+			$numEstudiante = $numEstudiante + 1;
+			/*
+			if ($posicionUltimo > 0) {
+				$objetoNota = array();
+				$objetoNota['nota'] = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
+				//echo 'nota:'.$objetoNota['nota'].' ';
+				$objetoNota['id_evaluacion'] = -1;
+				$promedio = array($objetoNota);
+				array_merge($estudiante->notas, $promedio);
+
+				$objetoComentario = array();
+				$objetoComentario['comentario'] = NULL;
+				$objetoComentario['id_evaluacion'] = -1;
+				$comentarioPromedio = array($objetoComentario);
+				array_merge($estudiante->comentarios, $comentarioPromedio);
+			}
+			*/
+
+		}
+		
+		$mostrarTodas = $only_view;
+		$this->load->model('Model_calificaciones');
+		$evaluaciones = $this->Model_calificaciones->getEvaluacionesBySeccionAndProfesorAjax($id_seccion, $rut_usuario, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
+		
+		$this->load->model('Model_seccion');
+		$nombre_seccion =  $this->Model_seccion->getNombreSeccion($id_seccion)->nombre;
+
+		header('Content-Type: application/csv; charset=UTF-8');
+		header('Content-Disposition: attachment; filename=calificaciones_seccion_'.$nombre_seccion.'.csv'); //CAMBIAR POR NOMBRE DE SECCION
+		$resultadoCSV = $this->convertirCalificacionToCSV($listaEstudiantes, $evaluaciones);
+		echo $resultadoCSV;
+	}
+
+
+	public function generateCSVAsistenciaBySeccionAjax() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$only_view = $this->input->post('only_view');
+		$rut_usuario = $this->session->userdata('rut');
+		$this->load->model('Model_asistencia');
+		$this->load->model('Model_profesor');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_planificacion');
+		$this->load->model('Model_modulo_tematico');
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) || $only_view) {
+			$esCoordinador = TRUE;
+			$id_modulo_tem = NULL;
+			$modulosTematicosEnQueEsLider = array();
+		}
+		else {
+			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_usuario);
+			//echo 'Cantidad mod es lider: '.count($modulosTematicosEnQueEsLider).'  ';
+			//Podría tomar -1 si se está consultando una sección a la cual no le hace clases el profesor, sin embargo igualmente puede ser profesor lider
+			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
+		}
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistenciaFormatCSV($id_seccion);
+		$numEstudiante = 1;
+		foreach ($listaEstudiantes as $estudiante) {
+			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
+			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
+			$estudiante->posicion = strval($numEstudiante);
+			if (count($modulosTematicosEnQueEsLider) < 1) {
+				$asistenciaDelEstudiante = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+				$estudiante->asistencia = $asistenciaDelEstudiante;
+				//Lo ordeno por num_sesion_seccion
+				$comentariosDelEstudiante = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+				$estudiante->comentarios = $comentariosDelEstudiante;
+				
+				$cantidadSesiones = $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+			}
+			else {
+				$cantidadSesiones = 0;
+				foreach ($modulosTematicosEnQueEsLider as $modTem) {
+					$id_modulo_tem = $modTem->id;
+					$asistenciaTemp = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+					
+					$comentariosTemp = $this->Model_asistencia->getComentariosAsistenciaEstudianteByModuloTematico($estudiante->RUT, $id_modulo_tem);
+					$estudiante->asistencia = array_merge($estudiante->asistencia, $asistenciaTemp);
+					$estudiante->comentarios = array_merge($estudiante->comentarios, $comentariosTemp);
+					$cantidadSesiones += $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
+
+				}
+			}
+			$numEstudiante = $numEstudiante + 1;
+		}
+
+		$mostrarTodas = $only_view;
+		$this->load->model('Model_sesion');
+		$fechas = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_usuario, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
+		
+		$this->load->model('Model_seccion');
+		$nombre_seccion =  $this->Model_seccion->getNombreSeccion($id_seccion)->nombre;
+		header('Content-Type: application/csv; charset=UTF-8');
+		header('Content-Disposition: attachment; filename=asistencia_seccion_'.$nombre_seccion.'.csv'); //CAMBIAR POR NOMBRE DE SECCION
+		$resultadoCSV = $this->convertirAsistenciaToCSV($listaEstudiantes, $fechas);
+		echo $resultadoCSV;
+	}
+
+
+	private function convertirAsistenciaToCSV($listaEstudiantes, $fechas) {
+		$cabecera = array();
+		$cabecera[] = "N°";
+		$cabecera[] = "RUT";
+		$cabecera[] = "PATERNO";
+		$cabecera[] = "MATERNO";
+		$cabecera[] = "NOMBRES";
+		$nvaListaEstudiantes = array();
+		foreach ($listaEstudiantes as $estudiante) {
+
+			$estudianteArreglado = array();
+			$estudianteArreglado[] = $estudiante->posicion;
+			$estudianteArreglado[] = $estudiante->RUT;
+			$estudianteArreglado[] = $estudiante->PATERNO;
+			$estudianteArreglado[] = $estudiante->MATERNO;
+			$estudianteArreglado[] = $estudiante->NOMBRES;
+
+			//Agrego las asistencias
+			//foreach ($estudiante->asistencia as $elementoAsistencia) {
+			foreach ($fechas as $sesionDeClase) {
+				$id_sesion = $sesionDeClase->id;
+				$encontrado = FALSE;
+				$presente = "";
+				foreach ($estudiante->asistencia as $elementoAsistencia) {
+					$id_sesionAsist = $elementoAsistencia->id_sesion;
+					if ($id_sesion == $id_sesionAsist) {
+						$presente = $elementoAsistencia->presente;
+						$encontrado = TRUE;
+						break;
+					}
+				}
+
+				if ($encontrado) {
+					$estudianteArreglado[] = $presente;
+				}
+				else {
+					$estudianteArreglado[] = "";
+				}
+			}
+
+
+			$nvaListaEstudiantes[] = $estudianteArreglado;
+		}
+
+		
+		$f = fopen('php://output', 'w');
+		//Agrego la cabecera
+		foreach ($fechas as $sesionDeClase) {
+			$fecha = $sesionDeClase->fecha_planificada;
+			$fecha = str_replace("-", "/", $fecha); //Cambiar fechas al revez al formato dd/mm/yyyy
+			$cabecera[] = $fecha;
+		}
+
+		//Agrego los datos
+		fputcsv($f, $cabecera, ';');
+		foreach ($nvaListaEstudiantes as $estudiante) {
+		    fputcsv($f, $estudiante, ';');
+		}
+		fclose($f);
+		
+	}
+
+
+	private function convertirCalificacionToCSV($listaEstudiantes, $evaluaciones) {
+		$cabecera = array();
+		$cabecera[] = "N°";
+		$cabecera[] = "RUT";
+		$cabecera[] = "PATERNO";
+		$cabecera[] = "MATERNO";
+		$cabecera[] = "NOMBRES";
+		$nvaListaEstudiantes = array();
+		foreach ($listaEstudiantes as $estudiante) {
+
+			$estudianteArreglado = array();
+			$estudianteArreglado[] = $estudiante->posicion;
+			$estudianteArreglado[] = $estudiante->RUT;
+			$estudianteArreglado[] = $estudiante->PATERNO;
+			$estudianteArreglado[] = $estudiante->MATERNO;
+			$estudianteArreglado[] = $estudiante->NOMBRES;
+
+			//Agrego las asistencias
+			foreach ($estudiante->notas as $elementoCalificacion) {
+				$estudianteArreglado[] = $elementoCalificacion->nota;
+			}
+
+
+			$nvaListaEstudiantes[] = $estudianteArreglado;
+		}
+
+		
+		$f = fopen('php://output', 'w');
+		//Agrego la cabecera
+		foreach ($evaluaciones as $evaluacion) {
+			$abrev = $evaluacion->abreviatura;
+			$cabecera[] = $abrev;
+		}
+
+		//Agrego los datos
+		fputcsv($f, $cabecera, ';');
+		foreach ($nvaListaEstudiantes as $estudiante) {
+		    fputcsv($f, $estudiante, ';');
+		}
+		fclose($f);
 		
 	}
 

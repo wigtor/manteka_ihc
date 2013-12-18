@@ -76,7 +76,6 @@ class Model_asistencia extends CI_Model {
 
 
 	public function getAsistenciaEstudianteByModuloTematico($rut_estudiante, $id_modulotem) {
-		//echo 'rut_estudiante: '.$rut_estudiante.' id_modulotem: '.$id_modulotem;
 		$this->db->flush_cache();
 		$this->db->select('asistencia.PRESENTE_ASISTENCIA AS presente');
 		$this->db->select('sesion_de_clase.ID_SESION AS id_sesion');
@@ -407,9 +406,24 @@ class Model_asistencia extends CI_Model {
 	}
 
 	private function adaptFechaFormat($fecha) {
-		if (preg_match ('/^\d{1,2}\/\d{1,2}\/\d{4}$/' , $fecha)) {
+		if (preg_match ('/^\d{1,2}\/\d{1,2}\/\d{4}$/' , $fecha)) { //Busco estilo dd/mm/yyyy
 			$fechaArray =  explode('/', $fecha);
 			$fechaResultado = $fechaArray[2].'-'.$fechaArray[1].'-'.$fechaArray[0];
+			return $fechaResultado;
+		}
+		else if (preg_match ('/^\d{1,2}-\d{1,2}-\d{4}$/' , $fecha)) { //Busco estilo dd-mm-yyyy
+			$fechaArray =  explode('-', $fecha);
+			$fechaResultado = $fechaArray[2].'-'.$fechaArray[1].'-'.$fechaArray[0];
+			return $fechaResultado;
+		}
+		else if (preg_match ('/^\d{4}\/\d{1,2}\/\d{1,2}$/' , $fecha)) { //Busco estilo yyyy/mm/dd
+			$fechaArray =  explode('/', $fecha);
+			$fechaResultado = $fechaArray[0].'-'.$fechaArray[1].'-'.$fechaArray[2];
+			return $fechaResultado;
+		}
+		else if (preg_match ('/^\d{4}-\d{1,2}-\d{1,2}$/' , $fecha)) { //Busco estilo yyyy-mm-dd
+			$fechaArray =  explode('-', $fecha);
+			$fechaResultado = $fechaArray[0].'-'.$fechaArray[1].'-'.$fechaArray[2];
 			return $fechaResultado;
 		}
 		return NULL;

@@ -187,7 +187,24 @@ class Model_estudiante extends CI_Model {
 		$this->db->select('CONCAT_WS(\' \', APELLIDO1, APELLIDO2, NOMBRE1, NOMBRE2 ) AS nombres', FALSE);
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);
 		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
-		$this->db->order_by('APELLIDO1 ASC, APELLIDO2 ASC');
+		$this->db->order_by('APELLIDO1 ASC, APELLIDO2 ASC, NOMBRE1 ASC, NOMBRE2 ASC');
+		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+
+	public function getEstudiantesBySeccionForAsistenciaFormatCSV($id_seccion) {
+		$this->db->select('estudiante.RUT_USUARIO AS posicion');
+		$this->db->select('estudiante.RUT_USUARIO AS RUT');
+		$this->db->select('APELLIDO1 AS PATERNO');
+		$this->db->select('APELLIDO2 AS MATERNO');
+		$this->db->select('CONCAT_WS(\' \', NOMBRE1, NOMBRE2 ) AS NOMBRES', FALSE);
+		$this->db->where('estudiante.ID_SECCION', $id_seccion);
+		$this->db->join('usuario', 'estudiante.RUT_USUARIO = usuario.RUT_USUARIO');
+		$this->db->order_by('APELLIDO1 ASC, APELLIDO2 ASC, NOMBRE1 ASC, NOMBRE2 ASC');
 		$query = $this->db->get('estudiante');
 		if ($query == FALSE) {
 			return array();
