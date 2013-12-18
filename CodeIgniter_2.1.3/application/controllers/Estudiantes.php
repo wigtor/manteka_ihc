@@ -854,10 +854,11 @@ class Estudiantes extends MasterManteka {
 			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
 		}
 		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		$numEstudiante = 1;
 		foreach ($listaEstudiantes as $estudiante) {
 			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
 			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
-
+			$estudiante->posicion = strval($numEstudiante);
 			if (count($modulosTematicosEnQueEsLider) < 1) {
 				$asistenciaDelEstudiante = $this->Model_asistencia->getAsistenciaEstudianteByModuloTematico($estudiante->rut, $id_modulo_tem);
 				$estudiante->asistencia = $asistenciaDelEstudiante;
@@ -879,6 +880,7 @@ class Estudiantes extends MasterManteka {
 
 				}
 			}
+			$numEstudiante = $numEstudiante + 1;
 		}
 		echo json_encode($listaEstudiantes);
 	}
@@ -1016,11 +1018,11 @@ class Estudiantes extends MasterManteka {
 			//Podría tomar -1 si se está consultando una sección a la cual no le hace clases el profesor, sin embargo igualmente puede ser profesor lider
 			$id_modulo_tem = $this->Model_modulo_tematico->getIdModuloTematicoByProfesorAndSeccion($rut_usuario, $id_seccion);
 		}
-		//DE AQUÍ PARA ABAJO HAY QUE CAMBIAR
+		
 		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
-		//echo 'id_modulo_tem: '.$id_modulo_tem.'   ';
+		$numEstudiante = 1;
 		foreach ($listaEstudiantes as $estudiante) {
-			
+			$estudiante->posicion = strval($numEstudiante);
 			$estudiante->notas = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es presente o no
 			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las sesiones de clase y el value es el comentario de la inasistencia
 			if (count($modulosTematicosEnQueEsLider) < 1) {
@@ -1062,7 +1064,7 @@ class Estudiantes extends MasterManteka {
 				//array_merge($estudiante->comentarios, $comentarioPromedio);
 				
 			}
-			
+			$numEstudiante = $numEstudiante + 1;
 			/*
 			if ($posicionUltimo > 0) {
 				$objetoNota = array();

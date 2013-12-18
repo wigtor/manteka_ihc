@@ -181,6 +181,8 @@ class Model_estudiante extends CI_Model {
 
 
 	public function getEstudiantesBySeccionForAsistencia($id_seccion) {
+
+		$this->db->select('estudiante.RUT_USUARIO AS posicion');
 		$this->db->select('estudiante.RUT_USUARIO AS rut');
 		$this->db->select('CONCAT_WS(\' \', APELLIDO1, APELLIDO2, NOMBRE1, NOMBRE2 ) AS nombres', FALSE);
 		$this->db->where('estudiante.ID_SECCION', $id_seccion);

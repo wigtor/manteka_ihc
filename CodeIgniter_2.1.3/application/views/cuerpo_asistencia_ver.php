@@ -1,8 +1,9 @@
 <script type="text/javascript">
 	var prefijo_tipoDato = "estudiante_";
-	var listaColumnas = ["Rut", "Nombres"];
+	var listaColumnas = ["N°", "Rut", "Nombres"];
 	var ruts_estudiantes = new Array();
 	var lista_idSesiones = new Array();
+	var LARGO_MAXIMO_NOMBRE = 26;
 
 	function resetTablaAsistencia() {
 		var tablaResultados = document.getElementById("tablaAsistencia");
@@ -93,11 +94,11 @@
 						if (j < listaColumnas.length) {
 							td = document.createElement('td'); //Creo la celda
 							stringTemp = arrayRespuesta[i][j];
-							if (stringTemp.length > 21) {
-								stringTemp = stringTemp.substring(0,21) + "..."
+							if (stringTemp.length > LARGO_MAXIMO_NOMBRE) {
+								stringTemp = stringTemp.substring(0, LARGO_MAXIMO_NOMBRE) + "..."
 							}
 							else {
-								stringTemp = stringTemp.substring(0,21);
+								stringTemp = stringTemp.substring(0, LARGO_MAXIMO_NOMBRE);
 							}
 							nodo = document.createTextNode(stringTemp);
 							td.appendChild(nodo);
@@ -302,9 +303,11 @@
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
 			if (i == 0)
+				th.setAttribute('style', "min-width:30px");
+			else if (i == 1)
 				th.setAttribute('style', "min-width:70px");
 			else
-				th.setAttribute('style', "min-width:170px");
+				th.setAttribute('style', "min-width:200px");
 			nodoTexto = document.createTextNode(listaColumnas[i]);
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
@@ -375,6 +378,8 @@
 		$('#icono_cargando').show();
 		cargarHeadTabla();
 		cargarDatosAsistencia();
+		$('#seccion').blur();
+		//$('#tablaAsistencia tr th').focus();
 		$('#icono_cargando').hide();
 	}
 
@@ -542,7 +547,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			</div>
 		</div>
 		<div class="row-fluid" >
-			<div class="span4" style="margin-left:0px; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+			<div class="span5" style="margin-left:0px; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
 				<table id="tablaAsistenciaNombres" class="table table-striped" >
 					<thead>
 
@@ -553,7 +558,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				</table>
 			</div>
 			
-			<div class="span8" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+			<div class="span7" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
 				<table id="tablaAsistencia" class="table table-striped" >
 					<thead>
 
