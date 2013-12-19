@@ -4,7 +4,7 @@
 	var listaColumnas = ["N°", "Rut", "Nombres"];
 	var ruts_estudiantes = new Array();
 	var lista_idEvaluaciones = new Array();
-	var LARGO_MAXIMO_NOMBRE = 26;
+	var LARGO_MAXIMO_NOMBRE = 19;
 
 	function resetTablaCalificaciones() {
 		var tablaResultados = document.getElementById("tablaCalificaciones");
