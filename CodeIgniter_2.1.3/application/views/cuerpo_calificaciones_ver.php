@@ -29,6 +29,18 @@
 		return -1;
 	}
 
+	function agregarCalificacionPromedioToTable(rutEstudiante, promedio) {
+		var tbody, td, tr, nodoTexto, tablaAsistenciaPorcentaje, tdExiste;
+		tdExiste = false;
+
+		if (!tdExiste) {
+			tablaAsistenciaPorcentaje = document.getElementById("tablaCalificacionesPromedio");
+
+			tbody = $("#tablaCalificacionesPromedio tbody");
+			tbody.append('<tr style="cursor:default; height:47px;"><td>'+promedio+'</td></tr>');
+		}
+	}
+
 	//Carga una matriz con los datos del estudiante y sus Calificacioness
 	function cargarDatosCalificaciones() {
 		var id_seccion = $('#seccion').val();
@@ -49,6 +61,11 @@
 		var tablaNombres = document.getElementById("tablaCalificacionesNombres");
 		$(tablaResultados).find('tbody').remove();
 		$(tablaNombres).find('tbody').remove();
+
+		var tablaCalificacionesPromedio = document.getElementById("tablaCalificacionesPromedio");
+		$(tablaCalificacionesPromedio).find('tbody').remove();
+		var tbodyCalif = document.createElement('tbody');
+		tablaCalificacionesPromedio.appendChild(tbodyCalif);
 		
 		
 		$.ajax({
@@ -107,13 +124,21 @@
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la Calificaciones
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
+							var sumaNotas = 0, cantidadNotas = 0;
 							for (var k = 0; k < lista_idEvaluaciones.length ; k++) {
-								//ACÁ ESTÁ EL
+								
 								//Busco si viene esa asistencia en la respuesta del servidor
 								var indiceEncontrado = buscarCalificacion(arrayObjectRespuesta[i].notas, lista_idEvaluaciones[k]);
 								if (indiceEncontrado >= 0) {
 									comentario = arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario == null ? '' : arrayObjectRespuesta[i].comentarios[indiceEncontrado].comentario; //paso a booleano
-									nota = arrayObjectRespuesta[i].notas[indiceEncontrado].nota == undefined ? "" : arrayObjectRespuesta[i].notas[indiceEncontrado].nota;
+									nota = arrayObjectRespuesta[i].notas[indiceEncontrado].nota;// == undefined ? "" : arrayObjectRespuesta[i].notas[indiceEncontrado].nota;
+									if (nota == undefined) {
+										nota = "";
+									}
+									else if (nota != "") {
+										sumaNotas += nota;
+										cantidadNotas++;
+									}
 								}
 								else { //Si se encontró -1
 									comentario = '';
@@ -213,6 +238,16 @@
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
 							}
+							var total = lista_idEvaluaciones.length;
+							var promedio = (sumaNotas)/cantidadNotas;
+							if (isNaN(promedio)) {
+								promedio = "";
+							}
+							else {
+								promedio = Math.round(promedio*10)/10;
+							}
+							agregarCalificacionPromedioToTable(arrayObjectRespuesta[i].rut, promedio);
+
 							break; //Se mostró todo el listado de Calificacioness, esto no funciona si se agregan más atributos despues de las Calificacioness
 						}
 					}
@@ -301,8 +336,11 @@
 	function cargarHeadTabla() {
 		var tablaResultados = document.getElementById("tablaCalificaciones");
 		var tablaNombres = document.getElementById("tablaCalificacionesNombres");
+		var tablaCalificacionesPromedio = document.getElementById("tablaCalificacionesPromedio");
+
 		$(tablaResultados).find('thead').remove();
 		$(tablaNombres).find('thead').remove();
+		$(tablaCalificacionesPromedio).find('thead').remove();
 		
 		var nodoCheckeable, nodoTexto, th, thead, tr;
 		thead = document.createElement('thead');
@@ -343,10 +381,22 @@
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
-
 		thead.appendChild(tr);
-		
 		tablaResultados.appendChild(thead);
+
+
+		//Cargo la tabla para el porcentaje de asistencia total
+		thead = document.createElement('thead');
+		thead.setAttribute('style', "cursor:default;");
+		tr = document.createElement('tr');
+		tr.setAttribute('style', "height:77px;");
+		th = document.createElement('th');
+		th.setAttribute('style', "min-width:30px");
+		nodoTexto = document.createTextNode("Promedio");
+		th.appendChild(nodoTexto);
+		tr.appendChild(th);
+		thead.appendChild(tr);
+		tablaCalificacionesPromedio.appendChild(thead);
 	}
 
 	function cargarCalificaciones() {
@@ -551,8 +601,18 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				</table>
 			</div>
 			
-			<div class="span7" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+			<div class="span5" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
 				<table id="tablaCalificaciones" class="table table-striped" >
+					<thead>
+
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+			<div class="span2" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+				<table id="tablaCalificacionesPromedio" class="table table-striped" >
 					<thead>
 
 					</thead>

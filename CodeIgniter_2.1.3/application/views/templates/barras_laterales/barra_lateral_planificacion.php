@@ -25,11 +25,16 @@
 		$agregarSesion = "";
 		$editarSesion = "";
 		$eliminarSesion = "";
+		$verEventos = "";
+		$agregarEvento = "";
+		$editarEvento = "";
+		$eliminarEvento = "";
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
 		$inPlanificacion = "";
 		$inModulos = "";
 		$inSesiones = "";
+		$inEventos = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
@@ -81,6 +86,22 @@
 			$eliminarSesion = 'class="active"';
 			$inSesiones = 'in';
 		}
+		else if ($subVistaLateralAbierta == "verEventos") {
+			$verEventos = 'class="active"';
+			$inEventos = 'in';
+		}
+		else if ($subVistaLateralAbierta == "agregarEvento") {
+			$agregarEvento = 'class="active"';
+			$inEventos = 'in';
+		}
+		else if ($subVistaLateralAbierta == "editarEvento") {
+			$editarEvento = 'class="active"';
+			$inEventos = 'in';
+		}
+		else if ($subVistaLateralAbierta == "eliminarEvento") {
+			$eliminarEvento = 'class="active"';
+			$inEventos = 'in';
+		}
 	?>
 
 	<!--	Barra lateral de correos	-->
@@ -129,6 +150,22 @@
 						<li <?php echo $agregarSesion; ?> ><a href="<?php echo site_url("Sesiones/agregarSesion")?>">Agregar sesiones</a></li>
 						<li <?php echo $editarSesion; ?> ><a href="<?php echo site_url("Sesiones/editarSesion")?>">Editar sesiones</a></li>
 						<li <?php echo $eliminarSesion; ?> ><a href="<?php echo site_url("Sesiones/eliminarSesion")?>">Eliminar sesiones</a></li>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
+				Eventos masivos</a>
+			</div>
+			<div id="collapseFive" class="accordion-body collapse <?php echo $inEventos; ?>">
+				<div class="accordion-inner nav nav-list">
+					<li <?php echo $verEventos; ?> ><a href="<?php echo site_url("Eventos/verEventos")?>">Ver eventos</a></li>
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<li <?php echo $agregarEvento; ?> ><a href="<?php echo site_url("Eventos/agregarEvento")?>">Agregar eventos</a></li>
+						<li <?php echo $editarEvento; ?> ><a href="<?php echo site_url("Eventos/editarEvento")?>">Editar eventos</a></li>
+						<li <?php echo $eliminarEvento; ?> ><a href="<?php echo site_url("Eventos/eliminarEvento")?>">Eliminar eventos</a></li>
 					<?php } ?>
 				</div>
 			</div>

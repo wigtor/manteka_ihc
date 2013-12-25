@@ -29,6 +29,20 @@
 		return -1;
 	}
 
+
+	function agregarPorcentajeAsistenciaToTable(rutEstudiante, porcentaje) {
+		var tbody, td, tr, nodoTexto, tablaAsistenciaPorcentaje, tdExiste;
+		tdExiste = false;
+
+		if (!tdExiste) {
+			tablaAsistenciaPorcentaje = document.getElementById("tablaAsistenciaPorcentaje");
+
+			tbody = $("#tablaAsistenciaPorcentaje tbody");
+			tbody.append('<tr style="cursor:default; height:47px;"><td>'+porcentaje+'%</td></tr>');
+		}
+	}
+
+
 	//Carga una matriz con los datos del estudiante y sus asistencias
 	function cargarDatosAsistencia() {
 		var id_seccion = $('#seccion').val();
@@ -47,8 +61,12 @@
 
 		var tablaResultados = document.getElementById("tablaAsistencia");
 		var tablaNombres = document.getElementById("tablaAsistenciaNombres");
+		var tablaAsistenciaPorcentaje = document.getElementById("tablaAsistenciaPorcentaje");
 		$(tablaResultados).find('tbody').remove();
 		$(tablaNombres).find('tbody').remove();
+		$(tablaAsistenciaPorcentaje).find('tbody').remove();
+		var tbodyPorcentaje = document.createElement('tbody');
+		tablaAsistenciaPorcentaje.appendChild(tbodyPorcentaje);
 
 
 		$.ajax({
@@ -107,6 +125,8 @@
 						}
 						else { //Entonces se están cargando las columnas relacionadas con la asistencia
 							//arrayRespuesta[i][j] = jQuery.parseJSON(arrayRespuesta[i][j]);
+
+							contadorAsistencia = 0;
 							for (var k = 0; k < lista_idSesiones.length ; k++) {
 
 								//Busco si viene esa asistencia en la respuesta del servidor
@@ -167,8 +187,10 @@
 								
 								//$(nodo).prop('checked', estaPresente);
 								if (!blanco) {
-									if (estaPresente)
+									if (estaPresente) {
 										nodo.setAttribute("value", "1");
+										contadorAsistencia++;
+									}
 									else {
 										nodo.setAttribute("value", "0");
 									}
@@ -179,7 +201,8 @@
 
 								//Agrego el popover para poner comentarios
 								var divBtnCerrar = '';// '<div class="btn btn-mini" data-dismiss="clickover" data-toggle="clickover" data-clickover-open="1" style="position:absolute; margin-top:-40px; margin-left:180px;"><i class="icon-remove"></i></div>';
-								var divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
+								var divs;
+								divs = '<div ><input class="popovers" onChange="cambioComentario(this)" value="'+comentario+
 								'" id="comentario_'+arrayObjectRespuesta[i].rut+'_'+lista_idSesiones[k]+
 								<?php 
 									if ($ONLY_VIEW === TRUE) {
@@ -190,6 +213,7 @@
 								?>
 								'" type="text" ></div>';
 
+								//Son como las "llaves" para identificar un input de asistencia
 								nodo.setAttribute("indice1", arrayObjectRespuesta[i].rut);
 								nodo.setAttribute("indice2", lista_idSesiones[k]);
 								$(nodo).dblclick(function(evento){ //mostrar popover
@@ -205,6 +229,14 @@
 								td.appendChild(divTd);
 								tr.appendChild(td); //Agrego la celda a la fila
 							}
+							var total = lista_idSesiones.length;
+							var porcentajeAsistencia = (contadorAsistencia*100)/lista_idSesiones.length;
+							if (isNaN(porcentajeAsistencia)) {
+								porcentajeAsistencia = 0;
+							}
+							porcentajeAsistencia = Math.round(porcentajeAsistencia);
+							agregarPorcentajeAsistenciaToTable(arrayObjectRespuesta[i].rut, porcentajeAsistencia);
+
 							break; //Se mostró todo el listado de asistencias, esto no funciona si se agregan más atributos despues de las asistencias
 						}
 					}
@@ -291,8 +323,11 @@
 	function cargarHeadTabla() {
 		var tablaResultados = document.getElementById("tablaAsistencia");
 		var tablaNombres = document.getElementById("tablaAsistenciaNombres");
+		var tablaAsistenciaPorcentaje = document.getElementById("tablaAsistenciaPorcentaje");
+
 		$(tablaResultados).find('thead').remove();
 		$(tablaNombres).find('thead').remove();
+		$(tablaAsistenciaPorcentaje).find('thead').remove();
 		
 		var nodoCheckeable, nodoTexto, th, thead, tr;
 		thead = document.createElement('thead');
@@ -300,7 +335,7 @@
 		tr = document.createElement('tr');
 		tr.setAttribute('style', "height:56px;");
 
-		//Recorro la lista de columnas para crearlas
+		//Recorro la lista de columnas de la primera tabla para crearlas
 		for (var i = 0; i < listaColumnas.length; i++) {
 			th = document.createElement('th');
 			if (i == 0)
@@ -350,10 +385,22 @@
 			th.appendChild(nodoTexto);
 			tr.appendChild(th);
 		}
-
 		thead.appendChild(tr);
-		
 		tablaResultados.appendChild(thead);
+
+
+		//Cargo la tabla para el porcentaje de asistencia total
+		thead = document.createElement('thead');
+		thead.setAttribute('style', "cursor:default;");
+		tr = document.createElement('tr');
+		tr.setAttribute('style', "height:56px;");
+		th = document.createElement('th');
+		th.setAttribute('style', "min-width:30px");
+		nodoTexto = document.createTextNode("Total");
+		th.appendChild(nodoTexto);
+		tr.appendChild(th);
+		thead.appendChild(tr);
+		tablaAsistenciaPorcentaje.appendChild(thead);
 	}
 
 	//Confierte la fecha de formato yyyy-mm-dd a: dd-mes
@@ -415,6 +462,7 @@
 	if ($ONLY_VIEW !== TRUE) {
 ?>
 
+//NO FUNCIONA POR AHORA ESTA
 	function checkAll(checkboxAll) {
 		var idSesion = checkboxAll.id;
 		idSesion = idSesion.substring('selectorTodos_'.length, idSesion.length);//obtengo los 2 id separados por un _
@@ -594,8 +642,18 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				</table>
 			</div>
 			
-			<div class="span7" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+			<div class="span6" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
 				<table id="tablaAsistencia" class="table table-striped" >
+					<thead>
+
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+			<div class="span1" style="margin-left:0px; overflow-x:scroll; max-width:100%; -webkit-border-radius: 4px; border:#cccccc 1px solid;">
+				<table id="tablaAsistenciaPorcentaje" class="table table-striped" >
 					<thead>
 
 					</thead>

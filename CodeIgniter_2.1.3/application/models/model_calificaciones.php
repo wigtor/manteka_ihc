@@ -102,15 +102,6 @@ class Model_calificaciones extends CI_Model {
 			return array();
 		}
 		$resultado = $query->result();
-
-		//Agrego la columna para el promedio final
-		$notaFinal = new stdClass();
-		$notaFinal->id = -1;
-		$notaFinal->nombre = "Promedio final acumulado";
-		$notaFinal->fecha_planificada = "";
-		$notaFinal->editable = FALSE;
-		$notaFinal->abreviatura = 'FIN';
-		$resultado[count($resultado)] = $notaFinal;
 		return $resultado;
 	}
 

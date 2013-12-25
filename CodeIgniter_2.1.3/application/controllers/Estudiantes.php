@@ -1041,46 +1041,7 @@ class Estudiantes extends MasterManteka {
 
 				}
 			}
-			
-			//Agrego el promedio final
-			$posicionUltimo = count($estudiante->notas);
-			if ($posicionUltimo > 0) {
-				
-				$objetoNota = new stdClass();
-				$objetoNota->nota = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
-				//echo 'nota:'.$objetoNota->nota.' c:'.count($estudiante->notas).' ';
-				$objetoNota->id_evaluacion = -1;
-				$estudiante->notas[$posicionUltimo] = $objetoNota;
-
-				//$promedio = array($objetoNota);
-				//array_merge($estudiante->notas, $promedio);
-
-				$objetoComentario = new stdClass();
-				$objetoComentario->comentario = NULL;
-				$objetoComentario->id_evaluacion = -1;
-				$estudiante->comentarios[$posicionUltimo] = $objetoComentario;
-				//$comentarioPromedio = array($objetoComentario);
-				//array_merge($estudiante->comentarios, $comentarioPromedio);
-				
-			}
 			$numEstudiante = $numEstudiante + 1;
-			/*
-			if ($posicionUltimo > 0) {
-				$objetoNota = array();
-				$objetoNota['nota'] = $this->Model_calificaciones->calculaPromedio($estudiante->rut);
-				//echo 'nota:'.$objetoNota['nota'].' ';
-				$objetoNota['id_evaluacion'] = -1;
-				$promedio = array($objetoNota);
-				array_merge($estudiante->notas, $promedio);
-
-				$objetoComentario = array();
-				$objetoComentario['comentario'] = NULL;
-				$objetoComentario['id_evaluacion'] = -1;
-				$comentarioPromedio = array($objetoComentario);
-				array_merge($estudiante->comentarios, $comentarioPromedio);
-			}
-			*/
-
 		}
 		echo json_encode($listaEstudiantes);
 		
