@@ -561,6 +561,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				if ($ONLY_VIEW === FALSE) {
 					?>
 				<p><font color="red">Atención: </font>Sólo puede ver las asistencias que le corresponde poner a la sección</p>
+				<p><font color="red">Atención: </font>El porcentaje total de asistencia corresponde sólo a su módulo temático, vaya a "ver asistencia" para obtener los porcentajes totales</p>
 					<?php
 				}
 			?>

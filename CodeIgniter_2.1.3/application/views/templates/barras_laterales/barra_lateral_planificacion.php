@@ -25,16 +25,16 @@
 		$agregarSesion = "";
 		$editarSesion = "";
 		$eliminarSesion = "";
-		$verEventos = "";
-		$agregarEvento = "";
-		$editarEvento = "";
-		$eliminarEvento = "";
+		$verActividades = "";
+		$agregarActividad = "";
+		$editarActividad = "";
+		$eliminarActividad = "";
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
 		$inPlanificacion = "";
 		$inModulos = "";
 		$inSesiones = "";
-		$inEventos = "";
+		$inActividades = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
@@ -86,21 +86,21 @@
 			$eliminarSesion = 'class="active"';
 			$inSesiones = 'in';
 		}
-		else if ($subVistaLateralAbierta == "verEventos") {
-			$verEventos = 'class="active"';
-			$inEventos = 'in';
+		else if ($subVistaLateralAbierta == "verActividades") {
+			$verActividades = 'class="active"';
+			$inActividades = 'in';
 		}
-		else if ($subVistaLateralAbierta == "agregarEvento") {
-			$agregarEvento = 'class="active"';
-			$inEventos = 'in';
+		else if ($subVistaLateralAbierta == "agregarActividad") {
+			$agregarActividad = 'class="active"';
+			$inActividades = 'in';
 		}
-		else if ($subVistaLateralAbierta == "editarEvento") {
-			$editarEvento = 'class="active"';
-			$inEventos = 'in';
+		else if ($subVistaLateralAbierta == "editarActividad") {
+			$editarActividad = 'class="active"';
+			$inActividades = 'in';
 		}
-		else if ($subVistaLateralAbierta == "eliminarEvento") {
-			$eliminarEvento = 'class="active"';
-			$inEventos = 'in';
+		else if ($subVistaLateralAbierta == "eliminarActividad") {
+			$eliminarActividad = 'class="active"';
+			$inActividades = 'in';
 		}
 	?>
 
@@ -157,15 +157,15 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-				Eventos masivos</a>
+				Actividades masivas</a>
 			</div>
-			<div id="collapseFive" class="accordion-body collapse <?php echo $inEventos; ?>">
+			<div id="collapseFive" class="accordion-body collapse <?php echo $inActividades; ?>">
 				<div class="accordion-inner nav nav-list">
-					<li <?php echo $verEventos; ?> ><a href="<?php echo site_url("Eventos/verEventos")?>">Ver eventos</a></li>
+					<li <?php echo $verActividades; ?> ><a href="<?php echo site_url("ActividadesMasivas/verActividades")?>">Ver actividades</a></li>
 					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
-						<li <?php echo $agregarEvento; ?> ><a href="<?php echo site_url("Eventos/agregarEvento")?>">Agregar eventos</a></li>
-						<li <?php echo $editarEvento; ?> ><a href="<?php echo site_url("Eventos/editarEvento")?>">Editar eventos</a></li>
-						<li <?php echo $eliminarEvento; ?> ><a href="<?php echo site_url("Eventos/eliminarEvento")?>">Eliminar eventos</a></li>
+						<li <?php echo $agregarActividad; ?> ><a href="<?php echo site_url("ActividadesMasivas/agregarActividad")?>">Agregar actividades</a></li>
+						<li <?php echo $editarActividad; ?> ><a href="<?php echo site_url("ActividadesMasivas/editarActividad")?>">Editar actividades</a></li>
+						<li <?php echo $eliminarActividad; ?> ><a href="<?php echo site_url("ActividadesMasivas/eliminarActividad")?>">Eliminar actividades</a></li>
 					<?php } ?>
 				</div>
 			</div>

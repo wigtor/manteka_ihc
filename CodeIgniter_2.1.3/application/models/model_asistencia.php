@@ -196,7 +196,7 @@ class Model_asistencia extends CI_Model {
 	}
 
 
-	public function cargaMasiva($archivo, $rutProfesor){
+	public function cargaMasiva($archivo, $rutProfesor, $esCoordinador){
 
 		if(!file_exists($archivo) || !is_readable($archivo)) {
 			return FALSE;
@@ -338,7 +338,16 @@ class Model_asistencia extends CI_Model {
 							if (preg_match ('/^[0]|[1]$/' , $asistio)) {
 								//echo 'es válido:'.$asistio.'  ';
 								//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_sesion_de_clase: '.$id_sesion_de_clase.'         ';
-								$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+								if ($this->tienePermisosPonerAsistencia($rutProfesor, $id_seccion, $id_sesion_de_clase, $esCoordinador)) {
+									$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+								}
+								else {
+									//echo ' mal ';
+									$linea[] = "<br>No tiene permisos para poner la asistencia al estudiante";
+									//$stack[count($stack)] = $linea;
+									$hayErrores = TRUE;
+									continue;
+								}
 							}
 							else {
 								//echo 'No es válido:'.$asistio.'  ';
@@ -373,6 +382,46 @@ class Model_asistencia extends CI_Model {
 		fclose($ffa);
 		unlink($archivo);
 		return $stack;
+	}
+
+//($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas) 
+	private function tienePermisosPonerAsistencia($rutProfesor, $id_seccion, $id_sesion_de_clase, $esCoordinador) {
+		$this->db->select('sesion_de_clase.ID_SESION AS id');
+		$this->db->select('NOMBRE_SESION AS nombre');
+		$this->db->select('DESCRIPCION_SESION AS descripcion');
+		$this->db->select('FECHA_PLANIFICADA AS fecha_planificada');
+		$this->db->select('NUM_SESION_SECCION AS numero_sesion_global');
+		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION');
+
+		if (!$esCoordinador) {
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rutProfesor);
+		}
+
+		/*
+		if (($esCoordinador == FALSE) && ($mostrarTodas == FALSE)) {
+			if (count($modulosTematicosEnQueEsLider) < 1) {
+				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+				$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut_profesor);
+			}
+			foreach ($modulosTematicosEnQueEsLider as $modulo_tematico) {
+				$this->db->or_where('sesion_de_clase.ID_MODULO_TEM', $modulo_tematico->id);
+			}
+		}
+		*/
+		$this->db->where('seccion.ID_SECCION', $id_seccion);
+		$this->db->where('sesion_de_clase.ID_SESION', $id_sesion_de_clase);
+		$query = $this->db->get('sesion_de_clase');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->num_rows() > 0) {
+			//echo ' bien ';
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 	private function findSeccionByEstudiante($rut_estudiante) {

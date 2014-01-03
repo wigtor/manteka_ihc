@@ -404,7 +404,12 @@ class Estudiantes extends MasterManteka {
 
 		$this->load->library('upload', $config);
 
-
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR)) {
+			$esCoordinador = TRUE;
+		}
+		else {
+			$esCoordinador = FALSE;
+		}
 		$subMenuLateralAbierto = $nombreMenuLateral;
 		$datos_vista['tipoCarga'] = $tipoCarga;
 		$datos_vista['funcionControlador'] = $subMenuLateralAbierto;
@@ -430,15 +435,15 @@ class Estudiantes extends MasterManteka {
 
 			if ($tipoCarga == CARGA_MASIVA_ESTUDIANTE) {
 				$this->load->model('Model_estudiante');
-				$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo, $rutProfesor);
+				$stack = $this->Model_estudiante->cargaMasiva($nombre_archivo, $rutProfesor, $esCoordinador);
 			}
 			else if ($tipoCarga == CARGA_MASIVA_ASISTENCIA) {
 				$this->load->model('Model_asistencia');
-				$stack = $this->Model_asistencia->cargaMasiva($nombre_archivo, $rutProfesor);
+				$stack = $this->Model_asistencia->cargaMasiva($nombre_archivo, $rutProfesor, $esCoordinador);
 			}
 			else if ($tipoCarga == CARGA_MASIVA_CALIFICACIONES) {
 				$this->load->model('Model_calificaciones');
-				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $rutProfesor);
+				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $rutProfesor, $esCoordinador);
 			}
 
 			if ($stack !== FALSE) {
@@ -1318,6 +1323,7 @@ class Estudiantes extends MasterManteka {
 			$abrev = $evaluacion->abreviatura;
 			$cabecera[] = $abrev;
 		}
+		$cabecera[] = "FIN"; //Para promedio final
 
 		//Agrego los datos
 		fputcsv($f, $cabecera, ';');

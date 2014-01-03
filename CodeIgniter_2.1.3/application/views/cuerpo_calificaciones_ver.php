@@ -136,7 +136,7 @@
 										nota = "";
 									}
 									else if (nota != "") {
-										sumaNotas += nota;
+										sumaNotas += parseFloat(nota);
 										cantidadNotas++;
 									}
 								}
@@ -524,6 +524,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				if ($ONLY_VIEW === FALSE) {
 					?>
 				<p><font color="red">Atención: </font>Sólo puede ver las notas que le corresponde poner a la sección</p>
+				<p><font color="red">Atención: </font>El promedio final corresponde sólo a su módulo temático, vaya a "ver notas" para obtener los promedios finales</p>
 					<?php
 				}
 			?>

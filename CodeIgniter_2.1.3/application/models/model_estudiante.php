@@ -554,8 +554,7 @@ class Model_estudiante extends CI_Model {
 	* @param $archivo ruta del archivo con la información de los estudiantes que se desea ingresarf a manteka
 	* @return $stack lineas del archivo csv que contienen errores retorna FALSE en caso de error critico
 	*/
-	public function cargaMasiva($archivo, $rutProfesor){ //FALTA AGREGAR A AUDITORIA
-
+	public function cargaMasiva($archivo, $rutProfesor, $esCoordinador) { //FALTA AGREGAR A AUDITORIA
 		if(!file_exists($archivo) || !is_readable($archivo)) {
 			return FALSE;
 		}
@@ -569,6 +568,11 @@ class Model_estudiante extends CI_Model {
 		$c = 1;
 		$flag = FALSE;
 		$hayErrores = FALSE;
+		if (!$esCoordinador) {
+			$header[] = "<br>No tiene permisos de administrador para la carga masiva de estudiantes";
+			$stack[$c] = $header;
+			return $stack;
+		}
 		while(($linea = fgets($ff)) !== FALSE) {
 
 			if(!$header) { //Si está vacio

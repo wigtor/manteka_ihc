@@ -179,7 +179,7 @@ class Model_calificaciones extends CI_Model {
 	}
 	
 	
-	public function cargaMasiva($archivo, $rutProfesor){
+	public function cargaMasiva($archivo, $rutProfesor, $esCoordinador){
 
 		if(!file_exists($archivo) || !is_readable($archivo)) {
 			return FALSE;
@@ -317,7 +317,16 @@ class Model_calificaciones extends CI_Model {
 							if (preg_match ('/^([123456]([\.][0-9])?)|[7]([\.][0])?$/', $nota)) {
 								//echo 'es válido:'.$nota.'  ';
 								//echo 'RP:'.$rutProfesor.' Rut: '.$data['RUT'].' nota: '.$nota.' id_evaluacion: '.$id_evaluacion.'         ';
-								$this->agregarCalificacion($rutProfesor, $data['RUT'], $nota, NULL, $id_evaluacion);
+								if ($this->tienePermisosPonerCalificacion($rutProfesor, $rut_estudiante, $id_modulo_tem, $esCoordinador)) {
+									$this->agregarCalificacion($rutProfesor, $data['RUT'], $nota, NULL, $id_evaluacion);
+								}
+								else {
+									//echo ' fail ';
+									$linea[] = "<br>No tiene permisos para poner la calificación al estudiante";
+									//$stack[count($stack)] = $linea;
+									$hayErrores = TRUE;
+									continue;
+								}
 							}
 							else {
 								//echo 'Inválido:'.$nota.'  ';
@@ -349,6 +358,45 @@ class Model_calificaciones extends CI_Model {
 		fclose($ffa);
 		unlink($archivo);
 		return $stack;
+	}
+
+	//$id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas
+	private function tienePermisosPonerCalificacion($rutProfesor, $rut_estudiante, $id_modulo_tem, $esCoordinador) {
+		$this->db->select('evaluacion.ID_EVALUACION AS id');
+		$this->db->join('modulo_tematico', 'evaluacion.ID_MODULO_TEM = modulo_tematico.ID_MODULO_TEM');
+		$this->db->join('sesion_de_clase', 'modulo_tematico.ID_MODULO_TEM = sesion_de_clase.ID_MODULO_TEM');
+		$this->db->join('planificacion_clase', 'sesion_de_clase.ID_SESION = planificacion_clase.ID_SESION');
+		$this->db->join('seccion', 'planificacion_clase.ID_SECCION = seccion.ID_SECCION');
+		$this->db->join('estudiante', 'seccion.ID_SECCION = estudiante.ID_SECCION');
+		
+		if (!$esCoordinador) {
+			$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+			$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rutProfesor);
+		}
+		/*
+		if (($esCoordinador == FALSE) && ($mostrarTodas == FALSE)) {
+			if (count($modulosTematicosEnQueEsLider) < 1) {
+				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+				$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rutProfesor);
+			}
+			foreach ($modulosTematicosEnQueEsLider as $modulo_tematico) {
+				$this->db->or_where('modulo_tematico.ID_MODULO_TEM', $modulo_tematico->id);
+			}
+		}
+		*/
+		$this->db->where('estudiante.RUT_USUARIO', $rut_estudiante);
+		$this->db->where('modulo_tematico.ID_MODULO_TEM', $id_modulo_tem);
+		$this->db->group_by('evaluacion.ID_EVALUACION');
+		$query = $this->db->get('evaluacion');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->num_rows() > 0) {
+			//echo ' bien ';
+			return TRUE;
+		}
+		return FALSE;
 	}
 	
 	private function findModuloTemByAbreviatura($abreviaturaModuloTem) {
