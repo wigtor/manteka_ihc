@@ -52,8 +52,17 @@ class ActividadesMasivas extends MasterManteka {
 
 			
 			$nombre = $this->input->post('nombre');
-			$listaInstanciasActividades = array();
-			$confirmacion = $this->Model_actividades_masivas->agregarActividad($nombre, $listaInstanciasActividades);
+			$listaInstanciasActividades = $this->input->post('listaInstanciasActividades');
+			if ($listaInstanciasActividades == FALSE) {
+				$listaInstanciasActividades = array();
+			}
+			$listaInstancias = array(); //Como objetos
+			foreach($listaInstanciasActividades as $instancia) {
+				$obj = json_decode($instancia);
+				$listaInstancias[] = $obj;
+			}
+			echo 'Largo lista: '.count($listaInstancias);
+			$confirmacion = $this->Model_actividades_masivas->agregarActividadMasiva($nombre, $listaInstancias);
 
 			// mostramos el mensaje de operacion realizada
 			if ($confirmacion == TRUE) {
@@ -168,8 +177,8 @@ class ActividadesMasivas extends MasterManteka {
 		}
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
 			$this->load->model("Model_actividades_masivas");
-			$id_modulo_eliminar = $this->input->post('id_moduloEliminar');
-			$confirmacion = $this->Model_actividades_masivas->eliminarModulo($id_modulo_eliminar);
+			$idEliminar = $this->input->post('idEliminar');
+			$confirmacion = $this->Model_actividades_masivas->eliminarActividadMasiva($idEliminar);
 
 			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
@@ -179,10 +188,10 @@ class ActividadesMasivas extends MasterManteka {
 			else {
 				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
 				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error en la eliminación con la base de datos";
-				$datos_plantilla["tipo_msj"] = "alert-error";	
+				$datos_plantilla["tipo_msj"] = "alert-error";
 			}
 			$datos_plantilla["redirectAuto"] = FALSE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-			$datos_plantilla["redirecTo"] = "Modulos/eliminarActividad"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["redirecTo"] = "ActividadesMasivas/eliminarActividad"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 			$datos_plantilla["nombre_redirecTo"] = "Eliminar actividad"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
 			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
@@ -247,7 +256,7 @@ class ActividadesMasivas extends MasterManteka {
 	* Método que responde a una solicitud de post para pedir los datos de un módulo temático
 	* Recibe como parámetro el código del módulo temático
 	*/
-	public function getDetallesActividadAjax() {
+	public function getInstanciasActividadMasivaAjax() {
 		if (!$this->input->is_ajax_request()) {
 			return;
 		}
@@ -257,7 +266,7 @@ class ActividadesMasivas extends MasterManteka {
 		}
 		$id = $this->input->post('id_actividad');
 		$this->load->model('Model_actividades_masivas');
-		$resultado = $this->Model_actividades_masivas->getDetallesEveto($id);
+		$resultado = $this->Model_actividades_masivas->getInstanciasActividadMasiva($id);
 		echo json_encode($resultado);
 	}
 

@@ -11,6 +11,8 @@
 		/* Obtengo el código del módulo clickeado a partir del id de lo que se clickeó */
 		var idElem = elemTabla.id;
 		var id_act = idElem.substring(prefijo_tipoDato.length, idElem.length);
+		
+		$('#idEliminar').val(id_act);
 
 		/* Muestro el div que indica que se está cargando... */
 		$('#icono_cargando').show();
@@ -47,6 +49,26 @@
 			}
 		});
 	}
+	
+		function eliminarActividad(){
+		if ($('#idEliminar').val().trim() == '') {
+			$('#tituloErrorDialog').html('Error, no ha seleccionado actividad');
+			$('#textoErrorDialog').html('No ha seleccionado una actividad masiva para eliminar');
+			$('#modalError').modal();
+			return;
+		}
+		$('#tituloConfirmacionDialog').html('Confirmación para eliminar actividad');
+		$('#textoConfirmacionDialog').html('¿Está seguro que desea eliminar permanentemente la actividad masiva del sistema?');
+		$('#modalConfirmacion').modal();
+	}
+
+    function resetearActividad(){
+    	//ESTO ES DE QUIENES HICIERON EL BORRADO
+		$('#idEliminar').val("");
+
+		//Se limpia lo que está seleccionado en la tabla
+		$('#listadoResultados tbody tr').removeClass('highlight');
+    }
 
 	//Se carga todo por ajax
 	$(document).ready(function() {
@@ -57,7 +79,7 @@
 </script>
 
 <fieldset>
-	<legend>Ver Actividad Masiva</legend>
+	<legend>Eliminar Actividad Masiva</legend>
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="controls controls-row">
@@ -82,7 +104,7 @@
 
 			</table>
 		</div>
-				
+		
 		<div class="span6">
 			<div class="row-fluid">
 				<div style="border:#cccccc 1px solid;overflow-y:scroll;height:400px; -webkit-border-radius: 4px" >
@@ -103,5 +125,29 @@
 				</div>
 			</div>
 		</div>
+		
+		<?php
+			$attributes = array('id' => 'formBorrar');
+			echo form_open('ActividadesMasivas/postEliminarActividad', $attributes);
+		?>
+			<input type="hidden" id="idEliminar" name="idEliminar" value="">
+			<div class="control-group">
+				<div class="controls pull-right">
+					<button type="button" class="btn" onclick="eliminarActividad()">
+						<i class= "icon-trash"></i>
+						&nbsp; Eliminar
+					</button>
+					<button class="btn" type="button" onclick="resetearActividad()" >
+						<div class="btn_with_icon_solo">Â</div>
+						&nbsp; Cancelar
+					</button>
+				</div>
+				<?php
+					if (isset($dialogos)) {
+						echo $dialogos;
+					}
+				?>
+			</div>
+		<?php echo form_close(""); ?>
 	</div>
 </fieldset>
