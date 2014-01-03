@@ -20,9 +20,16 @@ class Model_asistencia extends CI_Model {
 			//Se intenta updatear si es que existe esa asistencia
 
 			$this->db->flush_cache();
-			$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
-				'JUSTIFICADO_ASISTENCIA' => $justificado, 
-				'COMENTARIO_ASISTENCIA' => $comentario);
+			if ($comentario === NULL) {
+				$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
+					'JUSTIFICADO_ASISTENCIA' => $justificado;
+			}
+			else {
+				$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
+					'JUSTIFICADO_ASISTENCIA' => $justificado, 
+					'COMENTARIO_ASISTENCIA' => $comentario);
+			}
+
 			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->where('ID_SESION', $id_sesion_de_clase);
 			$this->db->update('asistencia', $data1);

@@ -19,9 +19,15 @@ class Model_calificaciones extends CI_Model {
 			//Se intenta updatear si es que existe esa asistencia
 
 			$this->db->flush_cache();
-			$data1 = array('VALOR_NOTA' => $nota,
-				'COMENTARIO_NOTA' => $comentario
-			);
+			if ($comentario === NULL) {
+				$data1 = array('VALOR_NOTA' => $nota
+				);
+			}
+			else {
+				$data1 = array('VALOR_NOTA' => $nota,
+					'COMENTARIO_NOTA' => $comentario
+				);
+			}
 			$this->db->where('RUT_USUARIO', $rut);
 			$this->db->where('ID_EVALUACION', $id_evaluacion);
 			$this->db->update('nota', $data1);
