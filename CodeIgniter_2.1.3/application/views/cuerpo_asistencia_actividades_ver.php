@@ -20,9 +20,9 @@
 		tablaResultados.appendChild(tbody);
 	}
 
-	function buscarAsistencia(arrayAsistencia, id_sesion_buscada) {
+	function buscarAsistencia(arrayAsistencia, id_actividad_buscada) {
 		for (var i = 0; i < arrayAsistencia.length; i++) {
-			if (arrayAsistencia[i].id == id_sesion_buscada) {
+			if (arrayAsistencia[i].id == id_actividad_buscada) {
 				return i;
 			}
 		};

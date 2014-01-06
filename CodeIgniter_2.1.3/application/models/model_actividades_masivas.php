@@ -177,6 +177,111 @@ class Model_actividades_masivas extends CI_Model {
 		}
 		return $query->result();
 	}
+	
+	public function agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_actividad) {
+		//POR AHORA LOS ESTUDIANTES DA LO MISMO A CUAL INSTANCIA DE ACTIVIDAD MASIVA VAN, SE CONSIDERA SÓLO LA PRIMERA
+		$this->db->trans_start();
+
+		$this->db->select('PRESENTE_ASIST_EVENTO');
+		$this->db->select('JUSTIFICADO_ASIST_EVENTO');
+		$this->db->select('COMENTARIO_ASIST_EVENTO');
+		$this->db->select('instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA AS id_instancia');
+		$this->db->join('instancia_actividad_masiva', 'asistencia_actividad.ID_INSTANCIA_ACTIVIDAD_MASIVA = instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA');
+		$this->db->where('RUT_USUARIO', $rut);
+		$this->db->where('instancia_actividad_masiva.ID_ACT', $id_actividad);
+		$primeraResp = $this->db->get('asistencia_actividad');
+		//echo $this->db->last_query().'    ';
+		if ($primeraResp == FALSE) {
+			$this->db->trans_complete();
+			return FALSE;
+		}
+		if ($primeraResp->num_rows() > 0) {
+			//Se intenta updatear si es que existe esa asistencia
+			$row_original = $primeraResp->row();
+			$id_primera_instancia = $row_original->id_instancia; 
+
+			$this->db->flush_cache();
+			if ($comentario === NULL) {
+				$data1 = array('PRESENTE_ASIST_EVENTO' => $asistio, 
+					'JUSTIFICADO_ASIST_EVENTO' => $justificado);
+			}
+			else {
+				$data1 = array('PRESENTE_ASIST_EVENTO' => $asistio, 
+					'JUSTIFICADO_ASIST_EVENTO' => $justificado, 
+					'COMENTARIO_ASIST_EVENTO' => $comentario);
+			}
+
+			$this->db->where('RUT_USUARIO', $rut);
+			$this->db->where('asistencia_actividad.ID_INSTANCIA_ACTIVIDAD_MASIVA', $id_primera_instancia);
+			$this->db->update('asistencia_actividad', $data1);
+
+			//Si hubo cambios, entonces hago insert en auditoría
+			if ($this->db->affected_rows() > 0) {
+				$asistioOri = $row_original->PRESENTE_ASIST_EVENTO;
+				$justificadoOri = $row_original->JUSTIFICADO_ASIST_EVENTO;
+				$comentarioOri = $row_original->COMENTARIO_ASIST_EVENTO;
+				$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
+					'NOMBRE' => 'UPDATE', 
+					'DATO_PRE_CAMBIO' => 'PRESENTE_ASIST_EVENTO=`'.$asistioOri.'`, '.'JUSTIFICADO_ASIST_EVENTO=`'.$justificadoOri.'`, '.'COMENTARIO_ASIST_EVENTO=`'.$comentarioOri.'`', 
+					'DATO_POST_CAMBIO' => 'PRESENTE_ASIST_EVENTO=`'.$asistio.'`, '.'JUSTIFICADO_ASIST_EVENTO=`'.$justificado.'`, '.'COMENTARIO_ASIST_EVENTO=`'.$comentario.'`', 
+					'TABLA_MODIFICADA'=> 'asistencia_actividad', 
+					'QUERY'=> $this->db->last_query());
+				$this->db->flush_cache();
+				$this->db->insert('auditoria', $datos_auditoria);
+			}
+		}
+		else {
+			$this->db->flush_cache();
+			//Se obtiene el id de la primera instancia disposible de la actividad masiva
+			$this->db->select('instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA AS id_instancia');
+			$this->db->where('instancia_actividad_masiva.ID_ACT', $id_actividad);
+			$primeraResp = $this->db->get('instancia_actividad_masiva');
+			//echo $this->db->last_query().'    ';
+			if ($primeraResp == FALSE) {
+				$this->db->trans_complete();
+				return FALSE;
+			}
+			$id_primera_instancia = NULL;
+			if ($primeraResp->num_rows() > 0) {
+				//Se intenta updatear si es que existe esa asistencia
+				$row1 = $primeraResp->row();
+				$id_primera_instancia = $row1->id_instancia; 
+			}
+			else {
+				//NO SE ENCONTRÓ INSTANCIA PARA LA ACTIVIDAD MASIVA
+				$this->db->trans_rollback();
+				return FALSE;
+			}
+			
+			//Se intenta insertar si no existe registro
+			$this->db->flush_cache();
+			$data2 = array('RUT_USUARIO' => $rut, 
+				'ID_INSTANCIA_ACTIVIDAD_MASIVA' => $id_primera_instancia,
+				'PRESENTE_ASIST_EVENTO' => $asistio, 
+				'JUSTIFICADO_ASIST_EVENTO' => $justificado, 
+				'COMENTARIO_ASIST_EVENTO' => $comentario);
+			$this->db->insert('asistencia_actividad', $data2);
+
+			$datos_auditoria = array('RUT_USUARIO' => $rut_profesor, 
+					'NOMBRE' => 'INSERT', 
+					'DATO_PRE_CAMBIO' => NULL,
+					'DATO_POST_CAMBIO' => 'PRESENTE_ASIST_EVENTO=`'.$asistio.'`, '.'JUSTIFICADO_ASIST_EVENTO=`'.$justificado.'`, '.'COMENTARIO_ASIST_EVENTO=`'.$comentario.'`', 
+					'TABLA_MODIFICADA'=> 'asistencia_actividad', 
+					'QUERY'=> $this->db->last_query());
+			$this->db->flush_cache();
+			$this->db->insert('auditoria', $datos_auditoria);
+			//echo $this->db->last_query().'    ';
+		}
+
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === FALSE) {
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+	}
 
 	public function getActividadesBySeccionAndProfesorForAsistencia($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas) {
 		return $this->getEventosConInstancias(); //A futuro se hará algún filtrado según profesor

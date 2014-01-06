@@ -468,6 +468,10 @@ class Estudiantes extends MasterManteka {
 						$mensajeErrorExtra = ", sin embargo se ha guardado la asistencia del resto de estudiantes.<br><br>";
 						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"].$mensajeErrorExtra;
 					}
+					if ($tipoCarga == CARGA_MASIVA_ASISTENCIA_ACTIVIDADES) {
+						$mensajeErrorExtra = ", sin embargo se ha guardado la asistencia del resto de estudiantes.<br><br>";
+						$datos_plantilla["cuerpo_msj"] = $datos_plantilla["cuerpo_msj"].$mensajeErrorExtra;
+					}
 
 					foreach ($stack as $key => $value) { //Cada linea procesada
 						$linea = ' ';
@@ -689,25 +693,24 @@ class Estudiantes extends MasterManteka {
 			$this->invalidSession();
 			return;
 		}
-		return; //POR AHORA HACER NADA
+		
 		if ($this->input->server('REQUEST_METHOD') == 'POST') {
-			$this->load->model('Model_asistencia');
+			$this->load->model('Model_actividades_masivas');
 			$rut_profesor = $this->session->userdata('rut');
 			$asistencia = $this->input->post('asistencia');
 			if ($asistencia == FALSE)
 				$asistencia = array();
 			$comentarios = $this->input->post('comentario');
-			$id_sesion_de_clase = $this->input->post('sesion_de_clase');
 			$id_seccion = $this->input->post('seccion'); //No es necesario más que para hacer control de reglas de negocio después
 			//echo 'Se está implementando esto, largo array asistencia:'.count($asistencia).'  comentario:'.count($comentarios).'...';
 			$confirmacion = TRUE;
 			//echo 'Largo comentarios: '.count($comentarios).'  '.$comentarios.'caca ';
 			foreach ($comentarios as $rut => $arrayComentarioBySesion) { //Comentarios tiene todos los ruts de la sección como key
-				foreach ($arrayComentarioBySesion as $id_sesion_de_clase => $comentario) {
+				foreach ($arrayComentarioBySesion as $id_actividad => $comentario) {
 					$asistio = FALSE;
 					if (array_key_exists ($rut, $asistencia)) { //Compruebo el primer índice (rut)
-						if (array_key_exists ($id_sesion_de_clase, $asistencia[$rut])) { //Compruebo el segundo índice (id_evaluacion)
-							$asistio = $asistencia[$rut][$id_sesion_de_clase];
+						if (array_key_exists ($id_actividad, $asistencia[$rut])) { //Compruebo el segundo índice (id_evaluacion)
+							$asistio = $asistencia[$rut][$id_actividad];
 							//echo 'Rut: '.$rut.' '.$asistio.' ';
 							if ($asistio === "") {
 								$asistio = NULL;
@@ -738,14 +741,15 @@ class Estudiantes extends MasterManteka {
 						$justificado = FALSE;
 					}
 					if (($asistio !== NULL) || ($comentario !== NULL) || ($justificado === TRUE)) {
-						$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
+						//echo 'Agregando asistencia de :'.$rut.' asistio: '.$asistio.' comentario: '.$comentario;
+						$confirmacion = $confirmacion && $this->Model_actividades_masivas->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_actividad);
 					}
 				}
 			}
 
 			if ($confirmacion == TRUE) {
 				$datos_plantilla["titulo_msj"] = "Acción Realizada";
-				$datos_plantilla["cuerpo_msj"] = "Se ha guardado la asistencia con éxito";
+				$datos_plantilla["cuerpo_msj"] = "Se ha guardado la asistencia de las actividades masivas con éxito";
 				$datos_plantilla["tipo_msj"] = "alert-success";
 			}
 			else{
@@ -754,10 +758,10 @@ class Estudiantes extends MasterManteka {
 				$datos_plantilla["tipo_msj"] = "alert-error";	
 			}
 			$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
-			$datos_plantilla["redirecTo"] = "Estudiantes/agregarAsistencia"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			$datos_plantilla["redirecTo"] = "Estudiantes/agregarAsistenciaActividades"; //Acá se pone el controlador/metodo hacia donde se redireccionará
 			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
 			$datos_plantilla["nombre_redirecTo"] = "Agregar Asistencia"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
-			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
 		}
 	}
