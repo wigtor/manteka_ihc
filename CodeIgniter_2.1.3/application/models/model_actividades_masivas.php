@@ -60,7 +60,7 @@ class Model_actividades_masivas extends CI_Model {
 	{
 		$this->db->select('ID_ACT AS id');
 		$this->db->select('NOMBRE_ACT AS nombre');
-		$this->db->order_by('NOMBRE_MODULO','asc');
+		$this->db->order_by('NOMBRE_ACT','asc');
 		$query = $this->db->get('actividad_masiva');
 		if ($query == FALSE) {
 			return array();
@@ -100,6 +100,274 @@ class Model_actividades_masivas extends CI_Model {
 			return array();
 		}
 		return $query->result();
+	}
+
+/*
+	public function getInstanciasActividadesMasivas() {
+		$this->db->select('NOMBRE_ACT AS nombre');
+		$this->db->select('FECHA_ACT AS fecha');
+		$this->db->select('LUGAR_ACT AS lugar');
+		$this->db->select('instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA AS id');
+		$this->db->join('actividad_masiva', 'instancia_actividad_masiva.ID_ACT = actividad_masiva.ID_ACT');
+		$query = $this->db->get('instancia_actividad_masiva');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+	*/
+
+	public function getAsistenciasAndComentariosEstudiante($rut_estudiante) {
+		$this->db->select('PRESENTE_ASIST_EVENTO AS presente');
+		$this->db->select('COMENTARIO_ASIST_EVENTO AS comentario');
+		$this->db->select('asistencia_actividad.RUT_USUARIO AS rut');
+		$this->db->select('actividad_masiva.ID_ACT AS id');
+		$this->db->join('instancia_actividad_masiva', 'actividad_masiva.ID_ACT = instancia_actividad_masiva.ID_ACT');
+		$this->db->join('asistencia_actividad', 'instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA = asistencia_actividad.ID_INSTANCIA_ACTIVIDAD_MASIVA');
+		$this->db->where('asistencia_actividad.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('actividad_masiva');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+
+	}
+
+	public function getAsistenciaEstudiante($rut_estudiante) {
+		$this->db->select('PRESENTE_ASIST_EVENTO AS presente');
+		$this->db->select('asistencia_actividad.RUT_USUARIO AS rut');
+		$this->db->select('actividad_masiva.ID_ACT AS id');
+		$this->db->join('instancia_actividad_masiva', 'actividad_masiva.ID_ACT = instancia_actividad_masiva.ID_ACT');
+		$this->db->join('asistencia_actividad', 'instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA = asistencia_actividad.ID_INSTANCIA_ACTIVIDAD_MASIVA');
+		$this->db->where('asistencia_actividad.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('actividad_masiva');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+
+	}
+
+	public function getComentariosAsistenciaEstudiante($rut_estudiante) {
+		$this->db->select('COMENTARIO_ASIST_EVENTO AS comentario');
+		$this->db->select('asistencia_actividad.RUT_USUARIO AS rut');
+		$this->db->select('actividad_masiva.ID_ACT AS id');
+		$this->db->join('instancia_actividad_masiva', 'actividad_masiva.ID_ACT = instancia_actividad_masiva.ID_ACT');
+		$this->db->join('asistencia_actividad', 'instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA = asistencia_actividad.ID_INSTANCIA_ACTIVIDAD_MASIVA');
+		$this->db->where('asistencia_actividad.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('actividad_masiva');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+
+	}
+
+	public function getEventosConInstancias() {
+		$this->db->select('NOMBRE_ACT AS nombre');
+		$this->db->select('FECHA_ACT AS fecha');
+		$this->db->select('LUGAR_ACT AS lugar');
+		$this->db->select('actividad_masiva.ID_ACT AS id');
+		$this->db->join('instancia_actividad_masiva', 'actividad_masiva.ID_ACT = instancia_actividad_masiva.ID_ACT');
+		$this->db->group_by('actividad_masiva.ID_ACT');
+		$this->db->order_by('actividad_masiva.ID_ACT');
+		$query = $this->db->get('actividad_masiva');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
+
+	public function getActividadesBySeccionAndProfesorForAsistencia($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas) {
+		return $this->getEventosConInstancias(); //A futuro se hará algún filtrado según profesor
+	}
+
+		public function cargaMasiva($archivo, $rutProfesor, $esCoordinador){
+
+		if(!file_exists($archivo) || !is_readable($archivo)) {
+			return FALSE;
+		}
+
+		$ff = fopen($archivo, "r");
+
+		$header = array();
+		$revisandoHeader = FALSE;
+		$data = array();		
+		$splitArray = array();
+		$stack  = array();
+		$c = 1;
+		$flag = FALSE;
+		while(($linea = fgets($ff)) !== FALSE) {
+
+			//Se comprueba la cabecera del archivo, es decir, los nombres de las columnas
+			if(!$revisandoHeader) { //Si está vacio
+				$header = explode(';',trim($linea));
+				if (count($header) <= 5) { //CANTIDAD DE COLUMNAS DEBE SER MAYOR A 5
+					$header[] = "<br>La cantidad de elementos de la cabecera no es válida";
+					$stack[$c] = $header;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				if((strcmp($header[1], 'RUT') != 0) || (strcmp($header[2], 'PATERNO') != 0) || (strcmp($header[3], 'MATERNO') != 0) || (strcmp($header[4], 'NOMBRES') != 0)) {
+					$header[] = "<br>La cabecera del archivo no es válida";
+					$stack[$c] = $header;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$revisandoHeader = TRUE;
+			}
+			else { //Ahora que la cabecera está bien, se revisa el cuerpo
+				$linea =  explode(';',$linea);
+				if(($data = array_combine($header, $linea)) == FALSE) { //DEBE TENER EL MISMO LARGO QUE EL HEADER
+					$linea[] = "<br>El numero de argumentos en la linea es incorrecto";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				$data['RUT'] =  preg_replace('[\-]','',$data['RUT']); //Quito los guiones
+				$data['RUT'] =  preg_replace('[\.]','',$data['RUT']); //Quito los puntos
+				$validador = TRUE;//$this->validarDatos($data['RUT'],"rut");
+				if(!$validador) {
+					$linea[] = "<br>El rut del estudiante tiene caracteres no válidos";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				/*
+				$validador = $this->rutExiste($data['RUT']);
+				if($validador == -1) {
+					$linea[] = "<br>El rut de estudiante no existe en manteka";
+					$stack[$c] = $linea;
+					fclose($ff);
+					unlink($archivo);
+					return $stack;
+				}
+				*/
+				$flag = TRUE;
+
+			}
+			$c++;
+		}
+		fclose($ff);
+		$ffa = fopen($archivo, "r");
+
+		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
+		$header = array();
+		$hayErrores = FALSE;
+		$saltarEstudiante = FALSE;
+		if ($flag) {
+			while(($linea = fgets($ffa)) !== FALSE) {
+				if(!$header) {
+					$header = explode(';', trim($linea));
+				}
+				else {
+					$hayErrores = FALSE;
+					$this->db->trans_start();
+
+					$linea =  explode(';', $linea);
+					$data = array_combine($header, $linea);
+					//Trimeo todos los elementos
+					foreach ($data as $key => $value) {
+						$data[$key] = trim($value);
+					}
+
+					//Hago un insert o update por cada sesión de clase
+					$cantidadColumnas = count($header);
+					$saltarEstudiante = FALSE;
+					for($i = 5; $i < $cantidadColumnas; $i=$i+1) {
+						if ($saltarEstudiante) {
+							break;
+						}
+						if ($data['RUT'] !== "") {
+							$data['RUT'] =  preg_replace('[\-]', '', $data['RUT']);
+							$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
+						}
+
+						$fechaClase = $header[$i];
+						$fechaClaseAdaptada = $this->adaptFechaFormat($fechaClase);
+						if ($fechaClaseAdaptada == NULL) {
+							$linea[] = "<br>La fecha de la sesión de clase no tiene un formáto válido, debe ser dd-mm-yyyy";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+
+						$id_seccion = $this->findSeccionByEstudiante($data['RUT']);
+						if ($id_seccion == -1) {
+							$linea[] = "<br>El estudiante no tiene sección asignada en el sistema";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							$saltarEstudiante = TRUE; //No se intenta insertar las demás fechas de asistencia para ese estudiante
+							continue;
+						}
+						if ($id_seccion == NULL) {
+							$linea[] = "<br>El estudiante no está registrado en el sistema";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							$saltarEstudiante = TRUE; //No se intenta insertar las demás fechas de asistencia para ese estudiante
+							continue;
+						}
+						$id_sesion_de_clase = $this->findSesionByFechaAndSeccion($fechaClaseAdaptada, $id_seccion);
+						if ($id_sesion_de_clase == NULL) {
+							$linea[] = "<br>No se ha encontrado una sesión de clases para la fecha: ".$fechaClase." en la sección, revise si el estudiante se cambió de sección";
+							//$stack[count($stack)] = $linea;
+							$hayErrores = TRUE;
+							continue;
+						}
+
+						if ($data[$fechaClase] !== "") { //Los blancos no se agregan, ni se modifican
+							$asistio = $data[$fechaClase];
+							if (preg_match ('/^[0]|[1]$/' , $asistio)) {
+								//echo 'es válido:'.$asistio.'  ';
+								//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_sesion_de_clase: '.$id_sesion_de_clase.'         ';
+								if ($this->tienePermisosPonerAsistencia($rutProfesor, $id_seccion, $id_sesion_de_clase, $esCoordinador)) {
+									$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+								}
+								else {
+									//echo ' mal ';
+									$linea[] = "<br>No tiene permisos para poner la asistencia al estudiante";
+									//$stack[count($stack)] = $linea;
+									$hayErrores = TRUE;
+									continue;
+								}
+							}
+							else {
+								//echo 'No es válido:'.$asistio.'  ';
+								$linea[] = "<br>El formato de asistencia ingresado no es válido, debe ser 0 o 1";
+								//$stack[count($stack)] = $linea;
+								$hayErrores = TRUE;
+								continue;
+							}
+							
+						}
+						
+					}
+					
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+						$linea[] = "<br>Ha ocurrido un error en la base de datos al agregar la asistencia";
+						$hayErrores = TRUE;
+					}
+
+					if ($hayErrores)
+						$stack[count($stack)] = $linea;
+					
+				}
+
+			}
+		}
+		else {
+			fclose($ffa);
+			unlink($archivo);
+			return FALSE;
+		}
+		fclose($ffa);
+		unlink($archivo);
+		return $stack;
 	}
 }
 ?>

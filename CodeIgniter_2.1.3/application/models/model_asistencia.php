@@ -22,7 +22,7 @@ class Model_asistencia extends CI_Model {
 			$this->db->flush_cache();
 			if ($comentario === NULL) {
 				$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
-					'JUSTIFICADO_ASISTENCIA' => $justificado;
+					'JUSTIFICADO_ASISTENCIA' => $justificado);
 			}
 			else {
 				$data1 = array('PRESENTE_ASISTENCIA' => $asistio, 
@@ -271,10 +271,10 @@ class Model_asistencia extends CI_Model {
 				$flag = TRUE;
 
 			}
-			$c++;						
+			$c++;
 		}
 		fclose($ff);
-		$ffa = fopen($archivo, "r");	
+		$ffa = fopen($archivo, "r");
 
 		//AHORA REALMENTE ABRO EL ARCHIVO PARA INSERTAR LUEGO QUE SE COMPROBÓ QUE TODO ESTÁ OK
 		$header = array();

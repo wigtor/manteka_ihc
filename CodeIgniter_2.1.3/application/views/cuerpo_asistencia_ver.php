@@ -603,7 +603,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 				}
 			?>
 			</div>
-			<div class="span5 offset1">
+			<div class="span6">
 				<div class="control-group">
 					<?php if ($ONLY_VIEW !== TRUE) { ?>
 					<div class="controls ">
@@ -665,7 +665,7 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="control-group span5 offset7" style="margin-top:10px;">
+			<div class="control-group span6 offset6" style="margin-top:10px;">
 				<?php if ($ONLY_VIEW !== TRUE) { ?>
 				<div class="controls">
 					<button class="btn" type="button" onclick="guardarAsistencia()">

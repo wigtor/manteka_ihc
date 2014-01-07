@@ -4,6 +4,7 @@ require_once APPPATH.'controllers/Master.php';
 define('CARGA_MASIVA_ASISTENCIA', 1);
 define('CARGA_MASIVA_CALIFICACIONES', 2);
 define('CARGA_MASIVA_ESTUDIANTE', 3);
+define('CARGA_MASIVA_ASISTENCIA_ACTIVIDADES', 4);
 
 class Estudiantes extends MasterManteka {
 
@@ -445,6 +446,10 @@ class Estudiantes extends MasterManteka {
 				$this->load->model('Model_calificaciones');
 				$stack = $this->Model_calificaciones->cargaMasiva($nombre_archivo, $rutProfesor, $esCoordinador);
 			}
+			else if ($tipoCarga == CARGA_MASIVA_ASISTENCIA_ACTIVIDADES) {
+				$this->load->model('Model_actividades_masivas');
+				$stack = $this->Model_actividades_masivas->cargaMasiva($nombre_archivo, $rutProfesor, $esCoordinador);
+			}
 
 			if ($stack !== FALSE) {
 
@@ -630,6 +635,141 @@ class Estudiantes extends MasterManteka {
 			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
 			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
+	}
+
+	public function verAsistenciaActividades() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$datos_vista['ONLY_VIEW'] = TRUE;
+			$this->load->model('Model_seccion');
+			$rutProfesor = $this->session->userdata('rut');
+			$esLider = $this->esProfesorLider($rutProfesor);
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+			$datos_vista['IS_PROFESOR_LIDER'] = $esLider;
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+
+			$subMenuLateralAbierto = 'verAsistenciaActividades'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_actividades_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+	public function agregarAsistenciaActividades() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			$datos_vista['ONLY_VIEW'] = FALSE;
+			$this->load->model('Model_seccion');
+			$rutProfesor = $this->session->userdata('rut');
+			$esLider = $this->esProfesorLider($rutProfesor);
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+			$datos_vista['IS_PROFESOR_LIDER'] = $esLider;
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+
+			$subMenuLateralAbierto = 'agregarAsistenciaActividades'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Estudiantes", "cuerpo_asistencia_actividades_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
+
+
+	public function postAgregarAsistenciaActividades() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		return; //POR AHORA HACER NADA
+		if ($this->input->server('REQUEST_METHOD') == 'POST') {
+			$this->load->model('Model_asistencia');
+			$rut_profesor = $this->session->userdata('rut');
+			$asistencia = $this->input->post('asistencia');
+			if ($asistencia == FALSE)
+				$asistencia = array();
+			$comentarios = $this->input->post('comentario');
+			$id_sesion_de_clase = $this->input->post('sesion_de_clase');
+			$id_seccion = $this->input->post('seccion'); //No es necesario más que para hacer control de reglas de negocio después
+			//echo 'Se está implementando esto, largo array asistencia:'.count($asistencia).'  comentario:'.count($comentarios).'...';
+			$confirmacion = TRUE;
+			//echo 'Largo comentarios: '.count($comentarios).'  '.$comentarios.'caca ';
+			foreach ($comentarios as $rut => $arrayComentarioBySesion) { //Comentarios tiene todos los ruts de la sección como key
+				foreach ($arrayComentarioBySesion as $id_sesion_de_clase => $comentario) {
+					$asistio = FALSE;
+					if (array_key_exists ($rut, $asistencia)) { //Compruebo el primer índice (rut)
+						if (array_key_exists ($id_sesion_de_clase, $asistencia[$rut])) { //Compruebo el segundo índice (id_evaluacion)
+							$asistio = $asistencia[$rut][$id_sesion_de_clase];
+							//echo 'Rut: '.$rut.' '.$asistio.' ';
+							if ($asistio === "") {
+								$asistio = NULL;
+							}
+							else if ($asistio == 0) {
+								$asistio = FALSE;
+							}
+							else {
+								$asistio = TRUE;
+							}
+
+							if ($comentario !== NULL) {
+								if (trim($comentario) === "") { //Si el comentario es vacio
+									$comentario = NULL;
+								}
+							}
+						}
+					}
+
+					$justificado = !$asistio; //la negación de si asistió por defecto
+					if ($comentario !== NULL) {
+						if (trim($comentario) === "") { //Si el comentario es vacio
+							$justificado = FALSE;
+							$comentario = NULL;
+						}
+					}
+					else { //Si no hay comentario
+						$justificado = FALSE;
+					}
+					if (($asistio !== NULL) || ($comentario !== NULL) || ($justificado === TRUE)) {
+						$confirmacion = $confirmacion && $this->Model_asistencia->agregarAsistencia($rut_profesor, $rut, $asistio, $justificado, $comentario, $id_sesion_de_clase);
+					}
+				}
+			}
+
+			if ($confirmacion == TRUE) {
+				$datos_plantilla["titulo_msj"] = "Acción Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha guardado la asistencia con éxito";
+				$datos_plantilla["tipo_msj"] = "alert-success";
+			}
+			else{
+				$datos_plantilla["titulo_msj"] = "Acción No Realizada";
+				$datos_plantilla["cuerpo_msj"] = "Se ha ocurrido un error al guardar la asistencia de algún estudiante";
+				$datos_plantilla["tipo_msj"] = "alert-error";	
+			}
+			$datos_plantilla["redirectAuto"] = TRUE; //Esto indica si por javascript se va a redireccionar luego de 5 segundos
+			$datos_plantilla["redirecTo"] = "Estudiantes/agregarAsistencia"; //Acá se pone el controlador/metodo hacia donde se redireccionará
+			//$datos_plantilla["redirecFrom"] = "Login/olvidoPass"; //Acá se pone el controlador/metodo desde donde se llegó acá, no hago esto si no quiero que el usuario vuelva
+			$datos_plantilla["nombre_redirecTo"] = "Agregar Asistencia"; //Acá se pone el nombre del sitio hacia donde se va a redireccionar
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
+			$this->cargarMsjLogueado($datos_plantilla, $tipos_usuarios_permitidos);
+		}
+	}
+
+
+	public function cargaMasivaAsistenciaActividades() {
+		$subMenuLateralAbierto = "cargaMasivaEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
+		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
+		$titulo = "Carga masiva de asistencia de actividades";
+		$datos_vista = array();
+		$rutProfesor = $this->session->userdata('rut');
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ASISTENCIA_ACTIVIDADES, 'estudiantes', $datos_vista, $rutProfesor);
 	}
 
 
@@ -841,6 +981,8 @@ class Estudiantes extends MasterManteka {
 		$id_seccion = $this->input->post('id_seccion');
 		$only_view = $this->input->post('only_view');
 		$rut_usuario = $this->session->userdata('rut');
+
+
 		$this->load->model('Model_asistencia');
 		$this->load->model('Model_profesor');
 		$this->load->model('Model_estudiante');
@@ -883,6 +1025,66 @@ class Estudiantes extends MasterManteka {
 					$estudiante->comentarios = array_merge($estudiante->comentarios, $comentariosTemp);
 					$cantidadSesiones += $this->Model_planificacion->cantidadSesionesPlanificadasBySeccionAndModuloTem($id_seccion, $id_modulo_tem);
 
+				}
+			}
+			$numEstudiante = $numEstudiante + 1;
+		}
+		echo json_encode($listaEstudiantes);
+	}
+
+
+	public function getAsistenciaActividadesEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$id_seccion = $this->input->post('id_seccion');
+		$only_view = $this->input->post('only_view');
+		$rut_usuario = $this->session->userdata('rut');
+
+
+		$this->load->model('Model_actividades_masivas');
+		$this->load->model('Model_profesor');
+		$this->load->model('Model_estudiante');
+		$this->load->model('Model_planificacion');
+		$this->load->model('Model_modulo_tematico');
+
+		if ($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR) {
+			$esCoordinador = TRUE;
+		}
+		else {
+			return ;
+		}
+
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		$listaEventosValidos = $this->Model_actividades_masivas->getEventosConInstancias();
+		$numEstudiante = 1;
+		foreach ($listaEstudiantes as $estudiante) {
+			$estudiante->asistencia = array(); //Array asociativo que usa como key las id de las actividades masivas y el value es presente o no
+			$estudiante->comentarios = array(); //Array asociativo que usa como key las id de las actividades masivas y el value es el comentario de la inasistencia
+			$estudiante->posicion = strval($numEstudiante);
+
+
+			$asistenciaDelEstudiante = $this->Model_actividades_masivas->getAsistenciasAndComentariosEstudiante($estudiante->rut);
+
+			//Reyeno con 0 las asistencias que no tenga a los eventos de $listaEventosValidos
+			foreach ($listaEventosValidos as $evento) {
+				$encontrado = FALSE;
+				foreach ($asistenciaDelEstudiante as $asistEstudiante) {
+					if ($evento->id == $asistEstudiante->id) {
+						$encontrado = TRUE;
+						$estudiante->asistencia[] = array("id" => $evento->id, "presente" => $asistEstudiante->presente);
+						$estudiante->comentarios[] = array("id" => $evento->id, "comentario" => $asistEstudiante->comentario);
+						break;
+					}
+				}
+				if ($encontrado == FALSE) {
+					$estudiante->asistencia[] = array($evento->id, "0");
+					$estudiante->comentarios[] = array($evento->id, "");
 				}
 			}
 			$numEstudiante = $numEstudiante + 1;
@@ -1376,6 +1578,36 @@ class Estudiantes extends MasterManteka {
 		//echo 'caca:'.$only_view.'listo. esCoordinador:'.$esCoordinador.'caca ';return;
 		$this->load->model('Model_sesion');
 		$resultado = $this->Model_sesion->getSesionesPlanificadasBySeccionAndProfesor($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
+		
+		echo json_encode($resultado);
+	}
+
+	public function getActividadesBySeccionAndProfesorAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+
+		$this->load->model('Model_profesor');
+		$only_view = $this->input->post('only_view');
+		$id_seccion = $this->input->post('seccion');
+		$rut_profesor = $this->session->userdata('rut');
+		$mostrarTodas = $only_view;
+		if (($this->session->userdata('id_tipo_usuario') == TIPO_USR_COORDINADOR)) {
+			$esCoordinador = TRUE;
+			$modulosTematicosEnQueEsLider = array();
+		}
+		else {
+			$esCoordinador = FALSE;
+			$modulosTematicosEnQueEsLider = $this->Model_profesor->getModulosTematicosProfesorLider($rut_profesor);
+		}
+		//echo 'caca:'.$only_view.'listo. esCoordinador:'.$esCoordinador.'caca ';return;
+		$this->load->model('Model_actividades_masivas');
+		$resultado = $this->Model_actividades_masivas->getActividadesBySeccionAndProfesorForAsistencia($id_seccion, $rut_profesor, $esCoordinador, $modulosTematicosEnQueEsLider, $mostrarTodas);
 		
 		echo json_encode($resultado);
 	}

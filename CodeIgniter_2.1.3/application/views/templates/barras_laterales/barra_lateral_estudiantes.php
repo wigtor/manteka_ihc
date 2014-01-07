@@ -23,12 +23,16 @@
 		$agregarCalificaciones = "";
 		$verCalificaciones = "";
 		$cargaMasivaCalificaciones = "";
+		$agregarAsistenciaActividades = "";
+		$verAsistenciaActividades = "";
+		$cargaMasivaAsistenciaActividades = "";
 
 
 		// Variables que determinan que grupo de operaciones se encuentra abierta
 		$inEstudiantes = "";
 		$inAsistencia = "";
 		$inCalificaciones = "";
+		$inAsistenciaActividades = "";
 
 		//	En caso de que tal operación específica este seleccionada.
 		//	La operación seleccionada tiene clase "active"
@@ -80,6 +84,18 @@
 			$cargaMasivaCalificaciones = 'class="active"';
 			$inCalificaciones = "in";
 		}
+		else if ($subVistaLateralAbierta == "verAsistenciaActividades") {
+			$verAsistenciaActividades = 'class="active"';
+			$inAsistenciaActividades = "in";
+		}
+		else if ($subVistaLateralAbierta == "agregarAsistenciaActividades") {
+			$agregarAsistenciaActividades = 'class="active"';
+			$inAsistenciaActividades = "in";
+		}
+		else if ($subVistaLateralAbierta == "cargaMasivaAsistenciaActividades") {
+			$cargaMasivaAsistenciaActividades = 'class="active"';
+			$inAsistenciaActividades = "in";
+		}
 	?>
 
 	<!--	Barra lateral de estudiantes	-->
@@ -128,4 +144,19 @@
 				</div>
 			</div>
 		</div>
+		<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+				Asistencia actividades</a>
+			</div>
+			<div id="collapseFour" class="accordion-body collapse <?php echo $inAsistenciaActividades; ?>" >
+				<div class="accordion-inner nav nav-list">
+					<li <?php echo $verAsistenciaActividades; ?> ><a href="<?php echo site_url("Estudiantes/verAsistenciaActividades")?>">Ver asistencia actividades</a></li>
+					<li <?php echo $agregarAsistenciaActividades; ?> ><a href="<?php echo site_url("Estudiantes/agregarAsistenciaActividades")?>">Agregar asistencia actividades</a></li>
+					<li <?php echo $cargaMasivaAsistenciaActividades; ?> ><a href="<?php echo site_url("Estudiantes/cargaMasivaAsistenciaActividades")?>">Carga masiva asistencia actividades</a></li>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
 	</div>

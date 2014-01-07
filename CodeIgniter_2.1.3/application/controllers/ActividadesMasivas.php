@@ -61,7 +61,7 @@ class ActividadesMasivas extends MasterManteka {
 				$obj = json_decode($instancia);
 				$listaInstancias[] = $obj;
 			}
-			echo 'Largo lista: '.count($listaInstancias);
+			//echo 'Largo lista: '.count($listaInstancias);
 			$confirmacion = $this->Model_actividades_masivas->agregarActividadMasiva($nombre, $listaInstancias);
 
 			// mostramos el mensaje de operacion realizada
