@@ -768,12 +768,12 @@ class Estudiantes extends MasterManteka {
 
 
 	public function cargaMasivaAsistenciaActividades() {
-		$subMenuLateralAbierto = "cargaMasivaEstudiantes"; //Para este ejemplo, los informes no tienen submenu lateral
+		$subMenuLateralAbierto = "cargaMasivaAsistenciaActividades"; //Para este ejemplo, los informes no tienen submenu lateral
 		$tipos_usuarios_permitidos = array(TIPO_USR_COORDINADOR);
 		$titulo = "Carga masiva de asistencia de actividades";
 		$datos_vista = array();
 		$rutProfesor = $this->session->userdata('rut');
-		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ASISTENCIA_ACTIVIDADES, 'estudiantes', $datos_vista, $rutProfesor);
+		$this->cargaMasiva($subMenuLateralAbierto, 'cuerpo_estudiantes_cargaMasiva', $titulo, $tipos_usuarios_permitidos, CARGA_MASIVA_ASISTENCIA_ACTIVIDADES, 'asistenciaActividades', $datos_vista, $rutProfesor);
 	}
 
 

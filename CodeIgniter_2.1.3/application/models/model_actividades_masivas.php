@@ -287,7 +287,7 @@ class Model_actividades_masivas extends CI_Model {
 		return $this->getEventosConInstancias(); //A futuro se hará algún filtrado según profesor
 	}
 
-		public function cargaMasiva($archivo, $rutProfesor, $esCoordinador){
+	public function cargaMasiva($archivo, $rutProfesor, $esCoordinador){
 
 		if(!file_exists($archivo) || !is_readable($archivo)) {
 			return FALSE;
@@ -308,7 +308,7 @@ class Model_actividades_masivas extends CI_Model {
 			if(!$revisandoHeader) { //Si está vacio
 				$header = explode(';',trim($linea));
 				if (count($header) <= 5) { //CANTIDAD DE COLUMNAS DEBE SER MAYOR A 5
-					$header[] = "<br>La cantidad de elementos de la cabecera no es válida";
+					$header[] = "<br>La cantidad de elementos de la cabecera no es válida".count($header);
 					$stack[$c] = $header;
 					fclose($ff);
 					unlink($archivo);
@@ -380,7 +380,7 @@ class Model_actividades_masivas extends CI_Model {
 						$data[$key] = trim($value);
 					}
 
-					//Hago un insert o update por cada sesión de clase
+					//Hago un insert o update por cada actividad masiva
 					$cantidadColumnas = count($header);
 					$saltarEstudiante = FALSE;
 					for($i = 5; $i < $cantidadColumnas; $i=$i+1) {
@@ -392,14 +392,8 @@ class Model_actividades_masivas extends CI_Model {
 							$data['RUT'] =  preg_replace('[\.]', '', $data['RUT']);
 						}
 
-						$fechaClase = $header[$i];
-						$fechaClaseAdaptada = $this->adaptFechaFormat($fechaClase);
-						if ($fechaClaseAdaptada == NULL) {
-							$linea[] = "<br>La fecha de la sesión de clase no tiene un formáto válido, debe ser dd-mm-yyyy";
-							//$stack[count($stack)] = $linea;
-							$hayErrores = TRUE;
-							continue;
-						}
+						$nombreActividad = $header[$i];
+						$nombreActividad = strtoupper($nombreActividad);
 
 						$id_seccion = $this->findSeccionByEstudiante($data['RUT']);
 						if ($id_seccion == -1) {
@@ -416,21 +410,22 @@ class Model_actividades_masivas extends CI_Model {
 							$saltarEstudiante = TRUE; //No se intenta insertar las demás fechas de asistencia para ese estudiante
 							continue;
 						}
-						$id_sesion_de_clase = $this->findSesionByFechaAndSeccion($fechaClaseAdaptada, $id_seccion);
-						if ($id_sesion_de_clase == NULL) {
-							$linea[] = "<br>No se ha encontrado una sesión de clases para la fecha: ".$fechaClase." en la sección, revise si el estudiante se cambió de sección";
+						
+						$id_actividad = $this->findIdActividadByNombre($nombreActividad);
+						if ($id_actividad == NULL) {
+							$linea[] = "<br>No se ha encontrado una instancia de la actividad : ".$nombreActividad;
 							//$stack[count($stack)] = $linea;
 							$hayErrores = TRUE;
 							continue;
 						}
 
-						if ($data[$fechaClase] !== "") { //Los blancos no se agregan, ni se modifican
-							$asistio = $data[$fechaClase];
+						if ($data[$nombreActividad] !== "") { //Los blancos no se agregan, ni se modifican
+							$asistio = $data[$nombreActividad];
 							if (preg_match ('/^[0]|[1]$/' , $asistio)) {
 								//echo 'es válido:'.$asistio.'  ';
-								//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_sesion_de_clase: '.$id_sesion_de_clase.'         ';
-								if ($this->tienePermisosPonerAsistencia($rutProfesor, $id_seccion, $id_sesion_de_clase, $esCoordinador)) {
-									$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_sesion_de_clase);
+								//echo ' Rut: '.$data['RUT'].' asistió: '.$asistio.' id_seccion: '.$id_seccion.' id_instancia_actividad: '.$id_instancia_actividad.'         ';
+								if ($esCoordinador) {
+									$this->agregarAsistencia($rutProfesor, $data['RUT'], $asistio, NULL, NULL, $id_actividad);
 								}
 								else {
 									//echo ' mal ';
@@ -454,7 +449,7 @@ class Model_actividades_masivas extends CI_Model {
 					
 					$this->db->trans_complete();
 					if ($this->db->trans_status() === FALSE) {
-						$linea[] = "<br>Ha ocurrido un error en la base de datos al agregar la asistencia";
+						$linea[] = "<br>Ha ocurrido un error en la base de datos al agregar la asistencia de la actividad";
 						$hayErrores = TRUE;
 					}
 
@@ -473,6 +468,41 @@ class Model_actividades_masivas extends CI_Model {
 		fclose($ffa);
 		unlink($archivo);
 		return $stack;
+	}
+	
+	private function findIdActividadByNombre($nombreActividad) {
+		$this->db->select('ID_ACT AS id');
+		$this->db->where('UPPER(NOMBRE_ACT)', $nombreActividad);
+		$query = $this->db->get('actividad_masiva');
+		if ($query == FALSE) {
+			return NULL;
+		}
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row();
+			//echo ' '.$primeraResp->id.' ';
+			return $primeraResp->id;
+		}
+		else {
+			return NULL;
+		}
+	}
+	
+	
+	//FUNCIÓN REPETIDA EN MODEL_ASISTENCIA
+	private function findSeccionByEstudiante($rut_estudiante) {
+		$this->db->select('estudiante.ID_SECCION');
+		$this->db->where('RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('estudiante');
+		if ($query->num_rows() > 0) {
+			$primeraResp = $query->row();
+			if ($primeraResp->ID_SECCION == NULL) {
+				return -1;
+			}
+			return $primeraResp->ID_SECCION;
+		}
+		else {
+			return NULL;
+		}
 	}
 }
 ?>
