@@ -1540,6 +1540,174 @@ class Estudiantes extends MasterManteka {
 		
 	}
 
+	public function getSituacionEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+
+		$this->load->model('Model_profesor');
+		$id_seccion = $this->input->post('seccion');
+		//echo 'caca:'.$only_view.'listo. esCoordinador:'.$esCoordinador.'caca ';return;
+		$this->load->model('Model_estudiante');
+		$estudiantes = $this->Model_estudiante->getEstudiantesBySeccion($id_seccion);
+		$resultado = array();
+		foreach ($estudiantes as $estudiante) {
+			$rut_estudiante = $estudiante->rut;
+			$resultado[] = $this->situacionEstudiante($rut_estudiante);
+		}
+		
+		echo json_encode($resultado);
+	}
+
+	public function situacionEstudiante($rut_estudiante) {
+		$resultado = $this->calculaSituacionEstudiante($rut_estudiante);
+		return $resultado;
+	}
+
+	//Sirve para mostrar como json toda la información de 1 sólo estudiante
+	public function getSituacionEstudiante($rut_estudiante) {
+		$resultado = $this->calculaSituacionEstudiante($rut_estudiante);
+		json_encode($resultado);
+	}
+
+
+	private function calculaSituacionEstudiante($rut_estudiante) {
+		//Obtengo la asistencia de un estudiante por cada módulo temático
+		//Si ha faltado a no más de 2 clases de un mismo módulo temático
+			//Calcular porcentaje de asistencia entre todas las que no sean vacio.
+			//Si asistencia es mayor al 80%
+				//Calcular asistencia a actividades masivas.
+				//Si asistencia igual al 100%
+					//Calcular promedio de notas
+						//Retornar promedio de notas
+		//Retornar 1 y decir la causa de la reprobación
+
+
+		
+		
+		$objetoResult = new stdClass();
+		$objetoResult->rut = $rut_estudiante;
+
+
+		//Calculo asistencia a las clases
+		
+		$this->load->model('Model_asistencia');
+		$asistenciaGroupByModulo = $this->Model_asistencia->getAsistenciaGroupByModuloByEstudiante($rut_estudiante); //Debe retornar una matriz con el primer índice los módulos temáticos y el segundo índice las asistencias por módulo
+		//echo 'cantidad modulos: '.count($asistenciaGroupByModulo).' ';
+		//echo json_encode($asistenciaGroupByModulo );
+		//return;
+		$contadorAsistencias = 0;
+		$contadorClasesValidas = 0;
+		$contadorTotalClases = 0;
+		foreach ($asistenciaGroupByModulo as $moduloTematico) {
+			$contadorInasistenciasModulo = 0;
+			foreach ($moduloTematico->sesiones_de_clase as $asistencia) {
+				$presente = intval($asistencia->presente);
+				if ($presente == NULL) {
+					$contadorTotalClases++;
+					$contadorInasistenciasModulo++; //pero porque no se ha puesto su asistencia
+				}
+ 				else if ($presente == 1) {
+					$contadorAsistencias++;
+					$contadorClasesValidas++;
+					$contadorTotalClases++;
+				}
+				else if ($presente == 0){
+					$contadorInasistenciasModulo++;
+					$contadorClasesValidas++;
+					$contadorTotalClases++;
+				}
+				else { //nunca debiese llegar acá
+					echo ' Error ';
+					return null;
+				}
+			}
+			//echo 'Se reviso la asistencia de un modulo. inasistencias:'.$contadorInasistenciasModulo.' ';
+			if ($contadorInasistenciasModulo >= 2) {
+				$objetoResult = new stdClass();
+				$objetoResult->rut = $rut_estudiante;
+				$objetoResult->nota = 1;
+				$objetoResult->comentario = "Artículo 2";//"Reprobado por 2 o mas inasistencias en un mismo modulo tematico";
+				return $objetoResult;
+			}
+		}
+
+		$porcentajeAsistencia = ($contadorAsistencias/$contadorTotalClases)*100;
+		if ($porcentajeAsistencia < 80) {
+			$objetoResult = new stdClass();
+			$objetoResult->rut = $rut_estudiante;
+			$objetoResult->nota = 1;
+			$objetoResult->comentario = "Artículo 1"; //"Reprobado por asistencia menor al 80%";
+			return $objetoResult;
+		}
+
+
+		//Calculo asistencia a actividades culturales masivas
+		$this->load->model('Model_actividades_masivas');
+		$asistenciaActividadesMasivas = $this->Model_actividades_masivas->getAsistenciaActividadesByEstudiante($rut_estudiante);
+		$contadorAsistenciasActividades = 0;
+		$contadorActividadesValidas = 0;
+		foreach ($asistenciaActividadesMasivas as $asistencia) {
+			//echo ' a:'.$asistencia.' ';
+			$contadorActividadesValidas++;
+			if ($asistencia == 1) {
+				$contadorAsistenciasActividades++;
+			}
+			else if ($asistencia == 0){
+
+			}
+			else { //null
+
+			}
+		}
+		//echo 'cantidad de actividades masivas: '.$contadorActividadesValidas.' y asistio a: '.$contadorAsistenciasActividades.' ';
+		$porcentajeAsistActividades = ($contadorAsistenciasActividades/$contadorActividadesValidas)*100;
+		if ($porcentajeAsistActividades < 100) {
+			$objetoResult->nota = 1;
+			$objetoResult->comentario = "Artículo 5";//"Reprobado por 1 o más inasistencias a actividad cultural masiva";
+			return $objetoResult;
+		}
+
+
+		//Calculo promedio de notas
+		$this->load->model('Model_calificaciones');
+		$calificaciones = $this->Model_calificaciones->getCalificacionesByEstudiante($rut_estudiante);
+		$cantidadCalificaciones = 0;
+		$sumaCalificaciones = 0;
+		foreach ($calificaciones as $nota) {
+			if (($nota->nota != NULL) && ($nota->nota != "")) {
+				$sumaCalificaciones += floatval($nota->nota);
+				$cantidadCalificaciones++;
+			}
+		}
+		//Se evita división por 0 (PREGUNTAR AL PROFESOR REGLA DE NEGOCIO)
+		if ($cantidadCalificaciones == 0) {
+			$objetoResult->nota = 1;
+			$objetoResult->comentario = "Reprobado por no tener notas";
+			return $objetoResult;
+		}
+		$promedio = $sumaCalificaciones/$cantidadCalificaciones;
+		$promedio = (ceil($promedio*10))/10;
+
+
+		//$objetoResult->comentario = "asistAct: ".$porcentajeAsistActividades.' nota: '.$promedio;
+
+		if ($promedio < 4) {
+			$objetoResult->nota = $promedio;
+			$objetoResult->comentario = "Artículo 10";
+			return $objetoResult;
+		}
+
+		$objetoResult->nota = $promedio;
+		$objetoResult->comentario = "Aprobado";
+		return $objetoResult;
+	}
+
 
 	private function calculaPromedio($notas) {
 		$cantidadNotas = 0;

@@ -446,6 +446,17 @@ class Model_calificaciones extends CI_Model {
 			return NULL;
 		}
 	}
+
+	public function getCalificacionesByEstudiante($rut_estudiante) {
+		$this->db->select('nota.VALOR_NOTA AS nota');
+		$this->db->where('nota.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('nota');
+		//echo $this->db->last_query().'  ';
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+	}
 }
 
 ?>

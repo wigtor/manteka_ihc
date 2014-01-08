@@ -504,5 +504,57 @@ class Model_actividades_masivas extends CI_Model {
 			return NULL;
 		}
 	}
+
+	public function getAsistenciaActividadesByEstudiante($rut_estudiante) {
+		$this->db->select('actividad_masiva.ID_ACT');
+		$this->db->join('instancia_actividad_masiva', 'actividad_masiva.ID_ACT=instancia_actividad_masiva.ID_ACT');
+		$this->db->group_by('actividad_masiva.ID_ACT');
+		$query = $this->db->get('actividad_masiva');
+		if ($query == FALSE) {
+			return array();
+		}
+		$allActividadesMasivas = $query->result();
+
+		$this->db->flush_cache();
+		$this->db->select('actividad_masiva.ID_ACT');
+		$this->db->select('PRESENTE_ASIST_EVENTO AS presente');
+		$this->db->join('instancia_actividad_masiva', 'instancia_actividad_masiva.ID_INSTANCIA_ACTIVIDAD_MASIVA=asistencia_actividad.ID_INSTANCIA_ACTIVIDAD_MASIVA', 'LEFT OUTER');
+		$this->db->join('actividad_masiva', 'actividad_masiva.ID_ACT=instancia_actividad_masiva.ID_ACT', 'LEFT OUTER');
+		$this->db->where('RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('asistencia_actividad');
+		//echo $this->db->last_query().' ';
+		if ($query == FALSE) {
+			return array();
+		}
+		$actividades_presentes = $query->result();
+
+		$resultado = array();
+		foreach ($allActividadesMasivas as $actividad_masiva) {
+			$encontrado = FALSE;
+			foreach ($actividades_presentes as $act_presente) {
+				if ($act_presente->ID_ACT == $actividad_masiva->ID_ACT) {
+					$encontrado = TRUE;
+					break;
+				}
+			}
+			if ($encontrado) {
+				$resultado[] = 1;
+			}
+			else {
+				$resultado[] = 0;
+			}
+		}
+		return $resultado;
+
+		/*
+		$this->db->select('PRESENTE_ASIST_EVENTO AS presente');
+		$this->db->where('asistencia_actividad.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('asistencia_actividad');
+		if ($query == FALSE) {
+			return array();
+		}
+		return $query->result();
+		*/
+	}
 }
 ?>

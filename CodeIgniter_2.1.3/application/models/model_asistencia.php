@@ -485,7 +485,48 @@ class Model_asistencia extends CI_Model {
 		return NULL;
 	}
 
+	public function getAsistenciaGroupByModuloByEstudiante($rut_estudiante) {
+		$this->db->select('ID_MODULO_TEM');
+		$query = $this->db->get('modulo_tematico');
+		if ($query == FALSE) {
+			return array();
+		}
+		$id_modulos_tematicos = $query->result();
+		foreach ($id_modulos_tematicos as $modTem) {
+			$this->db->flush_cache();
 
+			$idMod = $modTem->ID_MODULO_TEM;
+			$this->db->select('ID_SESION');
+			$this->db->where('ID_MODULO_TEM', $idMod);
+			$query2 = $this->db->get('sesion_de_clase');
+			if ($query2 == FALSE) {
+				return array();
+			}
+			$modTem->sesiones_de_clase = $query2->result();
+			foreach ($modTem->sesiones_de_clase as $sesion_de_clase) {
+				$this->db->flush_cache();
+
+				$id_sesion = $sesion_de_clase->ID_SESION;
+				$this->db->select('PRESENTE_ASISTENCIA AS presente');
+				$this->db->where('ID_SESION', $id_sesion);
+				$this->db->where('RUT_USUARIO', $rut_estudiante);
+				$query3 = $this->db->get('asistencia');
+				if ($query3 == FALSE) {
+					return array();
+				}
+				if ($query3->num_rows() > 0) {
+					$row = $query3->row(); 
+					$sesion_de_clase->presente = $row->presente;
+				}
+				else {
+					$sesion_de_clase->presente = NULL;
+				}
+			}
+
+		}
+
+		return $id_modulos_tematicos;
+	}
 }
 
 ?>
