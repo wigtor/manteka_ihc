@@ -1564,7 +1564,7 @@ class Estudiantes extends MasterManteka {
 		echo json_encode($resultado);
 	}
 
-	public function situacionEstudiante($rut_estudiante) {
+	private function situacionEstudiante($rut_estudiante) {
 		$resultado = $this->calculaSituacionEstudiante($rut_estudiante);
 		return $resultado;
 	}
@@ -1572,7 +1572,7 @@ class Estudiantes extends MasterManteka {
 	//Sirve para mostrar como json toda la información de 1 sólo estudiante
 	public function getSituacionEstudiante($rut_estudiante) {
 		$resultado = $this->calculaSituacionEstudiante($rut_estudiante);
-		json_encode($resultado);
+		echo json_encode($resultado);
 	}
 
 
@@ -1592,7 +1592,7 @@ class Estudiantes extends MasterManteka {
 		
 		$objetoResult = new stdClass();
 		$objetoResult->rut = $rut_estudiante;
-
+		$objetoResult->situacion = "Reprobado";
 
 		//Calculo asistencia a las clases
 		
@@ -1629,20 +1629,22 @@ class Estudiantes extends MasterManteka {
 			}
 			//echo 'Se reviso la asistencia de un modulo. inasistencias:'.$contadorInasistenciasModulo.' ';
 			if ($contadorInasistenciasModulo >= 2) {
-				$objetoResult = new stdClass();
-				$objetoResult->rut = $rut_estudiante;
 				$objetoResult->nota = 1;
 				$objetoResult->comentario = "Artículo 2";//"Reprobado por 2 o mas inasistencias en un mismo modulo tematico";
+				if ($contadorClasesValidas != $contadorTotalClases) {
+					$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias en el sistema, consulte a sus profesores";
+				}
 				return $objetoResult;
 			}
 		}
 
 		$porcentajeAsistencia = ($contadorAsistencias/$contadorTotalClases)*100;
 		if ($porcentajeAsistencia < 80) {
-			$objetoResult = new stdClass();
-			$objetoResult->rut = $rut_estudiante;
 			$objetoResult->nota = 1;
 			$objetoResult->comentario = "Artículo 1"; //"Reprobado por asistencia menor al 80%";
+			if ($contadorClasesValidas != $contadorTotalClases) {
+				$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias en el sistema, consulte a sus profesores";
+			}
 			return $objetoResult;
 		}
 
@@ -1652,24 +1654,33 @@ class Estudiantes extends MasterManteka {
 		$asistenciaActividadesMasivas = $this->Model_actividades_masivas->getAsistenciaActividadesByEstudiante($rut_estudiante);
 		$contadorAsistenciasActividades = 0;
 		$contadorActividadesValidas = 0;
+		$contadorTotalActividades = 0;
 		foreach ($asistenciaActividadesMasivas as $asistencia) {
 			//echo ' a:'.$asistencia.' ';
-			$contadorActividadesValidas++;
-			if ($asistencia == 1) {
+			$contadorTotalActividades++;
+			if ($asistencia === NULL) {
+
+			}
+			else if ($asistencia == 1) {
+				$contadorActividadesValidas++;
 				$contadorAsistenciasActividades++;
 			}
 			else if ($asistencia == 0){
-
+				$contadorActividadesValidas++;
 			}
 			else { //null
-
+				echo ' Error ';
+				return null;
 			}
 		}
 		//echo 'cantidad de actividades masivas: '.$contadorActividadesValidas.' y asistio a: '.$contadorAsistenciasActividades.' ';
-		$porcentajeAsistActividades = ($contadorAsistenciasActividades/$contadorActividadesValidas)*100;
+		$porcentajeAsistActividades = ($contadorAsistenciasActividades/$contadorTotalActividades)*100;
 		if ($porcentajeAsistActividades < 100) {
 			$objetoResult->nota = 1;
 			$objetoResult->comentario = "Artículo 5";//"Reprobado por 1 o más inasistencias a actividad cultural masiva";
+			if ($contadorActividadesValidas != $contadorTotalActividades) {
+				$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias a las actividades culturales, consulte a coordinación";
+			}
 			return $objetoResult;
 		}
 
@@ -1689,6 +1700,7 @@ class Estudiantes extends MasterManteka {
 		if ($cantidadCalificaciones == 0) {
 			$objetoResult->nota = 1;
 			$objetoResult->comentario = "Reprobado por no tener notas";
+			$objetoResult->comentarioInfo = "No se han ingresado calificaciones, consulte a sus profesores";
 			return $objetoResult;
 		}
 		$promedio = $sumaCalificaciones/$cantidadCalificaciones;
@@ -1700,11 +1712,14 @@ class Estudiantes extends MasterManteka {
 		if ($promedio < 4) {
 			$objetoResult->nota = $promedio;
 			$objetoResult->comentario = "Artículo 10";
+			$objetoResult->comentarioInfo = "Su promedio es ingerior a 4, nada que hacer :(";
 			return $objetoResult;
 		}
 
 		$objetoResult->nota = $promedio;
-		$objetoResult->comentario = "Aprobado";
+		$objetoResult->comentario = "";
+		$objetoResult->situacion = "Aprobado";
+		$objetoResult->comentarioInfo = "Felicitaciones :)";
 		return $objetoResult;
 	}
 

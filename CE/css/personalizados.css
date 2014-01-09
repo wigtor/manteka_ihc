@@ -1,0 +1,143 @@
+/* Acá se muestran datos de los css personalizados, para así no editar el archivo bootstrap.css */
+
+
+.table-hover tbody tr.highlight td {
+    background-color: rgb(205, 205,205);
+}
+
+.caca-clear-filters {
+	display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  line-height: 14px;
+  vertical-align: text-top;
+	background-image: url("../img/clear-filters.png");
+}
+
+.click_lista{
+    border-right-style: solid;
+    border-right-width: 1px;
+    padding-right: 22px;
+}
+
+.boton-usuario {
+     border-right-width: 1px;
+     padding-right: 22px;
+}
+
+.banner {
+    background: -moz-linear-gradient(top,  rgba(30,87,153,1) 0%, rgba(125,185,232,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#007db9e8',GradientType=0 ); /* IE6-9 */
+    width: 100%;
+	height:80px;
+	min-width:820px;
+}
+
+.logo_banner {
+	width: auto;
+	height: 80px;
+}
+
+.barra_navegacion {
+	width: 90px;
+	height: 30px;
+	text-align: center;
+}
+
+.navbar-inner{
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.navbar.barra_usuario {
+	margin-bottom: 0px;
+}
+.nav.botones_barra_usuario {
+	margin-right:10px;
+}
+.container-barra_usuario {
+	position: absolute;
+}
+
+.icon_menu_superior {
+	width:32px;
+	height:32px;
+}
+
+.btn.btn_sin_padding {
+	padding: 0 !important;
+}
+
+footer {
+	margin-top: -20px;
+	font-size: 11px;
+	height: 20px;
+	text-align: center;
+}
+
+.icon_footer {
+	width: 15px;
+	height: 15px;
+}
+
+#wrap {
+	min-height: 95%;
+	padding-bottom:30px;
+	/*height: 100%;*/
+}
+
+@font-face{
+font-family: 'MyWebFont';
+	src: url('WebFont.eot');
+	src: url('WebFont.eot?#iefix') format('embedded-opentype'),
+	url('WebFont.woff') format('woff'),
+	url('WebFont.ttf') format('truetype'),
+	url('WebFont.svg#webfont') format('svg');
+	/*
+	src: url('/manteka/css/WebFont.eot');
+	src: url('/manteka/css/WebFont.eot?#iefix') format('embedded-opentype'),
+	url('/manteka/css/WebFont.woff') format('woff'),
+	url('/manteka/css/WebFont.ttf') format('truetype'),
+	url('/manteka/css/WebFont.svg#webfont') format('svg'); */
+}
+
+.btn_with_icon:first-letter {
+	font-family: MyWebFont,Serif ! important;
+	font-size: 30px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+}
+.btn_with_icon_solo{
+	font-family: MyWebFont,Serif ! important;
+	font-size: 20px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+	display:inline-block;
+}
+
+.btn_with_icon_solo_footer{
+	font-family: MyWebFont,Serif ! important;
+	font-size: 18px ! important;
+	line-height: 10px ! important;
+	vertical-align: middle;
+	color: gray;
+}
+
+.letra_progress_bar {
+		color: rgb(235,235,235);
+}
+
+.progress_bar {
+	background-color: rgb(0, 165, 215);
+}
+
+html,body{
+    height: 96%;
+}

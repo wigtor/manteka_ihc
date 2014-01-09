@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Acá poner el título, las importaciones de los css y javascript -->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="UTF-8">
+		<title>Consulta CE</title>
+	<link rel="stylesheet" href="/CE/css/bootstrap.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="/CE/css/personalizados.css" type="text/css" media="all" />
+	<script src="/CE/javascripts/jquery.js"></script>
+</head>
+
+<body>
+	<script src="/CE/javascripts/verificadorRut.js"></script>
+	<script src="/CE/javascripts/jquery.js"></script>
+     
+
+	<script type='text/javascript'>
+		/* Esta función se llama al hacer click en el botón entrar, 
+		* por convención las funciones que utilizan document.getElementById()
+		* deben ser definidas en la misma vista en que son utilizados para evitar conflictos de nombres.
+		* Esta función retorna true o false, en caso de ser true el formulario se envía al servidor
+		* Para ver como se configura esto se debe ver como es seteado el evento onsubmit() en el formulario.
+		*/
+		function validacionRut() {
+			var inputRut = document.getElementById("inputRut");
+			var rut = inputRut.value;
+			RecepcionRut = rut;
+			var inputGuionRut = document.getElementById("inputGuionRut");
+			var guionCaracter = inputGuionRut.value;
+			var resultadoValidacionRut = calculaDigitoVerificador(rut, guionCaracter);
+
+			// Si el resultado de la validación es satisfactorio
+			if (resultadoValidacionRut == DV_CORRECTO) {
+				// Realizar un submit
+				mostrarError("", false);
+				return true;
+			}
+			// Caso en que la validación entregue un error de validación
+			else if (resultadoValidacionRut == DV_NO_VALIDO) {
+				mostrarError("El rut introducido no es válido.", true);
+				return false;
+			}
+			// Caso que el RUT ingresado sea incorrecto
+			else if (resultadoValidacionRut == DV_INCORRECTO) {
+				mostrarError("El dígito verificador o el rut no son válidos.", true);
+				
+				return false;
+			}
+			mostrarError("Error al validar el rut", true);
+			return false;
+		}
+
+		function mostrarError(mensaje, mostrar) {
+			var controlGroupRut = document.getElementById("groupRut");
+			if (mostrar == true) {
+				$(controlGroupRut).addClass("error");
+			}
+			else {
+				$(controlGroupRut).removeClass("error");
+			}
+			var spanError = document.getElementById("spanInputRutError");
+			$(spanError).html(mensaje);
+		}
+
+		function consultarNota() {
+			$('#icono_cargando').show();
+			if (validacionRut()) {
+				var inputRut = document.getElementById("inputRut");
+				var rut = inputRut.value;
+				var objRespuesta = obtenerSituacion(rut);
+				$('#icono_cargando').hide();
+				try {
+					objRespuesta = jQuery.parseJSON(objRespuesta);
+
+
+					$('#nota').html(objRespuesta.nota);
+					$('#situacion').html(objRespuesta.situacion);
+					$('#comentario').html(objRespuesta.comentario);
+					if (objRespuesta.comentarioInfo != null) {
+						if (objRespuesta.comentarioInfo != "") {
+							$('#comentario').html($('#comentario').html() + '.- ' + objRespuesta.comentarioInfo);
+						}
+					}
+
+				}
+				catch (err) {
+					alert('error!');
+
+					return;
+				}
+				$('#icono_cargando').hide();
+			}
+			else {
+				$('#icono_cargando').hide();
+			}
+		}
+
+		function obtenerSituacion(rut) {
+			var respuesta = $.ajax({
+				type: "POST",
+				async: false,
+				url: "/manteka/index.php/Estudiantes/getSituacionEstudiante/"+rut,
+				success: function(respuesta) {
+				}
+			});
+			return respuesta.responseText;
+		}
+
+
+	</script>
+
+	<div id="wrap">
+		<!-- Contiene la imágen de logo de la usach a la izquierda y la imagen de logo de manteka a la derecha, todo en un fondo gradiente -->
+		<div class="banner row-fluid">
+				<div class="pull-left">
+					<a href="http://www.udesantiago.cl" target="blank"><img src="/CE/img/logo_usach.png" class="logo_banner" alt="logo usach"></a>
+				</div>
+		</div>
+			<fieldset >
+				<legend>Consultar situación de comunicación efectiva</legend>
+				<form method="post" accept-charset="utf-8" id="formLogin">
+					<div class="control-group" id="groupRut">
+						<label class="control-label" for="inputRut">Rut</label>
+						<div class="controls">
+						  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="">
+							<STRONG>-</STRONG>
+							<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="k" value="">
+						<span id="spanInputRutError" class="help-inline"></span>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<div class="row">
+								<div class="span4 offset1">
+									<button type="button" onclick="consultarNota();" class="btn btn-primary">
+										Consultar nota
+									</button>
+								</div>
+								<div class="span2">
+									<img id="icono_cargando" src="/CE/img/procesando.gif" style="display:none; width:25px; height:25px;">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label bold" for="nota"><strong>Nota:</strong></label>
+						<div id="nota" class="controls">
+							
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label bold" for="nota"><strong>Situación:</strong></label>
+						<div id="situacion" class="controls">
+							
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label bold" for="nota"><strong>Comentario:</strong></label>
+						<div id="comentario" class="controls">
+							
+						</div>
+					</div>
+					</div>
+				</form>
+			</fieldset>
+		</div>
+	<!-- Contiene información del pie de la página -->
+<footer class="footer" id="footer" style="min-width:820px;">
+	<p class="muted">
+	Compatible con:
+	<a class="btn_with_icon_solo_footer" href="http://windows.microsoft.com/es-es/internet-explorer/download-ie" target="_blank">e</a>
+	<a class="btn_with_icon_solo_footer" href="http://www.google.com/chrome?hl=es" target="_blank">g</a>
+	<a class="btn_with_icon_solo_footer" href="http://www.mozilla.org/es-CL/firefox/fx/" target="_blank">d</a>
+	<a class="btn_with_icon_solo_footer" href="http://www.opera.com/download/" target="_blank">f</a>
+	<a class="btn_with_icon_solo_footer" href="http://www.apple.com/es/safari" target="_blank">h</a>
+	</p>
+</footer></body>
+</html>

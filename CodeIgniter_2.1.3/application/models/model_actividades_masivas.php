@@ -531,17 +531,19 @@ class Model_actividades_masivas extends CI_Model {
 		$resultado = array();
 		foreach ($allActividadesMasivas as $actividad_masiva) {
 			$encontrado = FALSE;
+			$resultadoPresente = NULL;
 			foreach ($actividades_presentes as $act_presente) {
 				if ($act_presente->ID_ACT == $actividad_masiva->ID_ACT) {
 					$encontrado = TRUE;
+					$resultadoPresente = $act_presente->presente;
 					break;
 				}
 			}
 			if ($encontrado) {
-				$resultado[] = 1;
+				$resultado[] = $resultadoPresente;
 			}
 			else {
-				$resultado[] = 0;
+				$resultado[] = NULL;
 			}
 		}
 		return $resultado;
