@@ -1594,6 +1594,16 @@ class Estudiantes extends MasterManteka {
 		$objetoResult->rut = $rut_estudiante;
 		$objetoResult->situacion = "Reprobado";
 
+		$this->load->model('Model_estudiante');
+		if (!$this->Model_estudiante->isEstudiante($rut_estudiante)) {
+			$objetoResult->situacion = "";
+			$objetoResult->nota = "";
+			$objetoResult->comentario = "";
+			$objetoResult->comentarioInfo = "No es estudiante registrado en el sistema";
+			return $objetoResult;
+		}
+
+
 		//Calculo asistencia a las clases
 		
 		$this->load->model('Model_asistencia');

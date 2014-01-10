@@ -180,6 +180,22 @@ class Model_estudiante extends CI_Model {
 	}
 
 
+	public function isEstudiante($rut_estudiante) {
+		$this->db->select('estudiante.RUT_USUARIO AS rut');
+		$this->db->where('estudiante.RUT_USUARIO', $rut_estudiante);
+		$query = $this->db->get('estudiante');
+		if ($query == FALSE) {
+			return FALSE;
+		}
+		if ($query->num_rows() > 0) {
+			return TRUE;
+		}
+		return FALSE;
+
+
+	}
+
+
 	public function getEstudiantesBySeccionForAsistencia($id_seccion) {
 
 		$this->db->select('estudiante.RUT_USUARIO AS posicion');
