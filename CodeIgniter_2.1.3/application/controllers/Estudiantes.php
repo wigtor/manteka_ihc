@@ -1587,7 +1587,7 @@ class Estudiantes extends MasterManteka {
 						//Retornar promedio de notas
 		//Retornar 1 y decir la causa de la reprobación
 
-
+		$comentarioAlFinal = "Esta calificación es referencial; la nota definitiva aparecerá cuando las actas oficiales sean emitidas";
 		
 		
 		$objetoResult = new stdClass();
@@ -1642,7 +1642,7 @@ class Estudiantes extends MasterManteka {
 				$objetoResult->nota = 1;
 				$objetoResult->comentario = "Artículo 2";//"Reprobado por 2 o mas inasistencias en un mismo modulo tematico";
 				if ($contadorClasesValidas != $contadorTotalClases) {
-					$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias en el sistema, consulte a sus profesores";
+					$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias en el sistema, consulte a sus profesores. ".$comentarioAlFinal;
 				}
 				return $objetoResult;
 			}
@@ -1653,7 +1653,7 @@ class Estudiantes extends MasterManteka {
 			$objetoResult->nota = 1;
 			$objetoResult->comentario = "Artículo 1"; //"Reprobado por asistencia menor al 80%";
 			if ($contadorClasesValidas != $contadorTotalClases) {
-				$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias en el sistema, consulte a sus profesores";
+				$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias en el sistema, consulte a sus profesores. ".$comentarioAlFinal;
 			}
 			return $objetoResult;
 		}
@@ -1689,7 +1689,7 @@ class Estudiantes extends MasterManteka {
 			$objetoResult->nota = 1;
 			$objetoResult->comentario = "Artículo 5";//"Reprobado por 1 o más inasistencias a actividad cultural masiva";
 			if ($contadorActividadesValidas != $contadorTotalActividades) {
-				$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias a las actividades culturales, consulte a coordinación";
+				$objetoResult->comentarioInfo = "No se han ingresado todas las asistencias a las actividades culturales, consulte a coordinación. ".$comentarioAlFinal;
 			}
 			return $objetoResult;
 		}
@@ -1710,7 +1710,7 @@ class Estudiantes extends MasterManteka {
 		if ($cantidadCalificaciones == 0) {
 			$objetoResult->nota = 1;
 			$objetoResult->comentario = "Reprobado por no tener notas";
-			$objetoResult->comentarioInfo = "No se han ingresado calificaciones, consulte a sus profesores";
+			$objetoResult->comentarioInfo = "No se han ingresado calificaciones, consulte a sus profesores. ".$comentarioAlFinal;
 			return $objetoResult;
 		}
 		$promedio = $sumaCalificaciones/$cantidadCalificaciones;
@@ -1722,14 +1722,14 @@ class Estudiantes extends MasterManteka {
 		if ($promedio < 4) {
 			$objetoResult->nota = $promedio;
 			$objetoResult->comentario = "Artículo 10";
-			$objetoResult->comentarioInfo = "Su promedio es ingerior a 4, nada que hacer :(";
+			$objetoResult->comentarioInfo = "Su promedio es ingerior a 4, nada que hacer :( ".$comentarioAlFinal;
 			return $objetoResult;
 		}
 
 		$objetoResult->nota = $promedio;
 		$objetoResult->comentario = "";
 		$objetoResult->situacion = "Aprobado";
-		$objetoResult->comentarioInfo = "Felicitaciones :)";
+		$objetoResult->comentarioInfo = "Felicitaciones :) ".$comentarioAlFinal;
 		return $objetoResult;
 	}
 

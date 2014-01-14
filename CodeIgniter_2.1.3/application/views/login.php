@@ -66,8 +66,7 @@
 			<div class="span7 offset1">
 				<h2>Bienvenido a ManteKA</h2>
 						<p align="justify">
-							ManteKA es un sistema que le permite mantener una comunicación precisa y fluida con los participantes de la asignatura de Comunicación Efectiva perteneciente al módulo básico de ingeniería. 							A través de ManteKA es posible enviar correos electrónicos masivos a las personas que usted requiere 
-							Basta de enviar correos uno por uno!.
+							ManteKA es un sistema que le permite mantener las asistencias y calificaciones de todos los estudiantes del curso de Comunicación Efectiva. Permite, además, tener una visión local para cada profesor de cada módulo temático. Además, Manteka permite consolidar las notas parciales en una nota final considerando las asistencias a eventos masivos y las asistencias a las clases de cátedra de manera automática.
 						</p>
 			</div>
 			<fieldset class="span3">
