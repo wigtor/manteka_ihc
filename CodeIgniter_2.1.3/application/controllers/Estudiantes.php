@@ -812,6 +812,29 @@ class Estudiantes extends MasterManteka {
 			$this->cargarTodo("Estudiantes", "cuerpo_calificaciones_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
 		}
 	}
+	
+	
+	public function verCalificacionesFinal() {
+		if (!$this->isLogged()) {
+			$this->invalidSession();
+			return;
+		}
+		if ($this->input->server('REQUEST_METHOD') == 'GET') {
+			$datos_vista = array();
+			//$datos_vista['ONLY_VIEW'] = TRUE;
+			$this->load->model('Model_seccion');
+			$rutProfesor = $this->session->userdata('rut');
+			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
+			//$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
+			$verTodas = FALSE;
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+
+			$subMenuLateralAbierto = 'verCalificacionesFinal'; //Para este ejemplo, los informes no tienen submenu lateral
+			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
+			$tipos_usuarios_permitidos = array(TIPO_USR_PROFESOR, TIPO_USR_COORDINADOR);
+			$this->cargarTodo("Estudiantes", "cuerpo_calificacionFinal_ver", "barra_lateral_estudiantes", $datos_vista, $tipos_usuarios_permitidos, $subMenuLateralAbierto, $muestraBarraProgreso);
+		}
+	}
 
 
 	public function agregarCalificaciones() {
@@ -1808,7 +1831,189 @@ class Estudiantes extends MasterManteka {
 		
 		echo json_encode($resultado);
 	}
-
+	
+	public function getAsistenciaPromedioEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_seccion = $this->input->post('id_seccion');
+		
+		$this->load->model('Model_estudiante');
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		
+		foreach ($listaEstudiantes as $estudiante) {
+			$porcentajeEstudiante = $this->getPorcentajeAsistenciaEstudiante($estudiante->rut);
+			$estudiante->valor = $porcentajeEstudiante;
+			$estudiante->comentario = "";
+			$estudiante->comentarioInfo = "";
+		}
+		
+		echo json_encode($listaEstudiantes);
+	}
+	
+	public function getAsistenciaActividadesPromedioEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_seccion = $this->input->post('id_seccion');
+		
+		$this->load->model('Model_estudiante');
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			$porcentajeEstudiante = $this->getPorcentajeAsistenciaActEstudiante($estudiante->rut);
+			$estudiante->valor = $porcentajeEstudiante;
+			$estudiante->comentario = "";
+			$estudiante->comentarioInfo = "";
+		}
+		
+		echo json_encode($listaEstudiantes);
+	}
+	
+	private function getPorcentajeAsistenciaEstudiante($rut_estudiante) {
+		$this->load->model('Model_asistencia');
+		$asistenciaGroupByModulo = $this->Model_asistencia->getAsistenciaGroupByModuloByEstudiante($rut_estudiante); //Debe retornar una matriz con el primer índice los módulos temáticos y el segundo índice las asistencias por módulo
+		//echo 'cantidad modulos: '.count($asistenciaGroupByModulo).' ';
+		//echo json_encode($asistenciaGroupByModulo );
+		//return;
+		$contadorAsistencias = 0;
+		$contadorClasesValidas = 0;
+		$contadorTotalClases = 0;
+		foreach ($asistenciaGroupByModulo as $moduloTematico) {
+			$contadorInasistenciasModulo = 0;
+			foreach ($moduloTematico->sesiones_de_clase as $asistencia) {
+				$presente = intval($asistencia->presente);
+				if ($presente == NULL) {
+					$contadorTotalClases++;
+					$contadorInasistenciasModulo++; //pero porque no se ha puesto su asistencia
+				}
+ 				else if ($presente == 1) {
+					$contadorAsistencias++;
+					$contadorClasesValidas++;
+					$contadorTotalClases++;
+				}
+				else if ($presente == 0){
+					$contadorInasistenciasModulo++;
+					$contadorClasesValidas++;
+					$contadorTotalClases++;
+				}
+				else { //nunca debiese llegar acá
+					return 0;
+				}
+			}
+			
+		}
+		$porcentajeAsistencia = ($contadorAsistencias/$contadorTotalClases)*100;
+		$porcentajeAsistencia = (ceil($porcentajeAsistencia*10))/10;
+		return $porcentajeAsistencia.'%';
+	}
+	
+	private function getPorcentajeAsistenciaActEstudiante($rut_estudiante){
+		$this->load->model('Model_actividades_masivas');
+		$asistenciaActividadesMasivas = $this->Model_actividades_masivas->getAsistenciaActividadesByEstudiante($rut_estudiante);
+		$contadorAsistenciasActividades = 0;
+		$contadorActividadesValidas = 0;
+		$contadorTotalActividades = 0;
+		foreach ($asistenciaActividadesMasivas as $asistencia) {
+			//echo ' a:'.$asistencia.' ';
+			$contadorTotalActividades++;
+			if ($asistencia === NULL) {
+				
+			}
+			else if ($asistencia == 1) {
+				$contadorActividadesValidas++;
+				$contadorAsistenciasActividades++;
+			}
+			else if ($asistencia == 0){
+				$contadorActividadesValidas++;
+			}
+			else { //null
+				return 0;
+			}
+		}
+		//echo 'cantidad de actividades masivas: '.$contadorActividadesValidas.' y asistio a: '.$contadorAsistenciasActividades.' ';
+		$porcentajeAsistActividades = ($contadorAsistenciasActividades/$contadorTotalActividades)*100;
+		$porcentajeAsistActividades = (ceil($porcentajeAsistActividades*10))/10;
+		return $porcentajeAsistActividades.'%';
+	}
+	
+	private function calculaPromedioEstudiante($rut_estudiante) {
+		$this->load->model('Model_calificaciones');
+		$calificaciones = $this->Model_calificaciones->getCalificacionesByEstudiante($rut_estudiante);
+		$cantidadCalificaciones = 0;
+		$sumaCalificaciones = 0;
+		foreach ($calificaciones as $nota) {
+			if (($nota->nota != NULL) && ($nota->nota != "")) {
+				$sumaCalificaciones += floatval($nota->nota);
+				$cantidadCalificaciones++;
+			}
+		}
+		//Se evita división por 0 (PREGUNTAR AL PROFESOR REGLA DE NEGOCIO)
+		if ($cantidadCalificaciones == 0) {
+			return 1;
+		}
+		$promedio = $sumaCalificaciones/$cantidadCalificaciones;
+		$promedio = (ceil($promedio*10))/10;
+		return $promedio;
+	}
+	
+	public function getCalificacionesPromedioEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_seccion = $this->input->post('id_seccion');
+		
+		$this->load->model('Model_estudiante');
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			$nota = $this->calculaPromedioEstudiante($estudiante->rut);
+			$estudiante->valor = $nota;
+			$estudiante->comentario = "";
+			$estudiante->comentarioInfo = "";
+		}
+		
+		echo json_encode($listaEstudiantes);
+	}
+	
+	public function getSituacionFinalEstudiantesBySeccionAjax() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_seccion = $this->input->post('id_seccion');
+		
+		$this->load->model('Model_estudiante');
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			$situacionEstudiante = $this->calculaSituacionEstudiante($estudiante->rut);
+			$estudiante->valor = $situacionEstudiante->nota;
+			$estudiante->comentario = $situacionEstudiante->comentario;
+			if (isset($situacionEstudiante->comentarioInfo))
+				$estudiante->comentarioInfo = $situacionEstudiante->comentarioInfo;
+			else
+				$estudiante->comentarioInfo = "";
+		}
+		
+		echo json_encode($listaEstudiantes);
+	}
 }
 
 /* End of file Estudiantes.php */
