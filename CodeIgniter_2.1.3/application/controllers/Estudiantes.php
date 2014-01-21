@@ -827,7 +827,7 @@ class Estudiantes extends MasterManteka {
 			$id_tipo_usuario = $this->session->userdata('id_tipo_usuario');
 			//$datos_vista['IS_PROFESOR_LIDER'] = $this->esProfesorLider($rutProfesor);
 			$verTodas = FALSE;
-			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesor($rutProfesor, $id_tipo_usuario, $verTodas);
+			$datos_vista['secciones'] = $this->Model_seccion->getSeccionesByProfesorCabezaSerie($rutProfesor, $id_tipo_usuario, $verTodas);
 
 			$subMenuLateralAbierto = 'verCalificacionesFinal'; //Para este ejemplo, los informes no tienen submenu lateral
 			$muestraBarraProgreso = FALSE; //Indica si se muestra la barra que dice anterior - siguiente
@@ -2013,6 +2013,124 @@ class Estudiantes extends MasterManteka {
 		}
 		
 		echo json_encode($listaEstudiantes);
+	}
+
+
+
+	/**
+	* Métodos llamados para emitir actas, llaman un webservice de LOA
+	*/
+	public function isActaEmitida() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_seccion');
+		$rutProfesor = $this->session->userdata('rut');
+		$passLoa = $this->input->post('passLoa');
+		$id_seccion = $this->input->post('id_seccion');
+		$seccion = $this->Model_seccion->getSeccionById($id_seccion);
+		if ($seccion == NULL) {
+			$objResult = new stdClass();
+			$objResult->valor = true;
+			$objResult->mensaje = 'Error en los parámetros ingresados';
+			echo json_encode($objResult);
+			return;
+		}
+
+		$this->load->library('curl');
+
+		$server = 'http://localhost:8080/ws/webresources/';
+		$queryStringParams = array('rut' => $rutProfesor, 'pass' => $passLoa, 'coord' => $seccion->coordinacion, 'sec' => $seccion->numSeccion);
+
+		$resultado = $this->curl->simple_get($server.'comunicacionEfectiva', $queryStringParams);
+		if ($resultado == "true") {
+			$objResult = new stdClass();
+			$objResult->valor = true;
+			$objResult->mensaje = "El acta de calificaciones ya ha sido emitida y no puede volver a subirla";
+		}
+		else if ($resultado == "false"){
+			$objResult = new stdClass();
+			$objResult->valor = false;
+			$objResult->mensaje = "Es posible subir el acta de calificaciones";
+		}
+		else {
+			$objResult = new stdClass();
+			$objResult->valor = false;
+			$objResult->mensaje = "Error al consultar el estado del acta";
+		}
+		echo json_encode($objResult);
+	}
+
+	public function subirCalificacionesALoa() {
+		if (!$this->input->is_ajax_request()) {
+			return;
+		}
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+
+		$this->load->model('Model_seccion');
+		$rutProfesor = $this->session->userdata('rut');
+		$passLoa = $this->input->post('passLoa');
+		$id_seccion = $this->input->post('id_seccion');
+		$seccion = $this->Model_seccion->getSeccionById($id_seccion);
+		if ($seccion == NULL) {
+			echo 'Error en los parámetros';
+			return;
+		}
+
+		$this->load->library('curl');
+
+		$server = 'http://localhost:8080/ws/webresources/';
+		$hayErrores = false;
+		$rutsEstudiantesConError = array();
+
+
+		$this->load->model('Model_estudiante');
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistencia($id_seccion);
+		foreach ($listaEstudiantes as $estudiante) {
+			$situacionEstudiante = $this->calculaSituacionEstudiante($estudiante->rut);
+			$notaFinal = $situacionEstudiante->nota;
+			$queryStringParams = array('rut' => $rutProfesor, 'pass' => $passLoa, 'rutAlu' => $estudiante->rut, 'coord' => $seccion->coordinacion, 'sec' => $seccion->numSeccion, 'nota' => $notaFinal);
+			$queryStringParams = http_build_query($queryStringParams);
+
+			$resultado = $this->curl->simple_post($server.'comunicacionEfectiva'.'?'.$queryStringParams, array());
+			if ($resultado == "false") {
+				$hayErrores = true;
+				$objResult = new stdClass();
+				$objResult->rut = $estudiante->rut;
+				$objResult->mensajeError = "No ha sido posible colocar la nota al estudiante, revise si su password es correcta";
+				$rutsEstudiantesConError[] = $objResult;
+			}
+			else if ($resultado == "true") {
+
+			}
+			else {
+				$hayErrores = true;
+				$objResult = new stdClass();
+				$objResult->rut = $estudiante->rut;
+				$objResult->mensajeError = "No ha sido posible conectarse a LOA";
+				$rutsEstudiantesConError[] = $objResult;
+			}
+		}
+		if ($hayErrores) {
+			if (count($rutsEstudiantesConError) == count($listaEstudiantes)) {
+				echo 'No ha sido posible subir las calificaciones a LOA, revise que su password de LOA es correcta';
+				return;
+			}
+		}
+		else {
+			echo 'Se han subido las notas a LOA, ingrese a LOA para emitir el acta si está COMPLETAMENTE SEGURO(A) que no habrán modificaciones';
+			return;
+		}
+
+		echo json_encode($rutsEstudiantesConError);
 	}
 }
 

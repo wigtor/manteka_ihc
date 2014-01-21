@@ -282,9 +282,68 @@ class Model_seccion extends CI_Model {
 
 		//echo 'verTodas:'.$verTodas.'  id_tipo_usuario: '.$id_tipo_usuario.'  TIPO_PROFE: '.TIPO_USR_PROFESOR;
 		if (!$verTodas) {
-			//echo 'entro1   ';
 			if ($id_tipo_usuario == TIPO_USR_PROFESOR) {
-				//echo 'ENTRO   ';
+				$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+				$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut);
+			}
+			if ($id_tipo_usuario == TIPO_USR_AYUDANTE) { //Aun no se usa ya que el ayudante no hace login
+				$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
+				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
+				$this->db->where('ayu_profe.RUT_USUARIO', $rut);
+			}
+		}
+		$this->db->group_by('seccion.ID_SECCION');
+		$this->db->order_by('LETRA_SECCION', 'asc');
+		$this->db->order_by('NUMERO_SECCION', 'asc');
+
+		
+		$query = $this->db->get('seccion');
+		//echo $this->db->last_query();
+		if ($query == FALSE) {
+			return array();
+		}
+		$resultadoProfe = $query->result();
+		/*
+		if ($verTodas) {
+			$resultadoCompleto = $this->getSeccionesByProfesor($rut, TIPO_USR_COORDINADOR, FALSE);
+			if ($verTodas) {
+				return $resultadoCompleto;
+			}
+			foreach ($resultadoCompleto as $fila) {
+				$esDelProfe = FALSE;
+				foreach ($resultadoProfe as $fila_solo_profe) {
+					if ($fila->id == $fila_solo_profe->id) {
+						$esDelProfe = TRUE;
+						break;
+					}
+				}
+				if ($esDelProfe) {
+					$fila->propia_del_profesor = TRUE;
+				}
+				else {
+					$fila->propia_del_profesor = FALSE;
+				}
+				
+			}
+			$resultadoProfe = $resultadoCompleto;
+		}
+		*/
+		return $resultadoProfe;
+	}
+
+
+	public function getSeccionesByProfesorCabezaSerie($rut, $id_tipo_usuario, $verTodas) {
+
+		$this->db->select('CONCAT_WS(\'-\', LETRA_SECCION, NUMERO_SECCION ) AS nombre');
+		$this->db->select('seccion.ID_SECCION AS id');
+		$this->db->select('LETRA_SECCION AS letra');
+		$this->db->select('NUMERO_SECCION AS numero');
+		$this->db->select('TRUE AS propia_del_profesor', FALSE);
+
+		//echo 'verTodas:'.$verTodas.'  id_tipo_usuario: '.$id_tipo_usuario.'  TIPO_PROFE: '.TIPO_USR_PROFESOR;
+		if (!$verTodas) {
+			if ($id_tipo_usuario == TIPO_USR_PROFESOR) {
 				$this->db->join('planificacion_clase', 'seccion.ID_SECCION = planificacion_clase.ID_SECCION');
 				$this->db->join('ayu_profe', 'planificacion_clase.ID_AYU_PROFE = ayu_profe.ID_AYU_PROFE');
 				$this->db->where('ayu_profe.PRO_RUT_USUARIO', $rut);
@@ -791,6 +850,22 @@ public function verModulosPorAsignar(){
 			return $query->row();
 		}
 		return array();
+    }
+
+    public function getSeccionById($id_seccion) {
+    	$this->db->select('seccion.ID_SECCION as id_seccion');
+		$this->db->select('LETRA_SECCION AS coordinacion');
+		$this->db->select('NUMERO_SECCION AS numSeccion');
+		$this->db->where('ID_SECCION', $id_seccion);
+
+		$query = $this->db->get('seccion');
+		if ($query == FALSE) {
+			return NULL;
+		}
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		}
+		return NULL;
     }
 
 }

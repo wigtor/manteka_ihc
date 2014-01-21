@@ -86,7 +86,7 @@ Apache->Módulos de apache y luego marcar la extensión 'ssl_module'.
 
 Habilitar 'php_sockets', 'php_openssl' y 'php_imap':
 En el ícono de WAMP del área de notificación, hacer click sobre este e ir a las opciones:
-PHP->Extensiones de php y luego marcar las extensiones 'php_sockets', 'php_openssl' y 'php_imap'.
+PHP->Extensiones de php y luego marcar las extensiones 'php_sockets', 'php_openssl', 'php_curl' y 'php_imap'.
 
 Configurar un servidor SMTP:
 

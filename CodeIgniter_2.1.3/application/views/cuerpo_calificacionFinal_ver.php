@@ -19,8 +19,72 @@
 		tablaResultados.appendChild(tbody);
 	}
 	
-	function subirActa() {
-		alert("No implementao aún...");
+	function isActaEmitida() {
+		var id_seccion = $('#seccion').val();
+		if (id_seccion == "") {
+			return;
+		}
+
+		var pass = "123456789";
+
+		$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Estudiantes/isActaEmitida") ?>",
+			data: { id_seccion: id_seccion, passLoa: pass},
+			success: function(respuesta) {
+				var objRespuesta = jQuery.parseJSON(respuesta);
+				$('#estadoActa').html(objRespuesta.mensaje);
+				if (objRespuesta.valor) {
+					$('.btnSubirActa').attr("disabled", "disabled");
+					$('.btnSubirActa').attr("title", "No es posible subir el acta, posiblemente ya la confirmó en LOA");
+				}
+				else {
+					$('.btnSubirActa').removeAttr("disabled");
+					$('.btnSubirActa').attr("title", "Suba las notas a LOA");
+				}
+				
+			}
+		});
+
+	
+	}
+
+	function subirCalificacionesALoaPidePassword() {
+		var id_seccion = $('#seccion').val();
+		if (id_seccion == "" || id_seccion == null) {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('No ha seleccionado una sección');
+			$('#modalError').modal();
+			return;
+		}
+
+		$('#modalPidePasswordLOA').modal();
+	}
+
+	function subirCalificacionesALoa() {
+		var id_seccion = $('#seccion').val();
+		if (id_seccion == "" || id_seccion == null) {
+			$('#tituloErrorDialog').html('Error en la validación');
+			$('#textoErrorDialog').html('No ha seleccionado una sección');
+			$('#modalError').modal();
+			return;
+		}
+
+		var pass = $('#passwordLOA').val();
+
+		$.ajax({
+			type: "POST",
+			url: "<?php echo site_url("Estudiantes/subirCalificacionesALoa") ?>",
+			data: { id_seccion: id_seccion, passLoa: pass},
+			success: function(respuesta) {
+				//alert(respuesta);
+				$('#passwordLOA').val("");
+				$('#modalPidePasswordLOA').modal('hide');
+				$('#textoRespuestaSubirCalificaciones').html(respuesta);
+				$('#modalResultadoSubirCalificaciones').modal();
+			}
+		});
+
 	
 	}
 
@@ -234,6 +298,8 @@
 
 	function cargarDatos() {
 		$('#icono_cargando').show();
+		isActaEmitida();
+
 		cargarHeadTabla();
 		
 		cargarDatosEstudiantes();
@@ -267,6 +333,12 @@
 		$('#icono_cargando').hide();
 	}
 
+	$(document).ready(function() {
+		$("#modalPidePasswordLOA").on('shown', function() {
+			$(this).find("[autofocus]:first").focus();
+		});
+	});
+
 </script>
 
 
@@ -277,14 +349,20 @@
 		echo form_open('Estudiantes/postSubirActas/', $atributos);
 	?>
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span5">
 				<font color="red">*</font> indica que se han ingresado comentarios
+			</div>
+			<div class="span2">
+				Estado del acta:
+			</div>
+			<div class="span5">
+				<font id="estadoActa" color="red"></font>
 			</div>
 		</div>
 		<div class="row-fluid">
 		</div>
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span5">
 				<div class="control-group">
 					<label class="control-label" for="seccion">1.- Sección:</label>
 					<div class="controls">
@@ -303,12 +381,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="span6">
+			<div class="span7">
 				<div class="control-group">
 					<div class="controls ">
-						<button class="btn" type="button" onclick="subirActa()">
+						<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword()">
 							<div class="btn_with_icon_solo">Ã</div>
-							&nbsp; Subir acta
+							&nbsp; Subir a LOA
 						</button>
 						<button class="btn" type="button" id="btn_descargar" onclick="descargarToArchivo()" disabled title="Debe seleccionar una sección para descargar su registro de calificaciones">
 							<i class="icon-download-alt"></i>
@@ -377,11 +455,11 @@
 			
 		</div>
 		<div class="row-fluid">
-			<div class="control-group span6 offset6" style="margin-top:10px;">
+			<div class="control-group span7 offset5" style="margin-top:10px;">
 				<div class="controls ">
-					<button class="btn" type="button" onclick="subirActa()">
+					<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword();">
 						<div class="btn_with_icon_solo">Ã</div>
-						&nbsp; Subir acta
+						&nbsp; Subir a LOA
 					</button>
 				</div>
 				<?php
@@ -389,6 +467,35 @@
 						echo $dialogos;
 					}
 				?>
+
+				<div id="modalPidePasswordLOA" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Ingrese su password de LOA</h3>
+					</div>
+					<div class="modal-body">
+						Contraseña de LOA para el usuario con rut: <?php echo $rut_usuario; ?>
+						<input type="password" id="passwordLOA" autofocus>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn" onclick="subirCalificacionesALoa();"><div class="btn_with_icon_solo">Ã</div>&nbsp; Aceptar</button>
+						<button class="btn" type="button" data-dismiss="modal"><div class="btn_with_icon_solo">Â</div>&nbsp; Cancelar</button>
+					</div>
+				</div>
+
+				<!-- Modal para mostrar un error en tiempo real -->
+				<div id="modalResultadoSubirCalificaciones" class="modal hide fade">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Resultados de la subida de notas a LOA</h3>
+					</div>
+					<div class="modal-body">
+						<div id="textoRespuestaSubirCalificaciones"></div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" type="button" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<?php

@@ -120,9 +120,9 @@
 						<div class="control-group <?php echo $inputRut ?>" id="groupRut">
 							<label class="control-label" for="inputRut">Rut</label>
 							<div class="controls">
-							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" placeholder=" Ingrese rut, ejemplo: 17565743" value="<?php echo $rut_almacenado; ?>">
+							  	<input style="width:200px" type="text" name="inputRut" id="inputRut" maxlength="9" autofocus placeholder=" Ingrese rut, ejemplo: 17565743" value="<?php echo $rut_almacenado; ?>">
 							 	<STRONG>-</STRONG>
-							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut"  placeholder="k" value="<?php echo $dv_almacenado; ?>">
+							  	<input style="width:15px" type="text" name="inputGuionRut" maxlength="1" id="inputGuionRut" placeholder="k" value="<?php echo $dv_almacenado; ?>">
 								<?php echo form_error('inputRut', '<span class="help-inline">', '</span>');?>
 								<span id="spanInputRutError" class="help-inline"></span>
 							</div>
