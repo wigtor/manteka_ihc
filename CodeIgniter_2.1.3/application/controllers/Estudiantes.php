@@ -2157,24 +2157,24 @@ class Estudiantes extends MasterManteka {
 
 		$this->load->library('curl');
 
-		$server = 'http://localhost:8080/ws/webresources/';
+		$server = 'http://localhost:8080/ws/webresources/'; //CAMBIARLO POR LA URL DEL WS DE LOA
 		$queryStringParams = array('rut' => $rutProfesor, 'pass' => $passLoa, 'coord' => $seccion->coordinacion, 'sec' => $seccion->numSeccion);
 
 		$resultado = $this->curl->simple_get($server.'comunicacionEfectiva', $queryStringParams);
 		if ($resultado == "true") {
 			$objResult = new stdClass();
 			$objResult->valor = true;
-			$objResult->mensaje = "El acta de calificaciones ya ha sido emitida y no puede volver a subirla";
+			$objResult->mensaje = "El acta de calificaciones ya ha sido emitida y no puede volver a subir las notas";
 		}
 		else if ($resultado == "false"){
 			$objResult = new stdClass();
 			$objResult->valor = false;
-			$objResult->mensaje = "Es posible subir el acta de calificaciones";
+			$objResult->mensaje = "Es posible subir las calificaciones a LOA";
 		}
 		else {
 			$objResult = new stdClass();
 			$objResult->valor = true; //Hace que esté inhabilitado el botón subir acta en la vista
-			$objResult->mensaje = "Error al consultar el estado del acta";
+			$objResult->mensaje = "Error al consultar el estado de las calificaciones en LOA";
 		}
 		echo json_encode($objResult);
 	}
