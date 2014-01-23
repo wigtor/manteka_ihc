@@ -1280,6 +1280,119 @@ class Estudiantes extends MasterManteka {
 		echo json_encode($listaEstudiantes);
 		
 	}
+	
+	public function convertirNotaFinalToCSV($listaE, $mostrarCabecera) {
+		$f = fopen('php://output', 'w');
+		
+		if ($mostrarCabecera == TRUE) {
+			$cabecera = array();
+			$cabecera[] = "N°";
+			$cabecera[] = "RUT";
+			$cabecera[] = "PATERNO";
+			$cabecera[] = "MATERNO";
+			$cabecera[] = "NOMBRES";
+			$cabecera[] = "COORDINACION";
+			$cabecera[] = "SECCION";
+			$cabecera[] = "NOTA";
+			$cabecera[] = "COMENTARIO";
+
+			//Agrego los datos
+			fputcsv($f, $cabecera, ';');
+		}
+		foreach ($listaE as $estudiante) {
+			$estudianteArreglado = array();
+			$estudianteArreglado[] = $estudiante->posicion;
+			$estudianteArreglado[] = $estudiante->RUT;
+			$estudianteArreglado[] = $estudiante->PATERNO;
+			$estudianteArreglado[] = $estudiante->MATERNO;
+			$estudianteArreglado[] = $estudiante->NOMBRES;
+			$estudianteArreglado[] = $estudiante->coordinacion;
+			$estudianteArreglado[] = $estudiante->seccion;
+			$estudianteArreglado[] = $estudiante->nota;
+			$estudianteArreglado[] = $estudiante->comentario;
+		    fputcsv($f, $estudianteArreglado, ';');
+		}
+		fclose($f);
+		
+	}
+	
+	
+	public function generateCSVCalificacionFinalBySeccionAjax() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		
+		$id_seccion = $this->input->post('id_seccion');
+		$this->load->model('Model_seccion');
+		$seccion = $this->Model_seccion->getSeccionById($id_seccion);
+		
+		
+		$this->load->model('Model_estudiante');
+		$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistenciaFormatCSV($id_seccion);
+		$numEstudiante = 1;
+		foreach ($listaEstudiantes as $estudiante) {
+			$situacionEstudiante = $this->calculaSituacionEstudiante($estudiante->RUT);
+			$estudiante->posicion = strval($numEstudiante);
+			$estudiante->coordinacion = $seccion->coordinacion;
+			$estudiante->seccion = $seccion->numSeccion;
+			$estudiante->nota = $situacionEstudiante->nota;
+			$estudiante->comentario = $situacionEstudiante->comentario;
+			if (isset($situacionEstudiante->comentarioInfo))
+				$estudiante->comentarioInfo = $situacionEstudiante->comentarioInfo;
+			else
+				$estudiante->comentarioInfo = "";
+			$numEstudiante = $numEstudiante + 1;
+		}
+		
+		
+		$nombre_seccion = $this->Model_seccion->getNombreSeccion($id_seccion)->nombre;
+		
+		header('Content-Type: application/csv; charset=UTF-8');
+		header('Content-Disposition: attachment; filename=calificaciones_finales_seccion_'.$nombre_seccion.'.csv');
+		$resultadoCSV = $this->convertirNotaFinalToCSV($listaEstudiantes, TRUE);
+		echo $resultadoCSV;
+	}
+	
+	public function generateCSVCalificacionFinalAllSeccionAjax() {
+		if (!$this->isLogged()) {
+			//echo 'No estás logueado!!';
+			return;
+		}
+		header('Content-Type: application/csv; charset=UTF-8');
+		header('Content-Disposition: attachment; filename=calificaciones_finales_todas_secciones.csv');
+		
+		$this->load->model('Model_seccion');
+		$this->load->model('Model_estudiante');
+		$numEstudiante = 1;
+		$secciones = $this->Model_seccion->getAllSecciones();
+		$mostrarCabecera = TRUE; //SÓLO LA PRIMERA VEZ
+		foreach($secciones as $objSeccion){
+			$id_seccion = $objSeccion->id;
+			$seccion = $this->Model_seccion->getSeccionById($id_seccion);
+			
+			
+			$listaEstudiantes = $this->Model_estudiante->getEstudiantesBySeccionForAsistenciaFormatCSV($id_seccion);
+			
+			foreach ($listaEstudiantes as $estudiante) {
+				$situacionEstudiante = $this->calculaSituacionEstudiante($estudiante->RUT);
+				$estudiante->posicion = strval($numEstudiante);
+				$estudiante->coordinacion = $seccion->coordinacion;
+				$estudiante->seccion = $seccion->numSeccion;
+				$estudiante->nota = $situacionEstudiante->nota;
+				$estudiante->comentario = $situacionEstudiante->comentario;
+				if (isset($situacionEstudiante->comentarioInfo))
+					$estudiante->comentarioInfo = $situacionEstudiante->comentarioInfo;
+				else
+					$estudiante->comentarioInfo = "";
+				$numEstudiante = $numEstudiante + 1;
+			}
+			
+			
+			$this->convertirNotaFinalToCSV($listaEstudiantes, $mostrarCabecera);
+			$mostrarCabecera = FALSE;
+		}
+	}
 
 
 	public function generateCSVCalificacionesBySeccionAjax() {
@@ -1380,7 +1493,7 @@ class Estudiantes extends MasterManteka {
 		$nombre_seccion =  $this->Model_seccion->getNombreSeccion($id_seccion)->nombre;
 
 		header('Content-Type: application/csv; charset=UTF-8');
-		header('Content-Disposition: attachment; filename=calificaciones_seccion_'.$nombre_seccion.'.csv'); //CAMBIAR POR NOMBRE DE SECCION
+		header('Content-Disposition: attachment; filename=calificaciones_seccion_'.$nombre_seccion.'.csv');
 		$resultadoCSV = $this->convertirCalificacionToCSV($listaEstudiantes, $evaluaciones);
 		echo $resultadoCSV;
 	}
@@ -2060,7 +2173,7 @@ class Estudiantes extends MasterManteka {
 		}
 		else {
 			$objResult = new stdClass();
-			$objResult->valor = false;
+			$objResult->valor = true; //Hace que esté inhabilitado el botón subir acta en la vista
 			$objResult->mensaje = "Error al consultar el estado del acta";
 		}
 		echo json_encode($objResult);

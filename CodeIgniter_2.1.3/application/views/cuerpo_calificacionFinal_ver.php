@@ -319,8 +319,7 @@
 	}
 
 	function descargarToArchivo() {
-		alert("No implementado aún...");
-		return;
+		
 		$('#icono_cargando').show();
 		var id_seccion = $('#seccion').val();
 		if (id_seccion == "") {
@@ -332,6 +331,23 @@
 		$.download(url, parametros);
 		$('#icono_cargando').hide();
 	}
+	
+<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+	function descargarAllToArchivo() {
+		$('#icono_cargando').show();
+		var id_seccion = $('#seccion').val();
+		if (id_seccion == "") {
+			return;
+		}
+
+		url =  "<?php echo site_url("Estudiantes/generateCSVCalificacionFinalAllSeccionAjax") ?>";
+		parametros = 'id_seccion='+id_seccion;
+		$.download(url, parametros);
+		$('#icono_cargando').hide();
+	
+	}
+<?php } ?>
+	
 
 	$(document).ready(function() {
 		$("#modalPidePasswordLOA").on('shown', function() {
@@ -346,7 +362,7 @@
 	<legend>Ver calificaciones finales y subir actas</legend>
 	<?php
 		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
-		echo form_open('Estudiantes/postSubirActas/', $atributos);
+		echo form_open('Estudiantes/postSubirActas/', $atributos); //No existe ese método en el controlador, sin embargo no se usa porque todo es ajax en esta vista
 	?>
 		<div class="row-fluid">
 			<div class="span5">
@@ -362,7 +378,7 @@
 		<div class="row-fluid">
 		</div>
 		<div class="row-fluid">
-			<div class="span5">
+			<div class="span4">
 				<div class="control-group">
 					<label class="control-label" for="seccion">1.- Sección:</label>
 					<div class="controls">
@@ -381,10 +397,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="span7">
+			<div class="span8">
 				<div class="control-group">
 					<div class="controls ">
-						<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword()">
+					<?php if ($id_tipo_usuario == TIPO_USR_COORDINADOR) { ?>
+						<button class="btn btn-primary" type="button" id="btn_descargarAll" onclick="descargarAllToArchivo()" title="Descargar las notas de todas las secciones en un mismo archivo">
+							<i class="icon-download-alt"></i>
+							&nbsp; Descargar todo
+						</button>
+					<?php } ?>
+						<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword()" disabled>
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Subir a LOA
 						</button>
@@ -457,7 +479,7 @@
 		<div class="row-fluid">
 			<div class="control-group span7 offset5" style="margin-top:10px;">
 				<div class="controls ">
-					<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword();">
+					<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword();" disabled>
 						<div class="btn_with_icon_solo">Ã</div>
 						&nbsp; Subir a LOA
 					</button>

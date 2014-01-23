@@ -25,8 +25,7 @@
 			var inputGuionRut = document.getElementById("inputGuionRut");
 			var guionCaracter = inputGuionRut.value;
 			var resultadoValidacionRut = calculaDigitoVerificador(rut, guionCaracter);
-			var iconoCargado = document.getElementById("icono_cargando");
-			$(icono_cargando).show();
+			$("#icono_cargando").show();
 
 			// Si el resultado de la validación es satisfactorio
 			if (resultadoValidacionRut == DV_CORRECTO) {
@@ -41,7 +40,7 @@
 				$(controlGroupRut).addClass("error");
 				var spanError = document.getElementById("spanInputRutError");
 				$(spanError).html("El rut introducido no es válido.");
-				
+				$("#icono_cargando").hide();
 				return false;
 			}
 			// Caso que el RUT ingresado sea incorrecto
@@ -51,7 +50,7 @@
 				$(controlGroupRut).addClass("error");
 				var spanError = document.getElementById("spanInputRutError");
 				$(spanError).html("El dígito verificador o el rut no son válidos.");
-				
+				$("#icono_cargando").hide();
 				return false;
 			}
 			return false;
