@@ -145,7 +145,7 @@
 				<div class="accordion-inner nav nav-list">
 					<li <?php echo $verCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/verCalificaciones")?>">Ver calificaciones</a></li>
 					<li <?php echo $agregarCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/agregarCalificaciones")?>">Agregar calificaciones</a></li>
-					<li <?php echo $verCalificacionesFinal; ?> ><a href="<?php echo site_url("Estudiantes/verCalificacionesFinal")?>">Ver calificación final / subir actas</a></li>
+					<li <?php echo $verCalificacionesFinal; ?> ><a href="<?php echo site_url("Estudiantes/verCalificacionesFinal")?>">Ver calificación final / llevar a LOA</a></li>
 					<li <?php echo $cargaMasivaCalificaciones; ?> ><a href="<?php echo site_url("Estudiantes/cargaMasivaCalificaciones")?>">Carga masiva calificaciones</a></li>
 				</div>
 			</div>

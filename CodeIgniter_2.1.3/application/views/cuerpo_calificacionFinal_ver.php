@@ -359,10 +359,10 @@
 
 
 <fieldset>
-	<legend>Ver calificaciones finales y subir actas</legend>
+	<legend>Ver calificaciones finales y llevar a LOA</legend>
 	<?php
 		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
-		echo form_open('Estudiantes/postSubirActas/', $atributos); //No existe ese método en el controlador, sin embargo no se usa porque todo es ajax en esta vista
+		echo form_open('Estudiantes/postLlevarALOA/', $atributos); //No existe ese método en el controlador, sin embargo no se usa porque todo es ajax en esta vista
 	?>
 		<div class="row-fluid">
 			<div class="span5">
@@ -408,7 +408,7 @@
 					<?php } ?>
 						<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword()" disabled>
 							<div class="btn_with_icon_solo">Ã</div>
-							&nbsp; Subir a LOA
+							&nbsp; Llevar a LOA
 						</button>
 						<button class="btn" type="button" id="btn_descargar" onclick="descargarToArchivo()" disabled title="Debe seleccionar una sección para descargar su registro de calificaciones">
 							<i class="icon-download-alt"></i>
@@ -481,7 +481,7 @@
 				<div class="controls ">
 					<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword();" disabled>
 						<div class="btn_with_icon_solo">Ã</div>
-						&nbsp; Subir a LOA
+						&nbsp; Llevar a LOA
 					</button>
 				</div>
 				<?php
