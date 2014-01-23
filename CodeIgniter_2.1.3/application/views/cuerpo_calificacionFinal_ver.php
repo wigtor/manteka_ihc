@@ -19,7 +19,7 @@
 		tablaResultados.appendChild(tbody);
 	}
 	
-	function isActaEmitida() {
+	function isNotasEmitida() {
 		var id_seccion = $('#seccion').val();
 		if (id_seccion == "") {
 			return;
@@ -33,14 +33,14 @@
 			data: { id_seccion: id_seccion, passLoa: pass},
 			success: function(respuesta) {
 				var objRespuesta = jQuery.parseJSON(respuesta);
-				$('#estadoActa').html(objRespuesta.mensaje);
+				$('#estadoNotas').html(objRespuesta.mensaje);
 				if (objRespuesta.valor) {
-					$('.btnSubirActa').attr("disabled", "disabled");
-					$('.btnSubirActa').attr("title", "No es posible subir el acta, posiblemente ya la confirmó en LOA");
+					$('.btnSubirNotas').attr("disabled", "disabled");
+					$('.btnSubirNotas').attr("title", "No es posible subir el notas, posiblemente ya la confirmó en LOA");
 				}
 				else {
-					$('.btnSubirActa').removeAttr("disabled");
-					$('.btnSubirActa').attr("title", "Suba las notas a LOA");
+					$('.btnSubirNotas').removeAttr("disabled");
+					$('.btnSubirNotas').attr("title", "Suba las notas a LOA");
 				}
 				
 			}
@@ -298,7 +298,7 @@
 
 	function cargarDatos() {
 		$('#icono_cargando').show();
-		isActaEmitida();
+		isNotasEmitida();
 
 		cargarHeadTabla();
 		
@@ -369,10 +369,10 @@
 				<font color="red">*</font> indica que se han ingresado comentarios
 			</div>
 			<div class="span2">
-				Estado del acta:
+				Estado de las notas:
 			</div>
 			<div class="span5">
-				<font id="estadoActa" color="red"></font>
+				<font id="estadoNotas" color="red"></font>
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -406,7 +406,7 @@
 							&nbsp; Descargar todo
 						</button>
 					<?php } ?>
-						<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword()" disabled>
+						<button class="btn btnSubirNotas" type="button" onclick="subirCalificacionesALoaPidePassword()" disabled>
 							<div class="btn_with_icon_solo">Ã</div>
 							&nbsp; Llevar a LOA
 						</button>
@@ -479,7 +479,7 @@
 		<div class="row-fluid">
 			<div class="control-group span7 offset5" style="margin-top:10px;">
 				<div class="controls ">
-					<button class="btn btnSubirActa" type="button" onclick="subirCalificacionesALoaPidePassword();" disabled>
+					<button class="btn btnSubirNotas" type="button" onclick="subirCalificacionesALoaPidePassword();" disabled>
 						<div class="btn_with_icon_solo">Ã</div>
 						&nbsp; Llevar a LOA
 					</button>
