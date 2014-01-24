@@ -548,8 +548,10 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 	<legend>Agregar asistencia</legend>
 	<?php
 	}
+	if ($ONLY_VIEW !== TRUE) {
 		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal', 'style' => 'max-width:1000px;');
 		echo form_open('Estudiantes/postAgregarAsistencia/', $atributos);
+		}
 	?>
 		<div class="row-fluid">
 			<div class="span5">

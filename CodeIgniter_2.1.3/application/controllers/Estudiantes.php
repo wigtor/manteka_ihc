@@ -1754,7 +1754,7 @@ class Estudiantes extends MasterManteka {
 			$contadorInasistenciasModulo = 0;
 			foreach ($moduloTematico->sesiones_de_clase as $asistencia) {
 				$presente = intval($asistencia->presente);
-				if ($presente == NULL) {
+				if ($asistencia->presente === NULL) {
 					$contadorTotalClases++;
 					$contadorInasistenciasModulo++; //pero porque no se ha puesto su asistencia
 				}

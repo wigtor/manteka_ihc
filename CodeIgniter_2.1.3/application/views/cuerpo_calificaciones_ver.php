@@ -511,8 +511,10 @@ if ($IS_PROFESOR_LIDER == TRUE) {
 	<legend>Agregar calificaciones</legend>
 	<?php
 	}
+	if ($ONLY_VIEW !== TRUE) {
 		$atributos= array('id' => 'formAgregar', 'class' => 'form-horizontal');
 		echo form_open('Estudiantes/postAgregarCalificaciones/', $atributos);
+	}
 	?>
 		<div class="row-fluid">
 			<div class="span6">
