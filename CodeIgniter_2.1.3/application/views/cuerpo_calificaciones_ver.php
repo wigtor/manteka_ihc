@@ -100,7 +100,7 @@
 				var tbodyNombres = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) { //Cada iteración es una fila o un estudiante
 					tr = document.createElement('tr');
-					tr.setAttribute('style', "cursor:default");
+					tr.setAttribute('style', "cursor:default; height:47px;");
 					trNombres = document.createElement('tr');
 					trNombres.setAttribute('style', "cursor:default; height:47px;");
 					
