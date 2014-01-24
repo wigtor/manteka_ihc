@@ -37,7 +37,7 @@
 			tablaAsistenciaPorcentaje = document.getElementById("tablaCalificacionesPromedio");
 
 			tbody = $("#tablaCalificacionesPromedio tbody");
-			tbody.append('<tr style="cursor:default; height:47px;"><td>'+promedio+'</td></tr>');
+			tbody.append('<tr style="cursor:default; height:57px;"><td>'+promedio+'</td></tr>');
 		}
 	}
 
@@ -100,9 +100,9 @@
 				var tbodyNombres = document.createElement('tbody');
 				for (var i = 0; i < arrayRespuesta.length; i++) { //Cada iteración es una fila o un estudiante
 					tr = document.createElement('tr');
-					tr.setAttribute('style', "cursor:default; height:47px;");
+					tr.setAttribute('style', "cursor:default; height:57px;");
 					trNombres = document.createElement('tr');
-					trNombres.setAttribute('style', "cursor:default; height:47px;");
+					trNombres.setAttribute('style', "cursor:default; height:57px;");
 					
 
 					var cantidadAtributos = Object.keys(arrayObjectRespuesta[i]).length;
